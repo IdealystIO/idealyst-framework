@@ -316,3 +316,41 @@ export async function promptForAppName(projectName: string): Promise<string> {
   ]);
   return appName;
 } 
+
+export async function configureAndroidVectorIcons(projectPath: string): Promise<void> {
+  const buildGradlePath = path.join(projectPath, 'android', 'app', 'build.gradle');
+  
+  try {
+    if (await fs.pathExists(buildGradlePath)) {
+      let content = await fs.readFile(buildGradlePath, 'utf8');
+      
+      // Check if the vector icons line is already present
+      if (content.includes('react-native-vector-icons/fonts.gradle')) {
+        console.log(chalk.yellow('Vector icons configuration already exists in build.gradle'));
+        return;
+      }
+      
+      // Find the line with jscFlavor definition and add the vector icons line after it
+      const jscFlavorRegex = /def jscFlavor = ['"][^'"]*['"]/;
+      const match = content.match(jscFlavorRegex);
+      
+      if (match) {
+        const insertionPoint = content.indexOf(match[0]) + match[0].length;
+        const beforeInsertion = content.substring(0, insertionPoint);
+        const afterInsertion = content.substring(insertionPoint);
+        
+        const vectorIconsLine = '\napply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")';
+        content = beforeInsertion + vectorIconsLine + afterInsertion;
+        
+        await fs.writeFile(buildGradlePath, content);
+        console.log(chalk.green('✅ Added react-native-vector-icons configuration to Android build.gradle'));
+      } else {
+        console.log(chalk.yellow('⚠️  Could not find jscFlavor line in build.gradle, vector icons configuration not added'));
+      }
+    } else {
+      console.log(chalk.yellow('⚠️  Android build.gradle not found, skipping vector icons configuration'));
+    }
+  } catch (error) {
+    console.log(chalk.yellow(`⚠️  Could not configure vector icons in build.gradle: ${error instanceof Error ? error.message : 'Unknown error'}`));
+  }
+} 

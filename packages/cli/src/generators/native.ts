@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles } from './utils';
+import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons } from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,7 +36,10 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
     // Step 3: Overlay Idealyst-specific files
     await overlayIdealystFiles(templatePath, projectPath, templateData);
     
-    // Step 4: Install dependencies (including Idealyst packages) after workspace config is updated
+    // Step 4: Configure Android vector icons
+    await configureAndroidVectorIcons(projectPath);
+    
+    // Step 5: Install dependencies (including Idealyst packages) after workspace config is updated
     await installDependencies(projectPath, skipInstall);
     
     console.log(chalk.green('✅ React Native project created successfully!'));
@@ -45,6 +48,7 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
     console.log(chalk.white('  • Idealyst Components'));
     console.log(chalk.white('  • Idealyst Navigation'));
     console.log(chalk.white('  • Idealyst Theme'));
+    console.log(chalk.white('  • React Native Vector Icons (configured)'));
     console.log(chalk.white('  • TypeScript configuration'));
     console.log(chalk.white('  • Metro configuration'));
     console.log(chalk.white('  • Babel configuration'));
