@@ -153,7 +153,7 @@ export async function initializeReactNativeProject(projectName: string, director
   try {
     // Use the correct React Native CLI command format with specific version and yarn
     const cliCommand = 'npx';
-    const args = ['@react-native-community/cli@latest', 'init', projectName, '--version', '0.80.1', '--pm', 'yarn'];
+    const args = ['@react-native-community/cli@latest', 'init', projectName, '--version', '0.80.1', '--pm', 'yarn', '--skip-git-init'];
     
     // Add title if displayName is provided
     if (displayName) {
@@ -172,7 +172,7 @@ export async function initializeReactNativeProject(projectName: string, director
   } catch (error) {
     spinner.fail('Failed to initialize React Native project');
     console.log(chalk.yellow('Make sure you have the React Native CLI and yarn available:'));
-    console.log(chalk.white('  npx @react-native-community/cli@latest init ProjectName --version 0.80.1 --pm yarn'));
+    console.log(chalk.white('  npx @react-native-community/cli@latest init ProjectName --version 0.80.1 --pm yarn --skip-git-init'));
     console.log(chalk.yellow('If you encounter issues, try:'));
     console.log(chalk.white('  npm install -g @react-native-community/cli'));
     console.log(chalk.white('  npm install -g yarn'));

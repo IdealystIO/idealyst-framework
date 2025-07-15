@@ -5,9 +5,15 @@ const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro
 
 const config = {
   projectRoot: __dirname,
+  watchFolders: [
+    // Add the workspace root to watch folders so Metro can watch workspace packages
+    path.resolve(__dirname, '..'),
+  ],
   resolver: {
     nodeModulesPaths: [
       path.resolve(__dirname, 'node_modules'),
+      // Add the workspace root node_modules
+      path.resolve(__dirname, '..', 'node_modules'),
     ],
     // Important for Idealyst to use .native extensions for React Native (eg: @idealyst/components/src/Button/Button.native.tsx)
     sourceExts: ['native.tsx', 'native.ts', 'tsx', 'ts', 'native.jsx', 'native.js', 'jsx', 'js', 'json'],

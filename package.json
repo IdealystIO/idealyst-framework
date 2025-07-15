@@ -1,6 +1,6 @@
 {
   "name": "idealyst-monorepo",
-  "version": "1.0.21",
+  "version": "1.0.23",
   "private": true,
   "workspaces": [
     "packages/*"

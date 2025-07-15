@@ -18,7 +18,6 @@ export default defineConfig({
         plugins: [
           ['react-native-unistyles/plugin', {
             root: 'src',
-            debug: true,
             autoProcessPaths: ['@idealyst/components', '@idealyst/navigation', '@idealyst/theme'],
           }],
           ['@idealyst/components/plugin/web', { root: 'src' }]
@@ -37,7 +36,9 @@ export default defineConfig({
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
     // Ensure proper resolution of package exports
-    conditions: ['browser', 'import', 'module', 'default']
+    conditions: ['browser', 'import', 'module', 'default'],
+    // Ensure workspace dependencies resolve properly
+    preserveSymlinks: false
   },
   define: {
     global: 'globalThis',
@@ -58,10 +59,11 @@ export default defineConfig({
       '@idealyst/components',
       '@idealyst/navigation', 
       '@idealyst/theme',
+      '@testproject/shared',
     ],
   },
   server: {
     host: '0.0.0.0',
-    port: 5173
+    port: 5173,
   },
 }) 

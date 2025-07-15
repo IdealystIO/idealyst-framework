@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/navigation",
-  "version": "1.0.21",
+  "version": "1.0.23",
   "description": "Cross-platform navigation library for React and React Native",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -33,14 +33,12 @@
     }
   },
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
     "prepublishOnly": "echo 'Publishing TypeScript source directly'",
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.0.21",
-    "@idealyst/theme": "^1.0.21",
+    "@idealyst/components": "^1.0.23",
+    "@idealyst/theme": "^1.0.23",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/drawer": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
@@ -58,8 +56,6 @@
   "devDependencies": {
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "rollup": "^3.20.0",
-    "rollup-plugin-typescript2": "^0.34.0",
     "typescript": "^5.0.0"
   },
   "files": [

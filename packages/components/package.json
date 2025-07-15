@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/components",
-  "version": "1.0.21",
+  "version": "1.0.23",
   "description": "Shared component library for React and React Native",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -35,13 +35,11 @@
     }
   },
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
     "prepublishOnly": "echo 'Publishing TypeScript source directly'",
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/theme": "^1.0.21",
+    "@idealyst/theme": "^1.0.23",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@react-native-vector-icons/common": "^12.0.1",
@@ -84,8 +82,6 @@
   },
   "devDependencies": {
     "@types/react": "^19.1.0",
-    "rollup": "^3.20.0",
-    "rollup-plugin-typescript2": "^0.34.0",
     "typescript": "^5.0.0"
   },
   "files": [

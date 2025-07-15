@@ -2,16 +2,13 @@
   "name": "{{packageName}}",
   "version": "{{version}}",
   "description": "{{description}}",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "prepublishOnly": "yarn build"
-  },
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
   "peerDependencies": {
-    "@idealyst/theme": "^1.0.3",
+    "@idealyst/components": "^1.0.21",
+    "@idealyst/navigation": "^1.0.21",
+    "@idealyst/theme": "^1.0.21",
     "react": "^19.1.0",
     "react-native": "^0.80.1"
   },
@@ -21,11 +18,12 @@
     }
   },
   "devDependencies": {
+    "@idealyst/components": "^1.0.21",
+    "@idealyst/navigation": "^1.0.21",
+    "@idealyst/theme": "^1.0.21",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",
     "react-native": "^0.80.1",
-    "rollup": "^3.20.0",
-    "rollup-plugin-typescript2": "^0.34.0",
     "typescript": "^5.0.0"
   },
   "files": [
