@@ -1,9 +1,5 @@
-// Import local theme configuration to avoid circular dependency issue in published packages
-// This bypasses the bug in @idealyst/theme@1.0.12's unistyles.ts file
-import './unistyles.config';
 
-// Import navigation unistyles after all other imports to ensure it overrides any previous configuration
-// import '@idealyst/navigation/examples/unistyles';
+import '@idealyst/navigation/examples/unistyles';
 
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';

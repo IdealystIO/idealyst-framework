@@ -1,4 +1,3 @@
-// Import navigation unistyles after all other imports to ensure it overrides any previous configuration
 import '@idealyst/navigation/examples/unistyles';
 
 import * as React from 'react';

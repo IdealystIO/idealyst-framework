@@ -147,7 +147,7 @@ export function getTemplateData(projectName: string, description?: string, appNa
   };
 }
 
-export async function initializeReactNativeProject(projectName: string, directory: string, displayName?: string): Promise<void> {
+export async function initializeReactNativeProject(projectName: string, directory: string, displayName?: string, skipInstall?: boolean): Promise<void> {
   const spinner = ora('Initializing React Native project...').start();
   
   try {
@@ -158,6 +158,11 @@ export async function initializeReactNativeProject(projectName: string, director
     // Add title if displayName is provided
     if (displayName) {
       args.push('--title', displayName);
+    }
+    
+    // Skip install if requested (we'll handle it separately for workspace integration)
+    if (skipInstall) {
+      args.push('--skip-install');
     }
     
     // Run React Native initialization in the target directory

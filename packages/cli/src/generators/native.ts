@@ -27,17 +27,17 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
   const templateData = getTemplateData(name, `React Native app built with Idealyst Framework`, displayName);
   
   try {
-    // Step 1: Initialize React Native project using CLI
-    await initializeReactNativeProject(name, directory, displayName);
+    // Step 1: Update workspace configuration FIRST (before React Native CLI)
+    await updateWorkspacePackageJson(name, directory);
     
-    // Step 2: Overlay Idealyst-specific files
+    // Step 2: Initialize React Native project using CLI with --skip-install
+    await initializeReactNativeProject(name, directory, displayName, true);
+    
+    // Step 3: Overlay Idealyst-specific files
     await overlayIdealystFiles(templatePath, projectPath, templateData);
     
-    // Step 3: Install dependencies (including Idealyst packages)
+    // Step 4: Install dependencies (including Idealyst packages) after workspace config is updated
     await installDependencies(projectPath, skipInstall);
-    
-    // Step 4: Update workspace configuration if applicable
-    await updateWorkspacePackageJson(name, directory);
     
     console.log(chalk.green('✅ React Native project created successfully!'));
     console.log(chalk.blue('📋 Project includes:'));
