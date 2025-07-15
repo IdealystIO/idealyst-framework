@@ -1,5 +1,0 @@
----
-description: Please avoid generating documentation unless specifically prompted
-globs:
-alwaysApply: true
----
