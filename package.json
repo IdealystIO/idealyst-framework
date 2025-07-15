@@ -1,0 +1,49 @@
+{
+  "name": "idealyst-monorepo",
+  "version": "1.0.19",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@3.6.4",
+  "scripts": {
+    "publish:theme": "cd packages/theme && npm publish",
+    "publish:components": "cd packages/components && npm publish",
+    "publish:navigation": "cd packages/navigation && npm publish",
+    "publish:cli": "cd packages/cli && npm publish",
+    "publish:all": "yarn publish:theme && yarn publish:components && yarn publish:navigation && yarn publish:cli",
+    "version:patch": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' version patch && yarn version:sync",
+    "version:minor": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' version minor && yarn version:sync",
+    "version:major": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' version major && yarn version:sync",
+    "version:sync": "node scripts/sync-versions.js",
+    "version:set": "node scripts/set-version.js",
+    "version:status": "node scripts/version-status.js",
+    "version:alpha": "node scripts/set-version.js",
+    "version:beta": "node scripts/set-version.js",
+    "version:rc": "node scripts/set-version.js"
+  },
+  "resolutions": {
+    "@react-navigation/native": "7.1.14",
+    "@react-navigation/bottom-tabs": "7.4.2",
+    "@react-navigation/drawer": "7.5.3",
+    "@react-navigation/native-stack": "7.3.21",
+    "react": "19.1.0",
+    "react-native": "0.80.1",
+    "react-native-unistyles": "^3.0.4",
+    "react-native-safe-area-context": "^5.5.1",
+    "react-native-screens": "^4.11.1",
+    "react-native-gesture-handler": "^2.27.1",
+    "react-native-reanimated": "^3.18.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.27.6"
+  },
+  "devDependencies": {
+    "@babel/compat-data": "^7.28.0",
+    "@babel/core": "^7.28.0",
+    "@babel/helper-compilation-targets": "^7.27.2",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1"
+  }
+}

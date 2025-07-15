@@ -1,0 +1,31 @@
+{
+  "name": "Node.js Monorepo (Yarn) - Optimized",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "source=idealyst-yarn-cache,target=/usr/local/share/.cache/yarn,type=volume",
+    "source=idealyst-root-node-modules,target=/workspace/node_modules,type=volume",
+    "source=idealyst-components-node-modules,target=/workspace/packages/components/node_modules,type=volume",
+    "source=idealyst-example-native-node-modules,target=/workspace/packages/example-native/node_modules,type=volume",
+    "source=idealyst-example-web-node-modules,target=/workspace/packages/example-web/node_modules,type=volume"
+  ],
+  "postCreateCommand": "sudo chown -R node:node /workspace/node_modules /workspace/packages/*/node_modules",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "ms-vscode.vscode-yarn"
+      ]
+    }
+  },
+  "workspaceFolder": "/workspace",
+  "remoteUser": "node"
+}

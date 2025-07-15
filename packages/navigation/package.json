@@ -1,0 +1,75 @@
+{
+  "name": "@idealyst/navigation",
+  "version": "1.0.19",
+  "description": "Cross-platform navigation library for React and React Native",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/idealyst-framework.git",
+    "directory": "packages/navigation"
+  },
+  "author": "Nicholas Mercier <nicho.mercier@gmail.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./examples": {
+      "import": "./src/examples/index.ts",
+      "require": "./src/examples/index.ts",
+      "types": "./src/examples/index.ts"
+    },
+    "./examples/unistyles": {
+      "import": "./src/examples/unistyles.ts",
+      "require": "./src/examples/unistyles.ts",
+      "types": "./src/examples/unistyles.ts"
+    }
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "@idealyst/components": "^1.0.19",
+    "@idealyst/theme": "^1.0.19",
+    "@react-navigation/bottom-tabs": "^7.0.0",
+    "@react-navigation/drawer": "^7.0.0",
+    "@react-navigation/native": "^7.0.0",
+    "@react-navigation/native-stack": "^7.0.0",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-screens": "*",
+    "react-native-unistyles": "^3.0.4",
+    "react-router": "^7.6.3",
+    "react-router-dom": "^7.6.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "rollup": "^3.20.0",
+    "rollup-plugin-typescript2": "^0.34.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "navigation",
+    "cross-platform",
+    "router"
+  ]
+}

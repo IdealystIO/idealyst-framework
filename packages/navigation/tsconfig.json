@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "ES2015",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "lib": ["ES2017", "DOM"],
+        "jsx": "react-jsx",
+        "declaration": true,
+        "outDir": "./dist",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "baseUrl": ".",
+        "paths": {
+            "@idealyst/components": ["../components/src"],
+            "@idealyst/theme": ["../theme/src"],
+            "@react-navigation/native": ["../example-native/node_modules/@react-navigation/native"],
+            "@react-navigation/bottom-tabs": ["../example-native/node_modules/@react-navigation/bottom-tabs"],
+            "@react-navigation/drawer": ["../example-native/node_modules/@react-navigation/drawer"],
+            "@react-navigation/native-stack": ["../example-native/node_modules/@react-navigation/native-stack"],
+            "react-native-*": ["../example-native/node_modules/react-native-*"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+}

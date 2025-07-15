@@ -1,0 +1,59 @@
+{
+  "name": "@idealyst/cli",
+  "version": "1.0.19",
+  "description": "CLI tool for generating Idealyst Framework projects",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "idealyst": "dist/index.js",
+    "idealyst-cli": "dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/idealyst-framework.git",
+    "directory": "packages/cli"
+  },
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "prepublishOnly": "yarn build",
+    "publish:npm": "npm publish"
+  },
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "commander": "^11.0.0",
+    "fs-extra": "^11.0.0",
+    "inquirer": "^9.0.0",
+    "ora": "^7.0.0",
+    "validate-npm-package-name": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.0",
+    "@types/inquirer": "^9.0.0",
+    "@types/node": "^20.0.0",
+    "@types/validate-npm-package-name": "^4.0.0",
+    "rollup": "^3.20.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.34.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "keywords": [
+    "cli",
+    "generator",
+    "react",
+    "react-native",
+    "cross-platform",
+    "idealyst"
+  ]
+}

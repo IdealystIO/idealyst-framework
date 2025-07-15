@@ -1,0 +1,101 @@
+{
+  "name": "@idealyst/components",
+  "version": "1.0.19",
+  "description": "Shared component library for React and React Native",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/idealyst-framework.git",
+    "directory": "packages/components"
+  },
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./plugin/web": {
+      "import": "./plugin/web.js",
+      "require": "./plugin/web.js",
+      "types": "./plugin/web.d.ts"
+    },
+    "./examples": {
+      "import": "./src/examples/index.ts",
+      "require": "./src/examples/index.ts",
+      "types": "./src/examples/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "@idealyst/theme": "^1.0.19",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
+    "@react-native-vector-icons/common": "^12.0.1",
+    "@react-native-vector-icons/material-design-icons": "^12.0.1",
+    "@react-native/normalize-colors": "*",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-edge-to-edge": "*",
+    "react-native-nitro-modules": "*",
+    "react-native-unistyles": "^3.0.4"
+  },
+  "peerDependenciesMeta": {
+    "@idealyst/theme": {
+      "optional": true
+    },
+    "@mdi/js": {
+      "optional": true
+    },
+    "@mdi/react": {
+      "optional": true
+    },
+    "@react-native/normalize-colors": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-edge-to-edge": {
+      "optional": true
+    },
+    "react-native-nitro-modules": {
+      "optional": true
+    },
+    "react-native-unistyles": {
+      "optional": true
+    },
+    "react-native-vector-icons": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "rollup": "^3.20.0",
+    "rollup-plugin-typescript2": "^0.34.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "plugin"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "components",
+    "cross-platform"
+  ]
+}

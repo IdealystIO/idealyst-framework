@@ -1,0 +1,25 @@
+{
+  "name": "{{packageName}}",
+  "version": "{{version}}",
+  "description": "{{description}}",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@4.1.0",
+  "scripts": {
+    "publish:all": "yarn workspaces foreach --include '@/*' npm publish",
+    "version:patch": "yarn workspaces foreach --include '@/*' version patch",
+    "version:minor": "yarn workspaces foreach --include '@/*' version minor",
+    "version:major": "yarn workspaces foreach --include '@/*' version major",
+    "build:all": "yarn workspaces foreach --include '@/*' run build",
+    "test:all": "yarn workspaces foreach --include '@/*' run test"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "typescript": "^5.0.0"
+  }
+} 

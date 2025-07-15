@@ -1,0 +1,5 @@
+{
+  "name": "{{projectName}}",
+  "displayName": "{{projectName}}",
+  "react-native-version": "0.80.1"
+} 

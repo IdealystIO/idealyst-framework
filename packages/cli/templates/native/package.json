@@ -1,0 +1,10 @@
+{
+  "name": "{{packageName}}",
+  "version": "{{version}}",
+  "description": "{{description}}",
+  "private": true,
+  "idealyst": {
+    "framework": "react-native",
+    "version": "1.0.3"
+  }
+} 
