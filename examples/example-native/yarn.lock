@@ -1559,11 +1559,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@idealyst/components@npm:^1.0.15":
-  version: 1.0.15
-  resolution: "@idealyst/components@npm:1.0.15"
+"@idealyst/components@npm:^1.0.24":
+  version: 1.0.24
+  resolution: "@idealyst/components@npm:1.0.24"
   peerDependencies:
-    "@idealyst/theme": ^1.0.15
+    "@idealyst/theme": ^1.0.24
     "@mdi/js": ^7.4.47
     "@mdi/react": ^1.6.1
     "@react-native-vector-icons/common": ^12.0.1
@@ -1593,16 +1593,16 @@ __metadata:
       optional: true
     react-native-vector-icons:
       optional: true
-  checksum: 91d2d25a4fc57ab61e94951de6da9605d0a253bbe269446f02c3626489bd01be85d1d92ab602adc382c824c5b72f94bfa8575b05f8fd5291d6079b46b62cfb16
+  checksum: f4389e5b4f67e15d0b91dbbd00a4d97785b9d0863c0b94f34b7cc41b3b6b7ac716e8c21044298de9dcadc05813f4e5415765d4170b8a2dc5f312b739e2ba71a6
   languageName: node
   linkType: hard
 
-"@idealyst/navigation@npm:^1.0.15":
-  version: 1.0.15
-  resolution: "@idealyst/navigation@npm:1.0.15"
+"@idealyst/navigation@npm:^1.0.24":
+  version: 1.0.24
+  resolution: "@idealyst/navigation@npm:1.0.24"
   peerDependencies:
-    "@idealyst/components": ^1.0.15
-    "@idealyst/theme": ^1.0.15
+    "@idealyst/components": ^1.0.24
+    "@idealyst/theme": ^1.0.24
     "@react-navigation/bottom-tabs": ^7.0.0
     "@react-navigation/drawer": ^7.0.0
     "@react-navigation/native": ^7.0.0
@@ -1616,19 +1616,19 @@ __metadata:
     react-native-unistyles: ^3.0.4
     react-router: ^7.6.3
     react-router-dom: ^7.6.3
-  checksum: 2a9be46b4fe8c0380b637910de2dfb61fd3105ba1aa3e7d98990e836d54d7c5bae1ed5fe8f82e00f5f4bcb5b8a8351716a18cd1a34fbddda9108331b0382be10
+  checksum: 99eebaa0f78dfba2491f93473552102ca725f309911ff62fe7b0c8f248b09733e0754afbd9be31444349750d2472c24b1a8c7b92b1fd90b6dc377f1793abeeef
   languageName: node
   linkType: hard
 
-"@idealyst/theme@npm:^1.0.15":
-  version: 1.0.15
-  resolution: "@idealyst/theme@npm:1.0.15"
+"@idealyst/theme@npm:^1.0.24":
+  version: 1.0.24
+  resolution: "@idealyst/theme@npm:1.0.24"
   peerDependencies:
     react-native-unistyles: ^3.0.4
   peerDependenciesMeta:
     react-native-unistyles:
       optional: true
-  checksum: 19dfd10016964d4d6c4ccde07871781dd6cca9a17cb3d3045c8c2e28a8b74002bbcfca11b74224653ad1fba37627e6aa7e2ec1fb84740f6ff992ed3fe5216f32
+  checksum: 9da231a8e7b27ab3f4615ea44265ac1f6b58f3244c64d4b5919e8c3af031b0f662c93e43be6cff494601f2b995a58184ee994bc7c216e1c225bf10b31877e9cd
   languageName: node
   linkType: hard
 
@@ -3056,9 +3056,9 @@ __metadata:
     "@babel/core": ^7.25.2
     "@babel/preset-env": ^7.25.3
     "@babel/runtime": ^7.27.6
-    "@idealyst/components": ^1.0.15
-    "@idealyst/navigation": ^1.0.15
-    "@idealyst/theme": ^1.0.15
+    "@idealyst/components": ^1.0.24
+    "@idealyst/navigation": ^1.0.24
+    "@idealyst/theme": ^1.0.24
     "@react-native-community/cli": 19.0.0
     "@react-native-community/cli-platform-android": 19.0.0
     "@react-native-community/cli-platform-ios": 19.0.0

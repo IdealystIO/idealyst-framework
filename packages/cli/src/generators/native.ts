@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons } from './utils';
+import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons, resolveProjectPath } from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,17 +21,20 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
   console.log(chalk.blue(`📱 Creating React Native project: ${name}`));
   console.log(chalk.gray(`   App display name: ${displayName}`));
   
-  const projectPath = path.join(directory, name);
+  const { projectPath, workspacePath } = await resolveProjectPath(name, directory);
   const templatePath = path.join(__dirname, '..', 'templates', 'native');
   
   const templateData = getTemplateData(name, `React Native app built with Idealyst Framework`, displayName);
   
   try {
     // Step 1: Update workspace configuration FIRST (before React Native CLI)
-    await updateWorkspacePackageJson(name, directory);
+    await updateWorkspacePackageJson(workspacePath, directory);
     
     // Step 2: Initialize React Native project using CLI with --skip-install
-    await initializeReactNativeProject(name, directory, displayName, true);
+    // Note: For React Native CLI, we need to run it in the parent directory and specify the project name
+    const projectDir = path.dirname(projectPath);
+    const projectName = path.basename(projectPath);
+    await initializeReactNativeProject(projectName, projectDir, displayName, true);
     
     // Step 3: Overlay Idealyst-specific files
     await overlayIdealystFiles(templatePath, projectPath, templateData);

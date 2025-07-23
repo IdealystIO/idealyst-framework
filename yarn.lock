@@ -1268,11 +1268,9 @@ __metadata:
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
     "@types/react": ^19.1.0
-    rollup: ^3.20.0
-    rollup-plugin-typescript2: ^0.34.0
     typescript: ^5.0.0
   peerDependencies:
-    "@idealyst/theme": ^1.0.13
+    "@idealyst/theme": ^1.0.24
     "@mdi/js": ^7.4.47
     "@mdi/react": ^1.6.1
     "@react-native-vector-icons/common": ^12.0.1
@@ -1311,12 +1309,10 @@ __metadata:
   dependencies:
     "@types/react": ^19.1.8
     "@types/react-dom": ^19.1.6
-    rollup: ^3.20.0
-    rollup-plugin-typescript2: ^0.34.0
     typescript: ^5.0.0
   peerDependencies:
-    "@idealyst/components": ^1.0.13
-    "@idealyst/theme": ^1.0.13
+    "@idealyst/components": ^1.0.24
+    "@idealyst/theme": ^1.0.24
     "@react-navigation/bottom-tabs": ^7.0.0
     "@react-navigation/drawer": ^7.0.0
     "@react-navigation/native": ^7.0.0
@@ -1338,8 +1334,6 @@ __metadata:
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
     "@types/react": ^19.1.0
-    rollup: ^3.20.0
-    rollup-plugin-typescript2: ^0.34.0
     typescript: ^5.0.0
   peerDependencies:
     react-native-unistyles: ^3.0.4

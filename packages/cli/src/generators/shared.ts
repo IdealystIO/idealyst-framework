@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, copyTemplate, installDependencies, getTemplateData, updateWorkspacePackageJson } from './utils';
+import { validateProjectName, copyTemplate, installDependencies, getTemplateData, updateWorkspacePackageJson, resolveProjectPath } from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,14 +16,14 @@ export async function generateSharedLibrary(options: GenerateProjectOptions): Pr
   
   console.log(chalk.blue(`📦 Creating shared library: ${name}`));
   
-  const projectPath = path.join(directory, name);
+  const { projectPath, workspacePath } = await resolveProjectPath(name, directory);
   const templatePath = path.join(__dirname, '..', 'templates', 'shared');
   
   const templateData = getTemplateData(name, `Shared library built with Idealyst Framework`);
   
   await copyTemplate(templatePath, projectPath, templateData);
   await installDependencies(projectPath, skipInstall);
-  await updateWorkspacePackageJson(name, directory);
+  await updateWorkspacePackageJson(workspacePath, directory);
   
   console.log(chalk.green('✅ Shared library created successfully!'));
   console.log(chalk.blue('📋 Project includes:'));

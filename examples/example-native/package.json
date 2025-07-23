@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android:manual": "cd android && ./gradlew installDebug && adb shell am start -n com.examplenative/.MainActivity",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",

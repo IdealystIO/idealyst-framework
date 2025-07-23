@@ -16,7 +16,7 @@ export function createPackageName(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9-]/g, '-');
 }
 
-export async function updateWorkspacePackageJson(projectName: string, directory: string): Promise<void> {
+export async function updateWorkspacePackageJson(workspacePath: string, directory: string): Promise<void> {
   // Look for package.json in the directory to see if we're in a workspace
   const packageJsonPath = path.join(directory, 'package.json');
   
@@ -27,10 +27,10 @@ export async function updateWorkspacePackageJson(projectName: string, directory:
       // Check if this is a workspace (has workspaces property)
       if (packageJson.workspaces && Array.isArray(packageJson.workspaces)) {
         // Add the new project to workspaces if not already present
-        if (!packageJson.workspaces.includes(projectName)) {
-          packageJson.workspaces.push(projectName);
+        if (!packageJson.workspaces.includes(workspacePath)) {
+          packageJson.workspaces.push(workspacePath);
           await fs.writeJSON(packageJsonPath, packageJson, { spaces: 2 });
-          console.log(chalk.green(`✅ Added ${projectName} to workspace configuration`));
+          console.log(chalk.green(`✅ Added ${workspacePath} to workspace configuration`));
         }
       }
     } catch (error) {
@@ -145,6 +145,50 @@ export function getTemplateData(projectName: string, description?: string, appNa
     description: description || `A new Idealyst project: ${projectName}`,
     appName
   };
+}
+
+/**
+ * Detects if we're in a workspace root directory
+ */
+export async function isWorkspaceRoot(directory: string): Promise<boolean> {
+  const packageJsonPath = path.join(directory, 'package.json');
+  
+  if (await fs.pathExists(packageJsonPath)) {
+    try {
+      const packageJson = await fs.readJSON(packageJsonPath);
+      return !!(packageJson.workspaces && Array.isArray(packageJson.workspaces));
+    } catch (error) {
+      return false;
+    }
+  }
+  
+  return false;
+}
+
+/**
+ * Resolves the correct project path for new packages.
+ * If we're in a workspace root and no specific directory is provided,
+ * place packages in the packages/ folder.
+ */
+export async function resolveProjectPath(projectName: string, directory: string): Promise<{ projectPath: string; workspacePath: string }> {
+  const isCurrentDir = directory === '.';
+  const isWorkspace = await isWorkspaceRoot(directory);
+  
+  if (isWorkspace && isCurrentDir) {
+    // We're in a workspace root, place packages in packages/ folder
+    const packagesDir = path.join(directory, 'packages');
+    await fs.ensureDir(packagesDir);
+    return {
+      projectPath: path.join(packagesDir, projectName),
+      workspacePath: `packages/${projectName}`
+    };
+  } else {
+    // Standard behavior: create project in specified directory
+    return {
+      projectPath: path.join(directory, projectName),
+      workspacePath: projectName
+    };
+  }
 }
 
 export async function initializeReactNativeProject(projectName: string, directory: string, displayName?: string, skipInstall?: boolean): Promise<void> {
