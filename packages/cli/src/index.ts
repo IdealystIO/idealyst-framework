@@ -4,7 +4,7 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import { generateProject } from './generators';
 import { ProjectType } from './types';
-import { promptForProjectName, promptForProjectType, promptForAppName } from './generators/utils';
+import { promptForProjectName, promptForProjectType, promptForAppName, promptForTrpcIntegration } from './generators/utils';
 
 const program = new Command();
 
@@ -16,14 +16,16 @@ program
 program
   .command('create [project-name]')
   .description('Create a new Idealyst project')
-  .option('-t, --type <type>', 'Project type: native, web, or shared')
+  .option('-t, --type <type>', 'Project type: native, web, shared, or api')
   .option('-d, --directory <directory>', 'Output directory', '.')
   .option('-a, --app-name <app-name>', 'Display name for native apps (e.g., "My Awesome App")')
+  .option('--with-trpc', 'Include tRPC boilerplate and setup (for web/native projects)')
   .option('--skip-install', 'Skip installing dependencies')
   .action(async (projectName: string | undefined, options: {
     type?: string;
     directory: string;
     appName?: string;
+    withTrpc?: boolean;
     skipInstall?: boolean;
   }) => {
     try {
@@ -47,7 +49,7 @@ program
         projectType = await promptForProjectType();
       }
 
-      const validTypes = ['native', 'web', 'shared'];
+      const validTypes = ['native', 'web', 'shared', 'api'];
       if (!validTypes.includes(projectType)) {
         console.error(chalk.red(`Invalid project type: ${projectType}`));
         console.error(chalk.yellow(`Valid types are: ${validTypes.join(', ')}`));
@@ -60,28 +62,41 @@ program
         appName = await promptForAppName(projectName);
       }
 
+      // Prompt for tRPC integration if it's a web/native project and flag not provided
+      let withTrpc = options.withTrpc;
+      if ((projectType === 'web' || projectType === 'native') && withTrpc === undefined) {
+        withTrpc = await promptForTrpcIntegration();
+      }
+
       await generateProject({
         name: projectName,
         type: projectType as ProjectType,
         directory: options.directory,
         skipInstall: options.skipInstall || false,
-        appName
+        appName,
+        withTrpc: withTrpc || false
       });
       
       console.log(chalk.green(`✨ Successfully created ${projectName}!`));
-      console.log(chalk.blue(`📁 Project created in: ${options.directory}/${projectName}`));
+      console.log(chalk.blue(`📁 Project created in: ${options.directory}/packages/${projectName}`));
       
       if (projectType === 'native') {
         console.log(chalk.yellow('\n📱 Next steps for React Native:'));
-        console.log(chalk.white('  cd ' + projectName));
+        console.log(chalk.white('  cd packages/' + projectName));
         console.log(chalk.white('  yarn android  # or yarn ios'));
       } else if (projectType === 'web') {
         console.log(chalk.yellow('\n🌐 Next steps for React Web:'));
-        console.log(chalk.white('  cd ' + projectName));
+        console.log(chalk.white('  cd packages/' + projectName));
         console.log(chalk.white('  yarn dev'));
+      } else if (projectType === 'api') {
+        console.log(chalk.yellow('\n🚀 Next steps for API Server:'));
+        console.log(chalk.white('  cd packages/' + projectName));
+        console.log(chalk.white('  yarn dev        # Start development server'));
+        console.log(chalk.white('  yarn db:push    # Push database schema'));
+        console.log(chalk.white('  yarn db:studio  # Open Prisma Studio'));
       } else {
         console.log(chalk.yellow('\n📦 Next steps for Shared Library:'));
-        console.log(chalk.white('  cd ' + projectName));
+        console.log(chalk.white('  cd packages/' + projectName));
         console.log(chalk.white('  yarn build'));
       }
     } catch (error) {

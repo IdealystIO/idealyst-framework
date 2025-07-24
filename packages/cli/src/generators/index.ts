@@ -3,6 +3,7 @@ import { generateNativeProject } from './native';
 import { generateWebProject } from './web';
 import { generateSharedLibrary } from './shared';
 import { generateWorkspace } from './workspace';
+import { generateApiProject } from './api';
 
 export async function generateProject(options: GenerateProjectOptions): Promise<void> {
   const { type } = options;
@@ -20,6 +21,9 @@ export async function generateProject(options: GenerateProjectOptions): Promise<
     case 'workspace':
       await generateWorkspace(options);
       break;
+    case 'api':
+      await generateApiProject(options);
+      break;
     default:
       throw new Error(`Unknown project type: ${type}`);
   }
@@ -28,4 +32,5 @@ export async function generateProject(options: GenerateProjectOptions): Promise<
 export * from './native';
 export * from './web';
 export * from './shared';
-export * from './workspace'; 
+export * from './workspace';
+export * from './api'; 

@@ -1,4 +1,4 @@
-export type ProjectType = 'native' | 'web' | 'shared' | 'workspace';
+export type ProjectType = 'native' | 'web' | 'shared' | 'workspace' | 'api';
 
 export interface GenerateProjectOptions {
   name: string;
@@ -6,6 +6,7 @@ export interface GenerateProjectOptions {
   directory: string;
   skipInstall: boolean;
   appName?: string; // For native projects - display name for the app
+  withTrpc?: boolean; // For web/native projects - include tRPC boilerplate
 }
 
 export interface TemplateData {

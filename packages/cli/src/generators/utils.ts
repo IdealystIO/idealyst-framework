@@ -26,11 +26,20 @@ export async function updateWorkspacePackageJson(workspacePath: string, director
       
       // Check if this is a workspace (has workspaces property)
       if (packageJson.workspaces && Array.isArray(packageJson.workspaces)) {
-        // Add the new project to workspaces if not already present
-        if (!packageJson.workspaces.includes(workspacePath)) {
+        // Check if workspace already covers this path with a wildcard
+        const workspaceDir = path.dirname(workspacePath);
+        const wildcardPattern = `${workspaceDir}/*`;
+                 const isAlreadyCovered = packageJson.workspaces.some((ws: string) => 
+           ws === wildcardPattern || ws === workspacePath
+         );
+        
+        // Add the new project to workspaces if not already present or covered
+        if (!isAlreadyCovered) {
           packageJson.workspaces.push(workspacePath);
           await fs.writeJSON(packageJsonPath, packageJson, { spaces: 2 });
           console.log(chalk.green(`✅ Added ${workspacePath} to workspace configuration`));
+        } else {
+          console.log(chalk.blue(`📦 Project ${workspacePath} already covered by existing workspace configuration`));
         }
       }
     } catch (error) {
@@ -48,7 +57,10 @@ export async function copyTemplate(templatePath: string, destPath: string, data:
     await fs.copy(templatePath, destPath, {
       filter: (src) => {
         const relativePath = path.relative(templatePath, src);
-        return !relativePath.includes('node_modules') && !relativePath.includes('.git');
+        // Skip App-with-trpc.tsx as it's only copied when tRPC is enabled
+        return !relativePath.includes('node_modules') && 
+               !relativePath.includes('.git') &&
+               !relativePath.endsWith('App-with-trpc.tsx');
       }
     });
     
@@ -86,6 +98,10 @@ export async function processTemplateFile(filePath: string, data: TemplateData):
     content = content.replace(/\{\{packageName\}\}/g, data.packageName);
     content = content.replace(/\{\{version\}\}/g, data.version);
     content = content.replace(/\{\{description\}\}/g, data.description);
+    
+    // Handle appName (with fallback to projectName if not provided)
+    const appName = data.appName || data.projectName;
+    content = content.replace(/\{\{appName\}\}/g, appName);
     
     await fs.writeFile(filePath, content);
   } catch (error) {
@@ -137,10 +153,17 @@ export function runCommand(command: string, args: string[], options: { cwd: stri
   });
 }
 
-export function getTemplateData(projectName: string, description?: string, appName?: string): TemplateData {
+export function getTemplateData(projectName: string, description?: string, appName?: string, workspaceScope?: string): TemplateData {
+  let packageName = createPackageName(projectName);
+  
+  // If we have a workspace scope, prefix the package name with it
+  if (workspaceScope) {
+    packageName = `@${workspaceScope}/${packageName}`;
+  }
+  
   return {
     projectName,
-    packageName: createPackageName(projectName),
+    packageName,
     version: '1.0.0',
     description: description || `A new Idealyst project: ${projectName}`,
     appName
@@ -166,29 +189,52 @@ export async function isWorkspaceRoot(directory: string): Promise<boolean> {
 }
 
 /**
- * Resolves the correct project path for new packages.
- * If we're in a workspace root and no specific directory is provided,
- * place packages in the packages/ folder.
+ * Gets the workspace name from the workspace root's package.json
  */
-export async function resolveProjectPath(projectName: string, directory: string): Promise<{ projectPath: string; workspacePath: string }> {
-  const isCurrentDir = directory === '.';
+export async function getWorkspaceName(directory: string): Promise<string | null> {
+  const packageJsonPath = path.join(directory, 'package.json');
+  
+  if (await fs.pathExists(packageJsonPath)) {
+    try {
+      const packageJson = await fs.readJSON(packageJsonPath);
+      return packageJson.name || null;
+    } catch (error) {
+      return null;
+    }
+  }
+  
+  return null;
+}
+
+/**
+ * Resolves the correct project path for individual projects (native, web, shared).
+ * Individual projects can ONLY be created within an existing workspace.
+ * This enforces proper monorepo structure and prevents scattered individual projects.
+ */
+export async function resolveProjectPath(projectName: string, directory: string): Promise<{ projectPath: string; workspacePath: string; workspaceScope: string | null }> {
+  // Check if we're in a workspace directory
   const isWorkspace = await isWorkspaceRoot(directory);
   
-  if (isWorkspace && isCurrentDir) {
-    // We're in a workspace root, place packages in packages/ folder
-    const packagesDir = path.join(directory, 'packages');
-    await fs.ensureDir(packagesDir);
-    return {
-      projectPath: path.join(packagesDir, projectName),
-      workspacePath: `packages/${projectName}`
-    };
-  } else {
-    // Standard behavior: create project in specified directory
-    return {
-      projectPath: path.join(directory, projectName),
-      workspacePath: projectName
-    };
+  if (!isWorkspace) {
+    throw new Error(
+      `Individual projects can only be created within a workspace.\n` +
+      `Please first create a workspace with: idealyst init my-workspace\n` +
+      `Then navigate to the workspace directory and create your project.`
+    );
   }
+  
+  // Get the workspace name to use as scope
+  const workspaceScope = await getWorkspaceName(directory);
+  
+  // Create project in workspace's packages/ folder
+  const packagesDir = path.join(directory, 'packages');
+  await fs.ensureDir(packagesDir);
+  
+  return {
+    projectPath: path.join(packagesDir, projectName),
+    workspacePath: `packages/${projectName}`,
+    workspaceScope
+  };
 }
 
 export async function initializeReactNativeProject(projectName: string, directory: string, displayName?: string, skipInstall?: boolean): Promise<void> {
@@ -236,9 +282,11 @@ export async function overlayIdealystFiles(templatePath: string, projectPath: st
       filter: (src) => {
         const relativePath = path.relative(templatePath, src);
         // Skip package.json as we'll merge it separately
+        // Skip App-with-trpc.tsx as it's only copied when tRPC is enabled
         return !relativePath.includes('node_modules') && 
                !relativePath.includes('.git') && 
-               !relativePath.endsWith('package.json');
+               !relativePath.endsWith('package.json') &&
+               !relativePath.endsWith('App-with-trpc.tsx');
       }
     });
     
@@ -275,6 +323,10 @@ export async function mergePackageJsonDependencies(templatePath: string, project
       '@react-navigation/drawer': '^7.5.3',
       '@react-navigation/native': '^7.1.14',
       '@react-navigation/native-stack': '^7.3.21',
+      '@tanstack/react-query': '^5.83.0',
+      '@trpc/client': '^11.4.3',
+      '@trpc/react-query': '^11.4.3',
+      '@trpc/server': '^11.4.3',
       'react-native-edge-to-edge': '^1.6.2',
       'react-native-gesture-handler': '^2.27.1',
       'react-native-nitro-modules': '^0.26.3',
@@ -332,7 +384,8 @@ export async function promptForProjectType(): Promise<string> {
       choices: [
         { name: 'React Native App', value: 'native' },
         { name: 'React Web App', value: 'web' },
-        { name: 'Shared Library', value: 'shared' }
+        { name: 'Shared Library', value: 'shared' },
+        { name: 'API Server (tRPC + Prisma + Zod)', value: 'api' }
       ],
       default: 'native'
     }
@@ -359,6 +412,82 @@ export async function promptForAppName(projectName: string): Promise<string> {
     }
   ]);
   return appName;
+}
+
+export async function promptForTrpcIntegration(): Promise<boolean> {
+  const { withTrpc } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'withTrpc',
+      message: 'Would you like to include tRPC client setup and boilerplate?',
+      default: false
+    }
+  ]);
+  return withTrpc;
+}
+
+export async function copyTrpcFiles(templatePath: string, projectPath: string, data: TemplateData): Promise<void> {
+  const spinner = ora('Adding tRPC client utilities...').start();
+  
+  try {
+    const trpcUtilsSource = path.join(templatePath, 'src', 'utils', 'trpc.ts');
+    const trpcUtilsTarget = path.join(projectPath, 'src', 'utils', 'trpc.ts');
+    
+    // Ensure utils directory exists
+    await fs.ensureDir(path.join(projectPath, 'src', 'utils'));
+    
+    // Copy and process the tRPC utils file
+    await fs.copy(trpcUtilsSource, trpcUtilsTarget);
+    await processTemplateFile(trpcUtilsTarget, data);
+    
+    spinner.succeed('tRPC client utilities added');
+  } catch (error) {
+    spinner.fail('Failed to add tRPC client utilities');
+    console.warn(chalk.yellow('⚠️  tRPC utilities could not be copied, but the project was created successfully'));
+  }
+}
+
+export async function copyTrpcAppComponent(templatePath: string, projectPath: string, data: TemplateData): Promise<void> {
+  const spinner = ora('Setting up tRPC App component...').start();
+  
+  try {
+    const trpcAppSource = path.join(templatePath, 'src', 'App-with-trpc.tsx');
+    const appTarget = path.join(projectPath, 'src', 'App.tsx');
+    
+    // Copy the tRPC-enabled App component over the default one
+    await fs.copy(trpcAppSource, appTarget, { overwrite: true });
+    await processTemplateFile(appTarget, data);
+    
+    spinner.succeed('tRPC App component configured');
+  } catch (error) {
+    spinner.fail('Failed to configure tRPC App component');
+    console.warn(chalk.yellow('⚠️  tRPC App component could not be configured, but the project was created successfully'));
+  }
+}
+
+export async function removeTrpcDependencies(projectPath: string): Promise<void> {
+  try {
+    const packageJsonPath = path.join(projectPath, 'package.json');
+    const packageJson = await fs.readJSON(packageJsonPath);
+    
+    // Remove tRPC-related dependencies
+    const trpcDeps = [
+      '@tanstack/react-query',
+      '@trpc/client',
+      '@trpc/react-query',
+      '@trpc/server'
+    ];
+    
+    trpcDeps.forEach(dep => {
+      if (packageJson.dependencies && packageJson.dependencies[dep]) {
+        delete packageJson.dependencies[dep];
+      }
+    });
+    
+    await fs.writeJSON(packageJsonPath, packageJson, { spaces: 2 });
+  } catch (error) {
+    console.warn(chalk.yellow('⚠️  Could not remove tRPC dependencies from package.json'));
+  }
 } 
 
 export async function configureAndroidVectorIcons(projectPath: string): Promise<void> {

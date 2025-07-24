@@ -2,13 +2,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons, resolveProjectPath } from './utils';
+import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons, resolveProjectPath, copyTrpcFiles, copyTrpcAppComponent, removeTrpcDependencies } from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function generateNativeProject(options: GenerateProjectOptions): Promise<void> {
-  const { name, directory, skipInstall, appName } = options;
+  const { name, directory, skipInstall, appName, withTrpc } = options;
   
   if (!validateProjectName(name)) {
     throw new Error(`Invalid project name: ${name}`);
@@ -21,10 +21,10 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
   console.log(chalk.blue(`📱 Creating React Native project: ${name}`));
   console.log(chalk.gray(`   App display name: ${displayName}`));
   
-  const { projectPath, workspacePath } = await resolveProjectPath(name, directory);
+  const { projectPath, workspacePath, workspaceScope } = await resolveProjectPath(name, directory);
   const templatePath = path.join(__dirname, '..', 'templates', 'native');
   
-  const templateData = getTemplateData(name, `React Native app built with Idealyst Framework`, displayName);
+  const templateData = getTemplateData(name, `React Native app built with Idealyst Framework`, displayName, workspaceScope || undefined);
   
   try {
     // Step 1: Update workspace configuration FIRST (before React Native CLI)
@@ -39,10 +39,21 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
     // Step 3: Overlay Idealyst-specific files
     await overlayIdealystFiles(templatePath, projectPath, templateData);
     
-    // Step 4: Configure Android vector icons
+    // Step 4: Handle tRPC setup
+    if (withTrpc) {
+      await copyTrpcFiles(templatePath, projectPath, templateData);
+      await copyTrpcAppComponent(templatePath, projectPath, templateData);
+    }
+    
+    // Step 5: Configure Android vector icons
     await configureAndroidVectorIcons(projectPath);
     
-    // Step 5: Install dependencies (including Idealyst packages) after workspace config is updated
+    // Step 6: Remove tRPC dependencies if not requested (after merge but before install)
+    if (!withTrpc) {
+      await removeTrpcDependencies(projectPath);
+    }
+    
+    // Step 7: Install dependencies (including Idealyst packages) after workspace config is updated
     await installDependencies(projectPath, skipInstall);
     
     console.log(chalk.green('✅ React Native project created successfully!'));
@@ -56,6 +67,11 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
     console.log(chalk.white('  • Metro configuration'));
     console.log(chalk.white('  • Babel configuration'));
     console.log(chalk.white('  • Native platform directories (android/, ios/)'));
+    if (withTrpc) {
+      console.log(chalk.white('  • tRPC client setup and utilities'));
+      console.log(chalk.white('  • React Query integration'));
+      console.log(chalk.white('  • Pre-configured tRPC provider'));
+    }
     
   } catch (error) {
     console.error(chalk.red('❌ Error creating React Native project:'));
