@@ -1,0 +1,150 @@
+{
+  "name": "Idealyst Development Environment",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "dev",
+  "workspaceFolder": "/app",
+  "shutdownAction": "stopCompose",
+
+  // VS Code configuration
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "typescript.preferences.includePackageJsonAutoImports": "auto",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true,
+          "source.organizeImports": true
+        },
+        "files.watcherExclude": {
+          "**/node_modules/**": true,
+          "**/.git/**": true,
+          "**/dist/**": true,
+          "**/coverage/**": true
+        },
+        "search.exclude": {
+          "**/node_modules": true,
+          "**/dist": true,
+          "**/coverage": true,
+          "**/.yarn": true
+        },
+        "typescript.preferences.importModuleSpecifier": "relative",
+        "jest.jestCommandLine": "yarn test",
+        "jest.autoRun": "off"
+      },
+
+      // Extensions to install
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-json",
+        "ms-vscode.test-adapter-converter",
+        "orta.vscode-jest",
+        "ms-vscode.vscode-npm-script",
+        "christian-kohler.path-intellisense",
+        "formulahendry.auto-rename-tag",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-docker",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-markdown",
+        "yzhang.markdown-all-in-one",
+        "davidanson.vscode-markdownlint",
+        "ms-vscode.vscode-git-graph",
+        "eamodio.gitlens",
+        "github.vscode-pull-request-github",
+        "github.copilot",
+        "github.copilot-chat",
+        "ms-vscode.vscode-react-native",
+        "msjsdiag.vscode-react-native"
+      ]
+    }
+  },
+
+  // Development container features
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "nodeGypDependencies": true,
+      "installYarnUsingApt": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "ppa": true,
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": true,
+      "dockerDashComposeVersion": "v2"
+    },
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "username": "devuser",
+      "userUid": 1001,
+      "userGid": 1001
+    }
+  },
+
+  // Port forwarding for development servers
+  "forwardPorts": [
+    3000,  // Web dev server
+    3001,  // API server
+    5173,  // Vite dev server
+    8080,  // Additional dev server
+    19006, // Expo dev tools
+    5432,  // PostgreSQL
+    6379   // Redis
+  ],
+
+  "portsAttributes": {
+    "3000": {
+      "label": "Web App",
+      "onAutoForward": "openBrowser"
+    },
+    "3001": {
+      "label": "API Server",
+      "onAutoForward": "silent"
+    },
+    "5173": {
+      "label": "Vite Dev Server",
+      "onAutoForward": "openBrowser"
+    },
+    "19006": {
+      "label": "Expo Dev Tools",
+      "onAutoForward": "openBrowser"
+    },
+    "5432": {
+      "label": "PostgreSQL",
+      "onAutoForward": "silent"
+    },
+    "6379": {
+      "label": "Redis",
+      "onAutoForward": "silent"
+    }
+  },
+
+  // Post-create commands
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  // Development user
+  "remoteUser": "devuser",
+
+  // Environment variables
+  "remoteEnv": {
+    "NODE_ENV": "development",
+    "DATABASE_URL": "postgresql://postgres:postgres@postgres:5432/idealyst_db",
+    "REDIS_URL": "redis://redis:6379"
+  },
+
+  // Mount the workspace with proper permissions
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
+    "source=idealyst-node-modules,target=/app/node_modules,type=volume"
+  ]
+}

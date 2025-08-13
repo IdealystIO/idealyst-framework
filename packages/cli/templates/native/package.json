@@ -3,6 +3,40 @@
   "version": "{{version}}",
   "description": "{{description}}",
   "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "ios": "react-native run-ios",
+    "android": "react-native run-android",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+  },
+  "dependencies": {
+    "@idealyst/components": "^1.0.21",
+    "@idealyst/navigation": "^1.0.21",
+    "@idealyst/theme": "^1.0.21",
+    "react": "^18.2.0",
+    "react-native": "^0.73.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@react-native/babel-preset": "^0.73.0",
+    "@react-native/eslint-config": "^0.73.0",
+    "@react-native/metro-config": "^0.73.0",
+    "@react-native/typescript-config": "^0.73.0",
+    "@types/jest": "^29.5.12",
+    "@types/react": "^18.2.6",
+    "@types/react-test-renderer": "^18.0.7",
+    "eslint": "^8.19.0",
+    "jest": "^29.6.3",
+    "metro-react-native-babel-preset": "^0.76.8",
+    "prettier": "^2.4.1",
+    "react-test-renderer": "^18.2.0",
+    "typescript": "^5.0.4"
+  },
   "idealyst": {
     "framework": "react-native",
     "version": "1.0.3"
