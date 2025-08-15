@@ -1,12 +1,8 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
 import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons, resolveProjectPath, copyTrpcFiles, copyTrpcAppComponent, removeTrpcDependencies, copyTemplate } from './utils';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export async function generateNativeProject(options: GenerateProjectOptions): Promise<void> {
   const { name, directory, skipInstall, appName, withTrpc } = options;

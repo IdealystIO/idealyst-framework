@@ -1,11 +1,7 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
 import { validateProjectName, copyTemplate, installDependencies, getTemplateData } from './utils';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export async function generateWorkspace(options: GenerateProjectOptions): Promise<void> {
   const { name, directory, skipInstall } = options;

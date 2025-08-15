@@ -2,7 +2,7 @@
 
 import { Command } from 'commander';
 import chalk from 'chalk';
-import { generateProject } from './generators';
+import { generateProject } from './generators/index';
 import { ProjectType } from './types';
 import { promptForProjectName, promptForProjectType, promptForAppName, promptForTrpcIntegration } from './generators/utils';
 

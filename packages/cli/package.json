@@ -1,8 +1,7 @@
 {
   "name": "@idealyst/cli",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "CLI tool for generating Idealyst Framework projects",
-  "type": "module",
   "main": "dist/index.js",
   "bin": {
     "idealyst": "dist/index.js",
