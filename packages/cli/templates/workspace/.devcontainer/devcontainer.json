@@ -1,6 +1,6 @@
 {
   "name": "Idealyst Development Environment",
-  "dockerComposeFile": ["../docker-compose.yml"],
+  "dockerComposeFile": ["./docker-compose.yml"],
   "service": "dev",
   "workspaceFolder": "/app",
   "shutdownAction": "stopCompose",
@@ -13,8 +13,8 @@
         "typescript.preferences.includePackageJsonAutoImports": "auto",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": true,
-          "source.organizeImports": true
+          "source.fixAll.eslint": "explicit",
+          "source.organizeImports": "explicit"
         },
         "files.watcherExclude": {
           "**/node_modules/**": true,
@@ -65,21 +65,12 @@
 
   // Development container features
   "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "20",
-      "nodeGypDependencies": true,
-      "installYarnUsingApt": true
-    },
     "ghcr.io/devcontainers/features/git:1": {
       "ppa": true,
       "version": "latest"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {
       "version": "latest"
-    },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "moby": true,
-      "dockerDashComposeVersion": "v2"
     },
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
@@ -144,7 +135,6 @@
 
   // Mount the workspace with proper permissions
   "mounts": [
-    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
-    "source=idealyst-node-modules,target=/app/node_modules,type=volume"
+    "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
   ]
 }

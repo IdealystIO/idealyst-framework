@@ -130,6 +130,10 @@ This workspace includes comprehensive Docker support for development, staging, a
 ### Quick Start with Docker
 
 ```bash
+# Use the Docker build helper (recommended)
+./scripts/docker-build.sh dev
+
+# Or manually:
 # Development environment
 cp .env.example .env
 ./scripts/docker/deploy.sh development
@@ -139,6 +143,8 @@ cp .env.production .env
 # Edit .env with your settings
 ./scripts/docker/deploy.sh production
 ```
+
+**Docker Build Helper**: The `./scripts/docker-build.sh` script automatically handles common issues like missing yarn.lock files and environment configuration.
 
 ### VS Code Dev Container
 

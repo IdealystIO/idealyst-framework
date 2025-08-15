@@ -87,7 +87,7 @@ LICENSE
 
 # Package manager files
 package-lock.json
-yarn.lock
+# yarn.lock - DO NOT IGNORE: Required for immutable installs
 pnpm-lock.yaml
 
 # Development scripts

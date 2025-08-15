@@ -6,6 +6,9 @@ echo "🚀 Setting up Idealyst development environment..."
 # Set proper permissions
 sudo chown -R devuser:devuser /app
 
+# Make scripts executable
+chmod +x /app/scripts/*.sh
+
 # Install dependencies if not already installed
 if [ ! -d "/app/node_modules" ]; then
     echo "📦 Installing dependencies..."
@@ -83,47 +86,4 @@ fi
 echo "⚡ Setting up helpful aliases..."
 cat >> ~/.bashrc << EOF
 
-# Idealyst Development Aliases
-alias dev-web='cd /app && yarn workspace web dev'
-alias dev-api='cd /app && yarn workspace api dev'
-alias test-all='cd /app && yarn test'
-alias build-all='cd /app && yarn build:all'
-alias lint-all='cd /app && yarn lint:all'
-
-# Docker aliases
-alias dc='docker-compose'
-alias dcu='docker-compose up'
-alias dcd='docker-compose down'
-alias dcl='docker-compose logs'
-
-# Git aliases
-alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
-alias gp='git push'
-alias gl='git pull'
-
-echo "🎉 Idealyst development environment is ready!"
-echo ""
-echo "Available commands:"
-echo "  dev-web     - Start web development server"
-echo "  dev-api     - Start API development server"
-echo "  test-all    - Run all tests"
-echo "  build-all   - Build all packages"
-echo "  lint-all    - Lint all packages"
-echo ""
-echo "Database: postgresql://postgres:postgres@postgres:5432/idealyst_db"
-echo "Redis: redis://redis:6379"
-echo ""
-EOF
-
 source ~/.bashrc
-
-echo "🎉 Development environment setup complete!"
-echo ""
-echo "Quick start:"
-echo "  1. Run 'dev-web' to start the web development server"
-echo "  2. Run 'dev-api' to start the API server"
-echo "  3. Open http://localhost:3000 to view your app"
-echo ""
-echo "Happy coding! 🚀"

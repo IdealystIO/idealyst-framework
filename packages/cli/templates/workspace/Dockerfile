@@ -2,8 +2,11 @@
 # Supports web apps, API services, and can be used for staging/production
 
 # Base stage with Node.js and build tools
-FROM node:20-alpine AS base
-RUN apk add --no-cache libc6-compat git
+FROM node:20-bullseye-slim AS base
+RUN apt-get update && apt-get install -y \
+    libc6-dev \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 # Enable corepack for yarn
@@ -11,9 +14,17 @@ RUN corepack enable
 
 # Dependencies stage - install all dependencies
 FROM base AS deps
-COPY package.json yarn.lock* .yarnrc.yml ./
+COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
-RUN yarn install --immutable
+
+# Create packages directory structure and copy package.json files
+RUN mkdir -p packages/api packages/app packages/components packages/web
+COPY packages/api/package.json ./packages/api/
+COPY packages/app/package.json ./packages/app/
+COPY packages/components/package.json ./packages/components/
+COPY packages/web/package.json ./packages/web/
+
+RUN yarn install
 
 # Build stage - build all packages
 FROM base AS builder
@@ -54,38 +65,20 @@ CMD ["nginx", "-g", "daemon off;"]
 
 # Development stage - for use with dev containers
 FROM base AS dev
-RUN apk add --no-cache \
-    docker \
-    docker-compose \
-    bash \
-    zsh \
-    fish \
-    git \
-    curl \
-    wget \
-    vim \
-    nano
-
-# Install global development tools
-RUN npm install -g @types/node typescript ts-node nodemon
 
 # Copy package files
-COPY package.json yarn.lock* .yarnrc.yml ./
+COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
+
+# Create packages directory structure and copy package.json files
+RUN mkdir -p packages/api packages/app packages/components packages/web
+COPY packages/api/package.json ./packages/api/
+COPY packages/app/package.json ./packages/app/
+COPY packages/components/package.json ./packages/components/
+COPY packages/web/package.json ./packages/web/
 
 # Install dependencies including dev dependencies
 RUN yarn install
-
-# Create non-root user for development
-RUN addgroup --system --gid 1001 devuser
-RUN adduser --system --uid 1001 --ingroup devuser devuser
-RUN chown -R devuser:devuser /app
-
-USER devuser
-
-# Set up shell
-RUN echo 'alias ll="ls -la"' >> ~/.bashrc
-RUN echo 'alias la="ls -la"' >> ~/.bashrc
 
 EXPOSE 3000 3001 5173 8080 19006
 

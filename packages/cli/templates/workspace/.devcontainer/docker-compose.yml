@@ -1,0 +1,74 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ${PROJECT_NAME:-truday}-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-idealyst_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - idealyst-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: ${PROJECT_NAME:-truday}-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - idealyst-network
+
+  # Development Service (for devcontainer)
+  dev:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: dev
+    container_name: ${PROJECT_NAME:-truday}-dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - "3000:3000"   # Web dev server
+      - "3001:3001"   # API dev server
+      - "5173:5173"   # Vite dev server
+      - "8080:8080"   # Additional dev server
+      - "19006:19006" # Expo dev tools
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - idealyst-network
+    tty: true
+    stdin_open: true
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  idealyst-network:
+    driver: bridge

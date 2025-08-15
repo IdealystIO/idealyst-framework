@@ -131,15 +131,29 @@ export async function installDependencies(projectPath: string, skipInstall: bool
   }
 }
 
-export function runCommand(command: string, args: string[], options: { cwd: string }): Promise<void> {
+export function runCommand(command: string, args: string[], options: { cwd: string; timeout?: number }): Promise<void> {
   return new Promise((resolve, reject) => {
+    const timeoutMs = options.timeout || 300000; // 5 minutes default timeout
+    
     const process = spawn(command, args, {
       cwd: options.cwd,
-      stdio: 'inherit',
+      stdio: ['pipe', 'inherit', 'inherit'], // Pipe stdin to prevent hanging on prompts
       shell: true
     });
     
+    // Set up timeout
+    const timeoutId = setTimeout(() => {
+      process.kill('SIGTERM');
+      reject(new Error(`Command timed out after ${timeoutMs / 1000} seconds`));
+    }, timeoutMs);
+    
+    // Close stdin immediately to prevent hanging on interactive prompts
+    if (process.stdin) {
+      process.stdin.end();
+    }
+    
     process.on('close', (code) => {
+      clearTimeout(timeoutId);
       if (code === 0) {
         resolve();
       } else {
@@ -148,6 +162,7 @@ export function runCommand(command: string, args: string[], options: { cwd: stri
     });
     
     process.on('error', (error) => {
+      clearTimeout(timeoutId);
       reject(error);
     });
   });
@@ -241,9 +256,15 @@ export async function initializeReactNativeProject(projectName: string, director
   const spinner = ora('Initializing React Native project...').start();
   
   try {
-    // Use the correct React Native CLI command format with specific version and yarn
+    // Use create-react-native-app for a more reliable setup
     const cliCommand = 'npx';
-    const args = ['@react-native-community/cli@latest', 'init', projectName, '--version', '0.80.1', '--pm', 'yarn', '--skip-git-init'];
+    const args = [
+      'react-native@latest', 
+      'init', 
+      projectName,
+      '--pm', 'yarn',
+      '--skip-git-init'
+    ];
     
     // Add title if displayName is provided
     if (displayName) {
@@ -255,19 +276,35 @@ export async function initializeReactNativeProject(projectName: string, director
       args.push('--skip-install');
     }
     
-    // Run React Native initialization in the target directory
-    await runCommand(cliCommand, args, { cwd: directory });
+    spinner.text = 'Initializing React Native project (this may take a few minutes)...';
+    
+    // Run React Native initialization with timeout
+    await runCommand(cliCommand, args, { 
+      cwd: directory,
+      timeout: 600000 // 10 minutes timeout for React Native init
+    });
     
     spinner.succeed('React Native project initialized successfully');
   } catch (error) {
     spinner.fail('Failed to initialize React Native project');
-    console.log(chalk.yellow('Make sure you have the React Native CLI and yarn available:'));
-    console.log(chalk.white('  npx @react-native-community/cli@latest init ProjectName --version 0.80.1 --pm yarn --skip-git-init'));
-    console.log(chalk.yellow('If you encounter issues, try:'));
-    console.log(chalk.white('  npm install -g @react-native-community/cli'));
-    console.log(chalk.white('  npm install -g yarn'));
-    console.log(chalk.white('  # or'));
-    console.log(chalk.white('  yarn global add @react-native-community/cli'));
+    
+    if (error instanceof Error && error.message.includes('timed out')) {
+      console.log(chalk.red('❌ React Native initialization timed out'));
+      console.log(chalk.yellow('This can happen due to:'));
+      console.log(chalk.white('  • Slow internet connection'));
+      console.log(chalk.white('  • Network issues downloading dependencies'));
+      console.log(chalk.white('  • React Native CLI hanging on prompts'));
+    }
+    
+    console.log(chalk.yellow('\n💡 Alternative approaches:'));
+    console.log(chalk.white('1. Try manually creating the project:'));
+    console.log(chalk.white(`   npx react-native@latest init ${projectName} --pm yarn --skip-git-init`));
+    console.log(chalk.white('\n2. Use Expo (faster alternative):'));
+    console.log(chalk.white(`   npx create-expo-app@latest ${projectName} --template blank-typescript`));
+    console.log(chalk.white('\n3. Ensure prerequisites:'));
+    console.log(chalk.white('   npm install -g react-native-cli'));
+    console.log(chalk.white('   npm install -g @react-native-community/cli'));
+    
     throw error;
   }
 }
