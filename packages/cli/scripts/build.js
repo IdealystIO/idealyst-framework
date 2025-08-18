@@ -103,11 +103,22 @@ async function build() {
   const templatesSource = path.join(__dirname, '..', 'templates');
   const templatesTarget = path.join(__dirname, '..', 'dist', 'templates');
   
-  // Ensure target directory doesn't exist before copying
+  // Copy docs directory if it exists
+  const docsSource = path.join(__dirname, '..', 'docs');
+  const docsTarget = path.join(__dirname, '..', 'dist', 'docs');
+  
+  // Ensure target directories don't exist before copying
   await fs.remove(templatesTarget);
+  await fs.remove(docsTarget);
   
   try {
     await copyTemplatesWithFilter(templatesSource, templatesTarget, ignorePatterns);
+    
+    // Copy docs if they exist
+    if (await fs.pathExists(docsSource)) {
+      await fs.copy(docsSource, docsTarget);
+      console.log('   📚 Copied documentation files');
+    }
   } catch (error) {
     console.error('❌ Template copy failed:', error.message);
     process.exit(1);
