@@ -1,0 +1,47 @@
+# Template Build Ignore File
+# Files and patterns listed here will be excluded during template copying
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*~
+*.swp
+*.swo
+
+# Development directories
+node_modules/
+.git/
+.svn/
+.hg/
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+.atom/
+
+# Build artifacts
+dist/
+build/
+.cache/
+
+# Environment files (if they contain secrets)
+.env.local
+.env.production
+.env.development
+
+# Package manager lock files in templates (let users generate their own)
+# package-lock.json
+# yarn.lock
+
+# Coverage and test artifacts
+coverage/
+.nyc_output/
+*.coverage

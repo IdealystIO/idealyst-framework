@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/cli",
-  "version": "1.0.32",
+  "version": "1.0.38",
   "description": "CLI tool for generating Idealyst Framework projects",
   "main": "dist/index.js",
   "bin": {
@@ -18,7 +18,13 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "node scripts/build.js",
+    "build:bash": "scripts/build.sh",
+    "build:tsc": "npm run clean && tsc && npm run copy-templates",
+    "build:validate": "npm run build && npm run validate",
+    "copy-templates": "npm run clean-templates && cp -r templates dist/",
+    "clean-templates": "rm -rf dist/templates",
+    "validate": "node scripts/validate-build.js",
     "test": "jest",
     "test:integration": "jest __tests__/integration.test.ts",
     "dev": "tsc --watch",

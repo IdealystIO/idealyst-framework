@@ -1,4 +1,4 @@
-export type ProjectType = 'native' | 'web' | 'shared' | 'workspace' | 'api';
+export type ProjectType = 'native' | 'web' | 'shared' | 'workspace' | 'api' | 'database';
 
 export interface GenerateProjectOptions {
   name: string;

@@ -16,7 +16,7 @@ program
 program
   .command('create [project-name]')
   .description('Create a new Idealyst project')
-  .option('-t, --type <type>', 'Project type: native, web, shared, or api')
+  .option('-t, --type <type>', 'Project type: native, web, shared, api, or database')
   .option('-d, --directory <directory>', 'Output directory', '.')
   .option('-a, --app-name <app-name>', 'Display name for native apps (e.g., "My Awesome App")')
   .option('--with-trpc', 'Include tRPC boilerplate and setup (for web/native projects)')
@@ -49,7 +49,7 @@ program
         projectType = await promptForProjectType();
       }
 
-      const validTypes = ['native', 'web', 'shared', 'api'];
+      const validTypes = ['native', 'web', 'shared', 'api', 'database'];
       if (!validTypes.includes(projectType)) {
         console.error(chalk.red(`Invalid project type: ${projectType}`));
         console.error(chalk.yellow(`Valid types are: ${validTypes.join(', ')}`));
@@ -92,8 +92,14 @@ program
         console.log(chalk.yellow('\n🚀 Next steps for API Server:'));
         console.log(chalk.white('  cd packages/' + projectName));
         console.log(chalk.white('  yarn dev        # Start development server'));
+        console.log(chalk.white('  yarn build      # Build for production'));
+      } else if (projectType === 'database') {
+        console.log(chalk.yellow('\n🗄️ Next steps for Database:'));
+        console.log(chalk.white('  cd packages/' + projectName));
+        console.log(chalk.white('  yarn db:generate # Generate Prisma client'));
         console.log(chalk.white('  yarn db:push    # Push database schema'));
         console.log(chalk.white('  yarn db:studio  # Open Prisma Studio'));
+        console.log(chalk.white('  yarn build      # Build for export to other packages'));
       } else {
         console.log(chalk.yellow('\n📦 Next steps for Shared Library:'));
         console.log(chalk.white('  cd packages/' + projectName));

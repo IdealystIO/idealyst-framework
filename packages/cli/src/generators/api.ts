@@ -15,7 +15,7 @@ export async function generateApiProject(options: GenerateProjectOptions): Promi
   const { projectPath, workspacePath, workspaceScope } = await resolveProjectPath(name, directory);
   const templatePath = path.join(__dirname, '..', 'templates', 'api');
   
-  const templateData = getTemplateData(name, `Clean API server template with tRPC, Prisma, and Zod`, undefined, workspaceScope || undefined);
+  const templateData = getTemplateData(name, `API server template with tRPC and Express`, undefined, workspaceScope || undefined);
   
   await copyTemplate(templatePath, projectPath, templateData);
   await installDependencies(projectPath, skipInstall);
@@ -24,11 +24,10 @@ export async function generateApiProject(options: GenerateProjectOptions): Promi
   console.log(chalk.green('✅ API project created successfully!'));
   console.log(chalk.blue('📋 Project includes:'));
   console.log(chalk.white('  • tRPC for type-safe APIs'));
-  console.log(chalk.white('  • Prisma for database management'));
   console.log(chalk.white('  • Zod for schema validation'));
   console.log(chalk.white('  • Express.js server'));
   console.log(chalk.white('  • TypeScript configuration'));
   console.log(chalk.white('  • CORS and middleware setup'));
-  console.log(chalk.white('  • Database migration scripts'));
-  console.log(chalk.white('  • Clean template ready for your models'));
+  console.log(chalk.white('  • Clean template ready for your endpoints'));
+  console.log(chalk.white('  • Example controllers and routing'));
 } 

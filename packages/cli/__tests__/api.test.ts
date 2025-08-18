@@ -50,9 +50,8 @@ describe('API Generator', () => {
     // Verify source files
     await verifyFileExists(path.join(projectPath, 'src', 'index.ts'));
     await verifyFileExists(path.join(projectPath, 'src', 'router', 'index.ts'));
-
-    // Verify Prisma setup
-    await verifyFileExists(path.join(projectPath, 'prisma', 'schema.prisma'));
+    await verifyFileExists(path.join(projectPath, 'src', 'server.ts'));
+    await verifyFileExists(path.join(projectPath, 'src', 'context.ts'));
 
     // Verify test files
     await verifyFileExists(path.join(projectPath, '__tests__', 'api.test.ts'));
@@ -60,10 +59,13 @@ describe('API Generator', () => {
     // Verify package.json has correct dependencies
     const packageJson = await fs.readJSON(path.join(projectPath, 'package.json'));
     expect(packageJson.dependencies).toHaveProperty('@trpc/server');
-    expect(packageJson.dependencies).toHaveProperty('prisma');
     expect(packageJson.dependencies).toHaveProperty('express');
     expect(packageJson.dependencies).toHaveProperty('cors');
     expect(packageJson.dependencies).toHaveProperty('zod');
+    
+    // Verify package.json does NOT have Prisma dependencies
+    expect(packageJson.dependencies).not.toHaveProperty('@prisma/client');
+    expect(packageJson.devDependencies).not.toHaveProperty('prisma');
   });
 
   it('should fail when not in a workspace', async () => {
@@ -104,7 +106,6 @@ describe('API Generator', () => {
       'src/controllers',
       'src/middleware',
       'src/lib',
-      'prisma',
       '__tests__'
     ];
 

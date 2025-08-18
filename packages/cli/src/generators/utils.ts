@@ -422,7 +422,8 @@ export async function promptForProjectType(): Promise<string> {
         { name: 'React Native App', value: 'native' },
         { name: 'React Web App', value: 'web' },
         { name: 'Shared Library', value: 'shared' },
-        { name: 'API Server (tRPC + Prisma + Zod)', value: 'api' }
+        { name: 'API Server (tRPC + Express)', value: 'api' },
+        { name: 'Database (Prisma + Zod)', value: 'database' }
       ],
       default: 'native'
     }

@@ -1,22 +1,18 @@
-import { PrismaClient } from '@prisma/client';
 import type { CreateExpressContextOptions } from '@trpc/server/adapters/express';
 
-// Create Prisma client
-const prisma = new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-});
-
 export interface Context {
-  prisma: PrismaClient;
   req: CreateExpressContextOptions['req'];
   res: CreateExpressContextOptions['res'];
+  // Add your dependencies here (e.g., database client, external services)
+  // Example: db: PrismaClient;
 }
 
 export const createContext = ({ req, res }: CreateExpressContextOptions): Context => {
   return {
-    prisma,
     req,
     res,
+    // Initialize your dependencies here
+    // Example: db: prisma,
   };
 };
 

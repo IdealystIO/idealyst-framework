@@ -66,16 +66,34 @@ CMD ["nginx", "-g", "daemon off;"]
 # Development stage - for use with dev containers
 FROM base AS dev
 
+# Install additional tools for development
+RUN apt-get update && apt-get install -y \
+    sudo \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create dev user with proper permissions
+RUN groupadd --gid 1000 devuser \
+    && useradd --uid 1000 --gid devuser --shell /bin/bash --create-home devuser \
+    && echo 'devuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Set up workspace directory with proper ownership
+RUN mkdir -p /app && chown -R devuser:devuser /app
+
+# Switch to dev user for remaining setup
+USER devuser
+WORKDIR /app
+
 # Copy package files
-COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn .yarn
+COPY --chown=devuser:devuser package.json yarn.lock .yarnrc.yml ./
+COPY --chown=devuser:devuser .yarn .yarn
 
 # Create packages directory structure and copy package.json files
 RUN mkdir -p packages/api packages/app packages/components packages/web
-COPY packages/api/package.json ./packages/api/
-COPY packages/app/package.json ./packages/app/
-COPY packages/components/package.json ./packages/components/
-COPY packages/web/package.json ./packages/web/
+COPY --chown=devuser:devuser packages/api/package.json ./packages/api/
+COPY --chown=devuser:devuser packages/app/package.json ./packages/app/
+COPY --chown=devuser:devuser packages/components/package.json ./packages/components/
+COPY --chown=devuser:devuser packages/web/package.json ./packages/web/
 
 # Install dependencies including dev dependencies
 RUN yarn install

@@ -99,7 +99,127 @@ describe('CLI Integration Tests', () => {
     const projectPath = path.join(workspacePath, 'packages', 'my-api');
     await verifyFileExists(path.join(projectPath, 'package.json'));
     await verifyFileExists(path.join(projectPath, 'src', 'index.ts'));
+    await verifyFileExists(path.join(projectPath, 'src', 'server.ts'));
+    await verifyFileExists(path.join(projectPath, 'src', 'context.ts'));
+    
+    // Verify package.json doesn't include Prisma dependencies
+    const packageJson = JSON.parse(await fs.readFile(path.join(projectPath, 'package.json'), 'utf8'));
+    expect(packageJson.dependencies).not.toHaveProperty('@prisma/client');
+    expect(packageJson.devDependencies).not.toHaveProperty('prisma');
+  });
+
+  it('should create database project within workspace', async () => {
+    // First create workspace
+    await runCLI(['init', 'test-workspace', '--skip-install']);
+    
+    const workspacePath = path.join(tempDir, 'test-workspace');
+    
+    // Then create database project
+    const result = await runCLI(['create', 'my-database', '--type', 'database', '--skip-install'], workspacePath);
+    
+    expect(result.code).toBe(0);
+    expect(result.stdout).toContain('Successfully created my-database');
+
+    const projectPath = path.join(workspacePath, 'packages', 'my-database');
+    await verifyFileExists(path.join(projectPath, 'package.json'));
+    await verifyFileExists(path.join(projectPath, 'src', 'index.ts'));
+    await verifyFileExists(path.join(projectPath, 'src', 'client.ts'));
+    await verifyFileExists(path.join(projectPath, 'src', 'schemas.ts'));
     await verifyFileExists(path.join(projectPath, 'prisma', 'schema.prisma'));
+    await verifyFileExists(path.join(projectPath, 'prisma', 'seed.ts'));
+    
+    // Verify package.json includes Prisma dependencies
+    const packageJson = JSON.parse(await fs.readFile(path.join(projectPath, 'package.json'), 'utf8'));
+    expect(packageJson.dependencies).toHaveProperty('@prisma/client');
+    expect(packageJson.dependencies).toHaveProperty('zod');
+    expect(packageJson.devDependencies).toHaveProperty('prisma');
+  });
+
+  it('should export database client and types for consumption by other packages', async () => {
+    // First create workspace
+    await runCLI(['init', 'test-workspace', '--skip-install']);
+    
+    const workspacePath = path.join(tempDir, 'test-workspace');
+    
+    // Create database project
+    const dbResult = await runCLI(['create', 'my-database', '--type', 'database', '--skip-install'], workspacePath);
+    expect(dbResult.code).toBe(0);
+
+    // Create API project  
+    const apiResult = await runCLI(['create', 'my-api', '--type', 'api', '--skip-install'], workspacePath);
+    expect(apiResult.code).toBe(0);
+
+    const databasePath = path.join(workspacePath, 'packages', 'my-database');
+    const apiPath = path.join(workspacePath, 'packages', 'my-api');
+
+    // Verify database exports are properly configured
+    const dbPackageJson = JSON.parse(await fs.readFile(path.join(databasePath, 'package.json'), 'utf8'));
+    expect(dbPackageJson.exports).toBeDefined();
+    expect(dbPackageJson.exports['.']).toBeDefined();
+    expect(dbPackageJson.exports['./client']).toBeDefined();
+    expect(dbPackageJson.exports['./schemas']).toBeDefined();
+    
+    // Verify the main export has correct paths
+    expect(dbPackageJson.exports['.']).toHaveProperty('import', './dist/index.js');
+    expect(dbPackageJson.exports['.']).toHaveProperty('types', './dist/index.d.ts');
+
+    // Verify main index exports all necessary items
+    const dbIndexContent = await fs.readFile(path.join(databasePath, 'src', 'index.ts'), 'utf8');
+    expect(dbIndexContent).toContain('export { PrismaClient }');
+    expect(dbIndexContent).toContain('export { default as db }');
+    expect(dbIndexContent).toContain('export * from \'./schemas\'');
+    expect(dbIndexContent).toContain('export type * from \'@prisma/client\'');
+
+    // Verify client file has proper singleton pattern for sharing across packages
+    const clientContent = await fs.readFile(path.join(databasePath, 'src', 'client.ts'), 'utf8');
+    expect(clientContent).toContain('PrismaClient');
+    expect(clientContent).toContain('globalThis.__globalPrisma');
+    expect(clientContent).toContain('export default prisma');
+
+    // Verify schemas file exists for runtime validation
+    const schemasContent = await fs.readFile(path.join(databasePath, 'src', 'schemas.ts'), 'utf8');
+    expect(schemasContent).toContain('import { z } from \'zod\'');
+    expect(schemasContent).toContain('export const schemas');
+
+    // Verify TypeScript configuration supports declaration generation for type safety
+    const tsConfig = JSON.parse(await fs.readFile(path.join(databasePath, 'tsconfig.json'), 'utf8'));
+    expect(tsConfig.compilerOptions.declaration).toBe(true);
+    expect(tsConfig.compilerOptions.declarationMap).toBe(true);
+
+    // Create a test file in the API project showing how to consume the database
+    const testConsumerContent = `
+// Example of how to consume the database package from an API server
+import { db, schemas, PrismaClient } from '@test-workspace/my-database';
+import type { User } from '@test-workspace/my-database';
+
+export class UserService {
+  // Use the singleton database instance
+  async getAllUsers() {
+    return await db.user.findMany();
+  }
+
+  // Use Zod schemas for validation
+  async createUser(userData: unknown) {
+    const validatedData = schemas.createUser.parse(userData);
+    return await db.user.create({ data: validatedData });
+  }
+
+  // Use Prisma types for type safety
+  async getUserById(id: string): Promise<User | null> {
+    return await db.user.findUnique({ where: { id } });
+  }
+}`;
+
+    await fs.writeFile(path.join(apiPath, 'src', 'UserService.ts'), testConsumerContent);
+    
+    // Verify the consumer file was created successfully
+    expect(await fs.pathExists(path.join(apiPath, 'src', 'UserService.ts'))).toBe(true);
+    
+    const consumerContent = await fs.readFile(path.join(apiPath, 'src', 'UserService.ts'), 'utf8');
+    expect(consumerContent).toContain('import { db, schemas, PrismaClient }');
+    expect(consumerContent).toContain('import type { User }');
+    expect(consumerContent).toContain('db.user.findMany()');
+    expect(consumerContent).toContain('schemas.createUser.parse');
   });
 
   it('should create shared library within workspace', async () => {
