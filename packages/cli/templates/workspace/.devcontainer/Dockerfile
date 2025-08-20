@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 RUN corepack enable
 
 # Install global tools that might be useful
-RUN npm install -g @expo/cli
+RUN npm install -g @expo/cli @anthropic-ai/claude-code
 
 # Set up git (will be configured in setup script)
 RUN git config --global init.defaultBranch main

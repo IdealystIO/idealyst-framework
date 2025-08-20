@@ -1641,11 +1641,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@idealyst/components@npm:^1.0.24":
-  version: 1.0.24
-  resolution: "@idealyst/components@npm:1.0.24"
+"@idealyst/components@npm:^1.0.39":
+  version: 1.0.39
+  resolution: "@idealyst/components@npm:1.0.39"
   peerDependencies:
-    "@idealyst/theme": ^1.0.24
+    "@idealyst/theme": ^1.0.39
     "@mdi/js": ^7.4.47
     "@mdi/react": ^1.6.1
     "@react-native-vector-icons/common": ^12.0.1
@@ -1675,7 +1675,7 @@ __metadata:
       optional: true
     react-native-vector-icons:
       optional: true
-  checksum: f4389e5b4f67e15d0b91dbbd00a4d97785b9d0863c0b94f34b7cc41b3b6b7ac716e8c21044298de9dcadc05813f4e5415765d4170b8a2dc5f312b739e2ba71a6
+  checksum: 51636ddd99544a3ba7b457a9e3e701368a8e77d094833ce9b385d19c5ac490d2db0375045070ed7b58472c0bd5c0985bd12a1350b69ae5dab6785ab36820b87f
   languageName: node
   linkType: hard
 
@@ -1687,9 +1687,9 @@ __metadata:
     "@babel/preset-env": ^7.28.0
     "@babel/preset-react": ^7.27.1
     "@babel/preset-typescript": ^7.27.1
-    "@idealyst/components": ^1.0.24
-    "@idealyst/navigation": ^1.0.24
-    "@idealyst/theme": ^1.0.24
+    "@idealyst/components": ^1.0.39
+    "@idealyst/navigation": ^1.0.39
+    "@idealyst/theme": ^1.0.39
     "@mdi/js": ^7.4.47
     "@mdi/react": ^1.6.1
     "@react-native/normalize-colors": ^0.80.1
@@ -1722,12 +1722,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/navigation@npm:^1.0.24":
-  version: 1.0.24
-  resolution: "@idealyst/navigation@npm:1.0.24"
+"@idealyst/navigation@npm:^1.0.39":
+  version: 1.0.39
+  resolution: "@idealyst/navigation@npm:1.0.39"
   peerDependencies:
-    "@idealyst/components": ^1.0.24
-    "@idealyst/theme": ^1.0.24
+    "@idealyst/components": ^1.0.39
+    "@idealyst/theme": ^1.0.39
     "@react-navigation/bottom-tabs": ^7.0.0
     "@react-navigation/drawer": ^7.0.0
     "@react-navigation/native": ^7.0.0
@@ -1741,19 +1741,19 @@ __metadata:
     react-native-unistyles: ^3.0.4
     react-router: ^7.6.3
     react-router-dom: ^7.6.3
-  checksum: 99eebaa0f78dfba2491f93473552102ca725f309911ff62fe7b0c8f248b09733e0754afbd9be31444349750d2472c24b1a8c7b92b1fd90b6dc377f1793abeeef
+  checksum: 14db027b591fcbd1156b26426d09afeb4365cca8e90a4fd93214cdc9c7c16bf2aa450c13972f78cc0d5018f22948c763dd7da52146866ce5d0ff3c900cd1cdd0
   languageName: node
   linkType: hard
 
-"@idealyst/theme@npm:^1.0.24":
-  version: 1.0.24
-  resolution: "@idealyst/theme@npm:1.0.24"
+"@idealyst/theme@npm:^1.0.39":
+  version: 1.0.39
+  resolution: "@idealyst/theme@npm:1.0.39"
   peerDependencies:
     react-native-unistyles: ^3.0.4
   peerDependenciesMeta:
     react-native-unistyles:
       optional: true
-  checksum: 9da231a8e7b27ab3f4615ea44265ac1f6b58f3244c64d4b5919e8c3af031b0f662c93e43be6cff494601f2b995a58184ee994bc7c216e1c225bf10b31877e9cd
+  checksum: 8dd8c5a0beb76cb36813336db61efe6639d74adec81a36320b9fcfe7d5bf60652af5fca8660a279d24858b04a2c2961a0097e0bdcd43cc67d32c0be46bdc087c
   languageName: node
   linkType: hard
 

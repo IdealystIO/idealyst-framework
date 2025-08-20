@@ -45,4 +45,4 @@ export type { ScreenProps } from './Screen/types';
 export type { IconProps } from './Icon/types';
 
 export { breakpoints } from '@idealyst/theme';
-export type { AppTheme } from '@idealyst/theme';   
+export type { AppTheme } from '@idealyst/theme';

@@ -65,174 +65,95 @@ export default function App() {
 
 ## Available Components
 
+The library includes 10 core components organized by category. Each component has detailed documentation in its respective folder.
+
 ### Layout Components
 
-#### View
-A flexible container component with built-in spacing and styling options.
-
-```tsx
-import { View } from '@idealyst/components';
-
-<View spacing="md" style={{ padding: 16 }}>
-  {/* Content */}
-</View>
-```
-
-**Props:**
-- `spacing`: `"xs" | "sm" | "md" | "lg" | "xl" | "xxl"`
-- Standard View props (style, children, etc.)
-
-#### Screen
-A full-screen container component that grows to fit the parent completely with theme-based backgrounds and padding.
-
-```tsx
-import { Screen } from '@idealyst/components';
-
-<Screen background="primary" padding="lg" safeArea={true}>
-  {/* Your app content */}
-</Screen>
-```
-
-**Props:**
-- `background`: `"primary" | "secondary" | "tertiary" | "inverse"` - Background color variant
-- `padding`: `"none" | "sm" | "md" | "lg" | "xl"` - Screen padding (default: "md")
-- `safeArea`: `boolean` - Enable safe area padding for mobile devices (default: false)
-- `style`: Additional styles
-- `testID`: Test identifier
-
-#### Divider
-A separator component with customizable styling and spacing.
-
-```tsx
-import { Divider } from '@idealyst/components';
-
-<Divider spacing="medium" intent="primary">
-  <Text>Section Title</Text>
-</Divider>
-```
-
-**Props:**
-- `spacing`: `"small" | "medium" | "large"`
-- `intent`: `"primary" | "secondary" | "neutral"`
-- `children`: Optional content to display in the divider
+| Component | Description | Documentation |
+|-----------|-------------|---------------|
+| **[View](src/View/README.md)** | Flexible container with built-in spacing system | [View Docs](src/View/README.md) |
+| **[Screen](src/Screen/README.md)** | Full-screen container with safe area support | [Screen Docs](src/Screen/README.md) |
+| **[Divider](src/Divider/README.md)** | Separator for content sections | [Divider Docs](src/Divider/README.md) |
 
 ### Typography
 
-#### Text
-A versatile text component with comprehensive styling options.
-
-```tsx
-import { Text } from '@idealyst/components';
-
-<Text
-  size="large"
-  weight="bold"
-  color="primary"
-  align="center"
->
-  Hello World
-</Text>
-```
-
-**Props:**
-- `size`: `"small" | "medium" | "large" | "xlarge"`
-- `weight`: `"light" | "normal" | "medium" | "semibold" | "bold"`
-- `color`: `"primary" | "secondary" | "success" | "warning" | "error"`
-- `align`: `"left" | "center" | "right"`
+| Component | Description | Documentation |
+|-----------|-------------|---------------|
+| **[Text](src/Text/README.md)** | Versatile text with extensive styling options | [Text Docs](src/Text/README.md) |
 
 ### Form Components
 
-#### Button
-A customizable button component with multiple variants and intents.
-
-```tsx
-import { Button } from '@idealyst/components';
-
-<Button
-  variant="contained"
-  intent="primary"
-  size="medium"
-  onPress={() => console.log('Pressed!')}
->
-  Click Me
-</Button>
-```
-
-**Props:**
-- `variant`: `"contained" | "outlined" | "text"`
-- `intent`: `"primary" | "neutral" | "success" | "error" | "warning"`
-- `size`: `"small" | "medium" | "large"`
-- `disabled`: `boolean`
-- `onPress`: `() => void`
-
-#### Input
-A text input component with consistent styling.
-
-```tsx
-import { Input } from '@idealyst/components';
-
-<Input
-  placeholder="Enter your name"
-  value={value}
-  onChangeText={setValue}
-/>
-```
-
-#### Checkbox
-A checkbox component with customizable styling.
-
-```tsx
-import { Checkbox } from '@idealyst/components';
-
-<Checkbox
-  checked={isChecked}
-  onPress={() => setIsChecked(!isChecked)}
-  label="Agree to terms"
-/>
-```
+| Component | Description | Documentation |
+|-----------|-------------|---------------|
+| **[Button](src/Button/README.md)** | Customizable button with variants and intents | [Button Docs](src/Button/README.md) |
+| **[Input](src/Input/README.md)** | Text input with validation and styling | [Input Docs](src/Input/README.md) |
+| **[Checkbox](src/Checkbox/README.md)** | Checkbox with label support | [Checkbox Docs](src/Checkbox/README.md) |
 
 ### Display Components
 
-#### Card
-A container component for displaying content in a card format.
+| Component | Description | Documentation |
+|-----------|-------------|---------------|
+| **[Card](src/Card/README.md)** | Container for grouped content | [Card Docs](src/Card/README.md) |
+| **[Badge](src/Badge/README.md)** | Status indicators and count displays | [Badge Docs](src/Badge/README.md) |
+| **[Avatar](src/Avatar/README.md)** | User profile pictures with fallback | [Avatar Docs](src/Avatar/README.md) |
 
+### Utility Components
+
+| Component | Description | Documentation |
+|-----------|-------------|---------------|
+| **[Icon](src/Icon/README.md)** | Icon library with extensive options | [Icon Docs](src/Icon/README.md) |
+
+## Quick Usage Examples
+
+### Basic Layout
 ```tsx
-import { Card } from '@idealyst/components';
+import { Screen, View, Text, Button } from '@idealyst/components';
 
-<Card>
-  <Text size="large" weight="bold">Card Title</Text>
-  <Text>Card content goes here</Text>
-</Card>
+<Screen background="primary" safeArea>
+  <View spacing="lg">
+    <Text size="xlarge" weight="bold">Welcome</Text>
+    <Text>Get started with your app</Text>
+    <Button variant="contained" intent="primary" onPress={() => {}}>
+      Get Started
+    </Button>
+  </View>
+</Screen>
 ```
 
-#### Badge
-A small component for displaying status or count information.
-
+### Form Example
 ```tsx
-import { Badge } from '@idealyst/components';
+import { View, Text, Input, Checkbox, Button } from '@idealyst/components';
 
-<Badge count={5} intent="error">
-  <Text>Notifications</Text>
-</Badge>
+<View spacing="md">
+  <Text size="large" weight="bold">Sign Up</Text>
+  <Input label="Email" value={email} onChangeText={setEmail} />
+  <Input label="Password" value={password} onChangeText={setPassword} secureTextEntry />
+  <Checkbox checked={agreed} onCheckedChange={setAgreed} label="I agree to terms" />
+  <Button variant="contained" intent="primary" onPress={handleSubmit}>
+    Create Account
+  </Button>
+</View>
 ```
 
-#### Avatar
-A component for displaying user avatars or profile pictures.
-
+### Card Grid
 ```tsx
-import { Avatar } from '@idealyst/components';
+import { View, Card, Text, Avatar, Badge } from '@idealyst/components';
 
-<Avatar
-  source={{ uri: 'https://example.com/avatar.jpg' }}
-  size="medium"
-  fallback="JD"
-/>
+<View spacing="md">
+  {items.map(item => (
+    <Card key={item.id} clickable onPress={() => navigate(item)}>
+      <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Avatar src={item.avatar} fallback={item.initials} />
+        <View spacing="xs" style={{ flex: 1 }}>
+          <Text weight="bold">{item.title}</Text>
+          <Text size="small" color="secondary">{item.subtitle}</Text>
+        </View>
+        {item.badge && <Badge color="red">{item.badge}</Badge>}
+      </View>
+    </Card>
+  ))}
+</View>
 ```
-
-**Props:**
-- `source`: Image source object
-- `size`: `"small" | "medium" | "large"`
-- `fallback`: Text to display when image fails to load
 
 ## Theme System
 

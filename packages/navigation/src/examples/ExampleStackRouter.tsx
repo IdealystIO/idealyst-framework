@@ -61,7 +61,7 @@ const HomeScreen = () => {
                         size="medium"
                         onPress={toggleHighContrast}
                     >
-                        ♿ Toggle High Contrast
+                        ♿ Toggle High Contrast 123
                     </Button>
                 </View>
                 

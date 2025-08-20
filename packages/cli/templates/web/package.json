@@ -31,7 +31,7 @@
     "react-native": "^0.80.1",
     "react-native-edge-to-edge": "^1.6.2",
     "react-native-nitro-modules": "0.26.3",
-    "react-native-unistyles": "^3.0.4",
+    "react-native-unistyles": "^3.0.10",
     "react-native-web": "^0.20.0",
     "react-router": "^7.6.3",
     "react-router-dom": "^7.6.3",

@@ -2,6 +2,7 @@
   "name": "@idealyst/components",
   "version": "1.0.39",
   "description": "Shared component library for React and React Native",
+  "documentation": "https://github.com/your-username/idealyst-framework/tree/main/packages/components#readme",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "types": "src/index.ts",
@@ -86,7 +87,10 @@
   },
   "files": [
     "src",
-    "plugin"
+    "plugin",
+    "CLAUDE.md",
+    "README.md",
+    "LLM-ACCESS-GUIDE.md"
   ],
   "keywords": [
     "react",

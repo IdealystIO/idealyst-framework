@@ -7,7 +7,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [
     babel({
-      filter: (id) => id.includes('node_modules/@idealyst/') && /\.(js|jsx|ts|tsx)$/.test(id),
+      filter: (id) => (id.includes('node_modules/@idealyst/') || id.includes('packages/')) && /\.(js|jsx|ts|tsx)$/.test(id),
       babelConfig: {
         presets: [
           ['@babel/preset-typescript', {
@@ -32,6 +32,9 @@ export default defineConfig({
       // Use absolute path to resolve react-native-web properly
       'react-native': path.resolve(__dirname, 'node_modules/react-native-web'),
       '@react-native/normalize-colors': path.resolve(__dirname, 'node_modules/@react-native/normalize-colors'),
+      '@idealyst/components': path.resolve(__dirname, '../../packages/components/src'),
+      '@idealyst/navigation': path.resolve(__dirname, '../../packages/navigation/src'),
+      '@idealyst/theme': path.resolve(__dirname, '../../packages/theme/src'),
     },
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
@@ -56,6 +59,7 @@ export default defineConfig({
     exclude: [
       'react-native-edge-to-edge',
       'react-native-nitro-modules',
+      '@idealyst/cli',
       '@idealyst/components',
       '@idealyst/navigation', 
       '@idealyst/theme',

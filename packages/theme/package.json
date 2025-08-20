@@ -44,7 +44,10 @@
     "typescript": "^5.0.0"
   },
   "files": [
-    "src"
+    "src",
+    "README.md",
+    "CLAUDE.md",
+    "LLM-ACCESS-GUIDE.md"
   ],
   "keywords": [
     "theme",
