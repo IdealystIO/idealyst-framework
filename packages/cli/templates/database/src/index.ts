@@ -1,11 +1,14 @@
-// Export Prisma client
-export { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
-// Export database client instance
-export { default as db } from './client';
+declare global {
+  var __prisma: PrismaClient | undefined
+}
 
-// Export Zod schemas
-export * from './schemas';
+export const prisma = globalThis.__prisma || new PrismaClient()
 
-// Export types from Prisma
-export type * from '@prisma/client';
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.__prisma = prisma
+}
+
+export * from '@prisma/client'
+export default prisma
