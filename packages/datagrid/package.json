@@ -1,8 +1,8 @@
 {
-  "name": "@idealyst/components",
+  "name": "@idealyst/datagrid",
   "version": "1.0.41",
-  "description": "Shared component library for React and React Native",
-  "documentation": "https://github.com/your-username/idealyst-framework/tree/main/packages/components#readme",
+  "description": "High-performance datagrid component for React and React Native",
+  "documentation": "https://github.com/your-username/idealyst-framework/tree/main/packages/datagrid#readme",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "types": "src/index.ts",
@@ -10,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/your-username/idealyst-framework.git",
-    "directory": "packages/components"
+    "directory": "packages/datagrid"
   },
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
@@ -24,11 +24,6 @@
       "require": "./src/index.ts",
       "types": "./src/index.ts"
     },
-    "./plugin/web": {
-      "import": "./plugin/web.js",
-      "require": "./plugin/web.js",
-      "types": "./plugin/web.d.ts"
-    },
     "./examples": {
       "import": "./src/examples/index.ts",
       "require": "./src/examples/index.ts",
@@ -40,62 +35,47 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/theme": "^1.0.41",
-    "@mdi/js": "^7.4.47",
-    "@mdi/react": "^1.6.1",
-    "@react-native-vector-icons/common": "^12.0.1",
-    "@react-native-vector-icons/material-design-icons": "^12.0.1",
-    "@react-native/normalize-colors": "*",
+    "@idealyst/components": "^1.0.40",
+    "@idealyst/theme": "^1.0.40",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
-    "react-native-edge-to-edge": "*",
-    "react-native-nitro-modules": "*",
-    "react-native-unistyles": "^3.0.4"
+    "react-native-unistyles": "^3.0.4",
+    "react-window": "^1.8.10"
   },
   "peerDependenciesMeta": {
+    "@idealyst/components": {
+      "optional": false
+    },
     "@idealyst/theme": {
-      "optional": true
-    },
-    "@mdi/js": {
-      "optional": true
-    },
-    "@mdi/react": {
-      "optional": true
-    },
-    "@react-native/normalize-colors": {
-      "optional": true
+      "optional": false
     },
     "react-native": {
-      "optional": true
-    },
-    "react-native-edge-to-edge": {
-      "optional": true
-    },
-    "react-native-nitro-modules": {
       "optional": true
     },
     "react-native-unistyles": {
       "optional": true
     },
-    "react-native-vector-icons": {
+    "react-window": {
       "optional": true
     }
   },
   "devDependencies": {
     "@types/react": "^19.1.0",
+    "@types/react-window": "^1.8.8",
     "typescript": "^5.0.0"
   },
   "files": [
     "src",
-    "plugin",
-    "CLAUDE.md",
-    "README.md",
-    "LLM-ACCESS-GUIDE.md"
+    "README.md"
   ],
   "keywords": [
     "react",
     "react-native",
-    "components",
-    "cross-platform"
+    "datagrid",
+    "table",
+    "grid",
+    "cross-platform",
+    "react-window",
+    "virtualization"
   ]
 }

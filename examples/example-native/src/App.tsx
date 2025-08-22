@@ -6,25 +6,10 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-} from 'react-native';
+import AppWithDataGrid from './AppWithDataGrid';
 
-import { ExampleStackRouter } from '@idealyst/navigation/examples';
-import { NavigatorProvider } from '@idealyst/navigation';
-
-
-function App() {  
-
-  const backgroundStyle = {
-    flex: 1,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <NavigatorProvider route={ExampleStackRouter} />
-    </SafeAreaView>
-  );
+function App() {
+  return <AppWithDataGrid />;
 }
 
 export default App;

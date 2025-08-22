@@ -14,6 +14,7 @@ module.exports = {
         '@idealyst/components': path.resolve(__dirname, '../../packages/components/src'),
         '@idealyst/navigation': path.resolve(__dirname, '../../packages/navigation/src'),
         '@idealyst/theme': path.resolve(__dirname, '../../packages/theme/src'),
+        '@idealyst/datagrid': path.resolve(__dirname, '../../packages/datagrid/src'),
       },
     }],
     'react-native-reanimated/plugin',

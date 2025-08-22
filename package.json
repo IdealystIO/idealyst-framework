@@ -1,11 +1,12 @@
 {
   "name": "idealyst-monorepo",
-  "version": "1.0.40",
+  "version": "1.0.41",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
-  "packageManager": "yarn@3.6.4",
+  "packageManager": "yarn@4.9.3",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
@@ -14,10 +15,11 @@
     "publish:components": "cd packages/components && npm publish",
     "publish:navigation": "cd packages/navigation && npm publish",
     "publish:cli": "cd packages/cli && npm publish",
-    "publish:all": "yarn publish:theme && yarn publish:components && yarn publish:navigation && yarn publish:cli",
-    "version:patch": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' version patch && yarn version:sync",
-    "version:minor": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' version minor && yarn version:sync",
-    "version:major": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' version major && yarn version:sync",
+    "publish:datagrid": "cd packages/datagrid && npm publish",
+    "publish:all": "yarn publish:theme && yarn publish:components && yarn publish:navigation && yarn publish:cli && yarn publish:datagrid",
+    "version:patch": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' --include '@idealyst/datagrid' version patch && yarn version:sync",
+    "version:minor": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' --include '@idealyst/datagrid' version minor && yarn version:sync",
+    "version:major": "yarn workspaces foreach --include '@idealyst/theme' --include '@idealyst/components' --include '@idealyst/navigation' --include '@idealyst/cli' --include '@idealyst/datagrid' version major && yarn version:sync",
     "version:sync": "node scripts/sync-versions.js",
     "version:set": "node scripts/set-version.js",
     "version:status": "node scripts/version-status.js",

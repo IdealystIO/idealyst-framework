@@ -17,6 +17,7 @@ const config = {
     path.resolve(__dirname, '../../packages/components'),
     path.resolve(__dirname, '../../packages/navigation'),
     path.resolve(__dirname, '../../packages/theme'),
+    path.resolve(__dirname, '../../packages/datagrid'),
     path.resolve(__dirname, 'src'),
   ],
   watcher: {

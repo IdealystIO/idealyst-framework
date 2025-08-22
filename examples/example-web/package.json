@@ -1,15 +1,16 @@
 {
   "name": "@idealyst/example-web",
   "private": true,
-  "version": "1.0.40",
+  "version": "1.0.41",
   "type": "module",
   "scripts": {
     "dev": "vite"
   },
   "dependencies": {
-    "@idealyst/components": "^1.0.40",
-    "@idealyst/navigation": "^1.0.40",
-    "@idealyst/theme": "^1.0.40",
+    "@idealyst/components": "^1.0.41",
+    "@idealyst/datagrid": "workspace:*",
+    "@idealyst/navigation": "^1.0.41",
+    "@idealyst/theme": "^1.0.41",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@react-native/normalize-colors": "^0.80.1",
@@ -25,6 +26,7 @@
     "react-native-web": "^0.20.0",
     "react-router": "^7.6.3",
     "react-router-dom": "^7.6.3",
+    "react-window": "^1.8.10",
     "sirv": "^2.0.4"
   },
   "devDependencies": {
@@ -36,6 +38,7 @@
     "@types/express": "^4.17.21",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "@types/react-window": "^1.8.8",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.6.0",
@@ -45,5 +48,6 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-babel": "^1.3.2"
-  }
+  },
+  "packageManager": "yarn@4.9.3"
 }
