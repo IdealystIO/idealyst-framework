@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { View } from '@idealyst/components';
 import { CalendarProps } from './types';
-import { CalendarHeader } from './CalendarHeader.web';
-import { CalendarGrid } from './CalendarGrid.web';
-import { CalendarOverlay } from './CalendarOverlay.web';
+import { CalendarHeader } from '../primitives/CalendarHeader';
+import { CalendarGrid } from '../primitives/CalendarGrid';
+import { CalendarOverlay } from '../primitives/CalendarOverlay';
+import { calendarStyles } from './Calendar.styles';
 
-const calendarStyles = {
-  container: {
-    width: 256,
-    position: 'relative' as const,
-  },
-};
 
 export const Calendar: React.FC<CalendarProps> = ({
   value,
@@ -26,7 +22,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     controlledCurrentMonth || value || new Date()
   );
   const [overlayMode, setOverlayMode] = useState<'month' | 'year' | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<View>(null);
 
   const currentMonth = controlledCurrentMonth || internalCurrentMonth;
 
@@ -121,7 +117,7 @@ export const Calendar: React.FC<CalendarProps> = ({
   };
 
   return (
-    <div ref={containerRef} style={{ ...calendarStyles.container, ...style }} data-testid={testID}>
+    <View ref={containerRef} style={[calendarStyles.container, style]} data-testid={testID}>
       <CalendarHeader
         currentMonth={currentMonth}
         onPreviousMonth={goToPreviousMonth}
@@ -153,6 +149,6 @@ export const Calendar: React.FC<CalendarProps> = ({
           disabled={disabled}
         />
       )}
-    </div>
+    </View>
   );
 };

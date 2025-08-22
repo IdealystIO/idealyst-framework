@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { Button } from '@idealyst/components';
+import { Text, Button, View } from '@idealyst/components';
+import { calendarGridStyles } from './CalendarGrid.styles';
 
 interface CalendarGridProps {
   currentMonth: Date;
@@ -11,48 +12,6 @@ interface CalendarGridProps {
   disabled?: boolean;
 }
 
-const gridStyles = {
-  weekdayHeader: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: 2,
-    marginBottom: 8,
-  },
-  weekdayCell: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 4,
-  },
-  weekdayText: {
-    fontSize: 12,
-    fontWeight: '500' as const,
-    color: '#6b7280',
-  },
-  calendarGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: 2,
-    marginBottom: 8,
-    height: 192, // Fixed height for consistency
-  },
-  dayCell: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 0, // Allow compression
-  },
-  dayButton: {
-    width: '100%',
-    height: '100%',
-    maxWidth: 36,
-    minWidth: 24, // Reduced min width for compression
-    minHeight: 24, // Reduced min height for compression
-    padding: 0,
-    borderRadius: 4, // Slightly smaller border radius
-    fontSize: 13,
-  },
-};
 
 export const CalendarGrid: React.FC<CalendarGridProps> = ({
   currentMonth,
@@ -137,30 +96,29 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   return (
     <>
       {/* Weekday headers */}
-      <div style={gridStyles.weekdayHeader}>
+      <View style={calendarGridStyles.weekdayHeader}>
         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
-          <div key={day} style={gridStyles.weekdayCell}>
-            <div style={gridStyles.weekdayText}>
+          <View key={day} style={calendarGridStyles.weekdayCell}>
+            <Text style={calendarGridStyles.weekdayText}>
               {day}
-            </div>
-          </div>
+            </Text>
+          </View>
         ))}
-      </div>
+      </View>
 
       {/* Calendar grid */}
-      <div style={{
-        ...gridStyles.calendarGrid,
-        gridTemplateRows: `repeat(${weekCount}, 1fr)`
-      }}>
+      <View 
+        style={[calendarGridStyles.calendarGrid, { gridTemplateRows: `repeat(${weekCount}, 1fr)` }]}
+      >
         {calendarDays.map((dayData, index) => {
           const { date, isCurrentMonth } = dayData;
-          const buttonStyle = {
-            ...gridStyles.dayButton,
-            opacity: isCurrentMonth ? 1 : 0.4,
-          };
+          const buttonStyle = [
+            calendarGridStyles.dayButton,
+            { opacity: isCurrentMonth ? 1 : 0.4 }
+          ];
 
           return (
-            <div key={index} style={gridStyles.dayCell}>
+            <View key={index} style={calendarGridStyles.dayCell}>
               <Button
                 variant={isDateSelected(date) ? 'contained' : 'text'}
                 intent={isDateSelected(date) ? 'primary' : 'neutral'}
@@ -171,10 +129,10 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
               >
                 {date.getDate()}
               </Button>
-            </div>
+            </View>
           );
         })}
-      </div>
+      </View>
     </>
   );
 };

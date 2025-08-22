@@ -1,6 +1,6 @@
 import React from 'react';
 import { DatePickerProps } from './types';
-import { Calendar } from './Calendar.web';
+import { Calendar } from './Calendar';
 
 const DatePicker: React.FC<DatePickerProps> = ({
   value,

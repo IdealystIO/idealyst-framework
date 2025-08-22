@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from '@idealyst/components';
+import { Button, View, Text } from '@idealyst/components';
+import { calendarOverlayStyles } from './CalendarOverlay.styles';
 
 type OverlayMode = 'month' | 'year';
 
@@ -18,74 +19,6 @@ const months = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
 
-const overlayStyles = {
-  container: {
-    position: 'absolute' as const,
-    top: '32px',
-    left: 0,
-    right: 0,
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 12,
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    border: '1px solid #e5e7eb',
-    zIndex: 10,
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: '600' as const,
-    margin: 0,
-    color: '#6b7280',
-  },
-  closeButton: {
-    minWidth: 24,
-    minHeight: 24,
-    padding: 2,
-    fontSize: 12,
-  },
-  monthGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: 6,
-  },
-  yearContainer: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: 8,
-  },
-  yearNavigation: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  yearRange: {
-    fontSize: 12,
-    fontWeight: '500' as const,
-    color: '#6b7280',
-  },
-  navButton: {
-    minWidth: 28,
-    minHeight: 28,
-    padding: 4,
-    fontSize: 12,
-  },
-  yearGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: 4,
-  },
-  gridButton: {
-    minHeight: 32,
-    fontSize: 13,
-    padding: '4px 8px',
-  },
-};
 
 export const CalendarOverlay: React.FC<CalendarOverlayProps> = ({
   mode,
@@ -119,23 +52,23 @@ export const CalendarOverlay: React.FC<CalendarOverlayProps> = ({
   };
 
   return (
-    <div style={overlayStyles.container}>
-      <div style={overlayStyles.header}>
-        <h3 style={overlayStyles.title}>
+    <View style={calendarOverlayStyles.container}>
+      <View style={calendarOverlayStyles.header}>
+        <Text style={calendarOverlayStyles.title}>
           Select {mode === 'month' ? 'Month' : 'Year'}
-        </h3>
+        </Text>
         <Button
           variant="text"
           size="small"
           onPress={onClose}
-          style={overlayStyles.closeButton}
+          style={calendarOverlayStyles.closeButton}
         >
           ✕
         </Button>
-      </div>
+      </View>
 
       {mode === 'month' ? (
-        <div style={overlayStyles.monthGrid}>
+        <View style={calendarOverlayStyles.monthGrid}>
           {months.map((month, index) => (
             <Button
               key={month}
@@ -144,38 +77,38 @@ export const CalendarOverlay: React.FC<CalendarOverlayProps> = ({
               size="small"
               onPress={() => handleMonthSelect(index)}
               disabled={disabled}
-              style={overlayStyles.gridButton}
+              style={calendarOverlayStyles.gridButton}
             >
               {month.slice(0, 3)}
             </Button>
           ))}
-        </div>
+        </View>
       ) : (
-        <div style={overlayStyles.yearContainer}>
-          <div style={overlayStyles.yearNavigation}>
+        <View style={calendarOverlayStyles.yearContainer}>
+          <View style={calendarOverlayStyles.yearNavigation}>
             <Button
               variant="text"
               size="small"
               onPress={goToPreviousYearRange}
               disabled={disabled}
-              style={overlayStyles.navButton}
+              style={calendarOverlayStyles.yearNavButton}
             >
               ←
             </Button>
-            <span style={overlayStyles.yearRange}>
+            <Text style={calendarOverlayStyles.yearRangeText}>
               {yearRangeStart} - {yearRangeStart + 19}
-            </span>
+            </Text>
             <Button
               variant="text"
               size="small"
               onPress={goToNextYearRange}
               disabled={disabled}
-              style={overlayStyles.navButton}
+              style={calendarOverlayStyles.yearNavButton}
             >
               →
             </Button>
-          </div>
-          <div style={overlayStyles.yearGrid}>
+          </View>
+          <View style={calendarOverlayStyles.yearGrid}>
             {years.map((year) => (
               <Button
                 key={year}
@@ -184,14 +117,14 @@ export const CalendarOverlay: React.FC<CalendarOverlayProps> = ({
                 size="small"
                 onPress={() => handleYearSelect(year)}
                 disabled={disabled}
-                style={overlayStyles.gridButton}
+                style={calendarOverlayStyles.gridButton}
               >
                 {year}
               </Button>
             ))}
-          </div>
-        </div>
+          </View>
+        </View>
       )}
-    </div>
+    </View>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, Button } from '@idealyst/components';
+import { Text, Button, View } from '@idealyst/components';
+import { calendarHeaderStyles } from './CalendarHeader.styles';
 
 interface CalendarHeaderProps {
   currentMonth: Date;
@@ -10,31 +11,6 @@ interface CalendarHeaderProps {
   disabled?: boolean;
 }
 
-const headerStyles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'row' as const,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  centerSection: {
-    display: 'flex',
-    flexDirection: 'row' as const,
-    alignItems: 'center',
-    gap: 8,
-  },
-  navButton: {
-    minWidth: 32,
-    minHeight: 32,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-  titleButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-  },
-};
 
 export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   currentMonth,
@@ -48,23 +24,23 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   const year = currentMonth.getFullYear();
 
   return (
-    <div style={headerStyles.container}>
+    <View style={calendarHeaderStyles.container}>
       <Button 
         variant="text" 
         size="small" 
         onPress={onPreviousMonth} 
         disabled={disabled}
-        style={headerStyles.navButton}
+        style={calendarHeaderStyles.navButton}
       >
         ←
       </Button>
       
-      <div style={headerStyles.centerSection}>
+      <View style={calendarHeaderStyles.centerSection}>
         <Button 
           variant="text" 
           onPress={onMonthClick}
           disabled={disabled}
-          style={headerStyles.titleButton}
+          style={calendarHeaderStyles.titleButton}
         >
           <Text weight="semibold">{monthName}</Text>
         </Button>
@@ -73,21 +49,21 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           variant="text" 
           onPress={onYearClick}
           disabled={disabled}
-          style={headerStyles.titleButton}
+          style={calendarHeaderStyles.titleButton}
         >
           <Text weight="semibold">{year}</Text>
         </Button>
-      </div>
+      </View>
       
       <Button 
         variant="text" 
         size="small" 
         onPress={onNextMonth} 
         disabled={disabled}
-        style={headerStyles.navButton}
+        style={calendarHeaderStyles.navButton}
       >
         →
       </Button>
-    </div>
+    </View>
   );
 };

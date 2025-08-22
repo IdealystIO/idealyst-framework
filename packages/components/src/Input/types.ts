@@ -12,6 +12,16 @@ export interface InputProps {
   onChangeText?: (text: string) => void;
   
   /**
+   * Called when the input receives focus
+   */
+  onFocus?: () => void;
+  
+  /**
+   * Called when the input loses focus
+   */
+  onBlur?: () => void;
+  
+  /**
    * Placeholder text
    */
   placeholder?: string;
@@ -44,7 +54,7 @@ export interface InputProps {
   /**
    * Style variant of the input
    */
-  variant?: 'default' | 'outlined' | 'filled';
+  variant?: 'default' | 'outlined' | 'filled' | 'bare';
   
   /**
    * The intent/color scheme of the input (for focus states, validation, etc.)

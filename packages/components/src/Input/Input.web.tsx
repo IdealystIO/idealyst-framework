@@ -6,6 +6,8 @@ import { inputStyles } from './Input.styles';
 const Input: React.FC<InputProps> = ({
   value,
   onChangeText,
+  onFocus,
+  onBlur,
   placeholder,
   disabled = false,
   inputType = 'text',
@@ -37,10 +39,22 @@ const Input: React.FC<InputProps> = ({
     }
   };
 
+  const handleFocus = () => {
+    if (onFocus) {
+      onFocus();
+    }
+  };
+
+  const handleBlur = () => {
+    if (onBlur) {
+      onBlur();
+    }
+  };
+
   // Apply variants using the correct Unistyles 3.0 pattern
   inputStyles.useVariants({
     size: size as 'small' | 'medium' | 'large',
-    variant: variant as 'default' | 'outlined' | 'filled',
+    variant: variant as 'default' | 'outlined' | 'filled' | 'bare',
   });
 
   // Create the style array following the official documentation pattern
@@ -60,6 +74,8 @@ const Input: React.FC<InputProps> = ({
       type={secureTextEntry ? 'password' : getInputType()}
       value={value}
       onChange={handleChange}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       placeholder={placeholder}
       disabled={disabled}
       autoCapitalize={autoCapitalize}

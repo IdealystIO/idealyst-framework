@@ -3,7 +3,7 @@ import { View, Text } from '@idealyst/components';
 import { getWebProps } from 'react-native-unistyles/web';
 import { DateTimeRangePickerProps, DateTimeRange } from './types';
 import { RangeCalendar } from '../DateRangePicker/RangeCalendar.web';
-import { TimePicker } from '../DateTimePicker/TimePicker.web';
+import { TimePicker } from '../DateTimePicker/TimePicker';
 import { dateTimeRangePickerStyles } from './DateTimeRangePicker.styles';
 
 const DateTimeRangePicker: React.FC<DateTimeRangePickerProps> = ({

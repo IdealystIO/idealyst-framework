@@ -1,7 +1,8 @@
 import React from 'react';
+import { View } from '@idealyst/components';
 import { DateTimePickerProps } from './types';
-import { Calendar } from '../DatePicker/Calendar.web';
-import { TimePicker } from './TimePicker.web';
+import { Calendar } from '../DatePicker/Calendar';
+import { TimePicker } from './TimePicker';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = ({
   value,
@@ -42,15 +43,19 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
   };
 
   const containerStyle = {
-    display: 'flex',
     flexDirection: 'row' as const,
     gap: 16,
     alignItems: 'flex-start',
-    ...style,
+    
+    _web: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+    }
   };
 
   return (
-    <div style={containerStyle} data-testid={testID}>
+    <View style={[containerStyle, style]} data-testid={testID}>
       <Calendar
         value={value}
         onChange={handleDateChange}
@@ -67,7 +72,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
         showSeconds={showSeconds}
         step={timeStep}
       />
-    </div>
+    </View>
   );
 };
 

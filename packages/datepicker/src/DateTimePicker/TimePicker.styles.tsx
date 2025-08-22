@@ -2,72 +2,115 @@ import { StyleSheet } from 'react-native-unistyles';
 
 export const timePickerStyles = StyleSheet.create((theme) => ({
   container: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     gap: 4,
-    justifyContent: 'center',
+    width: 170,
   },
-
-  timeSection: {
-    alignItems: 'center',
-    gap: 1,
-  },
-
-  timeInput: {
-    minWidth: 36,
-    minHeight: 32,
-    textAlign: 'center',
-    fontSize: 14,
-    fontWeight: '600',
-    color: theme.colors?.text?.primary || '#111827',
-    padding: 4,
-    borderRadius: 4,
-    backgroundColor: theme.colors?.surface?.secondary || '#f9fafb',
-    borderWidth: 1,
-    borderColor: theme.colors?.border?.primary || '#e5e7eb',
-    display: 'flex',
+  clockContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-
+    marginBottom: 4,
+    
     _web: {
-      border: `1px solid ${theme.colors?.border?.primary || '#e5e7eb'}`,
-      outline: 'none',
-    },
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }
   },
-
-  timeSeparator: {
-    fontSize: 14,
+  clockSvg: {
+    cursor: 'pointer',
+    
+    _web: {
+      cursor: 'pointer',
+    }
+  },
+  timeInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    
+    _web: {
+      display: 'flex',
+      alignItems: 'center',
+    }
+  },
+  timeInput: {
+    width: 32,
+    height: 32,
+    textAlign: 'center',
+    fontSize: 16,
     fontWeight: '600',
     color: theme.colors?.text?.primary || '#111827',
-    paddingHorizontal: 2,
+    borderWidth: 0,
+    borderBottomWidth: 0,
+    borderRadius: 0,
+    backgroundColor: 'transparent',
+    
+    _web: {
+      border: 'none',
+      borderBottom: 'none',
+      outline: 'none',
+      cursor: 'pointer',
+    }
   },
-
+  activeInput: {
+    color: theme.colors?.accent?.primary || '#3b82f6',
+    borderBottomWidth: 2,
+    borderBottomColor: theme.colors?.accent?.primary || '#3b82f6',
+    borderRadius: 0,
+  },
+  timeSeparator: {
+    fontSize: 16,
+    fontWeight: '300',
+    color: theme.colors?.text?.secondary || '#6b7280',
+  },
   ampmButton: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
-    minWidth: 40,
-    minHeight: 32,
-    marginLeft: 4,
+    minWidth: 36,
+    fontSize: 12,
+    fontWeight: '600',
   },
-
-  stepperContainer: {
-    alignItems: 'center',
-    gap: 1,
+  tabBar: {
+    flexDirection: 'row',
+    gap: 4,
+    marginBottom: 4,
+    padding: 2,
+    backgroundColor: theme.colors?.surface?.secondary || '#f3f4f6',
+    borderRadius: 6,
+    
+    _web: {
+      display: 'flex',
+    }
   },
-
-  stepperButton: {
-    width: 20,
-    height: 16,
-    minWidth: 20,
-    minHeight: 16,
-    padding: 0,
-    borderRadius: 2,
+  tabButton: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    fontSize: 13,
+    fontWeight: '500',
+    borderRadius: 4,
+    borderWidth: 0,
+    cursor: 'pointer',
+    
+    _web: {
+      border: 'none',
+      cursor: 'pointer',
+      transition: 'all 0.2s',
+    }
   },
-
-  stepperText: {
-    fontSize: 10,
-    lineHeight: 12,
+  activeTab: {
+    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+    color: theme.colors?.accent?.primary || '#3b82f6',
+    
+    _web: {
+      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+    }
+  },
+  inactiveTab: {
+    backgroundColor: 'transparent',
     color: theme.colors?.text?.secondary || '#6b7280',
   },
 }));

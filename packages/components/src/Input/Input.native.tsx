@@ -6,6 +6,8 @@ import { inputStyles } from './Input.styles';
 const Input: React.FC<InputProps> = ({
   value,
   onChangeText,
+  onFocus,
+  onBlur,
   placeholder,
   disabled = false,
   inputType = 'text',
@@ -34,10 +36,16 @@ const Input: React.FC<InputProps> = ({
 
   const handleFocus = () => {
     setIsFocused(true);
+    if (onFocus) {
+      onFocus();
+    }
   };
 
   const handleBlur = () => {
     setIsFocused(false);
+    if (onBlur) {
+      onBlur();
+    }
   };
 
   // Apply variants to the stylesheet

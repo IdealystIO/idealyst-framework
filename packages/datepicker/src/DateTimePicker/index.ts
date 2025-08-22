@@ -1,3 +1,3 @@
-export { default as DateTimePicker } from './DateTimePicker.web';
-export { TimePicker } from './TimePicker.web';
+export { default as DateTimePicker } from './DateTimePicker';
+export { TimePicker } from './TimePicker';
 export * from './types';

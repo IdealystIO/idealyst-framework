@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@idealyst/components';
+import { Button, View, Input } from '@idealyst/components';
 import { TimePickerProps } from './types';
+import { timePickerStyles } from './TimePicker.styles';
 
 export const TimePicker: React.FC<TimePickerProps> = ({
   value = new Date(),
@@ -128,7 +129,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
     if (activeSelection === 'hour') {
       return (
-        <div style={timePickerStyles.clockContainer}>
+        <View style={timePickerStyles.clockContainer}>
           <svg width={CLOCK_SIZE} height={CLOCK_SIZE} style={timePickerStyles.clockSvg}>
             {/* Clock face */}
             <circle cx={CENTER} cy={CENTER} r={CLOCK_RADIUS} fill="#f9fafb" stroke="#e5e7eb" strokeWidth="2"/>
@@ -192,11 +193,11 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             {/* Center dot */}
             <circle cx={CENTER} cy={CENTER} r="4" fill="#3b82f6"/>
           </svg>
-        </div>
+        </View>
       );
     } else {
       return (
-        <div style={timePickerStyles.clockContainer}>
+        <View style={timePickerStyles.clockContainer}>
           <svg width={CLOCK_SIZE} height={CLOCK_SIZE} style={timePickerStyles.clockSvg}>
             {/* Clock face */}
             <circle cx={CENTER} cy={CENTER} r={CLOCK_RADIUS} fill="#f9fafb" stroke="#e5e7eb" strokeWidth="2"/>
@@ -257,130 +258,47 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             {/* Center dot */}
             <circle cx={CENTER} cy={CENTER} r="4" fill="#3b82f6"/>
           </svg>
-        </div>
+        </View>
       );
     }
   };
 
-  const timePickerStyles = {
-    container: {
-      display: 'flex',
-      flexDirection: 'column' as const,
-      alignItems: 'center',
-      gap: 4,
-      width: 170,
-      ...style,
-    },
-    clockContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 4,
-    },
-    clockSvg: {
-      cursor: 'pointer',
-    },
-    timeInputRow: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 8,
-    },
-    timeInput: {
-      width: 32,
-      height: 32,
-      textAlign: 'center' as const,
-      fontSize: 16,
-      fontWeight: '600' as const,
-      color: '#111827',
-      border: 'none',
-      borderBottom: 'none',
-      borderRadius: 0,
-      outline: 'none',
-      cursor: 'pointer',
-      backgroundColor: 'transparent',
-    },
-    activeInput: {
-      color: '#3b82f6',
-      borderBottom: '2px solid #3b82f6',
-      borderRadius: 0,
-    },
-    timeSeparator: {
-      fontSize: 16,
-      fontWeight: '300' as const,
-      color: '#6b7280',
-    },
-    ampmButton: {
-      padding: '4px 8px',
-      borderRadius: 4,
-      minWidth: 36,
-      fontSize: 12,
-      fontWeight: '600' as const,
-    },
-    tabBar: {
-      display: 'flex',
-      gap: 4,
-      marginBottom: 4,
-      padding: 2,
-      backgroundColor: '#f3f4f6',
-      borderRadius: 6,
-    },
-    tabButton: {
-      flex: 1,
-      padding: '6px 12px',
-      fontSize: 13,
-      fontWeight: '500' as const,
-      borderRadius: 4,
-      border: 'none',
-      cursor: 'pointer',
-      transition: 'all 0.2s',
-    },
-    activeTab: {
-      backgroundColor: '#ffffff',
-      color: '#3b82f6',
-      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-    },
-    inactiveTab: {
-      backgroundColor: 'transparent',
-      color: '#6b7280',
-    },
-  };
   
   return (
-    <div style={timePickerStyles.container} data-testid={testID}>
+    <View style={[timePickerStyles.container, style]} data-testid={testID}>
       {/* Tab Bar */}
-      <div style={timePickerStyles.tabBar}>
-        <button
-          onClick={() => setActiveSelection('hour')}
-          style={{
-            ...timePickerStyles.tabButton,
-            ...(activeSelection === 'hour' ? timePickerStyles.activeTab : timePickerStyles.inactiveTab)
-          }}
+      <View style={timePickerStyles.tabBar}>
+        <Button
+          onPress={() => setActiveSelection('hour')}
+          style={[
+            timePickerStyles.tabButton,
+            activeSelection === 'hour' ? timePickerStyles.activeTab : timePickerStyles.inactiveTab
+          ]}
           disabled={disabled}
         >
           Hour
-        </button>
-        <button
-          onClick={() => setActiveSelection('minute')}
-          style={{
-            ...timePickerStyles.tabButton,
-            ...(activeSelection === 'minute' ? timePickerStyles.activeTab : timePickerStyles.inactiveTab)
-          }}
+        </Button>
+        <Button
+          onPress={() => setActiveSelection('minute')}
+          style={[
+            timePickerStyles.tabButton,
+            activeSelection === 'minute' ? timePickerStyles.activeTab : timePickerStyles.inactiveTab
+          ]}
           disabled={disabled}
         >
           Minute
-        </button>
-      </div>
+        </Button>
+      </View>
 
       {/* Interactive Clock Face */}
       {renderClockFace()}
 
       {/* Time Input Row */}
-      <div style={timePickerStyles.timeInputRow}>
-        <input
-          type="text"
+      <View style={timePickerStyles.timeInputRow}>
+        <Input
+          variant="bare"
           value={hourInputValue}
-          onChange={(e) => {
-            const value = e.target.value;
+          onChangeText={(value) => {
             setHourInputValue(value);
             
             // Smart focus switching: if user types 2 or higher, focus on minutes
@@ -389,10 +307,6 @@ export const TimePicker: React.FC<TimePickerProps> = ({
               // Wait a moment then focus minutes
               setTimeout(() => {
                 setActiveSelection('minute');
-                const minuteInput = document.querySelector('input[type="text"]:nth-of-type(2)') as HTMLInputElement;
-                if (minuteInput) {
-                  minuteInput.focus();
-                }
               }, 100);
             }
             
@@ -427,18 +341,17 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             }
             setHourInputValue(String(displayHours));
           }}
-          style={{
-            ...timePickerStyles.timeInput,
-            ...(activeSelection === 'hour' ? timePickerStyles.activeInput : {})
-          }}
+          style={[
+            timePickerStyles.timeInput,
+            activeSelection === 'hour' ? timePickerStyles.activeInput : {}
+          ]}
           disabled={disabled}
         />
-        <div style={timePickerStyles.timeSeparator}>:</div>
-        <input
-          type="text"
+        <View style={timePickerStyles.timeSeparator}>:</View>
+        <Input
+          variant="bare"
           value={minuteInputValue}
-          onChange={(e) => {
-            const value = e.target.value;
+          onChangeText={(value) => {
             setMinuteInputValue(value);
             
             // Try to update time if value is valid
@@ -456,10 +369,10 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           onBlur={() => {
             setMinuteInputValue(String(minutes).padStart(2, '0'));
           }}
-          style={{
-            ...timePickerStyles.timeInput,
-            ...(activeSelection === 'minute' ? timePickerStyles.activeInput : {})
-          }}
+          style={[
+            timePickerStyles.timeInput,
+            activeSelection === 'minute' ? timePickerStyles.activeInput : {}
+          ]}
           disabled={disabled}
         />
         
@@ -474,7 +387,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             {ampm}
           </Button>
         )}
-      </div>
-    </div>
+      </View>
+    </View>
   );
 };

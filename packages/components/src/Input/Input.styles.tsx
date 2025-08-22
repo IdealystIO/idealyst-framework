@@ -56,6 +56,19 @@ export const inputStyles = StyleSheet.create((theme) => ({
             border: 'none',
           },
         },
+        bare: {
+          backgroundColor: 'transparent',
+          borderWidth: 0,
+          borderColor: 'transparent',
+          color: theme.colors?.text?.primary || '#000000',
+          paddingHorizontal: 0,
+          paddingVertical: 0,
+          
+          _web: {
+            border: 'none',
+            boxShadow: 'none',
+          },
+        },
       },
       focused: {
         true: {
@@ -104,6 +117,16 @@ export const inputStyles = StyleSheet.create((theme) => ({
           shadowOpacity: 0.05,
           shadowRadius: 1,
           elevation: 0.5,
+        },
+      },
+      // Bare variant focus (no visual changes)
+      {
+        variant: 'bare',
+        focused: true,
+        styles: {
+          backgroundColor: 'transparent',
+          borderWidth: 0,
+          borderColor: 'transparent',
         },
       },
     ],
