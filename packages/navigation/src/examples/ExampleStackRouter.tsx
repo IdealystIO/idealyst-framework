@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DividerExamples, IconExamples, InputExamples, ScreenExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import React from 'react';
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { Button, Divider, Screen, Text, View } from "../../../components/src";
 import { useNavigator } from "../context";
-import { UnistylesRuntime, StyleSheet } from 'react-native-unistyles';
+import { UnistylesRuntime } from 'react-native-unistyles';
 import { GeneralLayout } from '../layouts/GeneralLayout';
 import { RouteParam } from '../routing';
 import { getNextTheme, getThemeDisplayName, isHighContrastTheme } from './unistyles';
@@ -173,6 +174,38 @@ const HomeScreen = () => {
                     }}>
                     Icon
                 </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/dialog",
+                            vars: {},
+                        });
+                    }}>
+                    Dialog
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/popover",
+                            vars: {},
+                        });
+                    }}>
+                    Popover
+                </Button>
+                
+                <Divider spacing="medium" />
+                <Text size="small" weight="semibold" color="secondary">Data Components</Text>
+                <Button
+                    variant="outlined"
+                    intent="neutral"
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/datagrid",
+                            vars: {},
+                        });
+                    }}>
+                    📊 DataGrid Showcase
+                </Button>
                 
                 <Divider spacing="medium" />
                 <Text size="small" weight="semibold" color="secondary">Theme System</Text>
@@ -238,6 +271,9 @@ const StackRouter: RouteParam = {
         { path: "view", component: ViewExamples},
         { path: "screen", component: ScreenExamples},
         { path: "icon", component: IconExamples},
+        { path: "dialog", component: DialogExamples},
+        { path: "popover", component: PopoverExamples},
+        { path: "datagrid", component: DataGridShowcase},
         { path: "theme-extension", component: ThemeExtensionExamples},
     ],
 };

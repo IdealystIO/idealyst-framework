@@ -1,5 +1,6 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DividerExamples, IconExamples, InputExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { Screen, Text, View, Button } from "../../../components/src";
 import { UnistylesRuntime } from 'react-native-unistyles';
 import { RouteParam } from '../routing';
@@ -129,6 +130,24 @@ const IconDrawerScreen = () => (
     </Screen>
 );
 
+const DialogDrawerScreen = () => (
+    <Screen>
+        <DialogExamples />
+    </Screen>
+);
+
+const PopoverDrawerScreen = () => (
+    <Screen>
+        <PopoverExamples />
+    </Screen>
+);
+
+const DataGridDrawerScreen = () => (
+    <Screen>
+        <DataGridShowcase />
+    </Screen>
+);
+
 const ThemeExtensionDrawerScreen = () => (
     <Screen>
         <ThemeExtensionExamples />
@@ -152,6 +171,9 @@ const DrawerRouter: RouteParam = {
         { path: "text", component: TextDrawerScreen },
         { path: "view", component: ViewDrawerScreen },
         { path: "icon", component: IconDrawerScreen },
+        { path: "dialog", component: DialogDrawerScreen },
+        { path: "popover", component: PopoverDrawerScreen },
+        { path: "datagrid", component: DataGridDrawerScreen },
         { path: "theme-extension", component: ThemeExtensionDrawerScreen },
     ],
 };

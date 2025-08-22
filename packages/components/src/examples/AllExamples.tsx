@@ -11,6 +11,8 @@ import { DividerExamples } from './DividerExamples';
 import { BadgeExamples } from './BadgeExamples';
 import { AvatarExamples } from './AvatarExamples';
 import { ScreenExamples } from './ScreenExamples';
+import { DialogExamples } from './DialogExamples';
+import { PopoverExamples } from './PopoverExamples';
 import { ThemeExtensionExamples } from './ThemeExtensionExamples';
 
 export const AllExamples = () => {
@@ -59,6 +61,12 @@ export const AllExamples = () => {
       <Divider spacing="medium" />
       
       <ScreenExamples />
+      <Divider spacing="medium" />
+      
+      <DialogExamples />
+      <Divider spacing="medium" />
+      
+      <PopoverExamples />
       <Divider spacing="medium" />
 
       <Divider spacing="large" intent="success">

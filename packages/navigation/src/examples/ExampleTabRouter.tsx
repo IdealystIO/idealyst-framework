@@ -1,5 +1,6 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DividerExamples, IconExamples, InputExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { Screen, Text, View, Button } from "../../../components/src";
 import { UnistylesRuntime } from 'react-native-unistyles';
 import { RouteParam } from '../routing';
@@ -127,6 +128,24 @@ const IconTabScreen = () => (
     </Screen>
 );
 
+const DialogTabScreen = () => (
+    <Screen>
+        <DialogExamples />
+    </Screen>
+);
+
+const PopoverTabScreen = () => (
+    <Screen>
+        <PopoverExamples />
+    </Screen>
+);
+
+const DataGridTabScreen = () => (
+    <Screen>
+        <DataGridShowcase />
+    </Screen>
+);
+
 const ThemeExtensionTabScreen = () => (
     <Screen>
         <ThemeExtensionExamples />
@@ -150,6 +169,9 @@ const TabRouter: RouteParam = {
         { path: "text", component: TextTabScreen },
         { path: "view", component: ViewTabScreen },
         { path: "icon", component: IconTabScreen },
+        { path: "dialog", component: DialogTabScreen },
+        { path: "popover", component: PopoverTabScreen },
+        { path: "datagrid", component: DataGridTabScreen },
         { path: "theme-extension", component: ThemeExtensionTabScreen },
     ],
 }

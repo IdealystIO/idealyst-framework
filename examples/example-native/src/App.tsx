@@ -6,10 +6,13 @@
  */
 
 import React from 'react';
-import AppWithDataGrid from './AppWithDataGrid';
+import { ExampleStackRouter } from '@idealyst/navigation/examples';
+import { NavigatorProvider } from '@idealyst/navigation';
 
 function App() {
-  return <AppWithDataGrid />;
+  return (
+    <NavigatorProvider route={ExampleStackRouter} />
+  );
 }
 
 export default App;

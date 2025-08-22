@@ -2,7 +2,6 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ExampleStackRouter } from '@idealyst/navigation/examples';
 import { NavigatorProvider } from '@idealyst/navigation';
-import { DataGridShowcase } from './DataGridShowcase';
 import { View, Button } from '@idealyst/components';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,11 +24,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/components/*" element={<NavigatorProvider route={ExampleStackRouter} />} />
-          <Route path="/datagrid" element={<DataGridShowcase />} />
-        </Routes>
+          <NavigatorProvider route={ExampleStackRouter} />
       </BrowserRouter>
     </div>
   );  

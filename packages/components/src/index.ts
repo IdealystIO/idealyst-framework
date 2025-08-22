@@ -32,6 +32,12 @@ export * from './Screen/types';
 export { default as Icon } from './Icon';
 export * from './Icon/types';
 
+export { default as Dialog } from './Dialog';
+export * from './Dialog/types';
+
+export { default as Popover } from './Popover';
+export * from './Popover/types';
+
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
@@ -43,6 +49,8 @@ export type { BadgeProps } from './Badge/types';
 export type { AvatarProps } from './Avatar/types';
 export type { ScreenProps } from './Screen/types';
 export type { IconProps } from './Icon/types';
+export type { DialogProps } from './Dialog/types';
+export type { PopoverProps } from './Popover/types';
 
 export { breakpoints } from '@idealyst/theme';
 export type { AppTheme } from '@idealyst/theme';
