@@ -1,0 +1,77 @@
+{
+  "name": "@idealyst/datepicker",
+  "version": "1.0.0",
+  "description": "Cross-platform date and time picker components for React and React Native",
+  "documentation": "https://github.com/your-username/idealyst-framework/tree/main/packages/datepicker#readme",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/idealyst-framework.git",
+    "directory": "packages/datepicker"
+  },
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./examples": {
+      "import": "./src/examples/index.ts",
+      "require": "./src/examples/index.ts",
+      "types": "./src/examples/index.ts"
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "@idealyst/components": "^1.0.40",
+    "@idealyst/theme": "^1.0.40",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-unistyles": "^3.0.4"
+  },
+  "peerDependenciesMeta": {
+    "@idealyst/components": {
+      "optional": false
+    },
+    "@idealyst/theme": {
+      "optional": false
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-unistyles": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "datepicker",
+    "timepicker",
+    "date-range",
+    "datetime",
+    "calendar",
+    "cross-platform",
+    "picker"
+  ]
+}

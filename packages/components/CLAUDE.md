@@ -5,7 +5,7 @@ This file provides comprehensive component documentation for LLMs working with t
 ## Library Overview
 
 @idealyst/components is a cross-platform React/React Native component library with:
-- 11 core components organized into 5 categories
+- 13 core components organized into 6 categories
 - Theme-based styling with Unistyles
 - Intent-based color system (primary, neutral, success, error, warning)
 - Cross-platform compatibility (React & React Native)
@@ -33,6 +33,10 @@ This file provides comprehensive component documentation for LLMs working with t
 
 ### Utility Components
 - **Icon**: Icon display (`name`, `size`, `color`, `intent`)
+
+### Overlay Components
+- **Dialog**: Modal dialog (`open`, `onOpenChange`, `title`, `size="small|medium|large"`, `variant="default"`, `showCloseButton`, `closeOnBackdropClick`, `closeOnEscapeKey`)
+- **Popover**: Contextual overlay (`open`, `onOpenChange`, `anchor`, `placement="top|bottom|left|right"`, `offset`, `closeOnClickOutside`, `closeOnEscapeKey`, `showArrow`)
 
 ## Intent System
 
@@ -73,6 +77,54 @@ All components use a consistent intent-based color system:
 </Card>
 ```
 
+### Dialog Usage
+```tsx
+const [dialogOpen, setDialogOpen] = useState(false);
+
+<Dialog
+  open={dialogOpen}
+  onOpenChange={setDialogOpen}
+  title="Confirm Action"
+  size="medium"
+>
+  <View spacing="md">
+    <Text>Are you sure you want to proceed?</Text>
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      <Button variant="outlined" onPress={() => setDialogOpen(false)}>
+        Cancel
+      </Button>
+      <Button variant="contained" intent="primary" onPress={handleConfirm}>
+        Confirm
+      </Button>
+    </View>
+  </View>
+</Dialog>
+```
+
+### Popover Usage
+```tsx
+const [popoverOpen, setPopoverOpen] = useState(false);
+const buttonRef = useRef<HTMLDivElement>(null);
+
+<div ref={buttonRef} style={{ display: 'inline-block' }}>
+  <Button onPress={() => setPopoverOpen(true)}>
+    Show Menu
+  </Button>
+</div>
+<Popover
+  open={popoverOpen}
+  onOpenChange={setPopoverOpen}
+  anchor={buttonRef}
+  placement="bottom-start"
+  showArrow
+>
+  <View spacing="sm">
+    <Button variant="text" onPress={handleAction}>Action 1</Button>
+    <Button variant="text" onPress={handleAction}>Action 2</Button>
+  </View>
+</Popover>
+```
+
 ## Styling Guidelines
 
 1. **Use variants over manual styles** - Components provide semantic variants
@@ -85,13 +137,13 @@ All components use a consistent intent-based color system:
 
 ```tsx
 // Individual imports (recommended)
-import { Button, Text, View } from '@idealyst/components';
+import { Button, Text, View, Dialog, Popover } from '@idealyst/components';
 
 // Documentation access
 import { componentDocs, getComponentDocs } from '@idealyst/components/docs';
 
 // Examples
-import { ButtonExamples } from '@idealyst/components/examples';
+import { ButtonExamples, DialogExamples, PopoverExamples } from '@idealyst/components/examples';
 ```
 
 ## Key Props Reference
@@ -144,9 +196,11 @@ src/Badge/README.md
 src/Button/README.md
 src/Card/README.md
 src/Checkbox/README.md
+src/Dialog/README.md
 src/Divider/README.md
 src/Icon/README.md
 src/Input/README.md
+src/Popover/README.md
 src/Screen/README.md
 src/Text/README.md
 src/View/README.md

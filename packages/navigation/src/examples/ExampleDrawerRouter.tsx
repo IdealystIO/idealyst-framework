@@ -1,6 +1,7 @@
 import React from 'react';
 import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
 import { DataGridShowcase } from "../../../datagrid/src/examples";
+import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Screen, Text, View, Button } from "../../../components/src";
 import { UnistylesRuntime } from 'react-native-unistyles';
 import { RouteParam } from '../routing';
@@ -148,6 +149,12 @@ const DataGridDrawerScreen = () => (
     </Screen>
 );
 
+const DatePickerDrawerScreen = () => (
+    <Screen>
+        <DatePickerExamples />
+    </Screen>
+);
+
 const ThemeExtensionDrawerScreen = () => (
     <Screen>
         <ThemeExtensionExamples />
@@ -174,6 +181,7 @@ const DrawerRouter: RouteParam = {
         { path: "dialog", component: DialogDrawerScreen },
         { path: "popover", component: PopoverDrawerScreen },
         { path: "datagrid", component: DataGridDrawerScreen },
+        { path: "datepicker", component: DatePickerDrawerScreen },
         { path: "theme-extension", component: ThemeExtensionDrawerScreen },
     ],
 };

@@ -1,0 +1,74 @@
+import React from 'react';
+import { DateTimePickerProps } from './types';
+import { Calendar } from '../DatePicker/Calendar.web';
+import { TimePicker } from './TimePicker.web';
+
+const DateTimePicker: React.FC<DateTimePickerProps> = ({
+  value,
+  onChange,
+  minDate,
+  maxDate,
+  disabled = false,
+  timeMode = '12h',
+  showSeconds = false,
+  timeStep = 1,
+  style,
+  testID,
+}) => {
+
+  const handleDateChange = (newDate: Date) => {
+    if (value) {
+      // Preserve the time from current value
+      const updatedDate = new Date(newDate);
+      updatedDate.setHours(value.getHours(), value.getMinutes(), value.getSeconds());
+      onChange(updatedDate);
+    } else {
+      onChange(newDate);
+    }
+  };
+
+  const handleTimeChange = (newTime: Date) => {
+    if (value) {
+      // Update time while preserving the date
+      const updatedDate = new Date(value);
+      updatedDate.setHours(newTime.getHours(), newTime.getMinutes(), newTime.getSeconds());
+      onChange(updatedDate);
+    } else {
+      // If no date is selected, use today's date with the new time
+      const today = new Date();
+      today.setHours(newTime.getHours(), newTime.getMinutes(), newTime.getSeconds());
+      onChange(today);
+    }
+  };
+
+  const containerStyle = {
+    display: 'flex',
+    flexDirection: 'row' as const,
+    gap: 16,
+    alignItems: 'flex-start',
+    ...style,
+  };
+
+  return (
+    <div style={containerStyle} data-testid={testID}>
+      <Calendar
+        value={value}
+        onChange={handleDateChange}
+        minDate={minDate}
+        maxDate={maxDate}
+        disabled={disabled}
+      />
+      
+      <TimePicker
+        value={value || new Date()}
+        onChange={handleTimeChange}
+        disabled={disabled}
+        mode={timeMode}
+        showSeconds={showSeconds}
+        step={timeStep}
+      />
+    </div>
+  );
+};
+
+export default DateTimePicker;

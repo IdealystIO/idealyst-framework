@@ -1,6 +1,7 @@
 import React from 'react';
 import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
 import { DataGridShowcase } from "../../../datagrid/src/examples";
+import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Button, Divider, Screen, Text, View } from "../../../components/src";
 import { useNavigator } from "../context";
 import { UnistylesRuntime } from 'react-native-unistyles';
@@ -206,6 +207,17 @@ const HomeScreen = () => {
                     }}>
                     📊 DataGrid Showcase
                 </Button>
+                <Button
+                    variant="outlined"
+                    intent="neutral"
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/datepicker",
+                            vars: {},
+                        });
+                    }}>
+                    📅 DatePicker Examples
+                </Button>
                 
                 <Divider spacing="medium" />
                 <Text size="small" weight="semibold" color="secondary">Theme System</Text>
@@ -274,6 +286,7 @@ const StackRouter: RouteParam = {
         { path: "dialog", component: DialogExamples},
         { path: "popover", component: PopoverExamples},
         { path: "datagrid", component: DataGridShowcase},
+        { path: "datepicker", component: DatePickerExamples},
         { path: "theme-extension", component: ThemeExtensionExamples},
     ],
 };
