@@ -36,8 +36,8 @@ export const timePickerStyles = StyleSheet.create((theme) => ({
     }
   },
   timeInput: {
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 40,
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '600',
@@ -46,6 +46,8 @@ export const timePickerStyles = StyleSheet.create((theme) => ({
     borderBottomWidth: 0,
     borderRadius: 0,
     backgroundColor: 'transparent',
+    paddingHorizontal: 0,
+    paddingVertical: 0,
     
     _web: {
       border: 'none',

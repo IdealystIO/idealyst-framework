@@ -48,6 +48,10 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   };
 
   const handleHourClick = (hour: number) => {
+    // Dismiss keyboard when interacting with clock
+    hourInputRef.current?.blur();
+    minuteInputRef.current?.blur();
+    
     let hour24 = hour;
     if (mode === '12h') {
       const isPM = hours >= 12;
@@ -59,7 +63,12 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   };
 
   const handleMinuteClick = (minute: number) => {
+    // Dismiss keyboard when interacting with clock
+    hourInputRef.current?.blur();
+    minuteInputRef.current?.blur();
+    
     updateTime(hours, minute, seconds);
+    // Keep minute selection active after clicking a minute
   };
 
   const toggleAmPm = () => {
@@ -284,43 +293,119 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
       {/* Digital time display */}
       <View style={timePickerStyles.timeInputRow}>
-        <TouchableOpacity
-          onPress={() => setActiveSelection('hour')}
-          disabled={disabled}
+        <TextInput
+          ref={hourInputRef}
+          value={hourInputValue}
+          onChangeText={(value) => {
+            setHourInputValue(value);
+            
+            // Smart focus switching: if user types 2 or higher, focus on minutes
+            if (mode === '12h' && parseInt(value) >= 2 && value.length >= 1) {
+              minuteInputRef.current?.focus();
+              setActiveSelection('minute');
+            } else if (mode === '24h' && parseInt(value) >= 3 && value.length >= 1) {
+              minuteInputRef.current?.focus();
+              setActiveSelection('minute');
+            }
+            
+            // Try to update time if value is valid
+            const hour = parseInt(value);
+            if (!isNaN(hour) && hour >= 0) {
+              let hour24 = hour;
+              if (mode === '12h' && hour <= 12) {
+                const isPM = hours >= 12;
+                if (hour === 12) hour24 = isPM ? 12 : 0;
+                else hour24 = isPM ? hour + 12 : hour;
+              }
+              if (hour24 <= 23) {
+                updateTime(hour24, minutes, seconds);
+              }
+            }
+          }}
+          onFocus={() => {
+            setHourInputFocused(true);
+            setActiveSelection('hour');
+          }}
+          onBlur={() => {
+            setHourInputFocused(false);
+            // Handle 0 -> 12 conversion for 12h mode
+            const hour = parseInt(hourInputValue);
+            if (!isNaN(hour)) {
+              let hour24 = hour;
+              if (mode === '12h') {
+                const isPM = hours >= 12;
+                if (hour === 0) hour24 = isPM ? 12 : 0;
+                else if (hour <= 12) hour24 = isPM ? (hour === 12 ? 12 : hour + 12) : (hour === 12 ? 0 : hour);
+              }
+              if (hour24 <= 23) {
+                updateTime(hour24, minutes, seconds);
+              }
+            }
+            setHourInputValue(String(displayHours));
+          }}
+          keyboardType="numeric"
+          maxLength={mode === '12h' ? 2 : 2}
+          selectTextOnFocus
+          editable={!disabled}
           style={[
             timePickerStyles.timeInput,
-            activeSelection === 'hour' && timePickerStyles.activeInput
+            activeSelection === 'hour' && timePickerStyles.activeInput,
+            {
+              fontSize: 16,
+              fontWeight: '600',
+              color: activeSelection === 'hour' ? '#3b82f6' : '#111827',
+              textAlign: 'center',
+              paddingHorizontal: 2,
+              paddingVertical: 2,
+            }
           ]}
-        >
-          <Text style={{ 
-            fontSize: 16, 
-            fontWeight: '600',
-            color: activeSelection === 'hour' ? '#3b82f6' : '#111827',
-            textAlign: 'center'
-          }}>
-            {String(displayHours).padStart(2, '0')}
-          </Text>
-        </TouchableOpacity>
+        />
         
         <Text style={timePickerStyles.timeSeparator}>:</Text>
         
-        <TouchableOpacity
-          onPress={() => setActiveSelection('minute')}
-          disabled={disabled}
+        <TextInput
+          ref={minuteInputRef}
+          value={minuteInputValue}
+          onChangeText={(value) => {
+            setMinuteInputValue(value);
+            
+            // Try to update time if value is valid
+            const minute = parseInt(value);
+            if (!isNaN(minute) && minute >= 0 && minute <= 59) {
+              updateTime(hours, minute, seconds);
+            }
+            
+            // Auto-focus hour input if user deletes and field becomes empty
+            if (value === '') {
+              hourInputRef.current?.focus();
+              setActiveSelection('hour');
+            }
+          }}
+          onFocus={() => {
+            setMinuteInputFocused(true);
+            setActiveSelection('minute');
+          }}
+          onBlur={() => {
+            setMinuteInputFocused(false);
+            setMinuteInputValue(String(minutes).padStart(2, '0'));
+          }}
+          keyboardType="numeric"
+          maxLength={2}
+          selectTextOnFocus
+          editable={!disabled}
           style={[
             timePickerStyles.timeInput,
-            activeSelection === 'minute' && timePickerStyles.activeInput
+            activeSelection === 'minute' && timePickerStyles.activeInput,
+            {
+              fontSize: 16,
+              fontWeight: '600',
+              color: activeSelection === 'minute' ? '#3b82f6' : '#111827',
+              textAlign: 'center',
+              paddingHorizontal: 2,
+              paddingVertical: 2,
+            }
           ]}
-        >
-          <Text style={{ 
-            fontSize: 16, 
-            fontWeight: '600',
-            color: activeSelection === 'minute' ? '#3b82f6' : '#111827',
-            textAlign: 'center'
-          }}>
-            {String(minutes).padStart(2, '0')}
-          </Text>
-        </TouchableOpacity>
+        />
 
         {showSeconds && (
           <>
