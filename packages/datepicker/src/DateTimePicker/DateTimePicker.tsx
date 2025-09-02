@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from '@idealyst/components';
 import { DateTimePickerProps } from './types';
-import { Calendar } from '../DatePicker/Calendar';
+import { Calendar } from '../DatePicker/Calendar.web';
 import { TimePicker } from './TimePicker';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = ({

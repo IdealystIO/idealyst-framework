@@ -31,28 +31,28 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
   },
 
   weekdayHeader: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: 2,
+    flexDirection: 'row',
     marginBottom: theme.spacing?.xs || 8,
     
-    // Native fallback
-    _native: {
-      flexDirection: 'row',
+    // Web specific styles
+    _web: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7, 1fr)',
+      gap: 2,
+      flexDirection: undefined,
     },
   },
 
   weekdayCell: {
-    display: 'flex',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: theme.spacing?.xs || 4,
     
-    // Native fallback
-    _native: {
-      flex: 1,
-      alignItems: 'center',
-      paddingVertical: theme.spacing?.xs || 4,
+    // Web specific styles
+    _web: {
+      display: 'flex',
+      flex: undefined,
     },
   },
 
@@ -63,44 +63,44 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
   },
 
   calendarGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: 2,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     marginBottom: theme.spacing?.xs || 8,
     
-    // Native fallback
-    _native: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
+    // Web specific styles
+    _web: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7, 1fr)',
+      gap: 2,
+      flexDirection: undefined,
+      flexWrap: undefined,
     },
   },
 
   dayCell: {
-    display: 'flex',
+    width: '14.28%', // 100% / 7 days
+    aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    aspectRatio: '1',
     minHeight: 32,
     
-    // Native specific sizing
-    _native: {
-      width: '14.28%', // 100% / 7 days
-      aspectRatio: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
+    // Web specific styles
+    _web: {
+      display: 'flex',
+      width: undefined,
     },
   },
 
   dayButton: {
-    width: '100%',
-    height: '100%',
-    maxWidth: 36,
-    maxHeight: 36,
+    width: 28,
+    height: 28,
     minWidth: 28,
     minHeight: 28,
     padding: 0,
     borderRadius: theme.borderRadius?.sm || 6,
     fontSize: theme.typography?.sizes?.small || 13,
+    alignItems: 'center',
+    justifyContent: 'center',
     
     variants: {
       inRange: {
@@ -137,13 +137,13 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
       },
     },
     
-    // Native specific styling
-    _native: {
-      width: 28,
-      height: 28,
-      minWidth: 28,
-      minHeight: 28,
-      borderRadius: theme.borderRadius?.sm || 6,
+    // Web specific styling
+    _web: {
+      width: '100%',
+      height: '100%',
+      maxWidth: 36,
+      maxHeight: 36,
+      display: 'flex',
     },
   },
 

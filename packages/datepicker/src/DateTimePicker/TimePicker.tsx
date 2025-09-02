@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, View, Input } from '@idealyst/components';
 import { TimePickerProps } from './types';
 import { timePickerStyles } from './TimePicker.styles';
@@ -16,6 +16,10 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   const [activeSelection, setActiveSelection] = useState<'hour' | 'minute'>('hour');
   const [hourInputValue, setHourInputValue] = useState(String(value.getHours() > 12 && mode === '12h' ? value.getHours() - 12 : value.getHours()));
   const [minuteInputValue, setMinuteInputValue] = useState(String(value.getMinutes()).padStart(2, '0'));
+  const [hourInputFocused, setHourInputFocused] = useState(false);
+  const [minuteInputFocused, setMinuteInputFocused] = useState(false);
+  const hourInputRef = useRef<HTMLInputElement | null>(null);
+  const minuteInputRef = useRef<HTMLInputElement | null>(null);
   const hours = value.getHours();
   const minutes = value.getMinutes();
   const seconds = value.getSeconds();
@@ -26,13 +30,13 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   // Sync input values when time changes from external sources (like clock clicks)
   // Only update if the input is not currently focused
   useEffect(() => {
-    if (activeSelection !== 'hour') {
+    if (!hourInputFocused) {
       setHourInputValue(String(displayHours));
     }
-    if (activeSelection !== 'minute') {
+    if (!minuteInputFocused) {
       setMinuteInputValue(String(minutes).padStart(2, '0'));
     }
-  }, [displayHours, minutes, activeSelection]);
+  }, [displayHours, minutes, hourInputFocused, minuteInputFocused]);
 
   const updateTime = (newHours: number, newMinutes: number, newSeconds?: number) => {
     const newDate = new Date(value);
@@ -296,6 +300,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
       {/* Time Input Row */}
       <View style={timePickerStyles.timeInputRow}>
         <Input
+          ref={hourInputRef}
           variant="bare"
           value={hourInputValue}
           onChangeText={(value) => {
@@ -307,6 +312,9 @@ export const TimePicker: React.FC<TimePickerProps> = ({
               // Wait a moment then focus minutes
               setTimeout(() => {
                 setActiveSelection('minute');
+                setHourInputFocused(false);
+                setMinuteInputFocused(true);
+                minuteInputRef.current?.focus();
               }, 100);
             }
             
@@ -329,9 +337,11 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           }}
           onFocus={() => {
             setActiveSelection('hour');
+            setHourInputFocused(true);
             setHourInputValue(String(displayHours));
           }}
           onBlur={() => {
+            setHourInputFocused(false);
             // Handle 0 -> 12 conversion for 12h mode
             const hour = parseInt(hourInputValue);
             if (hour === 0 && mode === '12h') {
@@ -349,6 +359,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         />
         <View style={timePickerStyles.timeSeparator}>:</View>
         <Input
+          ref={minuteInputRef}
           variant="bare"
           value={minuteInputValue}
           onChangeText={(value) => {
@@ -364,9 +375,11 @@ export const TimePicker: React.FC<TimePickerProps> = ({
           }}
           onFocus={() => {
             setActiveSelection('minute');
+            setMinuteInputFocused(true);
             setMinuteInputValue(String(minutes));
           }}
           onBlur={() => {
+            setMinuteInputFocused(false);
             setMinuteInputValue(String(minutes).padStart(2, '0'));
           }}
           style={[

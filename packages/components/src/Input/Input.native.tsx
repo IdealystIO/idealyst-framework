@@ -3,7 +3,7 @@ import { TextInput } from 'react-native';
 import { InputProps } from './types';
 import { inputStyles } from './Input.styles';
 
-const Input: React.FC<InputProps> = ({
+const Input = React.forwardRef<TextInput, InputProps>(({
   value,
   onChangeText,
   onFocus,
@@ -18,7 +18,7 @@ const Input: React.FC<InputProps> = ({
   hasError = false,
   style,
   testID,
-}) => {
+}, ref) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const getKeyboardType = () => {
@@ -64,6 +64,7 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <TextInput
+      ref={ref}
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}
@@ -78,6 +79,6 @@ const Input: React.FC<InputProps> = ({
       placeholderTextColor="#999999"
     />
   );
-};
+});
 
 export default Input; 

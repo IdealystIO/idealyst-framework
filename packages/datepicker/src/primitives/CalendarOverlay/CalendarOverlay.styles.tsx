@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native-unistyles';
 export const calendarOverlayStyles = StyleSheet.create((theme) => ({
   container: {
     position: 'absolute',
-    top: 32,
+    top: 40,
     left: 0,
     right: 0,
     backgroundColor: theme.colors?.surface?.primary || 'white',

@@ -16,9 +16,10 @@ export default defineConfig({
           }]
         ],
         plugins: [
+          ['babel-plugin-react-compiler', { target: '19' }],
           ['react-native-unistyles/plugin', {
             root: 'src',
-            autoProcessPaths: ['@idealyst/components', '@idealyst/navigation', '@idealyst/theme', '@idealyst/datagrid'],
+            autoProcessPaths: ['@idealyst/components', '@idealyst/navigation', '@idealyst/theme', '@idealyst/datagrid', '@idealyst/datepicker'],
           }],
           ['@idealyst/components/plugin/web', { root: 'src' }]
         ]
@@ -36,6 +37,7 @@ export default defineConfig({
       '@idealyst/navigation': path.resolve(__dirname, '../../packages/navigation/src'),
       '@idealyst/theme': path.resolve(__dirname, '../../packages/theme/src'),
       '@idealyst/datagrid': path.resolve(__dirname, '../../packages/datagrid/src'),
+      '@idealyst/datepicker': path.resolve(__dirname, '../../packages/datepicker/src'),
     },
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
@@ -66,6 +68,7 @@ export default defineConfig({
       '@idealyst/navigation', 
       '@idealyst/theme',
       '@idealyst/datagrid',
+      '@idealyst/datepicker',
       '@testproject/shared',
     ],
   },

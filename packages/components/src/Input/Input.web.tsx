@@ -3,7 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { InputProps } from './types';
 import { inputStyles } from './Input.styles';
 
-const Input: React.FC<InputProps> = ({
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   value,
   onChangeText,
   onFocus,
@@ -18,7 +18,8 @@ const Input: React.FC<InputProps> = ({
   hasError = false,
   style,
   testID,
-}) => {
+}, ref) => {
+
   const getInputType = () => {
     switch (inputType) {
       case 'email':
@@ -65,12 +66,23 @@ const Input: React.FC<InputProps> = ({
     style,
   ].filter(Boolean);
 
-  // Use getWebProps to generate className and ref for web
-  const webProps = getWebProps(inputStyleArray);
+  // Use getWebProps for Unistyles, then manually add our ref
+  const { ref: unistylesRef, ...webProps } = getWebProps(inputStyleArray);
+
+  // Forward the ref while still providing unistyles with access
+  const handleRef = (r: HTMLInputElement | null) => {
+    unistylesRef.current = r;
+    if (typeof ref === 'function') {
+      ref(r);
+    } else if (ref) {
+      ref.current = r;
+    }
+  };
 
   return (
     <input
       {...webProps}
+      ref={handleRef}
       type={secureTextEntry ? 'password' : getInputType()}
       value={value}
       onChange={handleChange}
@@ -82,6 +94,6 @@ const Input: React.FC<InputProps> = ({
       data-testid={testID}
     />
   );
-};
+});
 
 export default Input; 

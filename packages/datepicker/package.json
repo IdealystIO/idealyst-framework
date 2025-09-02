@@ -39,6 +39,7 @@
     "@idealyst/theme": "^1.0.40",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
+    "react-native-svg": ">=13.0.0",
     "react-native-unistyles": "^3.0.4"
   },
   "peerDependenciesMeta": {
@@ -49,6 +50,9 @@
       "optional": false
     },
     "react-native": {
+      "optional": true
+    },
+    "react-native-svg": {
       "optional": true
     },
     "react-native-unistyles": {
