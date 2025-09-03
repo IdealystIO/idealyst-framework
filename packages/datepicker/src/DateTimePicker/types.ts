@@ -44,8 +44,6 @@ export interface DateTimePickerProps {
   /** Time picker mode */
   timeMode?: '12h' | '24h';
   
-  /** Show seconds in time picker */
-  showSeconds?: boolean;
   
   /** Time step in minutes */
   timeStep?: number;
@@ -70,8 +68,6 @@ export interface TimePickerProps {
   /** Time picker mode */
   mode?: '12h' | '24h';
   
-  /** Show seconds */
-  showSeconds?: boolean;
   
   /** Time step in minutes */
   step?: number;

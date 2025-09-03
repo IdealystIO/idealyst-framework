@@ -69,6 +69,15 @@ export interface RangeCalendarProps {
   /** Called when range is selected */
   onChange: (range: DateRange) => void;
   
+  /** Called when a date is selected to indicate which end (start/end) */
+  onDateSelected?: (type: 'start' | 'end') => void;
+  
+  /** Show times in calendar cells (for DateTimeRangePicker) */
+  showTimes?: boolean;
+  
+  /** Time mode for display */
+  timeMode?: '12h' | '24h';
+  
   /** Minimum selectable date */
   minDate?: Date;
   

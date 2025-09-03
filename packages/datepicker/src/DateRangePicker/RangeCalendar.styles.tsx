@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native-unistyles';
 export const rangeCalendarStyles = StyleSheet.create((theme) => ({
   container: {
     width: 256,
+    position: 'relative',
   },
 
   header: {
@@ -10,6 +11,10 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: theme.spacing?.md || 16,
+
+    _web: {
+      display: 'flex',
+    },
   },
 
   headerButton: {
@@ -45,6 +50,9 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
 
   weekdayCell: {
     flex: 1,
+    width: 36,
+    minWidth: 36,
+    maxWidth: 36,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: theme.spacing?.xs || 4,
@@ -53,6 +61,9 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
     _web: {
       display: 'flex',
       flex: undefined,
+      width: '36px',
+      minWidth: '36px',
+      maxWidth: '36px',
     },
   },
 
@@ -79,28 +90,40 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
 
   dayCell: {
     width: '14.28%', // 100% / 7 days
+    minWidth: 36,
+    maxWidth: 36,
     aspectRatio: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 32,
+    alignItems: 'stretch',
+    justifyContent: 'stretch',
+    height: 36,
+    maxHeight: 36,
     
     // Web specific styles
     _web: {
       display: 'flex',
-      width: undefined,
+      width: '36px',
+      minWidth: '36px',
+      maxWidth: '36px',
+      height: '36px',
+      maxHeight: '36px',
     },
   },
 
   dayButton: {
-    width: 28,
-    height: 28,
-    minWidth: 28,
-    minHeight: 28,
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    minWidth: 36,
+    maxWidth: 36,
+    minHeight: 36,
+    maxHeight: 36,
     padding: 0,
+    margin: 0,
     borderRadius: theme.borderRadius?.sm || 6,
     fontSize: theme.typography?.sizes?.small || 13,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
     
     variants: {
       inRange: {
@@ -139,11 +162,14 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
     
     // Web specific styling
     _web: {
-      width: '100%',
-      height: '100%',
-      maxWidth: 36,
-      maxHeight: 36,
+      width: '36px',
+      height: '36px',
+      minWidth: '36px',
+      maxWidth: '36px',
+      minHeight: '36px',
+      maxHeight: '36px',
       display: 'flex',
+      overflow: 'hidden',
     },
   },
 

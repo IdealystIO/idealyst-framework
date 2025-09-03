@@ -17,6 +17,7 @@ export const dateTimeRangePickerStyles = StyleSheet.create((theme) => ({
   },
 
   selectedRangeHeader: {
+    flexDirection: 'column',
     padding: theme.spacing?.sm || 12,
     backgroundColor: theme.colors?.surface?.secondary || '#f9fafb',
     borderRadius: theme.borderRadius?.md || 8,
@@ -25,6 +26,8 @@ export const dateTimeRangePickerStyles = StyleSheet.create((theme) => ({
     gap: theme.spacing?.xs || 4,
 
     _web: {
+      display: 'flex',
+      flexDirection: 'column',
       border: `1px solid ${theme.colors?.border?.primary || '#e5e7eb'}`,
     },
   },

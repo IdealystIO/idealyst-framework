@@ -3,10 +3,14 @@ import { View, Text, Button } from '@idealyst/components';
 import { TouchableOpacity } from 'react-native';
 import { RangeCalendarProps, DateRange } from './types';
 import { rangeCalendarStyles } from './RangeCalendar.styles';
+import { CalendarOverlay } from '../primitives/CalendarOverlay';
 
 export const RangeCalendar: React.FC<RangeCalendarProps> = ({
   value = {},
   onChange,
+  onDateSelected,
+  showTimes = false,
+  timeMode = '12h',
   minDate,
   maxDate,
   disabled = false,
@@ -21,6 +25,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
     controlledCurrentMonth || value?.startDate || new Date()
   );
   const [selectingEnd, setSelectingEnd] = useState(false);
+  const [overlayMode, setOverlayMode] = useState<'month' | 'year' | null>(null);
 
   const currentMonth = controlledCurrentMonth || internalCurrentMonth;
 
@@ -78,6 +83,34 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
     return isDateRangeStart(date) || isDateRangeEnd(date);
   };
 
+  const formatTime = (date: Date): string => {
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    if (timeMode === '12h') {
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
+      return `${hours}:${minutes}${ampm}`;
+    } else {
+      return `${String(hours).padStart(2, '0')}:${minutes}`;
+    }
+  };
+
+  const getDateTimeInfo = (date: Date) => {
+    if (!showTimes) return null;
+    
+    const isStart = isDateRangeStart(date);
+    const isEnd = isDateRangeEnd(date);
+    
+    if (isStart && value?.startDate) {
+      return { type: 'start', time: formatTime(value.startDate) };
+    }
+    if (isEnd && value?.endDate) {
+      return { type: 'end', time: formatTime(value.endDate) };
+    }
+    return null;
+  };
+
   const handleDateClick = (date: Date) => {
     if (isDateDisabled(date)) return;
 
@@ -87,6 +120,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
     if (!startDate || (startDate && endDate)) {
       onChange({ startDate: date, endDate: undefined });
       setSelectingEnd(true);
+      onDateSelected?.('start');
       return;
     }
 
@@ -116,6 +150,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
 
       onChange({ startDate: newStartDate, endDate: newEndDate });
       setSelectingEnd(false);
+      onDateSelected?.('end');
     }
   };
 
@@ -129,34 +164,56 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
     handleMonthChange(newMonth);
   };
 
-  const handlePresetRange = (days: number) => {
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setDate(endDate.getDate() + days - 1);
-    
-    onChange({ startDate, endDate });
-    setSelectingEnd(false);
+  const createDateWithDayAdjustment = (year: number, month: number, day: number): Date => {
+    // Get the last day of the target month
+    const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+    // Use the smaller of the requested day or the last day of the month
+    const adjustedDay = Math.min(day, lastDayOfMonth);
+    return new Date(year, month, adjustedDay);
   };
 
-  const clearRange = () => {
-    onChange({});
-    setSelectingEnd(false);
+  const handleMonthSelect = (monthIndex: number) => {
+    const newMonth = new Date(currentMonth.getFullYear(), monthIndex, 1);
+    handleMonthChange(newMonth);
+    setOverlayMode(null);
   };
+
+  const handleYearSelect = (year: number) => {
+    const newMonth = new Date(year, currentMonth.getMonth(), 1);
+    handleMonthChange(newMonth);
+    setOverlayMode(null);
+  };
+
 
   const monthName = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   // Create calendar grid
   const calendarDays = [];
   
-  // Add empty cells for days before month starts
-  for (let i = 0; i < startingDayOfWeek; i++) {
-    calendarDays.push(null);
+  // Add previous month days to fill start of week
+  const prevMonthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 0);
+  const prevMonthDaysToShow = startingDayOfWeek;
+  for (let i = prevMonthDaysToShow - 1; i >= 0; i--) {
+    const day = prevMonthEnd.getDate() - i;
+    const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, day);
+    calendarDays.push({ date, isCurrentMonth: false });
   }
   
-  // Add days of the month
+  // Add days of the current month
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-    calendarDays.push(date);
+    calendarDays.push({ date, isCurrentMonth: true });
+  }
+  
+  // Add next month days to complete partial weeks
+  const currentLength = calendarDays.length;
+  const weeksNeeded = Math.ceil(currentLength / 7);
+  const totalCalendarDays = weeksNeeded * 7;
+  
+  const remainingDays = totalCalendarDays - currentLength;
+  for (let day = 1; day <= remainingDays; day++) {
+    const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, day);
+    calendarDays.push({ date, isCurrentMonth: false });
   }
 
   rangeCalendarStyles.useVariants({});
@@ -174,7 +231,26 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
         >
           ←
         </Button>
-        <Text weight="semibold">{monthName}</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <Button
+            variant="text"
+            size="small"
+            onPress={() => setOverlayMode('month')}
+            disabled={disabled}
+            style={{ padding: 4 }}
+          >
+            <Text weight="semibold">{currentMonth.toLocaleDateString('en-US', { month: 'long' })}</Text>
+          </Button>
+          <Button
+            variant="text"
+            size="small"
+            onPress={() => setOverlayMode('year')}
+            disabled={disabled}
+            style={{ padding: 4 }}
+          >
+            <Text weight="semibold">{currentMonth.getFullYear()}</Text>
+          </Button>
+        </View>
         <Button 
           variant="text" 
           size="small" 
@@ -199,69 +275,81 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
 
       {/* Calendar grid */}
       <View style={rangeCalendarStyles.calendarGrid}>
-        {calendarDays.map((date, index) => (
+        {calendarDays.map((dayInfo, index) => (
           <View key={index} style={rangeCalendarStyles.dayCell}>
-            {date && (
+            {dayInfo && (
               <TouchableOpacity
-                onPress={() => handleDateClick(date)}
-                disabled={isDateDisabled(date)}
+                onPress={() => handleDateClick(dayInfo.date)}
+                disabled={isDateDisabled(dayInfo.date)}
                 style={[
                   rangeCalendarStyles.dayButton,
                   {
-                    backgroundColor: isDateSelected(date) 
+                    backgroundColor: isDateSelected(dayInfo.date) 
                       ? '#3b82f6'
-                      : isDateInRange(date)
+                      : isDateInRange(dayInfo.date)
                       ? '#3b82f620'
                       : 'transparent',
-                    opacity: isDateDisabled(date) ? 0.5 : 1,
+                    opacity: isDateDisabled(dayInfo.date) ? 0.5 : dayInfo.isCurrentMonth ? 1 : 0.5,
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'relative',
+                    flex: 1,
+                    aspectRatio: 1,
                   }
                 ]}
               >
                 <Text 
                   style={{ 
-                    color: isDateSelected(date) ? 'white' : 'black',
+                    color: isDateSelected(dayInfo.date) ? 'white' : dayInfo.isCurrentMonth ? 'black' : '#9ca3af',
                     fontSize: 13,
-                    fontWeight: isDateSelected(date) ? '600' : '400',
+                    fontWeight: isDateSelected(dayInfo.date) ? '600' : '400',
+                    textAlign: 'center',
                   }}
                 >
-                  {date.getDate()}
+                  {dayInfo.date.getDate()}
                 </Text>
+                {(() => {
+                  const timeInfo = getDateTimeInfo(dayInfo.date);
+                  if (timeInfo) {
+                    return (
+                      <Text 
+                        style={{ 
+                          color: isDateSelected(dayInfo.date) ? 'white' : '#666',
+                          fontSize: 7,
+                          fontWeight: '500',
+                          textAlign: 'center',
+                          marginTop: 1,
+                          width: '100%',
+                        }}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                        {timeInfo.time}
+                      </Text>
+                    );
+                  }
+                  return null;
+                })()}
               </TouchableOpacity>
             )}
           </View>
         ))}
       </View>
 
-      {/* Range presets */}
-      <View style={rangeCalendarStyles.rangePresets}>
-        <Button
-          variant="text"
-          size="small"
-          onPress={() => handlePresetRange(7)}
+      {/* Overlay for month/year selection */}
+      {overlayMode && (
+        <CalendarOverlay
+          mode={overlayMode}
+          currentMonth={currentMonth.getMonth()}
+          currentYear={currentMonth.getFullYear()}
+          onMonthSelect={handleMonthSelect}
+          onYearSelect={handleYearSelect}
+          onClose={() => setOverlayMode(null)}
           disabled={disabled}
-          style={rangeCalendarStyles.presetButton}
-        >
-          Next 7 days
-        </Button>
-        <Button
-          variant="text"
-          size="small"
-          onPress={() => handlePresetRange(30)}
-          disabled={disabled}
-          style={rangeCalendarStyles.presetButton}
-        >
-          Next 30 days
-        </Button>
-        <Button
-          variant="outlined"
-          size="small"
-          onPress={clearRange}
-          disabled={disabled}
-          style={rangeCalendarStyles.clearButton}
-        >
-          Clear Range
-        </Button>
-      </View>
+        />
+      )}
+
     </View>
   );
 };
