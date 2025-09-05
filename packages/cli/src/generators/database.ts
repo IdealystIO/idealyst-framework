@@ -1,7 +1,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, copyTemplate, installDependencies, getTemplateData, updateWorkspacePackageJson, resolveProjectPath } from './utils';
+import { validateProjectName, copyTemplate, installDependencies, getTemplateData, updateWorkspacePackageJson, resolveProjectPath, getTemplatePath } from './utils';
 
 export async function generateDatabaseProject(options: GenerateProjectOptions): Promise<void> {
   const { name, directory, skipInstall } = options;
@@ -13,7 +13,7 @@ export async function generateDatabaseProject(options: GenerateProjectOptions): 
   console.log(chalk.blue(`🗄️ Creating Database project: ${name}`));
   
   const { projectPath, workspacePath, workspaceScope } = await resolveProjectPath(name, directory);
-  const templatePath = path.join(__dirname, '..', 'templates', 'database');
+  const templatePath = getTemplatePath('database');
   
   const templateData = getTemplateData(name, `Database models and client library with Prisma`, undefined, workspaceScope || undefined);
   

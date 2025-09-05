@@ -65,7 +65,7 @@ describe('Native Generator', () => {
     // Check app.json for correct app name
     const appJson = await fs.readJSON(path.join(projectPath, 'app.json'));
     expect(appJson.displayName).toBe('My Native App');
-    expect(appJson.name).toBe('my-native-app');
+    expect(appJson.name).toBe('My Native App');
 
     // Reset environment variable
     delete process.env.IDEALYST_USE_RN_CLI;
@@ -90,7 +90,7 @@ describe('Native Generator', () => {
     
     // Verify App.tsx has tRPC provider
     const appContent = await fs.readFile(path.join(projectPath, 'App.tsx'), 'utf8');
-    expect(appContent).toContain('TrpcProvider');
+    expect(appContent).toContain('trpc.Provider');
 
     // Verify package.json has tRPC dependencies
     const packageJson = await fs.readJSON(path.join(projectPath, 'package.json'));
@@ -166,7 +166,7 @@ describe('Native Generator', () => {
     const appJson = await fs.readJSON(path.join(projectPath, 'app.json'));
     
     // Should convert kebab-case to Title Case
-    expect(appJson.displayName).toBe('My-awesome-mobile-app'); // Note: current implementation doesn't do perfect title case
+    expect(appJson.displayName).toBe('My Awesome Mobile App');
 
     delete process.env.IDEALYST_USE_RN_CLI;
   });

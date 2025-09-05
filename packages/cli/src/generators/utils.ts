@@ -8,8 +8,32 @@ import inquirer from 'inquirer';
 import { TemplateData } from '../types';
 
 export function validateProjectName(name: string): boolean {
-  const validation = validatePackageName(name);
-  return validation.validForNewPackages;
+  // Use npm validation as base but add our own restrictions
+  const npmValidation = validatePackageName(name);
+  if (!npmValidation.validForNewPackages) {
+    return false;
+  }
+  
+  // Additional restrictions for our projects:
+  // - No underscores (prefer kebab-case)
+  // - No starting with numbers
+  // - Only lowercase letters, numbers, and hyphens
+  const pattern = /^[a-z][a-z0-9-]*$/;
+  return pattern.test(name);
+}
+
+export function getTemplatePath(templateName: string): string {
+  // In tests, use the current directory + templates
+  // In production, use the built directory + templates
+  const isTest = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID !== undefined;
+  
+  if (isTest) {
+    // During tests, use the templates directory relative to the project root
+    return path.join(__dirname, '..', '..', 'templates', templateName);
+  } else {
+    // In production, use the templates directory relative to the dist folder
+    return path.join(__dirname, '..', 'templates', templateName);
+  }
 }
 
 export function createPackageName(name: string): string {

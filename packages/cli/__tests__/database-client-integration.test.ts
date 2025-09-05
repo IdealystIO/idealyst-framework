@@ -9,6 +9,16 @@ describe('Database Client Integration', () => {
 
   beforeEach(async () => {
     tempDir = await createTempDir('database-client-integration');
+    
+    // Set up workspace structure for all tests
+    await fs.writeJson(path.join(tempDir, 'package.json'), {
+      name: 'test-workspace',
+      private: true,
+      workspaces: ['packages/*']
+    });
+    
+    // Create packages directory
+    await fs.ensureDir(path.join(tempDir, 'packages'));
   });
 
   afterEach(async () => {
@@ -16,20 +26,11 @@ describe('Database Client Integration', () => {
   });
 
   it('should export client and types that can be consumed by other packages', async () => {
-    // Create a workspace structure
-    const workspaceDir = path.join(tempDir, 'test-workspace');
-    await fs.ensureDir(workspaceDir);
-    await fs.writeJson(path.join(workspaceDir, 'package.json'), {
-      name: 'test-workspace',
-      private: true,
-      workspaces: ['packages/*']
-    });
-    
     // Create database project
     await generateDatabaseProject({
       name: 'my-database',
       type: 'database',
-      directory: workspaceDir,
+      directory: tempDir,
       skipInstall: true
     });
 
@@ -37,55 +38,47 @@ describe('Database Client Integration', () => {
     await generateApiProject({
       name: 'my-api',
       type: 'api', 
-      directory: workspaceDir,
+      directory: tempDir,
       skipInstall: true
     });
 
-    const databasePath = path.join(workspaceDir, 'packages', 'my-database');
-    const apiPath = path.join(workspaceDir, 'packages', 'my-api');
+    const databasePath = path.join(tempDir, 'packages', 'my-database');
+    const apiPath = path.join(tempDir, 'packages', 'my-api');
 
-    // Verify database exports are properly configured
+    // Verify database package.json structure
     const dbPackageJson = await fs.readJson(path.join(databasePath, 'package.json'));
-    expect(dbPackageJson.exports).toHaveProperty('.');
-    expect(dbPackageJson.exports).toHaveProperty('./client');
-    expect(dbPackageJson.exports).toHaveProperty('./schemas');
+    expect(dbPackageJson.name).toBe('@test-workspace/my-database');
+    expect(dbPackageJson.main).toBe('dist/index.js');
+    expect(dbPackageJson.types).toBe('dist/index.d.ts');
+    expect(dbPackageJson.files).toContain('generated/**/*');
 
     // Verify main index exports all necessary items
     const dbIndexContent = await fs.readFile(path.join(databasePath, 'src', 'index.ts'), 'utf8');
-    expect(dbIndexContent).toContain('export { PrismaClient }');
-    expect(dbIndexContent).toContain('export { default as db }');
-    expect(dbIndexContent).toContain('export * from \'./schemas\'');
-    expect(dbIndexContent).toContain('export type * from \'@prisma/client\'');
+    expect(dbIndexContent).toContain("import { PrismaClient } from '../generated/client'");
+    expect(dbIndexContent).toContain('export const prisma');
+    expect(dbIndexContent).toContain("export * from './validators'");
+    expect(dbIndexContent).toContain("export * from '../generated/client'");
+    expect(dbIndexContent).toContain('export default prisma');
 
-    // Verify client file has proper singleton pattern
-    const clientContent = await fs.readFile(path.join(databasePath, 'src', 'client.ts'), 'utf8');
-    expect(clientContent).toContain('PrismaClient');
-    expect(clientContent).toContain('globalThis.__globalPrisma');
-    expect(clientContent).toContain('export default prisma');
-
-    // Verify schemas file exists and has proper structure
-    const schemasContent = await fs.readFile(path.join(databasePath, 'src', 'schemas.ts'), 'utf8');
-    expect(schemasContent).toContain('import { z } from \'zod\'');
-    expect(schemasContent).toContain('export const schemas');
+    // Verify validators file exists and has proper structure
+    const validatorsContent = await fs.readFile(path.join(databasePath, 'src', 'validators.ts'), 'utf8');
+    expect(validatorsContent).toContain("import { z } from 'zod'");
+    expect(validatorsContent).toContain('export const TestValidator');
 
     // Create a test API controller that would use the database
     const testControllerContent = `
-import { db, schemas, PrismaClient } from '@test-workspace/my-database';
-import type { User } from '@test-workspace/my-database';
+import { prisma, PrismaClient, TestValidator } from '@test-workspace/my-database';
 
 // Test that we can import and use the database client
 const testDatabaseIntegration = async () => {
-  // Should be able to use the singleton db instance
-  console.log('Database client:', typeof db);
+  // Should be able to use the singleton prisma instance
+  console.log('Database client:', typeof prisma);
   
   // Should be able to import PrismaClient for type annotations
-  const client: PrismaClient = db;
+  const client: PrismaClient = prisma;
   
-  // Should be able to access schemas
-  console.log('Schemas:', typeof schemas);
-  
-  // Should be able to use Prisma types (this would fail at compile time if types aren't exported)
-  // const user: User = { id: '1', email: 'test@example.com' };
+  // Should be able to access validators
+  console.log('Validator:', typeof TestValidator);
   
   return { success: true };
 };
@@ -101,8 +94,8 @@ export { testDatabaseIntegration };
     
     // Read it back to ensure it contains our expected imports
     const writtenContent = await fs.readFile(path.join(apiPath, 'src', 'test-integration.ts'), 'utf8');
-    expect(writtenContent).toContain('import { db, schemas, PrismaClient }');
-    expect(writtenContent).toContain('import type { User }');
+    expect(writtenContent).toContain('import { prisma, PrismaClient, TestValidator }');
+    expect(writtenContent).toContain('typeof prisma');
   });
 
   it('should generate TypeScript declarations for proper type safety', async () => {
@@ -145,9 +138,8 @@ export { testDatabaseIntegration };
     
     // Verify README includes usage examples
     expect(readmeContent).toContain('## Usage');
-    expect(readmeContent).toContain('### In Other Packages');
-    expect(readmeContent).toContain('import { db, schemas }');
-    expect(readmeContent).toContain('const users = await db.user.findMany()');
-    expect(readmeContent).toContain('schemas.createUser.parse(input)');
+    expect(readmeContent).toContain('import { prisma,');
+    expect(readmeContent).toContain('const users = await prisma.user.findMany()');
+    expect(readmeContent).toContain('TestValidator.parse(');
   });
 });

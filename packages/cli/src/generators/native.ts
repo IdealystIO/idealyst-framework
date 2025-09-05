@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons, resolveProjectPath, copyTrpcFiles, copyTrpcAppComponent, removeTrpcDependencies, copyTemplate } from './utils';
+import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons, resolveProjectPath, copyTrpcFiles, copyTrpcAppComponent, removeTrpcDependencies, copyTemplate, getTemplatePath } from './utils';
 
 export async function generateNativeProject(options: GenerateProjectOptions): Promise<void> {
   const { name, directory, skipInstall, appName, withTrpc } = options;
@@ -19,7 +19,7 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
   console.log(chalk.gray(`   App display name: ${displayName}`));
   
   const { projectPath, workspacePath, workspaceScope } = await resolveProjectPath(name, directory);
-  const templatePath = path.join(__dirname, '..', 'templates', 'native');
+  const templatePath = getTemplatePath('native');
   
   const templateData = getTemplateData(name, `React Native app built with Idealyst Framework`, displayName, workspaceScope || undefined);
   

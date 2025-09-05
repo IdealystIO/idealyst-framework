@@ -60,5 +60,8 @@ if [ -d "packages" ]; then
     done
 fi
 
+echo "Add Figma MCP to Claude Code"
+claude mcp add -t sse figma-mcp http://figma-mcp:3333/sse
+
 echo "✅ Development environment is ready!"
 echo "🎉 You can now start developing your Idealyst application!"

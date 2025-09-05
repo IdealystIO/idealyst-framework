@@ -1,7 +1,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, copyTemplate, installDependencies, getTemplateData, updateWorkspacePackageJson, resolveProjectPath } from './utils';
+import { validateProjectName, copyTemplate, installDependencies, getTemplateData, updateWorkspacePackageJson, resolveProjectPath, getTemplatePath } from './utils';
 
 export async function generateApiProject(options: GenerateProjectOptions): Promise<void> {
   const { name, directory, skipInstall } = options;
@@ -13,7 +13,7 @@ export async function generateApiProject(options: GenerateProjectOptions): Promi
   console.log(chalk.blue(`🚀 Creating API project: ${name}`));
   
   const { projectPath, workspacePath, workspaceScope } = await resolveProjectPath(name, directory);
-  const templatePath = path.join(__dirname, '..', 'templates', 'api');
+  const templatePath = getTemplatePath('api');
   
   const templateData = getTemplateData(name, `API server template with tRPC and Express`, undefined, workspaceScope || undefined);
   

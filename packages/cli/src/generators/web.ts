@@ -1,7 +1,7 @@
 import path from 'path';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, copyTemplate, installDependencies, getTemplateData, updateWorkspacePackageJson, resolveProjectPath, copyTrpcFiles, copyTrpcAppComponent, removeTrpcDependencies } from './utils';
+import { validateProjectName, copyTemplate, installDependencies, getTemplateData, updateWorkspacePackageJson, resolveProjectPath, copyTrpcFiles, copyTrpcAppComponent, removeTrpcDependencies, getTemplatePath } from './utils';
 
 export async function generateWebProject(options: GenerateProjectOptions): Promise<void> {
   const { name, directory, skipInstall, withTrpc } = options;
@@ -13,7 +13,7 @@ export async function generateWebProject(options: GenerateProjectOptions): Promi
   console.log(chalk.blue(`🌐 Creating React Web project: ${name}`));
   
   const { projectPath, workspacePath, workspaceScope } = await resolveProjectPath(name, directory);
-  const templatePath = path.join(__dirname, '..', 'templates', 'web');
+  const templatePath = getTemplatePath('web');
   
   const templateData = getTemplateData(name, `React web app built with Idealyst Framework`, undefined, workspaceScope || undefined);
   

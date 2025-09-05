@@ -21,15 +21,18 @@ module.exports = {
     '/dist/',
   ],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: './tsconfig.test.json'
+    }],
   },
   modulePathIgnorePatterns: ['<rootDir>/templates/'],
   transformIgnorePatterns: [
-    'node_modules/(?!(chalk|ora|inquirer|fs-extra)/)'
+    'node_modules/(?!(chalk|inquirer|ora|fs-extra|ansi-styles|supports-color|strip-ansi|ansi-regex|string-width|wrap-ansi|cliui|yargs|is-fullwidth-code-point|validate-npm-package-name)/)'
   ],
-  globals: {
-    'ts-jest': {
-      tsconfig: './tsconfig.test.json'
-    }
-  }
+  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
+  moduleNameMapper: {
+    '^chalk$': '<rootDir>/__tests__/__mocks__/chalk.js',
+    '^inquirer$': '<rootDir>/__tests__/__mocks__/inquirer.js',
+    '^ora$': '<rootDir>/__tests__/__mocks__/ora.js',
+  },
 };

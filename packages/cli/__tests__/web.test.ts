@@ -79,7 +79,7 @@ describe('Web Generator', () => {
     
     // Verify App.tsx has tRPC provider
     const appContent = await fs.readFile(path.join(projectPath, 'src', 'App.tsx'), 'utf8');
-    expect(appContent).toContain('TrpcProvider');
+    expect(appContent).toContain('trpc.Provider');
 
     // Verify package.json has tRPC dependencies
     const packageJson = await fs.readJSON(path.join(projectPath, 'package.json'));

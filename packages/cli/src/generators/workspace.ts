@@ -2,7 +2,7 @@ import path from 'path';
 import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, copyTemplate, installDependencies, getTemplateData } from './utils';
+import { validateProjectName, copyTemplate, installDependencies, getTemplateData, getTemplatePath } from './utils';
 
 export async function generateWorkspace(options: GenerateProjectOptions): Promise<void> {
   const { name, directory, skipInstall, figmaToken } = options;
@@ -14,7 +14,7 @@ export async function generateWorkspace(options: GenerateProjectOptions): Promis
   console.log(chalk.blue(`🏗️ Creating Idealyst workspace: ${name}`));
   
   const projectPath = path.join(directory, name);
-  const templatePath = path.join(__dirname, '..', 'templates', 'workspace');
+  const templatePath = getTemplatePath('workspace');
   
   const templateData = getTemplateData(name, `Idealyst Framework monorepo workspace`);
   

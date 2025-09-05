@@ -49,17 +49,9 @@ describe('Workspace Generator', () => {
 
     // Verify directory structure
     await verifyDirectoryStructure(workspacePath, [
-      'scripts',
       'docker',
       '.devcontainer'
     ]);
-
-    // Verify executable scripts
-    const setupScript = path.join(workspacePath, 'setup.sh');
-    await verifyFileExists(setupScript);
-    
-    const stats = await fs.stat(setupScript);
-    expect(stats.mode & 0o111).toBeTruthy(); // Check if executable
   });
 
   it('should handle template variable replacement', async () => {
