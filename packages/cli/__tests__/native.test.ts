@@ -186,8 +186,9 @@ describe('Native Generator', () => {
 
     // Check React Native specific dependencies
     expect(packageJson.dependencies).toHaveProperty('react-native');
-    expect(packageJson.dependencies).toHaveProperty('react-native-vector-icons');
-    expect(packageJson.dependencies).toHaveProperty('react-native-unistyles');
+    expect(packageJson.dependencies).toHaveProperty('@idealyst/components');
+    expect(packageJson.dependencies).toHaveProperty('@idealyst/navigation');
+    expect(packageJson.dependencies).toHaveProperty('@idealyst/theme');
 
     // Check dev dependencies
     expect(packageJson.devDependencies).toHaveProperty('@types/react');

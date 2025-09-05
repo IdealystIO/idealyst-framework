@@ -16,8 +16,59 @@ program
   .version('1.0.1');
 
 program
+  .command('init [project-name]')
+  .description('Initialize a new full-stack Idealyst workspace with all packages')
+  .option('-d, --directory <directory>', 'Output directory', '.')
+  .option('--figma-token <token>', 'Figma personal access token for integration')
+  .option('--skip-install', 'Skip installing dependencies')
+  .action(async (projectName: string | undefined, options: {
+    directory: string;
+    figmaToken?: string;
+    skipInstall?: boolean;
+  }) => {
+    try {
+      // Prompt for project name if not provided
+      if (!projectName) {
+        projectName = await promptForProjectName();
+      } else {
+        // Validate provided project name
+        const { validateProjectName } = await import('./generators/utils');
+        if (!validateProjectName(projectName.toLowerCase())) {
+          console.error(chalk.red(`Invalid project name: ${projectName}`));
+          console.error(chalk.yellow('Project name must be a valid npm package name (lowercase, no spaces)'));
+          process.exit(1);
+        }
+        projectName = projectName.toLowerCase();
+      }
+
+      await generateProject({
+        name: projectName,
+        type: 'fullstack',
+        directory: options.directory,
+        skipInstall: options.skipInstall || false,
+        figmaToken: options.figmaToken
+      });
+      
+      console.log('');
+      console.log(chalk.green(`🎉 Full-stack workspace created successfully!`));
+      console.log(chalk.blue(`📁 Project created in: ${options.directory}/${projectName}`));
+      console.log('');
+      console.log(chalk.yellow('🚀 Next steps:'));
+      console.log(chalk.white(`  cd ${projectName}`));
+      console.log(chalk.white('  yarn dev        # Start all development servers'));
+      console.log(chalk.white('  yarn web:dev    # Start web app only'));
+      console.log(chalk.white('  yarn mobile:start # Start mobile app'));
+      console.log('');
+    } catch (error) {
+      console.error(chalk.red('❌ Failed to create project:'));
+      console.error(chalk.red(error instanceof Error ? error.message : String(error)));
+      process.exit(1);
+    }
+  });
+
+program
   .command('create [project-name]')
-  .description('Create a new Idealyst project')
+  .description('Create a new individual Idealyst project (for existing workspaces)')
   .option('-t, --type <type>', 'Project type: native, web, shared, api, or database')
   .option('-d, --directory <directory>', 'Output directory', '.')
   .option('-a, --app-name <app-name>', 'Display name for native apps (e.g., "My Awesome App")')

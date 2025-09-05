@@ -33,6 +33,8 @@ const packagePaths = [
   'packages/components/package.json',
   'packages/navigation/package.json',
   'packages/cli/package.json',
+  'packages/datagrid/package.json',
+  'packages/datepicker/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json'
 ];

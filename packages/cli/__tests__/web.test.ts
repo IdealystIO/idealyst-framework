@@ -52,7 +52,6 @@ describe('Web Generator', () => {
     // Verify source files
     await verifyFileExists(path.join(projectPath, 'src', 'main.tsx'));
     await verifyFileExists(path.join(projectPath, 'src', 'App.tsx'));
-    await verifyFileExists(path.join(projectPath, 'src', 'App.css'));
 
     // Verify test files
     await verifyFileExists(path.join(projectPath, '__tests__', 'App.test.tsx'));

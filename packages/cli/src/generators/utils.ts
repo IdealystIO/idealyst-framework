@@ -206,7 +206,8 @@ export function getTemplateData(projectName: string, description?: string, appNa
     packageName,
     version: '1.0.0',
     description: description || `A new Idealyst project: ${projectName}`,
-    appName
+    appName,
+    workspaceScope
   };
 }
 
@@ -229,7 +230,8 @@ export async function isWorkspaceRoot(directory: string): Promise<boolean> {
 }
 
 /**
- * Gets the workspace name from the workspace root's package.json
+ * Gets the workspace scope from the workspace root's package.json
+ * Extracts just the scope name (without @) from scoped package names
  */
 export async function getWorkspaceName(directory: string): Promise<string | null> {
   const packageJsonPath = path.join(directory, 'package.json');
@@ -237,7 +239,18 @@ export async function getWorkspaceName(directory: string): Promise<string | null
   if (await fs.pathExists(packageJsonPath)) {
     try {
       const packageJson = await fs.readJSON(packageJsonPath);
-      return packageJson.name || null;
+      const fullName = packageJson.name;
+      
+      if (!fullName) return null;
+      
+      // If it's a scoped package like @scope/name, extract just the scope
+      if (fullName.startsWith('@')) {
+        const scopeMatch = fullName.match(/^@([^/]+)/);
+        return scopeMatch ? scopeMatch[1] : null;
+      }
+      
+      // If it's not scoped, return the full name
+      return fullName;
     } catch (error) {
       return null;
     }
@@ -515,7 +528,15 @@ export async function copyTrpcAppComponent(templatePath: string, projectPath: st
   
   try {
     const trpcAppSource = path.join(templatePath, 'src', 'App-with-trpc.tsx');
-    const appTarget = path.join(projectPath, 'src', 'App.tsx');
+    
+    // For React Native projects, App.tsx is in the root, for web it's in src
+    const isNativeProject = await fs.pathExists(path.join(projectPath, 'metro.config.js')) || 
+                            await fs.pathExists(path.join(projectPath, 'android')) ||
+                            await fs.pathExists(path.join(projectPath, 'ios'));
+    
+    const appTarget = isNativeProject 
+      ? path.join(projectPath, 'App.tsx')
+      : path.join(projectPath, 'src', 'App.tsx');
     
     // Copy the tRPC-enabled App component over the default one
     await fs.copy(trpcAppSource, appTarget, { overwrite: true });
@@ -525,6 +546,32 @@ export async function copyTrpcAppComponent(templatePath: string, projectPath: st
   } catch (error) {
     spinner.fail('Failed to configure tRPC App component');
     console.warn(chalk.yellow('⚠️  tRPC App component could not be configured, but the project was created successfully'));
+  }
+}
+
+export async function addTrpcDependencies(projectPath: string): Promise<void> {
+  try {
+    const packageJsonPath = path.join(projectPath, 'package.json');
+    const packageJson = await fs.readJSON(packageJsonPath);
+    
+    // Add tRPC-related dependencies
+    const trpcDeps = {
+      '@tanstack/react-query': '^5.83.0',
+      '@trpc/client': '^11.4.3',
+      '@trpc/react-query': '^11.4.3'
+    };
+    
+    // Ensure dependencies object exists
+    if (!packageJson.dependencies) {
+      packageJson.dependencies = {};
+    }
+    
+    // Add tRPC dependencies
+    Object.assign(packageJson.dependencies, trpcDeps);
+    
+    await fs.writeJSON(packageJsonPath, packageJson, { spaces: 2 });
+  } catch (error) {
+    console.warn(chalk.yellow('⚠️  Could not add tRPC dependencies to package.json'));
   }
 }
 

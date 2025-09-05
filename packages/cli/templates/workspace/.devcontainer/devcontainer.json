@@ -1,5 +1,5 @@
 {
-  "name": "Idealyst Development",
+  "name": "{{projectName}} Development",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",

@@ -1,4 +1,4 @@
-export type ProjectType = 'native' | 'web' | 'shared' | 'workspace' | 'api' | 'database';
+export type ProjectType = 'native' | 'web' | 'shared' | 'workspace' | 'api' | 'database' | 'fullstack';
 
 export interface GenerateProjectOptions {
   name: string;
@@ -16,4 +16,5 @@ export interface TemplateData {
   version: string;
   description: string;
   appName?: string; // For native projects
+  workspaceScope?: string; // For workspace-scoped packages
 } 

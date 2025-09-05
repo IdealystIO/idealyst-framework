@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/components",
-  "version": "1.0.42",
+  "version": "1.0.45",
   "description": "Shared component library for React and React Native",
   "documentation": "https://github.com/your-username/idealyst-framework/tree/main/packages/components#readme",
   "main": "src/index.ts",
@@ -40,7 +40,7 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/theme": "^1.0.42",
+    "@idealyst/theme": "^1.0.45",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@react-native-vector-icons/common": "^12.0.1",

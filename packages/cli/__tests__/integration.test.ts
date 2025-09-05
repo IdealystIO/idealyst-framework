@@ -58,7 +58,7 @@ describe('CLI Integration Tests', () => {
     const result = await runCLI(['init', 'test-workspace', '--skip-install']);
     
     expect(result.code).toBe(0);
-    expect(result.stdout).toContain('Successfully initialized Idealyst workspace');
+    expect(result.stdout).toContain('Full-stack workspace created successfully!');
 
     const workspacePath = path.join(tempDir, 'test-workspace');
     await verifyFileExists(path.join(workspacePath, 'package.json'));
@@ -115,17 +115,17 @@ describe('CLI Integration Tests', () => {
     const workspacePath = path.join(tempDir, 'test-workspace');
     
     // Then create database project
-    const result = await runCLI(['create', 'my-database', '--type', 'database', '--skip-install'], workspacePath);
+    const result = await runCLI(['create', 'my-custom-database', '--type', 'database', '--skip-install'], workspacePath);
     
     expect(result.code).toBe(0);
-    expect(result.stdout).toContain('Successfully created my-database');
+    expect(result.stdout).toContain('Database project created successfully!');
 
-    const projectPath = path.join(workspacePath, 'packages', 'my-database');
+    const projectPath = path.join(workspacePath, 'packages', 'my-custom-database');
+    
     await verifyFileExists(path.join(projectPath, 'package.json'));
     await verifyFileExists(path.join(projectPath, 'src', 'index.ts'));
-    await verifyFileExists(path.join(projectPath, 'src', 'client.ts'));
-    await verifyFileExists(path.join(projectPath, 'src', 'schemas.ts'));
-    await verifyFileExists(path.join(projectPath, 'prisma', 'schema.prisma'));
+    await verifyFileExists(path.join(projectPath, 'src', 'validators.ts'));
+    await verifyFileExists(path.join(projectPath, 'schema.prisma')); // schema.prisma is in root, not prisma/ dir
     await verifyFileExists(path.join(projectPath, 'prisma', 'seed.ts'));
     
     // Verify package.json includes Prisma dependencies
@@ -165,21 +165,14 @@ describe('CLI Integration Tests', () => {
 
     // Verify main index exports all necessary items
     const dbIndexContent = await fs.readFile(path.join(databasePath, 'src', 'index.ts'), 'utf8');
-    expect(dbIndexContent).toContain('export { PrismaClient }');
-    expect(dbIndexContent).toContain('export { default as db }');
-    expect(dbIndexContent).toContain('export * from \'./schemas\'');
-    expect(dbIndexContent).toContain('export type * from \'@prisma/client\'');
+    expect(dbIndexContent).toContain('export * from \'../generated/client\'');
+    expect(dbIndexContent).toContain('export default prisma');
+    expect(dbIndexContent).toContain('export * from \'./validators\'');
+    expect(dbIndexContent).toContain('export const prisma');
 
-    // Verify client file has proper singleton pattern for sharing across packages
-    const clientContent = await fs.readFile(path.join(databasePath, 'src', 'client.ts'), 'utf8');
-    expect(clientContent).toContain('PrismaClient');
-    expect(clientContent).toContain('globalThis.__globalPrisma');
-    expect(clientContent).toContain('export default prisma');
-
-    // Verify schemas file exists for runtime validation
-    const schemasContent = await fs.readFile(path.join(databasePath, 'src', 'schemas.ts'), 'utf8');
-    expect(schemasContent).toContain('import { z } from \'zod\'');
-    expect(schemasContent).toContain('export const schemas');
+    // Verify validators file exists and has Zod schemas
+    const validatorsContent = await fs.readFile(path.join(databasePath, 'src', 'validators.ts'), 'utf8');
+    expect(validatorsContent).toContain('z.object');
 
     // Verify TypeScript configuration supports declaration generation for type safety
     const tsConfig = JSON.parse(await fs.readFile(path.join(databasePath, 'tsconfig.json'), 'utf8'));

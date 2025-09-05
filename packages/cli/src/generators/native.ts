@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
-import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons, resolveProjectPath, copyTrpcFiles, copyTrpcAppComponent, removeTrpcDependencies, copyTemplate, getTemplatePath } from './utils';
+import { validateProjectName, installDependencies, getTemplateData, updateWorkspacePackageJson, initializeReactNativeProject, overlayIdealystFiles, configureAndroidVectorIcons, resolveProjectPath, copyTrpcFiles, copyTrpcAppComponent, addTrpcDependencies, removeTrpcDependencies, copyTemplate, getTemplatePath } from './utils';
 
 export async function generateNativeProject(options: GenerateProjectOptions): Promise<void> {
   const { name, directory, skipInstall, appName, withTrpc } = options;
@@ -58,6 +58,7 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
     if (withTrpc) {
       await copyTrpcFiles(templatePath, projectPath, templateData);
       await copyTrpcAppComponent(templatePath, projectPath, templateData);
+      await addTrpcDependencies(projectPath);
     }
     
     // Step 5: Configure Android vector icons (only if we have Android directory)

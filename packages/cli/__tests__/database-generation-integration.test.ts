@@ -134,18 +134,19 @@ describe('Database Generation Integration Test', () => {
     const dbDir = join(workspaceDir, 'packages', 'user-database');
     const schemaPath = join(dbDir, 'schema.prisma');
     
-    // Add a model to test generation
-    const userModel = `
-model User {
+    // Add a model to test generation (using a different model since User already exists)
+    const categoryModel = `
+
+model Category {
   id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
+  name      String   @unique
+  description String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }`;
     
     const originalSchema = readFileSync(schemaPath, 'utf8');
-    writeFileSync(schemaPath, originalSchema + userModel);
+    writeFileSync(schemaPath, originalSchema + categoryModel);
 
     // Install dependencies
     execSync('yarn install', {

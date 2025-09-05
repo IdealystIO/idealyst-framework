@@ -5,6 +5,7 @@ import { generateSharedLibrary } from './shared';
 import { generateWorkspace } from './workspace';
 import { generateApiProject } from './api';
 import { generateDatabaseProject } from './database';
+import { generateFullStackWorkspace } from './fullstack';
 
 export async function generateProject(options: GenerateProjectOptions): Promise<void> {
   const { type } = options;
@@ -28,6 +29,9 @@ export async function generateProject(options: GenerateProjectOptions): Promise<
     case 'database':
       await generateDatabaseProject(options);
       break;
+    case 'fullstack':
+      await generateFullStackWorkspace(options);
+      break;
     default:
       throw new Error(`Unknown project type: ${type}`);
   }
@@ -38,4 +42,5 @@ export * from './web';
 export * from './shared';
 export * from './workspace';
 export * from './api';
-export * from './database'; 
+export * from './database';
+export * from './fullstack'; 
