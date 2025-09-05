@@ -23,10 +23,12 @@ function loadIgnorePatterns() {
       '*.tmp',
       '*.temp',
       '*.log',
-      'node_modules',
-      '.git',
-      '.vscode',
-      '.idea',
+      'node_modules/',
+      '.git/',
+      '.vscode/',
+      '.idea/',
+      'dist/',
+      'build/',
       '*.swp',
       '*.swo',
       '*~'
@@ -46,9 +48,22 @@ function shouldExclude(filePath, patterns) {
     }
     
     // Handle directory patterns - check if the file is inside the directory
+    if (pattern.endsWith('/')) {
+      const dirPattern = pattern.slice(0, -1); // Remove trailing slash
+      // Check if any part of the path contains this directory
+      const pathParts = relativePath.split(path.sep);
+      return pathParts.includes(dirPattern);
+    }
+    
     if (pattern === '.git') {
       // Special case: .git directory, but allow .gitignore files
       return relativePath.includes('.git' + path.sep) && !fileName.includes('.gitignore');
+    }
+    
+    if (pattern === 'node_modules') {
+      // Special case: node_modules directory
+      const pathParts = relativePath.split(path.sep);
+      return pathParts.includes('node_modules');
     }
     
     // Handle exact matches

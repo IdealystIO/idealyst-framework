@@ -1,16 +1,16 @@
 {
   "name": "@idealyst/example-web",
   "private": true,
-  "version": "1.0.46",
+  "version": "1.0.47",
   "type": "module",
   "scripts": {
     "dev": "vite"
   },
   "dependencies": {
-    "@idealyst/components": "^1.0.46",
+    "@idealyst/components": "^1.0.47",
     "@idealyst/datagrid": "^1.0.41",
-    "@idealyst/navigation": "^1.0.46",
-    "@idealyst/theme": "^1.0.46",
+    "@idealyst/navigation": "^1.0.47",
+    "@idealyst/theme": "^1.0.47",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@react-native/normalize-colors": "^0.80.1",

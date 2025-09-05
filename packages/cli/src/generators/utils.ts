@@ -107,6 +107,10 @@ export async function processTemplateFiles(dir: string, data: TemplateData): Pro
     const stat = await fs.stat(filePath);
     
     if (stat.isDirectory()) {
+      // Skip common directories that shouldn't be processed
+      if (file === 'node_modules' || file === '.git' || file === 'dist' || file === 'build' || file === '.cache') {
+        continue;
+      }
       await processTemplateFiles(filePath, data);
     } else if (file.endsWith('.json') || file.endsWith('.js') || file.endsWith('.ts') || file.endsWith('.tsx') || file.endsWith('.md')) {
       await processTemplateFile(filePath, data);
