@@ -4,7 +4,7 @@
 
 ## Getting Started
 
-This is a shared library built with the Idealyst Framework that can be used across React Native and React web applications.
+This is a shared component library built with the Idealyst Framework that can be used across React Native and React web applications. It exports source TypeScript files directly for seamless integration in monorepo setups.
 
 ### Prerequisites
 
@@ -20,14 +20,40 @@ yarn install
 
 ### Development
 
-Build the library:
+Run tests:
 ```bash
-yarn build
+yarn test
 ```
 
-Watch for changes during development:
+Type checking:
 ```bash
-yarn dev
+yarn type-check
+```
+
+## Usage
+
+Import the HelloWorld component in your React or React Native app:
+
+```typescript
+import { HelloWorld } from '@{{workspaceName}}/shared';
+
+function App() {
+  return <HelloWorld name="Developer" />;
+}
+```
+
+## Component
+
+### HelloWorld
+
+A simple welcome component that works on both web and mobile platforms.
+
+**Props:**
+- `name?: string` - Name to display in the greeting (defaults to "World")
+
+**Example:**
+```typescript
+<HelloWorld name="Alice" />
 ```
 
 ### Project Structure
