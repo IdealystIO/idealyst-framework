@@ -12,7 +12,8 @@
     8080,  // Additional dev server
     19006, // Expo dev tools
     5432,  // PostgreSQL
-    6379   // Redis
+    6379,   // Redis
+    3333    // Figma MCP server
   ],
 
   // Port attributes
@@ -44,6 +45,10 @@
     "6379": {
       "label": "Redis Cache",
       "onAutoForward": "silent"
+    },
+    "3333": {
+      "label": "Figma MCP Server",
+      "onAutoForward": "openBrowser"
     }
   },
 

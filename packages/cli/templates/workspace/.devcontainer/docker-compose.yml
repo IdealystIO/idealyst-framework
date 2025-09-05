@@ -42,6 +42,20 @@ services:
       - redis
     command: sleep infinity
 
+  # Figma MCP Server
+  figma-mcp:
+    image: node:18-alpine
+    working_dir: /app
+    environment:
+      - FIGMA_ACCESS_TOKEN=${FIGMA_ACCESS_TOKEN:-}
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./figma-mcp.sh:/app/figma-mcp.sh:ro
+      - figma_mcp_data:/app/node_modules
+    command: ["sh", "/app/figma-mcp.sh"]
+
 volumes:
   postgres_data:
   redis_data:
+  figma_mcp_data:

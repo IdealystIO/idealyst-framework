@@ -20,6 +20,12 @@ export async function generateWorkspace(options: GenerateProjectOptions): Promis
   
   await copyTemplate(templatePath, projectPath, templateData);
   
+  // Make figma-mcp.sh executable
+  const figmaMcpScript = path.join(projectPath, '.devcontainer', 'figma-mcp.sh');
+  if (await fs.pathExists(figmaMcpScript)) {
+    await fs.chmod(figmaMcpScript, '755');
+  }
+  
   // Always create .devcontainer/.env file (even if no token provided)
   const devcontainerDir = path.join(projectPath, '.devcontainer');
   await fs.ensureDir(devcontainerDir);
