@@ -20,7 +20,7 @@ POSTGRES_PASSWORD=postgres
 REDIS_URL=redis://redis:6379
 
 # API Configuration
-API_PORT=3001
+API_PORT=3000
 JWT_SECRET=your-jwt-secret-here
 
 # Web Configuration

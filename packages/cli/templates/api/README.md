@@ -1,4 +1,4 @@
-# {{projectName}}
+# {{projectName}} API
 
 {{description}}
 
@@ -7,6 +7,7 @@ This API project is built with:
 - **Zod** - TypeScript-first schema validation
 - **Express.js** - Web framework for Node.js
 - **TypeScript** - Type-safe JavaScript
+- **Prisma** - Next-generation ORM for database access
 
 ## Quick Start
 
@@ -20,12 +21,88 @@ This API project is built with:
    yarn install
    ```
 
-3. **Start development server:**
+3. **Setup database (if using database):**
+   ```bash
+   # Generate Prisma client
+   yarn prisma:generate
+   
+   # Run migrations
+   yarn prisma:migrate
+   
+   # Seed database with sample data
+   yarn prisma:seed
+   ```
+
+4. **Start development server:**
    ```bash
    yarn dev
    ```
 
 The API will be available at `http://localhost:3000`
+
+## API Endpoints
+
+### Test Endpoints
+
+If your project includes the Test model, the following endpoints are available:
+
+#### `test.getAll`
+- **Description**: Get all test records
+- **Method**: Query
+- **Returns**: Array of test records
+
+#### `test.getById`
+- **Description**: Get a test record by ID
+- **Method**: Query
+- **Input**: `{ id: string }`
+- **Returns**: Test record or null
+
+#### `test.create`
+- **Description**: Create a new test record
+- **Method**: Mutation
+- **Input**: `{ name: string, message: string, status?: string }`
+- **Returns**: Created test record
+
+#### `test.update`
+- **Description**: Update an existing test record
+- **Method**: Mutation
+- **Input**: `{ id: string, name?: string, message?: string, status?: string }`
+- **Returns**: Updated test record
+
+#### `test.delete`
+- **Description**: Delete a test record
+- **Method**: Mutation
+- **Input**: `{ id: string }`
+- **Returns**: Deleted test record
+
+### Usage Example
+
+```typescript
+// Client-side usage with tRPC
+import { trpc } from './utils/trpc';
+
+// Get all tests
+const { data: tests } = trpc.test.getAll.useQuery();
+
+// Create a new test
+const createTest = trpc.test.create.useMutation();
+await createTest.mutateAsync({
+  name: 'My Test',
+  message: 'This is a test message',
+  status: 'active'
+});
+
+// Update a test
+const updateTest = trpc.test.update.useMutation();
+await updateTest.mutateAsync({
+  id: 'test-id',
+  name: 'Updated Test Name'
+});
+
+// Delete a test
+const deleteTest = trpc.test.delete.useMutation();
+await deleteTest.mutateAsync({ id: 'test-id' });
+```
 
 ## Available Scripts
 

@@ -11,6 +11,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Simple Test model for quick API testing
+model Test {
+  id        String   @id @default(cuid())
+  name      String
+  message   String
+  status    String   @default("active") // "active", "inactive"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // Demo User model with profile information
 model User {
   id        String   @id @default(cuid())

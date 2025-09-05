@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../trpc.js';
+import { testRouter } from '../controllers/TestController.js';
 
 export const appRouter = router({
   // Simple hello world procedure
@@ -20,6 +21,9 @@ export const appRouter = router({
       version: '1.0.0',
     };
   }),
+
+  // Test endpoints for database testing
+  test: testRouter,
 
   // Add your procedures here
   // Example:

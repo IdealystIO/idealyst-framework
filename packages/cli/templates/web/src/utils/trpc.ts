@@ -1,13 +1,10 @@
 import { createTRPCReact } from '@trpc/react-query';
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 
-// Import your API types here when you have an API project
-// Example: import type { AppRouter } from '@your-workspace/api';
+// Import the API router type for full type safety
+import type { AppRouter } from '@{{workspaceScope}}/api';
 
-// For now, we'll use a generic type that you can replace
-type AppRouter = any;
-
-// Create the tRPC React hooks
+// Create the tRPC React hooks with full type safety
 export const trpc = createTRPCReact<AppRouter>();
 
 // Create a vanilla client (for use outside of React components)

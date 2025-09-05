@@ -1,17 +1,52 @@
-import React from 'react';
-import { View, Text, Card, Screen } from '@idealyst/components';
+import React, { useState } from 'react';
+import { View, Text, Card, Screen, Button, Input } from '@idealyst/components';
 
 interface HelloWorldProps {
   name?: string;
   platform?: 'web' | 'mobile';
   projectName?: string;
+  trpcClient?: any; // Optional tRPC client for testing database integration
 }
 
 export const HelloWorld: React.FC<HelloWorldProps> = ({ 
   name = 'World', 
   platform = 'web',
-  projectName = 'Your Project'
+  projectName = 'Your Project',
+  trpcClient
 }) => {
+  const [newTestName, setNewTestName] = useState('');
+  const [newTestMessage, setNewTestMessage] = useState('');
+
+  // tRPC integration for database testing (when available)
+  const tests = trpcClient?.test?.getAll?.useQuery?.();
+  const createTestMutation = trpcClient?.test?.create?.useMutation?.({
+    onSuccess: () => {
+      tests?.refetch?.();
+      setNewTestName('');
+      setNewTestMessage('');
+    },
+  });
+  const deleteTestMutation = trpcClient?.test?.delete?.useMutation?.({
+    onSuccess: () => {
+      tests?.refetch?.();
+    },
+  });
+
+  const handleCreateTest = async () => {
+    if (!newTestName || !newTestMessage || !createTestMutation) return;
+    
+    await createTestMutation.mutateAsync({
+      name: newTestName,
+      message: newTestMessage,
+      status: 'active',
+    });
+  };
+
+  const handleDeleteTest = async (id: string) => {
+    if (!deleteTestMutation) return;
+    await deleteTestMutation.mutateAsync({ id });
+  };
+
   const platformEmoji = platform === 'mobile' ? '📱' : '🌐';
   const platformText = platform === 'mobile' 
     ? 'Your mobile development environment is ready. This shared component works seamlessly across mobile and web platforms.'
@@ -111,6 +146,91 @@ export const HelloWorld: React.FC<HelloWorldProps> = ({
           </Text>
         </Card>
       </Card>
+
+      {/* API Testing Section (only shown when tRPC is available) */}
+      {trpcClient && (
+        <Card variant="outlined" padding="large" style={{ marginTop: 16 }}>
+          <Text size="large" weight="bold" style={{ marginBottom: 16 }}>
+            🚀 API Demo - Database Integration
+          </Text>
+          <Text size="medium" style={{ marginBottom: 16, color: '#64748b' }}>
+            Test your full-stack integration! This section demonstrates real-time database operations.
+          </Text>
+
+          {/* Create New Test Form */}
+          <Card variant="filled" padding="medium" style={{ marginBottom: 16, backgroundColor: '#f8fafc' }}>
+            <Text size="medium" weight="semibold" style={{ marginBottom: 12 }}>
+              Create New Test Entry
+            </Text>
+            
+            <View style={{ gap: 12 }}>
+              <Input
+                placeholder="Test name"
+                value={newTestName}
+                onChangeText={setNewTestName}
+              />
+              <Input
+                placeholder="Test message"
+                value={newTestMessage}
+                onChangeText={setNewTestMessage}
+                multiline
+              />
+              <Button
+                onPress={handleCreateTest}
+                disabled={!newTestName || !newTestMessage || createTestMutation?.isLoading}
+                style={{ alignSelf: 'flex-start' }}
+              >
+                {createTestMutation?.isLoading ? 'Creating...' : 'Create Test'}
+              </Button>
+            </View>
+          </Card>
+
+          {/* Tests List */}
+          <View>
+            <Text size="medium" weight="semibold" style={{ marginBottom: 12 }}>
+              Database Records ({tests?.data?.length || 0})
+            </Text>
+            
+            {tests?.isLoading ? (
+              <Card variant="outlined" padding="medium">
+                <Text size="small" style={{ color: '#64748b' }}>Loading tests...</Text>
+              </Card>
+            ) : tests?.data?.length === 0 ? (
+              <Card variant="outlined" padding="medium">
+                <Text size="small" style={{ color: '#64748b' }}>No tests found. Create one above!</Text>
+              </Card>
+            ) : (
+              <View style={{ gap: 8 }}>
+                {tests?.data?.map((test: any) => (
+                  <Card key={test.id} variant="outlined" padding="medium">
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <View style={{ flex: 1 }}>
+                        <Text size="small" weight="semibold" style={{ marginBottom: 4 }}>
+                          {test.name}
+                        </Text>
+                        <Text size="small" style={{ color: '#64748b', marginBottom: 4 }}>
+                          {test.message}
+                        </Text>
+                        <Text size="small" style={{ color: '#10b981' }}>
+                          Status: {test.status} • {new Date(test.createdAt).toLocaleDateString()}
+                        </Text>
+                      </View>
+                      <Button
+                        variant="destructive"
+                        size="small"
+                        onPress={() => handleDeleteTest(test.id)}
+                        disabled={deleteTestMutation?.isLoading}
+                      >
+                        Delete
+                      </Button>
+                    </View>
+                  </Card>
+                ))}
+              </View>
+            )}
+          </View>
+        </Card>
+      )}
       </View>
     </Screen>
   );

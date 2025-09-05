@@ -28,6 +28,7 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
+    "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset"
   },
   "dependencies": {
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@types/node": "^20.10.0",
     "prisma": "^5.19.1",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },
   "files": [

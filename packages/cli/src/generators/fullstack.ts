@@ -156,6 +156,30 @@ async function updateAppFilesWithSharedComponents(projectPath: string, templateD
     await fs.writeFile(nativeAppTargetPath, nativeAppContent);
   }
   
+  // Update API database.ts with workspace scope for client import
+  const databaseTsPath = path.join(projectPath, 'packages', 'api', 'src', 'lib', 'database.ts');
+  if (await fs.pathExists(databaseTsPath)) {
+    let databaseContent = await fs.readFile(databaseTsPath, 'utf8');
+    databaseContent = databaseContent.replace(/\{\{workspaceScope\}\}/g, templateData.workspaceScope || templateData.projectName);
+    await fs.writeFile(databaseTsPath, databaseContent);
+  }
+  
+  // Update web tRPC utils with workspace scope for API types
+  const webTrpcUtilsPath = path.join(projectPath, 'packages', 'web', 'src', 'utils', 'trpc.ts');
+  if (await fs.pathExists(webTrpcUtilsPath)) {
+    let trpcContent = await fs.readFile(webTrpcUtilsPath, 'utf8');
+    trpcContent = trpcContent.replace(/\{\{workspaceScope\}\}/g, templateData.workspaceScope || templateData.projectName);
+    await fs.writeFile(webTrpcUtilsPath, trpcContent);
+  }
+
+  // Update mobile tRPC utils with workspace scope for API types
+  const mobileTrpcUtilsPath = path.join(projectPath, 'packages', 'mobile', 'src', 'utils', 'trpc.ts');
+  if (await fs.pathExists(mobileTrpcUtilsPath)) {
+    let trpcContent = await fs.readFile(mobileTrpcUtilsPath, 'utf8');
+    trpcContent = trpcContent.replace(/\{\{workspaceScope\}\}/g, templateData.workspaceScope || templateData.projectName);
+    await fs.writeFile(mobileTrpcUtilsPath, trpcContent);
+  }
+  
   // Update package.json files to include shared dependencies
   await updatePackageJsonWithSharedDeps(projectPath, templateData.workspaceScope || templateData.projectName);
 }
@@ -171,7 +195,8 @@ async function updatePackageJsonWithSharedDeps(projectPath: string, workspaceSco
     webPackageJson.dependencies = {
       ...webPackageJson.dependencies,
       [`@${workspaceScope}/shared`]: 'workspace:*',
-      [`@${workspaceScope}/database`]: 'workspace:*'
+      [`@${workspaceScope}/database`]: 'workspace:*',
+      [`@${workspaceScope}/api`]: 'workspace:*'
     };
     await fs.writeJSON(webPackageJsonPath, webPackageJson, { spaces: 2 });
   }
@@ -288,8 +313,8 @@ yarn dev
 \`\`\`
 
 This will start:
-- 🌐 Web app at http://localhost:3000
-- 🚀 API server at http://localhost:3001
+- 🌐 Web app at http://localhost:5173
+- 🚀 API server at http://localhost:3000
 - 📱 Mobile app (Metro bundler)
 
 ### Individual Commands

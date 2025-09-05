@@ -45,13 +45,13 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
 
 USER apiuser
-EXPOSE 3001
+EXPOSE 3000
 ENV NODE_ENV=production
-ENV PORT=3001
+ENV PORT=3000
 
 # Health check for API
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+  CMD node -e "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
 CMD ["node", "packages/api/dist/server.js"]
 
@@ -98,7 +98,7 @@ COPY --chown=devuser:devuser packages/web/package.json ./packages/web/
 # Install dependencies including dev dependencies
 RUN yarn install
 
-EXPOSE 3000 3001 5173 8080 19006
+EXPOSE 3000 5173 8080 19006
 
 CMD ["tail", "-f", "/dev/null"]
 

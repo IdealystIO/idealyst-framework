@@ -15,7 +15,7 @@ scrape_configs:
   # API service
   - job_name: 'api'
     static_configs:
-      - targets: ['api:3001']
+      - targets: ['api:3000']
     metrics_path: '/metrics'
     scrape_interval: 30s
 
