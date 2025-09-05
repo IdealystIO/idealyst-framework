@@ -1,10 +1,11 @@
 import path from 'path';
+import * as fs from 'fs-extra';
 import chalk from 'chalk';
 import { GenerateProjectOptions } from '../types';
 import { validateProjectName, copyTemplate, installDependencies, getTemplateData } from './utils';
 
 export async function generateWorkspace(options: GenerateProjectOptions): Promise<void> {
-  const { name, directory, skipInstall } = options;
+  const { name, directory, skipInstall, figmaToken } = options;
   
   if (!validateProjectName(name)) {
     throw new Error(`Invalid project name: ${name}`);
@@ -18,6 +19,18 @@ export async function generateWorkspace(options: GenerateProjectOptions): Promis
   const templateData = getTemplateData(name, `Idealyst Framework monorepo workspace`);
   
   await copyTemplate(templatePath, projectPath, templateData);
+  
+  // Always create .devcontainer/.env file (even if no token provided)
+  const devcontainerDir = path.join(projectPath, '.devcontainer');
+  await fs.ensureDir(devcontainerDir);
+  
+  const envPath = path.join(devcontainerDir, '.env');
+  const envContent = figmaToken 
+    ? `# Figma Integration\nFIGMA_ACCESS_TOKEN=${figmaToken.trim()}\n`
+    : `# Figma Integration\nFIGMA_ACCESS_TOKEN=\n`;
+  
+  await fs.writeFile(envPath, envContent);
+  
   await installDependencies(projectPath, skipInstall);
   
   console.log(chalk.green('✅ Workspace created successfully!'));
@@ -27,4 +40,11 @@ export async function generateWorkspace(options: GenerateProjectOptions): Promis
   console.log(chalk.white('  • TypeScript configuration'));
   console.log(chalk.white('  • Build scripts'));
   console.log(chalk.white('  • Version management scripts'));
+  
+  if (figmaToken) {
+    console.log(chalk.green('🎨 Figma MCP server configured and ready!'));
+    console.log(chalk.blue('   Server will be available at http://localhost:3333'));
+  } else {
+    console.log(chalk.yellow('💡 Tip: Add Figma integration later by editing .devcontainer/.env'));
+  }
 } 

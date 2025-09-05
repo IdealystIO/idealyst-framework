@@ -7,6 +7,7 @@ export interface GenerateProjectOptions {
   skipInstall: boolean;
   appName?: string; // For native projects - display name for the app
   withTrpc?: boolean; // For web/native projects - include tRPC boilerplate
+  figmaToken?: string; // For workspace projects - Figma personal access token
 }
 
 export interface TemplateData {

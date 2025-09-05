@@ -118,9 +118,11 @@ program
   .description('Initialize a new Idealyst monorepo workspace')
   .option('-d, --directory <directory>', 'Output directory', '.')
   .option('--skip-install', 'Skip installing dependencies')
+  .option('--figma-token <token>', 'Figma personal access token (enables figma-developer-mcp server)')
   .action(async (projectName: string | undefined, options: {
     directory: string;
     skipInstall?: boolean;
+    figmaToken?: string;
   }) => {
     try {
       // Prompt for project name if not provided
@@ -141,7 +143,8 @@ program
         name: projectName,
         type: 'workspace',
         directory: options.directory,
-        skipInstall: options.skipInstall || false
+        skipInstall: options.skipInstall || false,
+        figmaToken: options.figmaToken
       });
       
       console.log(chalk.green('✨ Successfully initialized Idealyst workspace!'));

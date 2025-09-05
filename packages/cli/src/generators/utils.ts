@@ -58,8 +58,9 @@ export async function copyTemplate(templatePath: string, destPath: string, data:
       filter: (src) => {
         const relativePath = path.relative(templatePath, src);
         // Skip App-with-trpc.tsx as it's only copied when tRPC is enabled
+        // Skip .git directories but allow .gitignore files
         return !relativePath.includes('node_modules') && 
-               !relativePath.includes('.git') &&
+               !relativePath.includes('.git' + path.sep) &&
                !relativePath.endsWith('App-with-trpc.tsx');
       }
     });

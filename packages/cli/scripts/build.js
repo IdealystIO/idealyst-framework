@@ -45,13 +45,14 @@ function shouldExclude(filePath, patterns) {
       return regex.test(fileName) || regex.test(relativePath);
     }
     
-    // Handle directory patterns
-    if (pattern.endsWith('/') || filePath.includes(pattern + path.sep)) {
-      return true;
+    // Handle directory patterns - check if the file is inside the directory
+    if (pattern === '.git') {
+      // Special case: .git directory, but allow .gitignore files
+      return relativePath.includes('.git' + path.sep) && !fileName.includes('.gitignore');
     }
     
     // Handle exact matches
-    return fileName === pattern || relativePath.includes(pattern);
+    return fileName === pattern || relativePath === pattern;
   });
 }
 
