@@ -18,7 +18,12 @@
     "test:coverage": "jest --coverage",
     "type-check": "tsc --noEmit"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@tanstack/react-query": "^5.83.0",
+    "@trpc/client": "^11.5.1",
+    "@trpc/react-query": "^11.5.1",
+    "@trpc/server": "^11.5.1"
+  },
   "peerDependencies": {
     "@idealyst/components": "^1.0.21",
     "@idealyst/theme": "^1.0.21",

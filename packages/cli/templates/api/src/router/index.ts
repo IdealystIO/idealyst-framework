@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../trpc.js';
-import { testRouter } from '../controllers/TestController.js';
+import { testRouter } from '../routers/test.js';
 
 export const appRouter = router({
   // Simple hello world procedure
@@ -22,113 +22,142 @@ export const appRouter = router({
     };
   }),
 
-  // Test endpoints for database testing
+  // Test CRUD endpoints - generated automatically from Prisma model
   test: testRouter,
 
-  // Add your procedures here
+  // Add your model routers here
   // Example:
   // users: userRouter,
   // posts: postRouter,
-
-  // Example controller integration:
-  // Uncomment the lines below and create the corresponding controllers
-  
-  // 1. Import your controllers at the top:
-  // import { userRouter } from '../controllers/UserController.js';
-  
-  // 2. Add them to the router:
-  // users: userRouter,
 });
 
 // Export type definition of API
 export type AppRouter = typeof appRouter;
 
 /*
-CONTROLLER & MIDDLEWARE SYSTEM USAGE:
+SIMPLIFIED CRUD API SYSTEM:
 
-This API template includes a controller and middleware system that works seamlessly with tRPC.
+This API template uses a simplified approach with automatic CRUD generation for Prisma models.
 
-## Quick Start with Controllers:
+## Quick Start:
 
-1. Create a controller (see src/controllers/UserController.ts for example):
+1. **Define your Prisma model** in packages/database/schema.prisma
+2. **Create Zod schemas** for validation
+3. **Generate CRUD router** using createCrudRouter()
+4. **Add to main router** 
+
+## Example - Adding a User model:
+
+### 1. Define Prisma model:
+```prisma
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
+
+### 2. Create router file (src/routers/user.ts):
+```typescript
+import { z } from 'zod';
+import { createCrudRouter } from '../lib/crud.js';
+
+const createUserSchema = z.object({
+  email: z.string().email(),
+  name: z.string().min(1),
+});
+
+const updateUserSchema = z.object({
+  email: z.string().email().optional(),
+  name: z.string().min(1).optional(),
+});
+
+export const userRouter = createCrudRouter(
+  'user',
+  createUserSchema,
+  updateUserSchema
+);
+```
+
+### 3. Add to main router:
+```typescript
+import { userRouter } from '../routers/user.js';
+
+export const appRouter = router({
+  // ... other routes
+  users: userRouter,
+});
+```
+
+### 4. Use in frontend:
+```typescript
+// Get all users
+const { data: users } = trpc.users.getAll.useQuery();
+
+// Create user
+const createUser = trpc.users.create.useMutation();
+await createUser.mutateAsync({ 
+  email: 'user@example.com', 
+  name: 'John Doe' 
+});
+
+// Update user
+const updateUser = trpc.users.update.useMutation();
+await updateUser.mutateAsync({ 
+  id: 'user-id', 
+  data: { name: 'Jane Doe' } 
+});
+```
+
+## Available CRUD Operations:
+
+Each generated router includes:
+- `getAll({ skip?, take?, orderBy? })` - List with pagination
+- `getById({ id })` - Get single record
+- `create(data)` - Create new record
+- `update({ id, data })` - Update existing record
+- `delete({ id })` - Delete record
+- `count({ where? })` - Count records
+
+## Advanced Usage:
+
+### Custom procedures:
+You can extend generated routers with custom procedures:
 
 ```typescript
 import { z } from 'zod';
-import { BaseController, controllerToRouter } from '../lib/controller.js';
-import { requireAuth } from '../middleware/auth.js';
+import { router, publicProcedure } from '../trpc.js';
+import { createCrudRouter } from '../lib/crud.js';
+import { prisma } from '../lib/database.js';
 
-export class UserController extends BaseController {
-  getAll = this.createQueryWithMiddleware(
-    z.object({}),
-    [requireAuth],
-    async (input, ctx) => {
-      return await ctx.prisma.user.findMany();
-    }
-  );
-}
+const baseCrudRouter = createCrudRouter('user', createUserSchema);
 
-export const userRouter = controllerToRouter({
-  getAll: new UserController({} as any).getAll,
+export const userRouter = router({
+  ...baseCrudRouter,
+  
+  // Add custom procedures
+  getByEmail: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ input }) => {
+      return await prisma.user.findUnique({
+        where: { email: input.email }
+      });
+    }),
 });
 ```
 
-2. Add to main router:
+### Authentication & Authorization:
+Use middleware for protected procedures:
 
 ```typescript
-import { userRouter } from '../controllers/UserController.js';
+import { protectedProcedure } from '../trpc.js';
 
-export const appRouter = router({
-  users: userRouter,
-  // ... other routes
-});
+// Replace publicProcedure with protectedProcedure in createCrudRouter
+// or create a custom version for authenticated routes
 ```
 
-## Available Middleware:
-
-### Authentication:
-- `requireAuth` - Requires Bearer token
-- `requireRole(role)` - Requires specific role
-- `requireAdmin` - Requires admin role
-
-### Utility:
-- `logger` - Request/response logging
-- `rateLimit(max, window)` - Rate limiting
-- `responseTime` - Adds response time header
-- `requestId` - Adds unique request ID
-- `errorHandler` - Centralized error handling
-
-## Usage Examples:
-
-```typescript
-// Public endpoint
-getPublicData = this.createQuery(schema, handler);
-
-// Protected endpoint
-getPrivateData = this.createQueryWithMiddleware(
-  schema,
-  [requireAuth],
-  handler
-);
-
-// Admin-only endpoint
-adminAction = this.createMutationWithMiddleware(
-  schema,
-  [requireAuth, requireAdmin],
-  handler
-);
-
-// Multiple middleware
-complexEndpoint = this.createQueryWithMiddleware(
-  schema,
-  [logger, rateLimit(10, 60000), requireAuth],
-  handler
-);
-```
-
-This system provides:
-✅ Type safety with tRPC
-✅ Reusable middleware
-✅ Clean controller organization
-✅ Easy testing
-✅ Consistent error handling
+This simplified system removes the controller layer complexity while providing
+type-safe, validated CRUD operations for all your Prisma models.
 */ 

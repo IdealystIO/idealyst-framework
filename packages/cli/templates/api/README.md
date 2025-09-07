@@ -2,9 +2,30 @@
 
 {{description}}
 
+A simplified tRPC API with automatic CRUD generation for Prisma models.
+
 This API project is built with:
-- **tRPC** - End-to-end typesafe APIs
-- **Zod** - TypeScript-first schema validation
+- **tRPC** - End-to-end```typescript
+import { z } from 'zod';
+import { router, publicProcedure } from '../trpc.js';
+import { createCrudRouter } from '../lib/crud.js';
+import { prisma } from '../lib/database.js';
+
+const baseCrudRouter = createCrudRouter('user', createUserSchema);
+
+export const userRouter = router({
+  ...baseCrudRouter,
+  
+  // Add custom procedures
+  getByEmail: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ input }) => {
+      return await prisma.user.findUnique({
+        where: { email: input.email }
+      });
+    }),
+});
+```Zod** - TypeScript-first schema validation
 - **Express.js** - Web framework for Node.js
 - **TypeScript** - Type-safe JavaScript
 - **Prisma** - Next-generation ORM for database access
@@ -21,7 +42,7 @@ This API project is built with:
    yarn install
    ```
 
-3. **Setup database (if using database):**
+3. **Setup database:**
    ```bash
    # Generate Prisma client
    yarn prisma:generate
@@ -40,235 +61,214 @@ This API project is built with:
 
 The API will be available at `http://localhost:3000`
 
-## API Endpoints
+## Creating CRUD APIs
 
-### Test Endpoints
+This template provides a simple way to create type-safe APIs with automatic CRUD operations for your Prisma models.
 
-If your project includes the Test model, the following endpoints are available:
+### 1. Define Your Prisma Model
 
-#### `test.getAll`
-- **Description**: Get all test records
-- **Method**: Query
-- **Returns**: Array of test records
+Add models to `packages/database/schema.prisma`:
 
-#### `test.getById`
-- **Description**: Get a test record by ID
-- **Method**: Query
-- **Input**: `{ id: string }`
-- **Returns**: Test record or null
+```prisma
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
 
-#### `test.create`
-- **Description**: Create a new test record
-- **Method**: Mutation
-- **Input**: `{ name: string, message: string, status?: string }`
-- **Returns**: Created test record
+### 2. Create a Router
 
-#### `test.update`
-- **Description**: Update an existing test record
-- **Method**: Mutation
-- **Input**: `{ id: string, name?: string, message?: string, status?: string }`
-- **Returns**: Updated test record
-
-#### `test.delete`
-- **Description**: Delete a test record
-- **Method**: Mutation
-- **Input**: `{ id: string }`
-- **Returns**: Deleted test record
-
-### Usage Example
+Create `src/routers/user.ts`:
 
 ```typescript
-// Client-side usage with tRPC
-import { trpc } from './utils/trpc';
+import { z } from 'zod';
+import { createCrudRouter } from '../lib/crud.js';
 
-// Get all tests
-const { data: tests } = trpc.test.getAll.useQuery();
-
-// Create a new test
-const createTest = trpc.test.create.useMutation();
-await createTest.mutateAsync({
-  name: 'My Test',
-  message: 'This is a test message',
-  status: 'active'
+const createUserSchema = z.object({
+  email: z.string().email(),
+  name: z.string().min(1),
 });
 
-// Update a test
-const updateTest = trpc.test.update.useMutation();
-await updateTest.mutateAsync({
-  id: 'test-id',
-  name: 'Updated Test Name'
+const updateUserSchema = z.object({
+  email: z.string().email().optional(),
+  name: z.string().min(1).optional(),
 });
 
-// Delete a test
-const deleteTest = trpc.test.delete.useMutation();
-await deleteTest.mutateAsync({ id: 'test-id' });
+export const userRouter = createCrudRouter(
+  'user',
+  createUserSchema,
+  updateUserSchema
+);
 ```
+
+### 3. Add to Main Router
+
+Update `src/router/index.ts`:
+
+```typescript
+import { userRouter } from '../routers/user.js';
+
+export const appRouter = router({
+  // ... existing routes
+  users: userRouter,
+});
+```
+
+### 4. Use in Frontend
+
+```typescript
+// Get all users
+const { data: users } = trpc.users.getAll.useQuery();
+
+// Create user
+const createUser = trpc.users.create.useMutation();
+await createUser.mutateAsync({ 
+  email: 'user@example.com', 
+  name: 'John Doe' 
+});
+
+// Update user
+const updateUser = trpc.users.update.useMutation();
+await updateUser.mutateAsync({ 
+  id: 'user-id', 
+  data: { name: 'Jane Doe' } 
+});
+
+// Delete user
+const deleteUser = trpc.users.delete.useMutation();
+await deleteUser.mutateAsync({ id: 'user-id' });
+```
+
+## Generated CRUD Operations
+
+Each `createCrudRouter` call generates:
+
+- `getAll({ skip?, take?, orderBy? })` - List with pagination
+- `getById({ id })` - Get single record
+- `create(data)` - Create new record
+- `update({ id, data })` - Update existing record  
+- `delete({ id })` - Delete record
+- `count({ where? })` - Count records
 
 ## Available Scripts
 
 - `yarn dev` - Start development server with hot reload
-- `yarn build` - Build for production
+- `yarn build` - Build production bundle
 - `yarn start` - Start production server
-- `yarn lint` - Run ESLint
-- `yarn type-check` - Run TypeScript type checking
+- `yarn test` - Run tests
+- `yarn lint` - Lint code
+- `yarn type-check` - Check TypeScript types
 
-## API Endpoints
+## Project Structure
 
-### tRPC Routes
-
-All tRPC routes are available at `/trpc/[procedure]`
-
-#### Example Routes
-- `hello` - Simple greeting endpoint (accepts optional name parameter)
-- `health` - API health check with timestamp
-
-### REST Endpoints
-- `GET /` - API information
-- `GET /health` - Health check
-
-## Connecting to a Database
-
-For database functionality, create a separate database package using:
-```bash
-idealyst create my-database --type database
+```
+src/
+├── router/
+│   └── index.ts          # Main router definition
+├── routers/
+│   ├── test.ts          # Example CRUD router for Test model
+│   └── user.example.ts  # Example CRUD router for User model
+├── lib/
+│   ├── crud.ts          # CRUD router generator
+│   └── database.ts      # Database connection
+├── context.ts           # tRPC context
+├── trpc.ts             # tRPC setup
+└── server.ts           # Express server setup
 ```
 
-Then import and use it in your API:
-```typescript
-// In your API context or controllers
-import { db } from '@your-org/my-database';
+## Advanced Usage
 
-// Use the database client
-const users = await db.user.findMany();
+### Custom Procedures
+
+Extend generated routers with custom procedures:
+
+```typescript
+import { router, publicProcedure } from '../trpc.js';
+import { createCrudRouter } from '../lib/crud.js';
+
+const baseCrudRouter = createCrudRouter('user', createUserSchema);
+
+export const userRouter = router({
+  ...baseCrudRouter,
+  
+  // Add custom procedures
+  getByEmail: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ input }) => {
+      return await db.user.findUnique({
+        where: { email: input.email }
+      });
+    }),
+});
+```
+
+### Authentication
+
+For protected routes, you can add authentication middleware to the tRPC setup or create protected procedures:
+
+```typescript
+import { protectedProcedure } from '../trpc.js';
+
+// Use protectedProcedure instead of publicProcedure in your CRUD router
 ```
 
 ## Development
 
-### Adding New Routes
+1. **Add New Model**: 
+   - Add to Prisma schema
+   - Run `yarn db:migrate`
+   - Create router with `createCrudRouter`
+   - Add to main router
 
-You can add routes in two ways:
+2. **Test API**: 
+   - Start development: `yarn dev`
+   - API available at `http://localhost:3000/trpc`
 
-#### 1. Simple tRPC Procedures (Traditional)
-1. Create a new router file in `src/router/`
-2. Define your procedures with Zod schemas for validation
-3. Export the router and add it to `src/router/index.ts`
+3. **Type Safety**: 
+   - All operations are fully type-safe
+   - Frontend gets autocomplete and validation
+   - Schemas ensure data integrity
 
-#### 2. Controller & Middleware System (Recommended)
-This template includes a powerful controller and middleware system:
-
-1. **Create a Controller:**
-```typescript
-// src/controllers/PostController.ts
-import { z } from 'zod';
-import { BaseController, controllerToRouter } from '../lib/controller.js';
-import { requireAuth, requireAdmin } from '../middleware/auth.js';
-import { logger, rateLimit } from '../middleware/common.js';
-
-const createPostSchema = z.object({
-  title: z.string().min(1),
-  content: z.string(),
-});
-
-export class PostController extends BaseController {
-  // Public endpoint
-  getAll = this.createQuery(
-    z.object({ published: z.boolean().optional() }),
-    async (input, ctx) => {
-      // Mock data - replace with your database calls
-      return [
-        { id: '1', title: 'Post 1', content: 'Content 1', published: true },
-        { id: '2', title: 'Post 2', content: 'Content 2', published: false },
-      ];
-    }
-  );
-
-  // Protected endpoint with middleware
-  create = this.createMutationWithMiddleware(
-    createPostSchema,
-    [logger, rateLimit(5, 60000), requireAuth],
-    async (input, ctx) => {
-      // Mock creation - replace with your database calls
-      return { id: '3', ...input, published: false };
-    }
-  );
-
-  // Admin-only endpoint
-  delete = this.createMutationWithMiddleware(
-    z.object({ id: z.string() }),
-    [requireAuth, requireAdmin],
-    async (input, ctx) => {
-      // Mock deletion - replace with your database calls
-      return { success: true, deletedId: input.id };
-    }
-  );
-}
-
-export const postRouter = controllerToRouter({
-  getAll: new PostController({} as any).getAll,
-  create: new PostController({} as any).create,
-  delete: new PostController({} as any).delete,
-});
-```
-
-2. **Add to Main Router:**
-```typescript
-// src/router/index.ts
-import { postRouter } from '../controllers/PostController.js';
-
-export const appRouter = router({
-  posts: postRouter,
-  // ... other routes
-});
-```
-
-### Available Middleware
-
-#### Authentication
-- `requireAuth` - Requires Bearer token authentication
-- `requireRole(role)` - Requires specific user role
-- `requireAdmin` - Requires admin role
-
-#### Utility Middleware
-- `logger` - Request/response logging with timing
-- `rateLimit(maxRequests, windowMs)` - Rate limiting per IP
-- `responseTime` - Adds X-Response-Time header
-- `requestId` - Adds unique X-Request-ID header
-- `errorHandler` - Centralized error handling
-
-### Example tRPC Client Usage
-
-```typescript
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from './path/to/your/api';
-
-const client = createTRPCProxyClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: 'http://localhost:3000/trpc',
-    }),
-  ],
-});
-
-// Use the client
-const greeting = await client.hello.query({ name: 'John' });
-const healthStatus = await client.health.query();
-```
+This simplified approach removes controller complexity while maintaining full type safety and providing powerful CRUD operations for all your Prisma models.
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and configure:
+Create a `.env` file with:
 
-- `PORT` - Server port (default: 3000)
-- `NODE_ENV` - Environment (development/production)
-- `CORS_ORIGIN` - CORS origin for client requests
+```env
+# Database
+DATABASE_URL="file:./dev.db"
 
-## Deployment
+# API
+PORT=3000
+NODE_ENV=development
 
-1. Build the project: `yarn build`
-2. Start the server: `yarn start`
+# Add your environment variables here
+```
 
-## Learn More
+## Testing
 
-- [tRPC Documentation](https://trpc.io/)
-- [Zod Documentation](https://zod.dev/)
-- [Express.js Documentation](https://expressjs.com/) 
+The project includes Jest for testing:
+
+```typescript
+import { createContext } from '../src/context.js';
+import { appRouter } from '../src/router/index.js';
+
+describe('API Tests', () => {
+  test('should get test records', async () => {
+    const ctx = createContext({} as any);
+    const caller = appRouter.createCaller(ctx);
+    
+    const tests = await caller.test.getAll({});
+    expect(tests).toBeDefined();
+  });
+});
+```
+
+Run tests with:
+```bash
+yarn test
+```

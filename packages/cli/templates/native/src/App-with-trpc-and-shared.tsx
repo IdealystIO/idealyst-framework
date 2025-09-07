@@ -1,12 +1,16 @@
 import React from 'react';
+import { App } from '@{{workspaceScope}}/shared';
 
-// Import shared components
-import { HelloWorld } from '@{{workspaceScope}}/shared';
-
-function App() {
+// Main App component using shared App wrapper
+function AppWithTrpcAndShared() {
   return (
-    <HelloWorld name="{{projectName}} Mobile User" platform="mobile" projectName="{{projectName}}" />
+    <App 
+      apiUrl="http://localhost:3000/trpc"
+      name="{{projectName}} Mobile User"
+      platform="mobile"
+      projectName="{{projectName}}"
+    />
   );
 }
 
-export default App;
+export default AppWithTrpcAndShared;

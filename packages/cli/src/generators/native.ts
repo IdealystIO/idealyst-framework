@@ -45,6 +45,18 @@ export async function generateNativeProject(options: GenerateProjectOptions): Pr
         
         console.log(chalk.green('✅ React Native project created with native platform support'));
       } catch (rnError) {
+        console.log(chalk.yellow('✖ Failed to initialize React Native project'));
+        console.log('');
+        console.log(chalk.yellow('💡 Alternative approaches:'));
+        console.log(chalk.white('1. Try manually creating the project:'));
+        console.log(chalk.white(`   npx @react-native-community/cli@latest init ${path.basename(projectPath)} --pm yarn --skip-git-init`));
+        console.log('');
+        console.log(chalk.white('2. Use Expo (faster alternative):'));
+        console.log(chalk.white(`   npx create-expo-app@latest ${path.basename(projectPath)} --template blank-typescript`));
+        console.log('');
+        console.log(chalk.white('3. Ensure prerequisites:'));
+        console.log(chalk.white('   npm install -g @react-native-community/cli'));
+        console.log('');
         console.log(chalk.yellow('⚠️  React Native CLI failed, falling back to template-only approach...'));
         await createNativeProjectFromTemplate(templatePath, projectPath, templateData);
         console.log(chalk.yellow('📝 Template-only project created. You may need to run "npx react-native init" later for native platforms.'));

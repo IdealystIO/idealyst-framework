@@ -1,6 +1,8 @@
 import path from 'path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 import { GenerateProjectOptions, TemplateData } from '../types';
 import { 
   validateProjectName, 
@@ -97,6 +99,12 @@ export async function generateFullStackWorkspace(options: GenerateProjectOptions
   // Step 4: Install dependencies
   await installDependencies(projectPath, skipInstall);
   
+  // Step 5: Generate database client
+  if (!skipInstall) {
+    console.log(chalk.blue('🗄️  Generating database client...'));
+    await generateDatabaseClient(projectPath, templateData);
+  }
+  
   console.log(chalk.green('✅ Full-stack workspace created successfully!'));
   console.log(chalk.blue('📋 Your workspace includes:'));
   console.log(chalk.white('  • 🗄️  Database package with Prisma'));
@@ -121,6 +129,41 @@ export async function generateFullStackWorkspace(options: GenerateProjectOptions
     console.log(chalk.blue('🎨 Figma integration configured in .devcontainer/.env'));
   } else {
     console.log(chalk.gray('💡 Tip: Add Figma integration later by editing .devcontainer/.env'));
+  }
+}
+
+/**
+ * Generates the database client using Prisma
+ */
+async function generateDatabaseClient(projectPath: string, templateData: TemplateData): Promise<void> {
+  const execAsync = promisify(exec);
+  
+  try {
+    console.log(chalk.gray('   Running db:generate to create Prisma client...'));
+    
+    // Run the db:generate command in the project directory
+    const { stdout, stderr } = await execAsync('yarn db:generate', {
+      cwd: projectPath,
+      env: { ...process.env }
+    });
+    
+    if (stderr && !stderr.includes('warning')) {
+      console.log(chalk.yellow('   Database generation warnings:'));
+      console.log(chalk.gray(`   ${stderr.trim()}`));
+    }
+    
+    console.log(chalk.green('   ✅ Database client generated successfully!'));
+    
+  } catch (error: any) {
+    console.log(chalk.yellow('   ⚠️  Database client generation failed (this is normal on first setup)'));
+    console.log(chalk.gray('   You can run "yarn db:generate" manually after setting up your database'));
+    
+    if (error.stdout) {
+      console.log(chalk.gray(`   ${error.stdout.trim()}`));
+    }
+    if (error.stderr) {
+      console.log(chalk.gray(`   ${error.stderr.trim()}`));
+    }
   }
 }
 

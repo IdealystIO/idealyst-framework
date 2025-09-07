@@ -81,11 +81,12 @@ export async function copyTemplate(templatePath: string, destPath: string, data:
     await fs.copy(templatePath, destPath, {
       filter: (src) => {
         const relativePath = path.relative(templatePath, src);
-        // Skip App-with-trpc.tsx as it's only copied when tRPC is enabled
+        // Skip special App files that are only used in fullstack generation
         // Skip .git directories but allow .gitignore files
         return !relativePath.includes('node_modules') && 
                !relativePath.includes('.git' + path.sep) &&
-               !relativePath.endsWith('App-with-trpc.tsx');
+               !relativePath.endsWith('App-with-trpc.tsx') &&
+               !relativePath.endsWith('App-with-trpc-and-shared.tsx');
       }
     });
     
@@ -131,6 +132,10 @@ export async function processTemplateFile(filePath: string, data: TemplateData):
     // Handle appName (with fallback to projectName if not provided)
     const appName = data.appName || data.projectName;
     content = content.replace(/\{\{appName\}\}/g, appName);
+    
+    // Handle workspaceScope (with fallback to projectName if not provided)
+    const workspaceScope = data.workspaceScope || data.projectName;
+    content = content.replace(/\{\{workspaceScope\}\}/g, workspaceScope);
     
     await fs.writeFile(filePath, content);
   } catch (error) {
@@ -298,10 +303,10 @@ export async function initializeReactNativeProject(projectName: string, director
   const spinner = ora('Initializing React Native project...').start();
   
   try {
-    // Use create-react-native-app for a more reliable setup
+    // Try the modern approach first
     const cliCommand = 'npx';
     const args = [
-      'react-native@latest', 
+      '@react-native-community/cli@latest', 
       'init', 
       projectName,
       '--pm', 'yarn',
@@ -328,26 +333,47 @@ export async function initializeReactNativeProject(projectName: string, director
     
     spinner.succeed('React Native project initialized successfully');
   } catch (error) {
-    spinner.fail('Failed to initialize React Native project');
+    spinner.fail('Failed to initialize React Native project with CLI');
     
-    if (error instanceof Error && error.message.includes('timed out')) {
-      console.log(chalk.red('❌ React Native initialization timed out'));
-      console.log(chalk.yellow('This can happen due to:'));
-      console.log(chalk.white('  • Slow internet connection'));
-      console.log(chalk.white('  • Network issues downloading dependencies'));
-      console.log(chalk.white('  • React Native CLI hanging on prompts'));
+    // Try fallback to regular react-native init
+    try {
+      spinner.start('Trying fallback: react-native@latest init...');
+      
+      const fallbackArgs = [
+        'react-native@latest', 
+        'init', 
+        projectName,
+        '--pm', 'yarn',
+        '--skip-git-init'
+      ];
+      
+      if (displayName) {
+        fallbackArgs.push('--title', displayName);
+      }
+      
+      if (skipInstall) {
+        fallbackArgs.push('--skip-install');
+      }
+      
+      await runCommand('npx', fallbackArgs, { 
+        cwd: directory,
+        timeout: 600000
+      });
+      
+      spinner.succeed('React Native project initialized with fallback method');
+    } catch (fallbackError) {
+      spinner.fail('All React Native initialization methods failed');
+      
+      console.log(chalk.yellow('\n💡 Alternative approaches:'));
+      console.log(chalk.white('1. Try manually creating the project:'));
+      console.log(chalk.white(`   npx @react-native-community/cli@latest init ${projectName} --pm yarn --skip-git-init`));
+      console.log(chalk.white('\n2. Use Expo (recommended for easier setup):'));
+      console.log(chalk.white(`   npx create-expo-app@latest ${projectName} --template blank-typescript`));
+      console.log(chalk.white('\n3. Ensure prerequisites:'));
+      console.log(chalk.white('   npm install -g @react-native-community/cli'));
+      
+      throw fallbackError;
     }
-    
-    console.log(chalk.yellow('\n💡 Alternative approaches:'));
-    console.log(chalk.white('1. Try manually creating the project:'));
-    console.log(chalk.white(`   npx react-native@latest init ${projectName} --pm yarn --skip-git-init`));
-    console.log(chalk.white('\n2. Use Expo (faster alternative):'));
-    console.log(chalk.white(`   npx create-expo-app@latest ${projectName} --template blank-typescript`));
-    console.log(chalk.white('\n3. Ensure prerequisites:'));
-    console.log(chalk.white('   npm install -g react-native-cli'));
-    console.log(chalk.white('   npm install -g @react-native-community/cli'));
-    
-    throw error;
   }
 }
 
@@ -403,9 +429,9 @@ export async function mergePackageJsonDependencies(templatePath: string, project
       '@react-navigation/native': '^7.1.14',
       '@react-navigation/native-stack': '^7.3.21',
       '@tanstack/react-query': '^5.83.0',
-      '@trpc/client': '^11.4.3',
-      '@trpc/react-query': '^11.4.3',
-      '@trpc/server': '^11.4.3',
+      '@trpc/client': '^11.5.1',
+      '@trpc/react-query': '^11.5.1',
+      '@trpc/server': '^11.5.1',
       'react-native-edge-to-edge': '^1.6.2',
       'react-native-gesture-handler': '^2.27.1',
       'react-native-nitro-modules': '^0.26.3',
@@ -561,8 +587,8 @@ export async function addTrpcDependencies(projectPath: string): Promise<void> {
     // Add tRPC-related dependencies
     const trpcDeps = {
       '@tanstack/react-query': '^5.83.0',
-      '@trpc/client': '^11.4.3',
-      '@trpc/react-query': '^11.4.3'
+      '@trpc/client': '^11.5.1',
+      '@trpc/react-query': '^11.5.1'
     };
     
     // Ensure dependencies object exists
