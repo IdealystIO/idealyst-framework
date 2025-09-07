@@ -8,7 +8,7 @@
   "forwardPorts": [
     3000,  // Api server
     5173,  // Vite dev server
-    8080,  // Additional dev server
+    8081,  // Metro Bundler
     19006, // Expo dev tools
     5432,  // PostgreSQL
     6379,   // Redis
@@ -25,8 +25,8 @@
       "label": "Vite Dev Server",
       "onAutoForward": "openBrowser"
     },
-    "8080": {
-      "label": "Additional Dev Server",
+    "8081": {
+      "label": "Metro Bundler",
       "onAutoForward": "notify"
     },
     "19006": {

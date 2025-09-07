@@ -16,7 +16,7 @@ const config = {
       path.resolve(__dirname, '..', 'node_modules'),
     ],
     // Important for Idealyst to use .native extensions for React Native (eg: @idealyst/components/src/Button/Button.native.tsx)
-    sourceExts: ['native.tsx', 'native.ts', 'tsx', 'ts', 'native.jsx', 'native.js', 'jsx', 'js', 'json'],
+    sourceExts: ['native.tsx', 'native.ts', 'tsx', 'ts', 'native.jsx', 'native.js', 'jsx', 'js', 'json', 'cjs'],
   },
   watcher: {
     // When configuring custom components with .native extensions, make sure the watcher looks for them

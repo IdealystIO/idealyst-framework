@@ -53,7 +53,7 @@ RUN mkdir -p /workspace/node_modules && \
     chown -R node:node /workspace
 
 # Expose common development ports
-EXPOSE 3000 3002 3003 3004 3005 8080 8081 8082 9000 9001 5173
+EXPOSE 3000 3002 3003 3004 3005 8081 8082 9000 9001 5173
 
 # Default command
 CMD ["/bin/bash"] 

@@ -31,5 +31,9 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.0.0"
+  },
+  "resolutions": {
+    "react": "19.1.0",
+    "react-dom": "19.1.1"
   }
 } 

@@ -98,7 +98,7 @@ COPY --chown=devuser:devuser packages/web/package.json ./packages/web/
 # Install dependencies including dev dependencies
 RUN yarn install
 
-EXPOSE 3000 5173 8080 19006
+EXPOSE 3000 5173 1 19006
 
 CMD ["tail", "-f", "/dev/null"]
 

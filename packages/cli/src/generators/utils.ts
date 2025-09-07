@@ -395,6 +395,12 @@ export async function overlayIdealystFiles(templatePath: string, projectPath: st
       }
     });
     
+    // Remove the root App.tsx created by React Native CLI since we use src/App.tsx
+    const rootAppPath = path.join(projectPath, 'App.tsx');
+    if (await fs.pathExists(rootAppPath)) {
+      await fs.remove(rootAppPath);
+    }
+    
     // Process template files
     await processTemplateFiles(projectPath, data);
     
@@ -557,18 +563,21 @@ export async function copyTrpcAppComponent(templatePath: string, projectPath: st
   const spinner = ora('Setting up tRPC App component...').start();
   
   try {
-    const trpcAppSource = path.join(templatePath, 'src', 'App-with-trpc.tsx');
-    
-    // For React Native projects, App.tsx is in the root, for web it's in src
+    // For React Native, do NOT copy App-with-trpc-and-shared.tsx
     const isNativeProject = await fs.pathExists(path.join(projectPath, 'metro.config.js')) || 
                             await fs.pathExists(path.join(projectPath, 'android')) ||
                             await fs.pathExists(path.join(projectPath, 'ios'));
     
-    const appTarget = isNativeProject 
-      ? path.join(projectPath, 'App.tsx')
-      : path.join(projectPath, 'src', 'App.tsx');
+    if (isNativeProject) {
+      // Use the default App.tsx for native, do not overwrite with shared tRPC App
+      spinner.succeed('Skipped tRPC App component for native project');
+      return;
+    }
     
-    // Copy the tRPC-enabled App component over the default one
+    // For web, copy App-with-trpc.tsx as App.tsx
+    const trpcAppSource = path.join(templatePath, 'src', 'App-with-trpc.tsx');
+    const appTarget = path.join(projectPath, 'src', 'App.tsx');
+    
     await fs.copy(trpcAppSource, appTarget, { overwrite: true });
     await processTemplateFile(appTarget, data);
     
