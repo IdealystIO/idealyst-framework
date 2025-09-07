@@ -223,7 +223,6 @@ export const HelloWorld = ({
                 placeholder="Test message"
                 value={newTestMessage}
                 onChangeText={setNewTestMessage}
-                multiline
               />
               <Button
                 onPress={handleCreateTest}
