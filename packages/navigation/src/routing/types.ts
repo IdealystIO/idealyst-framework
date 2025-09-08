@@ -30,9 +30,14 @@ export type ScreenOptions = {
     tabBarVisible?: boolean;
     
     /**
-     * Custom header title component
+     * Custom header title component or string
      */
-    headerTitle?: React.ComponentType | string;
+    headerTitle?: React.ComponentType | React.ReactElement | string;
+    
+    /**
+     * Custom header left component (overrides back button)
+     */
+    headerLeft?: React.ComponentType | React.ReactElement;
     
     /**
      * Whether to show header back button
@@ -42,7 +47,7 @@ export type ScreenOptions = {
     /**
      * Custom header right component
      */
-    headerRight?: React.ComponentType;
+    headerRight?: React.ComponentType | React.ReactElement;
     
     /**
      * Additional platform-specific options

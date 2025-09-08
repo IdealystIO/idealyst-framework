@@ -1,34 +1,57 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { RouteParam, ScreenOptions } from "./types";
 import { GeneralLayout } from "../layouts/GeneralLayout";
 import { View, Text, Icon, Pressable } from '@idealyst/components';
-import { webTabLayoutStyles } from "../layouts/WebTabLayout/WebTabLayout.styles";
-import { getWebProps } from 'react-native-unistyles/web';
 
-// Tab Button Component
-const TabButton: React.FC<{
-    tab: { id: string; path: string; label: string; icon: any };
+// Types for TabButton
+interface TabRoute {
+    id: string;
+    path: string;
+    label: string;
+    icon?: React.ComponentType<{ focused: boolean; color: string; size: string }> 
+          | React.ReactElement 
+          | ((props: { focused: boolean; color: string; size: string }) => React.ReactElement)
+          | string;
+}
+
+interface TabButtonProps {
+    tab: TabRoute;
     isActive: boolean;
     onPress: () => void;
-}> = ({ tab, isActive, onPress }) => {
+}
+
+// Tab Button Component
+const TabButton: React.FC<TabButtonProps> = ({ tab, isActive, onPress }) => {
     // Render icon - supports React elements, functions, and string names
-    const renderIcon = (icon: any) => {
+    const renderIcon = (icon: TabRoute['icon']) => {
+        if (!icon) return null;
+        
         if (typeof icon === 'function') {
             // Function-based icon that receives state - pass explicit colors
-            return icon({ 
+            const IconComponent = icon as (props: { focused: boolean; color: string; size: string }) => React.ReactElement;
+            return IconComponent({ 
                 focused: isActive, 
-                color: isActive ? 'white' : 'secondary', 
-                size: 'sm' // Changed to md for better visibility
+                color: isActive ? 'blue' : 'black.900',
+                size: 'sm'
             });
         }
+        
         if (React.isValidElement(icon)) {
             return icon;
         }
+        
         if (typeof icon === 'string') {
             // Fallback for string icons (though this breaks transpiler support)
             return <Icon name={icon as any} size="md" color={isActive ? 'white' : 'secondary'} />;
         }
+        
+        // Handle React.ComponentType
+        if (typeof icon === 'object' && 'type' in icon) {
+            const IconComponent = icon as React.ComponentType<{ focused: boolean; color: string; size: string }>;
+            return <IconComponent focused={isActive} color={isActive ? 'white' : 'secondary'} size="sm" />;
+        }
+        
         return null;
     };
     
@@ -36,7 +59,6 @@ const TabButton: React.FC<{
         <Pressable onPress={onPress}>
             <View
                 style={{
-                    backgroundColor: isActive ? '#1976d2' : 'transparent',
                     paddingHorizontal: 12,
                     paddingVertical: 8,
                     borderRadius: 6,
@@ -48,7 +70,7 @@ const TabButton: React.FC<{
                 {tab.label && (
                     <Text 
                         size="small" 
-                        color={isActive ? 'white' : 'secondary'}
+                        color={isActive ? 'blue' : 'black.900'}
                         style={{
                             marginLeft: tab.icon ? 8 : 0,
                         }}
@@ -61,17 +83,28 @@ const TabButton: React.FC<{
     );
 };
 
-// Simple Tab Layout Component
-const SimpleTabLayout: React.FC<{
+// Types for SimpleTabLayout
+interface SimpleTabLayoutProps {
     routeParam: RouteParam;
-    webScreenOptions: any;
+    webScreenOptions: {
+        title?: string;
+        headerTitle?: React.ComponentType | React.ReactElement | string;
+        headerLeft?: React.ComponentType | React.ReactElement;
+        headerRight?: React.ComponentType | React.ReactElement;
+        tabBarLabel?: string;
+        tabBarIcon?: TabRoute['icon'];
+        [key: string]: any;
+    };
     currentPath: string;
-}> = ({ routeParam, webScreenOptions, currentPath }) => {
+}
+
+// Simple Tab Layout Component
+const SimpleTabLayout: React.FC<SimpleTabLayoutProps> = ({ routeParam, webScreenOptions }) => {
     const location = useLocation();
     const navigate = useNavigate();
     
     // Build tab links from routes with screen options
-    const tabRoutes = [
+    const tabRoutes: TabRoute[] = [
         // Main route (home/index)
         {
             id: 'home',
@@ -80,7 +113,7 @@ const SimpleTabLayout: React.FC<{
             icon: webScreenOptions.tabBarIcon,
         },
         // Child routes
-        ...routeParam.routes!.map((route) => {
+        ...routeParam.routes!.map((route): TabRoute => {
             const routeOptions = convertScreenOptionsForWeb(route.screenOptions);
             return {
                 id: route.path || '',
@@ -100,6 +133,18 @@ const SimpleTabLayout: React.FC<{
     
     const activeTab = getActiveTab();
     
+    // Helper to render header element (component, element, or string)
+    const renderHeaderElement = (element: React.ComponentType | React.ReactElement | string | undefined) => {
+        if (!element) return null;
+        if (React.isValidElement(element)) return element;
+        if (typeof element === 'string') return <Text size="large" weight="semibold">{element}</Text>;
+        if (typeof element === 'function') {
+            const Component = element as React.ComponentType;
+            return <Component />;
+        }
+        return null;
+    };
+
     // Create simple header navigation
     const headerContent = (
         <View style={{ 
@@ -109,10 +154,18 @@ const SimpleTabLayout: React.FC<{
             width: '100%',
             flex: 1
         }}>
-            {/* Title */}
-            <Text size="large" weight="semibold">
-                {webScreenOptions.title || webScreenOptions.headerTitle || 'Navigation'}
-            </Text>
+            {/* Left side */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                {webScreenOptions.headerLeft ? (
+                    renderHeaderElement(webScreenOptions.headerLeft)
+                ) : (
+                    renderHeaderElement(
+                        webScreenOptions.headerTitle || 
+                        webScreenOptions.title || 
+                        'Navigation'
+                    )
+                )}
+            </View>
             
             {/* Tab Navigation */}
             <View style={{ 
@@ -136,6 +189,11 @@ const SimpleTabLayout: React.FC<{
                         }}
                     />
                 ))}
+            </View>
+            
+            {/* Right side */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
+                {renderHeaderElement(webScreenOptions.headerRight)}
             </View>
         </View>
     );
