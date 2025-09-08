@@ -43,6 +43,7 @@ const iconStyles = StyleSheet.create((theme) => ({
       display: 'inline-block',
       verticalAlign: 'middle',
       flexShrink: 0,
+      lineHeight: 0, // Remove extra space below the icon
     },
   },
 }));

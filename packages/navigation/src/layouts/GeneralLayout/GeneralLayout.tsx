@@ -75,7 +75,6 @@ const GeneralLayout: React.FC<GeneralLayoutProps> = ({
       {/* Header */}
       {headerConfig.enabled && (
         <View 
-          background="surface"
           border="thin"
           spacing="md"
           style={[

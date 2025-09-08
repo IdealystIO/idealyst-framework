@@ -6,12 +6,15 @@
  */
 
 import React from 'react';
-import { ExampleStackRouter } from '@idealyst/navigation/examples';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ExampleTabRouter } from '@idealyst/navigation/examples';
 import { NavigatorProvider } from '@idealyst/navigation';
 
 function App() {
   return (
-    <NavigatorProvider route={ExampleStackRouter} />
+    <SafeAreaProvider>
+      <NavigatorProvider route={ExampleTabRouter} />
+    </SafeAreaProvider>
   );
 }
 

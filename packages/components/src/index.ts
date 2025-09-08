@@ -7,6 +7,9 @@ export * from './Text/types';
 export { default as View } from './View';
 export * from './View/types';
 
+export { default as Pressable } from './Pressable';
+export * from './Pressable/types';
+
 export { default as Input } from './Input';
 export * from './Input/types';
 

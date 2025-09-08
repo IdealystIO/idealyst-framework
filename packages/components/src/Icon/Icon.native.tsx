@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IconProps } from './types';
 import iconStyles from './Icon.styles';
@@ -16,14 +16,17 @@ const Icon: React.FC<IconProps> = ({
   const styles = iconStyles.useVariants({ color, size });
   
   // Map size variants to pixel values
-  const sizeMap = {
-    xs: 12,
-    sm: 16,
-    md: 24,
-    lg: 32,
-    xl: 48,
-  };
-  const iconSize = sizeMap[size];
+  const iconSize = useMemo(() => { 
+    if (typeof size === 'number') return size;
+    const sizeMap = {
+      xs: 12,
+      sm: 16,
+      md: 24,
+      lg: 32,
+      xl: 48,
+    };
+    return sizeMap[size];
+  }, [])
   
   return (
     <MaterialCommunityIcons

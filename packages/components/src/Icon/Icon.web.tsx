@@ -22,7 +22,6 @@ const Icon: React.FC<IconProps> = (props: InternalIconProps) => {
 
   // Use Unistyles v3 with color and size variants
   const styles = iconStyles.useVariants({ color, size });
-  console.log(styles);
   
   // Check if we have a path prop (from Babel plugin transformation)
   const { path } = restProps as { path?: string };

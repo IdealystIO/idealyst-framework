@@ -261,7 +261,7 @@ module.exports = function ({ types: t }, options = {}) {
             
             if (iconNames.length === 0) {
               // For dynamic expressions we can't resolve, leave a helpful comment
-              console.warn(`[mdi-auto-import] Cannot determine icon name for dynamic expression at ${path.node.loc ? `${path.node.loc.start.line}:${path.node.loc.start.column}` : 'unknown location'}. Consider adding icon names to manifest (${manifestPath}) for auto-import support.`);
+              console.warn(`[mdi-auto-import] Cannot determine icon name (${nameAttr.value.expression}) for dynamic expression at ${path.node.loc ? `${path.node.loc.start.line}:${path.node.loc.start.column}` : 'unknown location'}. Consider adding icon names to manifest (${manifestPath}) for auto-import support.`);
               return;
             }
           }

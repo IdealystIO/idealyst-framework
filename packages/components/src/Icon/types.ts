@@ -12,7 +12,7 @@ export interface IconProps {
   /**
    * The size variant of the icon
    */
-  size?: IconSizeVariant;
+  size?: IconSizeVariant | number;
 
   /**
    * Predefined color variant based on theme
