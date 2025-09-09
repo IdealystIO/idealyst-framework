@@ -1,6 +1,7 @@
 import React from 'react';
 import { RouteParam } from '@idealyst/navigation';
 import { Screen, Text, View, Icon } from '@idealyst/components';
+import { HelloWorld } from '../components/HelloWorld';
 
 const HomeScreen = () => (
   <Screen>
@@ -11,6 +12,12 @@ const HomeScreen = () => (
         <Text size="small">
           This app uses tab navigation. Navigate between tabs using the bottom bar on mobile or the top tabs on web.
         </Text>
+      </View>
+      
+      {/* API Testing Component */}
+      <View spacing="md" style={{ marginTop: 32 }}>
+        <Text size="medium" weight="semibold">API Test</Text>
+        <HelloWorld name="{{projectName}}" />
       </View>
     </View>
   </Screen>

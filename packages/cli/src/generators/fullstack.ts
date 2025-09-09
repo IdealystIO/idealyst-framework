@@ -186,18 +186,6 @@ async function updateAppFilesWithSharedComponents(projectPath: string, templateD
     await fs.writeFile(webAppTargetPath, webAppContent);
   }
   
-  // Update native App.tsx with enhanced version  
-  const nativeAppSourcePath = path.join(templateDir, '..', 'native', 'src', 'App-with-trpc-and-shared.tsx');
-  const nativeAppTargetPath = path.join(projectPath, 'packages', 'mobile', 'src', 'App.tsx');
-  
-  if (await fs.pathExists(nativeAppSourcePath)) {
-    let nativeAppContent = await fs.readFile(nativeAppSourcePath, 'utf8');
-    // Simple template variable replacement
-    nativeAppContent = nativeAppContent.replace(/\{\{workspaceScope\}\}/g, templateData.workspaceScope || templateData.projectName);
-    nativeAppContent = nativeAppContent.replace(/\{\{projectName\}\}/g, templateData.projectName);
-    nativeAppContent = nativeAppContent.replace(/\{\{appName\}\}/g, templateData.appName || templateData.projectName);
-    await fs.writeFile(nativeAppTargetPath, nativeAppContent);
-  }
   
   // Update API database.ts with workspace scope for client import
   const databaseTsPath = path.join(projectPath, 'packages', 'api', 'src', 'lib', 'database.ts');

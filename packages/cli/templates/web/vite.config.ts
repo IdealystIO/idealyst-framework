@@ -7,7 +7,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [
     babel({
-      filter: (id) => id.includes('node_modules/@idealyst/') && /\.(js|jsx|ts|tsx)$/.test(id),
+      filter: (id) => id.includes("node_modules/@idealyst/"),
       babelConfig: {
         presets: [
           ['@babel/preset-typescript', {
@@ -25,19 +25,7 @@ export default defineConfig({
       }
     }),
     // Then process everything else with React plugin
-    react({
-      babel: {
-        plugins: [
-          ['react-native-unistyles/plugin', {
-            root: 'src',
-            autoProcessPaths: ['@idealyst/components', '@idealyst/navigation', '@idealyst/theme'],
-            debug: true,
-            processOnlyProduction: false,
-            extensions: ['.tsx', '.ts', '.jsx', '.js'],
-          }],
-        ]
-      }
-    }),
+    react(),
   ],
   resolve: {
     alias: {

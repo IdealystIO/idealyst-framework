@@ -1,11 +1,11 @@
 {
   "name": "idealyst-monorepo",
-  "version": "1.0.52",
+  "version": "1.0.53",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "yarn@4.9.3",
+  "packageManager": "yarn@3.6.4",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",

@@ -1,11 +1,12 @@
 import React from 'react';
 import { RouteParam } from '@idealyst/navigation';
-import { Screen, Text, View, Icon } from '@idealyst/components';
+import { Screen, Text, View, Icon, Button } from '@idealyst/components';
 import { trpc } from '../utils/trpc';
 
 const HomeScreen = () => {
   // Example tRPC usage
-  const { data, isLoading, error } = trpc.hello.useQuery({ name: 'World' });
+  const [name, setName] = React.useState('{{projectName}}');
+  const { data, isLoading, error, refetch } = trpc.hello.useQuery({ name });
 
   return (
     <Screen>
@@ -17,12 +18,28 @@ const HomeScreen = () => {
             This app uses tab navigation with tRPC integration. Navigate between tabs using the top bar or menu.
           </Text>
           
-          {/* tRPC Example */}
+          {/* tRPC API Test */}
           <View spacing="sm" style={{ marginTop: 20 }}>
-            <Text size="medium" weight="semibold">tRPC Example:</Text>
-            {isLoading && <Text>Loading...</Text>}
-            {error && <Text>Error: {error.message}</Text>}
-            {data && <Text>{data.greeting}</Text>}
+            <Text size="medium" weight="semibold">API Test (tRPC):</Text>
+            <View spacing="xs">
+              <input 
+                type="text" 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your name"
+                style={{ padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
+              />
+              <Button variant="outlined" onPress={() => refetch()} size="small">
+                Test tRPC API
+              </Button>
+            </View>
+            
+            {/* Results */}
+            <View style={{ marginTop: 12 }}>
+              {isLoading && <Text size="small">Loading...</Text>}
+              {error && <Text size="small" color="error">Error: {error.message}</Text>}
+              {data && <Text size="small">✅ {data.greeting}</Text>}
+            </View>
           </View>
         </View>
       </View>

@@ -1,6 +1,35 @@
 import React from 'react';
 import { RouteParam } from '@idealyst/navigation';
-import { Screen, Text, View, Icon } from '@idealyst/components';
+import { Screen, Text, View, Icon, Button } from '@idealyst/components';
+
+// Simple API test component for native-only projects
+const ApiTest = () => {
+  const [result, setResult] = React.useState<string>('Tap to test API');
+  
+  const testApi = async () => {
+    try {
+      setResult('Testing...');
+      // Simple fetch test - replace with actual API endpoint  
+      const response = await fetch('http://localhost:3000/api/test');
+      if (response.ok) {
+        setResult('✅ API connection successful!');
+      } else {
+        setResult('❌ API connection failed');
+      }
+    } catch (error) {
+      setResult('❌ API connection failed');
+    }
+  };
+
+  return (
+    <View spacing="sm">
+      <Text size="small">{result}</Text>
+      <Button variant="outlined" onPress={testApi} size="small">
+        Test API
+      </Button>
+    </View>
+  );
+};
 
 const HomeScreen = () => (
   <Screen>
@@ -11,6 +40,12 @@ const HomeScreen = () => (
         <Text size="small">
           This app uses tab navigation. Navigate between tabs using the bottom bar.
         </Text>
+      </View>
+      
+      {/* API Testing Component */}
+      <View spacing="md" style={{ marginTop: 32 }}>
+        <Text size="medium" weight="semibold">API Test</Text>
+        <ApiTest />
       </View>
     </View>
   </Screen>

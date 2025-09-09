@@ -387,11 +387,12 @@ export async function overlayIdealystFiles(templatePath: string, projectPath: st
       filter: (src) => {
         const relativePath = path.relative(templatePath, src);
         // Skip package.json as we'll merge it separately
-        // Skip App-with-trpc.tsx as it's only copied when tRPC is enabled
+        // Skip App-with-trpc.tsx and App-with-trpc-and-shared.tsx as they're only copied when tRPC is enabled
         return !relativePath.includes('node_modules') && 
                !relativePath.includes('.git') && 
                !relativePath.endsWith('package.json') &&
-               !relativePath.endsWith('App-with-trpc.tsx');
+               !relativePath.endsWith('App-with-trpc.tsx') &&
+               !relativePath.endsWith('App-with-trpc-and-shared.tsx');
       }
     });
     
