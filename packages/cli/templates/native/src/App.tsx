@@ -1,16 +1,11 @@
 import React from 'react';
-import { App } from '@{{workspaceScope}}/shared';
+import { NavigatorProvider } from '@idealyst/navigation';
+import AppRouter from './navigation/AppRouter';
 
-// Main App component using shared App wrapper
-function AppWithShared() {
+function App() {
   return (
-    <App 
-      apiUrl="http://localhost:3000/trpc"
-      name="{{projectName}} Developer"
-      platform="mobile"
-      projectName="{{projectName}}"
-    />
+    <NavigatorProvider route={AppRouter} />
   );
 }
 
-export default AppWithShared;
+export default App;

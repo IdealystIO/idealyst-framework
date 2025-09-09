@@ -1,12 +1,12 @@
 import { BrowserRouter } from 'react-router-dom';
-import { ExampleStackRouter, } from '@idealyst/navigation/examples';
 import { NavigatorProvider } from '@idealyst/navigation';
+import AppRouter from './navigation/AppRouter';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <NavigatorProvider route={ExampleStackRouter} />
+        <NavigatorProvider route={AppRouter} />
       </BrowserRouter>
     </div>
   );  
