@@ -156,14 +156,15 @@ const SimpleTabLayout: React.FC<SimpleTabLayoutProps> = ({ routeParam, webScreen
         }}>
             {/* Left side */}
             <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                {webScreenOptions.headerLeft ? (
-                    renderHeaderElement(webScreenOptions.headerLeft)
-                ) : (
-                    renderHeaderElement(
-                        webScreenOptions.headerTitle || 
-                        webScreenOptions.title || 
-                        'Navigation'
-                    )
+                {webScreenOptions.headerLeft && (
+                    <View style={{ marginRight: 12 }}>
+                        {renderHeaderElement(webScreenOptions.headerLeft)}
+                    </View>
+                )}
+                {renderHeaderElement(
+                    webScreenOptions.headerTitle || 
+                    webScreenOptions.title || 
+                    'Navigation'
                 )}
             </View>
             
@@ -256,6 +257,10 @@ const convertScreenOptionsForWeb = (screenOptions?: ScreenOptions) => {
 
     if (screenOptions.headerBackVisible !== undefined) {
         webOptions.headerBackVisible = screenOptions.headerBackVisible;
+    }
+
+    if (screenOptions.headerLeft) {
+        webOptions.headerLeft = screenOptions.headerLeft;
     }
 
     if (screenOptions.headerRight) {

@@ -1,13 +1,14 @@
 {
   "name": "@idealyst/navigation",
-  "version": "1.0.54",
+  "version": "1.0.57",
   "description": "Cross-platform navigation library for React and React Native",
+  "readme": "README.md",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "types": "src/index.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/idealyst-framework.git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
     "directory": "packages/navigation"
   },
   "author": "Nicholas Mercier <nicho.mercier@gmail.com>",
@@ -37,8 +38,8 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.0.54",
-    "@idealyst/theme": "^1.0.54",
+    "@idealyst/components": "^1.0.57",
+    "@idealyst/theme": "^1.0.57",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/drawer": "^7.0.0",
     "@react-navigation/native": "^7.0.0",

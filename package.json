@@ -1,7 +1,11 @@
 {
   "name": "idealyst-monorepo",
-  "version": "1.0.54",
+  "version": "1.0.57",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git"
+  },
   "workspaces": [
     "packages/*"
   ],

@@ -22,7 +22,10 @@ const convertScreenOptions = (screenOptions?: ScreenOptions) => {
 
     if (screenOptions.title) {
         options.title = screenOptions.title;
-        options.headerTitle = screenOptions.title;
+        // Set default headerTitle to title, but allow headerTitle to override
+        if (!screenOptions.headerTitle) {
+            options.headerTitle = screenOptions.title;
+        }
     }
 
     if (screenOptions.tabBarLabel) {
@@ -52,12 +55,17 @@ const convertScreenOptions = (screenOptions?: ScreenOptions) => {
         options.tabBarStyle = screenOptions.tabBarVisible ? {} : { display: 'none' };
     }
 
+    // headerTitle should override the default title in the header
     if (screenOptions.headerTitle) {
         options.headerTitle = screenOptions.headerTitle;
     }
 
     if (screenOptions.headerBackVisible !== undefined) {
         options.headerBackVisible = screenOptions.headerBackVisible;
+    }
+
+    if (screenOptions.headerLeft) {
+        options.headerLeft = screenOptions.headerLeft;
     }
 
     if (screenOptions.headerRight) {

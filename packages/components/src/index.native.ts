@@ -40,6 +40,9 @@ export * from './Dialog/types';
 export { default as Popover } from './Popover';
 export * from './Popover/types';
 
+export { default as Pressable } from './Pressable';
+export * from './Pressable/types';
+
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
@@ -54,6 +57,7 @@ export type { IconProps } from './Icon/types';
 export type { SVGImageProps } from './SVGImage/types';
 export type { DialogProps } from './Dialog/types';
 export type { PopoverProps } from './Popover/types';
+export type { PressableProps } from './Pressable/types';
 
 export { appThemes, breakpoints } from './theme';
 export type { AppThemes, AppBreakpoints } from './theme';

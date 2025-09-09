@@ -1,7 +1,8 @@
 {
   "name": "@idealyst/cli",
-  "version": "1.0.54",
+  "version": "1.0.57",
   "description": "CLI tool for generating Idealyst Framework projects",
+  "readme": "README.md",
   "main": "dist/index.js",
   "bin": {
     "idealyst": "dist/index.js",
@@ -9,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/idealyst-framework.git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
     "directory": "packages/cli"
   },
   "author": "Your Name <your.email@example.com>",

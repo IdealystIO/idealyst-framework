@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable as RNPressable } from 'react-native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import { PressableProps } from './types';
 
 const Pressable: React.FC<PressableProps> = ({
@@ -14,18 +14,19 @@ const Pressable: React.FC<PressableProps> = ({
   accessibilityRole,
 }) => {
   return (
-    <RNPressable
-      onPress={onPress}
-      onPressIn={onPressIn}
-      onPressOut={onPressOut}
+    <TouchableWithoutFeedback
+      onPress={disabled ? undefined : onPress}
+      onPressIn={disabled ? undefined : onPressIn}
+      onPressOut={disabled ? undefined : onPressOut}
       disabled={disabled}
-      style={style}
       testID={testID}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole={accessibilityRole}
     >
-      {children}
-    </RNPressable>
+      <View style={style}>
+        {children}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

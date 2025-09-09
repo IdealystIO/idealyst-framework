@@ -2,6 +2,9 @@
 
 A comprehensive, cross-platform component library for React and React Native applications. Built with TypeScript and powered by [react-native-unistyles](https://github.com/jpudysz/react-native-unistyles) for consistent styling across platforms.
 
+[![npm version](https://badge.fury.io/js/@idealyst%2Fcomponents.svg)](https://badge.fury.io/js/@idealyst%2Fcomponents)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Features
 
 - 🌐 **Cross-Platform**: Works seamlessly in React and React Native
@@ -15,7 +18,7 @@ A comprehensive, cross-platform component library for React and React Native app
 ## Installation
 
 ```bash
-# Using Yarn (recommended)
+# Using yarn (recommended)
 yarn add @idealyst/components
 
 # Using npm
@@ -33,8 +36,11 @@ yarn add react react-native-unistyles
 # For React Native projects
 yarn add react-native @react-native/normalize-colors react-native-edge-to-edge react-native-nitro-modules
 
-# For React/Web projects
+# For React/Web projects  
 yarn add react
+
+# For SVG support (optional)
+yarn add react-native-svg react-native-svg-transformer
 ```
 
 ## Quick Start
@@ -65,53 +71,53 @@ export default function App() {
 
 ## Available Components
 
-The library includes 14 core components organized by category. Each component has detailed documentation in its respective folder.
+The library includes 14 core components organized by category:
 
 ### Layout Components
 
-| Component | Description | Documentation |
-|-----------|-------------|---------------|
-| **[View](src/View/README.md)** | Flexible container with built-in spacing system | [View Docs](src/View/README.md) |
-| **[Screen](src/Screen/README.md)** | Full-screen container with safe area support | [Screen Docs](src/Screen/README.md) |
-| **[Divider](src/Divider/README.md)** | Separator for content sections | [Divider Docs](src/Divider/README.md) |
+| Component | Description | Key Props |
+|-----------|-------------|-----------|
+| **[View](src/View/README.md)** | Flexible container with built-in spacing system | `spacing`, `style` |
+| **[Screen](src/Screen/README.md)** | Full-screen container with safe area support | `background`, `safeArea`, `padding` |
+| **[Divider](src/Divider/README.md)** | Separator for content sections | `orientation`, `spacing`, `intent` |
 
 ### Typography
 
-| Component | Description | Documentation |
-|-----------|-------------|---------------|
-| **[Text](src/Text/README.md)** | Versatile text with extensive styling options | [Text Docs](src/Text/README.md) |
+| Component | Description | Key Props |
+|-----------|-------------|-----------|
+| **[Text](src/Text/README.md)** | Versatile text with extensive styling options | `size`, `weight`, `color`, `align`, `intent` |
 
 ### Form Components
 
-| Component | Description | Documentation |
-|-----------|-------------|---------------|
-| **[Button](src/Button/README.md)** | Customizable button with variants and intents | [Button Docs](src/Button/README.md) |
-| **[Input](src/Input/README.md)** | Text input with validation and styling | [Input Docs](src/Input/README.md) |
-| **[Checkbox](src/Checkbox/README.md)** | Checkbox with label support | [Checkbox Docs](src/Checkbox/README.md) |
+| Component | Description | Key Props |
+|-----------|-------------|-----------|
+| **[Button](src/Button/README.md)** | Customizable button with variants and intents | `variant`, `intent`, `size`, `onPress` |
+| **[Input](src/Input/README.md)** | Text input with validation and styling | `label`, `placeholder`, `error`, `onChangeText` |
+| **[Checkbox](src/Checkbox/README.md)** | Checkbox with label support | `checked`, `onCheckedChange`, `label` |
 
 ### Display Components
 
-| Component | Description | Documentation |
-|-----------|-------------|---------------|
-| **[Card](src/Card/README.md)** | Container for grouped content | [Card Docs](src/Card/README.md) |
-| **[Badge](src/Badge/README.md)** | Status indicators and count displays | [Badge Docs](src/Badge/README.md) |
-| **[Avatar](src/Avatar/README.md)** | User profile pictures with fallback | [Avatar Docs](src/Avatar/README.md) |
+| Component | Description | Key Props |
+|-----------|-------------|-----------|
+| **[Card](src/Card/README.md)** | Container for grouped content | `variant`, `padding`, `clickable`, `intent` |
+| **[Badge](src/Badge/README.md)** | Status indicators and count displays | `variant`, `color`, `size` |
+| **[Avatar](src/Avatar/README.md)** | User profile pictures with fallback | `src`, `fallback`, `size`, `shape` |
 
 ### Utility Components
 
-| Component | Description | Documentation |
-|-----------|-------------|---------------|
-| **[Icon](src/Icon/README.md)** | Icon library with extensive options | [Icon Docs](src/Icon/README.md) |
-| **[SVGImage](src/SVGImage/README.md)** | SVG rendering with cross-platform support | [SVGImage Docs](src/SVGImage/README.md) |
+| Component | Description | Key Props |
+|-----------|-------------|-----------|
+| **[Icon](src/Icon/README.md)** | Icon library with extensive options | `name`, `size`, `color`, `intent` |
+| **[SVGImage](src/SVGImage/README.md)** | SVG rendering with cross-platform support | `source`, `width`, `height`, `color`, `intent` |
 
 ### Overlay Components
 
-| Component | Description | Documentation |
-|-----------|-------------|--------------|
-| **[Dialog](src/Dialog/README.md)** | Modal dialogs with customizable content | [Dialog Docs](src/Dialog/README.md) |
-| **[Popover](src/Popover/README.md)** | Contextual overlays and tooltips | [Popover Docs](src/Popover/README.md) |
+| Component | Description | Key Props |
+|-----------|-------------|-----------|
+| **[Dialog](src/Dialog/README.md)** | Modal dialogs with customizable content | `open`, `onOpenChange`, `title`, `size` |
+| **[Popover](src/Popover/README.md)** | Contextual overlays and tooltips | `open`, `anchor`, `placement`, `content` |
 
-## Quick Usage Examples
+## Usage Examples
 
 ### Basic Layout
 ```tsx
@@ -143,26 +149,6 @@ import { View, Text, Input, Checkbox, Button } from '@idealyst/components';
 </View>
 ```
 
-### Card Grid
-```tsx
-import { View, Card, Text, Avatar, Badge } from '@idealyst/components';
-
-<View spacing="md">
-  {items.map(item => (
-    <Card key={item.id} clickable onPress={() => navigate(item)}>
-      <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Avatar src={item.avatar} fallback={item.initials} />
-        <View spacing="xs" style={{ flex: 1 }}>
-          <Text weight="bold">{item.title}</Text>
-          <Text size="small" color="secondary">{item.subtitle}</Text>
-        </View>
-        {item.badge && <Badge color="red">{item.badge}</Badge>}
-      </View>
-    </Card>
-  ))}
-</View>
-```
-
 ### SVG Icons
 ```tsx
 import { SVGImage, View, Text } from '@idealyst/components';
@@ -183,11 +169,47 @@ import LogoIcon from './assets/logo.svg';
 </View>
 ```
 
+### Card Grid
+```tsx
+import { View, Card, Text, Avatar, Badge } from '@idealyst/components';
+
+<View spacing="md">
+  {items.map(item => (
+    <Card key={item.id} clickable onPress={() => navigate(item)}>
+      <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Avatar src={item.avatar} fallback={item.initials} />
+        <View spacing="xs" style={{ flex: 1 }}>
+          <Text weight="bold">{item.title}</Text>
+          <Text size="small" color="secondary">{item.subtitle}</Text>
+        </View>
+        {item.badge && <Badge color="red">{item.badge}</Badge>}
+      </View>
+    </Card>
+  ))}
+</View>
+```
+
 ## Theme System
 
 The library includes a comprehensive theme system with light and dark mode support.
 
-### Default Themes
+### Intent System
+
+All components use a consistent intent-based color system:
+
+- `primary`: Main brand actions
+- `neutral`: Secondary actions  
+- `success`: Positive actions (save, confirm)
+- `error`: Destructive actions (delete, cancel)
+- `warning`: Caution actions
+
+```tsx
+<Button variant="contained" intent="primary">Primary Action</Button>
+<Button variant="contained" intent="success">Save</Button>
+<Button variant="contained" intent="error">Delete</Button>
+```
+
+### Theme Integration
 
 ```tsx
 import { appThemes } from '@idealyst/components';
@@ -196,322 +218,64 @@ import { appThemes } from '@idealyst/components';
 const { colors, spacing, typography } = appThemes.light;
 ```
 
-### Intent System
+## Platform Setup
 
-Components use an intent-based color system for consistent UX:
+### React Native Setup
 
-- **Primary**: Main brand actions
-- **Neutral**: Secondary actions
-- **Success**: Positive actions (save, confirm)
-- **Error**: Destructive actions (delete, cancel)
-- **Warning**: Caution actions
+1. **Install dependencies:**
+   ```bash
+   yarn add react-native-unistyles react-native-svg react-native-svg-transformer
+   ```
 
-### Color Palettes
+2. **Configure Metro bundler** (`metro.config.js`):
+   ```javascript
+   const config = {
+     transformer: {
+       babelTransformerPath: require.resolve('react-native-svg-transformer'),
+     },
+     resolver: {
+       sourceExts: ['js', 'jsx', 'ts', 'tsx', 'svg'],
+       assetExts: ['png', 'jpg', 'jpeg', 'gif', 'webp'],
+     },
+   };
+   ```
 
-The theme includes 8 comprehensive color palettes:
-- Blue (Primary)
-- Green (Success)
-- Red (Error)
-- Amber (Warning)
-- Gray (Neutral)
-- Cyan (Info)
-- Purple (Accent)
-- Pink (Accent)
+3. **iOS: Install pods:**
+   ```bash
+   cd ios && pod install
+   ```
 
-Each palette includes 10 shades (50-900) optimized for both light and dark themes.
+### Web Setup
 
-### Custom Styling
+For Vite projects, SVG imports work out of the box. For other bundlers, ensure SVG support is configured.
 
-Use the theme in your custom components:
+## TypeScript
 
-```tsx
-import { StyleSheet } from 'react-native';
-import { createStyleSheet } from 'react-native-unistyles';
-
-const styles = createStyleSheet((theme) => ({
-  container: {
-    backgroundColor: theme.colors.surface.primary,
-    padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.lg,
-  },
-  text: {
-    color: theme.colors.text.primary,
-    fontSize: theme.typography.fontSize.md,
-  },
-}));
-```
-
-## Platform-Specific Usage
-
-### React Native
+Full TypeScript support with comprehensive type definitions:
 
 ```tsx
-import React from 'react';
-import { Screen, View, Text, Button } from '@idealyst/components';
+import type { ButtonProps, TextProps, ViewProps } from '@idealyst/components';
 
-export default function App() {
-  return (
-    <Screen background="primary">
-      <View spacing="lg" style={{ flex: 1 }}>
-        <Text size="large" weight="bold">
-          React Native App
-        </Text>
-        <Button variant="contained" intent="primary">
-          Native Button
-        </Button>
-      </View>
-    </Screen>
-  );
-}
-```
-
-### React Web
-
-```tsx
-import React from 'react';
-import { Screen, View, Text, Button } from '@idealyst/components';
-
-export default function App() {
-  return (
-    <Screen background="primary">
-      <View spacing="lg">
-        <Text size="large" weight="bold">
-          Web App
-        </Text>
-        <Button variant="contained" intent="primary">
-          Web Button
-        </Button>
-      </View>
-    </Screen>
-  );
-}
-```
-
-## Examples
-
-Import pre-built examples to see components in action:
-
-```tsx
-import { ButtonExamples, TextExamples, ScreenExamples, AllExamples } from '@idealyst/components/examples';
-
-// Show all components
-<AllExamples />
-
-// Show specific component examples
-<ButtonExamples />
-<TextExamples />
-<ScreenExamples />
-```
-
-## TypeScript Support
-
-All components are fully typed with comprehensive TypeScript definitions:
-
-```tsx
-import { ButtonProps, TextProps, ViewProps, ScreenProps } from '@idealyst/components';
-
-// Use component prop types in your own components
-interface MyButtonProps extends ButtonProps {
-  customProp: string;
-}
-
-interface MyScreenProps extends ScreenProps {
-  customLayout: boolean;
-}
-```
-
-## Styling Guidelines
-
-### Component Styling Architecture
-
-This library follows a consistent approach to component styling using [react-native-unistyles](https://github.com/jpudysz/react-native-unistyles) with a variant-based system.
-
-#### 1. Style Precedence
-
-When both stylesheet variants and manual style props are provided, **manual styles take precedence**:
-
-```tsx
-// The backgroundColor in style will override the background variant
-<View 
-  background="primary"           // Sets background via variant
-  style={{ backgroundColor: 'red' }}  // This takes precedence
->
-  Content
-</View>
-```
-
-This allows for flexible overrides while maintaining the design system defaults.
-
-#### 2. Variants Over Manual Styles
-
-**All style-related props should be implemented as variants** in the stylesheet rather than direct style modifications. This ensures consistency, theme integration, and maintainability.
-
-✅ **Good - Using Variants:**
-```tsx
-// Component prop
-<Text color="primary" size="large" weight="bold">
-  Hello World
-</Text>
-
-// Stylesheet implementation
-const textStyles = StyleSheet.create((theme) => ({
-  text: {
-    variants: {
-      color: {
-        primary: { color: theme.colors.text.primary },
-        secondary: { color: theme.colors.text.secondary },
-        error: { color: theme.intents.error.main },
-      },
-      size: {
-        small: { fontSize: theme.typography.fontSize.sm },
-        large: { fontSize: theme.typography.fontSize.lg },
-      },
-      weight: {
-        bold: { fontWeight: theme.typography.fontWeight.bold },
-        normal: { fontWeight: theme.typography.fontWeight.regular },
-      }
-    }
-  }
-}));
-```
-
-❌ **Avoid - Direct Style Manipulation:**
-```tsx
-// Don't do this
-const Text = ({ color, size, style }) => {
-  const dynamicStyles = {
-    color: color === 'primary' ? '#007AFF' : '#666',
-    fontSize: size === 'large' ? 18 : 14,
-  };
-  
-  return <RNText style={[dynamicStyles, style]} />;
+const MyButton: React.FC<ButtonProps> = (props) => {
+  return <Button {...props} />;
 };
-```
-
-#### 3. Benefits of the Variant System
-
-- **Theme Integration**: Variants automatically use theme values
-- **Type Safety**: TypeScript can enforce valid variant values  
-- **Performance**: Styles are computed once, not on every render
-- **Consistency**: All components follow the same patterns
-- **Dark Mode**: Automatic theme switching without component changes
-
-#### 4. Style Override Pattern
-
-The recommended pattern for all components:
-
-```tsx
-const Component = ({ variant1, variant2, style, ...props }) => {
-  componentStyles.useVariants({
-    variant1,
-    variant2,
-  });
-
-  const styleArray = [
-    componentStyles.component,  // Base styles + variants
-    style,                     // Manual overrides (highest precedence)
-  ];
-
-  return <BaseComponent style={styleArray} {...props} />;
-};
-```
-
-#### 5. Creating New Variants
-
-When adding new style options to components:
-
-1. **Define the prop type** with specific allowed values
-2. **Add the variant** to the stylesheet  
-3. **Use theme values** where possible
-4. **Document the new prop** in the component's props section
-
-```tsx
-// 1. Type definition
-interface ButtonProps {
-  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
-}
-
-// 2. Stylesheet variant
-const buttonStyles = StyleSheet.create((theme) => ({
-  button: {
-    variants: {
-      radius: {
-        none: { borderRadius: 0 },
-        sm: { borderRadius: theme.borderRadius.sm },
-        md: { borderRadius: theme.borderRadius.md },
-        lg: { borderRadius: theme.borderRadius.lg },
-        full: { borderRadius: theme.borderRadius.full },
-      }
-    }
-  }
-}));
-
-// 3. Component implementation
-const Button = ({ radius = 'md', style, ...props }) => {
-  buttonStyles.useVariants({ radius });
-  return <Pressable style={[buttonStyles.button, style]} {...props} />;
-};
-```
-
-## Development
-
-### Building
-
-```bash
-# Build the library
-yarn build
-
-# Watch for changes during development
-yarn dev
-```
-
-### Project Structure
-
-```
-packages/components/
-├── src/
-│   ├── Avatar/           # Avatar component
-│   ├── Badge/            # Badge component
-│   ├── Button/           # Button component
-│   ├── Card/             # Card component
-│   ├── Checkbox/         # Checkbox component
-│   ├── Divider/          # Divider component
-│   ├── Input/            # Input component
-│   ├── Text/             # Text component
-│   ├── View/             # View component
-│   ├── examples/         # Component examples
-│   ├── theme/            # Theme system
-│   └── index.ts          # Main exports
-├── package.json
-└── README.md
 ```
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Add your component following the existing patterns
-4. Include examples and TypeScript definitions
-5. Submit a pull request
-
-### Component Structure
-
-Each component follows this structure:
-```
-ComponentName/
-├── ComponentName.web.tsx      # Web implementation
-├── ComponentName.native.tsx   # React Native implementation
-├── ComponentName.styles.tsx   # Shared styles
-├── types.ts                   # TypeScript definitions
-├── index.ts                   # Web export
-├── index.native.ts            # Native export
-└── index.web.ts               # Web export
-```
+We welcome contributions! Please see our [Contributing Guide](../../CONTRIBUTING.md) for details.
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT © [Idealyst](https://github.com/IdealystIO)
 
-## Support
+## Links
 
-For issues, questions, or contributions, please visit our [GitHub repository](https://github.com/your-org/idealyst-framework). 
+- [Documentation](https://github.com/IdealystIO/idealyst-framework/tree/main/packages/components)
+- [GitHub](https://github.com/IdealystIO/idealyst-framework)
+- [Issues](https://github.com/IdealystIO/idealyst-framework/issues)
+- [Changelog](https://github.com/IdealystIO/idealyst-framework/releases)
+
+---
+
+Built with ❤️ by the Idealyst team
