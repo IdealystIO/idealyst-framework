@@ -38,6 +38,7 @@ export default defineConfig({
       '@idealyst/theme': path.resolve(__dirname, '../../packages/theme/src'),
       '@idealyst/datagrid': path.resolve(__dirname, '../../packages/datagrid/src'),
       '@idealyst/datepicker': path.resolve(__dirname, '../../packages/datepicker/src'),
+      '@idealyst/storage': path.resolve(__dirname, '../../packages/storage/src'),
     },
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],

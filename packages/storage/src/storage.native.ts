@@ -1,76 +1,81 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MMKV } from 'react-native-mmkv';
 import { IStorage } from './types';
 
 class NativeStorage implements IStorage {
+  private storage = new MMKV();
+
   async getItem(key: string): Promise<string | null> {
     try {
-      return await AsyncStorage.getItem(key);
+      return this.storage.getString(key) || null;
     } catch (error) {
-      console.error('Error getting item from AsyncStorage:', error);
+      console.error('Error getting item from MMKV:', error);
       return null;
     }
   }
 
   async setItem(key: string, value: string): Promise<void> {
     try {
-      await AsyncStorage.setItem(key, value);
+      this.storage.set(key, value);
     } catch (error) {
-      console.error('Error setting item in AsyncStorage:', error);
+      console.error('Error setting item in MMKV:', error);
       throw error;
     }
   }
 
   async removeItem(key: string): Promise<void> {
     try {
-      await AsyncStorage.removeItem(key);
+      this.storage.delete(key);
     } catch (error) {
-      console.error('Error removing item from AsyncStorage:', error);
+      console.error('Error removing item from MMKV:', error);
       throw error;
     }
   }
 
   async clear(): Promise<void> {
     try {
-      await AsyncStorage.clear();
+      this.storage.clearAll();
     } catch (error) {
-      console.error('Error clearing AsyncStorage:', error);
+      console.error('Error clearing MMKV:', error);
       throw error;
     }
   }
 
   async getAllKeys(): Promise<string[]> {
     try {
-      return await AsyncStorage.getAllKeys();
+      return this.storage.getAllKeys();
     } catch (error) {
-      console.error('Error getting all keys from AsyncStorage:', error);
+      console.error('Error getting all keys from MMKV:', error);
       return [];
     }
   }
 
   async multiGet(keys: string[]): Promise<Array<[string, string | null]>> {
     try {
-      const results = await AsyncStorage.multiGet(keys);
-      return results as Array<[string, string | null]>;
+      return keys.map(key => [key, this.storage.getString(key) || null]);
     } catch (error) {
-      console.error('Error in multiGet from AsyncStorage:', error);
+      console.error('Error in multiGet from MMKV:', error);
       return keys.map(key => [key, null]);
     }
   }
 
   async multiSet(keyValuePairs: Array<[string, string]>): Promise<void> {
     try {
-      await AsyncStorage.multiSet(keyValuePairs);
+      keyValuePairs.forEach(([key, value]) => {
+        this.storage.set(key, value);
+      });
     } catch (error) {
-      console.error('Error in multiSet to AsyncStorage:', error);
+      console.error('Error in multiSet to MMKV:', error);
       throw error;
     }
   }
 
   async multiRemove(keys: string[]): Promise<void> {
     try {
-      await AsyncStorage.multiRemove(keys);
+      keys.forEach(key => {
+        this.storage.delete(key);
+      });
     } catch (error) {
-      console.error('Error in multiRemove from AsyncStorage:', error);
+      console.error('Error in multiRemove from MMKV:', error);
       throw error;
     }
   }

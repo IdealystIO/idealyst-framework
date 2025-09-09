@@ -1683,11 +1683,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@idealyst/components@npm:^1.0.41":
-  version: 1.0.41
-  resolution: "@idealyst/components@npm:1.0.41"
+"@idealyst/components@npm:^1.0.50":
+  version: 1.0.50
+  resolution: "@idealyst/components@npm:1.0.50"
   peerDependencies:
-    "@idealyst/theme": ^1.0.41
+    "@idealyst/theme": ^1.0.50
     "@mdi/js": ^7.4.47
     "@mdi/react": ^1.6.1
     "@react-native-vector-icons/common": ^12.0.1
@@ -1717,7 +1717,7 @@ __metadata:
       optional: true
     react-native-vector-icons:
       optional: true
-  checksum: 10/6179ecb9e199aca7d3510d36110d5a2604c22c9fb2628949d0ea62ba8077e9dbe1392a1302bb2c0f1e617c60378bdd699a0da609b253374da7289535a089db6e
+  checksum: 10/d7d101c6cf705aed802f8065e9bb7545a989971c3ccd2aa442cca9e1784a2cacd7f9d02586acf3a89ee01f7c5009260b03755cd0c3b730287bc655ada3a8b5c0
   languageName: node
   linkType: hard
 
@@ -1746,14 +1746,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@idealyst/datepicker@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@idealyst/datepicker@npm:1.0.0"
+"@idealyst/datepicker@npm:^1.0.41":
+  version: 1.0.41
+  resolution: "@idealyst/datepicker@npm:1.0.41"
   peerDependencies:
     "@idealyst/components": ^1.0.40
     "@idealyst/theme": ^1.0.40
     react: ">=16.8.0"
     react-native: ">=0.60.0"
+    react-native-svg: ">=13.0.0"
     react-native-unistyles: ^3.0.4
   peerDependenciesMeta:
     "@idealyst/components":
@@ -1762,18 +1763,20 @@ __metadata:
       optional: false
     react-native:
       optional: true
+    react-native-svg:
+      optional: true
     react-native-unistyles:
       optional: true
-  checksum: 10/fbe3bb01519699ec3f8d432ea316dbea120be968a6b40aab16b23ae79e4731efce70556a877428d5aca0378707a7b70be155c600df16b50b46ad7738b3cbb223
+  checksum: 10/c7aea475bd9f5bed4caae8cb6166bb64d03cfe3054753f3a077df97bf1a162e3cbba96aef741e5b4c171764ffb0153d9b310a75c2abe9bfef9dbeaf2c32afda6
   languageName: node
   linkType: hard
 
-"@idealyst/navigation@npm:^1.0.41":
-  version: 1.0.41
-  resolution: "@idealyst/navigation@npm:1.0.41"
+"@idealyst/navigation@npm:^1.0.50":
+  version: 1.0.50
+  resolution: "@idealyst/navigation@npm:1.0.50"
   peerDependencies:
-    "@idealyst/components": ^1.0.41
-    "@idealyst/theme": ^1.0.41
+    "@idealyst/components": ^1.0.50
+    "@idealyst/theme": ^1.0.50
     "@react-navigation/bottom-tabs": ^7.0.0
     "@react-navigation/drawer": ^7.0.0
     "@react-navigation/native": ^7.0.0
@@ -1787,19 +1790,35 @@ __metadata:
     react-native-unistyles: ^3.0.10
     react-router: ^7.6.3
     react-router-dom: ^7.6.3
-  checksum: 10/e86073af5bf6a584a65c9c93283f6a78253cf709d7f935d720bc3c99cdbae3720292e5ab0d737ca9158e9163d369e5ab105f1733e8df621d29a946c2e702f3a8
+  checksum: 10/5aade25f9020cd01dde005562995e44d3d16210bd823d20b0f6662c9ab727599853bbd3ec1789edccdd4f135d93f7bf0bf22c02328a660b60292d15ccca7a466
   languageName: node
   linkType: hard
 
-"@idealyst/theme@npm:^1.0.41":
-  version: 1.0.41
-  resolution: "@idealyst/theme@npm:1.0.41"
+"@idealyst/storage@npm:^1.0.50":
+  version: 1.0.50
+  resolution: "@idealyst/storage@npm:1.0.50"
+  peerDependencies:
+    "@react-native-async-storage/async-storage": ">=1.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+  peerDependenciesMeta:
+    "@react-native-async-storage/async-storage":
+      optional: true
+    react-native:
+      optional: true
+  checksum: 10/8bf2f13c78cf1f4f125961b3dcc13c732205bb43c6a1239b6875e07df0ce0b72f30f255bf3e1c18b1d8f618828618cff93e4c67299bfad9a09cf522784625797
+  languageName: node
+  linkType: hard
+
+"@idealyst/theme@npm:^1.0.50":
+  version: 1.0.50
+  resolution: "@idealyst/theme@npm:1.0.50"
   peerDependencies:
     react-native-unistyles: ^3.0.4
   peerDependenciesMeta:
     react-native-unistyles:
       optional: true
-  checksum: 10/7539a0cd4d0f811bc368124cfb4eff63a55529f7328a46b26356509aa5d848f4ecfa6bf295be56b81f5389f7e3ce25ad02d4102f20ef647034cbf2fe2635caba
+  checksum: 10/504333d4464085ee81dfb7fe88705c5e07b9896d061a5d12dfdd50cbe9ff9bba9c8c17cea1f949c2dd5abbac460ade39cd6da0da435fbb0227da37845d2cde72
   languageName: node
   linkType: hard
 
@@ -3227,11 +3246,12 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.27.6"
-    "@idealyst/components": "npm:^1.0.41"
+    "@idealyst/components": "npm:^1.0.50"
     "@idealyst/datagrid": "npm:^1.0.41"
-    "@idealyst/datepicker": "npm:^1.0.0"
-    "@idealyst/navigation": "npm:^1.0.41"
-    "@idealyst/theme": "npm:^1.0.41"
+    "@idealyst/datepicker": "npm:^1.0.41"
+    "@idealyst/navigation": "npm:^1.0.50"
+    "@idealyst/storage": "npm:^1.0.50"
+    "@idealyst/theme": "npm:^1.0.50"
     "@react-native-community/cli": "npm:19.0.0"
     "@react-native-community/cli-platform-android": "npm:19.0.0"
     "@react-native-community/cli-platform-ios": "npm:19.0.0"
@@ -3260,6 +3280,7 @@ __metadata:
     react-native: "npm:0.80.1"
     react-native-edge-to-edge: "npm:^1.6.2"
     react-native-gesture-handler: "npm:^2.27.1"
+    react-native-mmkv: "npm:^3.3.1"
     react-native-nitro-modules: "npm:0.28.0"
     react-native-reanimated: "npm:^3.18.0"
     react-native-safe-area-context: "npm:^5.5.1"
@@ -8466,6 +8487,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/8fb6d8ab7b953c7d7cec8c987cef24f1c5348a293a85cb49c7c53b54ef110c0ca746736ae730e297603c8c76020df912e93915fb17518c4f2f91143757177aba
+  languageName: node
+  linkType: hard
+
+"react-native-mmkv@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "react-native-mmkv@npm:3.3.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/830c2c6271125a7b9f8f473485cc66d44d0cc592ccd9978f98e3ee0e7081b1d53b94b42736381bfe369dc5132eda4540bfb6d1c4102e7f6a782fd8a7e257af7d
   languageName: node
   linkType: hard
 

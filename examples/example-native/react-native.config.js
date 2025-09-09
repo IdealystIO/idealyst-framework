@@ -16,6 +16,9 @@ module.exports = {
     '@idealyst/theme': {
       root: path.join(__dirname, '../theme'),
     },
+    '@idealyst/storage': {
+      root: path.join(__dirname, '../storage'),
+    },
   },
   // Additional configuration for workspace
   watchFolders: [
