@@ -25,7 +25,19 @@ export default defineConfig({
       }
     }),
     // Then process everything else with React plugin
-    react(),
+    react({
+      babel: {
+        plugins: [
+          ['react-native-unistyles/plugin', {
+            root: 'src',
+            autoProcessPaths: ['@idealyst/components', '@idealyst/navigation', '@idealyst/theme'],
+            debug: true,
+            processOnlyProduction: false,
+            extensions: ['.tsx', '.ts', '.jsx', '.js'],
+          }],
+        ]
+      }
+    }),
   ],
   resolve: {
     alias: {
@@ -59,8 +71,16 @@ export default defineConfig({
       '@idealyst/components',
       '@idealyst/navigation', 
       '@idealyst/theme',
-      '@testproject/shared',
+      '@{{workspaceScope}}/shared',
     ],
+    esbuildOptions: {
+      loader: {
+        '.tsx': 'tsx',
+        '.ts': 'ts',
+        '.jsx': 'jsx',
+        '.js': 'jsx' // Important: treat .js files as JSX for React Native compatibility
+      }
+    }
   },
   server: {
     host: '0.0.0.0',
