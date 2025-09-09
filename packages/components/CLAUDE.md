@@ -5,7 +5,7 @@ This file provides comprehensive component documentation for LLMs working with t
 ## Library Overview
 
 @idealyst/components is a cross-platform React/React Native component library with:
-- 13 core components organized into 6 categories
+- 14 core components organized into 7 categories
 - Theme-based styling with Unistyles
 - Intent-based color system (primary, neutral, success, error, warning)
 - Cross-platform compatibility (React & React Native)
@@ -33,6 +33,7 @@ This file provides comprehensive component documentation for LLMs working with t
 
 ### Utility Components
 - **Icon**: Icon display (`name`, `size`, `color`, `intent`)
+- **SVGImage**: SVG rendering (`source`, `width`, `height`, `size`, `color`, `intent`)
 
 ### Overlay Components
 - **Dialog**: Modal dialog (`open`, `onOpenChange`, `title`, `size="small|medium|large"`, `variant="default"`, `showCloseButton`, `closeOnBackdropClick`, `closeOnEscapeKey`)
@@ -65,6 +66,14 @@ All components use a consistent intent-based color system:
   <Input label="Email" value={email} onChangeText={setEmail} />
   <Button variant="contained" intent="primary" onPress={submit}>Submit</Button>
 </View>
+```
+
+### SVG Usage
+```tsx
+import MyIcon from './assets/icon.svg';
+
+<SVGImage source={MyIcon} size={24} intent="primary" />
+<SVGImage source={{ uri: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/react.svg" }} size={32} color="#61dafb" />
 ```
 
 ### Card with Content

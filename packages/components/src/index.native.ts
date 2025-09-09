@@ -31,6 +31,9 @@ export * from './Screen/types';
 export { default as Icon } from './Icon';
 export * from './Icon/types';
 
+export { default as SVGImage } from './SVGImage';
+export * from './SVGImage/types';
+
 export { default as Dialog } from './Dialog';
 export * from './Dialog/types';
 
@@ -48,6 +51,7 @@ export type { BadgeProps } from './Badge/types';
 export type { AvatarProps } from './Avatar/types';
 export type { ScreenProps } from './Screen/types';
 export type { IconProps } from './Icon/types';
+export type { SVGImageProps } from './SVGImage/types';
 export type { DialogProps } from './Dialog/types';
 export type { PopoverProps } from './Popover/types';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonExamples, CardExamples, IconExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { ButtonExamples, CardExamples, IconExamples, SVGImageExamples, ThemeExtensionExamples } from "../../../components/src/examples";
 import { Screen, Text, View, Button, Icon } from "../../../components/src";
 import { UnistylesRuntime } from 'react-native-unistyles';
 import { RouteParam } from '../routing';
@@ -112,6 +112,11 @@ const ComponentsTabScreen = () => (
             <View spacing="md">
                 <Text size="medium" weight="semibold">Icon Examples</Text>
                 <IconExamples />
+            </View>
+            
+            <View spacing="md">
+                <Text size="medium" weight="semibold">SVG Image Examples</Text>
+                <SVGImageExamples />
             </View>
         </View>
     </Screen>

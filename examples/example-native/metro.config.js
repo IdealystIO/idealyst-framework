@@ -5,12 +5,16 @@ const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro
 
 const config = {
   projectRoot: __dirname,
+  transformer: {
+    babelTransformerPath: require.resolve('react-native-svg-transformer'),
+  },
   resolver: {
     nodeModulesPaths: [
       path.resolve(__dirname, 'node_modules'),
     ],
     // Important for Idealyst to use .native extensions for React Native (eg: @idealyst/components/src/Button/Button.native.tsx)
-    sourceExts: ['native.tsx', 'native.ts', 'tsx', 'ts', 'native.jsx', 'native.js', 'jsx', 'js', 'json'],
+    sourceExts: ['native.tsx', 'native.ts', 'tsx', 'ts', 'native.jsx', 'native.js', 'jsx', 'js', 'json', 'svg'],
+    assetExts: ['png', 'jpg', 'jpeg', 'gif', 'webp'],
   },
   watchFolders: [
     // This is for debug purposes only - Babel should be updated to alias the packages to get live

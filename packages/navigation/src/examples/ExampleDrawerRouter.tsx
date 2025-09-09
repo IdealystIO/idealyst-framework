@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
 import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Screen, Text, View, Button } from "../../../components/src";
@@ -131,6 +131,12 @@ const IconDrawerScreen = () => (
     </Screen>
 );
 
+const SVGImageDrawerScreen = () => (
+    <Screen>
+        <SVGImageExamples />
+    </Screen>
+);
+
 const DialogDrawerScreen = () => (
     <Screen>
         <DialogExamples />
@@ -178,6 +184,7 @@ const DrawerRouter: RouteParam = {
         { path: "text", component: TextDrawerScreen },
         { path: "view", component: ViewDrawerScreen },
         { path: "icon", component: IconDrawerScreen },
+        { path: "svg-image", component: SVGImageDrawerScreen },
         { path: "dialog", component: DialogDrawerScreen },
         { path: "popover", component: PopoverDrawerScreen },
         { path: "datagrid", component: DataGridDrawerScreen },

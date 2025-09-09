@@ -65,7 +65,7 @@ export default function App() {
 
 ## Available Components
 
-The library includes 10 core components organized by category. Each component has detailed documentation in its respective folder.
+The library includes 14 core components organized by category. Each component has detailed documentation in its respective folder.
 
 ### Layout Components
 
@@ -102,6 +102,14 @@ The library includes 10 core components organized by category. Each component ha
 | Component | Description | Documentation |
 |-----------|-------------|---------------|
 | **[Icon](src/Icon/README.md)** | Icon library with extensive options | [Icon Docs](src/Icon/README.md) |
+| **[SVGImage](src/SVGImage/README.md)** | SVG rendering with cross-platform support | [SVGImage Docs](src/SVGImage/README.md) |
+
+### Overlay Components
+
+| Component | Description | Documentation |
+|-----------|-------------|--------------|
+| **[Dialog](src/Dialog/README.md)** | Modal dialogs with customizable content | [Dialog Docs](src/Dialog/README.md) |
+| **[Popover](src/Popover/README.md)** | Contextual overlays and tooltips | [Popover Docs](src/Popover/README.md) |
 
 ## Quick Usage Examples
 
@@ -152,6 +160,26 @@ import { View, Card, Text, Avatar, Badge } from '@idealyst/components';
       </View>
     </Card>
   ))}
+</View>
+```
+
+### SVG Icons
+```tsx
+import { SVGImage, View, Text } from '@idealyst/components';
+import LogoIcon from './assets/logo.svg';
+
+<View spacing="md">
+  <Text size="large" weight="bold">My App</Text>
+  
+  {/* Imported SVG */}
+  <SVGImage source={LogoIcon} size={40} intent="primary" />
+  
+  {/* Remote SVG */}
+  <SVGImage 
+    source={{ uri: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/react.svg" }}
+    size={24}
+    color="#61dafb"
+  />
 </View>
 ```
 

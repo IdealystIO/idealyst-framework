@@ -1,9 +1,10 @@
-import { createTRPCReact } from '@trpc/react-query';
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from '@{{workspaceScope}}/api';
+import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
+import { createTRPCReact } from "@trpc/react-query";
+import type { AppRouter } from "@{{workspaceScope}}/api";
 
 // Create the tRPC React hooks with full type safety
-export const trpc = createTRPCReact<AppRouter>();
+export const trpc: ReturnType<typeof createTRPCReact<AppRouter>> =
+  createTRPCReact<AppRouter>();
 
 // Configuration for tRPC client
 export interface TRPCClientConfig {
@@ -12,7 +13,9 @@ export interface TRPCClientConfig {
 }
 
 // Create tRPC client factory
-export function createTRPCClient(config: TRPCClientConfig) {
+export function createTRPCClient(
+  config: TRPCClientConfig
+): ReturnType<typeof trpc.createClient> {
   return trpc.createClient({
     links: [
       httpBatchLink({
@@ -24,7 +27,9 @@ export function createTRPCClient(config: TRPCClientConfig) {
 }
 
 // Create a vanilla client (for use outside of React components)
-export function createVanillaTRPCClient(config: TRPCClientConfig) {
+export function createVanillaTRPCClient(
+  config: TRPCClientConfig
+): ReturnType<typeof createTRPCProxyClient<AppRouter>> {
   return createTRPCProxyClient<AppRouter>({
     links: [
       httpBatchLink({
@@ -36,4 +41,4 @@ export function createVanillaTRPCClient(config: TRPCClientConfig) {
 }
 
 // Export types
-export type { AppRouter } from '@{{workspaceScope}}/api';
+export type { AppRouter } from "@{{workspaceScope}}/api";

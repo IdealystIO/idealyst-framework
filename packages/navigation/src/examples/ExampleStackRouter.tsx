@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
 import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Button, Divider, Screen, Text, View } from "../../../components/src";
@@ -283,6 +283,7 @@ const StackRouter: RouteParam = {
         { path: "view", component: ViewExamples},
         { path: "screen", component: ScreenExamples},
         { path: "icon", component: IconExamples},
+        { path: "svg-image", component: SVGImageExamples},
         { path: "dialog", component: DialogExamples},
         { path: "popover", component: PopoverExamples},
         { path: "datagrid", component: DataGridShowcase},

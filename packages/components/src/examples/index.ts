@@ -9,6 +9,7 @@ export { DividerExamples } from './DividerExamples';
 export { BadgeExamples } from './BadgeExamples';
 export { AvatarExamples } from './AvatarExamples';
 export { ScreenExamples } from './ScreenExamples';
+export { SVGImageExamples } from './SVGImageExamples';
 export { DialogExamples } from './DialogExamples';
 export { PopoverExamples } from './PopoverExamples';
 export { ThemeExtensionExamples } from './ThemeExtensionExamples';
