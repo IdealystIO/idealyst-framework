@@ -14,3 +14,7 @@ export type { DateRangePickerProps, RangeCalendarProps, DateRange } from './Date
 export { DateTimeRangePicker } from './DateTimeRangePicker/index.native';
 export type { DateTimeRangePickerProps, DateTimeRange } from './DateTimeRangePicker';
 
+// Date Input Component
+export { DateInput } from './DateInput/index.native';
+export type { DateInputProps } from './DateInput';
+

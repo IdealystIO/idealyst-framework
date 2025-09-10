@@ -8,7 +8,6 @@ export const popoverStyles = StyleSheet.create((theme) => ({
     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
     transition: 'opacity 150ms ease-out, transform 150ms ease-out',
     transformOrigin: 'center center',
-    maxWidth: 320,
   },
   
   content: {

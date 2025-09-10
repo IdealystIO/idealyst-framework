@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Button } from '@idealyst/components';
+import { View, Button } from '@idealyst/components';
 import { DateTimeRangePickerProps, DateTimeRange } from './types';
 import { dateTimeRangePickerStyles } from './DateTimeRangePicker.styles';
 import { timePickerStyles } from '../DateTimePicker/TimePicker.styles';
@@ -122,40 +122,6 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
     }
   }, [value, onChange]);
 
-  const formatSelectedRange = () => {
-    if (!value?.startDate) return 'No date range selected';
-    
-    const startStr = value.startDate.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    });
-    
-    const startTimeStr = value.startDate.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: timeMode === '12h' 
-    });
-    
-    if (!value.endDate) {
-      return `${startStr} at ${startTimeStr} - (end date not selected)`;
-    }
-    
-    const endStr = value.endDate.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    });
-    
-    const endTimeStr = value.endDate.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: timeMode === '12h' 
-    });
-    
-    return `${startStr} ${startTimeStr} - ${endStr} ${endTimeStr}`;
-  };
-
   // Initialize styles
   timePickerStyles.useVariants({});
 
@@ -163,14 +129,6 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
   if (viewMode === 'responsive' && shouldUseSideBySide) {
     return (
       <View style={[dateTimeRangePickerStyles.container, style]} testID={testID} data-testid={testID}>
-        {/* Selected Range Header */}
-        <View style={dateTimeRangePickerStyles.selectedRangeHeader}>
-          <Text style={dateTimeRangePickerStyles.selectedRangeLabel}>Selected Date & Time Range</Text>
-          <Text style={dateTimeRangePickerStyles.selectedRangeValue}>
-            {formatSelectedRange()}
-          </Text>
-        </View>
-
         {/* Side by side layout */}
         <View style={{ 
           flexDirection: 'row', 
@@ -257,18 +215,6 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
 
   return (
     <View style={[dateTimeRangePickerStyles.container, style]} testID={testID} data-testid={testID}>
-      {/* Selected Range Header */}
-      <View style={dateTimeRangePickerStyles.selectedRangeHeader}>
-        <Text style={dateTimeRangePickerStyles.selectedRangeLabel}>
-          {isDateStep ? 'Select Date Range' : 
-           isStartTimeStep ? 'Set Start Time' : 
-           isEndTimeStep ? 'Set End Time' : 'Selected Date & Time Range'}
-        </Text>
-        <Text style={dateTimeRangePickerStyles.selectedRangeValue}>
-          {formatSelectedRange()}
-        </Text>
-      </View>
-
       {/* Step Navigation */}
       <View style={timePickerStyles.tabBar}>
         <Button

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Button } from '@idealyst/components';
+import { View, Button } from '@idealyst/components';
 import { DateTimePickerProps } from './types';
 import { dateTimePickerStyles } from './DateTimePicker.styles';
 import { getDimensions, addEventListener } from './utils/dimensions';
@@ -90,37 +90,10 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
     }
   }, [value, onChange]);
 
-  const formatSelectedDateTime = () => {
-    if (!value) return 'No date/time selected';
-    
-    const dateStr = value.toLocaleDateString('en-US', { 
-      weekday: 'short',
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    });
-    
-    const timeStr = value.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: timeMode === '12h' 
-    });
-    
-    return `${dateStr} at ${timeStr}`;
-  };
-
   // Side-by-side layout for larger screens
   if (viewMode === 'responsive' && shouldUseSideBySide) {
     return (
       <View style={[dateTimePickerStyles.container, style]} testID={testID} data-testid={testID}>
-        {/* Selected DateTime Header */}
-        <View style={dateTimePickerStyles.selectedDateTimeHeader}>
-          <Text style={dateTimePickerStyles.selectedDateTimeLabel}>Selected Date & Time</Text>
-          <Text style={dateTimePickerStyles.selectedDateTimeValue}>
-            {formatSelectedDateTime()}
-          </Text>
-        </View>
-
         {/* Side by side layout */}
         <View style={{ 
           flexDirection: 'row', 
@@ -159,16 +132,6 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
 
   return (
     <View style={[dateTimePickerStyles.container, style]} testID={testID} data-testid={testID}>
-      {/* Selected DateTime Header */}
-      <View style={dateTimePickerStyles.selectedDateTimeHeader}>
-        <Text style={dateTimePickerStyles.selectedDateTimeLabel}>
-          {isDateStep ? 'Select Date' : isTimeStep ? 'Select Time' : 'Selected Date & Time'}
-        </Text>
-        <Text style={dateTimePickerStyles.selectedDateTimeValue}>
-          {formatSelectedDateTime()}
-        </Text>
-      </View>
-
       {/* Step Navigation */}
       <View style={{
         flexDirection: 'row',
