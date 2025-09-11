@@ -463,6 +463,7 @@ export async function mergePackageJsonDependencies(templatePath: string, project
       'react-native-reanimated': '^3.18.0',
       'react-native-safe-area-context': '^5.5.1',
       'react-native-screens': '^4.11.1',
+      'react-native-svg': '^15.8.0',
       'react-native-unistyles': '^3.0.4',
       'react-native-vector-icons': '^10.2.0'
     };
