@@ -1,13 +1,13 @@
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
-import { ExampleTabRouter } from '@idealyst/navigation/examples';
+import { ExampleHybridRouter, ExampleTabRouter } from '@idealyst/navigation/examples';
 import { NavigatorProvider } from '@idealyst/navigation';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <NavigatorProvider route={ExampleTabRouter} />
+        <NavigatorProvider route={ExampleHybridRouter} />
       </BrowserRouter>
     </div>
   );  

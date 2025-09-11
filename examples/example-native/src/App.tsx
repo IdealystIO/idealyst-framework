@@ -27,7 +27,7 @@ function App() {
   }, []);
   return (
     <SafeAreaProvider>
-      <NavigatorProvider route={ExampleTabRouter} />
+      <NavigatorProvider route={ExampleHybridRouter} />
     </SafeAreaProvider>
   );
 }

@@ -1,6 +1,5 @@
 import React, { createContext, memo, useContext, useMemo } from 'react';
 import { NavigateParams, NavigatorProviderProps } from './types';
-import { useNavigate } from "react-router-dom";
 import { buildNavigator } from '../routing';
 
 const NavigatorContext = createContext<{
@@ -12,16 +11,24 @@ const NavigatorContext = createContext<{
 export const NavigatorProvider = ({ 
     route,
 }: NavigatorProviderProps) => {
-    const routerNavigate = useNavigate();
-    
     const navigateFunction = (params: NavigateParams) => {
         if (params.path) {
-            routerNavigate(params.path);
+            // Normalize path - convert empty string to '/'
+            let path = params.path
+            if (path === '' || path === '/') {
+                path = '/'
+            } else if (!path.startsWith('/')) {
+                path = `/${path}`
+            }
+            
+            // Use HTML5 history API for proper navigation without hash
+            window.history.pushState({}, '', path);
+            // Trigger a popstate event to update any listening components
+            window.dispatchEvent(new PopStateEvent('popstate'));
         }
     };
     
     const RouteComponent = useMemo(() => {
-        console.log('RouteComponent build', buildNavigator(route));
         // Memoize the router to prevent unnecessary re-renders
         return memo(buildNavigator(route));
     }, [route]);
