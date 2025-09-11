@@ -7,6 +7,20 @@ import validatePackageName from 'validate-npm-package-name';
 import inquirer from 'inquirer';
 import { TemplateData } from '../types';
 
+/**
+ * Get the current CLI version from package.json
+ */
+function getCurrentVersion(): string {
+  try {
+    const packageJsonPath = path.join(__dirname, '../../package.json');
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    return packageJson.version;
+  } catch (error) {
+    console.warn('Could not read CLI version, using fallback');
+    return '1.0.67'; // Fallback version
+  }
+}
+
 export function validateProjectName(name: string): boolean {
   // Use npm validation as base but add our own restrictions
   const npmValidation = validatePackageName(name);
@@ -128,6 +142,7 @@ export async function processTemplateFile(filePath: string, data: TemplateData):
     content = content.replace(/\{\{packageName\}\}/g, data.packageName);
     content = content.replace(/\{\{version\}\}/g, data.version);
     content = content.replace(/\{\{description\}\}/g, data.description);
+    content = content.replace(/\{\{idealystVersion\}\}/g, data.idealystVersion);
     
     // Handle appName (with fallback to projectName if not provided)
     const appName = data.appName || data.projectName;
@@ -210,13 +225,16 @@ export function getTemplateData(projectName: string, description?: string, appNa
     packageName = `@${workspaceScope}/${packageName}`;
   }
   
+  const currentVersion = getCurrentVersion();
+  
   return {
     projectName,
     packageName,
-    version: '1.0.0',
+    version: currentVersion,
     description: description || `A new Idealyst project: ${projectName}`,
     appName,
-    workspaceScope
+    workspaceScope,
+    idealystVersion: currentVersion
   };
 }
 
@@ -406,7 +424,7 @@ export async function overlayIdealystFiles(templatePath: string, projectPath: st
     await processTemplateFiles(projectPath, data);
     
     // Merge package.json dependencies
-    await mergePackageJsonDependencies(templatePath, projectPath);
+    await mergePackageJsonDependencies(templatePath, projectPath, data);
     
     spinner.succeed('Idealyst Framework files applied successfully');
   } catch (error) {
@@ -415,7 +433,7 @@ export async function overlayIdealystFiles(templatePath: string, projectPath: st
   }
 }
 
-export async function mergePackageJsonDependencies(templatePath: string, projectPath: string): Promise<void> {
+export async function mergePackageJsonDependencies(templatePath: string, projectPath: string, data: TemplateData): Promise<void> {
   const templatePackageJsonPath = path.join(templatePath, 'package.json');
   const projectPackageJsonPath = path.join(projectPath, 'package.json');
   
@@ -424,11 +442,11 @@ export async function mergePackageJsonDependencies(templatePath: string, project
     const templatePackageJson = await fs.readJSON(templatePackageJsonPath);
     const projectPackageJson = await fs.readJSON(projectPackageJsonPath);
     
-    // Merge dependencies
+    // Merge dependencies with current version
     const idealystDependencies = {
-      '@idealyst/components': '^1.0.3',
-      '@idealyst/navigation': '^1.0.3',
-      '@idealyst/theme': '^1.0.3',
+      [`@idealyst/components`]: `^${data.idealystVersion}`,
+      [`@idealyst/navigation`]: `^${data.idealystVersion}`,
+      [`@idealyst/theme`]: `^${data.idealystVersion}`,
       '@react-native-vector-icons/common': '^12.0.1',
       '@react-native-vector-icons/material-design-icons': '^12.0.1',
       '@react-navigation/bottom-tabs': '^7.4.2',

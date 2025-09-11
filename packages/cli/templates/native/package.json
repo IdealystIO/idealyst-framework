@@ -13,9 +13,9 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@idealyst/components": "^1.0.21",
-    "@idealyst/navigation": "^1.0.21",
-    "@idealyst/theme": "^1.0.21",
+    "@idealyst/components": "^{{idealystVersion}}",
+    "@idealyst/navigation": "^{{idealystVersion}}",
+    "@idealyst/theme": "^{{idealystVersion}}",
     "@tanstack/react-query": "^5.83.0",
     "@trpc/client": "^11.5.1",
     "@trpc/react-query": "^11.5.1",

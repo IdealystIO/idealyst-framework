@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <NavigatorProvider route={ExampleHybridRouter} />
+        <NavigatorProvider route={ExampleTabRouter} />
       </BrowserRouter>
     </div>
   );  

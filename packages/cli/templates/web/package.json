@@ -13,9 +13,9 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@idealyst/components": "^1.0.3",
-    "@idealyst/navigation": "^1.0.3",
-    "@idealyst/theme": "^1.0.3",
+    "@idealyst/components": "^{{idealystVersion}}",
+    "@idealyst/navigation": "^{{idealystVersion}}",
+    "@idealyst/theme": "^{{idealystVersion}}",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@react-native/normalize-colors": "^0.80.1",

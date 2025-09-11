@@ -15,10 +15,7 @@ export type TabBarScreenOptions = {
     /**
      * Icon component for tab/drawer navigation (React.ComponentType, React.ReactElement, function, or string)
      */
-    tabBarIcon?: React.ComponentType<{ focused: boolean; color: string; size: number }> 
-                | React.ReactElement 
-                | ((props: { focused: boolean; color: string; size: string }) => React.ReactElement)
-                | string;
+    tabBarIcon?: ((props: { focused: boolean; color: string; size: string | number }) => React.ReactElement)
     
     /**
      * Label for tab/drawer navigation

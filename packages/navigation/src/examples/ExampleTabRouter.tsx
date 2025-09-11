@@ -5,6 +5,7 @@ import { UnistylesRuntime } from 'react-native-unistyles';
 import { NavigatorParam, RouteParam } from '../routing';
 import { useNavigator } from '../context';
 import { getNextTheme, getThemeDisplayName, isHighContrastTheme } from './unistyles';
+import CustomTabLayout from './CustomTabLayout';
 
 const HomeTabScreen = () => {
     const navigator = useNavigator();
@@ -195,6 +196,7 @@ const ThemeTabScreen = () => (
 const TabRouter: NavigatorParam = {
     path: "/",
     layout: 'tab',
+    layoutComponent: CustomTabLayout,
     routes: [
         {
             path: '/',

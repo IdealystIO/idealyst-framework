@@ -17,4 +17,5 @@ export interface TemplateData {
   description: string;
   appName?: string; // For native projects
   workspaceScope?: string; // For workspace-scoped packages
+  idealystVersion: string; // Current version of Idealyst packages
 } 

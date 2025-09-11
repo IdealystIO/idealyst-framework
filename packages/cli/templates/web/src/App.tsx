@@ -1,15 +1,14 @@
 import { BrowserRouter } from 'react-router-dom';
-import { NavigatorProvider } from '@idealyst/navigation';
-import { AppRouter } from '{{workspaceScope}}/shared';
+import { App } from '@{{workspaceScope}}/shared';
 
-function App() {
+function WebApp() {
   return (
     <div className="App">
       <BrowserRouter>
-        <NavigatorProvider route={AppRouter} />
+        <App />
       </BrowserRouter>
     </div>
   );  
 }
 
-export default App; 
+export default WebApp; 

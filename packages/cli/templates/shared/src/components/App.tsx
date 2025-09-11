@@ -1,16 +1,13 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { NavigatorProvider } from '@idealyst/navigation';
 import { trpc, createTRPCClient } from '../trpc/client';
-import { HelloWorld } from './HelloWorld';
+import AppRouter from '../navigation/AppRouter';
 
 interface AppProps {
   apiUrl?: string;
   queryClient?: QueryClient;
   headers?: () => Record<string, string>;
-  // HelloWorld component props
-  name?: string;
-  platform?: "web" | "mobile";
-  projectName?: string;
 }
 
 // Default query client instance
@@ -24,16 +21,13 @@ const defaultQueryClient = new QueryClient({
 });
 
 /**
- * Unified App component that sets up tRPC and React Query providers
- * and includes the HelloWorld component directly
+ * Unified App component that sets up tRPC, React Query providers, and Navigation
+ * This component can be used by both web and mobile platforms
  */
 export const App: React.FC<AppProps> = ({ 
   apiUrl = 'http://localhost:3000/trpc',
   queryClient = defaultQueryClient,
-  headers,
-  name,
-  platform = "web",
-  projectName
+  headers
 }) => {
   // Create tRPC client with the provided configuration
   const trpcClient = createTRPCClient({
@@ -44,11 +38,7 @@ export const App: React.FC<AppProps> = ({
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <HelloWorld 
-          name={name}
-          platform={platform}
-          projectName={projectName}
-        />
+        <NavigatorProvider route={AppRouter} />
       </QueryClientProvider>
     </trpc.Provider>
   );

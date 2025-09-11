@@ -1,11 +1,8 @@
 import React from 'react';
-import { NavigatorProvider } from '@idealyst/navigation';
-import { AppRouter } from '{{workspaceScope}}/shared';
+import { App } from '@{{workspaceScope}}/shared';
 
-function App() {
-  return (
-    <NavigatorProvider route={AppRouter} />
-  );
+function NativeApp() {
+  return <App />;
 }
 
-export default App;
+export default NativeApp;

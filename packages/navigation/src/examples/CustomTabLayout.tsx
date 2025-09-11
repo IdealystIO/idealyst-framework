@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, View, Text } from "@idealyst/components";
-import { TabLayoutProps } from "src/routing";
+import { Button, View, Text, Pressable } from "@idealyst/components";
+import { RouteParam, TabBarScreenOptions, TabLayoutProps } from "src/routing";
 
 export default function CustomTabLayout({
     routes,
@@ -9,7 +9,7 @@ export default function CustomTabLayout({
     onNavigate,
     currentPath
 }: TabLayoutProps) {
-
+    console.log(routes)
     return (
         <View>
             <View>
@@ -25,14 +25,12 @@ export default function CustomTabLayout({
             </View>
             <View style={{ flexDirection: 'row' }}>
                 {routes.map(route => (
-                    <Button
-                        variant={currentPath === route.fullPath ? 'contained' : 'outlined'}
+                    <TabButton
                         key={route.path}
-                        onPress={() => onNavigate(route.path)}
-                        style={{ margin: 4 }}
-                    >
-                        {route.fullPath === '/' ? 'Home' : route.fullPath}
-                    </Button>
+                        route={route}
+                        onNavigate={onNavigate}
+                        currentPath={currentPath}
+                    />
                 ))}
             </View>
             <View>
@@ -41,4 +39,26 @@ export default function CustomTabLayout({
         </View>
     )
 
+}
+
+type TabButtonProps = {
+    route: RouteParam<TabBarScreenOptions>
+    onNavigate: (path: string) => void
+    currentPath: string
+}
+
+function TabButton({route, onNavigate, currentPath}: TabButtonProps) {
+    if (route.type !== 'screen') return null
+    return (
+        <Pressable
+        key={route.path}
+        onPress={() => onNavigate(route.path)}
+        style={{ margin: 4 }}
+    >
+        {route.options?.tabBarIcon?.({ size: 20, color: currentPath === route.path ? 'blue' : 'black' })}
+        <Text style={{ color: currentPath === route.fullPath ? 'blue' : 'black' }}>
+            {route.fullPath === '/' ? 'Home' : route.fullPath}
+        </Text>
+    </Pressable>
+    )
 }
