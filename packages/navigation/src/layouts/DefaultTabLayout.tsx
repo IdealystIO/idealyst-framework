@@ -54,9 +54,9 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                     {routes.map((route) => {
                         if (route.type !== 'screen') return null
                         
-                        const isActive = currentPath === (route.path === '/' ? '/' : `/${route.path.replace(/^\//, '')}`)
+                        const isActive = currentPath === route.fullPath
                         const screenRoute = route as any
-                        const label = screenRoute.options?.tabBarLabel || screenRoute.options?.title || (route.path === '/' ? 'Home' : route.path)
+                        const label = screenRoute.options?.tabBarLabel || screenRoute.options?.title || (route.fullPath === '/' ? 'Home' : route.fullPath)
                         const icon = screenRoute.options?.tabBarIcon
                         
                         return (

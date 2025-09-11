@@ -40,7 +40,7 @@ export default function CustomStackLayout({
                 }}>
                     {routes.map(route => (
                         <Button
-                            variant={currentPath === route.path ? 'contained' : 'outlined'}
+                            variant={currentPath === route.fullPath ? 'contained' : 'outlined'}
                             key={route.path}
                             onPress={() => onNavigate(route.path)}
                             style={{ 
@@ -48,7 +48,7 @@ export default function CustomStackLayout({
                                 textAlign: 'left'
                             }}
                         >
-                            {route.path === '/' ? 'Home' : route.path}
+                            {route.fullPath === '/' ? 'Home' : route.fullPath}
                         </Button>
                     ))}
                 </View>

@@ -35,6 +35,28 @@ const normalizePath = (path: string): string => {
 }
 
 /**
+ * Build full path by combining parent path with child path
+ */
+const buildFullPath = (parentPath: string, childPath: string): string => {
+    if (childPath === '/') {
+        return parentPath || '/'
+    }
+    
+    const normalizedParent = parentPath === '/' ? '' : parentPath
+    const normalizedChild = normalizePath(childPath)
+    
+    return `${normalizedParent}${normalizedChild}`
+}
+
+/**
+ * Check if current path matches a route, considering parent path
+ */
+const pathMatches = (currentPath: string, routePath: string, parentPath: string): boolean => {
+    const fullRoutePath = buildFullPath(parentPath, routePath)
+    return currentPath === fullRoutePath
+}
+
+/**
  * Tab Navigator Component for web using custom layout components
  */
 const TabNavigator: React.FC<{ params: TabNavigatorParam; parentPath: string }> = ({ 
@@ -60,17 +82,16 @@ const TabNavigator: React.FC<{ params: TabNavigatorParam; parentPath: string }> 
 
     // Navigate function
     const navigateToRoute = (routePath: string) => {
-        const normalizedPath = normalizePath(routePath)
-        window.history.pushState({}, '', normalizedPath)
-        setCurrentPath(normalizedPath)
+        const fullPath = buildFullPath(parentPath, routePath)
+        window.history.pushState({}, '', fullPath)
+        setCurrentPath(fullPath)
     }
     
     // Get current route component
     const getCurrentRoute = () => {
         // Find matching route
         const currentRoute = params.routes.find(route => {
-            const routePath = normalizePath(route.path)
-            return routePath === currentPath
+            return pathMatches(currentPath, route.path, parentPath)
         }) || params.routes[0] // fallback to first route
 
         if (!currentRoute || currentRoute.type !== 'screen') {
@@ -80,13 +101,19 @@ const TabNavigator: React.FC<{ params: TabNavigatorParam; parentPath: string }> 
         return currentRoute.component
     }
 
+    // Transform routes to include full paths for layout component
+    const routesWithFullPaths = params.routes.map(route => ({
+        ...route,
+        fullPath: buildFullPath(parentPath, route.path)
+    }))
+
     // Use custom layout component or default
     const LayoutComponent = params.layoutComponent || DefaultTabLayout
 
     return (
         <LayoutComponent
             options={params.options}
-            routes={params.routes}
+            routes={routesWithFullPaths}
             ContentComponent={getCurrentRoute()}
             onNavigate={navigateToRoute}
             currentPath={currentPath}
@@ -120,31 +147,66 @@ const StackNavigator: React.FC<{ params: StackNavigatorParam; parentPath: string
 
     // Navigate function
     const navigateToRoute = (routePath: string) => {
-        const normalizedPath = normalizePath(routePath)
-        window.history.pushState({}, '', normalizedPath)
-        setCurrentPath(normalizedPath)
+        const fullPath = buildFullPath(parentPath, routePath)
+        window.history.pushState({}, '', fullPath)
+        setCurrentPath(fullPath)
     }
     
     // Get current route component
     const getCurrentRoute = () => {
         // Find matching route
         const currentRoute = params.routes.find(route => {
-            const routePath = normalizePath(route.path)
-            return routePath === currentPath
-        }) || params.routes[0] // fallback to first route
-
+            return pathMatches(currentPath, route.path, parentPath)
+        })
+        
+        // If no exact match, check if current path starts with any navigator route
         if (!currentRoute) {
-            return () => React.createElement('div', {}, `Route not found: ${currentPath}`)
+            const navigatorRoute = params.routes.find(route => {
+                if (route.type === 'navigator') {
+                    const fullRoutePath = buildFullPath(parentPath, route.path)
+                    return currentPath.startsWith(fullRoutePath)
+                }
+                return false
+            })
+            
+            if (navigatorRoute && navigatorRoute.type === 'navigator') {
+                return () => {
+                    const NestedNavigator = buildNavigator(navigatorRoute, buildFullPath(parentPath, navigatorRoute.path))
+                    return React.createElement(NestedNavigator)
+                }
+            }
+        }
+        
+        // Fallback to first route if no match
+        if (!currentRoute) {
+            const fallbackRoute = params.routes[0]
+            if (fallbackRoute.type === 'screen') {
+                return fallbackRoute.component
+            } else if (fallbackRoute.type === 'navigator') {
+                const NestedNavigator = buildNavigator(fallbackRoute, buildFullPath(parentPath, fallbackRoute.path))
+                return () => React.createElement(NestedNavigator)
+            }
         }
 
-        if (currentRoute.type === 'screen') {
-            return currentRoute.component
-        } else {
-            // Nested navigator
-            const NestedNavigator = buildNavigator(currentRoute, `${parentPath}/${currentRoute.path}`)
-            return NestedNavigator
+        if (currentRoute) {
+            if (currentRoute.type === 'screen') {
+                return currentRoute.component
+            } else if (currentRoute.type === 'navigator') {
+                // Nested navigator
+                const NestedNavigator = buildNavigator(currentRoute, buildFullPath(parentPath, currentRoute.path))
+                return () => React.createElement(NestedNavigator)
+            }
         }
+        
+        // If all else fails, return a not found component
+        return () => React.createElement('div', {}, `Route not found: ${currentPath}`)
     }
+
+    // Transform routes to include full paths for layout component
+    const routesWithFullPaths = params.routes.map(route => ({
+        ...route,
+        fullPath: buildFullPath(parentPath, route.path)
+    }))
 
     // Use custom layout component or default
     const LayoutComponent = params.layoutComponent || DefaultStackLayout
@@ -152,7 +214,7 @@ const StackNavigator: React.FC<{ params: StackNavigatorParam; parentPath: string
     return (
         <LayoutComponent
             options={params.options}
-            routes={params.routes}
+            routes={routesWithFullPaths}
             ContentComponent={getCurrentRoute()}
             onNavigate={navigateToRoute}
             currentPath={currentPath}

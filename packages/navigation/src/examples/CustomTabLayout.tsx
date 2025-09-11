@@ -1,3 +1,4 @@
+import React from "react";
 import { Button, View, Text } from "@idealyst/components";
 import { TabLayoutProps } from "src/routing";
 
@@ -9,22 +10,28 @@ export default function CustomTabLayout({
     currentPath
 }: TabLayoutProps) {
 
-    const HeaderTitle = options?.headerTitle;
-
     return (
         <View>
             <View>
-                {HeaderTitle ? <HeaderTitle /> : <Text>Custom Tab Layout</Text>}
+                {options?.headerTitle ? (
+                    typeof options.headerTitle === 'string' ? (
+                        <Text>{options.headerTitle}</Text>
+                    ) : (
+                        React.createElement(options.headerTitle as React.ComponentType)
+                    )
+                ) : (
+                    <Text>Custom Tab Layout</Text>
+                )}
             </View>
             <View style={{ flexDirection: 'row' }}>
                 {routes.map(route => (
                     <Button
-                        variant={currentPath === route.path ? 'contained' : 'outlined'}
+                        variant={currentPath === route.fullPath ? 'contained' : 'outlined'}
                         key={route.path}
                         onPress={() => onNavigate(route.path)}
                         style={{ margin: 4 }}
                     >
-                        {route.path === '/' ? 'Home' : route.path}
+                        {route.fullPath === '/' ? 'Home' : route.fullPath}
                     </Button>
                 ))}
             </View>

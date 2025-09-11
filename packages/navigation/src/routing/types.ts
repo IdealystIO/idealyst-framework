@@ -89,18 +89,25 @@ export type ScreenParam<T = ScreenOptions> = {
 
 export type RouteParam<T = ScreenOptions> = NavigatorParam | ScreenParam<T>;
 
+/**
+ * Extended route type with full path for layout components
+ */
+export type RouteWithFullPath<T = ScreenOptions> = RouteParam<T> & {
+    fullPath: string
+}
+
 export type TabLayoutProps = {
     options?: NavigatorOptions
-    routes: RouteParam<TabBarScreenOptions>[]
-    currentRoute: React.ComponentType
+    routes: RouteWithFullPath<TabBarScreenOptions>[]
+    ContentComponent: React.ComponentType
     onNavigate: (path: string) => void
     currentPath: string
 }
 
 export type StackLayoutProps = {
     options?: NavigatorOptions
-    routes: RouteParam<ScreenOptions>[]
-    currentRoute: React.ComponentType
+    routes: RouteWithFullPath<ScreenOptions>[]
+    ContentComponent: React.ComponentType
     onNavigate: (path: string) => void
     currentPath: string
 }
