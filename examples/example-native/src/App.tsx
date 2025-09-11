@@ -7,7 +7,7 @@
 
 import React, { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ExampleTabRouter } from '@idealyst/navigation/examples';
+import { ExampleHybridRouter } from '@idealyst/navigation/examples';
 import { NavigatorProvider } from '@idealyst/navigation';
 import Storage from '@idealyst/storage';
 
@@ -27,7 +27,7 @@ function App() {
   }, []);
   return (
     <SafeAreaProvider>
-      <NavigatorProvider route={ExampleTabRouter} />
+      <NavigatorProvider route={ExampleHybridRouter} />
     </SafeAreaProvider>
   );
 }

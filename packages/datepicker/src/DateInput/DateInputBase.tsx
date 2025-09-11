@@ -1,17 +1,16 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { View, TextInput } from '@idealyst/components';
+import { View } from '@idealyst/components';
 import { DateInputProps } from './types';
 import { dateInputStyles } from './DateInput.styles';
 
 interface DateInputBaseProps extends DateInputProps {
-  renderInput: (props: {
+  children: (props: {
     value: string;
     onChangeText: (text: string) => void;
     onFocus: () => void;
     onBlur: () => void;
     placeholder?: string;
-    editable: boolean;
-    style?: any;
+    disabled: boolean;
     testID?: string;
   }) => React.ReactNode;
 }
@@ -52,7 +51,7 @@ export const DateInputBase: React.FC<DateInputBaseProps> = ({
   testID,
   onFocus,
   onBlur,
-  renderInput,
+  children,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -215,17 +214,13 @@ export const DateInputBase: React.FC<DateInputBaseProps> = ({
 
   return (
     <View style={[dateInputStyles.container, style]} testID={testID}>
-      {renderInput({
+      {children({
         value: inputValue,
         onChangeText: handleChangeText,
         onFocus: handleFocus,
         onBlur: handleBlur,
         placeholder,
-        editable: !disabled,
-        style: [
-          dateInputStyles.input,
-          hasError && dateInputStyles.inputError,
-        ],
+        disabled,
         testID: testID ? `${testID}-input` : undefined,
       })}
     </View>

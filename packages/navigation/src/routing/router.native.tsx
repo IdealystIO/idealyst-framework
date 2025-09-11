@@ -90,90 +90,103 @@ const buildNativeRouter = (routeParam: RouteParam, path: string = '', LastNaviga
     const nextPath = (routeParam.path ? path + routeParam.path : path) || '';
     const type = routeParam.layout?.type;
     const screenOptions = convertScreenOptions(routeParam.screenOptions);
-    
-    switch (type) {
-        case 'stack':
-            const Stack = createNativeStackNavigator();
-            return (
-                <Stack.Navigator
-                    screenOptions={{
-                        // Disable screen optimization to ensure theme updates
-                        freezeOnBlur: false,
-                    }}
-                >
-                    <Stack.Screen 
-                        name={nextPath} 
-                        component={routeParam.component} 
-                        options={screenOptions}
-                    />
-                    {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, Stack))}
-                </Stack.Navigator>
-            )
-        case 'tab':
-            const Tab = createBottomTabNavigator();
-            return (
-                <Tab.Navigator
-                    screenOptions={{
-                        // Disable screen optimization to ensure theme updates
-                        lazy: false,
-                        freezeOnBlur: false,
-                    }}
-                >
-                    <Tab.Screen 
-                        name={nextPath} 
-                        component={routeParam.component}
-                        options={screenOptions}
-                    />
-                    {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, Tab))}
-                </Tab.Navigator>
-            )
-        case 'drawer':
-            const Drawer = createDrawerNavigator();
-            return (
-                <Drawer.Navigator
-                    screenOptions={{
-                        // Disable screen optimization to ensure theme updates
-                        lazy: false,
-                        freezeOnBlur: false,
-                    }}
-                >
-                    <Drawer.Screen 
-                        name={nextPath} 
-                        component={routeParam.component}
-                        options={screenOptions}
-                    />
-                    {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, Drawer))}
-                </Drawer.Navigator>
-            )
-        case 'modal':
-            if (!LastNavigator) {
-                throw new Error('LastNavigator is required for modal layout');
-            }
-            return (
-                <>
-                    <LastNavigator.Screen 
-                        options={{ headerShown: false, presentation: 'modal', ...screenOptions }} 
-                        name={nextPath} 
-                        component={routeParam.component} 
-                    />
-                    {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, LastNavigator))}
-                </>
-            )
-        case undefined:
-            if (!LastNavigator) {
-                throw new Error('LastNavigator is required for undefined layout');
-            }
-            return (
-                <>
-                    <LastNavigator.Screen 
-                        name={nextPath} 
-                        component={routeParam.component}
-                        options={screenOptions}
-                    />
-                    {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, LastNavigator))}
-                </>
-            )
-        default:
-            throw new Error(`Unknown layout type: ${type}`);
+
+    function buildComponent() {
+        switch (type) {
+            case 'stack':
+                const Stack = createNativeStackNavigator();
+                return (
+                    <Stack.Navigator
+                        screenOptions={{
+                            // Disable screen optimization to ensure theme updates
+                            freezeOnBlur: false,
+                        }}
+                    >
+                        <Stack.Screen 
+                            name={nextPath} 
+                            component={routeParam.component} 
+                            options={screenOptions}
+                        />
+                        {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, Stack))}
+                    </Stack.Navigator>
+                )
+            case 'tab':
+                const Tab = createBottomTabNavigator();
+                return (
+                    <Tab.Navigator
+                        screenOptions={{
+                            // Disable screen optimization to ensure theme updates
+                            lazy: false,
+                            freezeOnBlur: false,
+                        }}
+                    >
+                        <Tab.Screen 
+                            name={nextPath} 
+                            component={routeParam.component}
+                            options={screenOptions}
+                        />
+                        {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, Tab))}
+                    </Tab.Navigator>
+                )
+            case 'drawer':
+                const Drawer = createDrawerNavigator();
+                return (
+                    <Drawer.Navigator
+                        screenOptions={{
+                            // Disable screen optimization to ensure theme updates
+                            lazy: false,
+                            freezeOnBlur: false,
+                        }}
+                    >
+                        <Drawer.Screen 
+                            name={nextPath} 
+                            component={routeParam.component}
+                            options={screenOptions}
+                        />
+                        {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, Drawer))}
+                    </Drawer.Navigator>
+                )
+            case 'modal':
+                if (!LastNavigator) {
+                    throw new Error('LastNavigator is required for modal layout');
+                }
+                return (
+                    <>
+                        <LastNavigator.Screen 
+                            options={{ headerShown: false, presentation: 'modal', ...screenOptions }} 
+                            name={nextPath} 
+                            component={routeParam.component} 
+                        />
+                        {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, LastNavigator))}
+                    </>
+                )
+            case undefined:
+                if (!LastNavigator) {
+                    throw new Error('LastNavigator is required for undefined layout - ' + routeParam.path);
+                }
+                return (
+                    <>
+                        <LastNavigator.Screen 
+                            name={nextPath} 
+                            component={routeParam.component}
+                            options={screenOptions}
+                        />
+                        {routeParam.routes?.map((route) => buildNativeRouter(route, nextPath, LastNavigator))}
+                    </>
+                )
+            default:
+                throw new Error(`Unknown layout type: ${type}`);
+        }    
     }
+    const Component = buildComponent();
+    if (LastNavigator) {
+        return (
+            <LastNavigator.Screen 
+                name={nextPath} 
+                component={() => Component}
+                options={screenOptions}
+            />
+        );
+    }
+    return Component;
 }

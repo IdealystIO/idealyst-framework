@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Text } from '@idealyst/components';
+import { View, Input, Text } from '@idealyst/components';
 import { DateInputBase } from './DateInputBase';
 import { DateInputProps } from './types';
 import { dateInputStyles } from './DateInput.styles';
@@ -18,12 +18,6 @@ export const DateInput: React.FC<DateInputProps> = (props) => {
     ...baseProps
   } = props;
 
-  // Initialize styles
-  dateInputStyles.useVariants({
-    size,
-    variant,
-    state: disabled ? 'disabled' : error ? 'error' : undefined,
-  });
 
   return (
     <View style={style} testID={testID}>
@@ -33,35 +27,23 @@ export const DateInput: React.FC<DateInputProps> = (props) => {
         </Text>
       )}
       
-      <DateInputBase
-        {...baseProps}
-        disabled={disabled}
-        testID={testID}
-        renderInput={({
-          value,
-          onChangeText,
-          onFocus,
-          onBlur,
-          placeholder,
-          editable,
-          style: inputStyleProp,
-          testID: inputTestID,
-        }) => (
-          <TextInput
+      <DateInputBase {...baseProps} disabled={disabled} testID={testID}>
+        {({ value, onChangeText, onFocus, onBlur, placeholder, disabled: inputDisabled, testID: inputTestID }) => (
+          <Input
             value={value}
             onChangeText={onChangeText}
             onFocus={onFocus}
             onBlur={onBlur}
             placeholder={placeholder}
-            editable={editable}
-            style={[inputStyleProp, inputStyle]}
+            disabled={inputDisabled}
+            size={size}
+            variant={variant}
+            hasError={error ? true : false}
+            style={inputStyle}
             testID={inputTestID}
-            autoComplete="off"
-            autoCorrect={false}
-            spellCheck={false}
           />
         )}
-      />
+      </DateInputBase>
       
       {error && (
         <Text style={dateInputStyles.errorText} testID={testID ? `${testID}-error` : undefined}>

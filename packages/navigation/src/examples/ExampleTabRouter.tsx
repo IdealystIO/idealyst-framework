@@ -160,12 +160,7 @@ const SettingsTabScreen = () => {
                 <View spacing="md">
                     <Text size="medium" weight="semibold">Screen Options Used</Text>
                     <Text size="small" style={{ fontFamily: 'monospace', backgroundColor: 'rgba(0,0,0,0.05)', padding: 8 }}>
-                        screenOptions: {{
-  title: 'Settings',{"\n"}
-  headerTitle: 'App Settings',{"\n"}
-  headerLeft: () => &lt;BackButton /&gt;,{"\n"}
-  headerRight: () => &lt;ActionButtons /&gt;
-}}
+                        Test
                     </Text>
                 </View>
                 
