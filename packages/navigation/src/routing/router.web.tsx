@@ -1,8 +1,10 @@
 import React from 'react'
 import { NavigatorParam, RouteParam, TabNavigatorParam, StackNavigatorParam } from './types'
+import { DefaultTabLayout } from '../layouts/DefaultTabLayout'
+import { DefaultStackLayout } from '../layouts/DefaultStackLayout'
 
 /**
- * Build the Web navigator using simple navigation
+ * Build the Web navigator using custom layout components
  * @param params Navigator configuration
  * @param parentPath Parent route path for nested routing
  * @returns React Router component
@@ -33,7 +35,7 @@ const normalizePath = (path: string): string => {
 }
 
 /**
- * Simple Tab Navigator Component for web
+ * Tab Navigator Component for web using custom layout components
  */
 const TabNavigator: React.FC<{ params: TabNavigatorParam; parentPath: string }> = ({ 
     params, 
@@ -63,8 +65,8 @@ const TabNavigator: React.FC<{ params: TabNavigatorParam; parentPath: string }> 
         setCurrentPath(normalizedPath)
     }
     
-    // Render the current route component based on location
-    const renderCurrentRoute = () => {
+    // Get current route component
+    const getCurrentRoute = () => {
         // Find matching route
         const currentRoute = params.routes.find(route => {
             const routePath = normalizePath(route.path)
@@ -72,55 +74,28 @@ const TabNavigator: React.FC<{ params: TabNavigatorParam; parentPath: string }> 
         }) || params.routes[0] // fallback to first route
 
         if (!currentRoute || currentRoute.type !== 'screen') {
-            return <div>Route not found: {currentPath}</div>
+            return () => React.createElement('div', {}, `Route not found: ${currentPath}`)
         }
 
-        const Component = currentRoute.component
-        return <Component />
+        return currentRoute.component
     }
 
+    // Use custom layout component or default
+    const LayoutComponent = params.layoutComponent || DefaultTabLayout
+
     return (
-        <div>
-            {/* Simple navigation for debugging */}
-            <div style={{ padding: '10px', borderBottom: '1px solid #ccc', backgroundColor: '#f8f9fa' }}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '16px' }}>Tab Navigation</h3>
-                <div style={{ display: 'flex', gap: '5px' }}>
-                    {params.routes.map((route) => {
-                        const routePath = normalizePath(route.path)
-                        const isActive = currentPath === routePath
-                        const screenRoute = route as any
-                        const label = screenRoute.options?.tabBarLabel || screenRoute.options?.title || (route.path === '/' ? 'Home' : route.path)
-                        
-                        return (
-                            <button
-                                key={route.path}
-                                onClick={() => navigateToRoute(route.path)}
-                                style={{ 
-                                    padding: '8px 16px',
-                                    backgroundColor: isActive ? '#007bff' : 'white',
-                                    color: isActive ? 'white' : '#007bff',
-                                    border: '1px solid #007bff',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                    fontSize: '14px',
-                                    fontWeight: isActive ? 'bold' : 'normal'
-                                }}
-                            >
-                                {label}
-                            </button>
-                        )
-                    })}
-                </div>
-            </div>
-            <div style={{ padding: '20px' }}>
-                {renderCurrentRoute()}
-            </div>
-        </div>
+        <LayoutComponent
+            options={params.options}
+            routes={params.routes}
+            ContentComponent={getCurrentRoute()}
+            onNavigate={navigateToRoute}
+            currentPath={currentPath}
+        />
     )
 }
 
 /**
- * Simple Stack Navigator Component for web
+ * Stack Navigator Component for web using custom layout components
  */
 const StackNavigator: React.FC<{ params: StackNavigatorParam; parentPath: string }> = ({ 
     params, 
@@ -142,9 +117,16 @@ const StackNavigator: React.FC<{ params: StackNavigatorParam; parentPath: string
         window.addEventListener('popstate', handlePopState)
         return () => window.removeEventListener('popstate', handlePopState)
     }, [])
+
+    // Navigate function
+    const navigateToRoute = (routePath: string) => {
+        const normalizedPath = normalizePath(routePath)
+        window.history.pushState({}, '', normalizedPath)
+        setCurrentPath(normalizedPath)
+    }
     
-    // Render the current route component based on location
-    const renderCurrentRoute = () => {
+    // Get current route component
+    const getCurrentRoute = () => {
         // Find matching route
         const currentRoute = params.routes.find(route => {
             const routePath = normalizePath(route.path)
@@ -152,23 +134,28 @@ const StackNavigator: React.FC<{ params: StackNavigatorParam; parentPath: string
         }) || params.routes[0] // fallback to first route
 
         if (!currentRoute) {
-            return <div>Route not found: {currentPath}</div>
+            return () => React.createElement('div', {}, `Route not found: ${currentPath}`)
         }
 
         if (currentRoute.type === 'screen') {
-            const Component = currentRoute.component
-            return <Component />
+            return currentRoute.component
         } else {
             // Nested navigator
             const NestedNavigator = buildNavigator(currentRoute, `${parentPath}/${currentRoute.path}`)
-            return <NestedNavigator />
+            return NestedNavigator
         }
     }
 
+    // Use custom layout component or default
+    const LayoutComponent = params.layoutComponent || DefaultStackLayout
+
     return (
-        <div style={{ padding: '20px' }}>
-            <h3>Stack Navigation</h3>
-            {renderCurrentRoute()}
-        </div>
+        <LayoutComponent
+            options={params.options}
+            routes={params.routes}
+            ContentComponent={getCurrentRoute()}
+            onNavigate={navigateToRoute}
+            currentPath={currentPath}
+        />
     )
 }

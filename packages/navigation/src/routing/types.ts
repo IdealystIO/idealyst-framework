@@ -69,11 +69,13 @@ export type BaseNavigatorParam = {
 export type TabNavigatorParam = {
     layout: 'tab'
     routes: RouteParam<TabBarScreenOptions>[]
+    layoutComponent?: TabLayoutComponent
 } & BaseNavigatorParam
 
 export type StackNavigatorParam = {
     layout: 'stack'
     routes: RouteParam<ScreenOptions>[]
+    layoutComponent?: StackLayoutComponent
 } & BaseNavigatorParam
 
 export type NavigatorParam = TabNavigatorParam | StackNavigatorParam
@@ -87,3 +89,21 @@ export type ScreenParam<T = ScreenOptions> = {
 
 export type RouteParam<T = ScreenOptions> = NavigatorParam | ScreenParam<T>;
 
+export type TabLayoutProps = {
+    options?: NavigatorOptions
+    routes: RouteParam<TabBarScreenOptions>[]
+    currentRoute: React.ComponentType
+    onNavigate: (path: string) => void
+    currentPath: string
+}
+
+export type StackLayoutProps = {
+    options?: NavigatorOptions
+    routes: RouteParam<ScreenOptions>[]
+    currentRoute: React.ComponentType
+    onNavigate: (path: string) => void
+    currentPath: string
+}
+
+export type TabLayoutComponent = React.ComponentType<TabLayoutProps>
+export type StackLayoutComponent = React.ComponentType<StackLayoutProps>
