@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteParam } from '@idealyst/navigation';
+import { NavigatorParam } from '@idealyst/navigation';
 import { Screen, Text, View, Icon } from '@idealyst/components';
 
 // Simple API test component for web-only projects  
@@ -79,24 +79,28 @@ const SettingsScreen = () => (
   </Screen>
 );
 
-const AppRouter: RouteParam = {
-  path: "/",
-  component: HomeScreen,
-  layout: {
-    type: "tab",
-  },
-  screenOptions: {
-    title: 'Home',
-    tabBarLabel: 'Home',
-    tabBarIcon: ({ focused, size }) => (
-      <Icon name="home" color={focused ? 'blue' : 'gray'} size={size || 24} />
-    ),
-  },
+const AppRouter: NavigatorParam = {
+  type: 'navigator',
+  path: '/',
+  layout: 'tab',
   routes: [
-    { 
-      path: "profile", 
+    {
+      type: 'screen',
+      path: '/',
+      component: HomeScreen,
+      options: {
+        title: 'Home',
+        tabBarLabel: 'Home',
+        tabBarIcon: ({ focused, size }) => (
+          <Icon name="home" color={focused ? 'blue' : 'gray'} size={size || 24} />
+        ),
+      },
+    },
+    {
+      type: 'screen',
+      path: '/profile',
       component: ProfileScreen,
-      screenOptions: {
+      options: {
         title: 'Profile',
         tabBarLabel: 'Profile',
         tabBarIcon: ({ focused, size }) => (
@@ -104,10 +108,11 @@ const AppRouter: RouteParam = {
         ),
       },
     },
-    { 
-      path: "settings", 
+    {
+      type: 'screen',
+      path: '/settings',
       component: SettingsScreen,
-      screenOptions: {
+      options: {
         title: 'Settings',
         tabBarLabel: 'Settings', 
         tabBarIcon: ({ focused, size }) => (
