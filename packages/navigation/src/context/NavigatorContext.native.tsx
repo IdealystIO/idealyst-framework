@@ -1,7 +1,7 @@
 import React, { createContext, memo, useContext, useMemo } from 'react';
 import { NavigateParams, NavigatorProviderProps } from './types';
 import { useNavigation, useNavigationState, DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { buildRouter } from '../routing';
+import { buildNavigator } from '../routing';
 import { useUnistyles } from 'react-native-unistyles';
 
 const NavigatorContext = createContext<{
@@ -20,9 +20,11 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
     };
 
     const RouteComponent = useMemo(() => {
-        // Memoize the router to prevent unnecessary re-renders
-        return memo(buildRouter(route));
+        // Memoize the navigator to prevent unnecessary re-renders
+        return memo(buildNavigator(route));
     }, [route]);
+
+    console.log('UnwrappedNavigatorProvider render', RouteComponent);
      
     return (
         <NavigatorContext.Provider value={{ navigate }}>

@@ -1,4 +1,4 @@
-import { RouteParam } from '../routing';
+import { NavigatorParam, RouteParam } from '../routing';
 import React from 'react';
 import { Button, Screen, Text } from '../../../components/src';
 import { useNavigator } from '../context';
@@ -10,50 +10,48 @@ const RootScreen = () => {
     return <Screen>
         <Text>Root Screen</Text>
         <Button title="Go to Tab" onPress={() => navigator.navigate({
-            path: '/a',
+            path: '/tab',
             vars: {},
         })} />
     </Screen>
 }
 
-const ExampleHybridRouter: RouteParam = {
+const ExampleHybridRouter: NavigatorParam = {
     path: '/',
-    layout: {
-        type: 'stack',
-    },
-    component: RootScreen,
-    screenOptions: {
-        title: 'Example',
-        headerTitle: 'Example Header',
-        tabBarLabel: 'Example',
-        tabBarIcon: 'example-icon',
-    },
+    type: 'navigator',
+    layout: 'stack',
     routes: [
         {
-            path: 'a',
-            component: () => <Text>Nested Tab Example</Text>,
-            layout: {
-                type: 'tab',
+            type: 'screen',
+            path: '/',
+            component: RootScreen,
+            options: {
+                title: 'Example',
             },
-            screenOptions: {
-                title: 'Tab Example',
-                headerTitle: 'Tab Header',
-                tabBarLabel: 'Tab',
-                tabBarIcon: 'tab-icon',
-            },
+        },
+        {
+            type: 'navigator',
+            path: '/tab',
+            layout: 'tab',
             routes: [
                 {
-                    path: 'nested',
-                    component: () => <Text>Tab 2</Text>,
-                    screenOptions: {
-                        title: 'Nested Tab Example',
-                        headerTitle: 'Nested Tab Header',
-                        tabBarLabel: 'Nested Tab',
-                        tabBarIcon: 'nested-tab-icon',
+                    type: 'screen',
+                    path: '/a',
+                    component: () => <Text>Tab Example</Text>,
+                    options: {
+                        title: 'Tab Example',
                     },
-                }
+                },
+                {
+                    type: 'screen',
+                    path: '/b',
+                    component: () => <Text>Tab Example</Text>,
+                    options: {
+                        title: 'B',
+                    },
+                },
             ]
-        }
+        },
     ]
 }
 

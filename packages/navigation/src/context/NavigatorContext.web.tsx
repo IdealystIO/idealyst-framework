@@ -1,7 +1,7 @@
 import React, { createContext, memo, useContext, useMemo } from 'react';
 import { NavigateParams, NavigatorProviderProps } from './types';
 import { useNavigate } from "react-router-dom";
-import { buildRouter } from '../routing';
+import { buildNavigator } from '../routing';
 
 const NavigatorContext = createContext<{
     navigate: (params: NavigateParams) => void;
@@ -21,8 +21,9 @@ export const NavigatorProvider = ({
     };
     
     const RouteComponent = useMemo(() => {
+        console.log('RouteComponent build', buildNavigator(route));
         // Memoize the router to prevent unnecessary re-renders
-        return memo(buildRouter(route));
+        return memo(buildNavigator(route));
     }, [route]);
     
     return (

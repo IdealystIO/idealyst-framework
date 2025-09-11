@@ -2,7 +2,7 @@ import React from 'react';
 import { ButtonExamples, CardExamples, IconExamples, SVGImageExamples, ThemeExtensionExamples } from "../../../components/src/examples";
 import { Screen, Text, View, Button, Icon } from "../../../components/src";
 import { UnistylesRuntime } from 'react-native-unistyles';
-import { RouteParam } from '../routing';
+import { NavigatorParam, RouteParam } from '../routing';
 import { useNavigator } from '../context';
 import { getNextTheme, getThemeDisplayName, isHighContrastTheme } from './unistyles';
 
@@ -192,45 +192,48 @@ const ThemeTabScreen = () => (
     </Screen>
 );
 
-const TabRouter: RouteParam = {
+const TabRouter: NavigatorParam = {
     path: "/",
-    component: HomeTabScreen,
-    layout: {
-        type: "tab",
-    },
-    screenOptions: {
-        title: 'Home',
-        headerTitle: () => (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Icon name="home" size="md" style={{ marginRight: 8 }} />
-                <Text size="large" weight="bold">Tab Demo</Text>
-            </View>
-        ),
-        headerLeft: () => (
-            <Button variant="text" size="small">
-                <Icon name="menu" size="md" />
-            </Button>
-        ),
-        headerRight: () => (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Button variant="text" size="small" style={{ marginRight: 8 }}>
-                    <Icon name="bell" size="md" />
-                </Button>
-                <Button variant="text" size="small">
-                    <Icon name="account" size="md" />
-                </Button>
-            </View>
-        ),
-        tabBarLabel: 'Home',
-        tabBarIcon: ({ focused, size }) => {
-            return <Icon name="home" color={focused ? 'blue' : 'black'} size={size} />
-        },
-    },
+    layout: 'tab',
     routes: [
+        {
+            path: '/',
+            type: 'screen',
+            component: HomeTabScreen,
+            options: {
+                title: 'Home',
+                headerTitle: () => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Icon name="home" size="md" style={{ marginRight: 8 }} />
+                        <Text size="large" weight="bold">Tab Demo</Text>
+                    </View>
+                ),
+                headerLeft: () => (
+                    <Button variant="text" size="small">
+                        <Icon name="menu" size="md" />
+                    </Button>
+                ),
+                headerRight: () => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Button variant="text" size="small" style={{ marginRight: 8 }}>
+                            <Icon name="bell" size="md" />
+                        </Button>
+                        <Button variant="text" size="small">
+                            <Icon name="account" size="md" />
+                        </Button>
+                    </View>
+                ),
+                tabBarLabel: 'Home',
+                tabBarIcon: ({ focused, size }) => {
+                    return <Icon name="home" color={focused ? 'blue' : 'black'} size={size} />
+                },
+            },
+        },
         { 
             path: "components", 
             component: ComponentsTabScreen,
-            screenOptions: {
+            type: 'screen',
+            options: {
                 title: 'Components',
                 headerLeft: () => (
                     <Button variant="text" size="small">
@@ -254,7 +257,8 @@ const TabRouter: RouteParam = {
         { 
             path: "settings", 
             component: SettingsTabScreen,
-            screenOptions: {
+            type: 'screen',
+            options: {
                 title: 'Settings',
                 headerTitle: 'App Settings',
                 headerLeft: () => (
@@ -286,7 +290,8 @@ const TabRouter: RouteParam = {
         { 
             path: "theme", 
             component: ThemeTabScreen,
-            screenOptions: {
+            type: 'screen',
+            options: {
                 title: 'Theme',
                 headerTitle: () => (
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>

@@ -6,7 +6,7 @@ import { Button, Divider, Screen, Text, View } from "../../../components/src";
 import { useNavigator } from "../context";
 import { UnistylesRuntime } from 'react-native-unistyles';
 import { GeneralLayout } from '../layouts/GeneralLayout';
-import { RouteParam } from '../routing';
+import { NavigatorParam, RouteParam } from '../routing';
 import { getNextTheme, getThemeDisplayName, isHighContrastTheme } from './unistyles';
 
 const HomeScreen = () => {
@@ -264,31 +264,29 @@ const WrappedGeneralLayout = (props: any) => {
     )
 }
 
-const StackRouter: RouteParam = {
+const StackRouter: NavigatorParam = {
     path: "/",
-    component: HomeScreen,
-    layout: {
-        type: "stack",
-        component: WrappedGeneralLayout,
-    },
+    type: 'navigator',
+    layout: 'stack',
     routes: [
-        { path: "avatar", component: AvatarExamples},
-        { path: "badge", component: BadgeExamples},
-        { path: "button", component: ButtonExamples},
-        { path: "card", component: CardExamples},
-        { path: "checkbox", component: CheckboxExamples},
-        { path: "divider", component: DividerExamples},
-        { path: "input", component: InputExamples},
-        { path: "text", component: TextExamples},
-        { path: "view", component: ViewExamples},
-        { path: "screen", component: ScreenExamples},
-        { path: "icon", component: IconExamples},
-        { path: "svg-image", component: SVGImageExamples},
-        { path: "dialog", component: DialogExamples},
-        { path: "popover", component: PopoverExamples},
-        { path: "datagrid", component: DataGridShowcase},
-        { path: "datepicker", component: DatePickerExamples},
-        { path: "theme-extension", component: ThemeExtensionExamples},
+        { path: "/", type: 'screen', component: HomeScreen },
+        { path: "avatar", type: 'screen', component: AvatarExamples},
+        { path: "badge", type: 'screen', component: BadgeExamples},
+        { path: "button", type: 'screen', component: ButtonExamples},
+        { path: "card", type: 'screen', component: CardExamples},
+        { path: "checkbox", type: 'screen', component: CheckboxExamples},
+        { path: "divider", type: 'screen', component: DividerExamples},
+        { path: "input", type: 'screen', component: InputExamples},
+        { path: "text", type: 'screen', component: TextExamples},
+        { path: "view", type: 'screen', component: ViewExamples},
+        { path: "screen", type: 'screen', component: ScreenExamples},
+        { path: "icon", type: 'screen', component: IconExamples},
+        { path: "svg-image", type: 'screen', component: SVGImageExamples},
+        { path: "dialog", type: 'screen', component: DialogExamples},
+        { path: "popover", type: 'screen', component: PopoverExamples},
+        { path: "datagrid", type: 'screen', component: DataGridShowcase},
+        { path: "datepicker", type: 'screen', component: DatePickerExamples},
+        { path: "theme-extension", type: 'screen', component: ThemeExtensionExamples},
     ],
 };
 

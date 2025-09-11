@@ -1,4 +1,4 @@
-import { RouteParam } from "../routing";
+import { NavigatorParam } from "../routing";
 
 /**
  * When navigating to a new route, specify the path and the variables to be used in the route.
@@ -9,5 +9,5 @@ export type NavigateParams = {
 };
 
 export type NavigatorProviderProps = {
-    route: RouteParam;
+    route: NavigatorParam;
 };

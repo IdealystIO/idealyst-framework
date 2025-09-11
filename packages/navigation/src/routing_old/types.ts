@@ -6,12 +6,6 @@ export type ScreenOptions = {
      */
     title?: string;
     
-};
-
-/**
- * Tab bar specific screen options
- */
-export type TabBarScreenOptions = {
     /**
      * Icon component for tab/drawer navigation (React.ComponentType, React.ReactElement, function, or string)
      */
@@ -34,10 +28,6 @@ export type TabBarScreenOptions = {
      * Whether to show the tab bar for this screen
      */
     tabBarVisible?: boolean;
-} & ScreenOptions
-
-export type NavigatorOptions = {
-
     
     /**
      * Custom header title component or string
@@ -58,32 +48,27 @@ export type NavigatorOptions = {
      * Custom header right component
      */
     headerRight?: React.ComponentType | React.ReactElement;
+    
+    /**
+     * Additional platform-specific options
+     */
+    platformOptions?: {
+        native?: Record<string, any>;
+        web?: Record<string, any>;
+    };
+};
+
+export type RouteParam = {
+    path?: string;
+    routes?: RouteParam[];
+    component: React.ComponentType;
+    layout?: LayoutParam;
+    screenOptions?: ScreenOptions;
 }
 
-export type BaseNavigatorParam = {
-    path: string
-    type: 'navigator'
-    options?: NavigatorOptions
+export type LayoutType = 'stack' | 'tab' | 'drawer' | 'modal';
+
+export type LayoutParam = {
+    type: LayoutType;
+    component?: React.ComponentType<{ children?: React.ReactNode }>;
 }
-
-export type TabNavigatorParam = {
-    layout: 'tab'
-    routes: RouteParam<TabBarScreenOptions>[]
-} & BaseNavigatorParam
-
-export type StackNavigatorParam = {
-    layout: 'stack'
-    routes: RouteParam<ScreenOptions>[]
-} & BaseNavigatorParam
-
-export type NavigatorParam = TabNavigatorParam | StackNavigatorParam
-
-export type ScreenParam<T = ScreenOptions> = {
-    path: string
-    type: 'screen'
-    options?: T
-    component: React.ComponentType
-}
-
-export type RouteParam<T = ScreenOptions> = NavigatorParam | ScreenParam<T>;
-
