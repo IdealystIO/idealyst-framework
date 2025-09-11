@@ -13,7 +13,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
     const NavigatorType = getNavigatorType(params);
     return () => (
-        <NavigatorType.Navigator>
+        <NavigatorType.Navigator screenOptions={{
+            headerShown: params.options?.headerShown
+        }}>
             {params.routes.map((child) => buildScreen(child, NavigatorType))}
         </NavigatorType.Navigator>
     )

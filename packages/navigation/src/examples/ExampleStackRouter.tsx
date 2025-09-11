@@ -5,7 +5,6 @@ import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Button, Divider, Screen, Text, View } from "../../../components/src";
 import { useNavigator } from "../context";
 import { UnistylesRuntime } from 'react-native-unistyles';
-import { GeneralLayout } from '../layouts/GeneralLayout';
 import { NavigatorParam, RouteParam } from '../routing';
 import { getNextTheme, getThemeDisplayName, isHighContrastTheme } from './unistyles';
 
@@ -237,32 +236,6 @@ const HomeScreen = () => {
         </Screen>
     )
 };
-
-const WrappedGeneralLayout = (props: any) => {
-
-    const navigator = useNavigator();
-
-    return (
-        <GeneralLayout
-            header={{
-                content: <Text style={{ marginHorizontal: 'auto' }} color="inverse">Stack Router Demo App</Text>,
-            }}
-            sidebar={{
-                enabled: true,
-                collapsible: true,
-                position: 'left',
-                initiallyExpanded: false,
-                content: <Button onPress={() => {
-                    navigator.navigate({
-                        path: "/",
-                        vars: {},
-                    });
-                }}>Home</Button>,
-            }}
-            {...props}>
-        </GeneralLayout>
-    )
-}
 
 const StackRouter: NavigatorParam = {
     path: "/",

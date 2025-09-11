@@ -58,6 +58,11 @@ export type NavigatorOptions = {
      * Custom header right component
      */
     headerRight?: React.ComponentType | React.ReactElement;
+    
+    /**
+     * Whether to hide the native React Navigation header (mobile only)
+     */
+    headerShown?: boolean;
 }
 
 export type BaseNavigatorParam = {

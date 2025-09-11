@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
 import { NavigatorProvider } from '@idealyst/navigation';
-import AppRouter from './navigation/AppRouter';
+import { AppRouter } from '{{workspaceScope}}/shared';
 
 function App() {
   return (

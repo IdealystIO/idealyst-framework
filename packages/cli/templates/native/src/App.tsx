@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigatorProvider } from '@idealyst/navigation';
-import AppRouter from './navigation/AppRouter';
+import { AppRouter } from '{{workspaceScope}}/shared';
 
 function App() {
   return (

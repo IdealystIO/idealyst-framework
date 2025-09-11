@@ -1,8 +1,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NavigatorProvider } from '@idealyst/navigation';
-import { trpc, createTRPCClient } from './utils/trpc';
-import AppRouter from './navigation/AppRouter';
+import { trpc, createTRPCClient, AppRouter } from '{{workspaceScope}}/shared';
 
 // Create tRPC client using shared factory
 const queryClient = new QueryClient();
