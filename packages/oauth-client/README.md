@@ -1,15 +1,15 @@
 # @idealyst/oauth-client
 
-Universal OAuth2 client for web and React Native applications with a single API.
+Universal OAuth2 client for web and React Native applications with minimal server requirements.
 
 ## Features
 
 - 🌐 **Universal**: Works on both web and React Native with the same API
-- 🔐 **Secure**: Uses PKCE for mobile, supports client secrets for web
+- 🖥️ **Minimal Server**: Server only needs to redirect - no token handling required
+- 🔗 **Deep Link Support**: Handles mobile OAuth callbacks via custom URL schemes  
+- 🔐 **Secure**: Uses PKCE flow, client exchanges tokens directly with OAuth provider
 - 🏪 **Storage**: Automatic token storage with customizable adapters
-- 🔄 **Refresh**: Automatic token refresh handling
-- 🚪 **Logout**: Proper logout with token revocation
-- 📱 **Mobile**: Uses `react-native-app-auth` for secure system browser flow
+- 🔄 **Refresh**: Direct token refresh with OAuth provider
 - 🎯 **TypeScript**: Fully typed for better developer experience
 
 ## Installation
@@ -24,8 +24,7 @@ yarn add @idealyst/oauth-client
 
 #### For React Native:
 ```bash
-npm install react-native-app-auth @react-native-async-storage/async-storage
-# Follow react-native-app-auth setup instructions for iOS/Android
+npm install @react-native-async-storage/async-storage
 ```
 
 #### For Web:
@@ -34,198 +33,73 @@ No additional dependencies required.
 ## Quick Start
 
 ```typescript
-import { createOAuthClient, providers } from '@idealyst/oauth-client'
-
-// Create OAuth client (works on both web and mobile)
-const client = createOAuthClient({
-  ...providers.google,
-  clientId: 'your-google-client-id',
-  redirectUrl: 'com.yourapp://oauth/callback', // Mobile
-  // redirectUrl: 'http://localhost:3000/auth/callback', // Web
-})
-
-// Authorize user - same API on web and mobile!
-try {
-  const result = await client.authorize()
-  console.log('Access token:', result.tokens.accessToken)
-  console.log('User data:', result.user)
-} catch (error) {
-  console.error('Authorization failed:', error)
-}
-```
-
-## API Reference
-
-### createOAuthClient(config, storage?)
-
-Creates a platform-specific OAuth client with a unified API.
-
-```typescript
-const client = createOAuthClient({
-  issuer: 'https://accounts.google.com',
-  clientId: 'your-client-id',
-  redirectUrl: 'your-app://oauth',
-  scopes: ['openid', 'profile', 'email'],
-  
-  // Optional
-  additionalParameters: { prompt: 'consent' },
-  customHeaders: { 'X-Custom': 'value' },
-})
-```
-
-**⚠️ Security**: Client secrets are **never** used in this library. All flows use PKCE for security, which is the OAuth 2.1 standard for public clients.
-
-### OAuthClient Methods
-
-#### authorize()
-Initiates the OAuth flow and returns tokens.
-
-```typescript
-const result = await client.authorize()
-// result.tokens: { accessToken, refreshToken, idToken, expiresAt, ... }
-// result.user: Additional user data (provider-specific)
-```
-
-#### refresh(refreshToken)
-Refreshes an expired access token.
-
-```typescript
-const result = await client.refresh(refreshToken)
-```
-
-#### getStoredTokens()
-Retrieves stored tokens from storage.
-
-```typescript
-const tokens = await client.getStoredTokens()
-if (tokens?.expiresAt && tokens.expiresAt < new Date()) {
-  // Token is expired, refresh it
-}
-```
-
-#### revoke(token)
-Revokes a specific token.
-
-```typescript
-await client.revoke(accessToken)
-```
-
-#### logout()
-Logs out the user, revokes tokens, and clears storage.
-
-```typescript
-await client.logout()
-```
-
-#### clearStoredTokens()
-Manually clears stored tokens.
-
-```typescript
-await client.clearStoredTokens()
-```
-
-## Provider Configurations
-
-Pre-configured settings for popular OAuth providers:
-
-```typescript
-import { providers } from '@idealyst/oauth-client'
-
-// Google
-const googleClient = createOAuthClient({
-  ...providers.google,
-  clientId: 'your-google-client-id',
-  redirectUrl: 'your-redirect-url',
-})
-
-// GitHub
-const githubClient = createOAuthClient({
-  ...providers.github,
-  clientId: 'your-github-client-id',
-  redirectUrl: 'your-redirect-url',
-})
-
-// Microsoft
-const msClient = createOAuthClient({
-  ...providers.microsoft,
-  clientId: 'your-microsoft-client-id',
-  redirectUrl: 'your-redirect-url',
-})
-
-// Auth0
-const auth0Client = createOAuthClient({
-  ...providers.auth0('your-domain.auth0.com'),
-  clientId: 'your-auth0-client-id',
-  redirectUrl: 'your-redirect-url',
-})
-
-// Okta
-const oktaClient = createOAuthClient({
-  ...providers.okta('dev-123.okta.com'),
-  clientId: 'your-okta-client-id',
-  redirectUrl: 'your-redirect-url',
-})
-```
-
-## Custom Storage
-
-By default, the library uses `localStorage` on web and `AsyncStorage` on mobile. You can provide a custom storage adapter:
-
-```typescript
 import { createOAuthClient } from '@idealyst/oauth-client'
 
-const customStorage = {
-  async getItem(key: string): Promise<string | null> {
-    // Your storage implementation
-  },
-  async setItem(key: string, value: string): Promise<void> {
-    // Your storage implementation
-  },
-  async removeItem(key: string): Promise<void> {
-    // Your storage implementation
-  },
-}
-
-const client = createOAuthClient(config, customStorage)
-```
-
-## Platform-Specific Configuration
-
-### Web Configuration
-
-For web applications, use standard HTTP redirect URLs:
-
-```typescript
-const webClient = createOAuthClient({
-  ...providers.google,
-  clientId: 'your-google-client-id',
-  redirectUrl: 'https://yourapp.com/auth/callback',
-})
-```
-
-**⚠️ Security Note**: Client secrets should **NEVER** be included in client-side code. This library uses PKCE (Proof Key for Code Exchange) which provides security for public clients without requiring client secrets.
-
-### Mobile Configuration
-
-For mobile apps, you need to:
-
-1. **Configure custom URL scheme** in your app
-2. **Register the URL scheme** with your OAuth provider
-3. **Use the custom URL** as redirect URL
-
-```typescript
-const mobileClient = createOAuthClient({
-  ...providers.google,
-  clientId: 'your-google-client-id',
+const client = createOAuthClient({
+  apiBaseUrl: 'https://api.yourapp.com',
+  provider: 'google', // Your server endpoint: /auth/google (just redirects)
   redirectUrl: 'com.yourapp://oauth/callback',
+  
+  // OAuth provider config for direct token exchange
+  issuer: 'https://accounts.google.com',
+  clientId: 'your-google-client-id',
+  
+  scopes: ['profile', 'email'],
+})
+
+// Works on both web and mobile!
+const result = await client.authorize()
+console.log('Access token:', result.tokens.accessToken)
+```
+
+## How It Works
+
+This library uses a hybrid approach that minimizes server requirements:
+
+### Web Flow:
+1. Client redirects to `GET /api/auth/google?redirect_uri=com.yourapp://oauth/callback&state=xyz&code_challenge=abc`
+2. Server redirects to Google OAuth with server's client credentials + client's PKCE challenge
+3. Google redirects back to `com.yourapp://oauth/callback?code=123&state=xyz`
+4. Client automatically detects callback and exchanges code directly with Google using PKCE
+
+### Mobile Flow:
+1. App opens browser to `GET /api/auth/google?redirect_uri=com.yourapp://oauth/callback&state=xyz&code_challenge=abc`
+2. Server redirects to Google OAuth with server's client credentials + client's PKCE challenge
+3. Google redirects back to `com.yourapp://oauth/callback?code=123&state=xyz`
+4. Mobile OS opens app via deep link, client exchanges code directly with Google using PKCE
+
+## Minimal Server Setup
+
+Your server only needs **ONE simple endpoint**:
+
+### GET `/auth/{provider}` - OAuth Redirect
+
+```javascript
+app.get('/auth/:provider', (req, res) => {
+  const { redirect_uri, state, scope, code_challenge, code_challenge_method } = req.query
+  
+  // Build OAuth URL with your server's credentials + client's PKCE
+  const authUrl = buildOAuthUrl(req.params.provider, {
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uri: redirect_uri, // Client's redirect URI
+    state: state, // Client's state for CSRF protection
+    scope: scope || 'profile email',
+    response_type: 'code',
+    code_challenge: code_challenge, // Client's PKCE challenge
+    code_challenge_method: code_challenge_method || 'S256',
+  })
+  
+  res.redirect(authUrl)
 })
 ```
+
+That's it! No token exchange, no callbacks, no database - just a simple redirect.
 
 ## React Native Setup
 
 ### iOS Configuration
 
-1. Add URL scheme to your `Info.plist`:
+Add URL scheme to your `Info.plist`:
 
 ```xml
 <key>CFBundleURLTypes</key>
@@ -243,11 +117,11 @@ const mobileClient = createOAuthClient({
 
 ### Android Configuration
 
-1. Add intent filter to `android/app/src/main/AndroidManifest.xml`:
+Add intent filter to `android/app/src/main/AndroidManifest.xml`:
 
 ```xml
 <activity android:name=".MainActivity">
-  <intent-filter android:label="filter_react_native">
+  <intent-filter android:label="oauth_callback">
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
@@ -256,25 +130,133 @@ const mobileClient = createOAuthClient({
 </activity>
 ```
 
-2. Follow the [react-native-app-auth setup guide](https://github.com/FormidableLabs/react-native-app-auth#setup) for additional configuration.
+### Deep Link Handling (Automatic)
 
-### OAuth Provider Setup
+The client automatically handles OAuth deep links. The deep link handler is built-in and requires no additional setup.
 
-Register your custom URL scheme as a valid redirect URI in your OAuth provider:
+## API Reference
 
-- **Google**: Add `com.yourapp://oauth/callback` to "Authorized redirect URIs"
-- **GitHub**: Set "Authorization callback URL" to `com.yourapp://oauth/callback`
-- **Other providers**: Add the URL scheme to allowed callback URLs
+### createOAuthClient(config, storage?)
 
-## How Mobile OAuth Works
+```typescript
+const client = createOAuthClient({
+  // Your server (just redirects)
+  apiBaseUrl: 'https://api.yourapp.com',
+  provider: 'google',
+  redirectUrl: 'com.yourapp://oauth/callback',
+  
+  // OAuth provider config (for direct token exchange)  
+  issuer: 'https://accounts.google.com',
+  clientId: 'your-google-client-id',
+  tokenEndpoint: 'https://oauth2.googleapis.com/token', // Optional
+  
+  // Optional
+  scopes: ['profile', 'email'],
+  additionalParameters: { prompt: 'consent' },
+  customHeaders: { 'Authorization': 'Bearer api-key' },
+})
+```
 
-1. **App opens system browser** (Safari/Chrome) with OAuth URL
-2. **User authenticates** in the browser (can use saved passwords, Touch ID, etc.)
-3. **Provider redirects** to your custom URL scheme (`com.yourapp://oauth/callback`)
-4. **OS recognizes the scheme** and opens your app
-5. **react-native-app-auth** automatically extracts tokens and returns them
+### OAuthClient Methods
 
-This provides the most secure OAuth flow for mobile apps, as recommended by OAuth 2.0 security best practices.
+#### authorize()
+Initiates the OAuth flow and returns tokens.
+
+```typescript
+const result = await client.authorize()
+// result.tokens: { accessToken, refreshToken, idToken, expiresAt, ... }
+```
+
+#### refresh(refreshToken)
+Refreshes an expired access token directly with OAuth provider.
+
+```typescript
+const result = await client.refresh(refreshToken)
+```
+
+#### getStoredTokens()
+Retrieves stored tokens from local storage.
+
+```typescript
+const tokens = await client.getStoredTokens()
+if (tokens?.expiresAt && tokens.expiresAt < new Date()) {
+  // Token is expired, refresh it
+}
+```
+
+#### clearStoredTokens()
+Clears stored tokens from local storage.
+
+```typescript
+await client.clearStoredTokens()
+```
+
+#### logout()
+Clears stored tokens (server handles actual logout/revocation).
+
+```typescript
+await client.logout()
+```
+
+## Provider Examples
+
+### Google OAuth
+
+```typescript
+const client = createOAuthClient({
+  apiBaseUrl: 'https://api.yourapp.com',
+  provider: 'google',
+  redirectUrl: 'com.yourapp://oauth/callback',
+  
+  issuer: 'https://accounts.google.com',
+  clientId: 'your-google-client-id',
+  scopes: ['profile', 'email'],
+})
+```
+
+### GitHub OAuth
+
+```typescript
+const client = createOAuthClient({
+  apiBaseUrl: 'https://api.yourapp.com',
+  provider: 'github',
+  redirectUrl: 'com.yourapp://oauth/callback',
+  
+  issuer: 'https://github.com',
+  clientId: 'your-github-client-id',
+  tokenEndpoint: 'https://github.com/login/oauth/access_token',
+  scopes: ['user', 'user:email'],
+})
+```
+
+## Token Management
+
+```typescript
+async function getValidTokens() {
+  const storedTokens = await client.getStoredTokens()
+  
+  if (storedTokens) {
+    // Check if expired
+    if (storedTokens.expiresAt && storedTokens.expiresAt < new Date()) {
+      if (storedTokens.refreshToken) {
+        try {
+          const refreshed = await client.refresh(storedTokens.refreshToken)
+          return refreshed.tokens
+        } catch (error) {
+          // Refresh failed, need to re-authenticate
+          await client.clearStoredTokens()
+        }
+      }
+    } else {
+      return storedTokens
+    }
+  }
+
+  // No valid tokens, start OAuth flow
+  const result = await client.authorize()
+  return result.tokens
+}
+```
 
 ## Error Handling
 
@@ -284,21 +266,29 @@ try {
 } catch (error) {
   if (error.message.includes('User cancelled')) {
     // User cancelled the authorization
-  } else if (error.message.includes('network')) {
-    // Network error
+  } else if (error.message.includes('Invalid state')) {
+    // CSRF protection triggered  
+  } else if (error.message.includes('timeout')) {
+    // User didn't complete OAuth in time (mobile)
   } else {
     // Other OAuth error
   }
 }
 ```
 
-## TypeScript
+## Security Benefits
 
-The library is fully typed. Import types as needed:
+✅ **No client secrets in client code** - Only client ID needed  
+✅ **PKCE protection** - Secure code exchange without client secrets  
+✅ **CSRF protection** - Uses state parameter  
+✅ **Direct token exchange** - Client communicates directly with OAuth provider  
+✅ **Minimal server attack surface** - Server only redirects, doesn't handle tokens  
+
+## TypeScript
 
 ```typescript
 import type { 
-  OAuthConfig, 
+  ServerOAuthConfig,
   OAuthTokens, 
   OAuthResult, 
   OAuthClient 

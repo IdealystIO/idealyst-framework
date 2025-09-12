@@ -30,7 +30,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "react-native-app-auth": "^7.2.0"
+    "@idealyst/storage": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",
@@ -41,13 +41,7 @@
     "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-native": ">=0.72"
-  },
-  "peerDependenciesMeta": {
-    "react-native": {
-      "optional": true
-    }
+    "@idealyst/storage": "workspace:*"
   },
   "files": [
     "dist",
