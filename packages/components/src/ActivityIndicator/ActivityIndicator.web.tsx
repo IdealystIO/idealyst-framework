@@ -2,7 +2,6 @@ import React from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { ActivityIndicatorProps } from './types';
 import { activityIndicatorStyles } from './ActivityIndicator.styles';
-import './ActivityIndicator.web.css';
 
 const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
   animating = true,
@@ -47,6 +46,10 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
       borderWidth: Math.max(2, customSize / 10),
     },
     color && { borderTopColor: color, borderRightColor: color },
+    // Add inline CSS animation
+    animating && {
+      animation: 'spin 1s linear infinite',
+    },
   ];
 
   // Use getWebProps to generate className and ref for web
@@ -54,9 +57,20 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
   const spinnerProps = getWebProps(spinnerStyleArray);
 
   return (
-    <div {...containerProps} data-testid={testID}>
-      <div {...spinnerProps} />
-    </div>
+    <>
+      {/* Inject keyframes animation into the document head */}
+      <style>
+        {`
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+      <div {...containerProps} data-testid={testID}>
+        <div {...spinnerProps} />
+      </div>
+    </>
   );
 };
 

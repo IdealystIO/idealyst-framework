@@ -1,5 +1,5 @@
 import type { OAuthClient, OAuthConfig, OAuthResult } from './types'
-
+import crypto from 'crypto'
 export class WebOAuthClient implements OAuthClient {
   private config: OAuthConfig
 
@@ -8,6 +8,7 @@ export class WebOAuthClient implements OAuthClient {
   }
 
   async authorize(): Promise<OAuthResult> {
+    console.log("AAAAAA")
     const state = this.generateState()
 
     // Check if we're already in a callback

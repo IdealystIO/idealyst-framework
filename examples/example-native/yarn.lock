@@ -1752,11 +1752,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@idealyst/components@npm:^1.0.60":
-  version: 1.0.60
-  resolution: "@idealyst/components@npm:1.0.60"
+"@idealyst/components@npm:^1.0.74":
+  version: 1.0.74
+  resolution: "@idealyst/components@npm:1.0.74"
   peerDependencies:
-    "@idealyst/theme": ^1.0.60
+    "@idealyst/theme": ^1.0.74
     "@mdi/js": ^7.4.47
     "@mdi/react": ^1.6.1
     "@react-native-vector-icons/common": ^12.0.1
@@ -1786,7 +1786,7 @@ __metadata:
       optional: true
     react-native-vector-icons:
       optional: true
-  checksum: 10/a7e1d17179cbcbd37034cd7a3e2760c48471f10198a0e2b674978a6aa74a67a6be793887c4a72f901e678550ea9c67b3bf4b3ed23b41af89576b86ffc2552be5
+  checksum: 10/2e3bf9ae7a7ca93f62553570b4b3dfa9cb1e73809a153a140770f94af10372cccfcdc81e8068b8e427b7039b3935c372519252651a0af922583035b23921d008
   languageName: node
   linkType: hard
 
@@ -1840,12 +1840,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@idealyst/navigation@npm:^1.0.60":
-  version: 1.0.60
-  resolution: "@idealyst/navigation@npm:1.0.60"
+"@idealyst/navigation@npm:^1.0.74":
+  version: 1.0.74
+  resolution: "@idealyst/navigation@npm:1.0.74"
   peerDependencies:
-    "@idealyst/components": ^1.0.60
-    "@idealyst/theme": ^1.0.60
+    "@idealyst/components": ^1.0.74
+    "@idealyst/theme": ^1.0.74
     "@react-navigation/bottom-tabs": ^7.0.0
     "@react-navigation/drawer": ^7.0.0
     "@react-navigation/native": ^7.0.0
@@ -1859,7 +1859,34 @@ __metadata:
     react-native-unistyles: ^3.0.10
     react-router: ^7.6.3
     react-router-dom: ^7.6.3
-  checksum: 10/dd6919787ca4d519e0aaf3d20ea39731b51089bd26f31b373e037aaec8fa1cdfdc288af520fd6e10fd614a917bde71b6e404d0a04ff912739082918722b3ec58
+  checksum: 10/a98c95210a7a4494b9af20bcc3b8adf7911514789713dac487ecb08407bbe60003f79315f46b97857f05e07f415dac4430f0ab6796a8444af87992864338cc51
+  languageName: node
+  linkType: hard
+
+"@idealyst/oauth-client@npm:^1.0.74":
+  version: 1.0.74
+  resolution: "@idealyst/oauth-client@npm:1.0.74"
+  dependencies:
+    "@idealyst/storage": "npm:1.0.74"
+  peerDependencies:
+    "@idealyst/storage": 1.0.74
+  checksum: 10/e668783daa41ba43de031268ee25eab4c905d202a7856166d1ced66ad0ba80298d003c3d86f415664324043718e2b9cd39051318633cb931f6c4df7018b1bf08
+  languageName: node
+  linkType: hard
+
+"@idealyst/storage@npm:1.0.74":
+  version: 1.0.74
+  resolution: "@idealyst/storage@npm:1.0.74"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-mmkv: ">=2.0.0"
+  peerDependenciesMeta:
+    react-native:
+      optional: true
+    react-native-mmkv:
+      optional: true
+  checksum: 10/24509e6ba21fcf3113aa3bde3e04b1857292e2861d8cf95c2de8bd63bfa700d74027019e1998f4664652c93d1e9ba1ca474f5e7a7fe6219fc7ce3f0203eb8ff5
   languageName: node
   linkType: hard
 
@@ -1879,15 +1906,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@idealyst/theme@npm:^1.0.60":
-  version: 1.0.60
-  resolution: "@idealyst/theme@npm:1.0.60"
+"@idealyst/theme@npm:^1.0.74":
+  version: 1.0.74
+  resolution: "@idealyst/theme@npm:1.0.74"
   peerDependencies:
     react-native-unistyles: ^3.0.4
   peerDependenciesMeta:
     react-native-unistyles:
       optional: true
-  checksum: 10/cab6322053ed98072d3efd8a5604c22562bf201151a5be9e9144fd5cfc2a8c9576bc09f636e08a57c1fa6dbeef1b9d77cf977748b46ba5bd3bd4e281350403f6
+  checksum: 10/e877bbff62f2fb4351933a741e0a64943f1080671cde8d872c3d17fb264c29d0cb59fa714685b3932055bca4c41911930acaa3698bb612fc0230b789abbaeac9
   languageName: node
   linkType: hard
 
@@ -3472,12 +3499,13 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.27.6"
-    "@idealyst/components": "npm:^1.0.60"
+    "@idealyst/components": "npm:^1.0.74"
     "@idealyst/datagrid": "npm:^1.0.41"
     "@idealyst/datepicker": "npm:^1.0.41"
-    "@idealyst/navigation": "npm:^1.0.60"
+    "@idealyst/navigation": "npm:^1.0.74"
+    "@idealyst/oauth-client": "npm:^1.0.74"
     "@idealyst/storage": "npm:^1.0.50"
-    "@idealyst/theme": "npm:^1.0.60"
+    "@idealyst/theme": "npm:^1.0.74"
     "@react-native-community/cli": "npm:19.0.0"
     "@react-native-community/cli-platform-android": "npm:19.0.0"
     "@react-native-community/cli-platform-ios": "npm:19.0.0"

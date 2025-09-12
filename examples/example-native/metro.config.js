@@ -24,6 +24,7 @@ const config = {
     path.resolve(__dirname, '../../packages/datagrid'),
     path.resolve(__dirname, '../../packages/datepicker'),
     path.resolve(__dirname, '../../packages/storage'),
+    path.resolve(__dirname, '../../packages/oauth-client'),
     path.resolve(__dirname, 'src'),
   ],
   watcher: {

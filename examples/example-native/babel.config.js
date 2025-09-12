@@ -22,6 +22,7 @@ module.exports = {
         '@idealyst/datagrid': path.resolve(__dirname, '../../packages/datagrid/src'),
         '@idealyst/datepicker': path.resolve(__dirname, '../../packages/datepicker/src'),
         '@idealyst/storage': path.resolve(__dirname, '../../packages/storage/src'),
+        '@idealyst/oauth-client': path.resolve(__dirname, '../../packages/oauth-client/src'),
       },
     }],
     'react-native-reanimated/plugin',

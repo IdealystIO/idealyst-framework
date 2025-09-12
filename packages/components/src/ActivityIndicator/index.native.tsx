@@ -1,2 +1,2 @@
-export { default } from './ActivityIndicator.web';
+export { default } from './ActivityIndicator.native';
 export type { ActivityIndicatorProps } from './types';

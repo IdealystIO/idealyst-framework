@@ -35,6 +35,7 @@ export class NativeOAuthClient implements OAuthClient {
   private async waitForDeepLinkCallback(): Promise<{ code?: string; error?: string; state?: string }> {
     return new Promise((resolve, reject) => {
       let subscription: any
+      let timeoutId: NodeJS.Timeout | null = null
       
       const handleUrl = (event: { url: string }) => {
         const callbackData = this.parseDeepLink(event.url)
@@ -47,6 +48,12 @@ export class NativeOAuthClient implements OAuthClient {
       const cleanup = () => {
         if (subscription?.remove) {
           subscription.remove()
+        } else if (subscription) {
+          // For newer React Native versions
+          subscription()
+        }
+        if (timeoutId) {
+          clearTimeout(timeoutId)
         }
       }
 
@@ -60,13 +67,15 @@ export class NativeOAuthClient implements OAuthClient {
             return
           }
         }
+      }).catch(error => {
+        console.warn('Failed to get initial URL:', error)
       })
 
       // Listen for subsequent deep links
       subscription = Linking.addEventListener('url', handleUrl)
 
       // Timeout after 5 minutes
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         cleanup()
         reject(new Error('OAuth timeout - user did not complete authorization'))
       }, 5 * 60 * 1000)
@@ -75,6 +84,7 @@ export class NativeOAuthClient implements OAuthClient {
 
   private parseDeepLink(url: string): { code?: string; error?: string; state?: string } | null {
     try {
+      // Handle custom scheme URLs (e.g., com.myapp://oauth/callback?code=123)
       const parsedUrl = new URL(url)
       
       // Check if this is our OAuth callback
@@ -83,10 +93,26 @@ export class NativeOAuthClient implements OAuthClient {
         return null
       }
 
-      // Extract OAuth parameters
+      // For custom schemes, parameters are in the query string
       const code = parsedUrl.searchParams.get('code')
       const error = parsedUrl.searchParams.get('error')
       const state = parsedUrl.searchParams.get('state')
+
+      // Also check the hash fragment for parameters (some OAuth providers use this)
+      if (!code && !error && parsedUrl.hash) {
+        const hashParams = new URLSearchParams(parsedUrl.hash.substring(1))
+        const hashCode = hashParams.get('code')
+        const hashError = hashParams.get('error')
+        const hashState = hashParams.get('state')
+        
+        if (hashCode || hashError) {
+          return {
+            code: hashCode || undefined,
+            error: hashError || undefined,
+            state: hashState || undefined
+          }
+        }
+      }
 
       if (!code && !error) {
         return null
@@ -98,6 +124,7 @@ export class NativeOAuthClient implements OAuthClient {
         state: state || undefined 
       }
     } catch (error) {
+      console.warn('Failed to parse deep link URL:', url, error)
       return null
     }
   }
