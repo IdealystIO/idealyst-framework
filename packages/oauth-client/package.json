@@ -1,0 +1,60 @@
+{
+  "name": "@idealyst/oauth-client",
+  "version": "1.0.69",
+  "description": "Universal OAuth2 client for web and React Native",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "yarn build"
+  },
+  "keywords": [
+    "oauth",
+    "oauth2",
+    "authentication",
+    "react",
+    "react-native",
+    "cross-platform"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react-native-app-auth": "^7.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-native": "^0.73.0",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-native": ">=0.72"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -35,6 +35,7 @@ const packagePaths = [
   'packages/cli/package.json',
   'packages/datagrid/package.json',
   'packages/datepicker/package.json',
+  'packages/oauth-client/package.json',
   'packages/storage/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json'
