@@ -1718,7 +1718,7 @@ __metadata:
     "@types/react": "npm:^19.1.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.0.74
+    "@idealyst/theme": ^1.0.76
     "@mdi/js": ^7.4.47
     "@mdi/react": ^1.6.1
     "@react-native-vector-icons/common": ^12.0.1
@@ -1759,8 +1759,8 @@ __metadata:
     "@types/react-window": "npm:^1.8.8"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.0.74
-    "@idealyst/theme": ^1.0.74
+    "@idealyst/components": ^1.0.76
+    "@idealyst/theme": ^1.0.76
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -1786,8 +1786,8 @@ __metadata:
     "@types/react": "npm:^19.1.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.0.74
-    "@idealyst/theme": ^1.0.74
+    "@idealyst/components": ^1.0.76
+    "@idealyst/theme": ^1.0.76
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-svg: ">=13.0.0"
@@ -1814,8 +1814,8 @@ __metadata:
     "@types/react-dom": "npm:^19.1.6"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.0.74
-    "@idealyst/theme": ^1.0.74
+    "@idealyst/components": ^1.0.76
+    "@idealyst/theme": ^1.0.76
     "@react-navigation/bottom-tabs": ^7.0.0
     "@react-navigation/drawer": ^7.0.0
     "@react-navigation/native": ^7.0.0
@@ -1836,21 +1836,20 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/oauth-client@workspace:packages/oauth-client"
   dependencies:
-    "@idealyst/storage": "workspace:*"
+    "@idealyst/storage": "npm:^1.0.76"
     "@types/react": "npm:^18.3.18"
     "@types/react-native": "npm:^0.73.0"
-    crypto: "npm:^1.0.1"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
     tsup: "npm:^8.3.5"
     typescript: "npm:^5.7.3"
   peerDependencies:
-    "@idealyst/storage": "workspace:*"
+    "@idealyst/storage": ^1.0.76
     react-native: ">=0.60.0"
   languageName: unknown
   linkType: soft
 
-"@idealyst/storage@workspace:*, @idealyst/storage@workspace:packages/storage":
+"@idealyst/storage@npm:^1.0.76, @idealyst/storage@workspace:packages/storage":
   version: 0.0.0-use.local
   resolution: "@idealyst/storage@workspace:packages/storage"
   dependencies:
@@ -3611,13 +3610,6 @@ __metadata:
     shebang-command: "npm:^2.0.0"
     which: "npm:^2.0.1"
   checksum: 10/0d52657d7ae36eb130999dffff1168ec348687b48dd38e2ff59992ed916c88d328cf1d07ff4a4a10bc78de5e1c23f04b306d569e42f7a2293915c081e4dfee86
-  languageName: node
-  linkType: hard
-
-"crypto@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "crypto@npm:1.0.1"
-  checksum: 10/087fe3165bd94c333a49e6ed66a0193911f63eac38a24f379b3001a5fe260a59c413646e53a0f67875ba13902b2686d81dc703cb2c147a4ec727dcdc04e5645e
   languageName: node
   linkType: hard
 

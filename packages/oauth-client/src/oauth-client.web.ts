@@ -1,5 +1,5 @@
 import type { OAuthClient, OAuthConfig, OAuthResult } from './types'
-import crypto from 'crypto'
+
 export class WebOAuthClient implements OAuthClient {
   private config: OAuthConfig
 
@@ -8,7 +8,6 @@ export class WebOAuthClient implements OAuthClient {
   }
 
   async authorize(): Promise<OAuthResult> {
-    console.log("AAAAAA")
     const state = this.generateState()
 
     // Check if we're already in a callback
@@ -74,11 +73,12 @@ export class WebOAuthClient implements OAuthClient {
   }
 
   private generateState(): string {
-    const array = new Uint8Array(16)
-    crypto.getRandomValues(array)
-    return btoa(String.fromCharCode.apply(null, Array.from(array)))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '')
+    // Generate random state for CSRF protection
+    let result = ''
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~'
+    for (let i = 0; i < 32; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    return result
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/oauth-client",
-  "version": "1.0.75",
+  "version": "1.0.76",
   "description": "Universal OAuth2 client for web and React Native",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -29,11 +29,8 @@
   ],
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "@idealyst/storage": "workspace:*",
-    "crypto": "^1.0.1"
-  },
   "devDependencies": {
+    "@idealyst/storage": "^1.0.76",
     "@types/react": "^18.3.18",
     "@types/react-native": "^0.73.0",
     "react": "^19.1.0",
@@ -42,7 +39,7 @@
     "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "@idealyst/storage": "workspace:*",
+    "@idealyst/storage": "^1.0.76",
     "react-native": ">=0.60.0"
   },
   "files": [
