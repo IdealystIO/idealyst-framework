@@ -5,7 +5,7 @@ import { NavigatorParam } from "../routing";
  */
 export type NavigateParams = {
     path: string;
-    vars: Record<string, string>;
+    vars?: Record<string, string>;
 };
 
 export type NavigatorProviderProps = {

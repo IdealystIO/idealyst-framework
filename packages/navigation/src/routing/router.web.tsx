@@ -1,7 +1,7 @@
 import React from 'react'
-import { NavigatorParam, RouteParam, TabNavigatorParam, StackNavigatorParam } from './types'
-import { DefaultTabLayout } from '../layouts/DefaultTabLayout'
 import { DefaultStackLayout } from '../layouts/DefaultStackLayout'
+import { DefaultTabLayout } from '../layouts/DefaultTabLayout'
+import { NavigatorParam, StackNavigatorParam, TabNavigatorParam } from './types'
 
 /**
  * Build the Web navigator using custom layout components
@@ -44,7 +44,7 @@ const buildFullPath = (parentPath: string, childPath: string): string => {
     
     const normalizedParent = parentPath === '/' ? '' : parentPath
     const normalizedChild = normalizePath(childPath)
-    
+
     return `${normalizedParent}${normalizedChild}`
 }
 
@@ -164,7 +164,7 @@ const StackNavigator: React.FC<{ params: StackNavigatorParam; parentPath: string
             const navigatorRoute = params.routes.find(route => {
                 if (route.type === 'navigator') {
                     const fullRoutePath = buildFullPath(parentPath, route.path)
-                    return currentPath.startsWith(fullRoutePath)
+                    return currentPath.startsWith(fullRoutePath + '/') || currentPath === fullRoutePath
                 }
                 return false
             })
