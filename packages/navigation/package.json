@@ -18,8 +18,10 @@
   },
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "require": "./src/index.ts",
+      "react-native": "./src/index.native.ts",
+      "default": "./src/index.web.ts",
+      "import": "./src/index.web.ts",
+      "require": "./src/index.web.ts",
       "types": "./src/index.ts"
     },
     "./examples": {

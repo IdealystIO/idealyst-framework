@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, Button, Icon } from '@idealyst/components'
 import { TabLayoutProps } from '../routing/types'
+import { Outlet } from 'react-router'
 
 export interface DefaultTabLayoutProps extends TabLayoutProps {}
 
@@ -11,7 +12,6 @@ export interface DefaultTabLayoutProps extends TabLayoutProps {}
 export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
     options,
     routes,
-    ContentComponent,
     onNavigate,
     currentPath
 }) => {
@@ -94,7 +94,7 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
             
             {/* Content Area */}
             <View style={{ flex: 1, padding: 20 }}>
-                <ContentComponent />
+                <Outlet />
             </View>
         </View>
     )

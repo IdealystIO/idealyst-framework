@@ -102,7 +102,6 @@ export type RouteWithFullPath<T = ScreenOptions> = RouteParam<T> & {
 export type TabLayoutProps = {
     options?: NavigatorOptions
     routes: RouteWithFullPath<TabBarScreenOptions>[]
-    ContentComponent: React.ComponentType
     onNavigate: (path: string) => void
     currentPath: string
 }
@@ -110,7 +109,6 @@ export type TabLayoutProps = {
 export type StackLayoutProps = {
     options?: NavigatorOptions
     routes: RouteWithFullPath<ScreenOptions>[]
-    ContentComponent: React.ComponentType
     onNavigate: (path: string) => void
     currentPath: string
 }

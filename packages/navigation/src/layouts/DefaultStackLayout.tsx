@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text } from '@idealyst/components'
 import { StackLayoutProps } from '../routing/types'
+import { Outlet } from 'react-router'
 
 export interface DefaultStackLayoutProps extends StackLayoutProps {
     onNavigate: (path: string) => void
@@ -14,7 +15,6 @@ export interface DefaultStackLayoutProps extends StackLayoutProps {
 export const DefaultStackLayout: React.FC<DefaultStackLayoutProps> = ({
     options,
     routes,
-    ContentComponent,
     onNavigate,
     currentPath
 }) => {
@@ -50,7 +50,7 @@ export const DefaultStackLayout: React.FC<DefaultStackLayoutProps> = ({
             
             {/* Content Area */}
             <View style={{ flex: 1, padding: 20 }}>
-                <ContentComponent />
+                <Outlet />
             </View>
         </View>
     )

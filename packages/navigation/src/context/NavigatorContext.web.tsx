@@ -1,4 +1,5 @@
 import React, { createContext, memo, useContext, useMemo } from 'react';
+import { useNavigate } from 'react-router';
 import { NavigateParams, NavigatorProviderProps } from './types';
 import { buildNavigator } from '../routing';
 
@@ -11,6 +12,8 @@ const NavigatorContext = createContext<{
 export const NavigatorProvider = ({ 
     route,
 }: NavigatorProviderProps) => {
+    const reactRouterNavigate = useNavigate()
+    
     const navigateFunction = (params: NavigateParams) => {
         if (params.path) {
             // Normalize path - convert empty string to '/'
@@ -21,10 +24,8 @@ export const NavigatorProvider = ({
                 path = `/${path}`
             }
             
-            // Use HTML5 history API for proper navigation without hash
-            window.history.pushState({}, '', path);
-            // Trigger a popstate event to update any listening components
-            window.dispatchEvent(new PopStateEvent('popstate'));
+            // Use React Router's navigate function
+            reactRouterNavigate(path);
         }
     };
     
