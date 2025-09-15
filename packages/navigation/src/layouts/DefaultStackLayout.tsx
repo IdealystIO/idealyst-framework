@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text } from '@idealyst/components'
 import { StackLayoutProps } from '../routing/types'
-import { Outlet } from 'react-router'
+import { Outlet } from '..'
 
 export interface DefaultStackLayoutProps extends StackLayoutProps {
     onNavigate: (path: string) => void

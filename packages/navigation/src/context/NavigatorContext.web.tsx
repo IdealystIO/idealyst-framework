@@ -1,11 +1,9 @@
 import React, { createContext, memo, useContext, useMemo } from 'react';
-import { useNavigate } from 'react-router';
-import { NavigateParams, NavigatorProviderProps } from './types';
+import { useNavigate, useParams } from 'react-router';
+import { NavigateParams, NavigatorProviderProps, NavigatorContextValue } from './types';
 import { buildNavigator } from '../routing';
 
-const NavigatorContext = createContext<{
-    navigate: (params: NavigateParams) => void;
-}>({
+const NavigatorContext = createContext<NavigatorContextValue>({
     navigate: () => {},
 });
 
@@ -24,6 +22,13 @@ export const NavigatorProvider = ({
                 path = `/${path}`
             }
             
+            // Substitute variables in the path if provided
+            if (params.vars) {
+                Object.entries(params.vars).forEach(([key, value]) => {
+                    path = path.replace(`:${key}`, value);
+                });
+            }
+            
             // Use React Router's navigate function
             reactRouterNavigate(path);
         }
@@ -35,7 +40,9 @@ export const NavigatorProvider = ({
     }, [route]);
     
     return (
-        <NavigatorContext.Provider value={{ navigate: navigateFunction }}>
+        <NavigatorContext.Provider value={{ 
+            navigate: navigateFunction,
+        }}>
             <RouteComponent />
         </NavigatorContext.Provider>
     );

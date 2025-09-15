@@ -11,3 +11,10 @@ export type NavigateParams = {
 export type NavigatorProviderProps = {
     route: NavigatorParam;
 };
+
+/**
+ * Context value that includes navigation function and current route parameters
+ */
+export type NavigatorContextValue = {
+    navigate: (params: NavigateParams) => void;
+};

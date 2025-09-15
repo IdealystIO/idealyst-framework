@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/navigation",
-  "version": "1.0.78",
+  "version": "1.0.82",
   "description": "Cross-platform navigation library for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",
@@ -18,10 +18,8 @@
   },
   "exports": {
     ".": {
-      "react-native": "./src/index.native.ts",
-      "default": "./src/index.web.ts",
-      "import": "./src/index.web.ts",
-      "require": "./src/index.web.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
       "types": "./src/index.ts"
     },
     "./examples": {
@@ -40,8 +38,8 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.0.78",
-    "@idealyst/theme": "^1.0.78",
+    "@idealyst/components": "^1.0.82",
+    "@idealyst/theme": "^1.0.82",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/drawer": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
