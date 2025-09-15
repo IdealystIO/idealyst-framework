@@ -16,7 +16,7 @@ export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
         <NavigatorType.Navigator screenOptions={{
             headerShown: params.options?.headerShown
         }}>
-            {params.routes.map((child) => buildScreen(child, NavigatorType))}
+            {params.routes.map((child, index) => buildScreen(child, NavigatorType, parentPath, index))}
         </NavigatorType.Navigator>
     )
 }
@@ -43,11 +43,33 @@ const getNavigatorType = (params: NavigatorParam) => {
  * @param parentPath 
  * @returns 
  */
-const buildScreen = (params: RouteParam, Navigator: TypedNavigator, parentPath = '') => {
+const buildScreen = (params: RouteParam, Navigator: TypedNavigator, parentPath = '', index: number) => {
+    // Build the full path by combining parent path with current route path
+    // Handle root paths properly to avoid double slashes
+    let fullPath: string;
+    if (!parentPath || parentPath === '/') {
+        // If no parent path or parent is root, use the route path directly
+        fullPath = params.path;
+    } else {
+        // For nested routes, combine parent path with route path
+        // Remove leading slash from route path to avoid double slashes
+        const routePath = params.path.startsWith('/') ? params.path.slice(1) : params.path;
+        fullPath = `${parentPath}/${routePath}`;
+    }
+    
+    console.log('📱 Registering screen:', {
+        originalPath: params.path,
+        parentPath,
+        fullPath,
+        type: params.type,
+        screenName: fullPath
+    });
+    
     return (
         <Navigator.Screen
-            name={params.path}
-            component={params.type === 'screen' ? params.component : buildNavigator(params, parentPath + params.path)}
+            key={`${fullPath}-${index}`}
+            name={fullPath}
+            component={params.type === 'screen' ? params.component : buildNavigator(params, fullPath)}
             options={params.options}
         />
     )

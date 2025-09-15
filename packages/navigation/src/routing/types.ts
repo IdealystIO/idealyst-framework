@@ -5,6 +5,7 @@ export type ScreenOptions = {
      * Screen title for navigation headers
      */
     title?: string;
+    headerShown?: boolean;
     
 };
 
