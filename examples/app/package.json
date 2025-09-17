@@ -1,0 +1,51 @@
+{
+  "name": "@test-select-demo/test-select-demo",
+  "version": "1.0.82",
+  "description": "Full-stack Idealyst Framework workspace",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@4.1.0",
+  "scripts": {
+    "test": "yarn workspaces run test",
+    "test:watch": "yarn workspaces foreach --include '@/*' run test:watch",
+    "test:coverage": "yarn workspaces foreach --include '@/*' run test:coverage",
+    "test:ci": "yarn workspaces foreach --include '@/*' --parallel run test --passWithNoTests",
+    "test:runner": "node scripts/test-runner.js",
+    "test:help": "node scripts/test-runner.js help",
+    "publish:all": "yarn workspaces foreach --include '@/*' npm publish",
+    "version:patch": "yarn workspaces foreach --include '@/*' version patch",
+    "version:minor": "yarn workspaces foreach --include '@/*' version minor",
+    "version:major": "yarn workspaces foreach --include '@/*' version major",
+    "build:all": "yarn workspaces foreach --include '@/*' run build",
+    "lint:all": "yarn workspaces foreach --include '@/*' run lint",
+    "type-check:all": "yarn workspaces foreach --include '@/*' run type-check",
+    "dev": "concurrently \"yarn api:dev\" \"yarn web:dev\" \"yarn mobile:start\"",
+    "build": "yarn build:packages && yarn api:build && yarn web:build",
+    "build:packages": "yarn workspace @test-select-demo/database build && yarn workspace @test-select-demo/shared build",
+    "api:dev": "yarn workspace @test-select-demo/api dev",
+    "api:build": "yarn workspace @test-select-demo/api build",
+    "web:dev": "yarn workspace @test-select-demo/web dev",
+    "web:build": "yarn workspace @test-select-demo/web build",
+    "mobile:start": "yarn workspace @test-select-demo/mobile start",
+    "mobile:android": "yarn workspace @test-select-demo/mobile android",
+    "mobile:ios": "yarn workspace @test-select-demo/mobile ios",
+    "db:generate": "yarn workspace @test-select-demo/database db:generate",
+    "db:push": "yarn workspace @test-select-demo/database db:push",
+    "db:migrate": "yarn workspace @test-select-demo/database db:migrate",
+    "db:studio": "yarn workspace @test-select-demo/database db:studio",
+    "type-check": "yarn workspaces run type-check"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/jest": "^29.5.12",
+    "concurrently": "^8.2.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.0.0"
+  }
+}

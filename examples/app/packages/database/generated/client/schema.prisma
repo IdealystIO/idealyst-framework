@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+// Simple Test model for quick API testing
+model Test {
+  id        String   @id @default(cuid())
+  name      String
+  message   String
+  status    String   @default("active") // "active", "inactive"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Demo User model with profile information
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  name     String?
+  avatar   String? // URL to profile image
+  bio      String? // User biography
+  location String? // User location
+  website  String? // Personal website
+
+  // Posts created by this user
+  posts Post[]
+
+  // Comments made by this user
+  comments Comment[]
+
+  // User preferences and settings
+  settings UserSettings?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Demo Post model for a simple blog/social feed
+model Post {
+  id        String  @id @default(cuid())
+  title     String
+  content   String
+  excerpt   String? // Short description
+  published Boolean @default(false)
+  tags      String? // Comma-separated tag strings
+
+  // Author relationship
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+
+  // Comments on this post
+  comments Comment[]
+
+  // Post metadata
+  views Int @default(0)
+  likes Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Demo Comment model
+model Comment {
+  id      String @id @default(cuid())
+  content String
+
+  // Author relationship
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+
+  // Post relationship
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  // Parent comment for nested threading
+  parent   Comment?  @relation("CommentThread", fields: [parentId], references: [id])
+  parentId String?
+  children Comment[] @relation("CommentThread")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// User settings and preferences
+model UserSettings {
+  id            String  @id @default(cuid())
+  theme         String  @default("auto") // "light", "dark", "auto"
+  notifications Boolean @default(true)
+  emailUpdates  Boolean @default(false)
+  publicProfile Boolean @default(true)
+
+  // User relationship (one-to-one)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

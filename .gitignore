@@ -112,6 +112,7 @@ public
 .yarn/install-state.gz
 .yarn/*
 .pnp.*
+.yarn
 
 # IDEs and editors
 .idea/
