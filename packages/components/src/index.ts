@@ -47,6 +47,9 @@ export * from './Popover/types';
 export { default as ActivityIndicator } from './ActivityIndicator';
 export * from './ActivityIndicator/types';
 
+export { default as Select } from './Select';
+export * from './Select/types';
+
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
@@ -62,6 +65,7 @@ export type { SVGImageProps } from './SVGImage/types';
 export type { DialogProps } from './Dialog/types';
 export type { PopoverProps } from './Popover/types';
 export type { ActivityIndicatorProps } from './ActivityIndicator/types';
+export type { SelectProps } from './Select/types';
 
 export { breakpoints } from '@idealyst/theme';
 export type { AppTheme } from '@idealyst/theme';

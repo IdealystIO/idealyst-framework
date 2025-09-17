@@ -12,6 +12,7 @@ export { ScreenExamples } from './ScreenExamples';
 export { SVGImageExamples } from './SVGImageExamples';
 export { DialogExamples } from './DialogExamples';
 export { PopoverExamples } from './PopoverExamples';
+export { SelectExamples } from './SelectExamples';
 export { ThemeExtensionExamples } from './ThemeExtensionExamples';
 export { extendedThemes, } from './extendedTheme';
 export type { ExtendedColorVariant, ExtendedIntentVariant } from './extendedTheme';

@@ -14,6 +14,7 @@ import { ScreenExamples } from './ScreenExamples';
 import { SVGImageExamples } from './SVGImageExamples';
 import { DialogExamples } from './DialogExamples';
 import { PopoverExamples } from './PopoverExamples';
+import { SelectExamples } from './SelectExamples';
 import { ThemeExtensionExamples } from './ThemeExtensionExamples';
 
 export const AllExamples = () => {
@@ -71,6 +72,9 @@ export const AllExamples = () => {
       <Divider spacing="medium" />
       
       <PopoverExamples />
+      <Divider spacing="medium" />
+
+      <SelectExamples />
       <Divider spacing="medium" />
 
       <Divider spacing="large" intent="success">
