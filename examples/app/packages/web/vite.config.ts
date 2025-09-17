@@ -45,14 +45,6 @@ export default defineConfig({
       // Use absolute path to resolve react-native-web properly
       'react-native': path.resolve(__dirname, 'node_modules/react-native-web'),
       '@react-native/normalize-colors': path.resolve(__dirname, 'node_modules/@react-native/normalize-colors'),
-      'react-native-unistyles': path.resolve(__dirname, 'node_modules/react-native-unistyles'),
-      '@mdi/react': path.resolve(__dirname, 'node_modules/@mdi/react'),
-      '@mdi/js': path.resolve(__dirname, 'node_modules/@mdi/js'),
-      'react-router-dom': path.resolve(__dirname, 'node_modules/react-router-dom'),
-      // Ensure we use the source code of our packages
-      '@idealyst/components': path.resolve(__dirname, '../../../../packages/components/src'),
-      '@idealyst/navigation': path.resolve(__dirname, '../../../../packages/navigation/src'),
-      '@idealyst/theme': path.resolve(__dirname, '../../../../packages/theme/src'),
     },
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
