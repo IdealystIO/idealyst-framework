@@ -33,7 +33,7 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "react-native-unistyles": "^3.0.4"
+    "react-native-unistyles": ">=3.0.0"
   },
   "peerDependenciesMeta": {
     "react-native-unistyles": {

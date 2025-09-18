@@ -1,4 +1,4 @@
-import { useParams as useReactRouterParams } from 'react-router';
+import { useParams as useReactRouterParams } from '../router';
 
 /**
  * Custom useParams hook that wraps React Router's useParams

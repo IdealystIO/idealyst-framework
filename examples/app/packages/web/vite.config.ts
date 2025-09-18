@@ -44,7 +44,14 @@ export default defineConfig({
     alias: {
       // Use absolute path to resolve react-native-web properly
       'react-native': path.resolve(__dirname, 'node_modules/react-native-web'),
+      'react-native-unistyles': path.resolve(__dirname, 'node_modules/react-native-unistyles'),
+      '@mdi/react': path.resolve(__dirname, 'node_modules/@mdi/react'),
+      '@mdi/js': path.resolve(__dirname, 'node_modules/@mdi/js'),
       '@react-native/normalize-colors': path.resolve(__dirname, 'node_modules/@react-native/normalize-colors'),
+      // Ensure we use the source code of our packages for live development
+      '@idealyst/components': path.resolve(__dirname, '../../../../packages/components/src'),
+      '@idealyst/navigation': path.resolve(__dirname, '../../../../packages/navigation/src'),
+      '@idealyst/theme': path.resolve(__dirname, '../../../../packages/theme/src'),
     },
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
@@ -58,20 +65,10 @@ export default defineConfig({
     __DEV__: JSON.stringify(true),
   },
   optimizeDeps: {
-    include: [
-      'react-native-web',
-      '@react-native/normalize-colors',
-      'react-native-unistyles',
-      'react-native-unistyles/web',
-      '@mdi/react',
-      '@mdi/js',
+    exclude: [
       '@idealyst/components',
       '@idealyst/navigation',
       '@idealyst/theme',
-    ],
-    exclude: [
-      'react-native-edge-to-edge',
-      'react-native-nitro-modules',
       '@test-select-demo/shared',
     ],
     esbuildOptions: {

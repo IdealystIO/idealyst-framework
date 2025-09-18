@@ -41,17 +41,17 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/theme": "^1.0.82",
-    "@mdi/js": "^7.4.47",
-    "@mdi/react": "^1.6.1",
-    "@react-native-vector-icons/common": "^12.0.1",
-    "@react-native-vector-icons/material-design-icons": "^12.0.1",
+    "@idealyst/theme": ">=1.0.0",
+    "@mdi/js": ">=7.0.0",
+    "@mdi/react": ">=1.0.0",
+    "@react-native-vector-icons/common": ">=12.0.0",
+    "@react-native-vector-icons/material-design-icons": ">=12.0.0",
     "@react-native/normalize-colors": "*",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-edge-to-edge": "*",
     "react-native-nitro-modules": "*",
-    "react-native-unistyles": "^3.0.4"
+    "react-native-unistyles": ">=3.0.0"
   },
   "peerDependenciesMeta": {
     "@idealyst/theme": {

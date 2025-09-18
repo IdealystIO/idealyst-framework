@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router'
+import { Routes, Route } from '../router'
 import { DefaultStackLayout } from '../layouts/DefaultStackLayout'
 import { DefaultTabLayout } from '../layouts/DefaultTabLayout'
 import { NavigatorParam, RouteParam } from './types'

@@ -31,6 +31,11 @@
       "import": "./src/examples/unistyles.ts",
       "require": "./src/examples/unistyles.ts",
       "types": "./src/examples/unistyles.ts"
+    },
+    "./router": {
+      "import": "./src/router/index.ts",
+      "require": "./src/router/index.ts",
+      "types": "./src/router/index.ts"
     }
   },
   "scripts": {
@@ -38,21 +43,21 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.0.82",
-    "@idealyst/theme": "^1.0.82",
-    "@react-navigation/bottom-tabs": "^7.0.0",
-    "@react-navigation/drawer": "^7.0.0",
-    "@react-navigation/native": "^7.0.0",
-    "@react-navigation/native-stack": "^7.0.0",
+    "@idealyst/components": ">=1.0.0",
+    "@idealyst/theme": ">=1.0.0",
+    "@react-navigation/bottom-tabs": ">=7.0.0",
+    "@react-navigation/drawer": ">=7.0.0",
+    "@react-navigation/native": ">=7.0.0",
+    "@react-navigation/native-stack": ">=7.0.0",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-gesture-handler": "*",
     "react-native-reanimated": "*",
     "react-native-safe-area-context": "*",
     "react-native-screens": "*",
-    "react-native-unistyles": "^3.0.10",
-    "react-router": "^7.6.3",
-    "react-router-dom": "^7.6.3"
+    "react-native-unistyles": ">=3.0.0",
+    "react-router": ">=6.0.0",
+    "react-router-dom": ">=6.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.8",

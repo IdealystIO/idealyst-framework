@@ -1,5 +1,5 @@
-import { BrowserRouter } from 'react-router-dom';
 import { App } from '@test-select-demo/shared';
+import { BrowserRouter } from 'react-router-dom';
 
 function WebApp() {
   return (
@@ -8,7 +8,7 @@ function WebApp() {
         <App />
       </BrowserRouter>
     </div>
-  );  
+  );
 }
 
 export default WebApp;

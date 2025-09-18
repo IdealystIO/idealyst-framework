@@ -1,5 +1,5 @@
 import React, { createContext, memo, useContext, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from '../router';
 import { NavigateParams, NavigatorProviderProps, NavigatorContextValue } from './types';
 import { buildNavigator } from '../routing';
 
@@ -7,7 +7,7 @@ const NavigatorContext = createContext<NavigatorContextValue>({
     navigate: () => {},
 });
 
-export const NavigatorProvider = ({ 
+export const NavigatorProvider = ({
     route,
 }: NavigatorProviderProps) => {
     const reactRouterNavigate = useNavigate()
