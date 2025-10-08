@@ -106,6 +106,7 @@
       }
     }
   },
+  "remoteUser": "node",
 
   // Post-create command to set up the development environment
   "postCreateCommand": "bash .devcontainer/setup.sh"

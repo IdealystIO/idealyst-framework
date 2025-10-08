@@ -43,6 +43,15 @@ export * from './Popover/types';
 export { default as Pressable } from './Pressable';
 export * from './Pressable/types';
 
+export { default as Switch } from './Switch';
+export * from './Switch/types';
+
+export { RadioButton, RadioGroup } from './RadioButton';
+export * from './RadioButton/types';
+
+export { default as Progress } from './Progress';
+export * from './Progress/types';
+
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
@@ -58,6 +67,9 @@ export type { SVGImageProps } from './SVGImage/types';
 export type { DialogProps } from './Dialog/types';
 export type { PopoverProps } from './Popover/types';
 export type { PressableProps } from './Pressable/types';
+export type { SwitchProps } from './Switch/types';
+export type { RadioButtonProps, RadioGroupProps } from './RadioButton/types';
+export type { ProgressProps } from './Progress/types';
 
 export { appThemes, breakpoints } from './theme';
 export type { AppThemes, AppBreakpoints } from './theme';

@@ -2,8 +2,8 @@ import React from 'react'
 import { View, Text } from '@idealyst/components'
 import { StackLayoutProps } from '../routing/types'
 import { Outlet } from '../router'
+import { useNavigator } from '../context'
 export interface DefaultStackLayoutProps extends StackLayoutProps {
-    onNavigate: (path: string) => void
     currentPath: string
 }
 
@@ -14,9 +14,11 @@ export interface DefaultStackLayoutProps extends StackLayoutProps {
 export const DefaultStackLayout: React.FC<DefaultStackLayoutProps> = ({
     options,
     routes,
-    onNavigate,
     currentPath
 }) => {
+
+    const navigator = useNavigator()
+
     return (
         <View style={{ height: '100vh', flexDirection: 'column' }}>
             {/* Header */}

@@ -102,14 +102,12 @@ export type RouteWithFullPath<T = ScreenOptions> = RouteParam<T> & {
 export type TabLayoutProps = {
     options?: NavigatorOptions
     routes: RouteWithFullPath<TabBarScreenOptions>[]
-    onNavigate: (path: string) => void
     currentPath: string
 }
 
 export type StackLayoutProps = {
     options?: NavigatorOptions
     routes: RouteWithFullPath<ScreenOptions>[]
-    onNavigate: (path: string) => void
     currentPath: string
 }
 

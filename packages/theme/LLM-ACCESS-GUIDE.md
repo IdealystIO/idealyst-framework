@@ -133,7 +133,6 @@ ls src/*.md                             # List all component docs
 ### For "How do I set up theming?" questions:
 1. Start with `CLAUDE.md` quick setup section
 2. Show default theme registration
-3. Explain basic component usage with `createStyleSheet`
 
 ### For "How do I customize colors?" questions:
 1. Read `src/colors.md` for palette understanding

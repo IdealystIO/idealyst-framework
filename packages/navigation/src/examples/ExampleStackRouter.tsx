@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples } from "../../../components/src/examples";
 import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Button, Divider, Screen, Text, View } from "../../../components/src";
@@ -192,7 +192,43 @@ const HomeScreen = () => {
                     }}>
                     Popover
                 </Button>
-                
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/select",
+                            vars: {},
+                        });
+                    }}>
+                    Select
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/switch",
+                            vars: {},
+                        });
+                    }}>
+                    Switch
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/radio-button",
+                            vars: {},
+                        });
+                    }}>
+                    RadioButton
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/progress",
+                            vars: {},
+                        });
+                    }}>
+                    Progress
+                </Button>
+
                 <Divider spacing="medium" />
                 <Text size="small" weight="semibold" color="secondary">Data Components</Text>
                 <Button
@@ -257,6 +293,10 @@ const StackRouter: NavigatorParam = {
         { path: "svg-image", type: 'screen', component: SVGImageExamples},
         { path: "dialog", type: 'screen', component: DialogExamples},
         { path: "popover", type: 'screen', component: PopoverExamples},
+        { path: "select", type: 'screen', component: SelectExamples},
+        { path: "switch", type: 'screen', component: SwitchExamples},
+        { path: "radio-button", type: 'screen', component: RadioButtonExamples},
+        { path: "progress", type: 'screen', component: ProgressExamples},
         { path: "datagrid", type: 'screen', component: DataGridShowcase},
         { path: "datepicker", type: 'screen', component: DatePickerExamples},
         { path: "theme-extension", type: 'screen', component: ThemeExtensionExamples},

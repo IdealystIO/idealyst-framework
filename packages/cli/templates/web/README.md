@@ -122,22 +122,6 @@ The app uses the Idealyst Framework for consistent UI and navigation that works 
 
 Edit `src/App.tsx` to start building your application.
 
-### Styling
-
-The app uses Unistyles for cross-platform styling. You can create styles that work on both web and mobile:
-
-```tsx
-import { createStyleSheet } from 'react-native-unistyles';
-
-const styles = createStyleSheet({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});
-```
-
 ### Learn More
 
 - [Idealyst Framework Documentation](https://github.com/your-username/idealyst-framework)

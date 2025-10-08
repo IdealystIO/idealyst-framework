@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, Button, Icon } from '@idealyst/components'
 import { TabLayoutProps } from '../routing/types'
 import { Outlet } from '../router'
+import { useNavigator } from '../context'
 
 export interface DefaultTabLayoutProps extends TabLayoutProps {}
 
@@ -12,9 +13,11 @@ export interface DefaultTabLayoutProps extends TabLayoutProps {}
 export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
     options,
     routes,
-    onNavigate,
     currentPath
 }) => {
+
+    const navigator = useNavigator()
+
     return (
         <View style={{ height: '100vh', flexDirection: 'column' }}>
             {/* Header */}
@@ -65,7 +68,9 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                                 variant={isActive ? 'contained' : 'outlined'}
                                 intent={isActive ? 'primary' : undefined}
                                 size="small"
-                                onPress={() => onNavigate(route.path)}
+                                onPress={() => navigator.navigate({
+                                    path: route.fullPath
+                                })}
                                 style={{ 
                                     flexDirection: 'row',
                                     alignItems: 'center',

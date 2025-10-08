@@ -13,7 +13,7 @@ import { NavigatorParam, RouteParam } from './types'
 export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
     return () => (
         <Routes>
-            {params.routes.map((child, index) => buildRoute(child, index))}
+            {buildRoute(params, 0, false)}
         </Routes>
     )
 }
@@ -63,7 +63,6 @@ const buildRoute = (params: RouteParam, index: number, isNested = false) => {
                     <LayoutComponent
                         options={params.options}
                         routes={routesWithFullPaths}
-                        onNavigate={() => {}} // Layout components can use their own navigation logic
                         currentPath=""
                     />
                 }

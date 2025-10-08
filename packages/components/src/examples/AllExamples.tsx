@@ -15,6 +15,9 @@ import { SVGImageExamples } from './SVGImageExamples';
 import { DialogExamples } from './DialogExamples';
 import { PopoverExamples } from './PopoverExamples';
 import { SelectExamples } from './SelectExamples';
+import { SwitchExamples } from './SwitchExamples';
+import { RadioButtonExamples } from './RadioButtonExamples';
+import { ProgressExamples } from './ProgressExamples';
 import { ThemeExtensionExamples } from './ThemeExtensionExamples';
 
 export const AllExamples = () => {
@@ -75,6 +78,15 @@ export const AllExamples = () => {
       <Divider spacing="medium" />
 
       <SelectExamples />
+      <Divider spacing="medium" />
+
+      <SwitchExamples />
+      <Divider spacing="medium" />
+
+      <RadioButtonExamples />
+      <Divider spacing="medium" />
+
+      <ProgressExamples />
       <Divider spacing="medium" />
 
       <Divider spacing="large" intent="success">

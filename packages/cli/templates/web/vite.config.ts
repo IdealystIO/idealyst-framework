@@ -7,8 +7,9 @@ import path from 'path'
 export default defineConfig({
   plugins: [
     babel({
-      filter: (id) => id.includes("node_modules/@idealyst/") || id.includes("/packages/"),
-      babelConfig: {
+      filter: (id) =>
+        id.includes("node_modules/@idealyst/") ||
+        (id.includes("/packages/") && /\.(tsx?|jsx?)$/.test(id)),      babelConfig: {
         presets: [
           ['@babel/preset-typescript', {
             isTSX: true,

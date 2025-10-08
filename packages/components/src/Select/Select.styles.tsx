@@ -201,7 +201,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
     shadowOpacity: theme.shadows?.lg?.shadowOpacity || 0.15,
     shadowRadius: theme.shadows?.lg?.shadowRadius || 12,
     elevation: theme.shadows?.lg?.elevation || 8,
-    zIndex: 1000,
+    zIndex: 9999, // Higher z-index to float above other content
     maxHeight: 240,
     overflow: 'hidden',
 

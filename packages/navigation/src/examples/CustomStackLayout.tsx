@@ -1,12 +1,10 @@
 import { Button, Text, View } from "@idealyst/components";
-import { StackLayoutProps } from "src";
+import { StackLayoutProps } from "../routing/types";
 import React, { useMemo } from "react";
 
 export default function CustomStackLayout({ 
     routes,
     options,
-    ContentComponent,
-    onNavigate,
     currentPath
 }: StackLayoutProps) {
 
