@@ -50,6 +50,9 @@ export * from './ActivityIndicator/types';
 export { default as Select } from './Select';
 export * from './Select/types';
 
+export { default as Slider } from './Slider';
+export * from './Slider/types';
+
 export { default as Switch } from './Switch';
 export * from './Switch/types';
 

@@ -13,6 +13,7 @@ export { SVGImageExamples } from './SVGImageExamples';
 export { DialogExamples } from './DialogExamples';
 export { PopoverExamples } from './PopoverExamples';
 export { SelectExamples } from './SelectExamples';
+export { SliderExamples } from './SliderExamples';
 export { SwitchExamples } from './SwitchExamples';
 export { RadioButtonExamples } from './RadioButtonExamples';
 export { ProgressExamples } from './ProgressExamples';

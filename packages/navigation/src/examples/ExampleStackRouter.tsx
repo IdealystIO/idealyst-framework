@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples } from "../../../components/src/examples";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples } from "../../../components/src/examples";
 import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Button, Divider, Screen, Text, View } from "../../../components/src";
@@ -204,6 +204,15 @@ const HomeScreen = () => {
                 <Button
                     onPress={() => {
                         navigator.navigate({
+                            path: "/slider",
+                            vars: {},
+                        });
+                    }}>
+                    Slider
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
                             path: "/switch",
                             vars: {},
                         });
@@ -294,6 +303,7 @@ const StackRouter: NavigatorParam = {
         { path: "dialog", type: 'screen', component: DialogExamples},
         { path: "popover", type: 'screen', component: PopoverExamples},
         { path: "select", type: 'screen', component: SelectExamples},
+        { path: "slider", type: 'screen', component: SliderExamples},
         { path: "switch", type: 'screen', component: SwitchExamples},
         { path: "radio-button", type: 'screen', component: RadioButtonExamples},
         { path: "progress", type: 'screen', component: ProgressExamples},

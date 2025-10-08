@@ -22,13 +22,13 @@
 ## Proposed New Components
 
 ### Priority 1: Essential Form Components
-- [ ] **Switch/Toggle** - Binary on/off control with animation
+- [✅] **Switch/Toggle** - Binary on/off control with animation
   - Platform-specific styling (iOS/Android/Web)
   - Label support
   - Disabled state
   - Intent colors
 
-- [ ] **RadioButton/RadioGroup** - Single selection from multiple options
+- [✅] **RadioButton/RadioGroup** - Single selection from multiple options
   - Group management
   - Horizontal/vertical layout
   - Custom styling per option
@@ -93,11 +93,12 @@
   - Rich content support
   - Arrow pointing
 
-- [ ] **Progress** - Progress indicators
+- [✅] **Progress** - Progress indicators
   - Linear/circular variants
   - Determinate/indeterminate
   - Labels
   - Color variants
+  - Rounded/straight variants (linear)
 
 ### Priority 4: Feedback Components
 - [ ] **Alert** - Inline alert messages

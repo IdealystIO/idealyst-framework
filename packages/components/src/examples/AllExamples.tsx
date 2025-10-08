@@ -15,6 +15,7 @@ import { SVGImageExamples } from './SVGImageExamples';
 import { DialogExamples } from './DialogExamples';
 import { PopoverExamples } from './PopoverExamples';
 import { SelectExamples } from './SelectExamples';
+import { SliderExamples } from './SliderExamples';
 import { SwitchExamples } from './SwitchExamples';
 import { RadioButtonExamples } from './RadioButtonExamples';
 import { ProgressExamples } from './ProgressExamples';
@@ -78,6 +79,9 @@ export const AllExamples = () => {
       <Divider spacing="medium" />
 
       <SelectExamples />
+      <Divider spacing="medium" />
+
+      <SliderExamples />
       <Divider spacing="medium" />
 
       <SwitchExamples />
