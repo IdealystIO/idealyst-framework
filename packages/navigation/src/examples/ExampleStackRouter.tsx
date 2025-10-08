@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples } from "../../../components/src/examples";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabsExamples, TooltipExamples, AccordionExamples, MenuExamples } from "../../../components/src/examples";
 import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Button, Divider, Screen, Text, View } from "../../../components/src";
@@ -237,6 +237,51 @@ const HomeScreen = () => {
                     }}>
                     Progress
                 </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/textarea",
+                            vars: {},
+                        });
+                    }}>
+                    TextArea
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/tabs",
+                            vars: {},
+                        });
+                    }}>
+                    Tabs
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/tooltip",
+                            vars: {},
+                        });
+                    }}>
+                    Tooltip
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/accordion",
+                            vars: {},
+                        });
+                    }}>
+                    Accordion
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/menu",
+                            vars: {},
+                        });
+                    }}>
+                    Menu
+                </Button>
 
                 <Divider spacing="medium" />
                 <Text size="small" weight="semibold" color="secondary">Data Components</Text>
@@ -307,6 +352,11 @@ const StackRouter: NavigatorParam = {
         { path: "switch", type: 'screen', component: SwitchExamples},
         { path: "radio-button", type: 'screen', component: RadioButtonExamples},
         { path: "progress", type: 'screen', component: ProgressExamples},
+        { path: "textarea", type: 'screen', component: TextAreaExamples},
+        { path: "tabs", type: 'screen', component: TabsExamples},
+        { path: "tooltip", type: 'screen', component: TooltipExamples},
+        { path: "accordion", type: 'screen', component: AccordionExamples},
+        { path: "menu", type: 'screen', component: MenuExamples},
         { path: "datagrid", type: 'screen', component: DataGridShowcase},
         { path: "datepicker", type: 'screen', component: DatePickerExamples},
         { path: "theme-extension", type: 'screen', component: ThemeExtensionExamples},

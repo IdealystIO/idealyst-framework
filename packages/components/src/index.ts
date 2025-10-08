@@ -62,6 +62,21 @@ export * from './RadioButton/types';
 export { default as Progress } from './Progress';
 export * from './Progress/types';
 
+export { default as TextArea } from './TextArea';
+export * from './TextArea/types';
+
+export { default as Tabs } from './Tabs';
+export * from './Tabs/types';
+
+export { default as Tooltip } from './Tooltip';
+export * from './Tooltip/types';
+
+export { default as Accordion } from './Accordion';
+export * from './Accordion/types';
+
+export { default as Menu } from './Menu';
+export * from './Menu/types';
+
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
@@ -81,6 +96,11 @@ export type { SelectProps } from './Select/types';
 export type { SwitchProps } from './Switch/types';
 export type { RadioButtonProps, RadioGroupProps } from './RadioButton/types';
 export type { ProgressProps } from './Progress/types';
+export type { TextAreaProps } from './TextArea/types';
+export type { TabsProps, TabItem } from './Tabs/types';
+export type { TooltipProps } from './Tooltip/types';
+export type { AccordionProps, AccordionItem } from './Accordion/types';
+export type { MenuProps, MenuItem } from './Menu/types';
 
 export { breakpoints } from '@idealyst/theme';
 export type { AppTheme } from '@idealyst/theme';

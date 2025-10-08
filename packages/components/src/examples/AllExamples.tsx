@@ -19,6 +19,11 @@ import { SliderExamples } from './SliderExamples';
 import { SwitchExamples } from './SwitchExamples';
 import { RadioButtonExamples } from './RadioButtonExamples';
 import { ProgressExamples } from './ProgressExamples';
+import { TextAreaExamples } from './TextAreaExamples';
+import { TabsExamples } from './TabsExamples';
+import { TooltipExamples } from './TooltipExamples';
+import { AccordionExamples } from './AccordionExamples';
+import { MenuExamples } from './MenuExamples';
 import { ThemeExtensionExamples } from './ThemeExtensionExamples';
 
 export const AllExamples = () => {
@@ -91,6 +96,21 @@ export const AllExamples = () => {
       <Divider spacing="medium" />
 
       <ProgressExamples />
+      <Divider spacing="medium" />
+
+      <TextAreaExamples />
+      <Divider spacing="medium" />
+
+      <TabsExamples />
+      <Divider spacing="medium" />
+
+      <TooltipExamples />
+      <Divider spacing="medium" />
+
+      <AccordionExamples />
+      <Divider spacing="medium" />
+
+      <MenuExamples />
       <Divider spacing="medium" />
 
       <Divider spacing="large" intent="success">
