@@ -16,11 +16,7 @@ const Menu: React.FC<MenuProps> = ({
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
-
-  // Apply variants
-  menuStyles.useVariants({
-    size,
-  });
+  const [isPositioned, setIsPositioned] = useState(false);
 
   const overlayProps = getWebProps([menuStyles.overlay]);
   const menuProps = getWebProps([menuStyles.menu, style]);
@@ -83,8 +79,16 @@ const Menu: React.FC<MenuProps> = ({
       }
 
       setPosition({ top, left });
+      setIsPositioned(true);
     }
   }, [open, anchor, placement]);
+
+  // Reset positioned state when menu closes
+  useEffect(() => {
+    if (!open) {
+      setIsPositioned(false);
+    }
+  }, [open]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -138,6 +142,7 @@ const Menu: React.FC<MenuProps> = ({
           ...menuProps.style,
           top: position.top,
           left: position.left,
+          opacity: isPositioned ? 1 : 0,
         }}
         role="menu"
         data-testid={testID}

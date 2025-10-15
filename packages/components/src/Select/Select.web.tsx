@@ -27,6 +27,7 @@ const Select: React.FC<SelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [isPositioned, setIsPositioned] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -128,6 +129,9 @@ const Select: React.FC<SelectProps> = ({
         width: dropdownRect.width,
         height: dropdownRect.height
       });
+
+      // Mark as positioned so it becomes visible
+      setIsPositioned(true);
     };
 
     // Start positioning attempts
@@ -228,6 +232,7 @@ const Select: React.FC<SelectProps> = ({
       setIsOpen(!isOpen);
       setSearchTerm('');
       setFocusedIndex(-1);
+      setIsPositioned(false);
     }
   };
 
@@ -266,7 +271,7 @@ const Select: React.FC<SelectProps> = ({
           position: 'fixed',
           top: '0px', // Explicit initial position
           left: '0px', // Explicit initial position
-          opacity: 1,
+          opacity: isPositioned ? 1 : 0,
           zIndex: 1300, // MUI's z-index for select
           backgroundColor: 'white',
           borderRadius: '4px',

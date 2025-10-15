@@ -20,25 +20,12 @@ export const menuStyles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.border.primary,
     borderRadius: theme.borderRadius.md,
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-    minWidth: 180,
-    maxWidth: 320,
+    minWidth: 120,
+    maxWidth: 400,
     padding: 4,
     display: 'flex',
     flexDirection: 'column',
-
-    variants: {
-      size: {
-        small: {
-          minWidth: 150,
-        },
-        medium: {
-          minWidth: 180,
-        },
-        large: {
-          minWidth: 220,
-        },
-      },
-    },
+    width: 'fit-content',
   },
 
   menuItem: {
@@ -78,8 +65,10 @@ export const menuStyles = StyleSheet.create((theme) => ({
           cursor: 'not-allowed',
         },
         false: {
-          ':hover': {
-            backgroundColor: theme.colors.surface.secondary,
+          _web: {
+            ':hover': {
+              backgroundColor: theme.colors.surface.secondary,
+            },
           },
         },
       },
@@ -97,9 +86,11 @@ export const menuStyles = StyleSheet.create((theme) => ({
         disabled: false,
         intent: 'primary',
         styles: {
-          ':hover': {
-            backgroundColor: theme.intents.primary.container,
-            color: theme.intents.primary.main,
+          _web: {
+            ':hover': {
+              backgroundColor: theme.intents.primary.container,
+              color: theme.intents.primary.main,
+            },
           },
         },
       },
@@ -107,9 +98,11 @@ export const menuStyles = StyleSheet.create((theme) => ({
         disabled: false,
         intent: 'success',
         styles: {
-          ':hover': {
-            backgroundColor: theme.intents.success.container,
-            color: theme.intents.success.main,
+          _web: {
+            ':hover': {
+              backgroundColor: theme.intents.success.container,
+              color: theme.intents.success.main,
+            },
           },
         },
       },
@@ -117,9 +110,11 @@ export const menuStyles = StyleSheet.create((theme) => ({
         disabled: false,
         intent: 'error',
         styles: {
-          ':hover': {
-            backgroundColor: theme.intents.error.container,
-            color: theme.intents.error.main,
+          _web: {
+            ':hover': {
+              backgroundColor: theme.intents.error.container,
+              color: theme.intents.error.main,
+            },
           },
         },
       },
@@ -127,9 +122,11 @@ export const menuStyles = StyleSheet.create((theme) => ({
         disabled: false,
         intent: 'warning',
         styles: {
-          ':hover': {
-            backgroundColor: theme.intents.warning.container,
-            color: theme.intents.warning.main,
+          _web: {
+            ':hover': {
+              backgroundColor: theme.intents.warning.container,
+              color: theme.intents.warning.main,
+            },
           },
         },
       },

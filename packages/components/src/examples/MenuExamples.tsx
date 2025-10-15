@@ -9,14 +9,14 @@ export const MenuExamples: React.FC = () => {
   const [iconMenuOpen, setIconMenuOpen] = useState(false);
   const [intentMenuOpen, setIntentMenuOpen] = useState(false);
   const [separatorMenuOpen, setSeparatorMenuOpen] = useState(false);
-  const [sizeMenuOpen, setSizeMenuOpen] = useState(false);
+  const [disabledMenuOpen, setDisabledMenuOpen] = useState(false);
 
   const basicButtonRef = useRef<HTMLDivElement>(null);
   const placementButtonRef = useRef<HTMLDivElement>(null);
   const iconButtonRef = useRef<HTMLDivElement>(null);
   const intentButtonRef = useRef<HTMLDivElement>(null);
   const separatorButtonRef = useRef<HTMLDivElement>(null);
-  const sizeButtonRef = useRef<HTMLDivElement>(null);
+  const disabledButtonRef = useRef<HTMLDivElement>(null);
 
   const [selectedAction, setSelectedAction] = useState<string>('');
 
@@ -157,58 +157,21 @@ export const MenuExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Sizes</Text>
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-          <div ref={sizeButtonRef} style={{ display: 'inline-block' }}>
-            <Button
-              variant="outlined"
-              size="small"
-              onPress={() => setSizeMenuOpen(!sizeMenuOpen)}
-            >
-              Small Menu
-            </Button>
-          </div>
-          <Button
-            variant="outlined"
-            size="medium"
-            onPress={() => alert('Medium menu demo')}
-          >
-            Medium Menu
-          </Button>
-          <Button
-            variant="outlined"
-            size="large"
-            onPress={() => alert('Large menu demo')}
-          >
-            Large Menu
-          </Button>
-        </div>
-        <Menu
-          items={basicItems}
-          open={sizeMenuOpen}
-          onOpenChange={setSizeMenuOpen}
-          anchor={sizeButtonRef}
-          size="small"
-        />
-      </View>
-
-      <View spacing="md">
         <Text size="large" weight="semibold">Disabled Items</Text>
-        <div style={{ display: 'inline-block' }}>
+        <div ref={disabledButtonRef} style={{ display: 'inline-block' }}>
           <Button
             variant="outlined"
-            onPress={() => alert('This menu has disabled items')}
+            onPress={() => setDisabledMenuOpen(!disabledMenuOpen)}
           >
             Menu with Disabled
           </Button>
         </div>
-      </View>
-
-      <View spacing="md">
-        <Text size="large" weight="semibold">Don't Close on Selection</Text>
-        <Text size="small" color="secondary">
-          Menu stays open after clicking items
-        </Text>
+        <Menu
+          items={disabledItems}
+          open={disabledMenuOpen}
+          onOpenChange={setDisabledMenuOpen}
+          anchor={disabledButtonRef}
+        />
       </View>
     </View>
   );

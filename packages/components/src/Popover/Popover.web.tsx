@@ -131,6 +131,7 @@ const Popover: React.FC<PopoverProps> = ({
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const [position, setPosition] = useState<PopoverPosition>({ top: 0, left: 0, placement });
+  const [isPositioned, setIsPositioned] = useState(false);
 
   // Calculate position
   const updatePosition = useCallback(() => {
@@ -163,16 +164,19 @@ const Popover: React.FC<PopoverProps> = ({
     );
 
     setPosition(newPosition);
+    setIsPositioned(true);
   }, [anchor, placement, offset, showArrow]);
 
   // Handle mounting/unmounting with animation
   useEffect(() => {
     if (open && !shouldRender) {
       setShouldRender(true);
+      setIsPositioned(false);
       // Set visible immediately to render the DOM element
       setIsVisible(true);
     } else if (!open && shouldRender) {
       setIsVisible(false);
+      setIsPositioned(false);
       const timer = setTimeout(() => {
         setShouldRender(false);
       }, 150);
@@ -254,8 +258,8 @@ const Popover: React.FC<PopoverProps> = ({
   const containerProps = getWebProps([
     popoverStyles.container,
     {
-      opacity: isVisible ? 1 : 0,
-      transform: isVisible ? 'scale(1)' : 'scale(0.95)',
+      opacity: isVisible && isPositioned ? 1 : 0,
+      transform: isVisible && isPositioned ? 'scale(1)' : 'scale(0.95)',
     }
   ]);
   const contentProps = getWebProps([popoverStyles.content]);
