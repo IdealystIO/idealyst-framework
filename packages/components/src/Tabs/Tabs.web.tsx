@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, Children } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { tabsStyles } from './Tabs.styles';
-import type { TabsProps } from './types';
+import type { TabsProps, TabProps } from './types';
 
 const Tabs: React.FC<TabsProps> = ({
-  items,
+  children,
   value: controlledValue,
   defaultValue,
   onChange,
@@ -14,71 +14,143 @@ const Tabs: React.FC<TabsProps> = ({
   style,
   testID,
 }) => {
-  const [internalValue, setInternalValue] = useState(
-    defaultValue || items[0]?.id || ''
+  const tabs = Children.toArray(children).filter(
+    (child): child is React.ReactElement<TabProps> =>
+      React.isValidElement(child) && typeof child.type !== 'string'
   );
+
+  const firstTabValue = tabs[0]?.props.value || '';
+  const [internalValue, setInternalValue] = useState(defaultValue || firstTabValue);
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+
+  const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
 
-  // Apply variants
-  tabsStyles.useVariants({
-    size,
-    variant,
-    intent,
-  });
+  const updateIndicatorPosition = (tabElement: HTMLButtonElement) => {
+    const container = containerRef.current;
+    if (!tabElement || !container) {
+      return;
+    }
+
+    const containerRect = container.getBoundingClientRect();
+    const tabRect = tabElement.getBoundingClientRect();
+
+    const newStyle = {
+      left: tabRect.left - containerRect.left,
+      width: tabRect.width,
+    };
+
+    setIndicatorStyle(newStyle);
+  };
+
+  // Update indicator when value changes
+  useEffect(() => {
+    const activeTab = tabRefs.current[value];
+    if (activeTab) {
+      updateIndicatorPosition(activeTab);
+    }
+  }, [value]);
+
+  // Handle window resize and initial mount
+  useEffect(() => {
+    const handleResize = () => {
+      const activeTab = tabRefs.current[value];
+      if (activeTab) {
+        updateIndicatorPosition(activeTab);
+      }
+    };
+
+    // Initial update
+    const timer = setTimeout(handleResize, 0);
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [value]);
 
   const containerProps = getWebProps([tabsStyles.container, style]);
 
-  const handleTabClick = (tabId: string, disabled?: boolean) => {
+  const handleTabClick = (tabValue: string, disabled?: boolean) => {
     if (disabled) return;
 
     if (controlledValue === undefined) {
-      setInternalValue(tabId);
+      setInternalValue(tabValue);
     }
 
-    onChange?.(tabId);
+    onChange?.(tabValue);
   };
+
+  // Get indicator props - apply variants separately
+  const getIndicatorProps = () => {
+    tabsStyles.useVariants({
+      variant,
+      intent,
+    });
+    return getWebProps([tabsStyles.indicator]);
+  };
+
+  const indicatorProps = getIndicatorProps();
 
   return (
     <div
+      ref={containerRef}
       {...containerProps}
       role="tablist"
       data-testid={testID}
     >
-      {items.map((item) => {
-        const isActive = value === item.id;
+      {/* Sliding indicator */}
+      <div
+        className={indicatorProps.className}
+        style={{
+          ...indicatorProps.style,
+          left: `${indicatorStyle.left}px`,
+          width: `${indicatorStyle.width}px`,
+        }}
+        data-indicator-debug={`left:${indicatorStyle.left} width:${indicatorStyle.width}`}
+      />
 
-        // Create a new stylesheet instance for each tab with its specific variants
-        const tabStylesheet = tabsStyles;
-        tabStylesheet.useVariants({
+      {tabs.map((tab) => {
+        const { value: tabValue, label, disabled, children: tabChildren } = tab.props;
+        const isActive = value === tabValue;
+
+        tabsStyles.useVariants({
           size,
           variant,
           intent,
           active: isActive,
-          disabled: Boolean(item.disabled),
+          disabled: Boolean(disabled),
         });
 
         const tabProps = getWebProps([tabsStyles.tab]);
+        const tabLabelProps = getWebProps([tabsStyles.tabLabel]);
 
         return (
           <button
-            key={item.id}
+            key={tabValue}
+            ref={(el) => {
+              if (el) {
+                tabRefs.current[tabValue] = el;
+                // Update indicator position when active tab ref is set
+                if (isActive) {
+                  updateIndicatorPosition(el);
+                }
+              }
+            }}
             className={tabProps.className}
             style={tabProps.style}
-            onClick={() => handleTabClick(item.id, item.disabled)}
-            disabled={item.disabled}
+            onClick={() => handleTabClick(tabValue, disabled)}
+            disabled={disabled}
             role="tab"
             aria-selected={isActive}
-            aria-disabled={item.disabled}
-            data-testid={`${testID}-tab-${item.id}`}
+            aria-disabled={disabled}
+            data-testid={`${testID}-tab-${tabValue}`}
           >
-            {item.icon && (
-              <span className={getWebProps([tabsStyles.tabIcon]).className}>
-                {item.icon}
-              </span>
-            )}
-            <span className={getWebProps([tabsStyles.tabLabel]).className}>
-              {item.label}
+            <span className={tabLabelProps.className} style={tabLabelProps.style}>
+              {label}
             </span>
           </button>
         );

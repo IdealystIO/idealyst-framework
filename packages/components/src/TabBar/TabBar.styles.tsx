@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 
-export const tabsStyles = StyleSheet.create((theme) => ({
+export const tabBarStyles = StyleSheet.create((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -16,7 +16,6 @@ export const tabsStyles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: theme.spacing.xs,
     backgroundColor: 'transparent',
     border: 'none',
     cursor: 'pointer',
@@ -33,14 +32,17 @@ export const tabsStyles = StyleSheet.create((theme) => ({
         small: {
           fontSize: 14,
           padding: 8,
+          lineHeight: 20,
         },
         medium: {
           fontSize: 16,
           padding: 12,
+          lineHeight: 24,
         },
         large: {
           fontSize: 18,
           padding: 16,
+          lineHeight: 28,
         },
       },
       variant: {
@@ -67,13 +69,6 @@ export const tabsStyles = StyleSheet.create((theme) => ({
             color: theme.colors.text.primary,
           },
         },
-      },
-      intent: {
-        primary: {},
-        neutral: {},
-        success: {},
-        error: {},
-        warning: {},
       },
     },
 
@@ -162,16 +157,6 @@ export const tabsStyles = StyleSheet.create((theme) => ({
         },
       },
     ],
-  },
-
-  tabIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  tabLabel: {
-    whiteSpace: 'nowrap',
   },
 
   indicator: {

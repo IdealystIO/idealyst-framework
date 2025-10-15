@@ -1,6 +1,7 @@
 # Component Library Roadmap
 
-## Current Components (17 total)
+## Current Components (30 total)
+- ✅ Accordion
 - ✅ ActivityIndicator
 - ✅ Avatar
 - ✅ Badge
@@ -11,12 +12,21 @@
 - ✅ Divider
 - ✅ Icon
 - ✅ Input
+- ✅ List
 - ✅ Popover
 - ✅ Pressable
+- ✅ Progress
+- ✅ RadioButton
 - ✅ Screen
 - ✅ Select
+- ✅ Slider
 - ✅ SVGImage
+- ✅ Switch
+- ✅ TabBar
+- ✅ Table
+- ✅ Tabs
 - ✅ Text
+- ✅ TextArea
 - ✅ View
 
 ## Proposed New Components
@@ -47,12 +57,15 @@
   - Better than current multiline Input
 
 ### Priority 2: Navigation Components
-- [ ] **Tabs/TabGroup** - Tab-based navigation (includes TabBar functionality)
-  - Scrollable tabs
-  - Icon support
-  - Badge integration
-  - Swipeable content (mobile)
-  - Bottom/top positioning
+- [ ] **Tabs/TabBar** - Tab-based navigation (WIP - indicator needs fixing)
+  - Compound component pattern (Tabs + Tab)
+  - Array-based pattern (TabBar + items)
+  - Scrollable tabs (native)
+  - Animated sliding indicator (needs debugging)
+  - Three variants (default, pills, underline)
+  - Intent colors
+  - Disabled tabs
+  - Controlled/uncontrolled modes
 
 - [ ] **Menu/MenuItem/MenuSection** - Dropdown and context menus
   - Nested menus support
@@ -63,28 +76,31 @@
   - Radio/checkbox items
   - MenuSection for grouped items
 
-- [ ] **Accordion/Collapsible** - Expandable content sections
-  - Single/multiple expansion
+- [✅] **Accordion** - Expandable content sections
+  - Single/multiple expansion modes
   - Animated transitions
-  - Custom headers
-  - Nested support
+  - Three variants (default, separated, bordered)
+  - Intent colors
+  - Disabled items
+  - Rich content support
+  - Default expanded items
 
 ### Priority 3: Data Display Components
-- [ ] **Table** - Data table component
-  - Sortable columns
-  - Pagination support
-  - Row selection
-  - Responsive design
+- [✅] **Table** - Simple data table component
+  - Three variants (default, bordered, striped)
+  - Custom cell rendering
+  - Column alignment and widths
+  - Clickable rows
+  - For complex data grids, use @idealyst/datagrid
 
-- [ ] **List/ListItem** - Structured list display (sidebar/navigation ready)
+- [✅] **List/ListItem/ListSection** - Structured list display
   - Leading/trailing elements (icons, badges, chevrons)
   - Active/selected states for navigation
   - Hover states
   - Indentation support for hierarchy
-  - Collapsible sections
-  - Swipe actions (mobile)
-  - Separators
-  - Group headers
+  - Sections with titles
+  - Three variants (default, bordered, divided)
+  - Rich content support
   - Ideal for sidebars and navigation menus
 
 - [ ] **Tooltip** - Contextual information display

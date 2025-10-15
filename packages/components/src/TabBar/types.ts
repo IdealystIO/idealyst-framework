@@ -1,14 +1,13 @@
 import type { ViewStyle } from 'react-native';
-import type { ReactNode } from 'react';
 
-export interface TabProps {
+export interface TabBarItem {
   value: string;
   label: string;
   disabled?: boolean;
-  children?: ReactNode;
 }
 
-export interface TabsProps {
+export interface TabBarProps {
+  items: TabBarItem[];
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
@@ -17,5 +16,4 @@ export interface TabsProps {
   intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
   style?: ViewStyle;
   testID?: string;
-  children: ReactNode;
 }

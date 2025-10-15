@@ -65,14 +65,23 @@ export * from './Progress/types';
 export { default as TextArea } from './TextArea';
 export * from './TextArea/types';
 
-export { default as Tabs } from './Tabs';
+export { default as Tabs, Tab } from './Tabs';
 export * from './Tabs/types';
+
+export { default as TabBar } from './TabBar';
+export * from './TabBar/types';
 
 export { default as Tooltip } from './Tooltip';
 export * from './Tooltip/types';
 
 export { default as Accordion } from './Accordion';
 export * from './Accordion/types';
+
+export { List, ListItem, ListSection } from './List';
+export * from './List/types';
+
+export { default as Table } from './Table';
+export * from './Table/types';
 
 export { default as Menu } from './Menu';
 export * from './Menu/types';
@@ -97,9 +106,12 @@ export type { SwitchProps } from './Switch/types';
 export type { RadioButtonProps, RadioGroupProps } from './RadioButton/types';
 export type { ProgressProps } from './Progress/types';
 export type { TextAreaProps } from './TextArea/types';
-export type { TabsProps, TabItem } from './Tabs/types';
+export type { TabsProps, TabProps } from './Tabs/types';
+export type { TabBarProps, TabBarItem } from './TabBar/types';
 export type { TooltipProps } from './Tooltip/types';
 export type { AccordionProps, AccordionItem } from './Accordion/types';
+export type { ListProps, ListItemProps, ListSectionProps } from './List/types';
+export type { TableProps, TableColumn } from './Table/types';
 export type { MenuProps, MenuItem } from './Menu/types';
 
 export { breakpoints } from '@idealyst/theme';
