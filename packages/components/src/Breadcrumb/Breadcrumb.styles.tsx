@@ -2,16 +2,18 @@ import { StyleSheet } from 'react-native-unistyles';
 
 export const breadcrumbStyles = StyleSheet.create((theme) => ({
   container: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap',
+    flexWrap: 'nowrap',
     gap: 8,
   },
 
   item: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
 
   itemText: {

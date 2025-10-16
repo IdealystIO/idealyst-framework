@@ -61,7 +61,15 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
         style={getWebProps([breadcrumbStyles.item]).style}
       >
         {item.icon && (
-          <span className={iconProps.className} style={iconProps.style}>
+          <span
+            className={iconProps.className}
+            style={{
+              ...iconProps.style,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             {item.icon}
           </span>
         )}
