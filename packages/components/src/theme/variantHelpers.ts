@@ -358,7 +358,7 @@ function resolveColorVariant(colorVariant: string, theme: ThemeContext): string 
 
 /**
  * Generate compound variants for badge-like components
- * Combines variant type (filled, outlined, dot) with color (including shade-specific)
+ * Combines variant type (filled, outlined, dot) with color (including shade-specific and intents)
  */
 export function generateBadgeCompoundVariants(theme: ThemeContext) {
   const variants: Array<{
@@ -366,13 +366,13 @@ export function generateBadgeCompoundVariants(theme: ThemeContext) {
     color: string;
     styles: Record<string, any>;
   }> = [];
-  
+
   // Get all color variants from the generated color variants
   const colorVariants = generateColorVariants(theme);
-  
+
   Object.keys(colorVariants).forEach((colorKey) => {
     const resolvedColor = resolveColorVariant(colorKey, theme);
-    
+
     if (resolvedColor) {
       // Filled variant
       variants.push({
@@ -382,7 +382,7 @@ export function generateBadgeCompoundVariants(theme: ThemeContext) {
           backgroundColor: resolvedColor,
         },
       });
-      
+
       // Dot variant
       variants.push({
         variant: 'dot',
@@ -391,7 +391,7 @@ export function generateBadgeCompoundVariants(theme: ThemeContext) {
           backgroundColor: resolvedColor,
         },
       });
-      
+
       // Outlined variant
       variants.push({
         variant: 'outlined',
@@ -406,7 +406,58 @@ export function generateBadgeCompoundVariants(theme: ThemeContext) {
       });
     }
   });
-  
+
+  // Also add intent colors so Badge can use color="error", color="success", etc.
+  const intentKeys = theme.intents ? Object.keys(theme.intents) : [
+    'primary', 'success', 'error', 'warning', 'neutral', 'info'
+  ];
+
+  const fallbacks: Record<string, string> = {
+    primary: '#3b82f6',
+    success: '#22c55e',
+    error: '#ef4444',
+    warning: '#f59e0b',
+    neutral: '#6b7280',
+    info: '#06b6d4',
+  };
+
+  intentKeys.forEach((intentKey) => {
+    const intent = theme.intents?.[intentKey];
+    const mainColor = intent?.main || fallbacks[intentKey];
+    if (mainColor) {
+      // Filled variant
+      variants.push({
+        variant: 'filled',
+        color: intentKey,
+        styles: {
+          backgroundColor: mainColor,
+        },
+      });
+
+      // Dot variant
+      variants.push({
+        variant: 'dot',
+        color: intentKey,
+        styles: {
+          backgroundColor: mainColor,
+        },
+      });
+
+      // Outlined variant
+      variants.push({
+        variant: 'outlined',
+        color: intentKey,
+        styles: {
+          borderColor: mainColor,
+          _web: {
+            border: `1px solid ${mainColor}`,
+            color: mainColor,
+          },
+        },
+      });
+    }
+  });
+
   return variants;
 }
 

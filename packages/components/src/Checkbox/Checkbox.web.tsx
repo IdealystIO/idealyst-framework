@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CheckboxProps } from './types';
 import { checkboxStyles, checkboxLabelStyles, checkboxCheckmarkStyles, checkboxHelperStyles } from './Checkbox.styles';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath } from '../Icon/icon-resolver';
 
 const Checkbox: React.FC<CheckboxProps> = ({
   checked = false,
@@ -107,9 +109,11 @@ const Checkbox: React.FC<CheckboxProps> = ({
           />
           <div {...checkboxProps}>
             {(internalChecked || indeterminate) && (
-              <div {...checkmarkProps}>
-                {indeterminate ? '−' : '✓'}
-              </div>
+              <IconSvg
+                path={resolveIconPath(indeterminate ? 'minus' : 'check')}
+                {...checkmarkProps}
+                aria-label={indeterminate ? 'minus' : 'check'}
+              />
             )}
           </div>
         </div>

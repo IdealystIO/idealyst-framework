@@ -158,6 +158,8 @@ export const alertStyles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    width: 24,
+    height: 24,
 
     variants: {
       variant: {
@@ -489,5 +491,13 @@ export const alertStyles = StyleSheet.create((theme) => ({
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
       },
     },
+  },
+
+  closeIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 16,
+    height: 16,
   },
 }));

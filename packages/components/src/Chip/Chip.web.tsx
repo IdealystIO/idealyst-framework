@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { chipStyles } from './Chip.styles';
 import type { ChipProps } from './types';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 
 const Chip: React.FC<ChipProps> = ({
   label,
@@ -47,6 +49,26 @@ const Chip: React.FC<ChipProps> = ({
     }
   };
 
+  // Helper to render icon
+  const renderIcon = () => {
+    if (!icon) return null;
+
+    if (isIconName(icon)) {
+      const iconPath = resolveIconPath(icon);
+      return (
+        <IconSvg
+          path={iconPath}
+          {...iconProps}
+          aria-label={icon}
+        />
+      );
+    } else if (isValidElement(icon)) {
+      return icon;
+    }
+
+    return null;
+  };
+
   const isClickable = (onPress && !disabled) || (selectable && !disabled);
 
   return (
@@ -73,7 +95,7 @@ const Chip: React.FC<ChipProps> = ({
             justifyContent: 'center',
           }}
         >
-          {icon}
+          {renderIcon()}
         </span>
       )}
 

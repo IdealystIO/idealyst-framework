@@ -96,17 +96,17 @@ export const ListExamples: React.FC = () => {
         <List variant="divided">
           <ListItem
             label="Dashboard"
-            leading={<Text>🏠</Text>}
+            leading="home"
             onPress={() => console.log('Dashboard')}
           />
           <ListItem
             label="Settings"
-            leading={<Text>⚙️</Text>}
+            leading="cog"
             onPress={() => console.log('Settings')}
           />
           <ListItem
             label="Profile"
-            leading={<Text>👤</Text>}
+            leading="account"
             onPress={() => console.log('Profile')}
           />
         </List>
@@ -117,17 +117,17 @@ export const ListExamples: React.FC = () => {
         <List variant="bordered">
           <ListItem
             label="Notifications"
-            leading={<Text>🔔</Text>}
-            trailing={<Badge variant="filled" color="error">3</Badge>}
+            leading="bell"
+            trailing={<Badge variant="filled" color="red">3</Badge>}
           />
           <ListItem
             label="Messages"
-            leading={<Text>✉️</Text>}
-            trailing={<Badge variant="filled" color="primary">12</Badge>}
+            leading="email"
+            trailing={<Badge variant="filled" color="blue">12</Badge>}
           />
           <ListItem
             label="Updates"
-            leading={<Text>🔄</Text>}
+            leading="refresh"
             trailing={<Text size="small" color="secondary">New</Text>}
           />
         </List>
@@ -138,25 +138,25 @@ export const ListExamples: React.FC = () => {
         <List variant="bordered">
           <ListItem
             label="Dashboard"
-            leading={<Text>📊</Text>}
+            leading="view-dashboard"
             selected={selectedNav === 'dashboard'}
             onPress={() => setSelectedNav('dashboard')}
           />
           <ListItem
             label="Analytics"
-            leading={<Text>📈</Text>}
+            leading="chart-line"
             selected={selectedNav === 'analytics'}
             onPress={() => setSelectedNav('analytics')}
           />
           <ListItem
             label="Reports"
-            leading={<Text>📄</Text>}
+            leading="file-document"
             selected={selectedNav === 'reports'}
             onPress={() => setSelectedNav('reports')}
           />
           <ListItem
             label="Settings"
-            leading={<Text>⚙️</Text>}
+            leading="cog"
             selected={selectedNav === 'settings'}
             onPress={() => setSelectedNav('settings')}
           />
@@ -169,37 +169,37 @@ export const ListExamples: React.FC = () => {
           <ListSection title="Main">
             <ListItem
               label="Dashboard"
-              leading={<Text>🏠</Text>}
+              leading="home"
             />
             <ListItem
               label="Analytics"
-              leading={<Text>📈</Text>}
+              leading="chart-line"
             />
           </ListSection>
 
           <ListSection title="Settings">
             <ListItem
               label="Profile"
-              leading={<Text>👤</Text>}
+              leading="account"
             />
             <ListItem
               label="Preferences"
-              leading={<Text>⚙️</Text>}
+              leading="cog"
             />
             <ListItem
               label="Security"
-              leading={<Text>🔒</Text>}
+              leading="lock"
             />
           </ListSection>
 
           <ListSection title="Other">
             <ListItem
               label="Help"
-              leading={<Text>❓</Text>}
+              leading="help-circle"
             />
             <ListItem
               label="Logout"
-              leading={<Text>🚪</Text>}
+              leading="logout"
             />
           </ListSection>
         </List>
@@ -240,7 +240,7 @@ export const ListExamples: React.FC = () => {
         <Text size="large" weight="semibold">Rich Content</Text>
         <List variant="bordered">
           <ListItem
-            leading={<Text size="large">👤</Text>}
+            leading="account-circle"
             trailing={<Text size="small" color="secondary">Admin</Text>}
           >
             <View>
@@ -249,7 +249,7 @@ export const ListExamples: React.FC = () => {
             </View>
           </ListItem>
           <ListItem
-            leading={<Text size="large">👤</Text>}
+            leading="account-circle"
             trailing={<Text size="small" color="secondary">User</Text>}
           >
             <View>

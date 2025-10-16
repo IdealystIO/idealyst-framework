@@ -89,6 +89,7 @@ export const buttonStyles = StyleSheet.create((theme) => ({
   
   // Icon container styles
   iconContainer: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -97,6 +98,10 @@ export const buttonStyles = StyleSheet.create((theme) => ({
 
   // Icon styles that inherit button colors
   icon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+
     variants: {
       size: {
         small: {

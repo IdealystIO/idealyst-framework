@@ -33,7 +33,6 @@ export const listStyles = StyleSheet.create((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
     backgroundColor: 'transparent',
     border: 'none',
     cursor: 'pointer',
@@ -157,6 +156,23 @@ export const listStyles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     marginRight: theme.spacing.sm,
     color: theme.colors.text.secondary,
+
+    variants: {
+      size: {
+        small: {
+          width: 16,
+          height: 16,
+        },
+        medium: {
+          width: 20,
+          height: 20,
+        },
+        large: {
+          width: 24,
+          height: 24,
+        },
+      },
+    },
   },
 
   labelContainer: {
@@ -207,6 +223,30 @@ export const listStyles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
     marginLeft: theme.spacing.sm,
     color: theme.colors.text.secondary,
+    flexShrink: 0,
+  },
+
+  trailingIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    variants: {
+      size: {
+        small: {
+          width: 16,
+          height: 16,
+        },
+        medium: {
+          width: 20,
+          height: 20,
+        },
+        large: {
+          width: 24,
+          height: 24,
+        },
+      },
+    },
   },
 
   section: {

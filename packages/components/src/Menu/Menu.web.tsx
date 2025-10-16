@@ -183,7 +183,7 @@ const Menu: React.FC<MenuProps> = ({
               return (
                 <IconSvg
                   path={iconPath}
-                  style={iconProps.style}
+                  {...iconProps}
                   aria-label={item.icon}
                 />
               );

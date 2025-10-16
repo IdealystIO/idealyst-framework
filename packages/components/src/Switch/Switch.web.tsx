@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { switchStyles } from './Switch.styles';
 import type { SwitchProps } from './types';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 
 const Switch: React.FC<SwitchProps> = ({
   checked = false,
@@ -11,6 +13,8 @@ const Switch: React.FC<SwitchProps> = ({
   labelPosition = 'right',
   intent = 'primary',
   size = 'medium',
+  enabledIcon,
+  disabledIcon,
   style,
   testID,
 }) => {
@@ -33,7 +37,29 @@ const Switch: React.FC<SwitchProps> = ({
   const switchContainerProps = getWebProps([switchStyles.switchContainer]);
   const trackProps = getWebProps([switchStyles.switchTrack]);
   const thumbProps = getWebProps([switchStyles.switchThumb]);
+  const thumbIconProps = getWebProps([switchStyles.thumbIcon]);
   const labelProps = getWebProps([switchStyles.label]);
+
+  // Helper to render icon
+  const renderIcon = () => {
+    const iconToRender = checked ? enabledIcon : disabledIcon;
+    if (!iconToRender) return null;
+
+    if (isIconName(iconToRender)) {
+      const iconPath = resolveIconPath(iconToRender);
+      return (
+        <IconSvg
+          path={iconPath}
+          {...thumbIconProps}
+          aria-label={iconToRender}
+        />
+      );
+    } else if (isValidElement(iconToRender)) {
+      return iconToRender;
+    }
+
+    return null;
+  };
 
   const switchElement = (
     <button
@@ -54,7 +80,9 @@ const Switch: React.FC<SwitchProps> = ({
       className={switchContainerProps.className}
     >
       <div className={trackProps.className} style={trackProps.style}>
-        <div className={thumbProps.className} style={thumbProps.style} />
+        <div className={thumbProps.className} style={thumbProps.style}>
+          {renderIcon()}
+        </div>
       </div>
     </button>
   );

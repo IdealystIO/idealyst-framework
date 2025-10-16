@@ -4,6 +4,8 @@ import { createPortal } from 'react-dom';
 import { getWebProps } from 'react-native-unistyles/web';
 import { SelectProps, SelectOption } from './types';
 import { selectStyles } from './Select.styles';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath } from '../Icon/icon-resolver';
 
 const Select: React.FC<SelectProps> = ({
   options,
@@ -408,18 +410,14 @@ const Select: React.FC<SelectProps> = ({
           </span>
         </div>
 
-        <svg
+        <IconSvg
+          path={resolveIconPath('chevron-down')}
           {...getWebProps([
             selectStyles.chevron,
             isOpen && selectStyles.chevronOpen
           ])}
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-        >
-          <path d="M4.427 9.573l3.396-3.396a.25.25 0 01.354 0l3.396 3.396a.25.25 0 01-.177.427H4.604a.25.25 0 01-.177-.427z" />
-        </svg>
+          aria-label="chevron-down"
+        />
       </button>
 
       {renderDropdown()}

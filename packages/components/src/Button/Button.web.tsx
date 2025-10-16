@@ -65,7 +65,7 @@ const Button: React.FC<ButtonProps> = (props: InternalButtonProps) => {
       return (
         <IconSvg
           path={iconPath}
-          style={iconProps.style}
+          {...iconProps}
           aria-label={icon}
         />
       );

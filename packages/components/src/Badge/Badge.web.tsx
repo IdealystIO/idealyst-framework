@@ -44,7 +44,7 @@ const Badge: React.FC<BadgeProps> = (props: InternalBadgeProps) => {
       return (
         <IconSvg
           path={path}
-          style={iconProps.style}
+          {...iconProps}
           aria-label={iconProp}
         />
       );

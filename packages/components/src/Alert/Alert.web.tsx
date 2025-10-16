@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { alertStyles } from './Alert.styles';
 import type { AlertProps } from './types';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 
 // Default icons for each intent
 const defaultIcons = {
-  success: '✓',
-  error: '✕',
-  warning: '⚠',
-  info: 'ℹ',
-  neutral: '●',
+  success: 'check-circle',
+  error: 'alert-circle',
+  warning: 'alert',
+  info: 'information',
+  neutral: 'record-circle',
 };
 
 const Alert: React.FC<AlertProps> = ({
@@ -38,8 +40,29 @@ const Alert: React.FC<AlertProps> = ({
   const messageProps = getWebProps([alertStyles.message]);
   const actionsProps = getWebProps([alertStyles.actions]);
   const closeButtonProps = getWebProps([alertStyles.closeButton]);
+  const closeIconProps = getWebProps([alertStyles.closeIcon]);
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
+
+  // Helper to render icon
+  const renderIcon = (iconProp: typeof displayIcon) => {
+    if (!iconProp) return null;
+
+    if (isIconName(iconProp)) {
+      const iconPath = resolveIconPath(iconProp);
+      return (
+        <IconSvg
+          path={iconPath}
+          {...iconContainerProps}
+          aria-label={iconProp}
+        />
+      );
+    } else if (isValidElement(iconProp)) {
+      return iconProp;
+    }
+
+    return null;
+  };
 
   return (
     <div
@@ -48,15 +71,7 @@ const Alert: React.FC<AlertProps> = ({
       data-testid={testID}
       role="alert"
     >
-      {displayIcon && (
-        <div className={iconContainerProps.className} style={iconContainerProps.style}>
-          {typeof displayIcon === 'string' ? (
-            <span style={{ fontSize: 20, lineHeight: '24px' }}>{displayIcon}</span>
-          ) : (
-            displayIcon
-          )}
-        </div>
-      )}
+      {displayIcon && renderIcon(displayIcon)}
 
       <div className={contentProps.className} style={contentProps.style}>
         {title && (
@@ -88,7 +103,11 @@ const Alert: React.FC<AlertProps> = ({
           aria-label="Dismiss alert"
           type="button"
         >
-          <span style={{ fontSize: 16 }}>✕</span>
+          <IconSvg
+            path={resolveIconPath('close')}
+            {...closeIconProps}
+            aria-label="close"
+          />
         </button>
       )}
     </div>

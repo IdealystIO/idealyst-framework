@@ -245,19 +245,24 @@ export const checkboxLabelStyles = StyleSheet.create((theme) => ({
 export const checkboxCheckmarkStyles = StyleSheet.create((theme) => ({
   checkmark: {
     position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     color: '#ffffff',
-    fontWeight: 'bold',
-    
+
     variants: {
       size: {
         small: {
-          fontSize: 10,
+          width: 12,
+          height: 12,
         },
         medium: {
-          fontSize: 12,
+          width: 14,
+          height: 14,
         },
         large: {
-          fontSize: 14,
+          width: 16,
+          height: 16,
         },
       },
       visible: {

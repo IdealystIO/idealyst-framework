@@ -1,4 +1,5 @@
 import type { ViewStyle } from 'react-native';
+import type { IconName } from '../Icon/icon-types';
 
 export interface SwitchProps {
   checked?: boolean;
@@ -8,6 +9,8 @@ export interface SwitchProps {
   labelPosition?: 'left' | 'right';
   intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
   size?: 'small' | 'medium' | 'large';
+  enabledIcon?: IconName | React.ReactNode;
+  disabledIcon?: IconName | React.ReactNode;
   style?: ViewStyle;
   testID?: string;
 }

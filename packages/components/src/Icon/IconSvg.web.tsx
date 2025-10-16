@@ -19,22 +19,20 @@ interface IconSvgProps {
 
 export const IconSvg: React.FC<IconSvgProps> = ({
   path,
-  size,
   color = 'currentColor',
   style,
   'aria-label': ariaLabel,
   'data-testid': testID,
+  ...rest
 }) => {
-  // Don't use the size prop - let CSS handle dimensions entirely through style
-  // This gives us full control and avoids MdiIcon's size prop (which is a multiplier)
   return (
     <MdiIcon
-      path={path}
-      size={1}
-      color={color}
       style={style}
+      path={path}
+      color={color}
       aria-label={ariaLabel}
       data-testid={testID}
+      {...rest}
     />
   );
 };

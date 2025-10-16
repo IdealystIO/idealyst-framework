@@ -1,12 +1,13 @@
 import type { ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
+import type { IconName } from '../Icon/icon-types';
 
 export interface ListItemProps {
   id?: string;
   label?: string;
   children?: ReactNode;
-  leading?: ReactNode;
-  trailing?: ReactNode;
+  leading?: IconName | ReactNode;
+  trailing?: IconName | ReactNode;
   active?: boolean;
   selected?: boolean;
   disabled?: boolean;

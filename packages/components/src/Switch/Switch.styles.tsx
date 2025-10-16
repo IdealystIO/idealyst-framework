@@ -99,6 +99,9 @@ export const switchStyles = StyleSheet.create((theme) => ({
     transition: 'transform 0.2s ease',
     top: '50%',
     transform: 'translateY(-50%)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 
     variants: {
       size: {
@@ -165,6 +168,84 @@ export const switchStyles = StyleSheet.create((theme) => ({
         checked: false,
         styles: {
           transform: 'translateY(-50%) translateX(0)',
+        },
+      },
+    ],
+  },
+
+  thumbIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    variants: {
+      size: {
+        small: {
+          width: 10,
+          height: 10,
+        },
+        medium: {
+          width: 12,
+          height: 12,
+        },
+        large: {
+          width: 14,
+          height: 14,
+        },
+      },
+      checked: {
+        true: {},
+        false: {},
+      },
+      intent: {
+        primary: {},
+        success: {},
+        error: {},
+        warning: {},
+        neutral: {},
+      },
+    },
+
+    compoundVariants: [
+      {
+        checked: true,
+        intent: 'primary',
+        styles: {
+          color: theme.intents.primary.main,
+        },
+      },
+      {
+        checked: true,
+        intent: 'success',
+        styles: {
+          color: theme.intents.success.main,
+        },
+      },
+      {
+        checked: true,
+        intent: 'error',
+        styles: {
+          color: theme.intents.error.main,
+        },
+      },
+      {
+        checked: true,
+        intent: 'warning',
+        styles: {
+          color: theme.intents.warning.main,
+        },
+      },
+      {
+        checked: true,
+        intent: 'neutral',
+        styles: {
+          color: theme.intents.neutral.main,
+        },
+      },
+      {
+        checked: false,
+        styles: {
+          color: theme.palettes.gray[400],
         },
       },
     ],

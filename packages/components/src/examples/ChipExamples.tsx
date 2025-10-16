@@ -4,7 +4,6 @@ import { View } from '../View';
 import { Text } from '../Text';
 import { Chip } from '../Chip';
 import { Divider } from '../Divider';
-import { Icon } from '../Icon';
 
 export const ChipExamples = () => {
   const [selectedChips, setSelectedChips] = useState<Set<string>>(new Set());
@@ -78,10 +77,10 @@ export const ChipExamples = () => {
         <Text size="large" weight="semibold">With Icons</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          <Chip label="Star" icon={<Icon name="star" size="sm" />} />
-          <Chip label="Heart" icon={<Icon name="heart" size="sm" />} intent="error" />
-          <Chip label="Check" icon={<Icon name="check" size="sm" />} intent="success" />
-          <Chip label="Info" icon={<Icon name="information" size="sm" />} variant="outlined" />
+          <Chip label="Star" icon="star" />
+          <Chip label="Heart" icon="heart" intent="error" />
+          <Chip label="Check" icon="check" intent="success" />
+          <Chip label="Info" icon="information" variant="outlined" />
         </View>
 
         <Divider spacing="medium" />

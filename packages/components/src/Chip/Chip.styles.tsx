@@ -363,16 +363,125 @@ export const chipStyles = StyleSheet.create((theme) => ({
     variants: {
       size: {
         small: {
-          fontSize: 12,
+          width: 12,
+          height: 12,
         },
         medium: {
-          fontSize: 14,
+          width: 14,
+          height: 14,
         },
         large: {
-          fontSize: 16,
+          width: 16,
+          height: 16,
         },
       },
+      variant: {
+        filled: {
+          color: theme.colors.text.inverse,
+        },
+        outlined: {},
+        soft: {},
+      },
+      intent: {
+        primary: {},
+        neutral: {},
+        success: {},
+        error: {},
+        warning: {},
+      },
+      selected: {
+        true: {
+          color: theme.colors.text.inverse,
+        },
+        false: {},
+      },
     },
+
+    compoundVariants: [
+      // Outlined icon colors
+      {
+        variant: 'outlined',
+        intent: 'primary',
+        selected: false,
+        styles: {
+          color: theme.intents.primary.main,
+        },
+      },
+      {
+        variant: 'outlined',
+        intent: 'neutral',
+        selected: false,
+        styles: {
+          color: theme.colors.text.primary,
+        },
+      },
+      {
+        variant: 'outlined',
+        intent: 'success',
+        selected: false,
+        styles: {
+          color: theme.intents.success.main,
+        },
+      },
+      {
+        variant: 'outlined',
+        intent: 'error',
+        selected: false,
+        styles: {
+          color: theme.intents.error.main,
+        },
+      },
+      {
+        variant: 'outlined',
+        intent: 'warning',
+        selected: false,
+        styles: {
+          color: theme.intents.warning.main,
+        },
+      },
+
+      // Soft icon colors
+      {
+        variant: 'soft',
+        intent: 'primary',
+        selected: false,
+        styles: {
+          color: theme.intents.primary.main,
+        },
+      },
+      {
+        variant: 'soft',
+        intent: 'neutral',
+        selected: false,
+        styles: {
+          color: theme.colors.text.primary,
+        },
+      },
+      {
+        variant: 'soft',
+        intent: 'success',
+        selected: false,
+        styles: {
+          color: theme.intents.success.main,
+        },
+      },
+      {
+        variant: 'soft',
+        intent: 'error',
+        selected: false,
+        styles: {
+          color: theme.intents.error.main,
+        },
+      },
+      {
+        variant: 'soft',
+        intent: 'warning',
+        selected: false,
+        styles: {
+          color: theme.intents.warning.main,
+        },
+      },
+    ],
   },
 
   deleteButton: {

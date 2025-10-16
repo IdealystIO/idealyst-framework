@@ -12,6 +12,13 @@ export const SwitchExamples: React.FC = () => {
     warning: false,
     neutral: false,
   });
+  const [iconChecked, setIconChecked] = useState({
+    basic: false,
+    notifications: true,
+    visibility: false,
+    volume: true,
+    wifi: false,
+  });
 
   return (
     <View spacing="lg">
@@ -100,6 +107,53 @@ export const SwitchExamples: React.FC = () => {
             onCheckedChange={(checked) => setIntentChecked(prev => ({ ...prev, neutral: checked }))}
             intent="neutral"
             label="Neutral"
+          />
+        </View>
+      </View>
+
+      <View spacing="md">
+        <Text size="large" weight="semibold">With Icons</Text>
+        <View spacing="sm">
+          <Switch
+            checked={iconChecked.basic}
+            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, basic: checked }))}
+            enabledIcon="check"
+            disabledIcon="close"
+            label="On/Off"
+          />
+          <Switch
+            checked={iconChecked.notifications}
+            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, notifications: checked }))}
+            enabledIcon="bell"
+            disabledIcon="bell-off"
+            intent="success"
+            label="Notifications"
+          />
+          <Switch
+            checked={iconChecked.visibility}
+            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, visibility: checked }))}
+            enabledIcon="eye"
+            disabledIcon="eye-off"
+            intent="primary"
+            label="Visibility"
+          />
+          <Switch
+            checked={iconChecked.volume}
+            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, volume: checked }))}
+            enabledIcon="volume-high"
+            disabledIcon="volume-off"
+            intent="warning"
+            label="Sound"
+            size="large"
+          />
+          <Switch
+            checked={iconChecked.wifi}
+            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, wifi: checked }))}
+            enabledIcon="wifi"
+            disabledIcon="wifi-off"
+            intent="error"
+            label="WiFi Connection"
+            size="small"
           />
         </View>
       </View>

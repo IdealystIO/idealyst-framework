@@ -17,8 +17,8 @@ export interface ChipProps {
   /** Size of the chip */
   size?: ChipSize;
 
-  /** Icon to display before the label */
-  icon?: React.ReactNode;
+  /** Icon to display before the label. Can be an icon name (string) or a custom React element */
+  icon?: string | React.ReactNode;
 
   /** Whether the chip can be deleted */
   deletable?: boolean;

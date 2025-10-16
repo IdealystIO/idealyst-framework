@@ -109,6 +109,7 @@ export const badgeStyles = StyleSheet.create((theme) => ({
   
   // Container for icon and text
   content: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -117,6 +118,10 @@ export const badgeStyles = StyleSheet.create((theme) => ({
 
   // Icon styles
   icon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+
     variants: {
       size: {
         small: {

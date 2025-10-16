@@ -178,9 +178,14 @@ export const selectStyles = StyleSheet.create((theme) => ({
   },
 
   chevron: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginLeft: theme.spacing?.xs || 4,
     color: theme.colors?.text?.secondary || theme.palettes?.gray?.[600] || '#4b5563',
     transition: 'transform 0.2s ease',
+    width: 20,
+    height: 20,
   },
 
   chevronOpen: {

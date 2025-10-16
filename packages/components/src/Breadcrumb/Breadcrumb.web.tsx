@@ -67,7 +67,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
         return (
           <IconSvg
             path={iconPath}
-            style={iconProps.style}
+            {...iconProps}
             aria-label={item.icon}
           />
         );
