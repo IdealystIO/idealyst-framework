@@ -1,3 +1,5 @@
-// Web-specific Checkbox export
-export { default } from './Checkbox.web';
-export * from './types'; 
+import CheckboxComponent from './Checkbox.web';
+
+export default CheckboxComponent;
+export { CheckboxComponent as Checkbox };
+export * from './types';

@@ -44,6 +44,12 @@ export const menuStyles = StyleSheet.create((theme) => ({
     color: theme.colors.text.primary,
     textAlign: 'left',
 
+    _web: {
+      _hover: {
+        backgroundColor: theme.colors.surface.secondary,
+      },
+    },
+
     variants: {
       size: {
         small: {
@@ -64,68 +70,52 @@ export const menuStyles = StyleSheet.create((theme) => ({
           opacity: 0.5,
           cursor: 'not-allowed',
         },
-        false: {
-          _web: {
-            ':hover': {
-              backgroundColor: theme.colors.surface.secondary,
-            },
-          },
-        },
+        false: {},
       },
       intent: {
-        primary: {},
-        neutral: {},
-        success: {},
-        error: {},
-        warning: {},
-      },
-    },
-
-    compoundVariants: [
-      {
-        disabled: false,
-        intent: 'primary',
-        styles: {
+        primary: {
           _web: {
-            ':hover': {
+            _hover: {
               backgroundColor: theme.intents.primary.container,
               color: theme.intents.primary.main,
             },
           },
         },
-      },
-      {
-        disabled: false,
-        intent: 'success',
-        styles: {
+        neutral: {},
+        success: {
           _web: {
-            ':hover': {
+            _hover: {
               backgroundColor: theme.intents.success.container,
               color: theme.intents.success.main,
             },
           },
         },
-      },
-      {
-        disabled: false,
-        intent: 'error',
-        styles: {
+        error: {
           _web: {
-            ':hover': {
+            _hover: {
               backgroundColor: theme.intents.error.container,
               color: theme.intents.error.main,
             },
           },
         },
-      },
-      {
-        disabled: false,
-        intent: 'warning',
-        styles: {
+        warning: {
           _web: {
-            ':hover': {
+            _hover: {
               backgroundColor: theme.intents.warning.container,
               color: theme.intents.warning.main,
+            },
+          },
+        },
+      },
+    },
+
+    compoundVariants: [
+      {
+        disabled: true,
+        styles: {
+          _web: {
+            _hover: {
+              backgroundColor: 'transparent',
             },
           },
         },

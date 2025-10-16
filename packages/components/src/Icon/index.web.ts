@@ -1,3 +1,5 @@
-// Web-specific Icon export
-export { default } from './Icon.web';
-export * from './types'; 
+import IconComponent from './Icon.web';
+
+export default IconComponent;
+export { IconComponent as Icon };
+export * from './types';

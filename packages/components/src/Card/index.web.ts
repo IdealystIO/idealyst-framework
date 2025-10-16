@@ -1,3 +1,5 @@
-// Web-specific Card export
-export { default } from './Card.web';
-export * from './types'; 
+import CardComponent from './Card.web';
+
+export default CardComponent;
+export { CardComponent as Card };
+export * from './types';

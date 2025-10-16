@@ -1,3 +1,5 @@
-// Web-specific Input export
-export { default } from './Input.web';
-export * from './types'; 
+import InputComponent from './Input.web';
+
+export default InputComponent;
+export { InputComponent as Input };
+export * from './types';

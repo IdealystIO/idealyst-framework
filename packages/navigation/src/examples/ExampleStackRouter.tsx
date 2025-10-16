@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabsExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples } from "../../../components/src/examples";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabsExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from "../../../components/src/examples";
 import { DataGridShowcase } from "../../../datagrid/src/examples";
 import { DatePickerExamples } from "../../../datepicker/src/examples";
 import { Button, Divider, Screen, Text, View } from "../../../components/src";
@@ -309,6 +309,67 @@ const HomeScreen = () => {
                     }}>
                     TabBar
                 </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/alert",
+                            vars: {},
+                        });
+                    }}>
+                    Alert
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/skeleton",
+                            vars: {},
+                        });
+                    }}>
+                    Skeleton
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/chip",
+                            vars: {},
+                        });
+                    }}>
+                    Chip
+                </Button>
+                <Button
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/breadcrumb",
+                            vars: {},
+                        });
+                    }}>
+                    Breadcrumb
+                </Button>
+
+                <Divider spacing="medium" />
+                <Text size="small" weight="semibold" color="secondary">Media Components</Text>
+                <Button
+                    variant="outlined"
+                    intent="neutral"
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/image",
+                            vars: {},
+                        });
+                    }}>
+                    🖼️ Image
+                </Button>
+                <Button
+                    variant="outlined"
+                    intent="neutral"
+                    onPress={() => {
+                        navigator.navigate({
+                            path: "/video",
+                            vars: {},
+                        });
+                    }}>
+                    🎬 Video
+                </Button>
 
                 <Divider spacing="medium" />
                 <Text size="small" weight="semibold" color="secondary">Data Components</Text>
@@ -387,6 +448,12 @@ const StackRouter: NavigatorParam = {
         { path: "list", type: 'screen', component: ListExamples},
         { path: "table", type: 'screen', component: TableExamples},
         { path: "tabbar", type: 'screen', component: TabBarExamples},
+        { path: "alert", type: 'screen', component: AlertExamples},
+        { path: "skeleton", type: 'screen', component: SkeletonExamples},
+        { path: "chip", type: 'screen', component: ChipExamples},
+        { path: "breadcrumb", type: 'screen', component: BreadcrumbExamples},
+        { path: "image", type: 'screen', component: ImageExamples},
+        { path: "video", type: 'screen', component: VideoExamples},
         { path: "datagrid", type: 'screen', component: DataGridShowcase},
         { path: "datepicker", type: 'screen', component: DatePickerExamples},
         { path: "theme-extension", type: 'screen', component: ThemeExtensionExamples},

@@ -1,8 +1,9 @@
 # Component Library Roadmap
 
-## Current Components (30 total)
+## Current Components (36 total)
 - ✅ Accordion
 - ✅ ActivityIndicator
+- ✅ Alert
 - ✅ Avatar
 - ✅ Badge
 - ✅ Button
@@ -11,14 +12,17 @@
 - ✅ Dialog
 - ✅ Divider
 - ✅ Icon
+- ✅ Image
 - ✅ Input
 - ✅ List
+- ✅ Menu
 - ✅ Popover
 - ✅ Pressable
 - ✅ Progress
 - ✅ RadioButton
 - ✅ Screen
 - ✅ Select
+- ✅ Skeleton
 - ✅ Slider
 - ✅ SVGImage
 - ✅ Switch
@@ -27,54 +31,21 @@
 - ✅ Tabs
 - ✅ Text
 - ✅ TextArea
+- ✅ Tooltip
+- ✅ Video
 - ✅ View
 
 ## Proposed New Components
 
 ### Priority 1: Essential Form Components
 - [✅] **Switch/Toggle** - Binary on/off control with animation
-  - Platform-specific styling (iOS/Android/Web)
-  - Label support
-  - Disabled state
-  - Intent colors
-
 - [✅] **RadioButton/RadioGroup** - Single selection from multiple options
-  - Group management
-  - Horizontal/vertical layout
-  - Custom styling per option
-  - Accessibility support
-
-- [ ] **Slider** - Range selection component
-  - Min/max values
-  - Step increments
-  - Value display
-  - Marks/labels support
-
-- [ ] **TextArea** - Multi-line text input (enhanced version)
-  - Auto-resize option
-  - Character count
-  - Max length enforcement
-  - Better than current multiline Input
+- [✅] **Slider** - Range selection component with min/max values, step increments
+- [✅] **TextArea** - Multi-line text input with auto-resize, character count
 
 ### Priority 2: Navigation Components
-- [ ] **Tabs/TabBar** - Tab-based navigation (WIP - indicator needs fixing)
-  - Compound component pattern (Tabs + Tab)
-  - Array-based pattern (TabBar + items)
-  - Scrollable tabs (native)
-  - Animated sliding indicator (needs debugging)
-  - Three variants (default, pills, underline)
-  - Intent colors
-  - Disabled tabs
-  - Controlled/uncontrolled modes
-
-- [ ] **Menu/MenuItem/MenuSection** - Dropdown and context menus
-  - Nested menus support
-  - Keyboard navigation
-  - Icons and shortcuts
-  - Dividers between sections
-  - Disabled items
-  - Radio/checkbox items
-  - MenuSection for grouped items
+- [✅] **Tabs/TabBar** - Tab-based navigation (compound & array patterns)
+- [✅] **Menu** - Dropdown menus with icons, separators, disabled items
 
 - [✅] **Accordion** - Expandable content sections
   - Single/multiple expansion modes
@@ -86,61 +57,30 @@
   - Default expanded items
 
 ### Priority 3: Data Display Components
-- [✅] **Table** - Simple data table component
-  - Three variants (default, bordered, striped)
-  - Custom cell rendering
-  - Column alignment and widths
-  - Clickable rows
-  - For complex data grids, use @idealyst/datagrid
-
-- [✅] **List/ListItem/ListSection** - Structured list display
-  - Leading/trailing elements (icons, badges, chevrons)
-  - Active/selected states for navigation
-  - Hover states
-  - Indentation support for hierarchy
-  - Sections with titles
-  - Three variants (default, bordered, divided)
-  - Rich content support
-  - Ideal for sidebars and navigation menus
-
-- [ ] **Tooltip** - Contextual information display
-  - Multiple positions
-  - Hover/click triggers
-  - Rich content support
-  - Arrow pointing
-
-- [✅] **Progress** - Progress indicators
-  - Linear/circular variants
-  - Determinate/indeterminate
-  - Labels
-  - Color variants
-  - Rounded/straight variants (linear)
+- [✅] **Table** - Simple data table component (3 variants, custom cell rendering)
+- [✅] **List/ListItem/ListSection** - Structured list display for sidebars and navigation
+- [✅] **Tooltip** - Contextual information display with multiple positions
+- [✅] **Progress** - Linear/circular progress indicators
 
 ### Priority 4: Feedback Components
-- [ ] **Alert** - Inline alert messages
-  - Intent variants (success/error/warning/info)
+- [✅] **Alert** - Inline alert messages
+  - Intent variants (success/error/warning/info/neutral)
+  - Style variants (filled/outlined/soft)
   - Dismissible
-  - Icon support
+  - Icon support (default icons + custom)
   - Actions
+  - Rich content support
 
-- [ ] **Skeleton** - Loading placeholder
-  - Shape variants
-  - Animation
+- [✅] **Skeleton** - Loading placeholder
+  - Shape variants (rectangle/rounded/circle)
+  - Animation (pulse/wave/none)
   - Custom dimensions
-  - Group composition
+  - Group composition with spacing
+  - Cross-platform animations (CSS on web, Animated API on native)
 
 ### Priority 5: Media Components
-- [ ] **Image** - Enhanced image component
-  - Lazy loading
-  - Placeholder/skeleton
-  - Error state
-  - Aspect ratio control
-
-- [ ] **Video** - Video player wrapper
-  - Controls customization
-  - Poster support
-  - Platform-specific players
-  - Fullscreen support
+- [✅] **Image** - Enhanced image with lazy loading, placeholder, error state, aspect ratio
+- [✅] **Video** - Video player with controls, poster, react-native-video on native
 
 ### Priority 6: Utility Components
 - [ ] **Portal** - Render content outside parent

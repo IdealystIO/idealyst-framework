@@ -1,2 +1,5 @@
-export { default } from './Screen.web';
-export * from './types'; 
+import ScreenComponent from './Screen.web';
+
+export default ScreenComponent;
+export { ScreenComponent as Screen };
+export * from './types';

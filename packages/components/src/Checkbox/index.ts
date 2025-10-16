@@ -1,5 +1,5 @@
-// Platform-agnostic Checkbox export
-// Metro will resolve to index.native.ts for React Native
-// This file serves as fallback for web environments
-export { default } from './Checkbox.web';
-export * from './types'; 
+import CheckboxComponent from './Checkbox.web';
+
+export default CheckboxComponent;
+export { CheckboxComponent as Checkbox };
+export * from './types';

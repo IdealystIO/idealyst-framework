@@ -1,3 +1,5 @@
-// Web-specific Button export
-export { default } from './Button.web';
-export * from './types'; 
+import ButtonComponent from './Button.web';
+
+export default ButtonComponent;
+export { ButtonComponent as Button };
+export * from './types';

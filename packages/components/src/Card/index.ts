@@ -1,5 +1,5 @@
-// Platform-agnostic Card export
-// Metro will resolve to index.native.ts for React Native
-// This file serves as fallback for web environments
-export { default } from './Card.web';
-export * from './types'; 
+import CardComponent from './Card.web';
+
+export default CardComponent;
+export { CardComponent as Card };
+export * from './types';

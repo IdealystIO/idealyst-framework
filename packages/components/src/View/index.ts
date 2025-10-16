@@ -1,5 +1,5 @@
-// Platform-agnostic View export
-// Bundlers will resolve to index.web.ts (web) or index.native.ts (React Native)
-// This file serves as fallback for web environments
-export { default } from './View.web';
-export * from './types'; 
+import ViewComponent from './View.web';
+
+export default ViewComponent;
+export { ViewComponent as View };
+export * from './types';

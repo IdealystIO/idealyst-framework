@@ -1,3 +1,5 @@
-// Web-specific Text export
-export { default } from './Text.web';
-export * from './types'; 
+import TextComponent from './Text.web';
+
+export default TextComponent;
+export { TextComponent as Text };
+export * from './types';

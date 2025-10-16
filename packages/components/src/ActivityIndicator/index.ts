@@ -1,2 +1,5 @@
-export { default } from './ActivityIndicator.web';
-export type { ActivityIndicatorProps } from './types';
+import ActivityIndicatorComponent from './ActivityIndicator.web';
+
+export default ActivityIndicatorComponent;
+export { ActivityIndicatorComponent as ActivityIndicator };
+export * from './types';
