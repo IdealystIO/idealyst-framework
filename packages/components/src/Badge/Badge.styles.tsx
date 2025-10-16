@@ -107,11 +107,39 @@ export const badgeStyles = StyleSheet.create((theme) => ({
     ],
   },
   
+  // Container for icon and text
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+  },
+
+  // Icon styles
+  icon: {
+    variants: {
+      size: {
+        small: {
+          width: 10,
+          height: 10,
+        },
+        medium: {
+          width: 12,
+          height: 12,
+        },
+        large: {
+          width: 14,
+          height: 14,
+        },
+      },
+    },
+  },
+
   text: {
     color: '#ffffff',
     fontWeight: '600',
     textAlign: 'center',
-    
+
     variants: {
       size: {
         small: {
@@ -139,7 +167,7 @@ export const badgeStyles = StyleSheet.create((theme) => ({
         },
       },
     },
-    
+
     compoundVariants: [
       // Outlined variant text colors - dynamically generated
       ...Object.entries(theme.palettes || {}).map(([colorKey, palette]: [string, any]) => ({

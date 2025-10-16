@@ -1,8 +1,89 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Screen, View, Icon, Text, Button } from '../index';
 import type { IconName } from '../Icon/icon-types';
 
+// Test Components for Plugin
+const SimpleVariableTest = () => {
+  const homeIcon = "home";
+  const accountIcon = "account";
+  const cogIcon = "cog";
+  return (
+    <>
+      <Icon name={homeIcon} size="md" />
+      <Icon name={accountIcon} size="md" />
+      <Icon name={cogIcon} size="md" />
+    </>
+  );
+};
+
+const NamespaceTest = () => {
+  const starIcon = "mdi:star";
+  const heartIcon = "mdi:heart";
+  const rocketIcon = "mdi:rocket";
+  return (
+    <>
+      <Icon name={starIcon} size="md" />
+      <Icon name={heartIcon} size="md" />
+      <Icon name={rocketIcon} size="md" />
+    </>
+  );
+};
+
+const TemplateLiteralTest = () => {
+  const bellIcon = `bell`;
+  const mailIcon = `mail`;
+  return (
+    <>
+      <Icon name={bellIcon} size="md" />
+      <Icon name={mailIcon} size="md" />
+    </>
+  );
+};
+
+const MultipleVariablesTest = () => {
+  const deleteIcon = "delete";
+  const editIcon = "pencil";
+  const saveIcon = "content-save";
+  const copyIcon = "content-copy";
+  return (
+    <>
+      <Icon name={deleteIcon} size="md" color="red" />
+      <Icon name={editIcon} size="md" color="blue" />
+      <Icon name={saveIcon} size="md" color="green" />
+      <Icon name={copyIcon} size="md" color="orange" />
+    </>
+  );
+};
+
+const FalsePositiveTest = () => {
+  const pageName = "home"; // Not used with Icon
+  const title = "account"; // Not used with Icon
+  return (
+    <>
+      <Text size="small">Page: {pageName}</Text>
+      <Text size="small">Title: {title}</Text>
+      <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+        These strings are NOT transformed (not used with Icon)
+      </Text>
+    </>
+  );
+};
+
 export const IconExamples = () => {
+  // Test state for dynamic icon switching
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [userStatus, setUserStatus] = useState<'online' | 'offline' | 'away'>('online');
+
+  // Test function that returns an icon name
+  const getStatusIcon = (status: string): string => {
+    switch (status) {
+      case 'online': return 'check-circle';
+      case 'offline': return 'close-circle';
+      case 'away': return 'clock';
+      default: return 'help-circle';
+    }
+  };
+
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
@@ -334,6 +415,149 @@ export const IconExamples = () => {
             <Icon name="cog" size="md" />
             <Icon name="toolbox" size="md" />
             <Icon name="hammer-wrench" size="md" />
+          </View>
+        </View>
+
+        {/* Enhanced Plugin Testing Section */}
+        <View spacing="lg" style={{ marginTop: 32, padding: 16, backgroundColor: 'rgba(100, 100, 255, 0.1)', borderRadius: 8 }}>
+          <Text size="large" weight="bold">Enhanced Plugin Testing</Text>
+          <Text size="small" style={{ fontStyle: 'italic', marginBottom: 16 }}>
+            These examples test the new context-aware babel plugin features
+          </Text>
+
+          {/* Test 1: Simple Variable */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 1: Simple Variable</Text>
+            <Text size="small" color="secondary">Icon name from a simple variable</Text>
+            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              <SimpleVariableTest />
+            </View>
+            <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+              const iconName = "home"; &lt;Icon name={'{iconName}'} /&gt;
+            </Text>
+          </View>
+
+          {/* Test 2: Namespace Prefix */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 2: Namespace Prefix (mdi:)</Text>
+            <Text size="small" color="secondary">Explicit marking with mdi: prefix</Text>
+            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              <NamespaceTest />
+            </View>
+            <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+              const icon = "mdi:star"; &lt;Icon name={'{icon}'} /&gt;
+            </Text>
+          </View>
+
+          {/* Test 3: Conditional Expression */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 3: Conditional Expression</Text>
+            <Text size="small" color="secondary">Ternary operator with two icons</Text>
+            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              <Icon name={isPlaying ? "pause" : "play"} size="md" />
+              <Button onPress={() => setIsPlaying(!isPlaying)}>
+                Toggle Play/Pause
+              </Button>
+              <Text size="small">Currently: {isPlaying ? 'Playing' : 'Paused'}</Text>
+            </View>
+            <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+              &lt;Icon name={'{isPlaying ? "pause" : "play"}'} /&gt;
+            </Text>
+          </View>
+
+          {/* Test 4: Function Return */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 4: Function Return Value</Text>
+            <Text size="small" color="secondary">Icon name from function (requires manifest or namespace)</Text>
+            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              <Icon name={getStatusIcon(userStatus)} size="md" />
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                <Button onPress={() => setUserStatus('online')} variant={userStatus === 'online' ? 'contained' : 'outlined'}>
+                  Online
+                </Button>
+                <Button onPress={() => setUserStatus('offline')} variant={userStatus === 'offline' ? 'contained' : 'outlined'}>
+                  Offline
+                </Button>
+                <Button onPress={() => setUserStatus('away')} variant={userStatus === 'away' ? 'contained' : 'outlined'}>
+                  Away
+                </Button>
+              </View>
+            </View>
+            <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+              &lt;Icon name={'{getStatusIcon(status)}'} /&gt;
+            </Text>
+          </View>
+
+          {/* Test 5: Namespace with Conditional */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 5: Namespace + Conditional</Text>
+            <Text size="small" color="secondary">Guaranteed transformation with mdi: prefix</Text>
+            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              <Icon name={isPlaying ? "mdi:volume-high" : "mdi:volume-mute"} size="md" />
+              <Text size="small">Audio: {isPlaying ? 'On' : 'Muted'}</Text>
+            </View>
+            <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+              &lt;Icon name={'{isPlaying ? "mdi:volume-high" : "mdi:volume-mute"}'} /&gt;
+            </Text>
+          </View>
+
+          {/* Test 6: Logical Expression */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 6: Logical Expression</Text>
+            <Text size="small" color="secondary">Using && and || operators</Text>
+            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              <Icon name={userStatus === 'online' && "wifi"} size="md" />
+              <Icon name={userStatus === 'offline' || "wifi-off"} size="md" />
+            </View>
+            <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+              &lt;Icon name={'{condition && "wifi"}'} /&gt;
+            </Text>
+          </View>
+
+          {/* Test 7: Template Literal (Static) */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 7: Template Literal (Static)</Text>
+            <Text size="small" color="secondary">Static template strings</Text>
+            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              <TemplateLiteralTest />
+            </View>
+            <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+              const icon = `bell`; &lt;Icon name={'{icon}'} /&gt;
+            </Text>
+          </View>
+
+          {/* Test 8: No False Positives */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 8: No False Positives</Text>
+            <Text size="small" color="secondary">Common words NOT used with Icon shouldn't transform</Text>
+            <View style={{ flexDirection: 'column', gap: 8 }}>
+              <FalsePositiveTest />
+            </View>
+          </View>
+
+          {/* Test 9: Multiple Variables */}
+          <View spacing="md">
+            <Text size="medium" weight="semibold">Test 9: Multiple Icon Variables</Text>
+            <Text size="small" color="secondary">Several variables used with Icon components</Text>
+            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+              <MultipleVariablesTest />
+            </View>
+            <Text size="small" style={{ fontFamily: 'monospace', color: '#666' }}>
+              Multiple icon variables in same scope
+            </Text>
+          </View>
+
+          {/* Summary */}
+          <View style={{ marginTop: 16, padding: 12, backgroundColor: 'rgba(0, 255, 0, 0.1)', borderRadius: 4 }}>
+            <Text size="small" weight="semibold">Plugin Features Tested:</Text>
+            <Text size="small">✓ Simple variables</Text>
+            <Text size="small">✓ Namespace prefix (mdi:)</Text>
+            <Text size="small">✓ Conditional expressions</Text>
+            <Text size="small">✓ Function returns</Text>
+            <Text size="small">✓ Logical operators</Text>
+            <Text size="small">✓ Template literals</Text>
+            <Text size="small">✓ No false positives</Text>
+            <Text size="small">✓ Multiple variables</Text>
           </View>
         </View>
       </View>

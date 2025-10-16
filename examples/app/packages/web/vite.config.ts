@@ -33,7 +33,7 @@ export default defineConfig({
               ],
             },
           ],
-          ["@idealyst/components/plugin/web", { root: "src" }],
+          [path.resolve(__dirname, "../../../../packages/components/plugin/web.js"), { root: "src", debug: true }],
         ],
       },
     }),

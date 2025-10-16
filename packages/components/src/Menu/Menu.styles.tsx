@@ -129,6 +129,20 @@ export const menuStyles = StyleSheet.create((theme) => ({
     justifyContent: 'center',
 
     variants: {
+      size: {
+        small: {
+          width: 16,
+          height: 16,
+        },
+        medium: {
+          width: 18,
+          height: 18,
+        },
+        large: {
+          width: 20,
+          height: 20,
+        },
+      },
       intent: {
         primary: {
           color: theme.intents.primary.main,

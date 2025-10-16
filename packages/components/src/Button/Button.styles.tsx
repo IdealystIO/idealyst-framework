@@ -87,11 +87,136 @@ export const buttonStyles = StyleSheet.create((theme) => ({
     },
   },
   
+  // Icon container styles
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.spacing?.xs || 4,
+  },
+
+  // Icon styles that inherit button colors
+  icon: {
+    variants: {
+      size: {
+        small: {
+          width: 14,
+          height: 14,
+        },
+        medium: {
+          width: 16,
+          height: 16,
+        },
+        large: {
+          width: 18,
+          height: 18,
+        },
+      },
+      intent: {
+        primary: {
+          color: theme.intents?.primary?.on || '#ffffff',
+        },
+        success: {
+          color: theme.intents?.success?.on || '#ffffff',
+        },
+        error: {
+          color: theme.intents?.error?.on || '#ffffff',
+        },
+        warning: {
+          color: theme.intents?.warning?.on || '#ffffff',
+        },
+        neutral: {
+          color: theme.intents?.neutral?.on || '#ffffff',
+        },
+      },
+      variant: {
+        contained: {},
+        outlined: {},
+        text: {},
+      },
+    },
+    // Compound variants for icon colors in outlined and text variants
+    compoundVariants: [
+      // Outlined variant icon colors
+      {
+        variant: 'outlined',
+        intent: 'primary',
+        styles: {
+          color: theme.intents?.primary?.main || '#3b82f6',
+        },
+      },
+      {
+        variant: 'outlined',
+        intent: 'success',
+        styles: {
+          color: theme.intents?.success?.main || '#22c55e',
+        },
+      },
+      {
+        variant: 'outlined',
+        intent: 'error',
+        styles: {
+          color: theme.intents?.error?.main || '#ef4444',
+        },
+      },
+      {
+        variant: 'outlined',
+        intent: 'warning',
+        styles: {
+          color: theme.intents?.warning?.main || '#f59e0b',
+        },
+      },
+      {
+        variant: 'outlined',
+        intent: 'neutral',
+        styles: {
+          color: theme.intents?.neutral?.main || '#6b7280',
+        },
+      },
+      // Text variant icon colors
+      {
+        variant: 'text',
+        intent: 'primary',
+        styles: {
+          color: theme.intents?.primary?.main || '#3b82f6',
+        },
+      },
+      {
+        variant: 'text',
+        intent: 'success',
+        styles: {
+          color: theme.intents?.success?.main || '#22c55e',
+        },
+      },
+      {
+        variant: 'text',
+        intent: 'error',
+        styles: {
+          color: theme.intents?.error?.main || '#ef4444',
+        },
+      },
+      {
+        variant: 'text',
+        intent: 'warning',
+        styles: {
+          color: theme.intents?.warning?.main || '#f59e0b',
+        },
+      },
+      {
+        variant: 'text',
+        intent: 'neutral',
+        styles: {
+          color: theme.intents?.neutral?.main || '#6b7280',
+        },
+      },
+    ],
+  },
+
   // Separate text style for React Native (no borders, just text properties)
   text: {
     fontWeight: '600',
     textAlign: 'center',
-    
+
     variants: {
       size: {
         small: {
@@ -99,7 +224,7 @@ export const buttonStyles = StyleSheet.create((theme) => ({
         },
         medium: {
           fontSize: 16,
-        },  
+        },
         large: {
           fontSize: 18,
         },

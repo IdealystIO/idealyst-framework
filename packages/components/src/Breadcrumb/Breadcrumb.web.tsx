@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { breadcrumbStyles } from './Breadcrumb.styles';
 import type { BreadcrumbProps, BreadcrumbItem } from './types';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({
   items,
@@ -55,6 +57,28 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
       }
     };
 
+    // Helper to render icon
+    const renderIcon = () => {
+      if (!item.icon) return null;
+
+      if (isIconName(item.icon)) {
+        // Resolve icon name to path and render with IconSvg
+        const iconPath = resolveIconPath(item.icon);
+        return (
+          <IconSvg
+            path={iconPath}
+            style={iconProps.style}
+            aria-label={item.icon}
+          />
+        );
+      } else if (isValidElement(item.icon)) {
+        // Render custom component as-is
+        return item.icon;
+      }
+
+      return null;
+    };
+
     const content = (
       <div
         className={getWebProps([breadcrumbStyles.item]).className}
@@ -70,7 +94,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
               justifyContent: 'center',
             }}
           >
-            {item.icon}
+            {renderIcon()}
           </span>
         )}
         <span className={itemTextProps.className} style={itemTextProps.style}>

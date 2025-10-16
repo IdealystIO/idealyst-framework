@@ -7,6 +7,7 @@ export const MenuExamples: React.FC = () => {
   const [basicMenuOpen, setBasicMenuOpen] = useState(false);
   const [placementMenuOpen, setPlacementMenuOpen] = useState(false);
   const [iconMenuOpen, setIconMenuOpen] = useState(false);
+  const [iconNameMenuOpen, setIconNameMenuOpen] = useState(false);
   const [intentMenuOpen, setIntentMenuOpen] = useState(false);
   const [separatorMenuOpen, setSeparatorMenuOpen] = useState(false);
   const [disabledMenuOpen, setDisabledMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ export const MenuExamples: React.FC = () => {
   const basicButtonRef = useRef<HTMLDivElement>(null);
   const placementButtonRef = useRef<HTMLDivElement>(null);
   const iconButtonRef = useRef<HTMLDivElement>(null);
+  const iconNameButtonRef = useRef<HTMLDivElement>(null);
   const intentButtonRef = useRef<HTMLDivElement>(null);
   const separatorButtonRef = useRef<HTMLDivElement>(null);
   const disabledButtonRef = useRef<HTMLDivElement>(null);
@@ -30,6 +32,13 @@ export const MenuExamples: React.FC = () => {
     { id: 'edit', label: 'Edit', icon: '✏️', onClick: () => setSelectedAction('Edit') },
     { id: 'copy', label: 'Copy', icon: '📋', onClick: () => setSelectedAction('Copy') },
     { id: 'delete', label: 'Delete', icon: '🗑️', onClick: () => setSelectedAction('Delete'), intent: 'error' },
+  ];
+
+  const iconNameItems: MenuItem[] = [
+    { id: 'edit', label: 'Edit', icon: 'pencil', onClick: () => setSelectedAction('Edit') },
+    { id: 'copy', label: 'Copy', icon: 'content-copy', onClick: () => setSelectedAction('Copy') },
+    { id: 'share', label: 'Share', icon: 'share-variant', onClick: () => setSelectedAction('Share'), intent: 'primary' },
+    { id: 'delete', label: 'Delete', icon: 'delete', onClick: () => setSelectedAction('Delete'), intent: 'error' },
   ];
 
   const intentItems: MenuItem[] = [
@@ -103,13 +112,13 @@ export const MenuExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Icons</Text>
+        <Text size="large" weight="semibold">With Icons (Emoji)</Text>
         <div ref={iconButtonRef} style={{ display: 'inline-block' }}>
           <Button
             variant="outlined"
             onPress={() => setIconMenuOpen(!iconMenuOpen)}
           >
-            Menu with Icons
+            Menu with Emoji Icons
           </Button>
         </div>
         <Menu
@@ -117,6 +126,25 @@ export const MenuExamples: React.FC = () => {
           open={iconMenuOpen}
           onOpenChange={setIconMenuOpen}
           anchor={iconButtonRef}
+        />
+      </View>
+
+      <View spacing="md">
+        <Text size="large" weight="semibold">With Icons (Icon Names)</Text>
+        <Text size="small" color="secondary">Using icon name strings (recommended)</Text>
+        <div ref={iconNameButtonRef} style={{ display: 'inline-block' }}>
+          <Button
+            variant="outlined"
+            onPress={() => setIconNameMenuOpen(!iconNameMenuOpen)}
+          >
+            Menu with Icon Names
+          </Button>
+        </div>
+        <Menu
+          items={iconNameItems}
+          open={iconNameMenuOpen}
+          onOpenChange={setIconNameMenuOpen}
+          anchor={iconNameButtonRef}
         />
       </View>
 

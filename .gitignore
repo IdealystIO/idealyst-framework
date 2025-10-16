@@ -209,3 +209,4 @@ yarn-error.log*
 *.sw?
 /packages/example-ssr/.react-router
 /.cursor
+/.playwright-mcp

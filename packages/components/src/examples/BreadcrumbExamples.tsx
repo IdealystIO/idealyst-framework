@@ -37,6 +37,28 @@ export const BreadcrumbExamples = () => {
     },
   ];
 
+  const withIconNamesItems: BreadcrumbItem[] = [
+    {
+      label: 'Home',
+      icon: 'home',
+      onPress: () => console.log('Home'),
+    },
+    {
+      label: 'Documents',
+      icon: 'folder',
+      onPress: () => console.log('Documents'),
+    },
+    {
+      label: 'Projects',
+      icon: 'folder-open',
+      onPress: () => console.log('Projects'),
+    },
+    {
+      label: 'Current File',
+      icon: 'file-document',
+    },
+  ];
+
   const longPathItems: BreadcrumbItem[] = [
     { label: 'Home', onPress: () => console.log('Home') },
     { label: 'Level 1', onPress: () => console.log('Level 1') },
@@ -58,9 +80,16 @@ export const BreadcrumbExamples = () => {
         <Breadcrumb items={basicItems} />
 
         <Divider spacing="medium" />
-        <Text size="large" weight="semibold">With Icons</Text>
+        <Text size="large" weight="semibold">With Icons (Components)</Text>
 
         <Breadcrumb items={withIconsItems} />
+        <Text size="small" color="secondary">Using Icon components</Text>
+
+        <Divider spacing="medium" />
+        <Text size="large" weight="semibold">With Icons (Icon Names)</Text>
+
+        <Breadcrumb items={withIconNamesItems} />
+        <Text size="small" color="secondary">Using icon name strings (recommended)</Text>
 
         <Divider spacing="medium" />
         <Text size="large" weight="semibold">Custom Separator</Text>

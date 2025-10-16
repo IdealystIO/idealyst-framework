@@ -1,11 +1,12 @@
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import type { IconName } from '../Icon/icon-types';
 
 export interface BreadcrumbItem {
   /** Label text for the breadcrumb item */
   label: string;
 
-  /** Optional icon to display before the label */
-  icon?: React.ReactNode;
+  /** Optional icon to display before the label - can be an IconName or custom component */
+  icon?: IconName | React.ReactNode;
 
   /** Click handler for the breadcrumb item */
   onPress?: () => void;

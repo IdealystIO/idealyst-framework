@@ -194,6 +194,74 @@ export const BadgeExamples = () => {
           </Badge>
         </View>
       </View>
+
+      {/* Badges with Icons */}
+      <View spacing="md">
+        <Text size="medium" weight="semibold">Badges with Icons</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Badge color="blue" icon="information">
+            Info
+          </Badge>
+          <Badge color="green" icon="check-circle">
+            Success
+          </Badge>
+          <Badge color="red" icon="alert-circle">
+            Error
+          </Badge>
+          <Badge color="orange" icon="alert">
+            Warning
+          </Badge>
+        </View>
+      </View>
+
+      {/* Icon-only Badges */}
+      <View spacing="md">
+        <Text size="medium" weight="semibold">Icon-only Badges</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Badge color="blue" icon="star" size="small" />
+          <Badge color="green" icon="heart" size="medium" />
+          <Badge color="red" icon="fire" size="large" />
+          <Badge color="purple" icon="lightning-bolt" variant="outlined" />
+        </View>
+      </View>
+
+      {/* Status Badges with Icons */}
+      <View spacing="md">
+        <Text size="medium" weight="semibold">Status with Icons</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Badge color="green" icon="check">
+            VERIFIED
+          </Badge>
+          <Badge color="blue" icon="clock">
+            PENDING
+          </Badge>
+          <Badge color="red" icon="close">
+            REJECTED
+          </Badge>
+          <Badge color="gray" icon="email">
+            SENT
+          </Badge>
+        </View>
+      </View>
+
+      {/* Outlined Badges with Icons */}
+      <View spacing="md">
+        <Text size="medium" weight="semibold">Outlined with Icons</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Badge color="blue" variant="outlined" icon="download">
+            Download
+          </Badge>
+          <Badge color="green" variant="outlined" icon="upload">
+            Upload
+          </Badge>
+          <Badge color="red" variant="outlined" icon="delete">
+            Delete
+          </Badge>
+          <Badge color="purple" variant="outlined" icon="share">
+            Share
+          </Badge>
+        </View>
+      </View>
     </View>
     </Screen>
   );

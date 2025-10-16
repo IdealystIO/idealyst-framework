@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { menuStyles } from './Menu.styles';
 import type { MenuProps } from './types';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 
 const Menu: React.FC<MenuProps> = ({
   items,
@@ -171,6 +173,28 @@ const Menu: React.FC<MenuProps> = ({
           const iconProps = getWebProps([menuStyles.menuItemIcon]);
           const labelProps = getWebProps([menuStyles.menuItemLabel]);
 
+          // Helper to render icon
+          const renderIcon = () => {
+            if (!item.icon) return null;
+
+            if (isIconName(item.icon)) {
+              // Resolve icon name to path and render with IconSvg
+              const iconPath = resolveIconPath(item.icon);
+              return (
+                <IconSvg
+                  path={iconPath}
+                  style={iconProps.style}
+                  aria-label={item.icon}
+                />
+              );
+            } else if (isValidElement(item.icon)) {
+              // Render custom component as-is
+              return item.icon;
+            }
+
+            return null;
+          };
+
           return (
             <button
               key={item.id}
@@ -183,7 +207,7 @@ const Menu: React.FC<MenuProps> = ({
             >
               {item.icon && (
                 <span className={iconProps.className} style={iconProps.style}>
-                  {item.icon}
+                  {renderIcon()}
                 </span>
               )}
               <span className={labelProps.className}>
