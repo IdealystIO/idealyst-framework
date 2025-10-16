@@ -12,21 +12,21 @@ export const chipStyles = StyleSheet.create((theme) => ({
     variants: {
       size: {
         small: {
+          paddingHorizontal: 8,
+          paddingVertical: 2,
+          minHeight: 20,
+          borderRadius: 999,
+        },
+        medium: {
           paddingHorizontal: 10,
           paddingVertical: 2,
           minHeight: 24,
           borderRadius: 999,
         },
-        medium: {
-          paddingHorizontal: 14,
-          paddingVertical: 4,
-          minHeight: 32,
-          borderRadius: 999,
-        },
         large: {
-          paddingHorizontal: 18,
-          paddingVertical: 6,
-          minHeight: 40,
+          paddingHorizontal: 12,
+          paddingVertical: 3,
+          minHeight: 28,
           borderRadius: 999,
         },
       },
@@ -234,16 +234,16 @@ export const chipStyles = StyleSheet.create((theme) => ({
     variants: {
       size: {
         small: {
+          fontSize: 11,
+          lineHeight: 14,
+        },
+        medium: {
           fontSize: 12,
           lineHeight: 16,
         },
-        medium: {
-          fontSize: 14,
-          lineHeight: 20,
-        },
         large: {
-          fontSize: 16,
-          lineHeight: 24,
+          fontSize: 14,
+          lineHeight: 18,
         },
       },
       variant: {
@@ -363,13 +363,13 @@ export const chipStyles = StyleSheet.create((theme) => ({
     variants: {
       size: {
         small: {
-          fontSize: 14,
+          fontSize: 12,
         },
         medium: {
-          fontSize: 16,
+          fontSize: 14,
         },
         large: {
-          fontSize: 18,
+          fontSize: 16,
         },
       },
     },
@@ -386,16 +386,16 @@ export const chipStyles = StyleSheet.create((theme) => ({
     variants: {
       size: {
         small: {
+          width: 12,
+          height: 12,
+        },
+        medium: {
           width: 14,
           height: 14,
         },
-        medium: {
+        large: {
           width: 16,
           height: 16,
-        },
-        large: {
-          width: 18,
-          height: 18,
         },
       },
     },
@@ -405,13 +405,13 @@ export const chipStyles = StyleSheet.create((theme) => ({
     variants: {
       size: {
         small: {
-          fontSize: 12,
+          fontSize: 10,
         },
         medium: {
-          fontSize: 14,
+          fontSize: 11,
         },
         large: {
-          fontSize: 16,
+          fontSize: 12,
         },
       },
     },
