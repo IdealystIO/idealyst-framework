@@ -1,7 +1,103 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { accordionStyles } from './Accordion.styles';
-import type { AccordionProps } from './types';
+import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath } from '../Icon/icon-resolver';
+
+interface AccordionItemProps {
+  item: AccordionItemType;
+  isExpanded: boolean;
+  onToggle: () => void;
+  size: 'small' | 'medium' | 'large';
+  intent: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
+  testID?: string;
+}
+
+const AccordionItem: React.FC<AccordionItemProps> = ({
+  item,
+  isExpanded,
+  onToggle,
+  size,
+  intent,
+  testID,
+}) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const contentWrapperRef = useRef<HTMLDivElement>(null);
+  const chevronIconPath = resolveIconPath('chevron-down');
+
+  // Note: Variants are applied globally in parent Accordion component
+  // We use inline styles for per-item dynamic values (expanded, disabled)
+  const itemProps = getWebProps([accordionStyles.item]);
+  const headerProps = getWebProps([accordionStyles.header]);
+  const titleProps = getWebProps([accordionStyles.title]);
+  const iconProps = getWebProps([accordionStyles.icon]);
+  const contentProps = getWebProps([accordionStyles.content]);
+  const contentInnerProps = getWebProps([accordionStyles.contentInner]);
+
+  // Get height from the wrapper when expanded
+  // The wrapper needs to have auto height temporarily to measure correctly
+  const contentHeight = isExpanded && contentWrapperRef.current
+    ? contentWrapperRef.current.scrollHeight
+    : 0;
+
+  return (
+    <div
+      {...itemProps}
+      data-testid={testID}
+    >
+      <button
+        {...headerProps}
+        style={{
+          ...headerProps.style,
+          fontWeight: isExpanded ? 600 : 500,
+          opacity: item.disabled ? 0.5 : 1,
+          cursor: item.disabled ? 'not-allowed' : 'pointer',
+        }}
+        onClick={onToggle}
+        disabled={item.disabled}
+        aria-expanded={isExpanded}
+        aria-disabled={item.disabled}
+      >
+        <span {...titleProps}>
+          {item.title}
+        </span>
+        <span
+          {...iconProps}
+          style={{
+            ...iconProps.style,
+            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <IconSvg
+            style={{ width: 12, height: 12 }}
+            path={chevronIconPath}
+            aria-label="chevron-down"
+          />
+        </span>
+      </button>
+
+      <div
+        {...contentProps}
+        style={{
+          ...contentProps.style,
+          height: isExpanded ? `${contentHeight}px` : '0px',
+          overflow: 'hidden',
+          transition: 'height 0.3s ease',
+        }}
+        aria-hidden={!isExpanded}
+      >
+        <div ref={contentRef} {...contentInnerProps}>
+          {item.content}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Accordion: React.FC<AccordionProps> = ({
   items,
@@ -40,74 +136,19 @@ const Accordion: React.FC<AccordionProps> = ({
     });
   };
 
-  const ChevronIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M4.427 5.927l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 5.5H4.604a.25.25 0 00-.177.427z" />
-    </svg>
-  );
-
   return (
     <div {...containerProps} data-testid={testID}>
-      {items.map((item, index) => {
-        const isExpanded = expandedItems.includes(item.id);
-        const isLast = index === items.length - 1;
-
-        // Apply item-specific variants
-        const itemStylesheet = accordionStyles;
-        itemStylesheet.useVariants({
-          variant,
-          isLast,
-          size,
-          expanded: isExpanded,
-          disabled: Boolean(item.disabled),
-          intent,
-        });
-
-        const itemProps = getWebProps([accordionStyles.item]);
-        const headerProps = getWebProps([accordionStyles.header]);
-        const titleProps = getWebProps([accordionStyles.title]);
-        const iconProps = getWebProps([accordionStyles.icon]);
-        const contentProps = getWebProps([accordionStyles.content]);
-        const contentInnerProps = getWebProps([accordionStyles.contentInner]);
-
-        return (
-          <div
-            key={item.id}
-            className={itemProps.className}
-            style={itemProps.style}
-            data-testid={`${testID}-item-${item.id}`}
-          >
-            <button
-              className={headerProps.className}
-              style={headerProps.style}
-              onClick={() => toggleItem(item.id, item.disabled)}
-              disabled={item.disabled}
-              aria-expanded={isExpanded}
-              aria-disabled={item.disabled}
-            >
-              <span className={titleProps.className}>
-                {item.title}
-              </span>
-              <span className={iconProps.className} style={iconProps.style}>
-                <ChevronIcon />
-              </span>
-            </button>
-
-            <div
-              className={contentProps.className}
-              style={contentProps.style}
-              aria-hidden={!isExpanded}
-            >
-              <div
-                className={contentInnerProps.className}
-                style={contentInnerProps.style}
-              >
-                {item.content}
-              </div>
-            </div>
-          </div>
-        );
-      })}
+      {items.map((item) => (
+        <AccordionItem
+          key={item.id}
+          item={item}
+          isExpanded={expandedItems.includes(item.id)}
+          onToggle={() => toggleItem(item.id, item.disabled)}
+          size={size}
+          intent={intent}
+          testID={`${testID}-item-${item.id}`}
+        />
+      ))}
     </div>
   );
 };

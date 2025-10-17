@@ -1,45 +1,61 @@
 import type { IntentVariant } from '../theme/variants';
+import type { IconName } from '../Icon/icon-types';
 
 export interface InputProps {
   /**
    * The current value of the input
    */
   value?: string;
-  
+
   /**
    * Called when the text changes
    */
   onChangeText?: (text: string) => void;
-  
+
   /**
    * Called when the input receives focus
    */
   onFocus?: () => void;
-  
+
   /**
    * Called when the input loses focus
    */
   onBlur?: () => void;
-  
+
   /**
    * Placeholder text
    */
   placeholder?: string;
-  
+
   /**
    * Whether the input is disabled
    */
   disabled?: boolean;
-  
+
   /**
    * The type of input (affects keyboard type on mobile)
    */
   inputType?: 'text' | 'email' | 'password' | 'number';
-  
+
   /**
    * Whether to show the password
    */
   secureTextEntry?: boolean;
+
+  /**
+   * Icon to display on the left side of the input
+   */
+  leftIcon?: IconName | React.ReactNode;
+
+  /**
+   * Icon to display on the right side of the input
+   */
+  rightIcon?: IconName | React.ReactNode;
+
+  /**
+   * Show password visibility toggle for password inputs (defaults to true for password type)
+   */
+  showPasswordToggle?: boolean;
   
   /**
    * Auto-capitalization behavior

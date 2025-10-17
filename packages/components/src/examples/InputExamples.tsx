@@ -6,6 +6,8 @@ export const InputExamples = () => {
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [numberValue, setNumberValue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+  const [usernameValue, setUsernameValue] = useState('');
 
   return (
     <Screen background="primary" padding="lg">
@@ -13,7 +15,51 @@ export const InputExamples = () => {
       <Text size="large" weight="bold" align="center">
         Input Examples
       </Text>
-      
+
+      {/* With Icons */}
+      <View spacing="md">
+        <Text size="medium" weight="semibold">With Icons</Text>
+        <View spacing="sm" style={{ gap: 10 }}>
+          <Input
+            leftIcon="email"
+            value={emailValue}
+            onChangeText={setEmailValue}
+            placeholder="Email with icon"
+            inputType="email"
+          />
+          <Input
+            leftIcon="account"
+            value={usernameValue}
+            onChangeText={setUsernameValue}
+            placeholder="Username with icon"
+          />
+          <Input
+            rightIcon="magnify"
+            value={searchValue}
+            onChangeText={setSearchValue}
+            placeholder="Search with icon"
+          />
+          <Input
+            leftIcon="lock"
+            rightIcon="check"
+            placeholder="Both icons"
+          />
+          <Input
+            leftIcon="lock"
+            value={passwordValue}
+            onChangeText={setPasswordValue}
+            placeholder="Password with toggle"
+            inputType="password"
+          />
+          <Input
+            leftIcon="lock"
+            placeholder="Password without toggle"
+            inputType="password"
+            showPasswordToggle={false}
+          />
+        </View>
+      </View>
+
       {/* Input Types */}
       <View spacing="md">
         <Text size="medium" weight="semibold">Input Types</Text>
@@ -25,19 +71,21 @@ export const InputExamples = () => {
             inputType="text"
           />
           <Input
+            leftIcon="email"
             value={emailValue}
             onChangeText={setEmailValue}
             placeholder="Email input"
             inputType="email"
           />
           <Input
+            leftIcon="lock"
             value={passwordValue}
             onChangeText={setPasswordValue}
             placeholder="Password input"
             inputType="password"
-            secureTextEntry
           />
           <Input
+            leftIcon="calculator"
             value={numberValue}
             onChangeText={setNumberValue}
             placeholder="Number input"
@@ -51,14 +99,17 @@ export const InputExamples = () => {
         <Text size="medium" weight="semibold">Sizes</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Input
+            leftIcon="email"
             placeholder="Small input"
             size="small"
           />
           <Input
+            leftIcon="email"
             placeholder="Medium input"
             size="medium"
           />
           <Input
+            leftIcon="email"
             placeholder="Large input"
             size="large"
           />
@@ -70,16 +121,24 @@ export const InputExamples = () => {
         <Text size="medium" weight="semibold">Variants</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Input
+            leftIcon="magnify"
             placeholder="Default variant"
             variant="default"
           />
           <Input
+            leftIcon="magnify"
             placeholder="Outlined variant"
             variant="outlined"
           />
           <Input
+            leftIcon="magnify"
             placeholder="Filled variant"
             variant="filled"
+          />
+          <Input
+            leftIcon="magnify"
+            placeholder="Bare variant"
+            variant="bare"
           />
         </View>
       </View>
@@ -89,17 +148,21 @@ export const InputExamples = () => {
         <Text size="medium" weight="semibold">States</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Input
+            leftIcon="account"
             placeholder="Normal state"
           />
           <Input
+            leftIcon="account"
             placeholder="Disabled state"
             disabled
           />
           <Input
+            leftIcon="account"
             placeholder="Error state"
             hasError
           />
           <Input
+            leftIcon="account"
             value="Pre-filled value"
             onChangeText={() => {}}
           />

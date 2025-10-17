@@ -1,7 +1,205 @@
 import { StyleSheet } from 'react-native-unistyles';
 
 export const inputStyles = StyleSheet.create((theme) => ({
+  container: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+  },
+  leftIconContainer: {
+    position: 'absolute',
+    left: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    pointerEvents: 'none',
+    variants: {
+      size: {
+        small: {
+          left: 8,
+          width: 16,
+          height: 16,
+        },
+        medium: {
+          left: 12,
+          width: 20,
+          height: 20,
+        },
+        large: {
+          left: 16,
+          width: 24,
+          height: 24,
+        },
+      },
+    },
+  },
+  rightIconContainer: {
+    position: 'absolute',
+    right: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    pointerEvents: 'none',
+    variants: {
+      size: {
+        small: {
+          right: 8,
+          width: 16,
+          height: 16,
+        },
+        medium: {
+          right: 12,
+          width: 20,
+          height: 20,
+        },
+        large: {
+          right: 16,
+          width: 24,
+          height: 24,
+        },
+      },
+    },
+  },
+  leftIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    variants: {
+      size: {
+        small: {
+          width: 16,
+          height: 16,
+          minWidth: 16,
+          maxWidth: 16,
+          minHeight: 16,
+          maxHeight: 16,
+        },
+        medium: {
+          width: 20,
+          height: 20,
+          minWidth: 20,
+          maxWidth: 20,
+          minHeight: 20,
+          maxHeight: 20,
+        },
+        large: {
+          width: 24,
+          height: 24,
+          minWidth: 24,
+          maxWidth: 24,
+          minHeight: 24,
+          maxHeight: 24,
+        },
+      },
+    },
+  },
+  rightIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    variants: {
+      size: {
+        small: {
+          width: 16,
+          height: 16,
+          minWidth: 16,
+          maxWidth: 16,
+          minHeight: 16,
+          maxHeight: 16,
+        },
+        medium: {
+          width: 20,
+          height: 20,
+          minWidth: 20,
+          maxWidth: 20,
+          minHeight: 20,
+          maxHeight: 20,
+        },
+        large: {
+          width: 24,
+          height: 24,
+          minWidth: 24,
+          maxWidth: 24,
+          minHeight: 24,
+          maxHeight: 24,
+        },
+      },
+    },
+  },
+  passwordToggle: {
+    position: 'absolute',
+    right: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    padding: 0,
+    variants: {
+      size: {
+        small: {
+          right: 8,
+          width: 16,
+          height: 16,
+        },
+        medium: {
+          right: 12,
+          width: 20,
+          height: 20,
+        },
+        large: {
+          right: 16,
+          width: 24,
+          height: 24,
+        },
+      },
+    },
+    _web: {
+      _hover: {
+        opacity: 0.7,
+      },
+    },
+  },
+  passwordToggleIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    variants: {
+      size: {
+        small: {
+          width: 16,
+          height: 16,
+          minWidth: 16,
+          maxWidth: 16,
+          minHeight: 16,
+          maxHeight: 16,
+        },
+        medium: {
+          width: 20,
+          height: 20,
+          minWidth: 20,
+          maxWidth: 20,
+          minHeight: 20,
+          maxHeight: 20,
+        },
+        large: {
+          width: 24,
+          height: 24,
+          minWidth: 24,
+          maxWidth: 24,
+          minHeight: 24,
+          maxHeight: 24,
+        },
+      },
+    },
+  },
   input: {
+    width: '100%',
     variants: {
       size: {
         small: {
@@ -22,6 +220,18 @@ export const inputStyles = StyleSheet.create((theme) => ({
           paddingVertical: theme.spacing?.md || 12,
           fontSize: theme.typography?.fontSize?.lg || 18,
         },
+      },
+      hasLeftIcon: {
+        true: {
+          // Will be combined with size variant
+        },
+        false: {},
+      },
+      hasRightIcon: {
+        true: {
+          // Will be combined with size variant
+        },
+        false: {},
       },
       variant: {
         default: {
@@ -79,8 +289,56 @@ export const inputStyles = StyleSheet.create((theme) => ({
         },
       },
     },
-    
+
     compoundVariants: [
+      // Small size with left icon
+      {
+        size: 'small',
+        hasLeftIcon: true,
+        styles: {
+          paddingLeft: 32, // 8px base + 16px icon + 8px gap
+        },
+      },
+      // Medium size with left icon
+      {
+        size: 'medium',
+        hasLeftIcon: true,
+        styles: {
+          paddingLeft: 40, // 12px base + 20px icon + 8px gap
+        },
+      },
+      // Large size with left icon
+      {
+        size: 'large',
+        hasLeftIcon: true,
+        styles: {
+          paddingLeft: 48, // 16px base + 24px icon + 8px gap
+        },
+      },
+      // Small size with right icon
+      {
+        size: 'small',
+        hasRightIcon: true,
+        styles: {
+          paddingRight: 32,
+        },
+      },
+      // Medium size with right icon
+      {
+        size: 'medium',
+        hasRightIcon: true,
+        styles: {
+          paddingRight: 40,
+        },
+      },
+      // Large size with right icon
+      {
+        size: 'large',
+        hasRightIcon: true,
+        styles: {
+          paddingRight: 48,
+        },
+      },
       // Default variant focus
       {
         variant: 'default',

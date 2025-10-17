@@ -13,6 +13,7 @@ const Chip: React.FC<ChipProps> = ({
   icon,
   deletable = false,
   onDelete,
+  deleteIcon = 'close',
   selectable = false,
   selected = false,
   onPress,
@@ -64,6 +65,24 @@ const Chip: React.FC<ChipProps> = ({
       );
     } else if (isValidElement(icon)) {
       return icon;
+    }
+
+    return null;
+  };
+
+  // Helper to render delete icon
+  const renderDeleteIcon = () => {
+    if (isIconName(deleteIcon)) {
+      const iconPath = resolveIconPath(deleteIcon);
+      return (
+        <IconSvg
+          path={iconPath}
+          {...deleteIconProps}
+          aria-label={deleteIcon}
+        />
+      );
+    } else if (isValidElement(deleteIcon)) {
+      return deleteIcon;
     }
 
     return null;
@@ -127,9 +146,7 @@ const Chip: React.FC<ChipProps> = ({
           aria-label="Delete"
           type="button"
         >
-          <span className={deleteIconProps.className} style={deleteIconProps.style}>
-            ✕
-          </span>
+          {renderDeleteIcon()}
         </button>
       )}
     </div>

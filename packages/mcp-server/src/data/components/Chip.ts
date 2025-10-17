@@ -6,9 +6,10 @@ category: "display",
 - \`variant\`: 'filled' | 'outlined' | 'soft' - Visual style
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
 - \`size\`: 'small' | 'medium' | 'large' - Chip size
-- \`icon\`: string | ReactNode - Leading icon
+- \`icon\`: IconName | ReactNode - Leading icon
 - \`deletable\`: boolean - Show delete button
 - \`onDelete\`: () => void - Delete handler
+- \`deleteIcon\`: IconName | ReactNode - Custom delete icon (defaults to 'close')
 - \`selectable\`: boolean - Enable selection
 - \`selected\`: boolean - Selected state
 - \`onPress\`: () => void - Press handler
@@ -17,8 +18,9 @@ category: "display",
     features: [
       "Three variants: filled, outlined, soft",
       "Five intent colors",
-      "Icon support",
+      "Icon support with MDI icons",
       "Deletable with onDelete handler",
+      "Customizable delete icon (defaults to MDI 'close')",
       "Selectable with selected state",
       "Three sizes",
       "Disabled state",
@@ -51,7 +53,23 @@ import { Chip } from '@idealyst/components';
       "with-icons": `import { Chip } from '@idealyst/components';
 
 <Chip label="Star" icon="star" />
-<Chip label="Heart" icon="heart" intent="error" />`,
+<Chip label="Heart" icon="heart" intent="error" />
+
+// Custom delete icon
+<Chip
+  label="Custom Delete"
+  deletable
+  deleteIcon="close-circle"
+  onDelete={() => console.log('deleted')}
+/>
+
+// Alternative delete icons
+<Chip
+  label="Remove"
+  deletable
+  deleteIcon="delete"
+  onDelete={() => console.log('deleted')}
+/>`,
       interactive: `import { Chip, View } from '@idealyst/components';
 import { useState } from 'react';
 

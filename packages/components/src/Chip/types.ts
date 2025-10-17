@@ -1,4 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native';
+import type { IconName } from '../Icon/icon-types';
 
 export type ChipSize = 'small' | 'medium' | 'large';
 export type ChipVariant = 'filled' | 'outlined' | 'soft';
@@ -18,13 +19,16 @@ export interface ChipProps {
   size?: ChipSize;
 
   /** Icon to display before the label. Can be an icon name (string) or a custom React element */
-  icon?: string | React.ReactNode;
+  icon?: IconName | React.ReactNode;
 
   /** Whether the chip can be deleted */
   deletable?: boolean;
 
   /** Callback when delete button is pressed */
   onDelete?: () => void;
+
+  /** Icon to display in the delete button. Defaults to 'close' */
+  deleteIcon?: IconName | React.ReactNode;
 
   /** Whether the chip is selectable */
   selectable?: boolean;
