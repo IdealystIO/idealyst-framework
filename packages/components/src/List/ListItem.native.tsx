@@ -13,6 +13,7 @@ const ListItem: React.FC<ListItemProps> = ({
   selected = false,
   disabled = false,
   indent = 0,
+  size = 'medium',
   onPress,
   style,
   testID,
@@ -21,7 +22,7 @@ const ListItem: React.FC<ListItemProps> = ({
 
   // Apply variants
   listStyles.useVariants({
-    size: 'medium', // Default size
+    size,
     variant: 'default',
     active,
     selected,

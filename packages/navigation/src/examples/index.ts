@@ -4,3 +4,4 @@ export { default as ExampleDrawerRouter } from './ExampleDrawerRouter';
 export { default as ExampleHybridRouter } from './ExampleHybridRouter';
 export { default as CustomStackLayout } from './CustomStackLayout';
 export { default as CustomTabLayout } from './CustomTabLayout';
+export { ExampleWebLayout } from './ExampleWebLayout';

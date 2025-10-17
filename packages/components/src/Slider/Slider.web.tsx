@@ -1,7 +1,9 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { sliderStyles } from './Slider.styles';
 import type { SliderProps } from './types';
+import { IconSvg } from '../Icon/IconSvg.web';
+import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 
 const Slider: React.FC<SliderProps> = ({
   value: controlledValue,
@@ -15,6 +17,7 @@ const Slider: React.FC<SliderProps> = ({
   marks = [],
   intent = 'primary',
   size = 'medium',
+  icon,
   onValueChange,
   onValueCommit,
   style,
@@ -23,6 +26,8 @@ const Slider: React.FC<SliderProps> = ({
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isDragging, setIsDragging] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  const hasMoved = useRef(false);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
 
@@ -39,6 +44,7 @@ const Slider: React.FC<SliderProps> = ({
   const filledTrackProps = getWebProps([sliderStyles.filledTrack]);
   const thumbProps = getWebProps([sliderStyles.thumb]);
   const thumbActiveProps = getWebProps([sliderStyles.thumbActive]);
+  const thumbIconProps = getWebProps([sliderStyles.thumbIcon]);
   const valueLabelProps = getWebProps([sliderStyles.valueLabel]);
   const minMaxLabelsProps = getWebProps([sliderStyles.minMaxLabels]);
   const minMaxLabelProps = getWebProps([sliderStyles.minMaxLabel]);
@@ -75,14 +81,27 @@ const Slider: React.FC<SliderProps> = ({
     if (disabled) return;
 
     e.preventDefault();
-    setIsDragging(true);
-    const newValue = calculateValueFromPosition(e.clientX);
-    updateValue(newValue);
+
+    // Check if click is on the thumb
+    const isThumbClick = thumbRef.current && thumbRef.current.contains(e.target as Node);
+
+    if (isThumbClick) {
+      // Clicking on thumb: only start dragging, don't update value yet
+      setIsDragging(true);
+      hasMoved.current = false;
+    } else {
+      // Clicking on track: immediately update value
+      setIsDragging(true);
+      hasMoved.current = true;
+      const newValue = calculateValueFromPosition(e.clientX);
+      updateValue(newValue);
+    }
   }, [disabled, calculateValueFromPosition, updateValue]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging || disabled) return;
 
+    hasMoved.current = true;
     const newValue = calculateValueFromPosition(e.clientX);
     updateValue(newValue);
   }, [isDragging, disabled, calculateValueFromPosition, updateValue]);
@@ -90,7 +109,10 @@ const Slider: React.FC<SliderProps> = ({
   const handleMouseUp = useCallback(() => {
     if (isDragging) {
       setIsDragging(false);
-      onValueCommit?.(value);
+      if (hasMoved.current) {
+        onValueCommit?.(value);
+      }
+      hasMoved.current = false;
     }
   }, [isDragging, value, onValueCommit]);
 
@@ -107,6 +129,28 @@ const Slider: React.FC<SliderProps> = ({
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const percentage = ((value - min) / (max - min)) * 100;
+
+  // Helper to render icon
+  const renderIcon = () => {
+    if (!icon) return null;
+
+    if (isIconName(icon)) {
+      // Resolve icon name to path and render with IconSvg
+      const iconPath = resolveIconPath(icon);
+      return (
+        <IconSvg
+          path={iconPath}
+          {...thumbIconProps}
+          aria-label={icon}
+        />
+      );
+    } else if (isValidElement(icon)) {
+      // Render custom component as-is
+      return <span className={thumbIconProps.className} style={thumbIconProps.style}>{icon}</span>;
+    }
+
+    return null;
+  };
 
   return (
     <div {...containerProps} data-testid={testID}>
@@ -168,13 +212,16 @@ const Slider: React.FC<SliderProps> = ({
 
           {/* Thumb */}
           <div
+            ref={thumbRef}
             className={`${thumbProps.className} ${isDragging ? thumbActiveProps.className : ''}`}
             style={{
               ...thumbProps.style,
               ...(isDragging ? thumbActiveProps.style : {}),
               left: `${percentage}%`,
             }}
-          />
+          >
+            {renderIcon()}
+          </div>
         </div>
       </div>
 

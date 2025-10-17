@@ -54,15 +54,24 @@ export const menuStyles = StyleSheet.create((theme) => ({
       size: {
         small: {
           fontSize: 14,
-          padding: 8,
+          paddingTop: 6,
+          paddingBottom: 6,
+          paddingLeft: 8,
+          paddingRight: 8,
         },
         medium: {
           fontSize: 16,
-          padding: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
+          paddingLeft: 12,
+          paddingRight: 12,
         },
         large: {
           fontSize: 18,
-          padding: 12,
+          paddingTop: 12,
+          paddingBottom: 12,
+          paddingLeft: 16,
+          paddingRight: 16,
         },
       },
       disabled: {
@@ -127,20 +136,33 @@ export const menuStyles = StyleSheet.create((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
 
     variants: {
       size: {
         small: {
           width: 16,
           height: 16,
+          minWidth: 16,
+          maxWidth: 16,
+          minHeight: 16,
+          maxHeight: 16,
         },
         medium: {
-          width: 18,
-          height: 18,
-        },
-        large: {
           width: 20,
           height: 20,
+          minWidth: 20,
+          maxWidth: 20,
+          minHeight: 20,
+          maxHeight: 20,
+        },
+        large: {
+          width: 24,
+          height: 24,
+          minWidth: 24,
+          maxWidth: 24,
+          minHeight: 24,
+          maxHeight: 24,
         },
       },
       intent: {

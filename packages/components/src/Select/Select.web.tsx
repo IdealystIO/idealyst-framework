@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
 // @ts-ignore - web-specific import
 import { getWebProps } from 'react-native-unistyles/web';
 import { SelectProps, SelectOption } from './types';
 import { selectStyles } from './Select.styles';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
+import { PositionedPortal } from '../internal/PositionedPortal';
 
 const Select: React.FC<SelectProps> = ({
   options,
@@ -29,16 +29,8 @@ const Select: React.FC<SelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
-  const [isPositioned, setIsPositioned] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // Debug: Log when trigger ref is set
-  const setTriggerRef = (el: HTMLButtonElement | null) => {
-    console.log('Setting trigger ref to:', el);
-    triggerRef.current = el;
-  };
 
   const selectedOption = options.find(option => option.value === value);
 
@@ -62,161 +54,41 @@ const Select: React.FC<SelectProps> = ({
     focused: isOpen,
   });
 
-  // Position dropdown when it opens
-  useEffect(() => {
-    if (!isOpen) return;
-
-    let retryCount = 0;
-    const maxRetries = 10;
-
-    const positionDropdown = () => {
-      if (!triggerRef.current || !dropdownRef.current) {
-        console.log(`[Attempt ${retryCount + 1}/${maxRetries}] Refs not ready:`, {
-          trigger: !!triggerRef.current,
-          dropdown: !!dropdownRef.current
-        });
-
-        if (retryCount < maxRetries) {
-          retryCount++;
-          setTimeout(positionDropdown, 10);
-        }
-        return;
-      }
-
-      const trigger = triggerRef.current;
-      const dropdown = dropdownRef.current;
-      const triggerRect = trigger.getBoundingClientRect();
-
-      console.log('Trigger button found at:', {
-        top: triggerRect.top,
-        left: triggerRect.left,
-        bottom: triggerRect.bottom,
-        right: triggerRect.right,
-        width: triggerRect.width,
-        height: triggerRect.height
-      });
-
-      console.log('Dropdown initial position:', {
-        currentTop: dropdown.style.top,
-        currentLeft: dropdown.style.left,
-        offsetHeight: dropdown.offsetHeight,
-        offsetWidth: dropdown.offsetWidth
-      });
-
-      // Calculate and set position
-      const top = triggerRect.bottom + 4;
-      const left = triggerRect.left;
-      const width = triggerRect.width;
-
-      dropdown.style.position = 'fixed';
-      dropdown.style.top = `${top}px`;
-      dropdown.style.left = `${left}px`;
-      dropdown.style.width = `${width}px`;
-      dropdown.style.maxHeight = `${maxHeight}px`;
-
-      console.log('Dropdown NEW position set to:', {
-        top: `${top}px`,
-        left: `${left}px`,
-        width: `${width}px`,
-        actualTop: dropdown.style.top,
-        actualLeft: dropdown.style.left,
-        actualWidth: dropdown.style.width
-      });
-
-      // Verify position was applied
-      const dropdownRect = dropdown.getBoundingClientRect();
-      console.log('Dropdown actual position after setting:', {
-        top: dropdownRect.top,
-        left: dropdownRect.left,
-        width: dropdownRect.width,
-        height: dropdownRect.height
-      });
-
-      // Mark as positioned so it becomes visible
-      setIsPositioned(true);
-    };
-
-    // Start positioning attempts
-    positionDropdown();
-
-    // Reposition on scroll/resize
-    const handleReposition = () => {
-      retryCount = 0;
-      positionDropdown();
-    };
-
-    window.addEventListener('scroll', handleReposition, true);
-    window.addEventListener('resize', handleReposition);
-
-    return () => {
-      window.removeEventListener('scroll', handleReposition, true);
-      window.removeEventListener('resize', handleReposition);
-    };
-  }, [isOpen, maxHeight]);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-
-      // Check if click is outside both trigger and dropdown
-      if (
-        triggerRef.current && !triggerRef.current.contains(target) &&
-        dropdownRef.current && !dropdownRef.current.contains(target)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    // Use capture phase for better event handling
-    document.addEventListener('mousedown', handleClickOutside, true);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside, true);
-    };
-  }, [isOpen]);
 
   // Handle keyboard navigation
-  useEffect(() => {
+  const handleKeyDown = (event: KeyboardEvent) => {
     if (!isOpen) return;
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case 'Escape':
-          setIsOpen(false);
-          triggerRef.current?.focus();
-          break;
-        case 'ArrowDown':
-          event.preventDefault();
-          setFocusedIndex(prev =>
-            prev < filteredOptions.length - 1 ? prev + 1 : 0
-          );
-          break;
-        case 'ArrowUp':
-          event.preventDefault();
-          setFocusedIndex(prev =>
-            prev > 0 ? prev - 1 : filteredOptions.length - 1
-          );
-          break;
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          if (focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
-            const option = filteredOptions[focusedIndex];
-            if (!option.disabled) {
-              handleOptionSelect(option);
-            }
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        setFocusedIndex(prev =>
+          prev < filteredOptions.length - 1 ? prev + 1 : 0
+        );
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        setFocusedIndex(prev =>
+          prev > 0 ? prev - 1 : filteredOptions.length - 1
+        );
+        break;
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
+          const option = filteredOptions[focusedIndex];
+          if (!option.disabled) {
+            handleOptionSelect(option);
           }
-          break;
-      }
-    };
+        }
+        break;
+    }
+  };
 
+  useEffect(() => {
+    if (!isOpen) return;
     document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, focusedIndex, filteredOptions]);
 
   // Focus search input when dropdown opens
@@ -234,7 +106,6 @@ const Select: React.FC<SelectProps> = ({
       setIsOpen(!isOpen);
       setSearchTerm('');
       setFocusedIndex(-1);
-      setIsPositioned(false);
     }
   };
 
@@ -262,119 +133,9 @@ const Select: React.FC<SelectProps> = ({
     isOpen && selectStyles.triggerOpen
   ]);
 
-  // MUI-style dropdown portal
-  const renderDropdown = () => {
-    if (!isOpen) return null;
-
-    return createPortal(
-      <div
-        ref={dropdownRef}
-        style={{
-          position: 'fixed',
-          top: '0px', // Explicit initial position
-          left: '0px', // Explicit initial position
-          opacity: isPositioned ? 1 : 0,
-          zIndex: 1300, // MUI's z-index for select
-          backgroundColor: 'white',
-          borderRadius: '4px',
-          boxShadow: '0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)',
-          overflow: 'auto',
-          minWidth: '200px', // Ensure minimum width
-          visibility: 'visible', // Ensure it's visible
-        }}
-        role="listbox"
-      >
-        {searchable && (
-          <div
-            style={{
-              padding: '8px 16px',
-              borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-              position: 'sticky',
-              top: 0,
-              backgroundColor: 'white',
-              zIndex: 1,
-            }}
-          >
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Search options..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: '1px solid rgba(0, 0, 0, 0.23)',
-                borderRadius: '4px',
-                fontSize: '14px',
-                outline: 'none',
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#1976d2';
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = 'rgba(0, 0, 0, 0.23)';
-              }}
-            />
-          </div>
-        )}
-
-        <div style={{ padding: '8px 0' }}>
-          {filteredOptions.map((option, index) => {
-            const isSelected = option.value === value;
-            const isFocused = index === focusedIndex;
-
-            return (
-              <div
-                key={option.value}
-                onClick={() => handleOptionSelect(option)}
-                role="option"
-                aria-selected={isSelected}
-                onMouseEnter={() => setFocusedIndex(index)}
-                style={{
-                  padding: '6px 16px',
-                  cursor: option.disabled ? 'default' : 'pointer',
-                  backgroundColor: isFocused
-                    ? 'rgba(0, 0, 0, 0.04)'
-                    : isSelected
-                      ? 'rgba(25, 118, 210, 0.08)'
-                      : 'transparent',
-                  color: option.disabled
-                    ? 'rgba(0, 0, 0, 0.38)'
-                    : 'rgba(0, 0, 0, 0.87)',
-                  fontSize: '14px',
-                  lineHeight: '1.5',
-                  transition: 'background-color 150ms cubic-bezier(0.4, 0, 0.2, 1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                }}
-              >
-                {option.icon && (
-                  <span style={{ display: 'flex', alignItems: 'center' }}>
-                    {option.icon}
-                  </span>
-                )}
-                <span>{option.label}</span>
-              </div>
-            );
-          })}
-
-          {filteredOptions.length === 0 && (
-            <div
-              style={{
-                padding: '6px 16px',
-                color: 'rgba(0, 0, 0, 0.54)',
-                fontSize: '14px',
-              }}
-            >
-              No options found
-            </div>
-          )}
-        </div>
-      </div>,
-      document.body
-    );
+  const handleClose = () => {
+    setIsOpen(false);
+    triggerRef.current?.focus();
   };
 
   return (
@@ -385,42 +146,152 @@ const Select: React.FC<SelectProps> = ({
         </label>
       )}
 
-      <button
-        ref={setTriggerRef}
-        {...triggerWebProps}
-        onClick={handleTriggerClick}
-        disabled={disabled}
-        aria-label={accessibilityLabel || label}
-        aria-expanded={isOpen}
-        aria-haspopup="listbox"
-        type="button"
-      >
-        <div {...getWebProps([selectStyles.triggerContent])}>
-          {selectedOption?.icon && (
-            <span {...getWebProps([selectStyles.icon])}>
-              {selectedOption.icon}
+      <div ref={triggerRef}>
+        <button
+          {...triggerWebProps}
+          onClick={handleTriggerClick}
+          disabled={disabled}
+          aria-label={accessibilityLabel || label}
+          aria-expanded={isOpen}
+          aria-haspopup="listbox"
+          type="button"
+        >
+          <div {...getWebProps([selectStyles.triggerContent])}>
+            {selectedOption?.icon && (
+              <span {...getWebProps([selectStyles.icon])}>
+                {selectedOption.icon}
+              </span>
+            )}
+            <span
+              {...getWebProps([
+                selectedOption ? selectStyles.triggerText : selectStyles.placeholder
+              ])}
+            >
+              {selectedOption ? selectedOption.label : placeholder}
             </span>
-          )}
-          <span
+          </div>
+
+          <IconSvg
+            path={resolveIconPath('chevron-down')}
             {...getWebProps([
-              selectedOption ? selectStyles.triggerText : selectStyles.placeholder
+              selectStyles.chevron,
+              isOpen && selectStyles.chevronOpen
             ])}
-          >
-            {selectedOption ? selectedOption.label : placeholder}
-          </span>
+            aria-label="chevron-down"
+          />
+        </button>
+      </div>
+      <PositionedPortal
+        open={isOpen}
+        anchor={triggerRef}
+        placement="bottom-start"
+        offset={4}
+        onClickOutside={handleClose}
+        onEscapeKey={handleClose}
+        matchWidth={false}
+        zIndex={1000}
+      >
+        <div
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '4px',
+            boxShadow: '0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)',
+            maxHeight: maxHeight,
+            overflow: 'auto',
+          }}
+          role="listbox"
+        >
+            {searchable && (
+              <div
+                style={{
+                  padding: '8px 16px',
+                  borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+                  position: 'sticky',
+                  top: 0,
+                  backgroundColor: 'white',
+                  zIndex: 1,
+                }}
+              >
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search options..."
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: '1px solid rgba(0, 0, 0, 0.23)',
+                    borderRadius: '4px',
+                    fontSize: '14px',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#1976d2';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(0, 0, 0, 0.23)';
+                  }}
+                />
+              </div>
+            )}
+
+            <div style={{ padding: '8px 0' }}>
+              {filteredOptions.map((option, index) => {
+                const isSelected = option.value === value;
+                const isFocused = index === focusedIndex;
+
+                return (
+                  <div
+                    key={option.value}
+                    onClick={() => handleOptionSelect(option)}
+                    role="option"
+                    aria-selected={isSelected}
+                    onMouseEnter={() => setFocusedIndex(index)}
+                    style={{
+                      padding: '6px 16px',
+                      cursor: option.disabled ? 'default' : 'pointer',
+                      backgroundColor: isFocused
+                        ? 'rgba(0, 0, 0, 0.04)'
+                        : isSelected
+                          ? 'rgba(25, 118, 210, 0.08)'
+                          : 'transparent',
+                      color: option.disabled
+                        ? 'rgba(0, 0, 0, 0.38)'
+                        : 'rgba(0, 0, 0, 0.87)',
+                      fontSize: '14px',
+                      lineHeight: '1.5',
+                      transition: 'background-color 150ms cubic-bezier(0.4, 0, 0.2, 1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                    }}
+                  >
+                    {option.icon && (
+                      <span style={{ display: 'flex', alignItems: 'center' }}>
+                        {option.icon}
+                      </span>
+                    )}
+                    <span>{option.label}</span>
+                  </div>
+                );
+              })}
+
+              {filteredOptions.length === 0 && (
+                <div
+                  style={{
+                    padding: '6px 16px',
+                    color: 'rgba(0, 0, 0, 0.54)',
+                    fontSize: '14px',
+                  }}
+                >
+                  No options found
+                </div>
+              )}
+            </div>
         </div>
-
-        <IconSvg
-          path={resolveIconPath('chevron-down')}
-          {...getWebProps([
-            selectStyles.chevron,
-            isOpen && selectStyles.chevronOpen
-          ])}
-          aria-label="chevron-down"
-        />
-      </button>
-
-      {renderDropdown()}
+      </PositionedPortal>
 
       {helperText && (
         <div

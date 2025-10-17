@@ -39,12 +39,21 @@ export const listStyles = StyleSheet.create((theme) => ({
     outline: 'none',
     transition: 'background-color 0.2s ease, border-color 0.2s ease',
     textAlign: 'left',
+    _web: {
+      _hover: {
+        backgroundColor: theme.colors.interactive.hover,
+        borderRadius: theme.borderRadius.sm,
+      },
+    },
 
     variants: {
       size: {
         small: {
-          padding: theme.spacing.sm,
-          minHeight: 36,
+          paddingTop: theme.spacing.xs,
+          paddingBottom: theme.spacing.xs,
+          paddingLeft: theme.spacing.sm,
+          paddingRight: theme.spacing.sm,
+          minHeight: 32,
         },
         medium: {
           padding: theme.spacing.md,
@@ -89,13 +98,7 @@ export const listStyles = StyleSheet.create((theme) => ({
           opacity: 0.5,
           cursor: 'not-allowed',
         },
-        false: {
-          _web: {
-            ':hover': {
-              backgroundColor: theme.colors.surface.secondary,
-            },
-          },
-        },
+        false: {},
       },
       clickable: {
         true: {},
@@ -122,8 +125,9 @@ export const listStyles = StyleSheet.create((theme) => ({
         disabled: true,
         styles: {
           _web: {
-            ':hover': {
+            _hover: {
               backgroundColor: 'transparent',
+              borderRadius: 0,
             },
           },
         },
@@ -133,8 +137,9 @@ export const listStyles = StyleSheet.create((theme) => ({
         clickable: false,
         styles: {
           _web: {
-            ':hover': {
+            _hover: {
               backgroundColor: 'transparent',
+              borderRadius: 0,
             },
           },
         },

@@ -1,4 +1,5 @@
 import type { ViewStyle } from 'react-native';
+import type { IconName } from '../Icon/icon-types';
 
 export interface SliderProps {
   value?: number;
@@ -12,6 +13,7 @@ export interface SliderProps {
   marks?: SliderMark[];
   intent?: 'primary' | 'success' | 'error' | 'warning' | 'neutral';
   size?: 'small' | 'medium' | 'large';
+  icon?: IconName | React.ReactNode;
   onValueChange?: (value: number) => void;
   onValueCommit?: (value: number) => void;
   style?: ViewStyle;

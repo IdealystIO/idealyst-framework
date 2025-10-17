@@ -6,7 +6,6 @@ import type { MenuItem } from '../Menu/types';
 export const MenuExamples: React.FC = () => {
   const [basicMenuOpen, setBasicMenuOpen] = useState(false);
   const [placementMenuOpen, setPlacementMenuOpen] = useState(false);
-  const [iconMenuOpen, setIconMenuOpen] = useState(false);
   const [iconNameMenuOpen, setIconNameMenuOpen] = useState(false);
   const [intentMenuOpen, setIntentMenuOpen] = useState(false);
   const [separatorMenuOpen, setSeparatorMenuOpen] = useState(false);
@@ -14,7 +13,6 @@ export const MenuExamples: React.FC = () => {
 
   const basicButtonRef = useRef<HTMLDivElement>(null);
   const placementButtonRef = useRef<HTMLDivElement>(null);
-  const iconButtonRef = useRef<HTMLDivElement>(null);
   const iconNameButtonRef = useRef<HTMLDivElement>(null);
   const intentButtonRef = useRef<HTMLDivElement>(null);
   const separatorButtonRef = useRef<HTMLDivElement>(null);
@@ -26,12 +24,6 @@ export const MenuExamples: React.FC = () => {
     { id: 'action1', label: 'Action 1', onClick: () => setSelectedAction('Action 1') },
     { id: 'action2', label: 'Action 2', onClick: () => setSelectedAction('Action 2') },
     { id: 'action3', label: 'Action 3', onClick: () => setSelectedAction('Action 3') },
-  ];
-
-  const iconItems: MenuItem[] = [
-    { id: 'edit', label: 'Edit', icon: '✏️', onClick: () => setSelectedAction('Edit') },
-    { id: 'copy', label: 'Copy', icon: '📋', onClick: () => setSelectedAction('Copy') },
-    { id: 'delete', label: 'Delete', icon: '🗑️', onClick: () => setSelectedAction('Delete'), intent: 'error' },
   ];
 
   const iconNameItems: MenuItem[] = [
@@ -112,32 +104,13 @@ export const MenuExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Icons (Emoji)</Text>
-        <div ref={iconButtonRef} style={{ display: 'inline-block' }}>
-          <Button
-            variant="outlined"
-            onPress={() => setIconMenuOpen(!iconMenuOpen)}
-          >
-            Menu with Emoji Icons
-          </Button>
-        </div>
-        <Menu
-          items={iconItems}
-          open={iconMenuOpen}
-          onOpenChange={setIconMenuOpen}
-          anchor={iconButtonRef}
-        />
-      </View>
-
-      <View spacing="md">
-        <Text size="large" weight="semibold">With Icons (Icon Names)</Text>
-        <Text size="small" color="secondary">Using icon name strings (recommended)</Text>
+        <Text size="large" weight="semibold">With Icons</Text>
         <div ref={iconNameButtonRef} style={{ display: 'inline-block' }}>
           <Button
             variant="outlined"
             onPress={() => setIconNameMenuOpen(!iconNameMenuOpen)}
           >
-            Menu with Icon Names
+            Menu with Icons
           </Button>
         </div>
         <Menu

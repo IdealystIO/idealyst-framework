@@ -66,6 +66,11 @@ export const selectStyles = StyleSheet.create((theme) => ({
         true: {
           opacity: 0.6,
           cursor: 'not-allowed',
+          _web: {
+            _hover: {
+              borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+            },
+          },
         },
         false: {},
       },
@@ -267,6 +272,11 @@ export const selectStyles = StyleSheet.create((theme) => ({
         true: {
           opacity: 0.5,
           cursor: 'not-allowed',
+          _web: {
+            _hover: {
+              backgroundColor: 'transparent',
+            },
+          },
         },
         false: {},
       },

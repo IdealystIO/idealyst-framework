@@ -12,6 +12,7 @@ export interface ListItemProps {
   selected?: boolean;
   disabled?: boolean;
   indent?: number;
+  size?: 'small' | 'medium' | 'large';
   onPress?: () => void;
   style?: ViewStyle;
   testID?: string;

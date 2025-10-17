@@ -15,6 +15,7 @@ const ListItem: React.FC<ListItemProps> = ({
   selected = false,
   disabled = false,
   indent = 0,
+  size = 'medium',
   onPress,
   style,
   testID,
@@ -23,7 +24,7 @@ const ListItem: React.FC<ListItemProps> = ({
 
   // Apply variants
   listStyles.useVariants({
-    size: 'medium', // Default size, can be overridden by parent List context
+    size,
     variant: 'default',
     active,
     selected,
@@ -86,29 +87,14 @@ const ListItem: React.FC<ListItemProps> = ({
 
   const indentStyle = indent > 0 ? { paddingLeft: `${indent * 16}px` } : {};
 
-  if (isClickable) {
-    return (
-      <button
-        {...itemProps}
-        style={{ ...itemProps.style, ...indentStyle }}
-        onClick={handleClick}
-        disabled={disabled}
-        role="listitem"
-        aria-selected={selected}
-        aria-disabled={disabled}
-        data-testid={testID}
-      >
-        {content}
-      </button>
-    );
-  }
-
   return (
     <div
       {...itemProps}
       style={{ ...itemProps.style, ...indentStyle }}
+      onClick={isClickable ? handleClick : undefined}
       role="listitem"
       aria-selected={selected}
+      aria-disabled={disabled}
       data-testid={testID}
     >
       {content}

@@ -20,6 +20,10 @@ const Menu: React.FC<MenuProps> = ({
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
 
+  menuStyles.useVariants({
+    size,
+  });
+
   const overlayProps = getWebProps([menuStyles.overlay]);
   const menuProps = getWebProps([menuStyles.menu, style]);
   const separatorProps = getWebProps([menuStyles.separator]);
@@ -173,6 +177,9 @@ const Menu: React.FC<MenuProps> = ({
           const iconProps = getWebProps([menuStyles.menuItemIcon]);
           const labelProps = getWebProps([menuStyles.menuItemLabel]);
 
+
+          console.log(iconProps)
+
           // Helper to render icon
           const renderIcon = () => {
             if (!item.icon) return null;
@@ -189,7 +196,7 @@ const Menu: React.FC<MenuProps> = ({
               );
             } else if (isValidElement(item.icon)) {
               // Render custom component as-is
-              return item.icon;
+              return <span className={iconProps.className} style={iconProps.style}>{item.icon}</span>;
             }
 
             return null;
@@ -205,11 +212,7 @@ const Menu: React.FC<MenuProps> = ({
               role="menuitem"
               data-testid={`${testID}-item-${item.id}`}
             >
-              {item.icon && (
-                <span className={iconProps.className} style={iconProps.style}>
-                  {renderIcon()}
-                </span>
-              )}
+              {renderIcon()}
               <span className={labelProps.className}>
                 {item.label}
               </span>

@@ -1,0 +1,31 @@
+{
+  "name": "@idealyst/mcp-server",
+  "version": "1.0.83",
+  "description": "MCP server providing documentation and examples for the Idealyst framework",
+  "main": "dist/index.js",
+  "bin": {
+    "idealyst-mcp": "./dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "idealyst",
+    "mcp",
+    "model-context-protocol",
+    "documentation",
+    "framework"
+  ],
+  "author": "Idealyst",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

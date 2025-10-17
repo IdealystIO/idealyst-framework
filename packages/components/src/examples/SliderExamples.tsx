@@ -135,6 +135,41 @@ export const SliderExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
+        <Text size="large" weight="semibold">With Icons</Text>
+        <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <View spacing="xs">
+            <Text size="small">Volume with icon</Text>
+            <Slider
+              defaultValue={60}
+              icon="volume-high"
+              intent="primary"
+              showMinMax
+            />
+          </View>
+          <View spacing="xs">
+            <Text size="small">Brightness with icon</Text>
+            <Slider
+              defaultValue={75}
+              icon="brightness-6"
+              intent="warning"
+              showMinMax
+            />
+          </View>
+          <View spacing="xs">
+            <Text size="small">Temperature with icon</Text>
+            <Slider
+              defaultValue={22}
+              min={10}
+              max={30}
+              icon="thermometer"
+              intent="error"
+              showMinMax
+            />
+          </View>
+        </View>
+      </View>
+
+      <View spacing="md">
         <Text size="large" weight="semibold">Temperature Control</Text>
         <Slider
           value={temperatureValue}

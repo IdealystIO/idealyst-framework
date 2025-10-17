@@ -78,6 +78,9 @@ export const sliderStyles = StyleSheet.create((theme) => ({
     transform: 'translate(-50%, -50%)',
     cursor: 'pointer',
     transition: 'transform 0.15s ease, box-shadow 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 
     variants: {
       size: {
@@ -134,6 +137,59 @@ export const sliderStyles = StyleSheet.create((theme) => ({
 
   thumbActive: {
     transform: 'translate(-50%, -50%) scale(1.1)',
+  },
+
+  thumbIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+
+    variants: {
+      size: {
+        small: {
+          width: 10,
+          height: 10,
+          minWidth: 10,
+          maxWidth: 10,
+          minHeight: 10,
+          maxHeight: 10,
+        },
+        medium: {
+          width: 12,
+          height: 12,
+          minWidth: 12,
+          maxWidth: 12,
+          minHeight: 12,
+          maxHeight: 12,
+        },
+        large: {
+          width: 16,
+          height: 16,
+          minWidth: 16,
+          maxWidth: 16,
+          minHeight: 16,
+          maxHeight: 16,
+        },
+      },
+      intent: {
+        primary: {
+          color: theme.intents.primary.main,
+        },
+        success: {
+          color: theme.intents.success.main,
+        },
+        error: {
+          color: theme.intents.error.main,
+        },
+        warning: {
+          color: theme.intents.warning.main,
+        },
+        neutral: {
+          color: theme.intents.neutral.main,
+        },
+      },
+    },
   },
 
   valueLabel: {
