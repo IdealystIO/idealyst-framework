@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { accordionStyles } from './Accordion.styles';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
@@ -22,9 +22,22 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   intent,
   testID,
 }) => {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const contentWrapperRef = useRef<HTMLDivElement>(null);
+  const contentInnerRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState(0);
   const chevronIconPath = resolveIconPath('chevron-down');
+
+  accordionStyles.useVariants({
+    size,
+    intent,
+  });
+
+  // Measure height after render and when content changes
+  useEffect(() => {
+    if (contentInnerRef.current) {
+      const height = contentInnerRef.current.scrollHeight;
+      setContentHeight(height);
+    }
+  }, [item.content]);
 
   // Note: Variants are applied globally in parent Accordion component
   // We use inline styles for per-item dynamic values (expanded, disabled)
@@ -34,12 +47,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const iconProps = getWebProps([accordionStyles.icon]);
   const contentProps = getWebProps([accordionStyles.content]);
   const contentInnerProps = getWebProps([accordionStyles.contentInner]);
-
-  // Get height from the wrapper when expanded
-  // The wrapper needs to have auto height temporarily to measure correctly
-  const contentHeight = isExpanded && contentWrapperRef.current
-    ? contentWrapperRef.current.scrollHeight
-    : 0;
 
   return (
     <div
@@ -91,7 +98,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         }}
         aria-hidden={!isExpanded}
       >
-        <div ref={contentRef} {...contentInnerProps}>
+        <div ref={contentInnerRef} {...contentInnerProps}>
           {item.content}
         </div>
       </div>
