@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = (props: InternalButtonProps) => {
     disabled = false,
     variant = 'contained',
     intent = 'primary',
-    size = 'medium',
+    size = 'md',
     leftIcon,
     rightIcon,
     leftIconPath,
@@ -34,7 +34,7 @@ const Button: React.FC<ButtonProps> = (props: InternalButtonProps) => {
 
   // Apply variants using the correct Unistyles 3.0 pattern
   buttonStyles.useVariants({
-    size: size as 'small' | 'medium' | 'large',
+    size: size as 'sm' | 'md' | 'lg',
     intent: intent as 'primary' | 'success' | 'error' | 'warning' | 'neutral',
     variant: variant as 'contained' | 'outlined' | 'text',
     disabled: disabled as boolean,

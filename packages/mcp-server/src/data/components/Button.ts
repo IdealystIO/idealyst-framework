@@ -4,7 +4,7 @@ category: "form",
     props: `
 - \`variant\`: 'contained' | 'outlined' | 'text' - Visual style variant
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'small' | 'medium' | 'large' - Button size
+- \`size\`: 'sm' | 'md' | 'lg' - Button size
 - \`icon\`: string | ReactNode - Icon name (MDI) or custom React element
 - \`iconPosition\`: 'left' | 'right' - Position of icon relative to label
 - \`disabled\`: boolean - Disable button interaction
@@ -15,7 +15,7 @@ category: "form",
     features: [
       "Three variants: contained, outlined, text",
       "Five intent colors for semantic meaning",
-      "Three sizes: small, medium, large",
+      "Three sizes: sm, md, lg",
       "Icon support with string names or custom React elements",
       "Loading and disabled states",
       "Full width option",

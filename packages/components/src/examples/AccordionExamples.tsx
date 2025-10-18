@@ -109,17 +109,6 @@ export const AccordionExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Intent Colors</Text>
-        <View spacing="sm">
-          <Accordion items={basicItems} intent="primary" variant="separated" />
-          <Accordion items={basicItems} intent="success" variant="separated" />
-          <Accordion items={basicItems} intent="warning" variant="separated" />
-          <Accordion items={basicItems} intent="error" variant="separated" />
-          <Accordion items={basicItems} intent="neutral" variant="separated" />
-        </View>
-      </View>
-
-      <View spacing="md">
         <Text size="large" weight="semibold">Rich Content</Text>
         <Accordion items={richContentItems} variant="bordered" />
       </View>

@@ -123,10 +123,10 @@ export const TableExamples: React.FC = () => {
       width: '200px',
       render: (_, user) => (
         <View style={{ flexDirection: 'row', gap: 8 }}>
-          <Button size="small" variant="outlined" onPress={() => console.log('Edit', user.id)}>
+          <Button size="sm" variant="outlined" onPress={() => console.log('Edit', user.id)}>
             Edit
           </Button>
-          <Button size="small" variant="outlined" intent="error" onPress={() => console.log('Delete', user.id)}>
+          <Button size="sm" variant="outlined" intent="error" onPress={() => console.log('Delete', user.id)}>
             Delete
           </Button>
         </View>
@@ -147,7 +147,7 @@ export const TableExamples: React.FC = () => {
         <Text size="large" weight="semibold">Variants</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="small" weight="medium">Default</Text>
+            <Text size="sm" weight="medium">Default</Text>
             <Table
               columns={userColumns}
               data={users}
@@ -155,7 +155,7 @@ export const TableExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Bordered</Text>
+            <Text size="sm" weight="medium">Bordered</Text>
             <Table
               columns={userColumns}
               data={users}
@@ -163,7 +163,7 @@ export const TableExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Striped</Text>
+            <Text size="sm" weight="medium">Striped</Text>
             <Table
               columns={userColumns}
               data={users}
@@ -177,16 +177,16 @@ export const TableExamples: React.FC = () => {
         <Text size="large" weight="semibold">Sizes</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="small" weight="medium">Small</Text>
+            <Text size="sm" weight="medium">Small</Text>
             <Table
               columns={userColumns}
               data={users.slice(0, 2)}
-              size="small"
+              size="sm"
               variant="bordered"
             />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Medium (default)</Text>
+            <Text size="sm" weight="medium">Medium (default)</Text>
             <Table
               columns={userColumns}
               data={users.slice(0, 2)}
@@ -195,7 +195,7 @@ export const TableExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Large</Text>
+            <Text size="sm" weight="medium">Large</Text>
             <Table
               columns={userColumns}
               data={users.slice(0, 2)}
@@ -219,7 +219,7 @@ export const TableExamples: React.FC = () => {
           variant="bordered"
           onRowPress={(user) => console.log('Clicked user:', user)}
         />
-        <Text size="small" color="secondary">
+        <Text size="sm" color="secondary">
           Click any row to see console output
         </Text>
       </View>
@@ -267,7 +267,7 @@ export const TableExamples: React.FC = () => {
           data={[]}
           variant="bordered"
         />
-        <Text size="small" color="secondary">
+        <Text size="sm" color="secondary">
           No data to display
         </Text>
       </View>

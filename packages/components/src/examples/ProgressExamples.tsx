@@ -30,7 +30,7 @@ export const ProgressExamples: React.FC = () => {
       <View spacing="md">
         <Text size="large" weight="semibold">Sizes</Text>
         <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <Progress value={60} size="small" />
+          <Progress value={60} size="sm" />
           <Progress value={60} size="medium" />
           <Progress value={60} size="large" />
         </View>
@@ -68,7 +68,7 @@ export const ProgressExamples: React.FC = () => {
       <View spacing="md">
         <Text size="large" weight="semibold">Circular Progress</Text>
         <View spacing="sm" style={{ flexDirection: 'row', gap: 16 }}>
-          <Progress variant="circular" value={25} size="small" />
+          <Progress variant="circular" value={25} size="sm" />
           <Progress variant="circular" value={50} size="medium" />
           <Progress variant="circular" value={75} size="large" />
         </View>
@@ -85,7 +85,7 @@ export const ProgressExamples: React.FC = () => {
       <View spacing="md">
         <Text size="large" weight="semibold">Circular Indeterminate</Text>
         <View spacing="sm" style={{ flexDirection: 'row', gap: 16 }}>
-          <Progress variant="circular" indeterminate size="small" />
+          <Progress variant="circular" indeterminate size="sm" />
           <Progress variant="circular" indeterminate size="medium" intent="primary" />
           <Progress variant="circular" indeterminate size="large" intent="warning" />
         </View>
@@ -95,11 +95,11 @@ export const ProgressExamples: React.FC = () => {
         <Text size="large" weight="semibold">Rounded vs Straight</Text>
         <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <View spacing="xs">
-            <Text size="small">Rounded (default)</Text>
+            <Text size="sm">Rounded (default)</Text>
             <Progress value={70} rounded={true} />
           </View>
           <View spacing="xs">
-            <Text size="small">Straight edges</Text>
+            <Text size="sm">Straight edges</Text>
             <Progress value={70} rounded={false} />
           </View>
         </View>
@@ -108,7 +108,7 @@ export const ProgressExamples: React.FC = () => {
       <View spacing="md">
         <Text size="large" weight="semibold">Dynamic Progress</Text>
         <Progress value={dynamicValue} showLabel />
-        <Text size="small" color="secondary">Automatically updating every second</Text>
+        <Text size="sm" color="secondary">Automatically updating every second</Text>
       </View>
 
       <View spacing="md">
@@ -117,15 +117,15 @@ export const ProgressExamples: React.FC = () => {
           <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
             <Progress variant="circular" value={interactiveValue} showLabel size="large" />
             <View spacing="sm">
-              <Button size="small" onPress={() => setInteractiveValue(Math.max(0, interactiveValue - 10))}>
+              <Button size="sm" onPress={() => setInteractiveValue(Math.max(0, interactiveValue - 10))}>
                 -10
               </Button>
-              <Button size="small" onPress={() => setInteractiveValue(Math.min(100, interactiveValue + 10))}>
+              <Button size="sm" onPress={() => setInteractiveValue(Math.min(100, interactiveValue + 10))}>
                 +10
               </Button>
             </View>
           </View>
-          <Text size="small" color="secondary">Click buttons to change value</Text>
+          <Text size="sm" color="secondary">Click buttons to change value</Text>
         </View>
       </View>
     </View>

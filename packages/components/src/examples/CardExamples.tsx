@@ -19,28 +19,28 @@ export const CardExamples = () => {
         <View spacing="sm" style={{ gap: 10 }}>
           <Card variant="default" padding="medium">
             <Text>Default Card</Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               This is a default card with standard styling
             </Text>
           </Card>
           
           <Card variant="outlined" padding="medium">
             <Text>Outlined Card</Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               This is an outlined card with border
             </Text>
           </Card>
           
           <Card variant="elevated" padding="medium">
             <Text>Elevated Card</Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               This is an elevated card with shadow
             </Text>
           </Card>
           
           <Card variant="filled" padding="medium">
             <Text>Filled Card</Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               This is a filled card with background
             </Text>
           </Card>
@@ -132,7 +132,7 @@ export const CardExamples = () => {
             padding="medium"
           >
             <Text weight="semibold">Clickable Card</Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               Click me to see interaction
             </Text>
           </Card>
@@ -145,7 +145,7 @@ export const CardExamples = () => {
             padding="medium"
           >
             <Text weight="semibold">Disabled Card</Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               This card is disabled
             </Text>
           </Card>
@@ -157,14 +157,14 @@ export const CardExamples = () => {
         <Text size="medium" weight="semibold">Complex Layout</Text>
         <Card variant="elevated" padding="large" radius="medium">
           <Text size="large" weight="bold">Product Card</Text>
-          <Text size="small" color="secondary" style={{ marginVertical: 8 }}>
+          <Text size="sm" color="secondary" style={{ marginVertical: 8 }}>
             This is a more complex card layout with multiple elements
           </Text>
           <View style={{ flexDirection: 'row', gap: 8, marginTop: 12 }}>
-            <Button size="small" variant="contained" intent="primary">
+            <Button size="sm" variant="contained" intent="primary">
               Buy Now
             </Button>
-            <Button size="small" variant="outlined" intent="neutral">
+            <Button size="sm" variant="outlined" intent="neutral">
               Add to Cart
             </Button>
           </View>

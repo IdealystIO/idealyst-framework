@@ -40,8 +40,8 @@ export const PopoverExamples = () => {
           >
             <View spacing="sm">
               <Text weight="bold">Basic Popover</Text>
-              <Text size="small">This is a basic popover with some content.</Text>
-              <Button size="small" onPress={() => setBasicOpen(false)}>
+              <Text size="sm">This is a basic popover with some content.</Text>
+              <Button size="sm" onPress={() => setBasicOpen(false)}>
                 Close
               </Button>
             </View>
@@ -64,7 +64,7 @@ export const PopoverExamples = () => {
                 style={{ display: 'inline-block' }}
               >
                 <Button
-                  size="small"
+                  size="sm"
                   variant="outlined"
                   onPress={() => setPlacementOpen(placement)}
                 >
@@ -83,10 +83,10 @@ export const PopoverExamples = () => {
             >
               <View spacing="sm">
                 <Text weight="bold">{placementOpen} placement</Text>
-                <Text size="small">
+                <Text size="sm">
                   Positioned {placementOpen} relative to the button
                 </Text>
-                <Button size="small" onPress={() => setPlacementOpen(null)}>
+                <Button size="sm" onPress={() => setPlacementOpen(null)}>
                   Close
                 </Button>
               </View>
@@ -115,10 +115,10 @@ export const PopoverExamples = () => {
           >
             <View spacing="sm">
               <Text weight="bold">Arrow Popover</Text>
-              <Text size="small">
+              <Text size="sm">
                 This popover includes an arrow pointing to the anchor element.
               </Text>
-              <Button size="small" onPress={() => setArrowOpen(false)}>
+              <Button size="sm" onPress={() => setArrowOpen(false)}>
                 Close
               </Button>
             </View>
@@ -129,22 +129,22 @@ export const PopoverExamples = () => {
         <View spacing="md">
           <Text size="medium" weight="semibold">Features</Text>
           <View spacing="sm">
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               • Automatically positions within viewport bounds
             </Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               • 12 placement options (top, bottom, left, right with start/end variants)
             </Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               • Optional arrow pointing to anchor element
             </Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               • Click outside or escape key to close
             </Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               • Smooth animations and transitions
             </Text>
-            <Text size="small" color="secondary">
+            <Text size="sm" color="secondary">
               • Follows anchor element on scroll/resize (web)
             </Text>
           </View>

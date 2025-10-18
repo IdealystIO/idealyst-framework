@@ -10,7 +10,6 @@ interface AccordionItemProps {
   isExpanded: boolean;
   onToggle: () => void;
   size: 'small' | 'medium' | 'large';
-  intent: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
   testID?: string;
 }
 
@@ -19,7 +18,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   isExpanded,
   onToggle,
   size,
-  intent,
   testID,
 }) => {
   const contentInnerRef = useRef<HTMLDivElement>(null);
@@ -28,7 +26,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
   accordionStyles.useVariants({
     size,
-    intent,
   });
 
   // Note: Variants are applied globally in parent Accordion component

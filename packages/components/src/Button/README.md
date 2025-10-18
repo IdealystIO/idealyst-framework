@@ -7,7 +7,7 @@ A versatile button component with multiple variants, intents, and sizes for cons
 - ✅ Cross-platform (React & React Native)
 - ✅ Three variants (contained, outlined, text)
 - ✅ Intent-based color system
-- ✅ Multiple sizes (small, medium, large)
+- ✅ Multiple sizes (sm, md, lg)
 - ✅ Disabled and loading states
 - ✅ Accessible with proper ARIA attributes
 - ✅ TypeScript support
@@ -55,7 +55,7 @@ import { Button } from '@idealyst/components';
 | `disabled` | `boolean` | `false` | Whether the button is disabled |
 | `variant` | `'contained' \| 'outlined' \| 'text'` | `'contained'` | Visual style variant |
 | `intent` | `IntentVariant` | `'primary'` | Color scheme/intent of the button |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size of the button |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the button |
 | `loading` | `boolean` | `false` | Show loading state (React Native only) |
 | `style` | `ViewStyle` | - | Additional custom styles |
 | `testID` | `string` | - | Test identifier for testing |
@@ -145,14 +145,14 @@ Caution actions that require attention.
 
 | Size | Height | Padding | Font Size | Use Case |
 |------|--------|---------|-----------|----------|
-| `small` | 32px | 12px | 14px | Compact spaces, secondary actions |
-| `medium` | 40px | 16px | 16px | Standard use, forms |
-| `large` | 48px | 20px | 18px | Primary actions, mobile |
+| `sm` | 32px | 12px | 14px | Compact spaces, secondary actions |
+| `md` | 40px | 16px | 16px | Standard use, forms |
+| `lg` | 48px | 20px | 18px | Primary actions, mobile |
 
 ```tsx
-<Button size="small" intent="neutral">Small</Button>
-<Button size="medium" intent="primary">Medium</Button>
-<Button size="large" intent="primary">Large</Button>
+<Button size="sm" intent="neutral">Small</Button>
+<Button size="md" intent="primary">Medium</Button>
+<Button size="lg" intent="primary">Large</Button>
 ```
 
 ## States
@@ -208,16 +208,16 @@ Caution actions that require attention.
 ### Call-to-Action Groups
 ```tsx
 <View style={{ gap: 12 }}>
-  <Button 
-    variant="contained" 
-    intent="primary" 
-    size="large"
+  <Button
+    variant="contained"
+    intent="primary"
+    size="lg"
     onPress={handleGetStarted}
   >
     Get Started
   </Button>
-  <Button 
-    variant="text" 
+  <Button
+    variant="text"
     intent="neutral"
     onPress={handleLearnMore}
   >

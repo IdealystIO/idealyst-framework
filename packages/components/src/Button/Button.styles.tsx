@@ -16,17 +16,17 @@ export const buttonStyles = StyleSheet.create((theme) => ({
     // All variants defined here
     variants: {
       size: {
-        small: {
+        sm: {
           paddingHorizontal: theme.spacing?.sm || 8,
           paddingVertical: theme.spacing?.xs || 4,
           minHeight: 24,
         },
-        medium: {
+        md: {
           paddingHorizontal: theme.spacing?.md || 12,
           paddingVertical: theme.spacing?.sm || 8,
           minHeight: 32,
-        },  
-        large: {
+        },
+        lg: {
           paddingHorizontal: theme.spacing?.lg || 16,
           paddingVertical: theme.spacing?.md || 12,
           minHeight: 40,
@@ -104,15 +104,15 @@ export const buttonStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 14,
           height: 14,
         },
-        medium: {
+        md: {
           width: 16,
           height: 16,
         },
-        large: {
+        lg: {
           width: 18,
           height: 18,
         },
@@ -224,13 +224,13 @@ export const buttonStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
         },
-        medium: {
+        md: {
           fontSize: 16,
         },
-        large: {
+        lg: {
           fontSize: 18,
         },
       },

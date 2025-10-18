@@ -45,24 +45,24 @@ export const ButtonExamples = () => {
       <View spacing="md">
         <Text size="medium" weight="semibold">Sizes</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Button 
-            size="small" 
+          <Button
+            size="sm"
             variant="contained"
             intent="primary"
             onPress={() => handlePress('small')}
           >
             Small
           </Button>
-          <Button 
-            size="medium" 
+          <Button
+            size="md"
             variant="contained"
             intent="primary"
             onPress={() => handlePress('medium')}
           >
             Medium
           </Button>
-          <Button 
-            size="large" 
+          <Button
+            size="lg"
             variant="contained"
             intent="primary"
             onPress={() => handlePress('large')}
@@ -201,21 +201,21 @@ export const ButtonExamples = () => {
             variant="contained"
             intent="primary"
             leftIcon="home"
-            size="small"
+            size="sm"
             onPress={() => handlePress('icon-only-small')}
           />
           <Button
             variant="contained"
             intent="primary"
             leftIcon="cog"
-            size="medium"
+            size="md"
             onPress={() => handlePress('icon-only-medium')}
           />
           <Button
             variant="contained"
             intent="primary"
             leftIcon="heart"
-            size="large"
+            size="lg"
             onPress={() => handlePress('icon-only-large')}
           />
           <Button

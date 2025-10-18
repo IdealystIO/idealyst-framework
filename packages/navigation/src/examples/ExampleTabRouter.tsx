@@ -42,37 +42,37 @@ const HomeTabScreen = () => {
                 </Text>
                 
                 <View spacing="sm" style={{ padding: 12, backgroundColor: 'rgba(0,150,255,0.1)', borderRadius: 8 }}>
-                    <Text size="small" weight="semibold">📋 Header Features Demonstrated:</Text>
-                    <Text size="small">• headerTitle: Custom title component with icon</Text>
-                    <Text size="small">• headerLeft: Menu button (appears before title)</Text>
-                    <Text size="small">• headerRight: Multiple action buttons</Text>
-                    <Text size="small">• Cross-platform: Works on both mobile and web</Text>
+                    <Text size="sm" weight="semibold">📋 Header Features Demonstrated:</Text>
+                    <Text size="sm">• headerTitle: Custom title component with icon</Text>
+                    <Text size="sm">• headerLeft: Menu button (appears before title)</Text>
+                    <Text size="sm">• headerRight: Multiple action buttons</Text>
+                    <Text size="sm">• Cross-platform: Works on both mobile and web</Text>
                 </View>
                 
                 <View spacing="md" style={{ marginTop: 24 }}>
                     <Text size="medium" weight="semibold">Navigation Tabs</Text>
-                    <Text size="small">
+                    <Text size="sm">
                         Each tab demonstrates different header configurations:
                     </Text>
-                    <Text size="small">• Home: Custom headerTitle, headerLeft menu, headerRight actions</Text>
-                    <Text size="small">• Components: Simple headerLeft back button, headerRight refresh</Text>
-                    <Text size="small">• Settings: String headerTitle override, help + menu buttons</Text>
-                    <Text size="small">• Theme: Component headerTitle with icon, save button</Text>
+                    <Text size="sm">• Home: Custom headerTitle, headerLeft menu, headerRight actions</Text>
+                    <Text size="sm">• Components: Simple headerLeft back button, headerRight refresh</Text>
+                    <Text size="sm">• Settings: String headerTitle override, help + menu buttons</Text>
+                    <Text size="sm">• Theme: Component headerTitle with icon, save button</Text>
                     
                     <View spacing="sm">
-                        <Button size="small" variant="outlined" onPress={() => navigator.navigate({ path: '/components', vars: {} })}>
+                        <Button size="sm" variant="outlined" onPress={() => navigator.navigate({ path: '/components', vars: {} })}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Icon name="view-dashboard" size="sm" style={{ marginRight: 8 }} />
                                 <Text>Components Tab</Text>
                             </View>
                         </Button>
-                        <Button size="small" variant="outlined" onPress={() => navigator.navigate({ path: '/settings', vars: {} })}>
+                        <Button size="sm" variant="outlined" onPress={() => navigator.navigate({ path: '/settings', vars: {} })}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Icon name="cog" size="sm" style={{ marginRight: 8 }} />
                                 <Text>Settings Tab</Text>
                             </View>
                         </Button>
-                        <Button size="small" variant="outlined" onPress={() => navigator.navigate({ path: '/theme', vars: {} })}>
+                        <Button size="sm" variant="outlined" onPress={() => navigator.navigate({ path: '/theme', vars: {} })}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Icon name="palette" size="sm" style={{ marginRight: 8 }} />
                                 <Text>Theme Tab</Text>
@@ -83,7 +83,7 @@ const HomeTabScreen = () => {
                 
                 <View spacing="md" style={{ marginTop: 24 }}>
                     <Text size="medium" weight="semibold">Theme Controls</Text>
-                    <Text size="small">Current Theme: {getThemeDisplayName(currentTheme)}</Text>
+                    <Text size="sm">Current Theme: {getThemeDisplayName(currentTheme)}</Text>
                     
                     <View style={{ flexDirection: 'row', marginTop: 12 }}>
                         <Button variant="outlined" onPress={cycleTheme} style={{ marginRight: 12 }}>
@@ -95,7 +95,7 @@ const HomeTabScreen = () => {
                     </View>
                     
                     {isHighContrastTheme(currentTheme) && (
-                        <Text size="small" style={{ fontStyle: 'italic', marginTop: 8 }}>
+                        <Text size="sm" style={{ fontStyle: 'italic', marginTop: 8 }}>
                             ♿ High contrast mode is active for better accessibility
                         </Text>
                     )}
@@ -112,10 +112,10 @@ const ComponentsTabScreen = () => (
             <Text>Explore UI components with custom header navigation</Text>
             
             <View spacing="sm" style={{ padding: 12, backgroundColor: 'rgba(100,200,100,0.1)', borderRadius: 8 }}>
-                <Text size="small" weight="semibold">🔧 This tab demonstrates:</Text>
-                <Text size="small">• headerLeft: Back arrow button</Text>
-                <Text size="small">• headerRight: Refresh action button</Text>
-                <Text size="small">• Default title: Uses 'Components' from screenOptions</Text>
+                <Text size="sm" weight="semibold">🔧 This tab demonstrates:</Text>
+                <Text size="sm">• headerLeft: Back arrow button</Text>
+                <Text size="sm">• headerRight: Refresh action button</Text>
+                <Text size="sm">• Default title: Uses 'Components' from screenOptions</Text>
             </View>
             
             <View spacing="md">
@@ -151,24 +151,24 @@ const SettingsTabScreen = () => {
                 <Text>Configure the TabBar demo settings</Text>
                 
                 <View spacing="sm" style={{ padding: 12, backgroundColor: 'rgba(255,150,0,0.1)', borderRadius: 8 }}>
-                    <Text size="small" weight="semibold">⚙️ This tab demonstrates:</Text>
-                    <Text size="small">• headerTitle: String override ('App Settings')</Text>
-                    <Text size="small">• headerLeft: Chevron back button</Text>
-                    <Text size="small">• headerRight: Help + menu buttons</Text>
-                    <Text size="small">• Notice: Title in header != tab title</Text>
+                    <Text size="sm" weight="semibold">⚙️ This tab demonstrates:</Text>
+                    <Text size="sm">• headerTitle: String override ('App Settings')</Text>
+                    <Text size="sm">• headerLeft: Chevron back button</Text>
+                    <Text size="sm">• headerRight: Help + menu buttons</Text>
+                    <Text size="sm">• Notice: Title in header != tab title</Text>
                 </View>
                 
                 <View spacing="md">
                     <Text size="medium" weight="semibold">Screen Options Used</Text>
-                    <Text size="small" style={{ fontFamily: 'monospace', backgroundColor: 'rgba(0,0,0,0.05)', padding: 8 }}>
+                    <Text size="sm" style={{ fontFamily: 'monospace', backgroundColor: 'rgba(0,0,0,0.05)', padding: 8 }}>
                         Test
                     </Text>
                 </View>
                 
                 <View spacing="md">
                     <Text size="medium" weight="semibold">Current State</Text>
-                    <Text size="small">Theme: {getThemeDisplayName(currentTheme)}</Text>
-                    <Text size="small">Platform: React Navigation (Native) / React Router (Web)</Text>
+                    <Text size="sm">Theme: {getThemeDisplayName(currentTheme)}</Text>
+                    <Text size="sm">Platform: React Navigation (Native) / React Router (Web)</Text>
                 </View>
             </View>
         </Screen>
@@ -182,10 +182,10 @@ const ThemeTabScreen = () => (
             <Text>Explore the theme extension system with custom header</Text>
             
             <View spacing="sm" style={{ padding: 12, backgroundColor: 'rgba(150,0,255,0.1)', borderRadius: 8 }}>
-                <Text size="small" weight="semibold">🎨 This tab demonstrates:</Text>
-                <Text size="small">• headerTitle: React component with icon + text</Text>
-                <Text size="small">• headerRight: Styled save button</Text>
-                <Text size="small">• Custom styling: Intent colors and typography</Text>
+                <Text size="sm" weight="semibold">🎨 This tab demonstrates:</Text>
+                <Text size="sm">• headerTitle: React component with icon + text</Text>
+                <Text size="sm">• headerRight: Styled save button</Text>
+                <Text size="sm">• Custom styling: Intent colors and typography</Text>
             </View>
             
             <ThemeExtensionExamples />
@@ -211,16 +211,16 @@ const TabRouter: NavigatorParam = {
                     </View>
                 ),
                 headerLeft: () => (
-                    <Button variant="text" size="small">
+                    <Button variant="text" size="sm">
                         <Icon name="menu" size="md" />
                     </Button>
                 ),
                 headerRight: () => (
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Button variant="text" size="small" style={{ marginRight: 8 }}>
+                        <Button variant="text" size="sm" style={{ marginRight: 8 }}>
                             <Icon name="bell" size="md" />
                         </Button>
-                        <Button variant="text" size="small">
+                        <Button variant="text" size="sm">
                             <Icon name="account" size="md" />
                         </Button>
                     </View>
@@ -238,12 +238,12 @@ const TabRouter: NavigatorParam = {
             options: {
                 title: 'Components',
                 headerLeft: () => (
-                    <Button variant="text" size="small">
+                    <Button variant="text" size="sm">
                         <Icon name="arrow-left" size="md" />
                     </Button>
                 ),
                 headerRight: () => (
-                    <Button variant="text" size="small">
+                    <Button variant="text" size="sm">
                         <Icon name="refresh" size="md" />
                     </Button>
                 ),
@@ -264,16 +264,16 @@ const TabRouter: NavigatorParam = {
                 title: 'Settings',
                 headerTitle: 'App Settings',
                 headerLeft: () => (
-                    <Button variant="text" size="small">
+                    <Button variant="text" size="sm">
                         <Icon name="chevron-left" size="md" />
                     </Button>
                 ),
                 headerRight: () => (
                     <View style={{ flexDirection: 'row' }}>
-                        <Button variant="text" size="small" style={{ marginRight: 4 }}>
+                        <Button variant="text" size="sm" style={{ marginRight: 4 }}>
                             <Icon name="help-circle" size="md" />
                         </Button>
-                        <Button variant="text" size="small">
+                        <Button variant="text" size="sm">
                             <Icon name="dots-vertical" size="md" />
                         </Button>
                     </View>
@@ -302,8 +302,8 @@ const TabRouter: NavigatorParam = {
                     </View>
                 ),
                 headerRight: () => (
-                    <Button variant="contained" size="small" intent="primary">
-                        <Text size="small" color="white">Save</Text>
+                    <Button variant="contained" size="sm" intent="primary">
+                        <Text size="sm" color="white">Save</Text>
                     </Button>
                 ),
                 tabBarLabel: 'Theme',

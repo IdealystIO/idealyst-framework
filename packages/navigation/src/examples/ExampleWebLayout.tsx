@@ -140,17 +140,11 @@ export const ExampleWebLayout: React.FC = () => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
                     <Button
                         variant="text"
-                        size="small"
+                        leftIcon="menu"
+                        size="large"
                         onPress={() => setSidebarCollapsed(!sidebarCollapsed)}
                         style={{ padding: 8 }}
-                    >
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24 }}>
-                            <Icon
-                                name={sidebarCollapsed ? 'menu' : 'menu-open'}
-                                size="lg"
-                            />
-                        </div>
-                    </Button>
+                    />
                     <Button
                         variant="text"
                         size="small"

@@ -10,7 +10,6 @@ export const Accordion = {
 - \`allowMultiple\`: boolean - Allow multiple items to be expanded simultaneously (default: false)
 - \`defaultExpanded\`: string[] - Array of item IDs to expand by default
 - \`variant\`: 'default' | 'separated' | 'bordered' - Visual style variant
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
 - \`size\`: 'small' | 'medium' | 'large' - Size of accordion items
 - \`style\`: ViewStyle - Additional custom styles
 - \`testID\`: string - Test identifier
@@ -19,7 +18,6 @@ export const Accordion = {
     "Single or multiple item expansion modes",
     "Default expanded items support",
     "Three visual variants",
-    "Five intent colors",
     "Three size options",
     "Disabled item state",
     "Controlled and uncontrolled modes",

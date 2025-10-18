@@ -6,7 +6,7 @@ export interface ButtonProps extends Omit<TouchableOpacityProps, 'disabled'> {
   onPress: () => void;
   variant?: 'contained' | 'outlined' | 'text';
   intent?: IntentNames;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
 } 

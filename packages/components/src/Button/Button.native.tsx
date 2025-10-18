@@ -10,7 +10,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   variant = 'contained',
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   style,
   testID,
 }) => {

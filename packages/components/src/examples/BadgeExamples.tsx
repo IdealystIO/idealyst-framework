@@ -27,7 +27,7 @@ export const BadgeExamples = () => {
       <View spacing="md">
         <Text size="medium" weight="semibold">Sizes</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Badge size="small" color="blue">
+          <Badge size="sm" color="blue">
             Small
           </Badge>
           <Badge size="medium" color="blue">
@@ -95,7 +95,7 @@ export const BadgeExamples = () => {
       <View spacing="md">
         <Text size="medium" weight="semibold">Dot Badges</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Badge variant="dot" color="blue" size="small" />
+          <Badge variant="dot" color="blue" size="sm" />
           <Badge variant="dot" color="green" size="medium" />
           <Badge variant="dot" color="red" size="large" />
           <Badge variant="dot" color="orange" size="medium" />
@@ -107,7 +107,7 @@ export const BadgeExamples = () => {
       <View spacing="md">
         <Text size="medium" weight="semibold">Number Badges</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Badge color="red" size="small">
+          <Badge color="red" size="sm">
             1
           </Badge>
           <Badge color="red" size="medium">
@@ -150,25 +150,25 @@ export const BadgeExamples = () => {
         <View spacing="sm">
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Text>Notifications</Text>
-            <Badge color="red" size="small">3</Badge>
+            <Badge color="red" size="sm">3</Badge>
           </View>
           
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Text>Messages</Text>
-            <Badge color="blue" size="small">12</Badge>
+            <Badge color="blue" size="sm">12</Badge>
           </View>
           
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Text>Status</Text>
             <Badge color="green" variant="dot" />
-            <Text size="small" color="secondary">Online</Text>
+            <Text size="sm" color="secondary">Online</Text>
           </View>
           
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <Button size="small" variant="outlined">
+            <Button size="sm" variant="outlined">
               Inbox
             </Button>
-            <Badge color="red" size="small">99+</Badge>
+            <Badge color="red" size="sm">99+</Badge>
           </View>
         </View>
       </View>
@@ -218,7 +218,7 @@ export const BadgeExamples = () => {
       <View spacing="md">
         <Text size="medium" weight="semibold">Icon-only Badges</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Badge color="blue" icon="star" size="small" />
+          <Badge color="blue" icon="star" size="sm" />
           <Badge color="green" icon="heart" size="medium" />
           <Badge color="red" icon="fire" size="large" />
           <Badge color="purple" icon="lightning-bolt" variant="outlined" />

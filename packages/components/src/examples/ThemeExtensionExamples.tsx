@@ -53,7 +53,7 @@ export const ThemeExtensionExamples = () => {
              <View spacing="sm">
                <Text color={"orange" as any} weight="bold">Orange Card Header</Text>
                <Text color="secondary">This card uses extended orange color for the header</Text>
-               <Button intent={"accent" as any} size="small">Accent Action</Button>
+               <Button intent={"accent" as any} size="sm">Accent Action</Button>
              </View>
            </Card>
            
@@ -61,7 +61,7 @@ export const ThemeExtensionExamples = () => {
              <View spacing="sm">
                <Text color={"teal" as any} weight="bold">Teal Card Header</Text>
                <Text color="secondary">This card uses extended teal color for the header</Text>
-               <Button intent={"feature" as any} size="small">Feature Action</Button>
+               <Button intent={"feature" as any} size="sm">Feature Action</Button>
              </View>
            </Card>
          </View>

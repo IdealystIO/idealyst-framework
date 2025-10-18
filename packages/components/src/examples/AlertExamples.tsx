@@ -147,10 +147,10 @@ export const AlertExamples = () => {
           message="You have unsaved changes. Do you want to save them?"
           actions={
             <View style={{ flexDirection: 'row', gap: 8 }}>
-              <Button variant="contained" intent="primary" size="small">
+              <Button variant="contained" intent="primary" size="sm">
                 Save
               </Button>
-              <Button variant="outlined" intent="neutral" size="small">
+              <Button variant="outlined" intent="neutral" size="sm">
                 Discard
               </Button>
             </View>
@@ -163,7 +163,7 @@ export const AlertExamples = () => {
           title="New Feature Available"
           message="Check out our new collaboration features."
           actions={
-            <Button variant="text" intent="primary" size="small">
+            <Button variant="text" intent="primary" size="sm">
               Learn More
             </Button>
           }
@@ -177,11 +177,11 @@ export const AlertExamples = () => {
           title="Custom Content"
         >
           <View spacing="sm">
-            <Text size="small">You can use children to add custom content:</Text>
+            <Text size="sm">You can use children to add custom content:</Text>
             <View style={{ paddingLeft: 16 }}>
-              <Text size="small">• Custom formatted text</Text>
-              <Text size="small">• Lists and structured content</Text>
-              <Text size="small">• Any React components</Text>
+              <Text size="sm">• Custom formatted text</Text>
+              <Text size="sm">• Lists and structured content</Text>
+              <Text size="sm">• Any React components</Text>
             </View>
           </View>
         </Alert>
@@ -198,10 +198,10 @@ export const AlertExamples = () => {
           onDismiss={() => console.log('Dismissed')}
           actions={
             <View style={{ flexDirection: 'row', gap: 8 }}>
-              <Button variant="outlined" size="small" onPress={() => console.log('View order')}>
+              <Button variant="outlined" size="sm" onPress={() => console.log('View order')}>
                 View Order
               </Button>
-              <Button variant="outlined" size="small" onPress={() => console.log('Track')}>
+              <Button variant="outlined" size="sm" onPress={() => console.log('Track')}>
                 Track Shipment
               </Button>
             </View>
