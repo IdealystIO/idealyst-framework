@@ -1,5 +1,10 @@
 import type { ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type RadioButtonIntentVariant = IntentVariant;
+export type RadioButtonSizeVariant = ButtonSize;
 
 export interface RadioButtonProps {
   value: string;
@@ -7,8 +12,8 @@ export interface RadioButtonProps {
   onPress?: () => void;
   disabled?: boolean;
   label?: string;
-  size?: 'small' | 'medium' | 'large';
-  intent?: 'primary' | 'success' | 'error' | 'warning' | 'neutral';
+  size?: RadioButtonSizeVariant;
+  intent?: RadioButtonIntentVariant;
   style?: ViewStyle;
   testID?: string;
 }

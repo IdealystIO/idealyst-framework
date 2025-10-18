@@ -1,4 +1,9 @@
 import { ViewStyle } from 'react-native';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type ActivityIndicatorIntentVariant = IntentVariant;
+export type ActivityIndicatorSizeVariant = ButtonSize | number;
 
 export interface ActivityIndicatorProps {
   /**
@@ -6,34 +11,34 @@ export interface ActivityIndicatorProps {
    * @default true
    */
   animating?: boolean;
-  
+
   /**
    * The size of the indicator
    * @default "medium"
    */
-  size?: 'small' | 'medium' | 'large' | number;
-  
+  size?: ActivityIndicatorSizeVariant;
+
   /**
    * The color/intent of the indicator
    * @default "primary"
    */
-  intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
-  
+  intent?: ActivityIndicatorIntentVariant;
+
   /**
    * Custom color to override intent
    */
   color?: string;
-  
+
   /**
    * Additional styles to apply to the container
    */
   style?: ViewStyle;
-  
+
   /**
    * Test identifier for testing
    */
   testID?: string;
-  
+
   /**
    * Whether to hide the indicator when not animating
    * @default true

@@ -1,18 +1,21 @@
 import { IconName } from "./icon-types";
-import type { DisplayColorVariant } from '../theme/variants';
+import type { DisplayColorVariant, IconSize } from '../theme/variants';
 
-export type IconSizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+/**
+ * @deprecated Use IconSize from theme instead
+ */
+export type IconSizeVariant = IconSize;
 
 export interface IconProps {
   /**
    * The name of the icon to display
    */
   name: IconName;
-  
+
   /**
    * The size variant of the icon
    */
-  size?: IconSizeVariant | number;
+  size?: IconSize | number;
 
   /**
    * Predefined color variant based on theme

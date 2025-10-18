@@ -1,7 +1,11 @@
 import React from 'react';
 import { ViewProps } from 'react-native';
 import { SvgProps } from 'react-native-svg';
-import { IntentNames } from '../theme';
+import { IntentVariant } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type SVGImageIntentVariant = IntentVariant;
+export type SVGImageResizeMode = 'contain' | 'cover' | 'stretch';
 
 export interface SVGImageProps extends Omit<ViewProps, 'children'> {
   source: string | { uri: string } | React.FC<SvgProps>;
@@ -9,6 +13,6 @@ export interface SVGImageProps extends Omit<ViewProps, 'children'> {
   height?: number | string;
   size?: number | string;
   color?: string;
-  intent?: IntentNames;
-  resizeMode?: 'contain' | 'cover' | 'stretch';
+  intent?: SVGImageIntentVariant;
+  resizeMode?: SVGImageResizeMode;
 }

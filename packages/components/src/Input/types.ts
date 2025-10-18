@@ -1,5 +1,11 @@
-import type { IntentVariant } from '../theme/variants';
+import type { IntentVariant, ButtonSize } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
+
+// Component-specific type aliases for future extensibility
+export type InputIntentVariant = IntentVariant;
+export type InputSizeVariant = ButtonSize;
+export type InputVariant = 'default' | 'outlined' | 'filled' | 'bare';
+export type InputTypeVariant = 'text' | 'email' | 'password' | 'number';
 
 export interface InputProps {
   /**
@@ -35,7 +41,7 @@ export interface InputProps {
   /**
    * The type of input (affects keyboard type on mobile)
    */
-  inputType?: 'text' | 'email' | 'password' | 'number';
+  inputType?: InputTypeVariant;
 
   /**
    * Whether to show the password
@@ -56,38 +62,38 @@ export interface InputProps {
    * Show password visibility toggle for password inputs (defaults to true for password type)
    */
   showPasswordToggle?: boolean;
-  
+
   /**
    * Auto-capitalization behavior
    */
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
-  
+
   /**
    * Size variant of the input
    */
-  size?: 'small' | 'medium' | 'large';
-  
+  size?: InputSizeVariant;
+
   /**
    * Style variant of the input
    */
-  variant?: 'default' | 'outlined' | 'filled' | 'bare';
-  
+  variant?: InputVariant;
+
   /**
    * The intent/color scheme of the input (for focus states, validation, etc.)
    */
-  intent?: IntentVariant;
-  
+  intent?: InputIntentVariant;
+
   /**
    * Whether the input has an error state
    * @deprecated Use intent="error" instead
    */
   hasError?: boolean;
-  
+
   /**
    * Additional styles (platform-specific)
    */
   style?: any;
-  
+
   /**
    * Test ID for testing
    */

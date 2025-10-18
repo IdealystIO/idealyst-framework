@@ -1,52 +1,60 @@
 import { ReactNode } from 'react';
 import type { IntentVariant } from '../theme/variants';
 
+// Component-specific type aliases for future extensibility
+export type DividerIntentVariant = IntentVariant;
+export type DividerOrientationVariant = 'horizontal' | 'vertical';
+export type DividerVariant = 'solid' | 'dashed' | 'dotted';
+export type DividerThicknessVariant = 'thin' | 'md' | 'thick';
+export type DividerLengthVariant = 'full' | 'auto' | number;
+export type DividerSpacingVariant = 'none' | 'sm' | 'md' | 'lg';
+
 export interface DividerProps {
   /**
    * The orientation of the divider
    */
-  orientation?: 'horizontal' | 'vertical';
-  
+  orientation?: DividerOrientationVariant;
+
   /**
    * The visual style variant of the divider
    */
-  variant?: 'solid' | 'dashed' | 'dotted';
-  
+  variant?: DividerVariant;
+
   /**
    * The thickness of the divider
    */
-  thickness?: 'thin' | 'medium' | 'thick';
-  
+  thickness?: DividerThicknessVariant;
+
   /**
    * The color intent of the divider
    */
-  intent?: IntentVariant;
-  
+  intent?: DividerIntentVariant;
+
   /**
    * The length of the divider (percentage or fixed)
    */
-  length?: 'full' | 'auto' | number;
-  
+  length?: DividerLengthVariant;
+
   /**
    * Spacing around the divider
    */
-  spacing?: 'none' | 'small' | 'medium' | 'large';
-  
+  spacing?: DividerSpacingVariant;
+
   /**
    * Content to display in the center of the divider (for horizontal dividers)
    */
   children?: ReactNode;
-  
+
   /**
    * Additional styles (platform-specific)
    */
   style?: any;
-  
+
   /**
    * Test ID for testing
    */
   testID?: string;
-  
+
   /**
    * Accessibility label
    */

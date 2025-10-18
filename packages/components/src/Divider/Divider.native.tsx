@@ -9,7 +9,7 @@ const Divider: React.FC<DividerProps> = ({
   thickness = 'thin',
   intent = 'neutral',
   length = 'full',
-  spacing = 'medium',
+  spacing = 'md',
   children,
   style,
   testID,
@@ -32,7 +32,7 @@ const Divider: React.FC<DividerProps> = ({
   const getThickness = () => {
     switch (thickness) {
       case 'thin': return 1;
-      case 'medium': return 2;
+      case 'md': return 2;
       case 'thick': return 4;
       default: return 1;
     }

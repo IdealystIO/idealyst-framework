@@ -1,37 +1,43 @@
 import { ReactNode } from 'react';
 import type { DisplayColorVariant } from '../theme/variants';
 
+// Component-specific type aliases for future extensibility
+export type TextColorVariant = DisplayColorVariant;
+export type TextSizeVariant = 'sm' | 'md' | 'lg' | 'xl';
+export type TextWeightVariant = 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
+export type TextAlignVariant = 'left' | 'center' | 'right';
+
 export interface TextProps {
   /**
    * The text content to display
    */
   children: ReactNode;
-  
+
   /**
    * The size variant of the text
    */
-  size?: 'small' | 'medium' | 'large' | 'xlarge';
-  
+  size?: TextSizeVariant;
+
   /**
    * The weight of the text
    */
-  weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
-  
+  weight?: TextWeightVariant;
+
   /**
    * The color of the text
    */
-  color?: DisplayColorVariant;
-  
+  color?: TextColorVariant;
+
   /**
    * Text alignment
    */
-  align?: 'left' | 'center' | 'right';
-  
+  align?: TextAlignVariant;
+
   /**
    * Additional styles (platform-specific)
    */
   style?: any;
-  
+
   /**
    * Test ID for testing
    */

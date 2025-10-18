@@ -1,5 +1,11 @@
 import type { ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type MenuIntentVariant = IntentVariant;
+export type MenuSizeVariant = ButtonSize;
+export type MenuPlacement = 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
 
 export interface MenuItem {
   id: string;
@@ -7,7 +13,7 @@ export interface MenuItem {
   onClick?: () => void;
   disabled?: boolean;
   icon?: IconName | React.ReactNode;
-  intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
+  intent?: MenuIntentVariant;
   separator?: boolean;
 }
 
@@ -16,9 +22,9 @@ export interface MenuProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   anchor: React.RefObject<HTMLElement>;
-  placement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
+  placement?: MenuPlacement;
   closeOnSelection?: boolean;
-  size?: 'small' | 'medium' | 'large';
+  size?: MenuSizeVariant;
   style?: ViewStyle;
   testID?: string;
 }

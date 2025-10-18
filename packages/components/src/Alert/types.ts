@@ -1,13 +1,15 @@
 import type { ViewStyle } from 'react-native';
+import type { IntentVariant } from '../theme';
 
-export type AlertIntent = 'success' | 'error' | 'warning' | 'info' | 'neutral';
+// Component-specific type aliases for future extensibility
+export type AlertIntentVariant = IntentVariant;
 export type AlertVariant = 'filled' | 'outlined' | 'soft';
 
 export interface AlertProps {
   title?: string;
   message?: string;
   children?: React.ReactNode;
-  intent?: AlertIntent;
+  intent?: AlertIntentVariant;
   variant?: AlertVariant;
   icon?: React.ReactNode;
   showIcon?: boolean;

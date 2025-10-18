@@ -1,9 +1,18 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
+import type { ButtonSize, IntentVariant } from '../theme';
 
-export type ChipSize = 'small' | 'medium' | 'large';
+/**
+ * @deprecated Use ButtonSize from theme instead (chips use same sizes as buttons)
+ */
+export type ChipSize = ButtonSize;
+
 export type ChipVariant = 'filled' | 'outlined' | 'soft';
-export type ChipIntent = 'primary' | 'neutral' | 'success' | 'error' | 'warning';
+
+/**
+ * @deprecated Use IntentVariant from theme instead
+ */
+export type ChipIntent = IntentVariant;
 
 export interface ChipProps {
   /** The text content of the chip */

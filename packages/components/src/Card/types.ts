@@ -1,57 +1,63 @@
 import { ReactNode } from 'react';
 import type { IntentVariant } from '../theme/variants';
 
+// Component-specific type aliases for future extensibility
+export type CardIntentVariant = IntentVariant;
+export type CardVariant = 'default' | 'outlined' | 'elevated' | 'filled';
+export type CardPaddingVariant = 'none' | 'sm' | 'md' | 'lg';
+export type CardRadiusVariant = 'none' | 'sm' | 'md' | 'lg';
+
 export interface CardProps {
   /**
    * The content to display inside the card
    */
   children?: ReactNode;
-  
+
   /**
    * The visual style variant of the card
    */
-  variant?: 'default' | 'outlined' | 'elevated' | 'filled';
-  
+  variant?: CardVariant;
+
   /**
    * The padding size inside the card
    */
-  padding?: 'none' | 'small' | 'medium' | 'large';
-  
+  padding?: CardPaddingVariant;
+
   /**
    * The border radius of the card
    */
-  radius?: 'none' | 'small' | 'medium' | 'large';
-  
+  radius?: CardRadiusVariant;
+
   /**
    * The intent/color scheme of the card
    */
-  intent?: IntentVariant;
-  
+  intent?: CardIntentVariant;
+
   /**
    * Whether the card is clickable
    */
   clickable?: boolean;
-  
+
   /**
    * Called when the card is pressed (if clickable)
    */
   onPress?: () => void;
-  
+
   /**
    * Whether the card is disabled
    */
   disabled?: boolean;
-  
+
   /**
    * Additional styles (platform-specific)
    */
   style?: any;
-  
+
   /**
    * Test ID for testing
    */
   testID?: string;
-  
+
   /**
    * Accessibility label
    */

@@ -1,5 +1,10 @@
 import type { ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type SwitchIntentVariant = IntentVariant;
+export type SwitchSizeVariant = ButtonSize;
 
 export interface SwitchProps {
   checked?: boolean;
@@ -7,8 +12,8 @@ export interface SwitchProps {
   disabled?: boolean;
   label?: string;
   labelPosition?: 'left' | 'right';
-  intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
-  size?: 'small' | 'medium' | 'large';
+  intent?: SwitchIntentVariant;
+  size?: SwitchSizeVariant;
   enabledIcon?: IconName | React.ReactNode;
   disabledIcon?: IconName | React.ReactNode;
   style?: ViewStyle;

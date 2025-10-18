@@ -1,11 +1,17 @@
 import type { ViewStyle } from 'react-native';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type ProgressIntentVariant = IntentVariant;
+export type ProgressSizeVariant = ButtonSize;
+export type ProgressVariant = 'linear' | 'circular';
 
 export interface ProgressProps {
   value?: number;
   max?: number;
-  variant?: 'linear' | 'circular';
-  intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
-  size?: 'small' | 'medium' | 'large';
+  variant?: ProgressVariant;
+  intent?: ProgressIntentVariant;
+  size?: ProgressSizeVariant;
   indeterminate?: boolean;
   showLabel?: boolean;
   label?: string;

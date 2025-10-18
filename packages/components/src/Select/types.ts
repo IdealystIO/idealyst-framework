@@ -1,5 +1,10 @@
 import { ReactNode } from 'react';
-import type { IntentVariant } from '../theme/variants';
+import type { IntentVariant, ButtonSize } from '../theme/variants';
+
+// Component-specific type aliases for future extensibility
+export type SelectIntentVariant = IntentVariant;
+export type SelectSizeVariant = ButtonSize;
+export type SelectVariant = 'outlined' | 'filled';
 
 export interface SelectOption {
   /**
@@ -67,17 +72,17 @@ export interface SelectProps {
   /**
    * The visual variant of the select
    */
-  variant?: 'outlined' | 'filled';
+  variant?: SelectVariant;
 
   /**
    * The intent/color scheme of the select
    */
-  intent?: IntentVariant;
+  intent?: SelectIntentVariant;
 
   /**
    * The size of the select
    */
-  size?: 'small' | 'medium' | 'large';
+  size?: SelectSizeVariant;
 
   /**
    * Whether to show a search/filter input (web only)

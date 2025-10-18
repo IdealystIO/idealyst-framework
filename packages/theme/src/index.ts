@@ -38,6 +38,9 @@ import { breakpoints } from './breakpoints';
 // Note: Removed import from ../unistyles to prevent circular dependency
 // when navigation package imports from this theme index
 
+// Import standardized type definitions
+export * from './types';
+
 // Re-export everything for external use
 export {
   // Primary theme creation functions - exported directly

@@ -1,6 +1,11 @@
 import { ReactNode } from 'react';
-import type { DisplayColorVariant } from '../theme/variants';
+import type { DisplayColorVariant, BadgeSize } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
+
+// Component-specific type aliases for future extensibility
+export type BadgeColorVariant = DisplayColorVariant;
+export type BadgeSizeVariant = BadgeSize;
+export type BadgeVariant = 'filled' | 'outlined' | 'dot';
 
 export interface BadgeProps {
   /**
@@ -11,17 +16,17 @@ export interface BadgeProps {
   /**
    * The size of the badge
    */
-  size?: 'small' | 'medium' | 'large';
+  size?: BadgeSizeVariant;
 
   /**
    * The visual style variant of the badge
    */
-  variant?: 'filled' | 'outlined' | 'dot';
+  variant?: BadgeVariant;
 
   /**
    * The color scheme of the badge
    */
-  color?: DisplayColorVariant;
+  color?: BadgeColorVariant;
 
   /**
    * Icon to display. Can be an icon name or custom component (ReactNode)

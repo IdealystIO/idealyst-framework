@@ -1,4 +1,10 @@
 import type { ViewStyle, TextStyle } from 'react-native';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type TextAreaIntentVariant = IntentVariant;
+export type TextAreaSizeVariant = ButtonSize;
+export type TextAreaResizeVariant = 'none' | 'vertical' | 'horizontal' | 'both';
 
 export interface TextAreaProps {
   value?: string;
@@ -14,10 +20,10 @@ export interface TextAreaProps {
   label?: string;
   error?: string;
   helperText?: string;
-  resize?: 'none' | 'vertical' | 'horizontal' | 'both';
+  resize?: TextAreaResizeVariant;
   showCharacterCount?: boolean;
-  intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
-  size?: 'small' | 'medium' | 'large';
+  intent?: TextAreaIntentVariant;
+  size?: TextAreaSizeVariant;
   style?: ViewStyle;
   textareaStyle?: TextStyle;
   testID?: string;

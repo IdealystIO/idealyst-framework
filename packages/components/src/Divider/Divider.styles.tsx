@@ -109,7 +109,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
       },
       {
         orientation: 'horizontal',
-        thickness: 'medium',
+        thickness: 'md',
         styles: {
           height: 2,
         },
@@ -131,7 +131,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
       },
       {
         orientation: 'vertical',
-        thickness: 'medium',
+        thickness: 'md',
         styles: {
           width: 2,
         },
@@ -153,7 +153,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
       },
       {
         orientation: 'horizontal',
-        spacing: 'medium',
+        spacing: 'md',
         styles: {
           marginVertical: theme.spacing?.md || 12,
         },
@@ -175,7 +175,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
       },
       {
         orientation: 'vertical',
-        spacing: 'medium',
+        spacing: 'md',
         styles: {
           marginHorizontal: theme.spacing?.md || 12,
         },
@@ -563,7 +563,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
       },
       {
         orientation: 'horizontal',
-        thickness: 'medium',
+        thickness: 'md',
         styles: {
           height: 2,
         },
@@ -585,7 +585,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
       },
       {
         orientation: 'vertical',
-        thickness: 'medium',
+        thickness: 'md',
         styles: {
           width: 2,
         },

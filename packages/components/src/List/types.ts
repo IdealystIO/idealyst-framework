@@ -1,6 +1,11 @@
 import type { ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { IconName } from '../Icon/icon-types';
+import type { ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type ListSizeVariant = ButtonSize;
+export type ListVariant = 'default' | 'bordered' | 'divided';
 
 export interface ListItemProps {
   id?: string;
@@ -12,7 +17,7 @@ export interface ListItemProps {
   selected?: boolean;
   disabled?: boolean;
   indent?: number;
-  size?: 'small' | 'medium' | 'large';
+  size?: ListSizeVariant;
   onPress?: () => void;
   style?: ViewStyle;
   testID?: string;
@@ -20,8 +25,8 @@ export interface ListItemProps {
 
 export interface ListProps {
   children: ReactNode;
-  variant?: 'default' | 'bordered' | 'divided';
-  size?: 'small' | 'medium' | 'large';
+  variant?: ListVariant;
+  size?: ListSizeVariant;
   style?: ViewStyle;
   testID?: string;
 }

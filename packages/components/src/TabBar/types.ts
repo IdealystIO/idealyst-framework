@@ -1,4 +1,10 @@
 import type { ViewStyle } from 'react-native';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type TabBarIntentVariant = IntentVariant;
+export type TabBarSizeVariant = ButtonSize;
+export type TabBarVariant = 'default' | 'pills' | 'underline';
 
 export interface TabBarItem {
   value: string;
@@ -11,9 +17,9 @@ export interface TabBarProps {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
-  variant?: 'default' | 'pills' | 'underline';
-  size?: 'small' | 'medium' | 'large';
-  intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
+  variant?: TabBarVariant;
+  size?: TabBarSizeVariant;
+  intent?: TabBarIntentVariant;
   style?: ViewStyle;
   testID?: string;
 }

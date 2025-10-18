@@ -1,5 +1,10 @@
 import type { ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type SliderIntentVariant = IntentVariant;
+export type SliderSizeVariant = ButtonSize;
 
 export interface SliderProps {
   value?: number;
@@ -11,8 +16,8 @@ export interface SliderProps {
   showValue?: boolean;
   showMinMax?: boolean;
   marks?: SliderMark[];
-  intent?: 'primary' | 'success' | 'error' | 'warning' | 'neutral';
-  size?: 'small' | 'medium' | 'large';
+  intent?: SliderIntentVariant;
+  size?: SliderSizeVariant;
   icon?: IconName | React.ReactNode;
   onValueChange?: (value: number) => void;
   onValueCommit?: (value: number) => void;

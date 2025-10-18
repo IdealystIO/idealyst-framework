@@ -1,12 +1,18 @@
 import type { ViewStyle } from 'react-native';
+import type { IntentVariant, ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type TooltipIntentVariant = IntentVariant;
+export type TooltipSizeVariant = ButtonSize;
+export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 export interface TooltipProps {
   content: string | React.ReactNode;
   children: React.ReactNode;
-  placement?: 'top' | 'bottom' | 'left' | 'right';
+  placement?: TooltipPlacement;
   delay?: number;
-  intent?: 'primary' | 'neutral' | 'success' | 'error' | 'warning';
-  size?: 'small' | 'medium' | 'large';
+  intent?: TooltipIntentVariant;
+  size?: TooltipSizeVariant;
   style?: ViewStyle;
   testID?: string;
 }

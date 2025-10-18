@@ -1,5 +1,10 @@
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
+import type { ButtonSize } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type BreadcrumbIntentVariant = 'primary' | 'neutral';
+export type BreadcrumbSizeVariant = ButtonSize;
 
 export interface BreadcrumbItem {
   /** Label text for the breadcrumb item */
@@ -26,10 +31,10 @@ export interface BreadcrumbProps {
   maxItems?: number;
 
   /** Intent color for links */
-  intent?: 'primary' | 'neutral';
+  intent?: BreadcrumbIntentVariant;
 
   /** Size of the breadcrumb text */
-  size?: 'small' | 'medium' | 'large';
+  size?: BreadcrumbSizeVariant;
 
   /** Custom container style */
   style?: StyleProp<ViewStyle>;

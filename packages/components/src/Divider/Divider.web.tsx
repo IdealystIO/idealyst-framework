@@ -9,7 +9,7 @@ const Divider: React.FC<DividerProps> = ({
   thickness = 'thin',
   intent = 'neutral',
   length = 'full',
-  spacing = 'medium',
+  spacing = 'md',
   children,
   style,
   testID,

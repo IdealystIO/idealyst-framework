@@ -7,8 +7,10 @@ export type AppTheme = typeof lightTheme;
 export type AppIntents = typeof lightTheme.intents;
 export type AppColors = typeof lightTheme.colors;
 export type AppPalettes = typeof lightTheme.palettes;
-export type IntentNames = keyof AppIntents;
-export type ColorNames = keyof AppColors;
+
+// Utility types to extract keys from theme
+export type ThemeIntentKeys = keyof AppIntents;
+export type ThemeColorKeys = keyof AppColors;
 
 // Unistyles v3 themes declaration
 declare module 'react-native-unistyles' {
