@@ -167,8 +167,7 @@ export const accordionStyles = StyleSheet.create((theme) => ({
 
   content: {
     overflow: 'hidden',
-    transition: 'max-height 0.3s ease, padding 0.3s ease',
-    maxHeight: 0,
+    transition: 'height 0.15s ease, padding 0.3s ease',
 
     variants: {
       expanded: {

@@ -31,14 +31,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     intent,
   });
 
-  // Measure height after render and when content changes
-  useEffect(() => {
-    if (contentInnerRef.current) {
-      const height = contentInnerRef.current.scrollHeight;
-      setContentHeight(height);
-    }
-  }, [item.content]);
-
   // Note: Variants are applied globally in parent Accordion component
   // We use inline styles for per-item dynamic values (expanded, disabled)
   const itemProps = getWebProps([accordionStyles.item]);
@@ -47,6 +39,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const iconProps = getWebProps([accordionStyles.icon]);
   const contentProps = getWebProps([accordionStyles.content]);
   const contentInnerProps = getWebProps([accordionStyles.contentInner]);
+
+  const handleToggle = () => {
+    if (contentInnerRef.current) {
+      setContentHeight(contentInnerRef.current.getBoundingClientRect().height);
+    }
+    onToggle();
+  }
+
+  console.log(isExpanded, contentHeight);
 
   return (
     <div
@@ -61,7 +62,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           opacity: item.disabled ? 0.5 : 1,
           cursor: item.disabled ? 'not-allowed' : 'pointer',
         }}
-        onClick={onToggle}
+        onClick={handleToggle}
         disabled={item.disabled}
         aria-expanded={isExpanded}
         aria-disabled={item.disabled}
@@ -92,14 +93,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         {...contentProps}
         style={{
           ...contentProps.style,
-          height: isExpanded ? `${contentHeight}px` : '0px',
+          height: isExpanded ? contentHeight : 0,
           overflow: 'hidden',
-          transition: 'height 0.3s ease',
         }}
         aria-hidden={!isExpanded}
       >
-        <div ref={contentInnerRef} {...contentInnerProps}>
-          {item.content}
+        <div ref={contentInnerRef}>
+          <div {...contentInnerProps}>
+            {item.content}
+          </div>
         </div>
       </div>
     </div>
