@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { IntentVariant, ButtonSize } from '../theme';
 
@@ -14,7 +14,7 @@ export interface RadioButtonProps {
   label?: string;
   size?: RadioButtonSizeVariant;
   intent?: RadioButtonIntentVariant;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 
@@ -24,6 +24,6 @@ export interface RadioGroupProps {
   disabled?: boolean;
   orientation?: 'horizontal' | 'vertical';
   children: ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }

@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { IntentVariant, ButtonSize } from '../theme';
 
 // Component-specific type aliases for future extensibility
@@ -13,6 +13,6 @@ export interface TooltipProps {
   delay?: number;
   intent?: TooltipIntentVariant;
   size?: TooltipSizeVariant;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }

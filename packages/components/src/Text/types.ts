@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import type { StyleProp, TextStyle } from 'react-native';
 import type { DisplayColorVariant } from '../theme/variants';
 
 // Component-specific type aliases for future extensibility
@@ -36,7 +37,7 @@ export interface TextProps {
   /**
    * Additional styles (platform-specific)
    */
-  style?: any;
+  style?: StyleProp<TextStyle>;
 
   /**
    * Test ID for testing

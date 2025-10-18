@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import type { IntentVariant, ButtonSize } from '../theme';
 
@@ -16,6 +16,6 @@ export interface SwitchProps {
   size?: SwitchSizeVariant;
   enabledIcon?: IconName | React.ReactNode;
   disabledIcon?: IconName | React.ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }

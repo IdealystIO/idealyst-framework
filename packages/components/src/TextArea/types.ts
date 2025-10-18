@@ -1,4 +1,4 @@
-import type { ViewStyle, TextStyle } from 'react-native';
+import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { IntentVariant, ButtonSize } from '../theme';
 
 // Component-specific type aliases for future extensibility
@@ -24,7 +24,7 @@ export interface TextAreaProps {
   showCharacterCount?: boolean;
   intent?: TextAreaIntentVariant;
   size?: TextAreaSizeVariant;
-  style?: ViewStyle;
-  textareaStyle?: TextStyle;
+  style?: StyleProp<ViewStyle>;
+  textareaStyle?: StyleProp<TextStyle>;
   testID?: string;
 }

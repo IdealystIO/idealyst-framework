@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { DisplayColorVariant, BadgeSize } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
 
@@ -36,7 +37,7 @@ export interface BadgeProps {
   /**
    * Additional styles
    */
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

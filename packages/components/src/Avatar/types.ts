@@ -1,3 +1,4 @@
+import type { StyleProp, ViewStyle, ImageSourcePropType } from 'react-native';
 import type { ColorVariant } from '../theme/variants';
 
 // Component-specific type aliases for future extensibility
@@ -9,7 +10,7 @@ export interface AvatarProps {
   /**
    * Image source (URL or require())
    */
-  src?: string | any;
+  src?: string | ImageSourcePropType;
 
   /**
    * Alt text for the image
@@ -39,7 +40,7 @@ export interface AvatarProps {
   /**
    * Additional styles
    */
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

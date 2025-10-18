@@ -1,4 +1,4 @@
-import type { ViewStyle, TextStyle } from 'react-native';
+import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { IconName } from '../Icon/icon-types';
 import type { ButtonSize } from '../theme';
@@ -19,7 +19,7 @@ export interface ListItemProps {
   indent?: number;
   size?: ListSizeVariant;
   onPress?: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 
@@ -27,7 +27,7 @@ export interface ListProps {
   children: ReactNode;
   variant?: ListVariant;
   size?: ListSizeVariant;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 
@@ -35,6 +35,6 @@ export interface ListSectionProps {
   title?: string;
   children: ReactNode;
   collapsed?: boolean;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }

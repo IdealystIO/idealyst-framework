@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { IntentVariant, ButtonSize } from '../theme';
 
 // Component-specific type aliases for future extensibility
@@ -20,6 +20,6 @@ export interface AccordionProps {
   variant?: AccordionVariant;
   intent?: AccordionIntentVariant;
   size?: AccordionSizeVariant;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }

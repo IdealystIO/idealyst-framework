@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import type { IntentVariant, ButtonSize } from '../theme';
 
@@ -21,7 +21,7 @@ export interface SliderProps {
   icon?: IconName | React.ReactNode;
   onValueChange?: (value: number) => void;
   onValueCommit?: (value: number) => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 

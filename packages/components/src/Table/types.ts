@@ -1,4 +1,4 @@
-import type { ViewStyle, TextStyle } from 'react-native';
+import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { ButtonSize } from '../theme';
 
@@ -23,6 +23,6 @@ export interface TableProps<T = any> {
   size?: TableSizeVariant;
   stickyHeader?: boolean;
   onRowPress?: (row: T, index: number) => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }

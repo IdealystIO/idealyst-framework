@@ -1,4 +1,4 @@
-import type { ImageStyle, ImageSourcePropType } from 'react-native';
+import type { StyleProp, ImageStyle, ImageSourcePropType } from 'react-native';
 
 export type ImageObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 
@@ -15,7 +15,7 @@ export interface ImageProps {
   onLoad?: () => void;
   onError?: (error: any) => void;
   borderRadius?: number;
-  style?: ImageStyle;
+  style?: StyleProp<ImageStyle>;
   testID?: string;
   accessibilityLabel?: string;
 }

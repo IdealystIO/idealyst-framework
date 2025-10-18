@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 export interface VideoSource {
   uri: string;
@@ -24,6 +24,6 @@ export interface VideoProps {
   onEnd?: () => void;
   onProgress?: (progress: { currentTime: number; playableDuration: number }) => void;
   borderRadius?: number;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }

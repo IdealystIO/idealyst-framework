@@ -1,6 +1,12 @@
-import { ReactNode } from 'react';
-import type { IntentVariant } from '../theme/variants';
+import type { ReactNode } from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
+import type { IntentVariant, ButtonSize } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
+
+// Component-specific type aliases for future extensibility
+export type ButtonVariant = 'contained' | 'outlined' | 'text';
+export type ButtonIntentVariant = IntentVariant;
+export type ButtonSizeVariant = ButtonSize;
 
 export interface ButtonProps {
   /**
@@ -26,17 +32,17 @@ export interface ButtonProps {
   /**
    * The visual style variant of the button
    */
-  variant?: 'contained' | 'outlined' | 'text';
+  variant?: ButtonVariant;
 
   /**
    * The intent/color scheme of the button
    */
-  intent?: IntentVariant;
+  intent?: ButtonIntentVariant;
 
   /**
    * The size of the button
    */
-  size?: 'small' | 'medium' | 'large';
+  size?: ButtonSizeVariant;
 
   /**
    * Icon to display on the left side. Can be an icon name or custom component (ReactNode)
@@ -51,7 +57,7 @@ export interface ButtonProps {
   /**
    * Additional styles (platform-specific)
    */
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

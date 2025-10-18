@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { IntentVariant, ButtonSize } from '../theme';
 
@@ -21,7 +21,7 @@ export interface TabsProps {
   variant?: TabsVariant;
   size?: TabsSizeVariant;
   intent?: TabsIntentVariant;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
   children: ReactNode;
 }

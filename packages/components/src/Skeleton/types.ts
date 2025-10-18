@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 export type SkeletonShape = 'rectangle' | 'circle' | 'rounded';
 export type SkeletonAnimation = 'pulse' | 'wave' | 'none';
@@ -37,7 +37,7 @@ export interface SkeletonProps {
   /**
    * Additional custom styles
    */
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing
@@ -66,7 +66,7 @@ export interface SkeletonGroupProps {
   /**
    * Additional custom styles for the container
    */
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

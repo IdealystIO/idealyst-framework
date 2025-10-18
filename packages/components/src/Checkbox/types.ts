@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { IntentVariant, ButtonSize } from '../theme/variants';
 
 // Component-specific type aliases for future extensibility
@@ -55,7 +56,7 @@ export interface CheckboxProps {
   /**
    * Additional styles (platform-specific)
    */
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

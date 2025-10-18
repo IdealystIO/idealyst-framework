@@ -1,4 +1,5 @@
-import { IconName } from "./icon-types";
+import type { StyleProp, ViewStyle } from 'react-native';
+import type { IconName } from "./icon-types";
 import type { DisplayColorVariant, IconSize } from '../theme/variants';
 
 /**
@@ -21,17 +22,17 @@ export interface IconProps {
    * Predefined color variant based on theme
    */
   color?: DisplayColorVariant;
-  
+
   /**
    * Additional styles (platform-specific)
    */
-  style?: any;
-  
+  style?: StyleProp<ViewStyle>;
+
   /**
    * Test ID for testing
    */
   testID?: string;
-  
+
   /**
    * Accessibility label for screen readers
    */

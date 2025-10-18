@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { IntentVariant } from '../theme/variants';
 
 // Component-specific type aliases for future extensibility
@@ -51,7 +52,7 @@ export interface CardProps {
   /**
    * Additional styles (platform-specific)
    */
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

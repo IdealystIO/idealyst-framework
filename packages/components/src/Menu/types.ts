@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import type { IntentVariant, ButtonSize } from '../theme';
 
@@ -25,6 +25,6 @@ export interface MenuProps {
   placement?: MenuPlacement;
   closeOnSelection?: boolean;
   size?: MenuSizeVariant;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }

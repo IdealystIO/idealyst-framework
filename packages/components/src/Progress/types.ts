@@ -1,4 +1,4 @@
-import type { ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { IntentVariant, ButtonSize } from '../theme';
 
 // Component-specific type aliases for future extensibility
@@ -16,6 +16,6 @@ export interface ProgressProps {
   showLabel?: boolean;
   label?: string;
   rounded?: boolean;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }
