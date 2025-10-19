@@ -37,14 +37,13 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const contentProps = getWebProps([accordionStyles.content]);
   const contentInnerProps = getWebProps([accordionStyles.contentInner]);
 
-  const handleToggle = () => {
-    if (contentInnerRef.current) {
+  useEffect(() => {
+    if (isExpanded) {
       setContentHeight(contentInnerRef.current.getBoundingClientRect().height);
+    } else {
+      setContentHeight(0);
     }
-    onToggle();
-  }
-
-  console.log(isExpanded, contentHeight);
+  }, [isExpanded]);
 
   return (
     <div
@@ -59,7 +58,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           opacity: item.disabled ? 0.5 : 1,
           cursor: item.disabled ? 'not-allowed' : 'pointer',
         }}
-        onClick={handleToggle}
+        onClick={onToggle}
         disabled={item.disabled}
         aria-expanded={isExpanded}
         aria-disabled={item.disabled}
