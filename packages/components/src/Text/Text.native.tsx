@@ -6,7 +6,7 @@ import textStyles from './Text.styles';
 
 const Text: React.FC<TextProps> = ({
   children,
-  size = 'medium',
+  size = 'md',
   weight = 'normal',
   color,
   align = 'left',

@@ -1,107 +1,121 @@
-import React from 'react';
 import { Screen, View, Text } from '../index';
 
 export const ViewExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
-      <Text size="large" weight="bold" align="center">
+      <Text size="lg" weight="bold" align="center">
         View Examples
       </Text>
-      
+
       {/* Spacing Examples */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Spacing Variants</Text>
+        <Text size="md" weight="semibold">Spacing Variants</Text>
         <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
-          <View spacing="none" background="surface" border="thin">
-            <Text size="small">None</Text>
+          <View spacing="none" background="secondary" border="thin">
+            <Text size="sm">None</Text>
           </View>
-          <View spacing="xs" background="surface" border="thin">
-            <Text size="small">XS</Text>
+          <View spacing="xs" background="secondary" border="thin">
+            <Text size="sm">XS</Text>
           </View>
-          <View spacing="sm" background="surface" border="thin">
-            <Text size="small">SM</Text>
+          <View spacing="sm" background="secondary" border="thin">
+            <Text size="sm">SM</Text>
           </View>
-          <View spacing="md" background="surface" border="thin">
-            <Text size="small">MD</Text>
+          <View spacing="md" background="secondary" border="thin">
+            <Text size="sm">MD</Text>
           </View>
-          <View spacing="lg" background="surface" border="thin">
-            <Text size="small">LG</Text>
+          <View spacing="lg" background="secondary" border="thin">
+            <Text size="sm">LG</Text>
           </View>
-          <View spacing="xl" background="surface" border="thin">
-            <Text size="small">XL</Text>
+          <View spacing="xl" background="secondary" border="thin">
+            <Text size="sm">XL</Text>
           </View>
         </View>
       </View>
 
       {/* Background Examples */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Background Variants</Text>
+        <Text size="md" weight="semibold">Background Variants</Text>
         <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
-          <View background="transparent" border="thin" spacing="sm">
-            <Text size="small">Transparent</Text>
+          <View background="transparent" border="thin" spacing="sm" radius="sm">
+            <Text size="sm" color="primary">Transparent</Text>
           </View>
-          <View background="surface" spacing="sm">
-            <Text size="small">Surface</Text>
+          <View background="primary" spacing="sm" radius="sm">
+            <Text size="sm" color="primary">Primary</Text>
           </View>
-          <View background="primary" spacing="sm">
-            <Text size="small" color="primary">Primary</Text>
+          <View background="secondary" spacing="sm" radius="sm">
+            <Text size="sm" color="secondary">Secondary</Text>
           </View>
-          <View background="secondary" spacing="sm">
-            <Text size="small" color="secondary">Secondary</Text>
+          <View background="tertiary" spacing="sm" radius="sm">
+            <Text size="sm" color="tertiary">Tertiary</Text>
+          </View>
+          <View background="elevated" spacing="sm" radius="sm" border="thin">
+            <Text size="sm" color="primary">Elevated</Text>
+          </View>
+          <View background="overlay" spacing="sm" radius="sm">
+            <Text size="sm" color="inverse">Overlay</Text>
+          </View>
+          <View background="inverse" spacing="sm" radius="sm">
+            <Text size="sm" color="inverse">Inverse (of primary)</Text>
+          </View>
+          <View background="inverse-secondary" spacing="sm" radius="sm">
+            <Text size="sm" color="inverse-secondary">Inverse Secondary</Text>
+          </View>
+          <View background="inverse-tertiary" spacing="sm" radius="sm">
+            <Text size="sm" color="inverse-tertiary">Inverse Tertiary</Text>
           </View>
         </View>
       </View>
 
       {/* Border Radius Examples */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Border Radius</Text>
+        <Text size="md" weight="semibold">Border Radius</Text>
         <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
-          <View radius="none" background="surface" spacing="sm" border="thin">
-            <Text size="small">None</Text>
+          <View radius="none" background="inverse" spacing="sm">
+            <Text size="sm" color="inverse">None</Text>
           </View>
-          <View radius="xs" background="surface" spacing="sm" border="thin">
-            <Text size="small">XS</Text>
+          <View radius="xs" background="inverse" spacing="sm">
+            <Text size="sm" color="inverse">XS</Text>
           </View>
-          <View radius="sm" background="surface" spacing="sm" border="thin">
-            <Text size="small">SM</Text>
+          <View radius="sm" background="inverse" spacing="sm">
+            <Text size="sm" color="inverse">SM</Text>
           </View>
-          <View radius="md" background="surface" spacing="sm" border="thin">
-            <Text size="small">MD</Text>
+          <View radius="md" background="inverse" spacing="sm">
+            <Text size="sm" color="inverse">MD</Text>
           </View>
-          <View radius="lg" background="surface" spacing="sm" border="thin">
-            <Text size="small">LG</Text>
+          <View radius="lg" background="inverse" spacing="sm">
+            <Text size="sm" color="inverse">LG</Text>
           </View>
-          <View radius="xl" background="surface" spacing="sm" border="thin">
-            <Text size="small">XL</Text>
+          <View radius="xl" background="inverse" spacing="sm">
+            <Text size="sm" color="inverse">XL</Text>
           </View>
         </View>
       </View>
 
       {/* Border Examples */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Border Variants</Text>
+        <Text size="md" weight="semibold">Border Variants</Text>
         <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
-          <View border="none" background="surface" spacing="sm" radius="sm">
-            <Text size="small">None</Text>
+          <View border="none" background="secondary" spacing="sm" radius="sm">
+            <Text size="sm">None</Text>
           </View>
-          <View border="thin" background="surface" spacing="sm" radius="sm">
-            <Text size="small">Thin</Text>
+          <View border="thin" background="secondary" spacing="sm" radius="sm">
+            <Text size="sm">Thin</Text>
           </View>
-          <View border="thick" background="surface" spacing="sm" radius="sm">
-            <Text size="small">Thick</Text>
+          <View border="thick" background="secondary" spacing="sm" radius="sm">
+            <Text size="sm">Thick</Text>
           </View>
         </View>
       </View>
 
       {/* Layout Examples */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Layout Examples</Text>
+        <Text size="md" weight="semibold">Layout Examples</Text>
         <View spacing="sm" style={{ gap: 10 }}>
-          <View 
-            background="surface" 
-            spacing="md" 
-            radius="md" 
+          <View
+            background="secondary"
+            spacing="md"
+            radius="md"
             border="thin"
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
@@ -109,11 +123,11 @@ export const ViewExamples = () => {
             <Text>Center</Text>
             <Text>Right</Text>
           </View>
-          
-          <View 
-            background="surface" 
-            spacing="md" 
-            radius="md" 
+
+          <View
+            background="secondary"
+            spacing="md"
+            radius="md"
             border="thin"
             style={{ flexDirection: 'column', alignItems: 'center' }}
           >

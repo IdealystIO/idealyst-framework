@@ -1,5 +1,10 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import type { BackgroundVariant, SpacingVariant } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type ScreenBackgroundVariant = BackgroundVariant;
+export type ScreenPaddingVariant = SpacingVariant;
 
 export interface ScreenProps {
   /**
@@ -10,12 +15,12 @@ export interface ScreenProps {
   /**
    * Background variant - controls the background color
    */
-  background?: 'primary' | 'secondary' | 'tertiary' | 'inverse';
+  background?: ScreenBackgroundVariant;
 
   /**
    * Screen padding variant
    */
-  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  padding?: ScreenPaddingVariant;
 
   /**
    * Safe area padding for mobile devices

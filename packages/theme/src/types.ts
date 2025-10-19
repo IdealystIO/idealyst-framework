@@ -90,7 +90,22 @@ export type PaletteColor = ColorVariant;
 // =============================================================================
 
 /**
- * Semantic color variants for text and display elements
+ * Text color variants for text elements
+ */
+export type TextColorVariant =
+  | 'primary'             // Main text color (dark on light, light on dark)
+  | 'secondary'           // Secondary text color
+  | 'tertiary'            // Tertiary text color
+  | 'inverse'             // Inverse of primary (light on light, dark on dark)
+  | 'inverse-secondary'   // Inverse of secondary
+  | 'inverse-tertiary'    // Inverse of tertiary
+  | 'disabled'            // Disabled state color
+  | 'muted'               // Muted/subdued color
+  | 'placeholder';        // Placeholder text color
+
+/**
+ * Semantic color variants for text and display elements (deprecated, use TextColorVariant)
+ * @deprecated Use TextColorVariant instead
  */
 export type SemanticColorVariant =
   | 'primary'      // Main text/content color
@@ -104,12 +119,15 @@ export type SemanticColorVariant =
  * Background color variants for surfaces
  */
 export type BackgroundVariant =
-  | 'primary'      // Main background
-  | 'secondary'    // Secondary background
-  | 'tertiary'     // Tertiary background
-  | 'elevated'     // Elevated surface
-  | 'overlay'      // Overlay/modal background
-  | 'inverse';     // Inverse background
+  | 'transparent'         // Transparent background
+  | 'primary'             // Main background (white on light, dark on dark)
+  | 'secondary'           // Secondary background (off-white/gray on light)
+  | 'tertiary'            // Tertiary background
+  | 'elevated'            // Elevated surface (with shadow)
+  | 'overlay'             // Overlay/modal background
+  | 'inverse'             // Inverse of primary (dark on light, light on dark)
+  | 'inverse-secondary'   // Inverse of secondary
+  | 'inverse-tertiary';   // Inverse of tertiary
 
 /**
  * Border color variants
@@ -122,9 +140,9 @@ export type BorderVariant =
   | 'disabled';    // Disabled state border
 
 /**
- * Combined color variant including palette and semantic colors
+ * Combined color variant including palette and text colors
  */
-export type DisplayColorVariant = ColorVariant | SemanticColorVariant;
+export type DisplayColorVariant = ColorVariant | TextColorVariant;
 
 // =============================================================================
 // SPACING SYSTEM
@@ -223,6 +241,7 @@ export type {
   ColorVariant as Color,
   ColorShade as Shade,
   BackgroundVariant as Background,
+  TextColorVariant as TextColor,
   SemanticColorVariant as SemanticColor,
   SpacingVariant as Spacing,
   RadiusVariant as Radius,

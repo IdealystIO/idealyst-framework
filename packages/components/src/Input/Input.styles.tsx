@@ -66,6 +66,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    color: theme.colors.text.secondary,
     variants: {
       size: {
         small: {
@@ -100,6 +101,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    color: theme.colors.text.secondary,
     variants: {
       size: {
         small: {
@@ -169,6 +171,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    color: theme.colors.text.secondary,
     variants: {
       size: {
         small: {

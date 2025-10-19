@@ -7,6 +7,9 @@ export const screenStyles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.surface.primary,
     variants: {
       background: {
+        transparent: {
+          backgroundColor: 'transparent',
+        },
         primary: {
           backgroundColor: theme.colors.surface.primary,
         },
@@ -16,8 +19,22 @@ export const screenStyles = StyleSheet.create((theme) => ({
         tertiary: {
           backgroundColor: theme.colors.surface.tertiary,
         },
+        elevated: {
+          backgroundColor: theme.colors.surface.elevated,
+        },
+        overlay: {
+          backgroundColor: theme.colors.surface.overlay,
+        },
         inverse: {
           backgroundColor: theme.colors.surface.inverse,
+        },
+        'inverse-secondary': {
+          backgroundColor: theme.colors.surface.inverse,
+          opacity: 0.9,
+        },
+        'inverse-tertiary': {
+          backgroundColor: theme.colors.surface.inverse,
+          opacity: 0.7,
         },
       },
       padding: {

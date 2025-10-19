@@ -1,5 +1,12 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import type { BackgroundVariant, SpacingVariant, RadiusVariant } from '../theme';
+
+// Component-specific type aliases for future extensibility
+export type ViewBackgroundVariant = BackgroundVariant;
+export type ViewSpacingVariant = SpacingVariant;
+export type ViewRadiusVariant = RadiusVariant;
+export type ViewBorderVariant = 'none' | 'thin' | 'thick';
 
 export interface ViewProps {
   /**
@@ -8,29 +15,29 @@ export interface ViewProps {
   children?: ReactNode;
 
   /**
-   * Padding variant
+   * Padding/spacing variant
    */
-  spacing?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  spacing?: ViewSpacingVariant;
 
   /**
    * Margin variant
    */
-  marginVariant?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  marginVariant?: ViewSpacingVariant;
 
   /**
    * Background variant
    */
-  background?: 'transparent' | 'surface' | 'primary' | 'secondary';
+  background?: ViewBackgroundVariant;
 
   /**
    * Border radius variant
    */
-  radius?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  radius?: ViewRadiusVariant;
 
   /**
    * Border variant
    */
-  border?: 'none' | 'thin' | 'thick';
+  border?: ViewBorderVariant;
 
   /**
    * Custom background color (overrides background variant)

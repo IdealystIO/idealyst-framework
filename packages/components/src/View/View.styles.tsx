@@ -47,14 +47,31 @@ const viewStyles = StyleSheet.create((theme) => ({
         transparent: {
           backgroundColor: 'transparent',
         },
-        surface: {
-          backgroundColor: theme.colors.surface,
-        },
         primary: {
-          backgroundColor: theme.colors.primary,
+          backgroundColor: theme.colors.surface.primary,
         },
         secondary: {
-          backgroundColor: theme.colors.secondary,
+          backgroundColor: theme.colors.surface.secondary,
+        },
+        tertiary: {
+          backgroundColor: theme.colors.surface.tertiary,
+        },
+        elevated: {
+          backgroundColor: theme.colors.surface.elevated,
+        },
+        overlay: {
+          backgroundColor: theme.colors.surface.overlay,
+        },
+        inverse: {
+          backgroundColor: theme.colors.surface.inverse,
+        },
+        'inverse-secondary': {
+          backgroundColor: theme.colors.surface.inverse,
+          opacity: 0.9,
+        },
+        'inverse-tertiary': {
+          backgroundColor: theme.colors.surface.inverse,
+          opacity: 0.7,
         },
       },
       radius: {

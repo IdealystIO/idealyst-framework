@@ -5,24 +5,24 @@ export const TextExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
-      <Text size="large" weight="bold" align="center">
+      <Text size="lg" weight="bold" align="center">
         Text Examples
       </Text>
-      
+
       {/* Text Sizes */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Sizes</Text>
+        <Text size="md" weight="semibold">Sizes</Text>
         <View spacing="sm" style={{ gap: 10 }}>
-          <Text size="small">Small text - Lorem ipsum dolor sit amet</Text>
-          <Text size="medium">Medium text - Lorem ipsum dolor sit amet</Text>
-          <Text size="large">Large text - Lorem ipsum dolor sit amet</Text>
-          <Text size="xlarge">Extra large text - Lorem ipsum dolor sit amet</Text>
+          <Text size="sm">Small text - Lorem ipsum dolor sit amet</Text>
+          <Text size="md">Medium text - Lorem ipsum dolor sit amet</Text>
+          <Text size="lg">Large text - Lorem ipsum dolor sit amet</Text>
+          <Text size="xl">Extra large text - Lorem ipsum dolor sit amet</Text>
         </View>
       </View>
 
       {/* Text Weights */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Weights</Text>
+        <Text size="md" weight="semibold">Weights</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Text weight="light">Light weight text</Text>
           <Text weight="normal">Normal weight text</Text>
@@ -32,12 +32,46 @@ export const TextExamples = () => {
         </View>
       </View>
 
-      {/* Text Colors */}
+      {/* Semantic Text Colors */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Color Variants</Text>
+        <Text size="md" weight="semibold">Semantic Text Colors</Text>
         <View spacing="sm" style={{ gap: 10 }}>
-          <Text color="primary">Primary color text</Text>
-          <Text color="secondary">Secondary color text</Text>
+          <Text color="primary">Primary text - Main text color</Text>
+          <Text color="secondary">Secondary text - Subdued text</Text>
+          <Text color="tertiary">Tertiary text - More subdued text</Text>
+        </View>
+      </View>
+
+      {/* Inverse Text Colors */}
+      <View spacing="md">
+        <Text size="md" weight="semibold">Inverse Text Colors (on dark backgrounds)</Text>
+        <View spacing="sm" style={{ gap: 10 }}>
+          <View background="inverse" spacing="sm" radius="sm">
+            <Text color="inverse">Inverse (of primary) - Light text on dark background</Text>
+          </View>
+          <View background="inverse" spacing="sm" radius="sm">
+            <Text color="inverse-secondary">Inverse secondary (90% opacity)</Text>
+          </View>
+          <View background="inverse" spacing="sm" radius="sm">
+            <Text color="inverse-tertiary">Inverse tertiary (70% opacity)</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Utility Text Colors */}
+      <View spacing="md">
+        <Text size="md" weight="semibold">Utility Text Colors</Text>
+        <View spacing="sm" style={{ gap: 10 }}>
+          <Text color="disabled">Disabled text</Text>
+          <Text color="muted">Muted text</Text>
+          <Text color="placeholder">Placeholder text</Text>
+        </View>
+      </View>
+
+      {/* Palette Text Colors */}
+      <View spacing="md">
+        <Text size="md" weight="semibold">Palette Colors</Text>
+        <View spacing="sm" style={{ gap: 10 }}>
           <Text color="blue">Blue color text</Text>
           <Text color="green">Green color text</Text>
           <Text color="red">Red color text</Text>
@@ -47,7 +81,7 @@ export const TextExamples = () => {
 
       {/* Text Color Shades */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Color Shades</Text>
+        <Text size="md" weight="semibold">Color Shades</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Text color="blue.300">Blue 300 text</Text>
           <Text color="blue.500">Blue 500 text</Text>
@@ -60,7 +94,7 @@ export const TextExamples = () => {
 
       {/* Text Alignment */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Alignment</Text>
+        <Text size="md" weight="semibold">Alignment</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Text align="left">Left aligned text</Text>
           <Text align="center">Center aligned text</Text>
@@ -70,15 +104,15 @@ export const TextExamples = () => {
 
       {/* Combined Examples */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Combined Examples</Text>
+        <Text size="md" weight="semibold">Combined Examples</Text>
         <View spacing="sm" style={{ gap: 10 }}>
-          <Text size="large" weight="bold" color="primary" align="center">
+          <Text size="lg" weight="bold" color="primary" align="center">
             Large Bold Primary Centered
           </Text>
-          <Text size="small" weight="light" color="secondary" align="right">
+          <Text size="sm" weight="light" color="secondary" align="right">
             Small Light Secondary Right
           </Text>
-          <Text size="medium" weight="semibold" color="green">
+          <Text size="md" weight="semibold" color="green">
             Medium Semibold Green
           </Text>
         </View>

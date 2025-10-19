@@ -15,7 +15,7 @@ const ListItem: React.FC<ListItemProps> = ({
   selected = false,
   disabled = false,
   indent = 0,
-  size = 'medium',
+  size = 'md',
   onPress,
   style,
   testID,

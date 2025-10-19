@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Divider, ListItem, Icon } from '@idealyst/components';
+import { View, Text, Button, Divider, ListItem, Icon, Badge } from '@idealyst/components';
 import { useNavigator } from '../context';
 import { Outlet } from '../router';
 import { UnistylesRuntime, useUnistyles } from 'react-native-unistyles';
 import { getNextTheme, getThemeDisplayName, isHighContrastTheme } from './unistyles';
+import { T } from 'react-router/dist/development/index-react-server-client-BYr9g50r';
 
 interface ComponentGroup {
     title: string;
@@ -125,60 +126,43 @@ export const ExampleWebLayout: React.FC = () => {
     const sidebarWidth = sidebarCollapsed ? 0 : 280;
 
     return (
-        <View style={{ height: '100vh', flexDirection: 'column', overflow: 'hidden' }}>
+        <View background='primary' style={{ height: '100vh', flexDirection: 'column', overflow: 'hidden' }}>
             {/* Header */}
             <View style={{
-                padding: 16,
+                paddingHorizontal: 16,
                 borderBottomWidth: 1,
                 borderBottomStyle: 'solid',
                 borderBottomColor: theme.colors.border.primary,
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                minHeight: 64,
             }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Button
                         variant="text"
                         leftIcon="menu"
-                        size="large"
+                        size="lg"
                         onPress={() => setSidebarCollapsed(!sidebarCollapsed)}
                         style={{ padding: 8 }}
                     />
-                    <Button
-                        variant="text"
-                        size="small"
-                        onPress={() => navigator.navigate({ path: '/', vars: {} })}
-                        style={{ padding: 8 }}
-                    >
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24 }}>
-                            <Icon name="home" size="lg" />
-                        </div>
+                    <Button variant='text' size="lg">
+                        <Text weight="bold" size="lg">
+                            Idealyst Components
+                        </Text>
                     </Button>
-                    <Text size="xlarge" weight="bold">
-                        Idealyst Components
-                    </Text>
-                    <Text size="small" color="secondary">
+                    <Badge color='green'>
                         {getThemeDisplayName(currentTheme)}
-                    </Text>
+                    </Badge>
                 </View>
 
                 <View style={{ flexDirection: 'row', gap: 8 }}>
                     <Button
                         variant="outlined"
                         intent="primary"
-                        size="small"
+                        size="sm"
                         onPress={cycleTheme}
                     >
                         Cycle Theme
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        intent="neutral"
-                        size="small"
-                        onPress={toggleHighContrast}
-                    >
-                        High Contrast
                     </Button>
                 </View>
             </View>
@@ -206,7 +190,7 @@ export const ExampleWebLayout: React.FC = () => {
                             {componentGroups.map((group, groupIndex) => (
                                 <View key={group.title} style={{ marginBottom: 16 }}>
                                     <Text
-                                        size="small"
+                                        size="sm"
                                         weight="bold"
                                         color="secondary"
                                         style={{ marginBottom: 8, marginLeft: 8 }}
@@ -218,12 +202,12 @@ export const ExampleWebLayout: React.FC = () => {
                                             key={item.path}
                                             label={item.label}
                                             leading={item.icon}
-                                            size="small"
+                                            size="sm"
                                             onPress={() => navigator.navigate({ path: item.path, vars: {} })}
                                         />
                                     ))}
                                     {groupIndex < componentGroups.length - 1 && (
-                                        <Divider spacing="small" style={{ marginTop: 8 }} />
+                                        <Divider spacing="sm" style={{ marginTop: 8 }} />
                                     )}
                                 </View>
                             ))}
@@ -236,7 +220,6 @@ export const ExampleWebLayout: React.FC = () => {
                 <View style={{
                     flex: 1,
                     overflowY: 'auto',
-                    backgroundColor: '#fafafa',
                 }}>
                     <View style={{ padding: 24, maxWidth: 1200, margin: '0 auto', width: '100%' }}>
                         <Outlet />

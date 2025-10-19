@@ -32,8 +32,11 @@ export interface ThemeColorSystem {
   text: {
     primary: string;
     secondary: string;
+    tertiary: string;
     disabled: string;
     inverse: string;
+    'inverse-secondary': string;
+    'inverse-tertiary': string;
     muted: string;
     placeholder: string;
   };
@@ -344,12 +347,15 @@ export function createDarkResolvedIntents(palettes: ThemeConfig['palettes']): Th
 export function createLightResolvedColors(palettes: ThemeConfig['palettes']): ThemeColorSystem {
   return {
     text: {
-      primary: palettes.gray[900],
-      secondary: palettes.gray[600],
-      disabled: palettes.gray[400],
-      inverse: '#ffffff',
-      muted: palettes.gray[500],
-      placeholder: palettes.gray[400],
+      primary: palettes.gray[900],                      // Dark text (main)
+      secondary: palettes.gray[600],                    // Medium dark text
+      tertiary: palettes.gray[500],                     // Light dark text
+      disabled: palettes.gray[400],                     // Disabled state
+      inverse: '#ffffff',                                // Inverse of primary (light text for dark backgrounds)
+      'inverse-secondary': 'rgba(255, 255, 255, 0.9)',  // Inverse of secondary (90% opacity)
+      'inverse-tertiary': 'rgba(255, 255, 255, 0.7)',   // Inverse of tertiary (70% opacity)
+      muted: palettes.gray[500],                        // Muted text
+      placeholder: palettes.gray[400],                  // Placeholder text
     },
     surface: {
       primary: '#ffffff',
@@ -381,12 +387,15 @@ export function createLightResolvedColors(palettes: ThemeConfig['palettes']): Th
 export function createDarkResolvedColors(palettes: ThemeConfig['palettes']): ThemeColorSystem {
   return {
     text: {
-      primary: palettes.gray[900],    // Light text on dark background
-      secondary: palettes.gray[700],  // Muted light text
-      disabled: palettes.gray[500],   // Disabled gray
-      inverse: palettes.gray[100],    // Dark text (inverse of primary)
-      muted: palettes.gray[600],      // Muted text
-      placeholder: palettes.gray[500], // Placeholder text
+      primary: palettes.gray[900],                      // Light text on dark background (main)
+      secondary: palettes.gray[700],                    // Medium light text
+      tertiary: palettes.gray[600],                     // Lighter muted text
+      disabled: palettes.gray[500],                     // Disabled gray
+      inverse: palettes.gray[100],                      // Inverse of primary (dark text for light backgrounds)
+      'inverse-secondary': 'rgba(10, 10, 10, 0.9)',     // Inverse of secondary (90% opacity)
+      'inverse-tertiary': 'rgba(10, 10, 10, 0.7)',      // Inverse of tertiary (70% opacity)
+      muted: palettes.gray[600],                        // Muted text
+      placeholder: palettes.gray[500],                  // Placeholder text
     },
     surface: {
       primary: palettes.gray[50],     // Very dark primary surface

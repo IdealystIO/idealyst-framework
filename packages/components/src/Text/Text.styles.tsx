@@ -5,19 +5,19 @@ const textStyles = StyleSheet.create((theme) => ({
   text: {
     variants: {
       size: {
-        small: {
-          fontSize: theme.typography.fontSize.xs,
-          lineHeight: theme.typography.fontSize.xs * 1.33,
+        sm: {
+          fontSize: theme.typography.fontSize.sm,
+          lineHeight: theme.typography.fontSize.sm * 1.5,
         },
-        medium: {
+        md: {
           fontSize: theme.typography.fontSize.md,
           lineHeight: theme.typography.fontSize.md * 1.5,
         },
-        large: {
+        lg: {
           fontSize: theme.typography.fontSize.lg,
           lineHeight: theme.typography.fontSize.lg * 1.4,
         },
-        xlarge: {
+        xl: {
           fontSize: theme.typography.fontSize.xl,
           lineHeight: theme.typography.fontSize.xl * 1.33,
         },

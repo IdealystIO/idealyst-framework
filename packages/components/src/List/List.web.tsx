@@ -6,7 +6,7 @@ import type { ListProps } from './types';
 const List: React.FC<ListProps> = ({
   children,
   variant = 'default',
-  size = 'medium',
+  size = 'md',
   style,
   testID,
 }) => {

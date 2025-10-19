@@ -48,18 +48,18 @@ export const listStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           paddingTop: theme.spacing.xs,
           paddingBottom: theme.spacing.xs,
           paddingLeft: theme.spacing.sm,
           paddingRight: theme.spacing.sm,
           minHeight: 32,
         },
-        medium: {
+        md: {
           padding: theme.spacing.md,
           minHeight: 44,
         },
-        large: {
+        lg: {
           padding: theme.spacing.lg,
           minHeight: 52,
         },
@@ -164,15 +164,15 @@ export const listStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 16,
           height: 16,
         },
-        medium: {
+        md: {
           width: 20,
           height: 20,
         },
-        large: {
+        lg: {
           width: 24,
           height: 24,
         },
@@ -193,15 +193,15 @@ export const listStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
           lineHeight: 20,
         },
-        medium: {
+        md: {
           fontSize: 16,
           lineHeight: 24,
         },
-        large: {
+        lg: {
           fontSize: 18,
           lineHeight: 28,
         },
@@ -238,15 +238,15 @@ export const listStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 16,
           height: 16,
         },
-        medium: {
+        md: {
           width: 20,
           height: 20,
         },
-        large: {
+        lg: {
           width: 24,
           height: 24,
         },

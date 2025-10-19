@@ -22,9 +22,9 @@ const shouldWarn = () => {
  * Validates if a color exists in the theme palette
  */
 export function validateColor(theme: ThemeContext, color: string): boolean {
-  const isSemanticColor = ['primary', 'secondary', 'disabled', 'inverse', 'muted'].includes(color);
+  const isSemanticColor = ['primary', 'secondary', 'tertiary', 'disabled', 'inverse', 'inverse-secondary', 'inverse-tertiary', 'muted', 'placeholder'].includes(color);
   const isPaletteColor = theme.palettes && Object.keys(theme.palettes).includes(color);
-  
+
   return isSemanticColor || isPaletteColor;
 }
 
@@ -79,9 +79,13 @@ type ThemeContext = {
     text?: {
       primary?: string;
       secondary?: string;
+      tertiary?: string;
       disabled?: string;
       inverse?: string;
+      'inverse-secondary'?: string;
+      'inverse-tertiary'?: string;
       muted?: string;
+      placeholder?: string;
     };
   };
 };
@@ -127,11 +131,20 @@ export function generateColorVariants(
     if (theme.colors.text.secondary) {
       variants.secondary = { color: theme.colors.text.secondary };
     }
+    if (theme.colors.text.tertiary) {
+      variants.tertiary = { color: theme.colors.text.tertiary };
+    }
     if (theme.colors.text.disabled) {
       variants.disabled = { color: theme.colors.text.disabled };
     }
     if (theme.colors.text.inverse) {
       variants.inverse = { color: theme.colors.text.inverse };
+    }
+    if (theme.colors.text['inverse-secondary']) {
+      variants['inverse-secondary'] = { color: theme.colors.text['inverse-secondary'] };
+    }
+    if (theme.colors.text['inverse-tertiary']) {
+      variants['inverse-tertiary'] = { color: theme.colors.text['inverse-tertiary'] };
     }
     if (theme.colors.text.muted) {
       variants.muted = { color: theme.colors.text.muted };
@@ -336,7 +349,7 @@ function resolveColorVariant(colorVariant: string, theme: ThemeContext): string 
   };
 
   // Handle semantic colors
-  if (['primary', 'secondary', 'disabled', 'inverse', 'muted'].includes(colorVariant)) {
+  if (['primary', 'secondary', 'tertiary', 'disabled', 'inverse', 'inverse-secondary', 'inverse-tertiary', 'muted', 'placeholder'].includes(colorVariant)) {
     return theme.colors?.text?.[colorVariant as keyof typeof theme.colors.text] || null;
   }
 
@@ -622,7 +635,7 @@ export function validateIntentProp(
  * Gets available colors from theme (for error messages)
  */
 export function getAvailableColors(theme: ThemeContext): string[] {
-  const semanticColors = ['primary', 'secondary', 'disabled', 'inverse', 'muted'];
+  const semanticColors = ['primary', 'secondary', 'tertiary', 'disabled', 'inverse', 'inverse-secondary', 'inverse-tertiary', 'muted', 'placeholder'];
   const paletteColors = theme.palettes ? Object.keys(theme.palettes) : [];
   return [...semanticColors, ...paletteColors];
 }

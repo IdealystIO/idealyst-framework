@@ -4,7 +4,7 @@ import type { DisplayColorVariant } from '../theme/variants';
 
 // Component-specific type aliases for future extensibility
 export type TextColorVariant = DisplayColorVariant;
-export type TextSizeVariant = 'sm' | 'md' | 'lg' | 'xl';
+export type TextSizeVariant = 'sm' | 'md' | 'lg' | 'xl';  // Using sm/md/lg/xl for consistency
 export type TextWeightVariant = 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
 export type TextAlignVariant = 'left' | 'center' | 'right';
 
