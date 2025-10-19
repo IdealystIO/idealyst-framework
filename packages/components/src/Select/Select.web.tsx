@@ -29,7 +29,7 @@ const Select: React.FC<SelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const selectedOption = options.find(option => option.value === value);
@@ -192,55 +192,42 @@ const Select: React.FC<SelectProps> = ({
         zIndex={1000}
       >
         <div
+          {...getWebProps([selectStyles.dropdown])}
           style={{
-            backgroundColor: 'white',
-            borderRadius: '4px',
-            boxShadow: '0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12)',
+            ...getWebProps([selectStyles.dropdown]).style,
             maxHeight: maxHeight,
-            overflow: 'auto',
+            // Override positioning since PositionedPortal handles it
+            position: 'relative',
+            top: 'auto',
+            left: 'auto',
+            right: 'auto',
           }}
           role="listbox"
         >
             {searchable && (
-              <div
-                style={{
-                  padding: '8px 16px',
-                  borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-                  position: 'sticky',
-                  top: 0,
-                  backgroundColor: 'white',
-                  zIndex: 1,
-                }}
-              >
+              <div {...getWebProps([selectStyles.searchContainer])}>
                 <input
                   ref={searchInputRef}
                   type="text"
                   placeholder="Search options..."
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  style={{
-                    width: '100%',
-                    padding: '8px 12px',
-                    border: '1px solid rgba(0, 0, 0, 0.23)',
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#1976d2';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'rgba(0, 0, 0, 0.23)';
-                  }}
+                  {...getWebProps([selectStyles.searchInput])}
                 />
               </div>
             )}
 
-            <div style={{ padding: '8px 0' }}>
+            <div {...getWebProps([selectStyles.optionsList])}>
               {filteredOptions.map((option, index) => {
                 const isSelected = option.value === value;
-                const isFocused = index === focusedIndex;
+
+                // Apply option variants for selected/disabled states
+                selectStyles.useVariants({
+                  selected: isSelected,
+                  disabled: option.disabled || false,
+                });
+
+                const optionProps = getWebProps([selectStyles.option]);
 
                 return (
                   <div
@@ -249,44 +236,30 @@ const Select: React.FC<SelectProps> = ({
                     role="option"
                     aria-selected={isSelected}
                     onMouseEnter={() => setFocusedIndex(index)}
-                    style={{
-                      padding: '6px 16px',
-                      cursor: option.disabled ? 'default' : 'pointer',
-                      backgroundColor: isFocused
-                        ? 'rgba(0, 0, 0, 0.04)'
-                        : isSelected
-                          ? 'rgba(25, 118, 210, 0.08)'
-                          : 'transparent',
-                      color: option.disabled
-                        ? 'rgba(0, 0, 0, 0.38)'
-                        : 'rgba(0, 0, 0, 0.87)',
-                      fontSize: '14px',
-                      lineHeight: '1.5',
-                      transition: 'background-color 150ms cubic-bezier(0.4, 0, 0.2, 1)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                    }}
+                    {...optionProps}
                   >
-                    {option.icon && (
-                      <span style={{ display: 'flex', alignItems: 'center' }}>
-                        {option.icon}
+                    <div {...getWebProps([selectStyles.optionContent])}>
+                      {option.icon && (
+                        <span {...getWebProps([selectStyles.optionIcon])}>
+                          {option.icon}
+                        </span>
+                      )}
+                      <span {...getWebProps([
+                        selectStyles.optionText,
+                        option.disabled && selectStyles.optionTextDisabled
+                      ])}>
+                        {option.label}
                       </span>
-                    )}
-                    <span>{option.label}</span>
+                    </div>
                   </div>
                 );
               })}
 
               {filteredOptions.length === 0 && (
-                <div
-                  style={{
-                    padding: '6px 16px',
-                    color: 'rgba(0, 0, 0, 0.54)',
-                    fontSize: '14px',
-                  }}
-                >
-                  No options found
+                <div {...getWebProps([selectStyles.option])} style={{ cursor: 'default' }}>
+                  <span {...getWebProps([selectStyles.optionText])}>
+                    No options found
+                  </span>
                 </div>
               )}
             </div>

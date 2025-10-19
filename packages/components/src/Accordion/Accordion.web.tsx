@@ -110,7 +110,7 @@ const Accordion: React.FC<AccordionProps> = ({
   defaultExpanded = [],
   variant = 'default',
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   style,
   testID,
 }) => {

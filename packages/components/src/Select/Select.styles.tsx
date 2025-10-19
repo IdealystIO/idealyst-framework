@@ -8,7 +8,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
   label: {
     fontSize: theme.typography?.sm?.fontSize || 14,
     fontWeight: theme.typography?.sm?.fontWeight || '500',
-    color: theme.colors?.text?.primary || theme.palettes?.gray?.[700] || '#374151',
+    color: theme.colors?.text?.primary || theme.palettes?.gray?.[700],
     marginBottom: theme.spacing?.xs || 4,
   },
 
@@ -27,13 +27,13 @@ export const selectStyles = StyleSheet.create((theme) => ({
       variant: {
         outlined: {
           backgroundColor: 'transparent',
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300],
           _web: {
-            border: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+            border: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[300]}`,
           },
         },
         filled: {
-          backgroundColor: theme.colors?.surface?.secondary || theme.palettes?.gray?.[50] || '#f9fafb',
+          backgroundColor: theme.colors?.surface?.secondary || theme.palettes?.gray?.[50],
           borderColor: 'transparent',
           _web: {
             border: '1px solid transparent',
@@ -213,6 +213,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
     elevation: theme.shadows?.lg?.elevation || 8,
     zIndex: 9999, // Higher z-index to float above other content
     maxHeight: 240,
+    minWidth: 200,
     overflow: 'hidden',
 
     _web: {
@@ -255,11 +256,11 @@ export const selectStyles = StyleSheet.create((theme) => ({
 
   option: {
     paddingHorizontal: theme.spacing?.sm || 12,
-    paddingVertical: theme.spacing?.sm || 12,
+    paddingVertical: theme.spacing?.xs || 8,
     flexDirection: 'row',
     alignItems: 'center',
     cursor: 'pointer',
-    minHeight: 44,
+    minHeight: 36,
 
     variants: {
       selected: {

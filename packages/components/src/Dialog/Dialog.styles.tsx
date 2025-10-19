@@ -21,7 +21,7 @@ export const dialogStyles = StyleSheet.create((theme) => ({
   },
   
   container: {
-    backgroundColor: theme.colors?.background?.primary || '#ffffff',
+    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
     borderRadius: theme.borderRadius?.lg || 12,
     shadowColor: '#000',
     shadowOffset: {
@@ -119,7 +119,7 @@ export const dialogStyles = StyleSheet.create((theme) => ({
     
     _web: {
       _hover: {
-        backgroundColor: theme.colors?.background?.secondary || '#f3f4f6',
+        backgroundColor: theme.colors?.surface?.secondary || '#f3f4f6',
       },
     },
   },
