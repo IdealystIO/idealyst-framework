@@ -1,7 +1,7 @@
 import React from 'react';
 import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from '@idealyst/components/examples';
-import { DataGridShowcase } from '../../../datagrid/src/examples';
-import { DatePickerExamples } from '../../../datepicker/src/examples';
+import { DataGridShowcase } from '@idealyst/datagrid/examples';
+import { DatePickerExamples } from '@idealyst/datepicker/examples';
 import { Screen, Text, View, Button } from '@idealyst/components';
 import { UnistylesRuntime } from 'react-native-unistyles';
 import { RouteParam } from '../routing';

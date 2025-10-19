@@ -52,6 +52,8 @@ export default defineConfig({
       '@idealyst/components': path.resolve(__dirname, '../../../../packages/components/src'),
       '@idealyst/navigation': path.resolve(__dirname, '../../../../packages/navigation/src'),
       '@idealyst/theme': path.resolve(__dirname, '../../../../packages/theme/src'),
+      '@idealyst/datagrid': path.resolve(__dirname, '../../../../packages/datagrid/src'),
+      '@idealyst/datepicker': path.resolve(__dirname, '../../../../packages/datepicker/src'),
     },
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
@@ -69,6 +71,8 @@ export default defineConfig({
       '@idealyst/components',
       '@idealyst/navigation',
       '@idealyst/theme',
+      '@idealyst/datagrid',
+      '@idealyst/datepicker',
       '@test-select-demo/shared',
     ],
     esbuildOptions: {

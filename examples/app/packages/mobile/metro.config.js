@@ -1,14 +1,21 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 const path = require('path');
+const fs = require('fs');
 
 const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro-config');
 
 const extraNodeModules = {
+  'react-native': path.resolve(__dirname, 'node_modules/react-native'),
+  'react-native-unistyles': path.resolve(__dirname, 'node_modules/react-native-unistyles'),
   '@idealyst/components': path.resolve(__dirname, '../../../../packages/components/src'),
+  '@idealyst/components/examples': path.resolve(__dirname, '../../../../packages/components/src/examples'),
   '@idealyst/navigation': path.resolve(__dirname, '../../../../packages/navigation/src'),
+  '@idealyst/navigation/examples': path.resolve(__dirname, '../../../../packages/navigation/src/examples'),
   '@idealyst/theme': path.resolve(__dirname, '../../../../packages/theme/src'),
   '@idealyst/datagrid': path.resolve(__dirname, '../../../../packages/datagrid/src'),
+  '@idealyst/datagrid/examples': path.resolve(__dirname, '../../../../packages/datagrid/src/examples'),
   '@idealyst/datepicker': path.resolve(__dirname, '../../../../packages/datepicker/src'),
+  '@idealyst/datepicker/examples': path.resolve(__dirname, '../../../../packages/datepicker/src/examples'),
 };
 
 const config = {

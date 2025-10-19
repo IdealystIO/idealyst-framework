@@ -37,11 +37,7 @@ export const App: React.FC<AppProps> = ({
   });
 
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <NavigatorProvider route={ExampleStackRouter} />
-      </QueryClientProvider>
-    </trpc.Provider>
+      <NavigatorProvider route={ExampleStackRouter} />
   );
 };
 

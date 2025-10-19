@@ -1,7 +1,7 @@
 import React from 'react';
 import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabsExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
-import { DataGridShowcase } from '../../../datagrid/src/examples';
-import { DatePickerExamples } from '../../../datepicker/src/examples';
+import { DataGridShowcase } from '@idealyst/datagrid/examples';
+import { DatePickerExamples } from '@idealyst/datepicker/examples';
 import { Text, View, Card } from '@idealyst/components';
 import { NavigatorParam, RouteParam } from '../routing';
 import { ExampleWebLayout } from './ExampleWebLayout';
