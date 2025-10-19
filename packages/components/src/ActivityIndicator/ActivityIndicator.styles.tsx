@@ -69,38 +69,38 @@ export const activityIndicatorStyles = StyleSheet.create((theme) => ({
       },
       intent: {
         primary: {
-          color: theme.intents?.primary?.main || '#3b82f6',
+          color: theme.intents.primary.main,
           _web: {
-            borderTopColor: theme.intents?.primary?.main || '#3b82f6',
-            borderRightColor: theme.intents?.primary?.main || '#3b82f6',
+            borderTopColor: theme.intents.primary.main,
+            borderRightColor: theme.intents.primary.main,
           },
         },
         success: {
-          color: theme.intents?.success?.main || '#22c55e',
+          color: theme.intents.success.main,
           _web: {
-            borderTopColor: theme.intents?.success?.main || '#22c55e',
-            borderRightColor: theme.intents?.success?.main || '#22c55e',
+            borderTopColor: theme.intents.success.main,
+            borderRightColor: theme.intents.success.main,
           },
         },
         error: {
-          color: theme.intents?.error?.main || '#ef4444',
+          color: theme.intents.error.main,
           _web: {
-            borderTopColor: theme.intents?.error?.main || '#ef4444',
-            borderRightColor: theme.intents?.error?.main || '#ef4444',
+            borderTopColor: theme.intents.error.main,
+            borderRightColor: theme.intents.error.main,
           },
         },
         warning: {
-          color: theme.intents?.warning?.main || '#f59e0b',
+          color: theme.intents.warning.main,
           _web: {
-            borderTopColor: theme.intents?.warning?.main || '#f59e0b',
-            borderRightColor: theme.intents?.warning?.main || '#f59e0b',
+            borderTopColor: theme.intents.warning.main,
+            borderRightColor: theme.intents.warning.main,
           },
         },
         neutral: {
-          color: theme.intents?.neutral?.main || '#6b7280',
+          color: theme.intents.neutral.main,
           _web: {
-            borderTopColor: theme.intents?.neutral?.main || '#6b7280',
-            borderRightColor: theme.intents?.neutral?.main || '#6b7280',
+            borderTopColor: theme.intents.neutral.main,
+            borderRightColor: theme.intents.neutral.main,
           },
         },
       },

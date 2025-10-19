@@ -207,20 +207,20 @@ export const inputStyles = StyleSheet.create((theme) => ({
       size: {
         small: {
           height: 36,
-          paddingHorizontal: theme.spacing?.sm || 8,
-          paddingVertical: theme.spacing?.xs || 4,
+          paddingHorizontal: theme.spacing.sm,
+          paddingVertical: theme.spacing.xs,
           fontSize: theme.typography?.fontSize?.sm || 14,
         },
         medium: {
           height: 44,
-          paddingHorizontal: theme.spacing?.md || 12,
-          paddingVertical: theme.spacing?.sm || 8,
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
           fontSize: theme.typography?.fontSize?.md || 16,
         },
         large: {
           height: 52,
-          paddingHorizontal: theme.spacing?.lg || 16,
-          paddingVertical: theme.spacing?.md || 12,
+          paddingHorizontal: theme.spacing.lg,
+          paddingVertical: theme.spacing.md,
           fontSize: theme.typography?.fontSize?.lg || 18,
         },
       },
@@ -238,32 +238,32 @@ export const inputStyles = StyleSheet.create((theme) => ({
       },
       variant: {
         default: {
-          backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+          backgroundColor: theme.colors.surface.primary,
           borderWidth: 1,
-          borderColor: theme.colors?.border?.primary || '#e5e7eb',
+          borderColor: theme.colors.border.primary,
           borderStyle: 'solid',
-          color: theme.colors?.text?.primary || '#000000',
+          color: theme.colors.text.primary,
           
           _web: {
-            border: `1px solid ${theme.colors?.border?.primary || '#e5e7eb'}`,
+            border: `1px solid ${theme.colors.border.primary}`,
           },
         },
         outlined: {
           backgroundColor: 'transparent',
           borderWidth: 1,
-          borderColor: theme.intents?.primary?.main || '#3b82f6',
+          borderColor: theme.intents.primary.main,
           borderStyle: 'solid',
-          color: theme.colors?.text?.primary || '#000000',
+          color: theme.colors.text.primary,
           
           _web: {
-            border: `1px solid ${theme.intents?.primary?.main || '#3b82f6'}`,
+            border: `1px solid ${theme.intents.primary.main}`,
           },
         },
         filled: {
-          backgroundColor: theme.colors?.surface?.secondary || '#f9fafb',
+          backgroundColor: theme.colors.surface.secondary,
           borderWidth: 0,
           borderColor: 'transparent',
-          color: theme.colors?.text?.primary || '#000000',
+          color: theme.colors.text.primary,
           
           _web: {
             border: 'none',
@@ -273,7 +273,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
           backgroundColor: 'transparent',
           borderWidth: 0,
           borderColor: 'transparent',
-          color: theme.colors?.text?.primary || '#000000',
+          color: theme.colors.text.primary,
           paddingHorizontal: 0,
           paddingVertical: 0,
           
@@ -347,8 +347,8 @@ export const inputStyles = StyleSheet.create((theme) => ({
         variant: 'default',
         focused: true,
         styles: {
-          borderColor: theme.intents?.primary?.main || '#3b82f6',
-          shadowColor: theme.intents?.primary?.main || '#3b82f6',
+          borderColor: theme.intents.primary.main,
+          shadowColor: theme.intents.primary.main,
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 0.1,
           shadowRadius: 2,
@@ -362,7 +362,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
         styles: {
           backgroundColor: 'transparent',
           borderWidth: 1,
-          borderColor: theme.intents?.primary?.main || '#3b82f6',
+          borderColor: theme.intents.primary.main,
           borderStyle: 'solid',
         },
       },
@@ -371,9 +371,9 @@ export const inputStyles = StyleSheet.create((theme) => ({
         variant: 'filled',
         focused: true,
         styles: {
-          backgroundColor: theme.colors?.surface?.secondary || '#f3f4f6',
+          backgroundColor: theme.colors.surface.secondary,
           borderWidth: 0,
-          shadowColor: theme.intents?.primary?.main || '#3b82f6',
+          shadowColor: theme.intents.primary.main,
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 0.05,
           shadowRadius: 1,
@@ -392,7 +392,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
       },
     ],
     
-    borderRadius: theme.borderRadius?.md || 8,
+    borderRadius: theme.borderRadius.md,
     fontWeight: theme.typography?.fontWeight?.regular || '400',
     // Web-specific styles
     _web: {
@@ -401,30 +401,30 @@ export const inputStyles = StyleSheet.create((theme) => ({
       transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
       fontFamily: 'inherit',
       _focus: {
-        borderColor: theme.intents?.primary?.main || '#3b82f6',
+        borderColor: theme.intents.primary.main,
       },
       _hover: {
-        borderColor: theme.intents?.primary?.main || '#3b82f6',
+        borderColor: theme.intents.primary.main,
       },
     },
   },
   disabled: {
     opacity: 0.6,
-    backgroundColor: theme.colors?.surface?.secondary || '#f3f4f6',
-    color: theme.colors?.text?.disabled || '#9ca3af',
+    backgroundColor: theme.colors.surface.secondary,
+    color: theme.colors.text.disabled,
     _web: {
       cursor: 'not-allowed',
     },
   },
   error: {
     borderWidth: 1,
-    borderColor: theme.intents?.error?.main || '#ef4444',
+    borderColor: theme.intents.error.main,
     borderStyle: 'solid',
     
     variants: {
       focused: {
         true: {
-          shadowColor: theme.intents?.error?.main || '#ef4444',
+          shadowColor: theme.intents.error.main,
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: 0.1,
           shadowRadius: 2,
@@ -440,21 +440,21 @@ export const inputStyles = StyleSheet.create((theme) => ({
         },
         outlined: {
           // Override outlined styles for error
-          borderColor: theme.intents?.error?.main || '#ef4444',
+          borderColor: theme.intents.error.main,
         },
         filled: {
           // Add border for error even in filled variant
           borderWidth: 1,
-          borderColor: theme.intents?.error?.main || '#ef4444',
+          borderColor: theme.intents.error.main,
         },
       },
     },
     
     _web: {
-      border: `1px solid ${theme.intents?.error?.main || '#ef4444'}`,
+      border: `1px solid ${theme.intents.error.main}`,
       _focus: {
-        borderColor: theme.intents?.error?.main || '#ef4444',
-        boxShadow: `0 0 0 2px ${theme.intents?.error?.main || '#ef4444'}20`,
+        borderColor: theme.intents.error.main,
+        boxShadow: `0 0 0 2px ${theme.intents.error.main}20`,
       },
     },
   },

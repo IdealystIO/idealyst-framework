@@ -3540,8 +3540,8 @@ __metadata:
     react-dom: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
     react-native-edge-to-edge: "npm:^1.6.2"
-    react-native-nitro-modules: "npm:0.28.0"
-    react-native-unistyles: "npm:^3.0.10"
+    react-native-nitro-modules: "npm:0.30.0"
+    react-native-unistyles: "npm:3.0.15"
     react-native-web: "npm:^0.20.0"
     react-router: "npm:^7.9.1"
     react-router-dom: "npm:^7.9.1"
@@ -9747,12 +9747,12 @@ __metadata:
     react-native: "npm:0.81.4"
     react-native-edge-to-edge: "npm:^1.6.2"
     react-native-gesture-handler: "npm:^2.27.1"
-    react-native-nitro-modules: "npm:^0.26.3"
+    react-native-nitro-modules: "npm:0.30.0"
     react-native-reanimated: "npm:^3.18.0"
     react-native-safe-area-context: "npm:^5.5.1"
     react-native-screens: "npm:^4.11.1"
     react-native-svg: "npm:^15.8.0"
-    react-native-unistyles: "npm:^3.0.4"
+    react-native-unistyles: "npm:3.0.15"
     react-native-vector-icons: "npm:^10.2.0"
     react-test-renderer: "npm:19.1.0"
     typescript: "npm:^5.8.3"
@@ -10714,23 +10714,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-modules@npm:0.28.0":
-  version: 0.28.0
-  resolution: "react-native-nitro-modules@npm:0.28.0"
+"react-native-nitro-modules@npm:0.30.0":
+  version: 0.30.0
+  resolution: "react-native-nitro-modules@npm:0.30.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/14be11f29d09f466a28f48fa680282cd941886af0a4eed9d885a3029e7b57f6f8fb5aa3fbd200d31ef90421c7c64ae64888931d87d43b82e722b5e45006657f8
-  languageName: node
-  linkType: hard
-
-"react-native-nitro-modules@npm:^0.26.3":
-  version: 0.26.4
-  resolution: "react-native-nitro-modules@npm:0.26.4"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/ba35c920f0c78dbd17517721c2edbfb6a9a417144a4950c32cafd5d07f732f8f0ab54f7ab946181d53e3feb92971702936797ad44caa617c026b94679f58ec03
+  checksum: 10/97dcf62c720dc84cfc269cd506359328ba7a7d59ddb977f841c9c31a56bcdeb98e814e1f14c93f5137255f7a1d26854d1c7ab128212785b528f0a74ce35df7bc
   languageName: node
   linkType: hard
 
@@ -10796,9 +10786,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-unistyles@npm:^3.0.10, react-native-unistyles@npm:^3.0.4":
-  version: 3.0.12
-  resolution: "react-native-unistyles@npm:3.0.12"
+"react-native-unistyles@npm:3.0.15":
+  version: 3.0.15
+  resolution: "react-native-unistyles@npm:3.0.15"
   peerDependencies:
     "@react-native/normalize-colors": "*"
     react: "*"
@@ -10809,7 +10799,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-reanimated:
       optional: true
-  checksum: 10/8720d039282508ca0406f5615af3c9a4c131e69552ca684a09d8d43bed74ec6f63247b5e073385a32d194b159093eed1d6dac8b4f54934dca8ce8f35e9de9a4d
+  checksum: 10/383701cfe4736d0202008b097925d65b0093540cfcb680d978d319e3fc05ce82db5b1346ffc5c6716e5773e61fa56cc3414d8930cd8b5b9dba0639adfa2ca04f
   languageName: node
   linkType: hard
 

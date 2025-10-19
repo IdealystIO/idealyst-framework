@@ -36,19 +36,19 @@ export const svgImageStyles = StyleSheet.create((theme) => ({
       variants: {
         intent: {
           primary: {
-            tintColor: theme.intents?.primary?.main || '#3b82f6',
+            tintColor: theme.intents.primary.main,
           },
           success: {
-            tintColor: theme.intents?.success?.main || '#22c55e',
+            tintColor: theme.intents.success.main,
           },
           error: {
-            tintColor: theme.intents?.error?.main || '#ef4444',
+            tintColor: theme.intents.error.main,
           },
           warning: {
-            tintColor: theme.intents?.warning?.main || '#f59e0b',
+            tintColor: theme.intents.warning.main,
           },
           neutral: {
-            tintColor: theme.intents?.neutral?.main || '#6b7280',
+            tintColor: theme.intents.neutral.main,
           },
         },
       },

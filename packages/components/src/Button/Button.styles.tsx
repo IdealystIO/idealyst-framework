@@ -6,29 +6,29 @@ export const buttonStyles = StyleSheet.create((theme) => ({
     // Base styles - no borders defined here
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: theme.borderRadius?.md || 8,
+    borderRadius: theme.borderRadius.md,
     fontWeight: '600',
     textAlign: 'center',
     transition: 'all 0.2s ease',
     // Set default color to prevent fallback to theme.colors.text.placeholder
-    color: theme.intents?.primary?.on || '#ffffff',
+    color: theme.intents.primary.on,
     
     // All variants defined here
     variants: {
       size: {
         sm: {
-          paddingHorizontal: theme.spacing?.sm || 8,
-          paddingVertical: theme.spacing?.xs || 4,
+          paddingHorizontal: theme.spacing.sm,
+          paddingVertical: theme.spacing.xs,
           minHeight: 24,
         },
         md: {
-          paddingHorizontal: theme.spacing?.md || 12,
-          paddingVertical: theme.spacing?.sm || 8,
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
           minHeight: 32,
         },
         lg: {
-          paddingHorizontal: theme.spacing?.lg || 16,
-          paddingVertical: theme.spacing?.md || 12,
+          paddingHorizontal: theme.spacing.lg,
+          paddingVertical: theme.spacing.md,
           minHeight: 40,
         },
       },
@@ -93,7 +93,7 @@ export const buttonStyles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: theme.spacing?.xs || 4,
+    gap: theme.spacing.xs,
   },
 
   // Icon styles that inherit button colors
@@ -119,19 +119,19 @@ export const buttonStyles = StyleSheet.create((theme) => ({
       },
       intent: {
         primary: {
-          color: theme.intents?.primary?.on || '#ffffff',
+          color: theme.intents.primary.on,
         },
         success: {
-          color: theme.intents?.success?.on || '#ffffff',
+          color: theme.intents.success.on,
         },
         error: {
-          color: theme.intents?.error?.on || '#ffffff',
+          color: theme.intents.error.on,
         },
         warning: {
-          color: theme.intents?.warning?.on || '#ffffff',
+          color: theme.intents.warning.on,
         },
         neutral: {
-          color: theme.intents?.neutral?.on || '#ffffff',
+          color: theme.intents.neutral.on,
         },
       },
       variant: {
@@ -147,35 +147,35 @@ export const buttonStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'primary',
         styles: {
-          color: theme.intents?.primary?.main || '#3b82f6',
+          color: theme.intents.primary.main,
         },
       },
       {
         variant: 'outlined',
         intent: 'success',
         styles: {
-          color: theme.intents?.success?.main || '#22c55e',
+          color: theme.intents.success.main,
         },
       },
       {
         variant: 'outlined',
         intent: 'error',
         styles: {
-          color: theme.intents?.error?.main || '#ef4444',
+          color: theme.intents.error.main,
         },
       },
       {
         variant: 'outlined',
         intent: 'warning',
         styles: {
-          color: theme.intents?.warning?.main || '#f59e0b',
+          color: theme.intents.warning.main,
         },
       },
       {
         variant: 'outlined',
         intent: 'neutral',
         styles: {
-          color: theme.intents?.neutral?.main || '#6b7280',
+          color: theme.intents.neutral.main,
         },
       },
       // Text variant icon colors
@@ -183,35 +183,35 @@ export const buttonStyles = StyleSheet.create((theme) => ({
         variant: 'text',
         intent: 'primary',
         styles: {
-          color: theme.intents?.primary?.main || '#3b82f6',
+          color: theme.intents.primary.main,
         },
       },
       {
         variant: 'text',
         intent: 'success',
         styles: {
-          color: theme.intents?.success?.main || '#22c55e',
+          color: theme.intents.success.main,
         },
       },
       {
         variant: 'text',
         intent: 'error',
         styles: {
-          color: theme.intents?.error?.main || '#ef4444',
+          color: theme.intents.error.main,
         },
       },
       {
         variant: 'text',
         intent: 'warning',
         styles: {
-          color: theme.intents?.warning?.main || '#f59e0b',
+          color: theme.intents.warning.main,
         },
       },
       {
         variant: 'text',
         intent: 'neutral',
         styles: {
-          color: theme.intents?.neutral?.main || '#6b7280',
+          color: theme.intents.neutral.main,
         },
       },
     ],
@@ -236,19 +236,19 @@ export const buttonStyles = StyleSheet.create((theme) => ({
       },
       intent: {
         primary: {
-          color: theme.intents?.primary?.on || '#ffffff',
+          color: theme.intents.primary.on,
         },
         success: {
-          color: theme.intents?.success?.on || '#ffffff',
+          color: theme.intents.success.on,
         },
         error: {
-          color: theme.intents?.error?.on || '#ffffff',
+          color: theme.intents.error.on,
         },
         warning: {
-          color: theme.intents?.warning?.on || '#ffffff',
+          color: theme.intents.warning.on,
         },
         neutral: {
-          color: theme.intents?.neutral?.on || '#ffffff',
+          color: theme.intents.neutral.on,
         },
       },
       variant: {
@@ -273,35 +273,35 @@ export const buttonStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'primary',
         styles: {
-          color: theme.intents?.primary?.main || '#3b82f6',
+          color: theme.intents.primary.main,
         },
       },
       {
         variant: 'outlined',
         intent: 'success',
         styles: {
-          color: theme.intents?.success?.main || '#22c55e',
+          color: theme.intents.success.main,
         },
       },
       {
         variant: 'outlined',
         intent: 'error',
         styles: {
-          color: theme.intents?.error?.main || '#ef4444',
+          color: theme.intents.error.main,
         },
       },
       {
         variant: 'outlined',
         intent: 'warning',
         styles: {
-          color: theme.intents?.warning?.main || '#f59e0b',
+          color: theme.intents.warning.main,
         },
       },
       {
         variant: 'outlined',
         intent: 'neutral',
         styles: {
-          color: theme.intents?.neutral?.main || '#6b7280',
+          color: theme.intents.neutral.main,
         },
       },
       // Text variant text colors
@@ -309,35 +309,35 @@ export const buttonStyles = StyleSheet.create((theme) => ({
         variant: 'text',
         intent: 'primary',
         styles: {
-          color: theme.intents?.primary?.main || '#3b82f6',
+          color: theme.intents.primary.main,
         },
       },
       {
         variant: 'text',
         intent: 'success',
         styles: {
-          color: theme.intents?.success?.main || '#22c55e',
+          color: theme.intents.success.main,
         },
       },
       {
         variant: 'text',
         intent: 'error',
         styles: {
-          color: theme.intents?.error?.main || '#ef4444',
+          color: theme.intents.error.main,
         },
       },
       {
         variant: 'text',
         intent: 'warning',
         styles: {
-          color: theme.intents?.warning?.main || '#f59e0b',
+          color: theme.intents.warning.main,
         },
       },
       {
         variant: 'text',
         intent: 'neutral',
         styles: {
-          color: theme.intents?.neutral?.main || '#6b7280',
+          color: theme.intents.neutral.main,
         },
       },
     ],

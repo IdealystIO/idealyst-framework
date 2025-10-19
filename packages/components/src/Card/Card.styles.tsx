@@ -2,41 +2,41 @@ import { StyleSheet } from 'react-native-unistyles';
 
 export const cardStyles = StyleSheet.create((theme) => ({
   card: {
-    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+    backgroundColor: theme.colors.surface.primary,
     position: 'relative',
     overflow: 'hidden',
     
     variants: {
       variant: {
         default: {
-          backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+          backgroundColor: theme.colors.surface.primary,
           // React Native border properties
           borderWidth: 1,
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[200] || '#e5e7eb',
+          borderColor: theme.colors.border.primary,
           // Web-specific border override
           _web: {
-            border: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[200] || '#e5e7eb'}`,
+            border: `1px solid ${theme.colors.border.primary}`,
           },
         },
         outlined: {
           backgroundColor: 'transparent',
           // React Native border properties
           borderWidth: 1,
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
           // Web-specific border override
           _web: {
-            border: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+            border: `1px solid ${theme.colors.border.primary}`,
           },
         },
         elevated: {
-          backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+          backgroundColor: theme.colors.surface.primary,
           borderWidth: 0,
           _web: {
             border: 'none',
           },
         },
         filled: {
-          backgroundColor: theme.colors?.surface?.secondary || theme.palettes?.gray?.[50] || '#f9fafb',
+          backgroundColor: theme.colors.surface.secondary,
           borderWidth: 0,
           _web: {
             border: 'none',
@@ -48,13 +48,13 @@ export const cardStyles = StyleSheet.create((theme) => ({
           padding: 0,
         },
         small: {
-          padding: theme.spacing?.sm || 8,
+          padding: theme.spacing.sm,
         },
         medium: {
-          padding: theme.spacing?.md || 12,
+          padding: theme.spacing.md,
         },
         large: {
-          padding: theme.spacing?.lg || 16,
+          padding: theme.spacing.lg,
         },
       },
       radius: {
@@ -62,13 +62,13 @@ export const cardStyles = StyleSheet.create((theme) => ({
           borderRadius: 0,
         },
         small: {
-          borderRadius: theme.borderRadius?.sm || 4,
+          borderRadius: theme.borderRadius.sm,
         },
         medium: {
-          borderRadius: theme.borderRadius?.md || 8,
+          borderRadius: theme.borderRadius.md,
         },
         large: {
-          borderRadius: theme.borderRadius?.lg || 12,
+          borderRadius: theme.borderRadius.lg,
         },
       },
       intent: {
@@ -116,11 +116,11 @@ export const cardStyles = StyleSheet.create((theme) => ({
       {
         variant: 'elevated',
         styles: {
-          shadowColor: theme.shadows?.md?.shadowColor || '#000',
-          shadowOffset: theme.shadows?.md?.shadowOffset || { width: 0, height: 4 },
-          shadowOpacity: theme.shadows?.md?.shadowOpacity || 0.1,
-          shadowRadius: theme.shadows?.md?.shadowRadius || 8,
-          elevation: theme.shadows?.md?.elevation || 4,
+          shadowColor: theme.shadows.md.shadowColor,
+          shadowOffset: theme.shadows.md.shadowOffset,
+          shadowOpacity: theme.shadows.md.shadowOpacity,
+          shadowRadius: theme.shadows.md.shadowRadius,
+          elevation: theme.shadows.md.elevation,
           // More subtle shadow for web
           _web: {
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)',
@@ -132,9 +132,9 @@ export const cardStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'primary',
         styles: {
-          borderColor: theme.intents?.primary?.main || '#3b82f6',
+          borderColor: theme.intents.primary.main,
           _web: {
-            border: `1px solid ${theme.intents?.primary?.main || '#3b82f6'}`,
+            border: `1px solid ${theme.intents.primary.main}`,
           },
         },
       },
@@ -142,9 +142,9 @@ export const cardStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'success',
         styles: {
-          borderColor: theme.intents?.success?.main || '#22c55e',
+          borderColor: theme.intents.success.main,
           _web: {
-            border: `1px solid ${theme.intents?.success?.main || '#22c55e'}`,
+            border: `1px solid ${theme.intents.success.main}`,
           },
         },
       },
@@ -152,9 +152,9 @@ export const cardStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'error',
         styles: {
-          borderColor: theme.intents?.error?.main || '#ef4444',
+          borderColor: theme.intents.error.main,
           _web: {
-            border: `1px solid ${theme.intents?.error?.main || '#ef4444'}`,
+            border: `1px solid ${theme.intents.error.main}`,
           },
         },
       },
@@ -162,9 +162,9 @@ export const cardStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'warning',
         styles: {
-          borderColor: theme.intents?.warning?.main || '#f59e0b',
+          borderColor: theme.intents.warning.main,
           _web: {
-            border: `1px solid ${theme.intents?.warning?.main || '#f59e0b'}`,
+            border: `1px solid ${theme.intents.warning.main}`,
           },
         },
       },
@@ -172,9 +172,9 @@ export const cardStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'info',
         styles: {
-          borderColor: theme.intents?.info?.main || '#06b6d4',
+          borderColor: theme.intents.info.main,
           _web: {
-            border: `1px solid ${theme.intents?.info?.main || '#06b6d4'}`,
+            border: `1px solid ${theme.intents.info.main}`,
           },
         },
       },
@@ -183,35 +183,35 @@ export const cardStyles = StyleSheet.create((theme) => ({
         variant: 'filled',
         intent: 'primary',
         styles: {
-          backgroundColor: theme.intents?.primary?.container || theme.palettes?.blue?.[50] || '#eff6ff',
+          backgroundColor: theme.intents.primary.container,
         },
       },
       {
         variant: 'filled',
         intent: 'success',
         styles: {
-          backgroundColor: theme.intents?.success?.container || theme.palettes?.green?.[50] || '#f0fdf4',
+          backgroundColor: theme.intents.success.container,
         },
       },
       {
         variant: 'filled',
         intent: 'error',
         styles: {
-          backgroundColor: theme.intents?.error?.container || theme.palettes?.red?.[50] || '#fef2f2',
+          backgroundColor: theme.intents.error.container,
         },
       },
       {
         variant: 'filled',
         intent: 'warning',
         styles: {
-          backgroundColor: theme.intents?.warning?.container || theme.palettes?.amber?.[50] || '#fffbeb',
+          backgroundColor: theme.intents.warning.container,
         },
       },
       {
         variant: 'filled',
         intent: 'info',
         styles: {
-          backgroundColor: theme.intents?.info?.container || theme.palettes?.cyan?.[50] || '#ecfeff',
+          backgroundColor: theme.intents.info.container,
         },
       },
     ],

@@ -5,7 +5,7 @@ export const avatarStyles = StyleSheet.create((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors?.surface?.secondary || '#f3f4f6',
+    backgroundColor: theme.colors.surface.secondary,
     overflow: 'hidden',
     
     variants: {
@@ -32,7 +32,7 @@ export const avatarStyles = StyleSheet.create((theme) => ({
           borderRadius: 9999,
         },
         square: {
-          borderRadius: theme.borderRadius?.md || 8,
+          borderRadius: theme.borderRadius.md,
         },
       },
     },
@@ -44,7 +44,7 @@ export const avatarStyles = StyleSheet.create((theme) => ({
   },
   
   fallback: {
-    color: theme.colors?.text?.primary || '#374151',
+    color: theme.colors.text.primary,
     fontWeight: '600',
     
     variants: {

@@ -21,8 +21,8 @@ export const dialogStyles = StyleSheet.create((theme) => ({
   },
   
   container: {
-    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-    borderRadius: theme.borderRadius?.lg || 12,
+    backgroundColor: theme.colors.surface.primary,
+    borderRadius: theme.borderRadius.lg,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -58,11 +58,11 @@ export const dialogStyles = StyleSheet.create((theme) => ({
         default: {},
         alert: {
           borderTopWidth: 4,
-          borderTopColor: theme.colors?.border?.primary || '#e5e7eb',
+          borderTopColor: theme.colors.border.primary,
         },
         confirmation: {
           borderTopWidth: 4,
-          borderTopColor: theme.colors?.border?.primary || '#e5e7eb',
+          borderTopColor: theme.colors.border.primary,
         },
       },
     },
@@ -81,7 +81,7 @@ export const dialogStyles = StyleSheet.create((theme) => ({
   
   header: {
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors?.border?.primary || '#e5e7eb',
+    borderBottomColor: theme.colors.border.primary,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -93,11 +93,11 @@ export const dialogStyles = StyleSheet.create((theme) => ({
   },
   
   title: {
-    marginLeft: theme.spacing?.lg || 12,
+    marginLeft: theme.spacing.lg,
     fontSize: 18,
     paddingVertical: theme.spacing.md,
     fontWeight: '600',
-    color: theme.colors?.text?.primary || '#111827',
+    color: theme.colors.text.primary,
     flex: 1,
 
     _web: {
@@ -108,7 +108,7 @@ export const dialogStyles = StyleSheet.create((theme) => ({
   closeButton: {
     width: 32,
     height: 32,
-    marginRight: theme.spacing?.md || 12,
+    marginRight: theme.spacing.md,
     borderRadius: 16,
     backgroundColor: 'transparent',
     border: 'none',
@@ -119,19 +119,19 @@ export const dialogStyles = StyleSheet.create((theme) => ({
     
     _web: {
       _hover: {
-        backgroundColor: theme.colors?.surface?.secondary || '#f3f4f6',
+        backgroundColor: theme.colors.surface.secondary,
       },
     },
   },
   
   closeButtonText: {
     fontSize: 18,
-    color: theme.colors?.text?.secondary || '#6b7280',
+    color: theme.colors.text.secondary,
     fontWeight: '500',
   },
   
   content: {
-    padding: theme.spacing?.lg || 16,
+    padding: theme.spacing.lg,
     
     _web: {
       overflow: 'visible',

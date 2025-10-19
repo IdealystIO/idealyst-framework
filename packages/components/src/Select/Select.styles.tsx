@@ -6,10 +6,10 @@ export const selectStyles = StyleSheet.create((theme) => ({
   },
 
   label: {
-    fontSize: theme.typography?.sm?.fontSize || 14,
-    fontWeight: theme.typography?.sm?.fontWeight || '500',
-    color: theme.colors?.text?.primary || theme.palettes?.gray?.[700],
-    marginBottom: theme.spacing?.xs || 4,
+    fontSize: theme.typography.sm.fontSize,
+    fontWeight: theme.typography.sm.fontWeight,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xs,
   },
 
   trigger: {
@@ -17,8 +17,8 @@ export const selectStyles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: theme.spacing?.sm || 12,
-    borderRadius: theme.borderRadius?.md || 8,
+    paddingHorizontal: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
     borderWidth: 1,
     minHeight: 44,
     cursor: 'pointer',
@@ -27,13 +27,13 @@ export const selectStyles = StyleSheet.create((theme) => ({
       variant: {
         outlined: {
           backgroundColor: 'transparent',
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300],
+          borderColor: theme.colors.border.primary,
           _web: {
-            border: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[300]}`,
+            border: `1px solid ${theme.colors.border.primary}`,
           },
         },
         filled: {
-          backgroundColor: theme.colors?.surface?.secondary || theme.palettes?.gray?.[50],
+          backgroundColor: theme.colors.surface.secondary,
           borderColor: 'transparent',
           _web: {
             border: '1px solid transparent',
@@ -42,15 +42,15 @@ export const selectStyles = StyleSheet.create((theme) => ({
       },
       size: {
         small: {
-          paddingHorizontal: theme.spacing?.xs || 8,
+          paddingHorizontal: theme.spacing.xs,
           minHeight: 36,
         },
         medium: {
-          paddingHorizontal: theme.spacing?.sm || 12,
+          paddingHorizontal: theme.spacing.sm,
           minHeight: 44,
         },
         large: {
-          paddingHorizontal: theme.spacing?.md || 16,
+          paddingHorizontal: theme.spacing.md,
           minHeight: 52,
         },
       },
@@ -68,7 +68,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
           cursor: 'not-allowed',
           _web: {
             _hover: {
-              borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+              borderColor: theme.colors.border.primary,
             },
           },
         },
@@ -76,18 +76,18 @@ export const selectStyles = StyleSheet.create((theme) => ({
       },
       error: {
         true: {
-          borderColor: theme.intents?.error?.main || '#ef4444',
+          borderColor: theme.intents.error.main,
           _web: {
-            border: `1px solid ${theme.intents?.error?.main || '#ef4444'}`,
+            border: `1px solid ${theme.intents.error.main}`,
           },
         },
         false: {},
       },
       focused: {
         true: {
-          borderColor: theme.intents?.primary?.main || '#3b82f6',
+          borderColor: theme.intents.primary.main,
           _web: {
-            border: `2px solid ${theme.intents?.primary?.main || '#3b82f6'}`,
+            border: `2px solid ${theme.intents.primary.main}`,
             outline: 'none',
           },
         },
@@ -100,9 +100,9 @@ export const selectStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'primary',
         styles: {
-          borderColor: theme.intents?.primary?.main || '#3b82f6',
+          borderColor: theme.intents.primary.main,
           _web: {
-            border: `1px solid ${theme.intents?.primary?.main || '#3b82f6'}`,
+            border: `1px solid ${theme.intents.primary.main}`,
           },
         },
       },
@@ -110,9 +110,9 @@ export const selectStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'success',
         styles: {
-          borderColor: theme.intents?.success?.main || '#22c55e',
+          borderColor: theme.intents.success.main,
           _web: {
-            border: `1px solid ${theme.intents?.success?.main || '#22c55e'}`,
+            border: `1px solid ${theme.intents.success.main}`,
           },
         },
       },
@@ -120,9 +120,9 @@ export const selectStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'error',
         styles: {
-          borderColor: theme.intents?.error?.main || '#ef4444',
+          borderColor: theme.intents.error.main,
           _web: {
-            border: `1px solid ${theme.intents?.error?.main || '#ef4444'}`,
+            border: `1px solid ${theme.intents.error.main}`,
           },
         },
       },
@@ -130,9 +130,9 @@ export const selectStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'warning',
         styles: {
-          borderColor: theme.intents?.warning?.main || '#f59e0b',
+          borderColor: theme.intents.warning.main,
           _web: {
-            border: `1px solid ${theme.intents?.warning?.main || '#f59e0b'}`,
+            border: `1px solid ${theme.intents.warning.main}`,
           },
         },
       },
@@ -140,9 +140,9 @@ export const selectStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'info',
         styles: {
-          borderColor: theme.intents?.info?.main || '#06b6d4',
+          borderColor: theme.intents.info.main,
           _web: {
-            border: `1px solid ${theme.intents?.info?.main || '#06b6d4'}`,
+            border: `1px solid ${theme.intents.info.main}`,
           },
         },
       },
@@ -155,7 +155,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
         outline: 'none',
       },
       _hover: {
-        borderColor: theme.intents?.primary?.main || '#3b82f6',
+        borderColor: theme.intents.primary.main,
       },
     },
   },
@@ -167,27 +167,27 @@ export const selectStyles = StyleSheet.create((theme) => ({
   },
 
   triggerText: {
-    fontSize: theme.typography?.base?.fontSize || 16,
-    color: theme.colors?.text?.primary || theme.palettes?.gray?.[900] || '#111827',
+    fontSize: theme.typography.base.fontSize,
+    color: theme.colors.text.primary,
     flex: 1,
   },
 
   placeholder: {
-    fontSize: theme.typography?.base?.fontSize || 16,
-    color: theme.colors?.text?.disabled || theme.palettes?.gray?.[500] || '#6b7280',
+    fontSize: theme.typography.base.fontSize,
+    color: theme.colors.text.disabled,
   },
 
   icon: {
-    marginLeft: theme.spacing?.xs || 4,
-    color: theme.colors?.text?.secondary || theme.palettes?.gray?.[600] || '#4b5563',
+    marginLeft: theme.spacing.xs,
+    color: theme.colors.text.secondary,
   },
 
   chevron: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: theme.spacing?.xs || 4,
-    color: theme.colors?.text?.secondary || theme.palettes?.gray?.[600] || '#4b5563',
+    marginLeft: theme.spacing.xs,
+    color: theme.colors.text.secondary,
     transition: 'transform 0.2s ease',
     width: 20,
     height: 20,
@@ -202,61 +202,61 @@ export const selectStyles = StyleSheet.create((theme) => ({
     top: '100%',
     left: 0,
     right: 0,
-    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-    borderRadius: theme.borderRadius?.md || 8,
+    backgroundColor: theme.colors?.surface?.primary,
+    borderRadius: theme.borderRadius.md,
     borderWidth: 1,
-    borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[200] || '#e5e7eb',
-    shadowColor: theme.shadows?.lg?.shadowColor || '#000',
-    shadowOffset: theme.shadows?.lg?.shadowOffset || { width: 0, height: 8 },
-    shadowOpacity: theme.shadows?.lg?.shadowOpacity || 0.15,
-    shadowRadius: theme.shadows?.lg?.shadowRadius || 12,
-    elevation: theme.shadows?.lg?.elevation || 8,
+    borderColor: theme.colors.border.primary,
+    shadowColor: theme.shadows.lg.shadowColor,
+    shadowOffset: theme.shadows.lg.shadowOffset,
+    shadowOpacity: theme.shadows.lg.shadowOpacity,
+    shadowRadius: theme.shadows.lg.shadowRadius,
+    elevation: theme.shadows.lg.elevation,
     zIndex: 9999, // Higher z-index to float above other content
     maxHeight: 240,
     minWidth: 200,
     overflow: 'hidden',
 
     _web: {
-      border: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[200] || '#e5e7eb'}`,
+      border: `1px solid ${theme.colors.border.primary}`,
       boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06)',
       overflowY: 'auto',
     },
   },
 
   searchContainer: {
-    padding: theme.spacing?.sm || 12,
+    padding: theme.spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors?.border?.primary || theme.palettes?.gray?.[200] || '#e5e7eb',
+    borderBottomColor: theme.colors.border.primary,
 
     _web: {
-      borderBottom: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[200] || '#e5e7eb'}`,
+      borderBottom: `1px solid ${theme.colors.border.primary}`,
     },
   },
 
   searchInput: {
-    padding: theme.spacing?.xs || 8,
-    borderRadius: theme.borderRadius?.sm || 4,
+    padding: theme.spacing.xs,
+    borderRadius: theme.borderRadius.sm,
     borderWidth: 1,
-    borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
-    fontSize: theme.typography?.sm?.fontSize || 14,
-    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+    borderColor: theme.colors.border.primary,
+    fontSize: theme.typography.sm.fontSize,
+    backgroundColor: theme.colors?.surface?.primary,
 
     _web: {
-      border: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+      border: `1px solid ${theme.colors.border.primary}`,
       outline: 'none',
       _focus: {
-        borderColor: theme.intents?.primary?.main || '#3b82f6',
+        borderColor: theme.intents.primary.main,
       },
     },
   },
 
   optionsList: {
-    paddingVertical: theme.spacing?.xs || 4,
+    paddingVertical: theme.spacing.xs,
   },
 
   option: {
-    paddingHorizontal: theme.spacing?.sm || 12,
-    paddingVertical: theme.spacing?.xs || 8,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
     flexDirection: 'row',
     alignItems: 'center',
     cursor: 'pointer',
@@ -265,7 +265,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
     variants: {
       selected: {
         true: {
-          backgroundColor: theme.intents?.primary?.container || theme.palettes?.blue?.[50] || '#eff6ff',
+          backgroundColor: theme.intents.primary.container,
         },
         false: {},
       },
@@ -286,7 +286,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
     _web: {
       display: 'flex',
       _hover: {
-        backgroundColor: theme.colors?.surface?.secondary || theme.palettes?.gray?.[50] || '#f9fafb',
+        backgroundColor: theme.colors.surface.secondary,
       },
     },
   },
@@ -298,28 +298,28 @@ export const selectStyles = StyleSheet.create((theme) => ({
   },
 
   optionIcon: {
-    marginRight: theme.spacing?.xs || 8,
+    marginRight: theme.spacing.xs,
   },
 
   optionText: {
-    fontSize: theme.typography?.base?.fontSize || 16,
-    color: theme.colors?.text?.primary || theme.palettes?.gray?.[900] || '#111827',
+    fontSize: theme.typography.base.fontSize,
+    color: theme.colors.text.primary,
     flex: 1,
   },
 
   optionTextDisabled: {
-    color: theme.colors?.text?.disabled || theme.palettes?.gray?.[500] || '#6b7280',
+    color: theme.colors.text.disabled,
   },
 
   helperText: {
-    fontSize: theme.typography?.xs?.fontSize || 12,
-    marginTop: theme.spacing?.xs || 4,
-    color: theme.colors?.text?.secondary || theme.palettes?.gray?.[600] || '#4b5563',
+    fontSize: theme.typography.xs.fontSize,
+    marginTop: theme.spacing.xs,
+    color: theme.colors.text.secondary,
 
     variants: {
       error: {
         true: {
-          color: theme.intents?.error?.main || '#ef4444',
+          color: theme.intents.error.main,
         },
         false: {},
       },

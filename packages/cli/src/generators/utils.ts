@@ -459,7 +459,7 @@ export async function mergePackageJsonDependencies(templatePath: string, project
       '@trpc/server': '^11.5.1',
       'react-native-edge-to-edge': '^1.6.2',
       'react-native-gesture-handler': '^2.27.1',
-      'react-native-nitro-modules': '^0.26.3',
+      'react-native-nitro-modules': '^0.30.0',
       'react-native-reanimated': '^3.18.0',
       'react-native-safe-area-context': '^5.5.1',
       'react-native-screens': '^4.11.1',

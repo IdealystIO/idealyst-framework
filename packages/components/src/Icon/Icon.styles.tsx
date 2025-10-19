@@ -8,7 +8,7 @@ const iconStyles = StyleSheet.create((theme) => ({
     height: 24,
     
     // Default theme-based color
-    color: theme.colors?.text || '#000000',
+    color: theme.colors.text,
     
     // Variants for different color schemes and sizes
     variants: {

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native-unistyles';
 
 export const dividerStyles = StyleSheet.create((theme) => ({
   divider: {
-    backgroundColor: theme.colors?.border?.secondary || theme.palettes?.gray?.[300] || '#d1d5db',
+    backgroundColor: theme.colors.border.secondary,
     
     variants: {
       orientation: {
@@ -53,25 +53,25 @@ export const dividerStyles = StyleSheet.create((theme) => ({
       },
       intent: {
         primary: {
-          backgroundColor: theme.intents?.primary?.main || '#3b82f6',
+          backgroundColor: theme.intents.primary.main,
         },
         secondary: {
-          backgroundColor: theme.colors?.border?.primary || theme.palettes?.gray?.[200] || '#e5e7eb',
+          backgroundColor: theme.colors.border.primary,
         },
         neutral: {
-          backgroundColor: theme.colors?.border?.secondary || theme.palettes?.gray?.[300] || '#d1d5db',
+          backgroundColor: theme.colors.border.secondary,
         },
         success: {
-          backgroundColor: theme.intents?.success?.main || '#22c55e',
+          backgroundColor: theme.intents.success.main,
         },
         error: {
-          backgroundColor: theme.intents?.error?.main || '#ef4444',
+          backgroundColor: theme.intents.error.main,
         },
         warning: {
-          backgroundColor: theme.intents?.warning?.main || '#f59e0b',
+          backgroundColor: theme.intents.warning.main,
         },
         info: {
-          backgroundColor: theme.intents?.info?.main || '#06b6d4',
+          backgroundColor: theme.intents.info.main,
         },
       },
       length: {
@@ -148,21 +148,21 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         orientation: 'horizontal',
         spacing: 'small',
         styles: {
-          marginVertical: theme.spacing?.sm || 8,
+          marginVertical: theme.spacing.sm,
         },
       },
       {
         orientation: 'horizontal',
         spacing: 'md',
         styles: {
-          marginVertical: theme.spacing?.md || 12,
+          marginVertical: theme.spacing.md,
         },
       },
       {
         orientation: 'horizontal',
         spacing: 'large',
         styles: {
-          marginVertical: theme.spacing?.lg || 16,
+          marginVertical: theme.spacing.lg,
         },
       },
       // Vertical spacing variants
@@ -170,21 +170,21 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         orientation: 'vertical',
         spacing: 'small',
         styles: {
-          marginHorizontal: theme.spacing?.sm || 8,
+          marginHorizontal: theme.spacing.sm,
         },
       },
       {
         orientation: 'vertical',
         spacing: 'md',
         styles: {
-          marginHorizontal: theme.spacing?.md || 12,
+          marginHorizontal: theme.spacing.md,
         },
       },
       {
         orientation: 'vertical',
         spacing: 'large',
         styles: {
-          marginHorizontal: theme.spacing?.lg || 16,
+          marginHorizontal: theme.spacing.lg,
         },
       },
       // Dashed variant compound styles (web-only, RN handled by component)
@@ -193,7 +193,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         orientation: 'horizontal',
         styles: {
           _web: {
-            borderTop: `1px dashed ${theme.colors?.border?.secondary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+            borderTop: `1px dashed ${theme.colors.border.secondary}`,
             borderLeft: 'none',
           },
         },
@@ -203,7 +203,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         orientation: 'vertical',
         styles: {
           _web: {
-            borderLeft: `1px dashed ${theme.colors?.border?.secondary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+            borderLeft: `1px dashed ${theme.colors.border.secondary}`,
             borderTop: 'none',
           },
         },
@@ -214,7 +214,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         orientation: 'horizontal',
         styles: {
           _web: {
-            borderTop: `1px dotted ${theme.colors?.border?.secondary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+            borderTop: `1px dotted ${theme.colors.border.secondary}`,
             borderLeft: 'none',
           },
         },
@@ -224,7 +224,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         orientation: 'vertical',
         styles: {
           _web: {
-            borderLeft: `1px dotted ${theme.colors?.border?.secondary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+            borderLeft: `1px dotted ${theme.colors.border.secondary}`,
             borderTop: 'none',
           },
         },
@@ -235,10 +235,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'primary',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.primary?.main || '#3b82f6',
+          borderTopColor: theme.intents.primary.main,
           
           _web: {
-            borderTop: `1px dashed ${theme.intents?.primary?.main || '#3b82f6'}`,
+            borderTop: `1px dashed ${theme.intents.primary.main}`,
           },
         },
       },
@@ -247,10 +247,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'primary',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.primary?.main || '#3b82f6',
+          borderLeftColor: theme.intents.primary.main,
           
           _web: {
-            borderLeft: `1px dashed ${theme.intents?.primary?.main || '#3b82f6'}`,
+            borderLeft: `1px dashed ${theme.intents.primary.main}`,
           },
         },
       },
@@ -259,10 +259,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'success',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.success?.main || '#22c55e',
+          borderTopColor: theme.intents.success.main,
           
           _web: {
-            borderTop: `1px dashed ${theme.intents?.success?.main || '#22c55e'}`,
+            borderTop: `1px dashed ${theme.intents.success.main}`,
           },
         },
       },
@@ -271,10 +271,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'success',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.success?.main || '#22c55e',
+          borderLeftColor: theme.intents.success.main,
           
           _web: {
-            borderLeft: `1px dashed ${theme.intents?.success?.main || '#22c55e'}`,
+            borderLeft: `1px dashed ${theme.intents.success.main}`,
           },
         },
       },
@@ -283,10 +283,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'error',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.error?.main || '#ef4444',
+          borderTopColor: theme.intents.error.main,
           
           _web: {
-            borderTop: `1px dashed ${theme.intents?.error?.main || '#ef4444'}`,
+            borderTop: `1px dashed ${theme.intents.error.main}`,
           },
         },
       },
@@ -295,10 +295,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'error',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.error?.main || '#ef4444',
+          borderLeftColor: theme.intents.error.main,
           
           _web: {
-            borderLeft: `1px dashed ${theme.intents?.error?.main || '#ef4444'}`,
+            borderLeft: `1px dashed ${theme.intents.error.main}`,
           },
         },
       },
@@ -307,10 +307,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'warning',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.warning?.main || '#f59e0b',
+          borderTopColor: theme.intents.warning.main,
           
           _web: {
-            borderTop: `1px dashed ${theme.intents?.warning?.main || '#f59e0b'}`,
+            borderTop: `1px dashed ${theme.intents.warning.main}`,
           },
         },
       },
@@ -319,10 +319,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'warning',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.warning?.main || '#f59e0b',
+          borderLeftColor: theme.intents.warning.main,
           
           _web: {
-            borderLeft: `1px dashed ${theme.intents?.warning?.main || '#f59e0b'}`,
+            borderLeft: `1px dashed ${theme.intents.warning.main}`,
           },
         },
       },
@@ -331,10 +331,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'info',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.info?.main || '#06b6d4',
+          borderTopColor: theme.intents.info.main,
           
           _web: {
-            borderTop: `1px dashed ${theme.intents?.info?.main || '#06b6d4'}`,
+            borderTop: `1px dashed ${theme.intents.info.main}`,
           },
         },
       },
@@ -343,10 +343,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'info',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.info?.main || '#06b6d4',
+          borderLeftColor: theme.intents.info.main,
           
           _web: {
-            borderLeft: `1px dashed ${theme.intents?.info?.main || '#06b6d4'}`,
+            borderLeft: `1px dashed ${theme.intents.info.main}`,
           },
         },
       },
@@ -356,10 +356,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'primary',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.primary?.main || '#3b82f6',
+          borderTopColor: theme.intents.primary.main,
           
           _web: {
-            borderTop: `1px dotted ${theme.intents?.primary?.main || '#3b82f6'}`,
+            borderTop: `1px dotted ${theme.intents.primary.main}`,
           },
         },
       },
@@ -368,10 +368,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'primary',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.primary?.main || '#3b82f6',
+          borderLeftColor: theme.intents.primary.main,
           
           _web: {
-            borderLeft: `1px dotted ${theme.intents?.primary?.main || '#3b82f6'}`,
+            borderLeft: `1px dotted ${theme.intents.primary.main}`,
           },
         },
       },
@@ -380,10 +380,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'success',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.success?.main || '#22c55e',
+          borderTopColor: theme.intents.success.main,
           
           _web: {
-            borderTop: `1px dotted ${theme.intents?.success?.main || '#22c55e'}`,
+            borderTop: `1px dotted ${theme.intents.success.main}`,
           },
         },
       },
@@ -392,10 +392,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'success',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.success?.main || '#22c55e',
+          borderLeftColor: theme.intents.success.main,
           
           _web: {
-            borderLeft: `1px dotted ${theme.intents?.success?.main || '#22c55e'}`,
+            borderLeft: `1px dotted ${theme.intents.success.main}`,
           },
         },
       },
@@ -404,10 +404,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'error',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.error?.main || '#ef4444',
+          borderTopColor: theme.intents.error.main,
           
           _web: {
-            borderTop: `1px dotted ${theme.intents?.error?.main || '#ef4444'}`,
+            borderTop: `1px dotted ${theme.intents.error.main}`,
           },
         },
       },
@@ -416,10 +416,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'error',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.error?.main || '#ef4444',
+          borderLeftColor: theme.intents.error.main,
           
           _web: {
-            borderLeft: `1px dotted ${theme.intents?.error?.main || '#ef4444'}`,
+            borderLeft: `1px dotted ${theme.intents.error.main}`,
           },
         },
       },
@@ -428,10 +428,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'warning',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.warning?.main || '#f59e0b',
+          borderTopColor: theme.intents.warning.main,
           
           _web: {
-            borderTop: `1px dotted ${theme.intents?.warning?.main || '#f59e0b'}`,
+            borderTop: `1px dotted ${theme.intents.warning.main}`,
           },
         },
       },
@@ -440,10 +440,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'warning',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.warning?.main || '#f59e0b',
+          borderLeftColor: theme.intents.warning.main,
           
           _web: {
-            borderLeft: `1px dotted ${theme.intents?.warning?.main || '#f59e0b'}`,
+            borderLeft: `1px dotted ${theme.intents.warning.main}`,
           },
         },
       },
@@ -452,10 +452,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'info',
         orientation: 'horizontal',
         styles: {
-          borderTopColor: theme.intents?.info?.main || '#06b6d4',
+          borderTopColor: theme.intents.info.main,
           
           _web: {
-            borderTop: `1px dotted ${theme.intents?.info?.main || '#06b6d4'}`,
+            borderTop: `1px dotted ${theme.intents.info.main}`,
           },
         },
       },
@@ -464,10 +464,10 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         intent: 'info',
         orientation: 'vertical',
         styles: {
-          borderLeftColor: theme.intents?.info?.main || '#06b6d4',
+          borderLeftColor: theme.intents.info.main,
           
           _web: {
-            borderLeft: `1px dotted ${theme.intents?.info?.main || '#06b6d4'}`,
+            borderLeft: `1px dotted ${theme.intents.info.main}`,
           },
         },
       },
@@ -495,13 +495,13 @@ export const dividerStyles = StyleSheet.create((theme) => ({
           gap: 0,
         },
         small: {
-          gap: theme.spacing?.sm || 8,
+          gap: theme.spacing.sm,
         },
         medium: {
-          gap: theme.spacing?.md || 12,
+          gap: theme.spacing.md,
         },
         large: {
-          gap: theme.spacing?.lg || 16,
+          gap: theme.spacing.lg,
         },
       },
     },
@@ -509,17 +509,17 @@ export const dividerStyles = StyleSheet.create((theme) => ({
   
   // Content styling for dividers with children
   content: {
-    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-    color: theme.colors?.text?.secondary || theme.palettes?.gray?.[600] || '#4b5563',
+    backgroundColor: theme.colors?.surface?.primary,
+    color: theme.colors.text.secondary,
     fontSize: theme.typography?.fontSize?.sm || 14,
     
     variants: {
       orientation: {
         horizontal: {
-          paddingHorizontal: theme.spacing?.sm || 8,
+          paddingHorizontal: theme.spacing.sm,
         },
         vertical: {
-          paddingVertical: theme.spacing?.sm || 8,
+          paddingVertical: theme.spacing.sm,
         },
       },
     },
@@ -527,7 +527,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
   
   // Line segments for dividers with content
   line: {
-    backgroundColor: theme.colors?.border?.secondary || theme.palettes?.gray?.[300] || '#d1d5db',
+    backgroundColor: theme.colors.border.secondary,
     flex: 1,
     
     variants: {

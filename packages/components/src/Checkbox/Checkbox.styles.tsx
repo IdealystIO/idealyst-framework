@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native-unistyles';
 export const checkboxStyles = StyleSheet.create((theme) => ({
   wrapper: {
     flexDirection: 'column',
-    gap: theme.spacing?.xs || 4,
+    gap: theme.spacing.xs,
     
     // Web-specific styles
     _web: {
@@ -17,14 +17,14 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing?.sm || 8,
+    gap: theme.spacing.sm,
     
     // Web-specific styles for proper layout
     _web: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      gap: theme.spacing?.sm || 8,
+      gap: theme.spacing.sm,
       width: 'fit-content',
       cursor: 'pointer',
     },
@@ -33,7 +33,7 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
   checkbox: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: theme.borderRadius?.sm || 4,
+    borderRadius: theme.borderRadius.sm,
     position: 'relative',
     transition: 'all 0.2s ease',
     
@@ -55,46 +55,46 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
       intent: {
         primary: {
           backgroundColor: 'transparent',
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
         },
         success: {
           backgroundColor: 'transparent',
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
         },
         error: {
           backgroundColor: 'transparent',
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
         },
         warning: {
           backgroundColor: 'transparent',
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
         },
         neutral: {
           backgroundColor: 'transparent',
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
         },
         info: {
           backgroundColor: 'transparent',
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
         },
       },
       variant: {
         default: {
           // React Native border properties
           borderWidth: 1,
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
           // Web-specific border override
           _web: {
-            border: `1px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+            border: `1px solid ${theme.colors.border.primary}`,
           },
         },
         outlined: {
           // React Native border properties
           borderWidth: 2,
-          borderColor: theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db',
+          borderColor: theme.colors.border.primary,
           // Web-specific border override
           _web: {
-            border: `2px solid ${theme.colors?.border?.primary || theme.palettes?.gray?.[300] || '#d1d5db'}`,
+            border: `2px solid ${theme.colors.border.primary}`,
           },
         },
       },
@@ -122,10 +122,10 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
         checked: true,
         intent: 'primary',
         styles: {
-          backgroundColor: theme.intents?.primary?.main || '#3b82f6',
-          borderColor: theme.intents?.primary?.main || '#3b82f6',
+          backgroundColor: theme.intents.primary.main,
+          borderColor: theme.intents.primary.main,
           _web: {
-            border: `1px solid ${theme.intents?.primary?.main || '#3b82f6'}`,
+            border: `1px solid ${theme.intents.primary.main}`,
           },
         },
       },
@@ -133,10 +133,10 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
         checked: true,
         intent: 'success',
         styles: {
-          backgroundColor: theme.intents?.success?.main || '#22c55e',
-          borderColor: theme.intents?.success?.main || '#22c55e',
+          backgroundColor: theme.intents.success.main,
+          borderColor: theme.intents.success.main,
           _web: {
-            border: `1px solid ${theme.intents?.success?.main || '#22c55e'}`,
+            border: `1px solid ${theme.intents.success.main}`,
           },
         },
       },
@@ -144,10 +144,10 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
         checked: true,
         intent: 'error',
         styles: {
-          backgroundColor: theme.intents?.error?.main || '#ef4444',
-          borderColor: theme.intents?.error?.main || '#ef4444',
+          backgroundColor: theme.intents.error.main,
+          borderColor: theme.intents.error.main,
           _web: {
-            border: `1px solid ${theme.intents?.error?.main || '#ef4444'}`,
+            border: `1px solid ${theme.intents.error.main}`,
           },
         },
       },
@@ -155,10 +155,10 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
         checked: true,
         intent: 'warning',
         styles: {
-          backgroundColor: theme.intents?.warning?.main || '#f59e0b',
-          borderColor: theme.intents?.warning?.main || '#f59e0b',
+          backgroundColor: theme.intents.warning.main,
+          borderColor: theme.intents.warning.main,
           _web: {
-            border: `1px solid ${theme.intents?.warning?.main || '#f59e0b'}`,
+            border: `1px solid ${theme.intents.warning.main}`,
           },
         },
       },
@@ -166,10 +166,10 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
         checked: true,
         intent: 'neutral',
         styles: {
-          backgroundColor: theme.intents?.neutral?.main || '#6b7280',
-          borderColor: theme.intents?.neutral?.main || '#6b7280',
+          backgroundColor: theme.intents.neutral.main,
+          borderColor: theme.intents.neutral.main,
           _web: {
-            border: `1px solid ${theme.intents?.neutral?.main || '#6b7280'}`,
+            border: `1px solid ${theme.intents.neutral.main}`,
           },
         },
       },
@@ -177,10 +177,10 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
         checked: true,
         intent: 'info',
         styles: {
-          backgroundColor: theme.intents?.info?.main || '#06b6d4',
-          borderColor: theme.intents?.info?.main || '#06b6d4',
+          backgroundColor: theme.intents.info.main,
+          borderColor: theme.intents.info.main,
           _web: {
-            border: `1px solid ${theme.intents?.info?.main || '#06b6d4'}`,
+            border: `1px solid ${theme.intents.info.main}`,
           },
         },
       },
@@ -199,7 +199,7 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
         opacity: 0.8,
       },
       _focus: {
-        outline: `2px solid ${theme.intents?.primary?.main || '#3b82f6'}`,
+        outline: `2px solid ${theme.intents.primary.main}`,
         outlineOffset: '2px',
       },
     },
@@ -208,7 +208,7 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
 
 export const checkboxLabelStyles = StyleSheet.create((theme) => ({
   label: {
-    color: theme.colors?.text?.primary || theme.palettes?.gray?.[900] || '#111827',
+    color: theme.colors.text.primary,
     
     // Web-specific styles to prevent centering issues
     _web: {
@@ -232,10 +232,10 @@ export const checkboxLabelStyles = StyleSheet.create((theme) => ({
       },
       disabled: {
         true: {
-          color: theme.colors?.text?.disabled || theme.palettes?.gray?.[400] || '#9ca3af',
+          color: theme.colors.text.disabled,
         },
         false: {
-          color: theme.colors?.text?.primary || theme.palettes?.gray?.[900] || '#111827',
+          color: theme.colors.text.primary,
         },
       },
     },
@@ -280,16 +280,16 @@ export const checkboxCheckmarkStyles = StyleSheet.create((theme) => ({
 export const checkboxHelperStyles = StyleSheet.create((theme) => ({
   helperText: {
     fontSize: theme.typography?.fontSize?.sm || 14,
-    color: theme.colors?.text?.secondary || theme.palettes?.gray?.[600] || '#4b5563',
+    color: theme.colors?.text?.secondary,
     marginTop: 2, // Reduced spacing between checkbox and helper text
     
     variants: {
       error: {
         true: {
-          color: theme.intents?.error?.main || '#ef4444',
+          color: theme.intents.error.main,
         },
         false: {
-          color: theme.colors?.text?.secondary || theme.palettes?.gray?.[600] || '#4b5563',
+          color: theme.colors?.text?.secondary,
         },
       },
     },

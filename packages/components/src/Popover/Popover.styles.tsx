@@ -2,23 +2,23 @@ import { StyleSheet } from 'react-native-unistyles';
 
 export const popoverStyles = StyleSheet.create((theme) => ({
   container: {
-    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-    borderRadius: theme.borderRadius?.md || 8,
-    border: `1px solid ${theme.colors?.border?.primary || '#e5e7eb'}`,
+    backgroundColor: theme.colors.surface.primary,
+    borderRadius: theme.borderRadius.md,
+    border: `1px solid ${theme.colors.border.primary}`,
     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
     transition: 'opacity 150ms ease-out, transform 150ms ease-out',
     transformOrigin: 'center center',
   },
   
   content: {
-    padding: theme.spacing?.md || 12,
+    padding: theme.spacing.md,
   },
   
   arrow: {
     position: 'absolute',
     width: 12,
     height: 12,
-    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+    backgroundColor: theme.colors.surface.primary,
     transform: 'rotate(45deg)',
     
     variants: {

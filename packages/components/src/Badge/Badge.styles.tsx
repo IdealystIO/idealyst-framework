@@ -179,7 +179,7 @@ export const badgeStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         color: colorKey,
         styles: {
-          color: palette?.[500] || '#6b7280',
+          color: palette[500],
         },
       })),
     ],
