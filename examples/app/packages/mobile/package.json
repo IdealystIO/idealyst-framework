@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@idealyst/components": "^1.0.82",
+    "@idealyst/datagrid": "^1.0.83",
+    "@idealyst/datepicker": "^1.0.83",
     "@idealyst/navigation": "^1.0.82",
     "@idealyst/theme": "^1.0.82",
     "@react-native-vector-icons/common": "^12.0.1",

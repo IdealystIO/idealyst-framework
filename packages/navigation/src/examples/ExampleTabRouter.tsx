@@ -1,6 +1,6 @@
 import React from 'react';
-import { ButtonExamples, CardExamples, IconExamples, SVGImageExamples, ThemeExtensionExamples } from "../../../components/src/examples";
-import { Screen, Text, View, Button, Icon } from "../../../components/src";
+import { ButtonExamples, CardExamples, IconExamples, SVGImageExamples, ThemeExtensionExamples } from '@idealyst/components/examples';
+import { Screen, Text, View, Button, Icon } from '@idealyst/components';
 import { UnistylesRuntime } from 'react-native-unistyles';
 import { NavigatorParam, RouteParam } from '../routing';
 import { useNavigator } from '../context';

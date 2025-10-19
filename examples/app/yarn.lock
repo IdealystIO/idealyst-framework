@@ -1976,6 +1976,56 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@idealyst/datagrid@npm:^1.0.83":
+  version: 1.0.83
+  resolution: "@idealyst/datagrid@npm:1.0.83"
+  peerDependencies:
+    "@idealyst/components": ^1.0.83
+    "@idealyst/theme": ^1.0.83
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-unistyles: ^3.0.4
+    react-window: ^1.8.10
+  peerDependenciesMeta:
+    "@idealyst/components":
+      optional: false
+    "@idealyst/theme":
+      optional: false
+    react-native:
+      optional: true
+    react-native-unistyles:
+      optional: true
+    react-window:
+      optional: true
+  checksum: 10/8ae7f2f392c4b32d808c8c23baa3b780a1819906ce2204b0ac88e35ed1fd8aeed41fa48a6492db1a8dc21b631d5b007d740bcabc2bcf91cc56f92a0c2f3d3dac
+  languageName: node
+  linkType: hard
+
+"@idealyst/datepicker@npm:^1.0.83":
+  version: 1.0.83
+  resolution: "@idealyst/datepicker@npm:1.0.83"
+  peerDependencies:
+    "@idealyst/components": ^1.0.83
+    "@idealyst/theme": ^1.0.83
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-svg: ">=13.0.0"
+    react-native-unistyles: ^3.0.4
+  peerDependenciesMeta:
+    "@idealyst/components":
+      optional: false
+    "@idealyst/theme":
+      optional: false
+    react-native:
+      optional: true
+    react-native-svg:
+      optional: true
+    react-native-unistyles:
+      optional: true
+  checksum: 10/ae3db77ebbf9edfc4382a663975a3d2f0e547d66ad4da6c26956a21c3306c62e114270a1993c31ede8cd2ad30cedfecd2ebb79d35d034aa026a2f22f7db1687d
+  languageName: node
+  linkType: hard
+
 "@idealyst/navigation@npm:^1.0.82":
   version: 1.0.82
   resolution: "@idealyst/navigation@npm:1.0.82"
@@ -3506,6 +3556,8 @@ __metadata:
     "@babel/preset-react": "npm:^7.27.1"
     "@babel/preset-typescript": "npm:^7.27.1"
     "@idealyst/components": "npm:^1.0.82"
+    "@idealyst/datagrid": "npm:^1.0.83"
+    "@idealyst/datepicker": "npm:^1.0.83"
     "@idealyst/navigation": "npm:^1.0.82"
     "@idealyst/theme": "npm:^1.0.82"
     "@mdi/js": "npm:^7.4.47"
@@ -9715,6 +9767,8 @@ __metadata:
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
     "@idealyst/components": "npm:^1.0.82"
+    "@idealyst/datagrid": "npm:^1.0.83"
+    "@idealyst/datepicker": "npm:^1.0.83"
     "@idealyst/navigation": "npm:^1.0.82"
     "@idealyst/theme": "npm:^1.0.82"
     "@react-native-community/cli": "npm:20.0.0"

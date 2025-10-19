@@ -1,6 +1,6 @@
 import { NavigatorParam, RouteParam } from '../routing';
 import React from 'react';
-import { Button, Screen, Text } from '../../../components/src';
+import { Button, Screen, Text } from '@idealyst/components';
 import { useNavigator } from '../context';
 import CustomTabLayout from './CustomTabLayout';
 import CustomStackLayout from './CustomStackLayout';

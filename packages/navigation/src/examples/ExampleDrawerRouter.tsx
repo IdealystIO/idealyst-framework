@@ -1,8 +1,8 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from "../../../components/src/examples";
-import { DataGridShowcase } from "../../../datagrid/src/examples";
-import { DatePickerExamples } from "../../../datepicker/src/examples";
-import { Screen, Text, View, Button } from "../../../components/src";
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples } from '@idealyst/components/examples';
+import { DataGridShowcase } from '../../../datagrid/src/examples';
+import { DatePickerExamples } from '../../../datepicker/src/examples';
+import { Screen, Text, View, Button } from '@idealyst/components';
 import { UnistylesRuntime } from 'react-native-unistyles';
 import { RouteParam } from '../routing';
 import { getNextTheme, getThemeDisplayName, isHighContrastTheme } from './unistyles';

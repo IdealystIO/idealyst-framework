@@ -6,8 +6,8 @@ export const selectStyles = StyleSheet.create((theme) => ({
   },
 
   label: {
-    fontSize: theme.typography.sm.fontSize,
-    fontWeight: theme.typography.sm.fontWeight,
+    fontSize: theme.typography.sm?.fontSize,
+    fontWeight: theme.typography.sm?.fontWeight,
     color: theme.colors.text.primary,
     marginBottom: theme.spacing.xs,
   },
@@ -167,13 +167,13 @@ export const selectStyles = StyleSheet.create((theme) => ({
   },
 
   triggerText: {
-    fontSize: theme.typography.base.fontSize,
+    fontSize: theme.typography.base?.fontSize,
     color: theme.colors.text.primary,
     flex: 1,
   },
 
   placeholder: {
-    fontSize: theme.typography.base.fontSize,
+    fontSize: theme.typography.base?.fontSize,
     color: theme.colors.text.disabled,
   },
 
@@ -238,7 +238,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
     borderRadius: theme.borderRadius.sm,
     borderWidth: 1,
     borderColor: theme.colors.border.primary,
-    fontSize: theme.typography.sm.fontSize,
+    fontSize: theme.typography.sm?.fontSize,
     backgroundColor: theme.colors?.surface?.primary,
 
     _web: {
@@ -302,7 +302,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
   },
 
   optionText: {
-    fontSize: theme.typography.base.fontSize,
+    fontSize: theme.typography.base?.fontSize,
     color: theme.colors.text.primary,
     flex: 1,
   },
@@ -312,7 +312,7 @@ export const selectStyles = StyleSheet.create((theme) => ({
   },
 
   helperText: {
-    fontSize: theme.typography.xs.fontSize,
+    fontSize: theme.typography.xs?.fontSize,
     marginTop: theme.spacing.xs,
     color: theme.colors.text.secondary,
 
