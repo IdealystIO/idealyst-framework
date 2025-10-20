@@ -81,7 +81,18 @@ export type StackNavigatorParam = {
     layoutComponent?: StackLayoutComponent
 } & BaseNavigatorParam
 
-export type NavigatorParam = TabNavigatorParam | StackNavigatorParam
+export type DrawerNavigatorParam = {
+    layout: 'drawer'
+    routes: RouteParam<TabBarScreenOptions>[]
+    layoutComponent?: TabLayoutComponent
+    /**
+     * Custom component to render in the drawer sidebar
+     * This component will have access to useNavigator hook
+     */
+    sidebarComponent?: React.ComponentType
+} & BaseNavigatorParam
+
+export type NavigatorParam = TabNavigatorParam | StackNavigatorParam | DrawerNavigatorParam
 
 export type ScreenParam<T = ScreenOptions> = {
     path: string

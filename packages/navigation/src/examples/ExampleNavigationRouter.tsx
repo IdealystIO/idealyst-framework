@@ -5,6 +5,7 @@ import { DatePickerExamples } from '@idealyst/datepicker/examples';
 import { Text, View, Card } from '@idealyst/components';
 import { NavigatorParam, RouteParam } from '../routing';
 import { ExampleWebLayout } from './ExampleWebLayout';
+import ExampleSidebar from './ExampleSidebar';
 
 const HomeScreen = () => {
     return (
@@ -55,10 +56,11 @@ const HomeScreen = () => {
     )
 };
 
-const StackRouter: NavigatorParam = {
+const ExampleNavigationRouter: NavigatorParam = {
     path: "/",
     type: 'navigator',
-    layout: 'stack',
+    layout: 'drawer',
+    sidebarComponent: ExampleSidebar,
     layoutComponent: ExampleWebLayout,
     routes: [
         { path: "/", type: 'screen', component: HomeScreen },
@@ -101,4 +103,4 @@ const StackRouter: NavigatorParam = {
     ],
 };
 
-export default StackRouter;
+export default ExampleNavigationRouter;

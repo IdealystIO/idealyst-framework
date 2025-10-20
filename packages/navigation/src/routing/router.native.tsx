@@ -3,15 +3,39 @@ import { NavigatorParam, RouteParam } from './types'
 import { TypedNavigator } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { DrawerContentWrapper } from './DrawerContentWrapper.native';
+import React from 'react';
 
 /**
  * Build the Mobile navigator using React Navigation
- * @param params 
- * @param parentPath 
- * @returns 
+ * @param params
+ * @param parentPath
+ * @returns
  */
 export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
     const NavigatorType = getNavigatorType(params);
+
+    // Special handling for drawer navigator with custom sidebar
+    if (params.layout === 'drawer' && params.sidebarComponent) {
+        return () => (
+            <NavigatorType.Navigator
+                screenOptions={{
+                    headerShown: params.options?.headerShown
+                }}
+                drawerContent={(drawerProps: any) => (
+                    <DrawerContentWrapper
+                        route={params}
+                        content={params.sidebarComponent!}
+                        drawerProps={drawerProps}
+                    />
+                )}
+            >
+                {params.routes.map((child, index) => buildScreen(child, NavigatorType, parentPath, index))}
+            </NavigatorType.Navigator>
+        );
+    }
+
     return () => (
         <NavigatorType.Navigator screenOptions={{
             headerShown: params.options?.headerShown
@@ -23,8 +47,8 @@ export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
 
 /**
  * Get Navigator Type
- * @param params 
- * @returns 
+ * @param params
+ * @returns
  */
 const getNavigatorType = (params: NavigatorParam) => {
     switch (params.layout) {
@@ -32,6 +56,8 @@ const getNavigatorType = (params: NavigatorParam) => {
             return createNativeStackNavigator();
         case 'tab':
             return createBottomTabNavigator();
+        case 'drawer':
+            return createDrawerNavigator();
     }
     throw new Error(`Unsupported navigator type: ${params.layout}`);
 }
@@ -56,14 +82,6 @@ const buildScreen = (params: RouteParam, Navigator: TypedNavigator, parentPath =
         const routePath = params.path.startsWith('/') ? params.path.slice(1) : params.path;
         fullPath = `${parentPath}/${routePath}`;
     }
-    
-    console.log('📱 Registering screen:', {
-        originalPath: params.path,
-        parentPath,
-        fullPath,
-        type: params.type,
-        screenName: fullPath
-    });
     
     return (
         <Navigator.Screen

@@ -1,10 +1,16 @@
-import React, { createContext, memo, useContext, useMemo } from 'react';
+import React, { createContext, memo, use, useContext, useMemo } from 'react';
 import { NavigateParams, NavigatorProviderProps, NavigatorContextValue } from './types';
 import { useNavigation, useNavigationState, DarkTheme, DefaultTheme, NavigationContainer, useRoute } from '@react-navigation/native';
 import { buildNavigator } from '../routing';
 import { useUnistyles } from 'react-native-unistyles';
 
 const NavigatorContext = createContext<NavigatorContextValue>({
+    route: undefined,
+    navigate: () => {},
+});
+
+const DrawerNavigatorContext = createContext<NavigatorContextValue>({
+    route: undefined,
     navigate: () => {},
 });
 
@@ -96,7 +102,8 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
     }, [route]);
      
     return (
-        <NavigatorContext.Provider value={{ 
+        <NavigatorContext.Provider value={{
+            route,
             navigate,
         }}>
             <RouteComponent />
@@ -116,9 +123,33 @@ const NavigatorProvider = ({ route }: NavigatorProviderProps) => {
     )
 };
 
-export { NavigatorProvider };
+const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: any, route: any, children: React.ReactNode }) => {
+
+    const navigate = (params: NavigateParams) => {
+        // Parse parameterized path for mobile
+        const parsed = parseParameterizedPath(params.path, route);
+        if (parsed) {
+            // Navigate to the pattern route with extracted parameters
+            navigation.navigate(parsed.routeName as never, parsed.params as never);
+        } else {
+            // Fallback to direct navigation
+        }
+    };
+
+    return (
+        <DrawerNavigatorContext.Provider value={{ navigate, route }}>
+            {children}
+        </DrawerNavigatorContext.Provider>
+    );
+};
+
+export { NavigatorProvider, DrawerNavigatorProvider };
 
 
 export const useNavigator = () => {
-  return useContext(NavigatorContext);
+  const drawerContext = useContext(DrawerNavigatorContext);
+  if (!drawerContext) {
+    return useContext(NavigatorContext)
+  }
+  return drawerContext;
 };

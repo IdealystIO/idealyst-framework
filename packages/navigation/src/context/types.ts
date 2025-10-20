@@ -10,11 +10,13 @@ export type NavigateParams = {
 
 export type NavigatorProviderProps = {
     route: NavigatorParam;
+    _overrideNavigation?: any; // Used in the drawer navigator which has to provide its own navigation object
 };
 
 /**
  * Context value that includes navigation function and current route parameters
  */
 export type NavigatorContextValue = {
+    route: NavigatorParam | undefined;
     navigate: (params: NavigateParams) => void;
 };

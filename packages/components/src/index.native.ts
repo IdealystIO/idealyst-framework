@@ -7,9 +7,13 @@ export * from './Text/types';
 export { default as View } from './View';
 export * from './View/types';
 
+export { default as Pressable } from './Pressable';
+export * from './Pressable/types';
+
 export { default as Input } from './Input';
 export * from './Input/types';
 
+// New primitive components
 export { default as Checkbox } from './Checkbox';
 export * from './Checkbox/types';
 
@@ -40,8 +44,14 @@ export * from './Dialog/types';
 export { default as Popover } from './Popover';
 export * from './Popover/types';
 
-export { default as Pressable } from './Pressable';
-export * from './Pressable/types';
+export { default as ActivityIndicator } from './ActivityIndicator';
+export * from './ActivityIndicator/types';
+
+export { default as Select } from './Select';
+export * from './Select/types';
+
+export { default as Slider } from './Slider';
+export * from './Slider/types';
 
 export { default as Switch } from './Switch';
 export * from './Switch/types';
@@ -51,6 +61,48 @@ export * from './RadioButton/types';
 
 export { default as Progress } from './Progress';
 export * from './Progress/types';
+
+export { default as TextArea } from './TextArea';
+export * from './TextArea/types';
+
+export { default as Tabs, Tab } from './Tabs';
+export * from './Tabs/types';
+
+export { default as TabBar } from './TabBar';
+export * from './TabBar/types';
+
+export { default as Tooltip } from './Tooltip';
+export * from './Tooltip/types';
+
+export { default as Accordion } from './Accordion';
+export * from './Accordion/types';
+
+export { List, ListItem, ListSection } from './List';
+export * from './List/types';
+
+export { default as Table } from './Table';
+export * from './Table/types';
+
+export { default as Menu } from './Menu';
+export * from './Menu/types';
+
+export { default as Image } from './Image';
+export * from './Image/types';
+
+export { default as Video } from './Video';
+export * from './Video/types';
+
+export { default as Alert } from './Alert';
+export * from './Alert/types';
+
+export { default as Skeleton, SkeletonGroup } from './Skeleton';
+export * from './Skeleton/types';
+
+export { default as Chip } from './Chip';
+export * from './Chip/types';
+
+export { default as Breadcrumb } from './Breadcrumb';
+export * from './Breadcrumb/types';
 
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
@@ -66,13 +118,25 @@ export type { IconProps } from './Icon/types';
 export type { SVGImageProps } from './SVGImage/types';
 export type { DialogProps } from './Dialog/types';
 export type { PopoverProps } from './Popover/types';
-export type { PressableProps } from './Pressable/types';
+export type { ActivityIndicatorProps } from './ActivityIndicator/types';
+export type { SelectProps } from './Select/types';
 export type { SwitchProps } from './Switch/types';
 export type { RadioButtonProps, RadioGroupProps } from './RadioButton/types';
 export type { ProgressProps } from './Progress/types';
+export type { TextAreaProps } from './TextArea/types';
+export type { TabsProps, TabProps } from './Tabs/types';
+export type { TabBarProps, TabBarItem } from './TabBar/types';
+export type { TooltipProps } from './Tooltip/types';
+export type { AccordionProps, AccordionItem } from './Accordion/types';
+export type { ListProps, ListItemProps, ListSectionProps } from './List/types';
+export type { TableProps, TableColumn } from './Table/types';
+export type { MenuProps, MenuItem } from './Menu/types';
+export type { ImageProps } from './Image/types';
+export type { VideoProps, VideoSource } from './Video/types';
+export type { AlertProps, AlertIntent, AlertVariant } from './Alert/types';
+export type { SkeletonProps, SkeletonGroupProps, SkeletonShape, SkeletonAnimation } from './Skeleton/types';
+export type { ChipProps, ChipSize, ChipVariant, ChipIntent } from './Chip/types';
+export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
 
-export { appThemes, breakpoints } from './theme';
-export type { AppThemes, AppBreakpoints } from './theme';
-
-// Theme provider for managing theme state (removed - using Unistyles Runtime directly)
-// export { ThemeProvider, useTheme } from './theme/ThemeProvider'; 
+export { breakpoints } from '@idealyst/theme';
+export type { AppTheme } from '@idealyst/theme'; 
