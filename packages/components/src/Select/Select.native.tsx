@@ -10,6 +10,7 @@ import {
   Platform,
   Animated,
 } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SelectProps, SelectOption } from './types';
 import { selectStyles } from './Select.styles';
 
@@ -35,7 +36,9 @@ const Select: React.FC<SelectProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number; width: number } | null>(null);
   const scaleAnim = useRef(new Animated.Value(0)).current;
+  const triggerRef = useRef<any>(null);
 
   const selectedOption = options.find(option => option.value === value);
 
@@ -65,15 +68,23 @@ const Select: React.FC<SelectProps> = ({
     if (Platform.OS === 'ios' && presentationMode === 'actionSheet') {
       showIOSActionSheet();
     } else {
-      setIsOpen(true);
-      setSearchTerm('');
-      // Animate dropdown appearance
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        tension: 300,
-        friction: 20,
-      }).start();
+      // Measure trigger position before opening
+      triggerRef.current?.measureInWindow((x, y, width, height) => {
+        setDropdownPosition({
+          top: y + height + 4, // 4px offset below trigger
+          left: x,
+          width: width,
+        });
+        setIsOpen(true);
+        setSearchTerm('');
+        // Animate dropdown appearance
+        Animated.spring(scaleAnim, {
+          toValue: 1,
+          useNativeDriver: true,
+          tension: 300,
+          friction: 20,
+        }).start();
+      });
     }
   };
 
@@ -89,7 +100,7 @@ const Select: React.FC<SelectProps> = ({
         title: label || 'Select an option',
         message: helperText,
       },
-      (buttonIndex) => {
+      (buttonIndex: number) => {
         if (buttonIndex !== cancelButtonIndex && buttonIndex < options.length) {
           const selectedOption = options[buttonIndex];
           if (!selectedOption.disabled) {
@@ -123,31 +134,88 @@ const Select: React.FC<SelectProps> = ({
     setSearchTerm(text);
   };
 
-  const renderChevron = () => (
-    <View style={selectStyles.chevron}>
-      <Text style={{ color: 'currentColor' }}>▼</Text>
-    </View>
-  );
+  const renderChevron = () => {
+    const chevronStyle = selectStyles.chevron;
+    return (
+      <View style={chevronStyle}>
+        <MaterialCommunityIcons
+          name="chevron-down"
+          size={chevronStyle.width || 20}
+          color={chevronStyle.color}
+        />
+      </View>
+    );
+  };
 
-  const renderDropdown = () => (
-    <Modal
-      visible={isOpen}
-      transparent
-      animationType="none"
-      onRequestClose={closeDropdown}
-    >
-      <Pressable style={selectStyles.overlay} onPress={closeDropdown}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  const renderTriggerIcon = (icon: any) => {
+    if (!icon) return null;
+
+    // If it's a string, render as MaterialCommunityIcons
+    if (typeof icon === 'string') {
+      const iconStyle = selectStyles.icon;
+      return (
+        <View style={iconStyle}>
+          <MaterialCommunityIcons
+            name={icon}
+            size={iconStyle.width || 20}
+            color={selectStyles.triggerText.color}
+          />
+        </View>
+      );
+    }
+
+    // Otherwise render the React element directly
+    return <View style={selectStyles.icon}>{icon}</View>;
+  };
+
+  const renderOptionIcon = (icon: any) => {
+    if (!icon) return null;
+
+    // If it's a string, render as MaterialCommunityIcons
+    if (typeof icon === 'string') {
+      const iconStyle = selectStyles.optionIcon;
+      return (
+        <View style={iconStyle}>
+          <MaterialCommunityIcons
+            name={icon}
+            size={iconStyle.width || 20}
+            color={selectStyles.optionText.color}
+          />
+        </View>
+      );
+    }
+
+    // Otherwise render the React element directly
+    return <View style={selectStyles.optionIcon}>{icon}</View>;
+  };
+
+  const renderDropdown = () => {
+    if (!dropdownPosition) return null;
+
+    return (
+      <Modal
+        visible={isOpen}
+        transparent
+        animationType="none"
+        onRequestClose={closeDropdown}
+      >
+        <Pressable
+          style={selectStyles.overlay}
+          onPress={closeDropdown}
+        >
           <Animated.View
             style={[
               selectStyles.dropdown,
               {
-                maxHeight,
+                position: 'absolute',
+                top: dropdownPosition.top,
+                left: dropdownPosition.left,
+                width: dropdownPosition.width,
+                maxHeight: maxHeight,
                 transform: [{ scale: scaleAnim }],
-                minWidth: 280,
-                maxWidth: '90%',
               },
             ]}
+            onStartShouldSetResponder={() => true}
           >
             {searchable && (
               <View style={selectStyles.searchContainer}>
@@ -161,16 +229,11 @@ const Select: React.FC<SelectProps> = ({
               </View>
             )}
 
-            <ScrollView style={selectStyles.optionsList} showsVerticalScrollIndicator={false}>
-              {filteredOptions.map((option) => {
-                const isSelected = option.value === value;
-
-                selectStyles.useVariants({
-                  selected: isSelected,
-                  disabled: option.disabled,
-                });
-
-                return (
+            <ScrollView
+              style={selectStyles.optionsList}
+              showsVerticalScrollIndicator={true}
+            >
+              {filteredOptions.map((option) => (
                   <Pressable
                     key={option.value}
                     style={selectStyles.option}
@@ -179,11 +242,7 @@ const Select: React.FC<SelectProps> = ({
                     android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
                   >
                     <View style={selectStyles.optionContent}>
-                      {option.icon && (
-                        <View style={selectStyles.optionIcon}>
-                          {option.icon}
-                        </View>
-                      )}
+                      {renderOptionIcon(option.icon)}
                       <Text
                         style={[
                           selectStyles.optionText,
@@ -194,8 +253,7 @@ const Select: React.FC<SelectProps> = ({
                       </Text>
                     </View>
                   </Pressable>
-                );
-              })}
+                ))}
 
               {filteredOptions.length === 0 && (
                 <View style={selectStyles.option}>
@@ -206,10 +264,10 @@ const Select: React.FC<SelectProps> = ({
               )}
             </ScrollView>
           </Animated.View>
-        </View>
-      </Pressable>
-    </Modal>
-  );
+        </Pressable>
+      </Modal>
+    );
+  };
 
   return (
     <View style={[selectStyles.container, style]} testID={testID}>
@@ -220,6 +278,7 @@ const Select: React.FC<SelectProps> = ({
       )}
 
       <Pressable
+        ref={triggerRef}
         style={selectStyles.trigger}
         onPress={handleTriggerPress}
         disabled={disabled}
@@ -232,11 +291,7 @@ const Select: React.FC<SelectProps> = ({
         android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
       >
         <View style={selectStyles.triggerContent}>
-          {selectedOption?.icon && (
-            <View style={selectStyles.icon}>
-              {selectedOption.icon}
-            </View>
-          )}
+          {renderTriggerIcon(selectedOption?.icon)}
           <Text
             style={[
               selectedOption ? selectStyles.triggerText : selectStyles.placeholder,

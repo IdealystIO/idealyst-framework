@@ -30,9 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   const isPasswordField = inputType === 'password' || secureTextEntry;
   const shouldShowPasswordToggle = isPasswordField && (showPasswordToggle !== false);
 
-  // Determine if there are icons
-  const hasLeftIcon = !!leftIcon;
-  const hasRightIcon = !!rightIcon || shouldShowPasswordToggle;
+  const [isFocused, setIsFocused] = useState(false);
 
   const getInputType = () => {
     // Handle password visibility
@@ -60,12 +58,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   };
 
   const handleFocus = () => {
+    setIsFocused(true);
     if (onFocus) {
       onFocus();
     }
   };
 
   const handleBlur = () => {
+    setIsFocused(false);
     if (onBlur) {
       onBlur();
     }
@@ -75,16 +75,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  // Apply variants using the correct Unistyles 3.0 pattern
+  // Apply variants for container
   inputStyles.useVariants({
     size: size as 'small' | 'medium' | 'large',
     variant: variant as 'default' | 'outlined' | 'filled' | 'bare',
-    hasLeftIcon,
-    hasRightIcon,
+    focused: isFocused,
+    hasError,
+    disabled,
   });
 
   // Get web props for all styled elements
-  const containerProps = getWebProps([inputStyles.container]);
+  const containerProps = getWebProps([inputStyles.container, style]);
   const leftIconContainerProps = getWebProps([inputStyles.leftIconContainer]);
   const rightIconContainerProps = getWebProps([inputStyles.rightIconContainer]);
   const leftIconProps = getWebProps([inputStyles.leftIcon]);
@@ -92,20 +93,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   const passwordToggleProps = getWebProps([inputStyles.passwordToggle]);
   const passwordToggleIconProps = getWebProps([inputStyles.passwordToggleIcon]);
 
-  // Create the style array for the input
-  const inputStyleArray = [
-    inputStyles.input,
-    disabled && inputStyles.disabled,
-    hasError && inputStyles.error,
-    style,
-  ].filter(Boolean);
-
-  // Use getWebProps for input Unistyles, then manually add our ref
-  const { ref: unistylesRef, ...webProps } = getWebProps(inputStyleArray);
+  // Get input props
+  const { ref: inputRef, ...inputWebProps } = getWebProps([inputStyles.input]);
 
   // Forward the ref while still providing unistyles with access
   const handleRef = (r: HTMLInputElement | null) => {
-    unistylesRef.current = r;
+    inputRef.current = r;
     if (typeof ref === 'function') {
       ref(r);
     } else if (ref) {
@@ -167,25 +160,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   };
 
   return (
-    <div className={containerProps.className} style={containerProps.style}>
+    <div {...containerProps} data-testid={testID}>
       {/* Left Icon */}
       {leftIcon && (
-        <span
-          className={leftIconContainerProps.className}
-          style={{
-            ...leftIconContainerProps.style,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <span {...leftIconContainerProps}>
           {renderLeftIcon()}
         </span>
       )}
 
       {/* Input */}
       <input
-        {...webProps}
+        {...inputWebProps}
         ref={handleRef}
         type={getInputType()}
         value={value}
@@ -195,19 +180,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
         placeholder={placeholder}
         disabled={disabled}
         autoCapitalize={autoCapitalize}
-        data-testid={testID}
       />
 
       {/* Right Icon or Password Toggle */}
       {shouldShowPasswordToggle ? (
         <button
-          className={passwordToggleProps.className}
-          style={{
-            ...passwordToggleProps.style,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          {...passwordToggleProps}
           onClick={togglePasswordVisibility}
           disabled={disabled}
           aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
@@ -217,15 +195,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
           {renderPasswordToggleIcon()}
         </button>
       ) : rightIcon ? (
-        <span
-          className={rightIconContainerProps.className}
-          style={{
-            ...rightIconContainerProps.style,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <span {...rightIconContainerProps}>
           {renderRightIcon()}
         </span>
       ) : null}

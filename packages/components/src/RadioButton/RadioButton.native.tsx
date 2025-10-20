@@ -11,6 +11,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   onPress,
   disabled: disabledProp = false,
   label,
+  size = 'medium',
+  intent = 'primary',
   style,
   testID,
 }) => {
@@ -40,6 +42,14 @@ const RadioButton: React.FC<RadioButtonProps> = ({
     }
   };
 
+  // Apply variants for radio styles
+  radioButtonStyles.useVariants({
+    size,
+    checked,
+    disabled,
+    intent,
+  });
+
   const dotScale = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 1],
@@ -54,13 +64,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       accessibilityRole="radio"
       accessibilityState={{ checked, disabled }}
     >
-      <View
-        style={[
-          radioButtonStyles.radio,
-          checked && radioButtonStyles.radioChecked,
-          disabled && radioButtonStyles.radioDisabled,
-        ]}
-      >
+      <View style={radioButtonStyles.radio}>
         <Animated.View
           style={[
             radioButtonStyles.radioDot,
@@ -71,7 +75,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
         />
       </View>
       {label && (
-        <Text style={[radioButtonStyles.label, disabled && radioButtonStyles.labelDisabled]}>
+        <Text style={radioButtonStyles.label}>
           {label}
         </Text>
       )}

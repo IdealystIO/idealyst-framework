@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { isValidElement } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 
@@ -30,11 +31,33 @@ const ListItem: React.FC<ListItemProps> = ({
     clickable: isClickable,
   });
 
+  // Helper to render leading/trailing icons
+  const renderElement = (element: typeof leading | typeof trailing, styleKey: 'leading' | 'trailingIcon') => {
+    if (!element) return null;
+
+    // If it's a string, treat it as an icon name
+    if (typeof element === 'string') {
+      const iconStyle = styleKey === 'leading' ? listStyles.leading : listStyles.trailingIcon;
+      return (
+        <MaterialCommunityIcons
+          name={element}
+          size={iconStyle.width}
+          color={iconStyle.color}
+        />
+      );
+    } else if (isValidElement(element)) {
+      // Custom React element
+      return element;
+    }
+
+    return null;
+  };
+
   const content = (
     <>
       {leading && (
         <View style={listStyles.leading}>
-          {leading}
+          {renderElement(leading, 'leading')}
         </View>
       )}
 
@@ -47,7 +70,7 @@ const ListItem: React.FC<ListItemProps> = ({
 
       {trailing && (
         <View style={listStyles.trailing}>
-          {trailing}
+          {renderElement(trailing, 'trailingIcon')}
         </View>
       )}
     </>

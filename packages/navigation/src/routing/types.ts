@@ -81,6 +81,23 @@ export type StackNavigatorParam = {
     layoutComponent?: StackLayoutComponent
 } & BaseNavigatorParam
 
+/**
+ * Props passed to drawer sidebar components on mobile
+ * Includes safe area insets for proper layout
+ */
+export type DrawerSidebarProps = {
+    /**
+     * Safe area insets (mobile only)
+     * Use these to add padding to avoid notches, status bars, etc.
+     */
+    insets?: {
+        top: number;
+        right: number;
+        bottom: number;
+        left: number;
+    };
+};
+
 export type DrawerNavigatorParam = {
     layout: 'drawer'
     routes: RouteParam<TabBarScreenOptions>[]
@@ -88,8 +105,9 @@ export type DrawerNavigatorParam = {
     /**
      * Custom component to render in the drawer sidebar
      * This component will have access to useNavigator hook
+     * On mobile, receives DrawerSidebarProps with safe area insets
      */
-    sidebarComponent?: React.ComponentType
+    sidebarComponent?: React.ComponentType<DrawerSidebarProps>
 } & BaseNavigatorParam
 
 export type NavigatorParam = TabNavigatorParam | StackNavigatorParam | DrawerNavigatorParam

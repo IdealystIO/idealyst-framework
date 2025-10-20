@@ -9,6 +9,7 @@ const Screen: React.FC<ScreenProps> = ({
   padding = 'md',
   safeArea = false,
   scrollable = true,
+  contentInset,
   style,
   testID,
 }) => {
@@ -23,9 +24,21 @@ const Screen: React.FC<ScreenProps> = ({
     style,
   ];
 
+  // Build content container style from contentInset
+  const contentContainerStyle = contentInset ? {
+    paddingTop: contentInset.top,
+    paddingBottom: contentInset.bottom,
+    paddingLeft: contentInset.left,
+    paddingRight: contentInset.right,
+  } : undefined;
+
   if (scrollable) {
     return (
-      <RNScrollView style={screenStyleArray} testID={testID}>
+      <RNScrollView
+        style={screenStyleArray}
+        contentContainerStyle={contentContainerStyle}
+        testID={testID}
+      >
         {children}
       </RNScrollView>
     );

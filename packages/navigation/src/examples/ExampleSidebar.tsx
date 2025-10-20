@@ -1,5 +1,6 @@
-import { ListItem, View, Text, Divider } from "@idealyst/components";
+import { ListItem, View, Text, Divider, Screen } from "@idealyst/components";
 import { useNavigator } from "../context";
+import type { DrawerSidebarProps } from "../routing/types";
 
 interface ComponentGroup {
     title: string;
@@ -94,15 +95,18 @@ const componentGroups: ComponentGroup[] = [
     },
 ];
 
-export default function ExampleSidebar() {
+export default function ExampleSidebar({ insets }: DrawerSidebarProps) {
     const navigator = useNavigator();
 
     return (
-    <View style={{
-            height: '100%',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-        }}>
+    <Screen
+            style={{
+                height: '100%',
+                overflowY: 'auto',
+                overflowX: 'hidden',
+            }}
+            contentInset={insets}
+        >
             <View style={{ padding: 16 }}>
                 {componentGroups.map((group, groupIndex) => (
                     <View key={group.title} style={{ marginBottom: 16 }}>
@@ -129,6 +133,6 @@ export default function ExampleSidebar() {
                     </View>
                 ))}
             </View>
-        </View>
+        </Screen>
     )
 }

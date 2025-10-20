@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CheckboxProps } from './types';
 import { checkboxStyles, checkboxLabelStyles, checkboxCheckmarkStyles, checkboxHelperStyles } from './Checkbox.styles';
 
@@ -76,9 +77,11 @@ const Checkbox: React.FC<CheckboxProps> = ({
       >
         <View style={checkboxStyles.checkbox}>
           {(internalChecked || indeterminate) && (
-            <Text style={checkboxCheckmarkStyles.checkmark}>
-              {indeterminate ? '−' : '✓'}
-            </Text>
+            <MaterialCommunityIcons
+              name={indeterminate ? 'minus' : 'check'}
+              size={checkboxCheckmarkStyles.checkmark.width}
+              color={checkboxCheckmarkStyles.checkmark.color}
+            />
           )}
         </View>
         {labelContent && (

@@ -1,25 +1,59 @@
-import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import React, { isValidElement } from 'react';
+import { TouchableOpacity, Text, View } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
 
-const Button: React.FC<ButtonProps> = ({
-  children,
-  title,
-  onPress,
-  disabled = false,
-  variant = 'contained',
-  intent = 'primary',
-  size = 'md',
-  style,
-  testID,
-}) => {
+const Button: React.FC<ButtonProps> = (props) => {
+  const {
+    children,
+    title,
+    onPress,
+    disabled = false,
+    variant = 'contained',
+    intent = 'primary',
+    size = 'md',
+    leftIcon,
+    rightIcon,
+    style,
+    testID,
+  } = props;
+
+  // Apply button variants
   buttonStyles.useVariants({
     size,
     intent,
     variant,
     disabled,
   });
+
+  // Map button size to icon size
+  const iconSize = size === 'sm' ? 14 : size === 'lg' ? 18 : 16;
+
+  // Helper to render icon - uses the icon styles from buttonStyles
+  const renderIcon = (icon: string | React.ReactNode) => {
+    if (typeof icon === 'string') {
+      // Render MaterialCommunityIcons with explicit size prop
+      // The icon styles provide the correct color based on variants
+      return (
+        <MaterialCommunityIcons
+          name={icon}
+          size={iconSize}
+          style={buttonStyles.icon}
+        />
+      );
+    } else if (isValidElement(icon)) {
+      // Render custom component as-is
+      return icon;
+    }
+    return null;
+  };
+
+  // Use children if available, otherwise use title
+  const buttonContent = children || title;
+
+  // Determine if we need to wrap content in icon container
+  const hasIcons = leftIcon || rightIcon;
 
   return (
     <TouchableOpacity
@@ -29,9 +63,19 @@ const Button: React.FC<ButtonProps> = ({
       activeOpacity={0.7}
       style={[buttonStyles.button, style]}
     >
-      <Text style={buttonStyles.text}>
-        {children || title}
-      </Text>
+      {hasIcons ? (
+        <View style={buttonStyles.iconContainer}>
+          {leftIcon && renderIcon(leftIcon)}
+          <Text style={buttonStyles.text}>
+            {buttonContent}
+          </Text>
+          {rightIcon && renderIcon(rightIcon)}
+        </View>
+      ) : (
+        <Text style={buttonStyles.text}>
+          {buttonContent}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

@@ -14,14 +14,14 @@ const fruitOptions = [
 ];
 
 const countryOptions = [
-  { value: 'us', label: 'United States', icon: '🇺🇸' },
-  { value: 'ca', label: 'Canada', icon: '🇨🇦' },
-  { value: 'uk', label: 'United Kingdom', icon: '🇬🇧' },
-  { value: 'de', label: 'Germany', icon: '🇩🇪' },
-  { value: 'fr', label: 'France', icon: '🇫🇷' },
-  { value: 'jp', label: 'Japan', icon: '🇯🇵' },
-  { value: 'au', label: 'Australia', icon: '🇦🇺' },
-  { value: 'in', label: 'India', icon: '🇮🇳' },
+  { value: 'us', label: 'United States', icon: <Text>🇺🇸</Text> },
+  { value: 'ca', label: 'Canada', icon: <Text>🇨🇦</Text> },
+  { value: 'uk', label: 'United Kingdom', icon: <Text>🇬🇧</Text> },
+  { value: 'de', label: 'Germany', icon: <Text>🇩🇪</Text> },
+  { value: 'fr', label: 'France', icon: <Text>🇫🇷</Text> },
+  { value: 'jp', label: 'Japan', icon: <Text>🇯🇵</Text> },
+  { value: 'au', label: 'Australia', icon: <Text>🇦🇺</Text> },
+  { value: 'in', label: 'India', icon: <Text>🇮🇳</Text> },
 ];
 
 const priorityOptions = [

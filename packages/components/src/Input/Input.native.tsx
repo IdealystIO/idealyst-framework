@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { TextInput } from 'react-native';
+import React, { useState, isValidElement } from 'react';
+import { View, TextInput, TouchableOpacity } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { InputProps } from './types';
 import { inputStyles } from './Input.styles';
 
@@ -12,6 +13,9 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   disabled = false,
   inputType = 'text',
   secureTextEntry = false,
+  leftIcon,
+  rightIcon,
+  showPasswordToggle,
   autoCapitalize = 'sentences',
   size = 'medium',
   variant = 'default',
@@ -20,6 +24,11 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   testID,
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  // Determine if we should show password toggle
+  const isPasswordField = inputType === 'password' || secureTextEntry;
+  const shouldShowPasswordToggle = isPasswordField && (showPasswordToggle !== false);
 
   const getKeyboardType = () => {
     switch (inputType) {
@@ -48,36 +57,104 @@ const Input = React.forwardRef<TextInput, InputProps>(({
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
   // Apply variants to the stylesheet
   inputStyles.useVariants({
     size,
     variant,
     focused: isFocused,
+    hasError,
+    disabled,
   });
 
-  const inputStyleArray = [
-    inputStyles.input,
-    disabled && inputStyles.disabled,
-    hasError && inputStyles.error,
-    style,
-  ];
+  // Helper to render left icon
+  const renderLeftIcon = () => {
+    if (!leftIcon) return null;
+
+    if (typeof leftIcon === 'string') {
+      const iconStyle = inputStyles.leftIcon;
+      return (
+        <MaterialCommunityIcons
+          name={leftIcon}
+          size={iconStyle.width}
+          color={iconStyle.color}
+        />
+      );
+    } else if (isValidElement(leftIcon)) {
+      return leftIcon;
+    }
+
+    return null;
+  };
+
+  // Helper to render right icon (not password toggle)
+  const renderRightIcon = () => {
+    if (!rightIcon) return null;
+
+    if (typeof rightIcon === 'string') {
+      const iconStyle = inputStyles.rightIcon;
+      return (
+        <MaterialCommunityIcons
+          name={rightIcon}
+          size={iconStyle.width}
+          color={iconStyle.color}
+        />
+      );
+    } else if (isValidElement(rightIcon)) {
+      return rightIcon;
+    }
+
+    return null;
+  };
 
   return (
-    <TextInput
-      ref={ref}
-      value={value}
-      onChangeText={onChangeText}
-      placeholder={placeholder}
-      editable={!disabled}
-      keyboardType={getKeyboardType()}
-      secureTextEntry={secureTextEntry || inputType === 'password'}
-      autoCapitalize={autoCapitalize}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      style={inputStyleArray}
-      testID={testID}
-      placeholderTextColor="#999999"
-    />
+    <View style={[inputStyles.container, style]} testID={testID}>
+      {/* Left Icon */}
+      {leftIcon && (
+        <View style={inputStyles.leftIconContainer}>
+          {renderLeftIcon()}
+        </View>
+      )}
+
+      {/* Input */}
+      <TextInput
+        ref={ref}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        editable={!disabled}
+        keyboardType={getKeyboardType()}
+        secureTextEntry={(secureTextEntry || inputType === 'password') && !isPasswordVisible}
+        autoCapitalize={autoCapitalize}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        style={inputStyles.input}
+        placeholderTextColor="#999999"
+      />
+
+      {/* Right Icon or Password Toggle */}
+      {shouldShowPasswordToggle ? (
+        <TouchableOpacity
+          style={inputStyles.passwordToggle}
+          onPress={togglePasswordVisibility}
+          disabled={disabled}
+          accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
+        >
+          <MaterialCommunityIcons
+            name={isPasswordVisible ? 'eye-off' : 'eye'}
+            size={inputStyles.passwordToggleIcon.width}
+            color={inputStyles.passwordToggleIcon.color}
+          />
+        </TouchableOpacity>
+      ) : rightIcon ? (
+        <View style={inputStyles.rightIconContainer}>
+          {renderRightIcon()}
+        </View>
+      ) : null}
+    </View>
   );
 });
 

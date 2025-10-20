@@ -221,14 +221,6 @@ const Select: React.FC<SelectProps> = ({
               {filteredOptions.map((option, index) => {
                 const isSelected = option.value === value;
 
-                // Apply option variants for selected/disabled states
-                selectStyles.useVariants({
-                  selected: isSelected,
-                  disabled: option.disabled || false,
-                });
-
-                const optionProps = getWebProps([selectStyles.option]);
-
                 return (
                   <div
                     key={option.value}
@@ -236,7 +228,7 @@ const Select: React.FC<SelectProps> = ({
                     role="option"
                     aria-selected={isSelected}
                     onMouseEnter={() => setFocusedIndex(index)}
-                    {...optionProps}
+                    {...getWebProps([selectStyles.option])}
                   >
                     <div {...getWebProps([selectStyles.optionContent])}>
                       {option.icon && (

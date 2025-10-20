@@ -28,6 +28,18 @@ export interface ScreenProps {
   safeArea?: boolean;
 
   /**
+   * Content inset padding for scrollable content (mobile only)
+   * Adds padding to the scroll view's content container
+   * Useful for adding safe area insets or additional spacing
+   */
+  contentInset?: {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+  };
+
+  /**
    * Additional styles (platform-specific)
    */
   style?: StyleProp<ViewStyle>;
