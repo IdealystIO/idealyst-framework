@@ -2,7 +2,7 @@ import React from 'react';
 import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
 import { DataGridShowcase } from '@idealyst/datagrid/examples';
 import { DatePickerExamples } from '@idealyst/datepicker/examples';
-import { Text, View, Card } from '@idealyst/components';
+import { Text, View, Card, Screen } from '@idealyst/components';
 import { NavigatorParam, RouteParam } from '../routing';
 import { ExampleWebLayout } from './ExampleWebLayout';
 import ExampleSidebar from './ExampleSidebar';
@@ -10,50 +10,52 @@ import HeaderRight from './HeaderRight';
 
 const HomeScreen = () => {
     return (
-        <View spacing="lg">
-            <Text size="xlarge" weight="bold">
-                Welcome to Idealyst Components
-            </Text>
+        <Screen spacing="lg">
+            <View spacing='lg'>
+                <Text size="xlarge" weight="bold">
+                    Welcome to Idealyst Components
+                </Text>
 
-            <Card>
-                <View spacing="md" style={{ padding: 16 }}>
-                    <Text size="large" weight="semibold">
-                        Getting Started
-                    </Text>
-                    <Text>
-                        Explore the component library using the sidebar navigation. Each component includes examples
-                        and demonstrations of various props and configurations.
-                    </Text>
-                </View>
-            </Card>
-
-            <Card>
-                <View spacing="md" style={{ padding: 16 }}>
-                    <Text size="large" weight="semibold">
-                        Features
-                    </Text>
-                    <View spacing="sm">
-                        <Text>• Cross-platform components for React and React Native</Text>
-                        <Text>• Comprehensive theming system with light/dark modes</Text>
-                        <Text>• High contrast accessibility support</Text>
-                        <Text>• Responsive design with Unistyles</Text>
-                        <Text>• Type-safe component APIs</Text>
+                <Card>
+                    <View spacing="md" style={{ padding: 16 }}>
+                        <Text size="large" weight="semibold">
+                            Getting Started
+                        </Text>
+                        <Text>
+                            Explore the component library using the sidebar navigation. Each component includes examples
+                            and demonstrations of various props and configurations.
+                        </Text>
                     </View>
-                </View>
-            </Card>
+                </Card>
 
-            <Card>
-                <View spacing="md" style={{ padding: 16 }}>
-                    <Text size="large" weight="semibold">
-                        Theme Controls
-                    </Text>
-                    <Text>
-                        Use the theme controls in the header to switch between light/dark themes and
-                        toggle high contrast mode for better accessibility.
-                    </Text>
-                </View>
-            </Card>
-        </View>
+                <Card>
+                    <View spacing="md" style={{ padding: 16 }}>
+                        <Text size="large" weight="semibold">
+                            Features
+                        </Text>
+                        <View spacing="sm">
+                            <Text>• Cross-platform components for React and React Native</Text>
+                            <Text>• Comprehensive theming system with light/dark modes</Text>
+                            <Text>• High contrast accessibility support</Text>
+                            <Text>• Responsive design with Unistyles</Text>
+                            <Text>• Type-safe component APIs</Text>
+                        </View>
+                    </View>
+                </Card>
+
+                <Card>
+                    <View spacing="md" style={{ padding: 16 }}>
+                        <Text size="large" weight="semibold">
+                            Theme Controls
+                        </Text>
+                        <Text>
+                            Use the theme controls in the header to switch between light/dark themes and
+                            toggle high contrast mode for better accessibility.
+                        </Text>
+                    </View>
+                </Card>
+            </View>
+        </Screen>
     )
 };
 

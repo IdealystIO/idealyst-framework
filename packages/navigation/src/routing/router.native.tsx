@@ -49,6 +49,32 @@ const ThemeAwareScreenWrapper: React.FC<{
 };
 
 /**
+ * Cache for wrapped components to maintain stable references across renders
+ */
+const wrappedComponentCache = new WeakMap<React.ComponentType<any>, React.ComponentType<any>>();
+
+/**
+ * Creates a theme-aware component wrapper with a stable reference
+ * This prevents React Navigation warnings about inline components
+ */
+const createThemeAwareComponent = (OriginalComponent: React.ComponentType<any>) => {
+    // Check cache first to return the same wrapped component reference
+    if (wrappedComponentCache.has(OriginalComponent)) {
+        return wrappedComponentCache.get(OriginalComponent)!;
+    }
+
+    const Wrapped = React.memo((props: any) => (
+        <ThemeAwareScreenWrapper Component={OriginalComponent} {...props} />
+    ));
+    Wrapped.displayName = `ThemeAware(${OriginalComponent.displayName || OriginalComponent.name || 'Component'})`;
+
+    // Store in cache for future lookups
+    wrappedComponentCache.set(OriginalComponent, Wrapped);
+
+    return Wrapped;
+};
+
+/**
  * Build the Mobile navigator using React Navigation
  * @param params
  * @param parentPath
@@ -123,10 +149,7 @@ const buildScreen = (params: RouteParam, Navigator: TypedNavigator, parentPath =
     // Determine the component - wrap screens with ThemeAwareScreenWrapper
     let component: React.ComponentType<any>;
     if (params.type === 'screen') {
-        const OriginalComponent = params.component;
-        component = (props: any) => (
-            <ThemeAwareScreenWrapper Component={OriginalComponent} {...props} />
-        );
+        component = createThemeAwareComponent(params.component);
     } else {
         component = buildNavigator(params, fullPath);
     }
