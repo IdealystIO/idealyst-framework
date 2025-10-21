@@ -86,7 +86,7 @@ export const ExampleWebLayout: React.FC = () => {
                     overflowY: 'auto',
                 }}>
                     <View style={{ padding: 24, maxWidth: 1200, margin: '0 auto', width: '100%' }}>
-                        <Outlet />
+                        <Outlet key={currentTheme} />
                     </View>
                 </View>
             </View>

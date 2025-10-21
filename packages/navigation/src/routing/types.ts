@@ -1,14 +1,5 @@
 import React from "react";
 
-export type ScreenOptions = {
-    /**
-     * Screen title for navigation headers
-     */
-    title?: string;
-    headerShown?: boolean;
-    
-};
-
 /**
  * Tab bar specific screen options
  */
@@ -62,6 +53,16 @@ export type NavigatorOptions = {
      */
     headerShown?: boolean;
 }
+
+export type ScreenOptions = {
+    /**
+     * Screen title for navigation headers
+     */
+    title?: string;
+    headerShown?: boolean;
+
+} & NavigatorOptions;
+
 
 export type BaseNavigatorParam = {
     path: string

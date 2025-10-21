@@ -6,6 +6,7 @@ import { Text, View, Card } from '@idealyst/components';
 import { NavigatorParam, RouteParam } from '../routing';
 import { ExampleWebLayout } from './ExampleWebLayout';
 import ExampleSidebar from './ExampleSidebar';
+import HeaderRight from './HeaderRight';
 
 const HomeScreen = () => {
     return (
@@ -62,6 +63,9 @@ const ExampleNavigationRouter: NavigatorParam = {
     layout: 'drawer',
     sidebarComponent: ExampleSidebar,
     layoutComponent: ExampleWebLayout,
+    options: {
+        headerRight: HeaderRight,
+    },
     routes: [
         { path: "/", type: 'screen', component: HomeScreen },
         { path: "avatar", type: 'screen', component: AvatarExamples},

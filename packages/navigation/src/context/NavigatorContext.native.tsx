@@ -83,7 +83,7 @@ const parseParameterizedPath = (path: string, rootRoute: any): { routeName: stri
 const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
 
     const navigation = useNavigation();
-        
+
     const navigate = (params: NavigateParams) => {
         // Parse parameterized path for mobile
         const parsed = parseParameterizedPath(params.path, route);
@@ -100,7 +100,7 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
         // Memoize the navigator to prevent unnecessary re-renders
         return memo(buildNavigator(route));
     }, [route]);
-     
+
     return (
         <NavigatorContext.Provider value={{
             route,
