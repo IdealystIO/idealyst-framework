@@ -7738,6 +7738,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"install@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "install@npm:0.13.0"
+  checksum: 10/587789343de46cfdac4d6f153ff1137f9620c80cbe7c97460ba549b79c55b97c47362ef1942cf977d5ddb7eedf2319104aa4c899f12e10788cb38b0e062b7a32
+  languageName: node
+  linkType: hard
+
 "internal-slot@npm:^1.1.0":
   version: 1.1.0
   resolution: "internal-slot@npm:1.1.0"
@@ -9866,6 +9873,7 @@ __metadata:
     "@types/react-test-renderer": "npm:^19.1.0"
     babel-plugin-module-resolver: "npm:^5.0.2"
     eslint: "npm:^8.19.0"
+    install: "npm:^0.13.0"
     jest: "npm:^29.6.3"
     prettier: "npm:2.8.8"
     react: "npm:19.1.0"
@@ -9879,6 +9887,7 @@ __metadata:
     react-native-svg: "npm:^15.8.0"
     react-native-unistyles: "npm:3.0.15"
     react-native-vector-icons: "npm:^10.2.0"
+    react-native-video: "npm:^6.17.0"
     react-test-renderer: "npm:19.1.0"
     typescript: "npm:^5.8.3"
   languageName: unknown
@@ -10965,6 +10974,16 @@ __metadata:
     fa6-upgrade: bin/fa6-upgrade.sh
     generate-icon: bin/generate-icon.js
   checksum: 10/8f83860985f89be7c6a46298e23802aad12d1743987b015d7eaf4eb206d03e1818d3b48c1ad9a19ec1e0a3a17a8ecf22385ab52b0cfb16f6602a3df264ec87cb
+  languageName: node
+  linkType: hard
+
+"react-native-video@npm:^6.17.0":
+  version: 6.17.0
+  resolution: "react-native-video@npm:6.17.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/57a41492e2db49e91bad8d7c4ca9022d5c95343a945b1d7bb49bb152a1f740f86f6196ada32b120efcc769b479a85449ecd84f2890ec5fe96412b70489f058a2
   languageName: node
   linkType: hard
 

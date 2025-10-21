@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { isValidElement } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { alertStyles } from './Alert.styles';
+import { isIconName } from '../Icon/icon-resolver';
 import type { AlertProps } from './types';
 
-// Default icons for each intent
+// Default icon names for each intent
 const defaultIcons = {
-  success: '✓',
-  error: '✕',
-  warning: '⚠',
-  info: 'ℹ',
-  neutral: '●',
+  success: 'check-circle',
+  error: 'alert-circle',
+  warning: 'alert',
+  info: 'information',
+  neutral: 'circle',
 };
 
 const Alert: React.FC<AlertProps> = ({
@@ -26,38 +28,53 @@ const Alert: React.FC<AlertProps> = ({
   style,
   testID,
 }) => {
-  const { styles } = alertStyles.useVariants({
+  alertStyles.useVariants({
     variant,
     intent,
   });
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
 
+  // Helper to render icon
+  const renderIcon = () => {
+    if (!displayIcon) return null;
+
+    if (typeof displayIcon === 'string' && isIconName(displayIcon)) {
+      const iconColor = alertStyles.iconContainer.color || '#000';
+      return (
+        <MaterialCommunityIcons
+          name={displayIcon}
+          size={20}
+          color={iconColor}
+        />
+      );
+    } else if (isValidElement(displayIcon)) {
+      return displayIcon;
+    }
+    return null;
+  };
+
   return (
     <View
-      style={[styles.container, style]}
+      style={[alertStyles.container, style]}
       testID={testID}
       accessibilityRole="alert"
     >
       {displayIcon && (
-        <View style={styles.iconContainer}>
-          {typeof displayIcon === 'string' ? (
-            <Text style={{ fontSize: 20, lineHeight: 24 }}>{displayIcon}</Text>
-          ) : (
-            displayIcon
-          )}
+        <View style={alertStyles.iconContainer}>
+          {renderIcon()}
         </View>
       )}
 
-      <View style={styles.content}>
+      <View style={alertStyles.content}>
         {title && (
-          <Text style={styles.title}>
+          <Text style={alertStyles.title}>
             {title}
           </Text>
         )}
 
         {message && (
-          <Text style={styles.message}>
+          <Text style={alertStyles.message}>
             {message}
           </Text>
         )}
@@ -65,7 +82,7 @@ const Alert: React.FC<AlertProps> = ({
         {children}
 
         {actions && (
-          <View style={styles.actions}>
+          <View style={alertStyles.actions}>
             {actions}
           </View>
         )}
@@ -73,12 +90,16 @@ const Alert: React.FC<AlertProps> = ({
 
       {dismissible && onDismiss && (
         <TouchableOpacity
-          style={styles.closeButton}
+          style={alertStyles.closeButton}
           onPress={onDismiss}
           accessibilityLabel="Dismiss alert"
           accessibilityRole="button"
         >
-          <Text style={{ fontSize: 16 }}>✕</Text>
+          <MaterialCommunityIcons
+            name="close"
+            size={16}
+            color={alertStyles.closeButton.color || '#000'}
+          />
         </TouchableOpacity>
       )}
     </View>

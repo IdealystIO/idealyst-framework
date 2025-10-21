@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { isValidElement } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { chipStyles } from './Chip.styles';
+import { isIconName } from '../Icon/icon-resolver';
 import type { ChipProps } from './types';
 
 const Chip: React.FC<ChipProps> = ({
@@ -19,7 +20,7 @@ const Chip: React.FC<ChipProps> = ({
   style,
   testID,
 }) => {
-  const { styles } = useStyles(chipStyles, {
+  chipStyles.useVariants({
     size,
     variant,
     intent,
@@ -41,24 +42,51 @@ const Chip: React.FC<ChipProps> = ({
     }
   };
 
+  // Map chip size to icon size
+  const iconSize = size === 'small' ? 12 : size === 'medium' ? 14 : 16;
+  const deleteIconSize = size === 'small' ? 10 : size === 'medium' ? 11 : 12;
+
+  // Helper to render icon
+  const renderIcon = () => {
+    if (!icon) return null;
+
+    if (typeof icon === 'string' && isIconName(icon)) {
+      const iconColor = chipStyles.icon.color || '#000';
+      return (
+        <MaterialCommunityIcons
+          name={icon}
+          size={iconSize}
+          color={iconColor}
+        />
+      );
+    } else if (isValidElement(icon)) {
+      return icon;
+    }
+    return null;
+  };
+
   const isClickable = (onPress && !disabled) || (selectable && !disabled);
 
   const content = (
-    <View style={[styles.container, style]} testID={testID}>
-      {icon && <View style={styles.icon}>{icon}</View>}
+    <View style={[chipStyles.container, style]} testID={testID}>
+      {icon && <View style={chipStyles.icon}>{renderIcon()}</View>}
 
-      <Text style={styles.label}>{label}</Text>
+      <Text style={chipStyles.label}>{label}</Text>
 
       {deletable && onDelete && (
         <Pressable
-          style={styles.deleteButton}
+          style={chipStyles.deleteButton}
           onPress={handleDelete}
           disabled={disabled}
           hitSlop={8}
           accessibilityLabel="Delete"
           accessibilityRole="button"
         >
-          <Text style={styles.deleteIcon}>✕</Text>
+          <MaterialCommunityIcons
+            name="close"
+            size={deleteIconSize}
+            color={chipStyles.label.color || '#000'}
+          />
         </Pressable>
       )}
     </View>

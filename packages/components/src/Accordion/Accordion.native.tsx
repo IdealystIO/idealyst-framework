@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, Animated } from 'react-native';
+import { View, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { accordionStyles } from './Accordion.styles';
+import Text from '../Text';
 import type { AccordionProps } from './types';
+
+// Enable LayoutAnimation on Android
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const Accordion: React.FC<AccordionProps> = ({
   items,
@@ -25,6 +32,9 @@ const Accordion: React.FC<AccordionProps> = ({
   const toggleItem = (itemId: string, disabled?: boolean) => {
     if (disabled) return;
 
+    // Configure layout animation
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+
     setExpandedItems((prev) => {
       const isExpanded = prev.includes(itemId);
 
@@ -37,12 +47,6 @@ const Accordion: React.FC<AccordionProps> = ({
       }
     });
   };
-
-  const ChevronIcon = () => (
-    <View style={{ width: 16, height: 16 }}>
-      <Text>▼</Text>
-    </View>
-  );
 
   return (
     <View style={[accordionStyles.container, style]} testID={testID}>
@@ -61,6 +65,9 @@ const Accordion: React.FC<AccordionProps> = ({
           intent,
         });
 
+        const iconStyle = accordionStyles.icon;
+        const headerTextColor = accordionStyles.header.color || '#000';
+
         return (
           <View
             key={item.id}
@@ -74,24 +81,33 @@ const Accordion: React.FC<AccordionProps> = ({
               activeOpacity={0.7}
             >
               <View style={accordionStyles.title}>
-                <Text style={{ fontFamily: accordionStyles.header.fontFamily }}>
+                <Text style={{ color: headerTextColor }}>
                   {item.title}
                 </Text>
               </View>
-              <View style={accordionStyles.icon}>
-                <ChevronIcon />
+              <View
+                style={[
+                  accordionStyles.icon,
+                  {
+                    transform: [{ rotate: isExpanded ? '180deg' : '0deg' }],
+                  },
+                ]}
+              >
+                <MaterialCommunityIcons
+                  name="chevron-down"
+                  size={iconStyle.width || 20}
+                  color={iconStyle.color || headerTextColor}
+                />
               </View>
             </TouchableOpacity>
 
-            <Animated.View
-              style={accordionStyles.content}
-            >
-              {isExpanded && (
+            {isExpanded && (
+              <View style={accordionStyles.content}>
                 <View style={accordionStyles.contentInner}>
                   {item.content}
                 </View>
-              )}
-            </Animated.View>
+              </View>
+            )}
           </View>
         );
       })}

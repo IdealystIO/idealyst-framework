@@ -1,10 +1,5 @@
 import React from 'react';
-import { Screen } from '../Screen';
-import { View } from '../View';
-import { Text } from '../Text';
-import { Skeleton, SkeletonGroup } from '../Skeleton';
-import { Divider } from '../Divider';
-import { Card } from '../Card';
+import { Screen, View, Text, Skeleton, SkeletonGroup, Divider, Card } from '../index';
 
 export const SkeletonExamples = () => {
   return (

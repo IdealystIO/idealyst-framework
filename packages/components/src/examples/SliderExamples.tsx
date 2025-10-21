@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from '@idealyst/components';
+import { Screen, View, Text } from '@idealyst/components';
 import Slider from '../Slider';
 
 export const SliderExamples: React.FC = () => {
@@ -8,8 +8,9 @@ export const SliderExamples: React.FC = () => {
   const [temperatureValue, setTemperatureValue] = useState(20);
 
   return (
-    <View spacing="lg">
-      <Text size="xlarge" weight="bold">Slider Examples</Text>
+    <Screen background="primary" padding="lg">
+      <View spacing="lg">
+        <Text size="xlarge" weight="bold">Slider Examples</Text>
 
       <View spacing="md">
         <Text size="large" weight="semibold">Basic Slider</Text>
@@ -191,7 +192,8 @@ export const SliderExamples: React.FC = () => {
           disabled
         />
       </View>
-    </View>
+      </View>
+    </Screen>
   );
 };
 

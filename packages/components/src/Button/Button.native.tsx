@@ -1,10 +1,10 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
 
-const Button: React.FC<ButtonProps> = (props) => {
+const Button = forwardRef<TouchableOpacity, ButtonProps>((props, ref) => {
   const {
     children,
     title,
@@ -57,6 +57,7 @@ const Button: React.FC<ButtonProps> = (props) => {
 
   return (
     <TouchableOpacity
+      ref={ref}
       onPress={onPress}
       disabled={disabled}
       testID={testID}
@@ -78,6 +79,8 @@ const Button: React.FC<ButtonProps> = (props) => {
       )}
     </TouchableOpacity>
   );
-};
+});
+
+Button.displayName = 'Button';
 
 export default Button; 

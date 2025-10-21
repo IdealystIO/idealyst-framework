@@ -1,6 +1,5 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { breadcrumbStyles } from './Breadcrumb.styles';
 import type { BreadcrumbProps, BreadcrumbItem } from './types';
 
@@ -15,7 +14,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   separatorStyle,
   testID,
 }) => {
-  const { styles } = useStyles(breadcrumbStyles, {
+  breadcrumbStyles.useVariants({
     size,
     intent,
   });
@@ -32,7 +31,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   }
 
   const renderItem = (item: BreadcrumbItem, index: number, isLast: boolean) => {
-    const { styles: itemStyles } = useStyles(breadcrumbStyles, {
+    breadcrumbStyles.useVariants({
       size,
       intent,
       disabled: item.disabled || false,
@@ -41,9 +40,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
     });
 
     const content = (
-      <View style={[styles.item, itemStyle]}>
-        {item.icon && <View style={styles.icon}>{item.icon}</View>}
-        <Text style={itemStyles.itemText}>{item.label}</Text>
+      <View style={[breadcrumbStyles.item, itemStyle]}>
+        {item.icon && <View style={breadcrumbStyles.icon}>{item.icon}</View>}
+        <Text style={breadcrumbStyles.itemText}>{item.label}</Text>
       </View>
     );
 
@@ -68,7 +67,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
 
   return (
     <View
-      style={[styles.container, style]}
+      style={[breadcrumbStyles.container, style]}
       testID={testID}
       accessibilityRole="navigation"
       accessibilityLabel="Breadcrumb"
@@ -81,8 +80,8 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
           <React.Fragment key={index}>
             {shouldShowEllipsis && (
               <>
-                <Text style={styles.ellipsis}>...</Text>
-                <Text style={[styles.separator, separatorStyle]}>
+                <Text style={breadcrumbStyles.ellipsis}>...</Text>
+                <Text style={[breadcrumbStyles.separator, separatorStyle]}>
                   {typeof separator === 'string' ? separator : '/'}
                 </Text>
               </>
@@ -91,7 +90,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
             {renderItem(item, index, isLast)}
 
             {!isLast && (
-              <Text style={[styles.separator, separatorStyle]}>
+              <Text style={[breadcrumbStyles.separator, separatorStyle]}>
                 {typeof separator === 'string' ? separator : '/'}
               </Text>
             )}

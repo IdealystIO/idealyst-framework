@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from '@idealyst/components';
+import { Screen, View, Text } from '../index';
 import Accordion from '../Accordion';
 import type { AccordionItem } from '../Accordion/types';
 
@@ -54,6 +54,7 @@ export const AccordionExamples: React.FC = () => {
   ];
 
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xlarge" weight="bold">Accordion Examples</Text>
 
@@ -118,6 +119,7 @@ export const AccordionExamples: React.FC = () => {
         <Accordion items={disabledItems} variant="separated" />
       </View>
     </View>
+    </Screen>
   );
 };
 

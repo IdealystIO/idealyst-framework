@@ -1,4 +1,4 @@
-import AlertComponent from './Alert';
+import AlertComponent from './Alert.web';
 
 export default AlertComponent;
 export { AlertComponent as Alert };

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, TouchableOpacity, Text, ScrollView, Animated } from 'react-native';
+import { View, TouchableOpacity, Text, ScrollView } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { tabBarStyles } from './TabBar.styles';
 import type { TabBarProps } from './types';
 
@@ -17,8 +18,8 @@ const TabBar: React.FC<TabBarProps> = ({
   const firstItemValue = items[0]?.value || '';
   const [internalValue, setInternalValue] = useState(defaultValue || firstItemValue);
 
-  const indicatorPosition = useRef(new Animated.Value(0)).current;
-  const indicatorWidth = useRef(new Animated.Value(0)).current;
+  const indicatorPosition = useSharedValue(0);
+  const indicatorWidth = useSharedValue(0);
   const tabLayouts = useRef<{ [key: string]: { x: number; width: number } }>({});
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
@@ -26,20 +27,14 @@ const TabBar: React.FC<TabBarProps> = ({
   const updateIndicatorPosition = (itemValue: string) => {
     const layout = tabLayouts.current[itemValue];
     if (layout) {
-      Animated.parallel([
-        Animated.spring(indicatorPosition, {
-          toValue: layout.x,
-          useNativeDriver: false,
-          tension: 300,
-          friction: 30,
-        }),
-        Animated.spring(indicatorWidth, {
-          toValue: layout.width,
-          useNativeDriver: false,
-          tension: 300,
-          friction: 30,
-        }),
-      ]).start();
+      indicatorPosition.value = withSpring(layout.x, {
+        damping: 30,
+        stiffness: 300,
+      });
+      indicatorWidth.value = withSpring(layout.width, {
+        damping: 30,
+        stiffness: 300,
+      });
     }
   };
 
@@ -68,6 +63,13 @@ const TabBar: React.FC<TabBarProps> = ({
 
   // Apply container variants
   tabBarStyles.useVariants({ variant, intent });
+
+  const indicatorAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: indicatorPosition.value }],
+      width: indicatorWidth.value,
+    };
+  });
 
   return (
     <View style={[tabBarStyles.container, style]} testID={testID}>
@@ -111,10 +113,7 @@ const TabBar: React.FC<TabBarProps> = ({
       <Animated.View
         style={[
           tabBarStyles.indicator,
-          {
-            transform: [{ translateX: indicatorPosition }],
-            width: indicatorWidth,
-          },
+          indicatorAnimatedStyle,
         ]}
       />
     </View>

@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { Screen } from '../Screen';
-import { View } from '../View';
-import { Text } from '../Text';
-import { Chip } from '../Chip';
-import { Divider } from '../Divider';
+import { Screen, View, Text, Chip, Divider } from '@idealyst/components';
 
 export const ChipExamples = () => {
   const [selectedChips, setSelectedChips] = useState<Set<string>>(new Set());

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from '@idealyst/components';
+import { Screen, View, Text } from '@idealyst/components';
 import TextArea from '../TextArea';
 
 export const TextAreaExamples: React.FC = () => {
@@ -9,6 +9,7 @@ export const TextAreaExamples: React.FC = () => {
   const [autoGrowValue, setAutoGrowValue] = useState('');
 
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xlarge" weight="bold">TextArea Examples</Text>
 
@@ -165,6 +166,7 @@ export const TextAreaExamples: React.FC = () => {
         />
       </View>
     </View>
+    </Screen>
   );
 };
 

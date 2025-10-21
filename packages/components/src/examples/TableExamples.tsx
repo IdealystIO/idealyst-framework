@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Badge, Button } from '@idealyst/components';
+import { Screen, View, Text, Badge, Button } from '@idealyst/components';
 import Table from '../Table';
 import type { TableColumn } from '../Table/types';
 
@@ -135,6 +135,7 @@ export const TableExamples: React.FC = () => {
   ];
 
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xlarge" weight="bold">Table Examples</Text>
 
@@ -272,6 +273,7 @@ export const TableExamples: React.FC = () => {
         </Text>
       </View>
     </View>
+    </Screen>
   );
 };
 

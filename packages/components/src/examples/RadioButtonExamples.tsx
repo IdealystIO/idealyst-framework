@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from '@idealyst/components';
+import { Screen, View, Text } from '@idealyst/components';
 import { RadioButton, RadioGroup } from '../RadioButton';
 
 export const RadioButtonExamples: React.FC = () => {
@@ -9,8 +9,9 @@ export const RadioButtonExamples: React.FC = () => {
   const [selectedIntent, setSelectedIntent] = useState('primary');
 
   return (
-    <View spacing="lg">
-      <Text size="xlarge" weight="bold">RadioButton Examples</Text>
+    <Screen background="primary" padding="lg">
+      <View spacing="lg">
+        <Text size="xlarge" weight="bold">RadioButton Examples</Text>
 
       <View spacing="md">
         <Text size="large" weight="semibold">Basic RadioGroup</Text>
@@ -152,7 +153,8 @@ export const RadioButtonExamples: React.FC = () => {
           />
         </View>
       </View>
-    </View>
+      </View>
+    </Screen>
   );
 };
 

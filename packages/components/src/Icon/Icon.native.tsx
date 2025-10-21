@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IconProps } from './types';
 import iconStyles from './Icon.styles';
@@ -11,28 +11,18 @@ const Icon: React.FC<IconProps> = ({
   testID,
   accessibilityLabel,
 }: IconProps) => {
-  
+
   // Use Unistyles v3 with color and size variants
-  const styles = iconStyles.useVariants({ color, size });
-  
-  // Map size variants to pixel values
-  const iconSize = useMemo(() => { 
-    if (typeof size === 'number') return size;
-    const sizeMap = {
-      xs: 12,
-      sm: 16,
-      md: 24,
-      lg: 32,
-      xl: 48,
-    };
-    return sizeMap[size];
-  }, [])
-  
+  iconStyles.useVariants({ color, size });
+
+  // Get fontSize from styles for numeric size prop
+  const iconSize = typeof size === 'number' ? size : iconStyles.icon.fontSize;
+
   return (
     <MaterialCommunityIcons
       name={name}
       size={iconSize}
-      style={[styles.icon, style]}
+      style={[iconStyles.icon, style]}
       testID={testID}
       accessibilityLabel={accessibilityLabel}
     />

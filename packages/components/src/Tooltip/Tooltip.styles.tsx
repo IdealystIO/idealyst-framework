@@ -3,19 +3,22 @@ import { StyleSheet } from 'react-native-unistyles';
 export const tooltipStyles = StyleSheet.create((theme) => ({
   container: {
     position: 'relative',
-    display: 'inline-flex',
+
+    _web: {
+      display: 'inline-flex',
+    },
   },
 
   tooltip: {
-    position: 'absolute',
-    zIndex: 1000,
     borderRadius: theme.borderRadius.md,
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-    pointerEvents: 'none',
-    opacity: 0,
-    transition: 'opacity 0.2s ease',
-    whiteSpace: 'nowrap',
     maxWidth: 300,
+
+    // Native shadows
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
 
     variants: {
       size: {
@@ -63,29 +66,48 @@ export const tooltipStyles = StyleSheet.create((theme) => ({
         },
       },
       placement: {
-        top: {
-          bottom: '100%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          marginBottom: 8,
-        },
-        bottom: {
-          top: '100%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          marginTop: 8,
-        },
-        left: {
-          right: '100%',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          marginRight: 8,
-        },
-        right: {
-          left: '100%',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          marginLeft: 8,
+        top: {},
+        bottom: {},
+        left: {},
+        right: {},
+      },
+    },
+
+    _web: {
+      position: 'absolute',
+      zIndex: 1000,
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+      pointerEvents: 'none',
+      opacity: 0,
+      transition: 'opacity 0.2s ease',
+      whiteSpace: 'nowrap',
+
+      variants: {
+        placement: {
+          top: {
+            bottom: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            marginBottom: 8,
+          },
+          bottom: {
+            top: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            marginTop: 8,
+          },
+          left: {
+            right: '100%',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            marginRight: 8,
+          },
+          right: {
+            left: '100%',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            marginLeft: 8,
+          },
         },
       },
     },

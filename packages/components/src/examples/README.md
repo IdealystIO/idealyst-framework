@@ -15,9 +15,6 @@ This directory contains comprehensive examples showcasing all components from th
 - **BadgeExamples**: Displays badge variants, intents, and use cases
 - **AvatarExamples**: Demonstrates avatar sizes, shapes, and fallback options
 
-### Master Example
-- **AllExamples**: A comprehensive showcase of all components in one scrollable view
-
 ## Usage
 
 ### Import Individual Examples
@@ -26,14 +23,6 @@ import { ButtonExamples, TextExamples, CardExamples } from '@idealyst/components
 
 // Use in your component
 <ButtonExamples />
-```
-
-### Import All Examples
-```typescript
-import { AllExamples } from '@idealyst/components/examples';
-
-// Display all examples at once
-<AllExamples />
 ```
 
 ## Example Structure
@@ -133,4 +122,3 @@ When adding new components:
 3. Include all variants, sizes, and states
 4. Add interactive elements where applicable
 5. Export the component in `index.ts`
-6. Update the `AllExamples` component to include the new example 

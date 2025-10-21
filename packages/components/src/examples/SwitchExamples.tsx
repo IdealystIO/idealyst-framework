@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from '@idealyst/components';
+import { Screen, View, Text } from '@idealyst/components';
 import Switch from '../Switch';
 
 export const SwitchExamples: React.FC = () => {
@@ -21,6 +21,7 @@ export const SwitchExamples: React.FC = () => {
   });
 
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xlarge" weight="bold">Switch Examples</Text>
 
@@ -174,6 +175,7 @@ export const SwitchExamples: React.FC = () => {
         </View>
       </View>
     </View>
+    </Screen>
   );
 };
 

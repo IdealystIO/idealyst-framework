@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from '@idealyst/components';
+import { Screen, View, Text } from '@idealyst/components';
 import Tabs, { Tab } from '../Tabs';
 
 export const TabsExamples: React.FC = () => {
@@ -8,6 +8,7 @@ export const TabsExamples: React.FC = () => {
   const [intentTab, setIntentTab] = useState('tab1');
 
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xlarge" weight="bold">Tabs Examples</Text>
 
@@ -135,6 +136,7 @@ export const TabsExamples: React.FC = () => {
         </View>
       </View>
     </View>
+    </Screen>
   );
 };
 

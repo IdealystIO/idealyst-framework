@@ -1,6 +1,13 @@
-import React from 'react';
-import { View, Animated } from 'react-native';
-import { UnistylesRuntime } from 'react-native-unistyles';
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  useAnimatedProps,
+  withTiming,
+  withRepeat,
+  Easing,
+} from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 import Text from '../Text';
 import { progressStyles } from './Progress.styles';
@@ -17,74 +24,50 @@ const Progress: React.FC<ProgressProps> = ({
   indeterminate = false,
   showLabel = false,
   label,
+  rounded = true,
   style,
   testID,
 }) => {
-  const theme = UnistylesRuntime.theme;
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
-  const animatedValue = React.useRef(new Animated.Value(0)).current;
-  const slideAnimation = React.useRef(new Animated.Value(0)).current;
+  // Apply variants
+  progressStyles.useVariants({
+    size,
+    intent,
+    rounded,
+  });
 
-  React.useEffect(() => {
+  // Animation values
+  const animatedValue = useSharedValue(0);
+  const slideAnimation = useSharedValue(0);
+  const rotateAnimation = useSharedValue(0);
+
+  useEffect(() => {
     if (indeterminate) {
-      Animated.loop(
-        Animated.timing(slideAnimation, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        })
-      ).start();
+      // Indeterminate animation
+      slideAnimation.value = withRepeat(
+        withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
+        -1,
+        false
+      );
+      rotateAnimation.value = withRepeat(
+        withTiming(1, { duration: 1400, easing: Easing.linear }),
+        -1,
+        false
+      );
     } else {
-      Animated.timing(animatedValue, {
-        toValue: percentage,
+      // Determinate animation
+      animatedValue.value = withTiming(percentage, {
         duration: 300,
-        useNativeDriver: false,
-      }).start();
+        easing: Easing.out(Easing.ease),
+      });
     }
-  }, [percentage, indeterminate, animatedValue, slideAnimation]);
-
-  const getBarStyles = () => {
-    const barStyles = [progressStyles.linearBar];
-
-    if (intent === 'success') barStyles.push(progressStyles.linearBarSuccess);
-    else if (intent === 'error') barStyles.push(progressStyles.linearBarError);
-    else if (intent === 'warning') barStyles.push(progressStyles.linearBarWarning);
-    else if (intent === 'neutral') barStyles.push(progressStyles.linearBarNeutral);
-
-    return barStyles;
-  };
-
-  const getIndeterminateBarStyles = () => {
-    const barStyles = [progressStyles.indeterminateBar];
-
-    if (intent === 'success') barStyles.push(progressStyles.indeterminateBarSuccess);
-    else if (intent === 'error') barStyles.push(progressStyles.indeterminateBarError);
-    else if (intent === 'warning') barStyles.push(progressStyles.indeterminateBarWarning);
-    else if (intent === 'neutral') barStyles.push(progressStyles.indeterminateBarNeutral);
-
-    return barStyles;
-  };
-
-  const getLabelStyles = () => {
-    const labelStyles = [progressStyles.label];
-    if (size === 'medium') labelStyles.push(progressStyles.labelMedium);
-    if (size === 'large') labelStyles.push(progressStyles.labelLarge);
-    return labelStyles;
-  };
+  }, [percentage, indeterminate]);
 
   const getCircularSize = () => {
     if (size === 'small') return 32;
     if (size === 'large') return 64;
     return 48;
-  };
-
-  const getBarColor = () => {
-    if (intent === 'success') return theme.intents?.success?.main || '#22c55e';
-    if (intent === 'error') return theme.intents?.error?.main || '#ef4444';
-    if (intent === 'warning') return theme.intents?.warning?.main || '#f59e0b';
-    if (intent === 'neutral') return theme.colors?.neutral?.[6] || '#52525b';
-    return theme.intents?.primary?.main || '#3b82f6';
   };
 
   if (variant === 'circular') {
@@ -93,64 +76,59 @@ const Progress: React.FC<ProgressProps> = ({
     const radius = (circularSize - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
 
-    const rotateAnimation = React.useRef(new Animated.Value(0)).current;
+    // Get colors from stylesheet after applying variants
+    const trackColor = progressStyles.circularTrack.stroke;
+    const barColor = progressStyles.circularBar.stroke;
 
-    React.useEffect(() => {
-      if (indeterminate) {
-        Animated.loop(
-          Animated.timing(rotateAnimation, {
-            toValue: 1,
-            duration: 1400,
-            useNativeDriver: true,
-          })
-        ).start();
-      }
-    }, [indeterminate, rotateAnimation]);
+    const circularAnimatedProps = useAnimatedProps(() => {
+      const offset = indeterminate
+        ? circumference * 0.25
+        : circumference - (animatedValue.value / 100) * circumference;
 
-    const strokeDashoffset = indeterminate
-      ? 0
-      : animatedValue.interpolate({
-          inputRange: [0, 100],
-          outputRange: [circumference, 0],
-        });
+      return {
+        strokeDashoffset: offset,
+      };
+    });
 
-    const rotation = rotateAnimation.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['0deg', '360deg'],
+    const rotationStyle = useAnimatedStyle(() => {
+      return {
+        transform: [
+          {
+            rotate: `${rotateAnimation.value * 360}deg`,
+          },
+        ],
+      };
     });
 
     return (
-      <View style={[progressStyles.circularContainer, { width: circularSize, height: circularSize }, style]} testID={testID}>
-        <Animated.View
-          style={[
-            progressStyles.circularSvg,
-            indeterminate && { transform: [{ rotate: rotation }] },
-          ]}
-        >
-          <Svg width={circularSize} height={circularSize}>
+      <View style={[progressStyles.circularContainer, style]} testID={testID}>
+        <Animated.View style={indeterminate ? rotationStyle : {}}>
+          <Svg width={circularSize} height={circularSize} style={{ transform: [{ rotate: '-90deg' }] }}>
+            {/* Track circle (background) */}
             <Circle
               cx={circularSize / 2}
               cy={circularSize / 2}
               r={radius}
               strokeWidth={strokeWidth}
               fill="none"
-              stroke={theme.colors?.neutral?.[3] || '#d4d4d8'}
+              stroke={trackColor}
             />
+            {/* Progress circle (foreground) */}
             <AnimatedCircle
               cx={circularSize / 2}
               cy={circularSize / 2}
               r={radius}
               strokeWidth={strokeWidth}
               fill="none"
-              stroke={getBarColor()}
-              strokeDasharray={indeterminate ? `${circumference * 0.8} ${circumference * 0.2}` : `${circumference} ${circumference}`}
-              strokeDashoffset={strokeDashoffset}
+              stroke={barColor}
+              strokeDasharray={`${circumference} ${circumference}`}
+              animatedProps={circularAnimatedProps}
               strokeLinecap="round"
             />
           </Svg>
         </Animated.View>
         {showLabel && (
-          <Text style={[progressStyles.circularLabel, ...getLabelStyles()]}>
+          <Text style={progressStyles.circularLabel}>
             {label || `${Math.round(percentage)}%`}
           </Text>
         )}
@@ -158,46 +136,34 @@ const Progress: React.FC<ProgressProps> = ({
     );
   }
 
+  // Linear progress
+  const barAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      width: `${animatedValue.value}%`,
+    };
+  });
+
+  const indeterminateAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: slideAnimation.value * 600 - 200,
+        },
+      ],
+    };
+  });
+
   return (
     <View style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
-      <View
-        style={[
-          progressStyles.linearTrack,
-          size === 'small' && progressStyles.linearTrackSmall,
-          size === 'medium' && progressStyles.linearTrackMedium,
-          size === 'large' && progressStyles.linearTrackLarge,
-        ]}
-      >
+      <View style={progressStyles.linearTrack}>
         {indeterminate ? (
-          <Animated.View
-            style={[
-              getIndeterminateBarStyles(),
-              {
-                transform: [{
-                  translateX: slideAnimation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [-200, 400],
-                  }),
-                }],
-              },
-            ]}
-          />
+          <Animated.View style={[progressStyles.indeterminateBar, indeterminateAnimatedStyle]} />
         ) : (
-          <Animated.View
-            style={[
-              getBarStyles(),
-              {
-                width: animatedValue.interpolate({
-                  inputRange: [0, 100],
-                  outputRange: ['0%', '100%'],
-                }),
-              },
-            ]}
-          />
+          <Animated.View style={[progressStyles.linearBar, barAnimatedStyle]} />
         )}
       </View>
       {showLabel && (
-        <Text style={getLabelStyles()}>
+        <Text style={progressStyles.label}>
           {label || `${Math.round(percentage)}%`}
         </Text>
       )}

@@ -6,32 +6,32 @@ export const PopoverExamples = () => {
   const [placementOpen, setPlacementOpen] = useState<string | null>(null);
   const [arrowOpen, setArrowOpen] = useState(false);
 
-  const basicButtonRef = useRef<HTMLDivElement>(null);
-  const placementButtonRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const arrowButtonRef = useRef<HTMLDivElement>(null);
+  const basicButtonRef = useRef<any>(null);
+  const placementButtonRefs = useRef<{ [key: string]: any }>({});
+  const arrowButtonRef = useRef<any>(null);
 
   const placements = [
-    'top', 'top-start', 'top-end',
-    'bottom', 'bottom-start', 'bottom-end',
-    'left', 'left-start', 'left-end',
-    'right', 'right-start', 'right-end',
+    { id: 'top', label: 'Top' },
+    { id: 'top-start', label: 'Top Start' },
+    { id: 'top-end', label: 'Top End' },
+    { id: 'bottom', label: 'Bottom' },
+    { id: 'bottom-start', label: 'Bottom Start' },
+    { id: 'bottom-end', label: 'Bottom End' },
   ];
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
+      <View spacing="lg">
         <Text size="large" weight="bold" align="center">
           Popover Examples
         </Text>
-        
+
         {/* Basic Popover */}
         <View spacing="md">
           <Text size="medium" weight="semibold">Basic Popover</Text>
-          <div ref={basicButtonRef} style={{ display: 'inline-block' }}>
-            <Button onPress={() => setBasicOpen(true)}>
-              Open Basic Popover
-            </Button>
-          </div>
+          <Button ref={basicButtonRef} onPress={() => setBasicOpen(true)}>
+            Open Basic Popover
+          </Button>
           <Popover
             open={basicOpen}
             onOpenChange={setBasicOpen}
@@ -51,61 +51,51 @@ export const PopoverExamples = () => {
         {/* Placement Examples */}
         <View spacing="md">
           <Text size="medium" weight="semibold">Placement Options</Text>
-          <View style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(3, 1fr)', 
-            gap: 8, 
-            maxWidth: 400 
-          }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {placements.map((placement) => (
-              <div 
-                key={placement}
-                ref={(ref) => placementButtonRefs.current[placement] = ref}
-                style={{ display: 'inline-block' }}
-              >
+              <View key={placement.id}>
                 <Button
+                  ref={(ref) => (placementButtonRefs.current[placement.id] = ref)}
                   size="sm"
                   variant="outlined"
-                  onPress={() => setPlacementOpen(placement)}
+                  onPress={() => setPlacementOpen(placement.id)}
                 >
-                  {placement}
+                  {placement.label}
                 </Button>
-              </div>
+                {placementOpen === placement.id && (
+                  <Popover
+                    open={true}
+                    onOpenChange={() => setPlacementOpen(null)}
+                    anchor={{ current: placementButtonRefs.current[placement.id] }}
+                    placement={placement.id as any}
+                  >
+                    <View spacing="sm">
+                      <Text weight="bold">{placement.label} placement</Text>
+                      <Text size="sm">
+                        Positioned {placement.id} relative to the button
+                      </Text>
+                      <Button size="sm" onPress={() => setPlacementOpen(null)}>
+                        Close
+                      </Button>
+                    </View>
+                  </Popover>
+                )}
+              </View>
             ))}
           </View>
-          
-          {placementOpen && (
-            <Popover
-              open={!!placementOpen}
-              onOpenChange={() => setPlacementOpen(null)}
-              anchor={{ current: placementButtonRefs.current[placementOpen] }}
-              placement={placementOpen as any}
-            >
-              <View spacing="sm">
-                <Text weight="bold">{placementOpen} placement</Text>
-                <Text size="sm">
-                  Positioned {placementOpen} relative to the button
-                </Text>
-                <Button size="sm" onPress={() => setPlacementOpen(null)}>
-                  Close
-                </Button>
-              </View>
-            </Popover>
-          )}
         </View>
 
         {/* Arrow Example */}
         <View spacing="md">
           <Text size="medium" weight="semibold">With Arrow</Text>
-          <div ref={arrowButtonRef} style={{ display: 'inline-block' }}>
-            <Button 
-              variant="contained"
-              intent="success"
-              onPress={() => setArrowOpen(true)}
-            >
-              Popover with Arrow
-            </Button>
-          </div>
+          <Button
+            ref={arrowButtonRef}
+            variant="contained"
+            intent="success"
+            onPress={() => setArrowOpen(true)}
+          >
+            Popover with Arrow
+          </Button>
           <Popover
             open={arrowOpen}
             onOpenChange={setArrowOpen}

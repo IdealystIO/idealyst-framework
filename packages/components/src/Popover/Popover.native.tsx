@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { Modal, View, TouchableWithoutFeedback, BackHandler, Dimensions } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Modal, View, TouchableWithoutFeedback, BackHandler } from 'react-native';
 import { PopoverProps } from './types';
 import { popoverStyles } from './Popover.styles';
 
@@ -11,11 +11,25 @@ const Popover: React.FC<PopoverProps> = ({
   placement = 'bottom',
   offset = 8,
   closeOnClickOutside = true,
-  showArrow = false, // Arrows are complex on native, disabled by default
+  showArrow = false,
   style,
   testID,
 }) => {
   const popoverRef = useRef<View>(null);
+  const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0, width: 0 });
+
+  // Apply variants
+  popoverStyles.useVariants({});
+
+  // Determine if anchor is a ref object
+  const anchorRefToUse = React.useMemo(() => {
+    if (!anchor || typeof anchor !== 'object') return null;
+    // Check if it has 'current' property (ref object)
+    if ('current' in anchor) {
+      return anchor as React.RefObject<any>;
+    }
+    return null;
+  }, [anchor]);
 
   // Handle Android back button
   useEffect(() => {
@@ -30,30 +44,82 @@ const Popover: React.FC<PopoverProps> = ({
     return () => backHandler.remove();
   }, [open, onOpenChange]);
 
+  // Measure anchor position when opening
+  useEffect(() => {
+    if (open && anchorRefToUse?.current) {
+      // Small delay to ensure layout is complete
+      setTimeout(() => {
+        anchorRefToUse.current?.measureInWindow((x: number, y: number, width: number, height: number) => {
+          calculatePopoverPosition(x, y, width, height);
+        });
+      }, 100);
+    }
+  }, [open, placement, anchorRefToUse]);
+
+  const calculatePopoverPosition = (x: number, y: number, width: number, height: number) => {
+    let top = 0;
+    let left = 0;
+
+    // Calculate position based on placement
+    switch (placement) {
+      case 'bottom':
+      case 'bottom-start':
+        top = y + height + offset;
+        left = placement === 'bottom' ? x + width / 2 : x;
+        break;
+      case 'bottom-end':
+        top = y + height + offset;
+        left = x + width;
+        break;
+      case 'top':
+      case 'top-start':
+        top = y - offset;
+        left = placement === 'top' ? x + width / 2 : x;
+        break;
+      case 'top-end':
+        top = y - offset;
+        left = x + width;
+        break;
+      case 'left':
+      case 'left-start':
+      case 'left-end':
+        top = placement === 'left' ? y + height / 2 : placement === 'left-start' ? y : y + height;
+        left = x - offset;
+        break;
+      case 'right':
+      case 'right-start':
+      case 'right-end':
+        top = placement === 'right' ? y + height / 2 : placement === 'right-start' ? y : y + height;
+        left = x + width + offset;
+        break;
+      default:
+        top = y + height + offset;
+        left = x;
+    }
+
+    setPopoverPosition({ top, left, width });
+  };
+
   const handleBackdropPress = () => {
     if (closeOnClickOutside) {
       onOpenChange(false);
     }
   };
 
-  if (!open) return null;
-
-  // For React Native, we simplify positioning - center the popover
-  // More complex anchor positioning would require measuring anchor positions
-  // which is challenging cross-platform
-  const screenDimensions = Dimensions.get('window');
   const popoverStyle = [
     popoverStyles.container,
     {
-      // Center on screen as a simplified approach
       position: 'absolute',
-      top: screenDimensions.height * 0.4,
-      left: 20,
-      right: 20,
-      maxWidth: screenDimensions.width - 40,
+      top: popoverPosition.top,
+      left: popoverPosition.left,
+      minWidth: popoverPosition.width || 200,
     },
     style,
   ];
+
+  if (!open || popoverPosition.top === 0) {
+    return null;
+  }
 
   return (
     <Modal
@@ -65,14 +131,9 @@ const Popover: React.FC<PopoverProps> = ({
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <View style={popoverStyles.backdrop}>
-          <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+          <TouchableWithoutFeedback>
             <View ref={popoverRef} style={popoverStyle}>
-              {showArrow && (
-                <View style={[
-                  popoverStyles.arrow,
-                  // Apply placement-based arrow positioning
-                ]} />
-              )}
+              {showArrow && <View style={popoverStyles.arrow} />}
               <View style={popoverStyles.content}>
                 {children}
               </View>

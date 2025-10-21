@@ -6,16 +6,17 @@ import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 
 const Menu: React.FC<MenuProps> = ({
+  children,
   items,
   open = false,
   onOpenChange,
-  anchor,
   placement = 'bottom-start',
   closeOnSelection = true,
   size = 'medium',
   style,
   testID,
 }) => {
+  const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
@@ -28,9 +29,13 @@ const Menu: React.FC<MenuProps> = ({
   const menuProps = getWebProps([menuStyles.menu, style]);
   const separatorProps = getWebProps([menuStyles.separator]);
 
+  const handleTriggerClick = () => {
+    onOpenChange?.(!open);
+  };
+
   useEffect(() => {
-    if (open && anchor.current && menuRef.current) {
-      const anchorRect = anchor.current.getBoundingClientRect();
+    if (open && triggerRef.current && menuRef.current) {
+      const anchorRect = triggerRef.current.getBoundingClientRect();
       const menuRect = menuRef.current.getBoundingClientRect();
 
       let top = 0;
@@ -87,7 +92,7 @@ const Menu: React.FC<MenuProps> = ({
       setPosition({ top, left });
       setIsPositioned(true);
     }
-  }, [open, anchor, placement]);
+  }, [open, placement]);
 
   // Reset positioned state when menu closes
   useEffect(() => {
@@ -102,8 +107,8 @@ const Menu: React.FC<MenuProps> = ({
         open &&
         menuRef.current &&
         !menuRef.current.contains(event.target as Node) &&
-        anchor.current &&
-        !anchor.current.contains(event.target as Node)
+        triggerRef.current &&
+        !triggerRef.current.contains(event.target as Node)
       ) {
         onOpenChange?.(false);
       }
@@ -124,9 +129,7 @@ const Menu: React.FC<MenuProps> = ({
         document.removeEventListener('keydown', handleEscape);
       };
     }
-  }, [open, anchor, onOpenChange]);
-
-  if (!open) return null;
+  }, [open, onOpenChange]);
 
   const handleItemClick = (item: typeof items[0]) => {
     if (item.disabled) return;
@@ -140,19 +143,25 @@ const Menu: React.FC<MenuProps> = ({
 
   return (
     <>
-      <div {...overlayProps} />
-      <div
-        ref={menuRef}
-        className={menuProps.className}
-        style={{
-          ...menuProps.style,
-          top: position.top,
-          left: position.left,
-          opacity: isPositioned ? 1 : 0,
-        }}
-        role="menu"
-        data-testid={testID}
-      >
+      <div ref={triggerRef} onClick={handleTriggerClick} style={{ display: 'inline-block' }}>
+        {children}
+      </div>
+
+      {open && (
+        <>
+          <div {...overlayProps} />
+          <div
+            ref={menuRef}
+            className={menuProps.className}
+            style={{
+              ...menuProps.style,
+              top: position.top,
+              left: position.left,
+              opacity: isPositioned ? 1 : 0,
+            }}
+            role="menu"
+            data-testid={testID}
+          >
         {items.map((item, index) => {
           if (item.separator) {
             return (
@@ -219,7 +228,9 @@ const Menu: React.FC<MenuProps> = ({
             </button>
           );
         })}
-      </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

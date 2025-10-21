@@ -1,12 +1,14 @@
 import React from 'react';
-import { View } from 'react-native';
-import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { View, StyleSheet } from 'react-native';
+import { videoStyles } from './Video.styles';
 import type { VideoProps, VideoSource } from './types';
 
 // Import react-native-video - it's a peer dependency
 let RNVideo: any;
 try {
-  RNVideo = require('react-native-video').default;
+  const videoModule = require('react-native-video');
+  // Try default export first (v5 and earlier), then named export (v6+)
+  RNVideo = videoModule.default || videoModule.Video || videoModule;
 } catch (e) {
   console.warn('react-native-video not installed. Video component will not work on native.');
 }
@@ -31,12 +33,13 @@ const Video: React.FC<VideoProps> = ({
   style,
   testID,
 }) => {
-  const { styles } = useStyles(stylesheet);
+  // Apply variants
+  videoStyles.useVariants({});
 
   if (!RNVideo) {
     return (
-      <View style={[styles.container, { width, height, aspectRatio, borderRadius }, style]} testID={testID}>
-        <View style={styles.fallback}>
+      <View style={[videoStyles.container, { width, height, aspectRatio, borderRadius }, style]} testID={testID}>
+        <View style={videoStyles.fallback}>
           {/* Fallback when react-native-video is not installed */}
         </View>
       </View>
@@ -48,7 +51,7 @@ const Video: React.FC<VideoProps> = ({
     : source;
 
   const containerStyle = [
-    styles.container,
+    videoStyles.container,
     {
       width: width || '100%',
       height: height || undefined,
@@ -84,13 +87,15 @@ const Video: React.FC<VideoProps> = ({
       <RNVideo
         source={videoSource}
         poster={poster}
-        style={[styles.video, { borderRadius }]}
+        style={[videoStyles.video, { borderRadius }]}
         controls={controls}
         paused={!autoPlay}
         repeat={loop}
         muted={muted}
         resizeMode="contain"
+        // Support both v5 and v6+ event names
         onLoad={handleLoad}
+        onReadyForDisplay={handleLoad}
         onError={handleError}
         onProgress={handleProgress}
         onEnd={handleEnd}
@@ -98,25 +103,5 @@ const Video: React.FC<VideoProps> = ({
     </View>
   );
 };
-
-const stylesheet = createStyleSheet((theme) => ({
-  container: {
-    position: 'relative',
-    overflow: 'hidden',
-    backgroundColor: theme.colors.surface.inverse,
-  },
-
-  video: {
-    width: '100%',
-    height: '100%',
-  },
-
-  fallback: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.colors.surface.tertiary,
-  },
-}));
 
 export default Video;

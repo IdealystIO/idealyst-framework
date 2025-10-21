@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text } from '@idealyst/components';
+import { Screen, View, Text } from '@idealyst/components';
 import Video from '../Video';
 
 export const VideoExamples: React.FC = () => {
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xlarge" weight="bold">Video Examples</Text>
 
@@ -136,6 +137,7 @@ export const VideoExamples: React.FC = () => {
         />
       </View>
     </View>
+    </Screen>
   );
 };
 

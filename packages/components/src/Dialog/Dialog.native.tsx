@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
 
@@ -16,6 +17,41 @@ const Dialog: React.FC<DialogProps> = ({
   style,
   testID,
 }) => {
+  const backdropOpacity = useSharedValue(0);
+  const containerScale = useSharedValue(0.9);
+  const containerOpacity = useSharedValue(0);
+
+  // Animate in/out when open changes
+  useEffect(() => {
+    if (open) {
+      backdropOpacity.value = withTiming(1, {
+        duration: 200,
+        easing: Easing.out(Easing.ease),
+      });
+      containerScale.value = withTiming(1, {
+        duration: 250,
+        easing: Easing.out(Easing.cubic),
+      });
+      containerOpacity.value = withTiming(1, {
+        duration: 200,
+        easing: Easing.out(Easing.ease),
+      });
+    } else {
+      backdropOpacity.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.in(Easing.ease),
+      });
+      containerScale.value = withTiming(0.9, {
+        duration: 150,
+        easing: Easing.in(Easing.cubic),
+      });
+      containerOpacity.value = withTiming(0, {
+        duration: 150,
+        easing: Easing.in(Easing.ease),
+      });
+    }
+  }, [open]);
+
   // Handle Android back button
   useEffect(() => {
     if (!open) return;
@@ -45,19 +81,34 @@ const Dialog: React.FC<DialogProps> = ({
     variant,
   });
 
+  const backdropAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: backdropOpacity.value,
+    };
+  });
+
+  const containerAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: containerOpacity.value,
+      transform: [
+        { scale: containerScale.value },
+      ],
+    };
+  });
+
   return (
     <Modal
       visible={open}
       transparent
-      animationType={animationType}
+      animationType="none"
       onRequestClose={() => onOpenChange(false)}
       statusBarTranslucent
       testID={testID}
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
-        <View style={dialogStyles.backdrop}>
+        <Animated.View style={[dialogStyles.backdrop, backdropAnimatedStyle]}>
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <View style={[dialogStyles.container, style]}>
+            <Animated.View style={[dialogStyles.container, style, containerAnimatedStyle]}>
               {(title || showCloseButton) && (
                 <View style={dialogStyles.header}>
                   {title && (
@@ -80,9 +131,9 @@ const Dialog: React.FC<DialogProps> = ({
               <View style={dialogStyles.content}>
                 {children}
               </View>
-            </View>
+            </Animated.View>
           </TouchableWithoutFeedback>
-        </View>
+        </Animated.View>
       </TouchableWithoutFeedback>
     </Modal>
   );

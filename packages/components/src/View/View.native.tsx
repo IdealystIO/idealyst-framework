@@ -1,9 +1,9 @@
-import React from 'react';
-import { View as RNView } from 'react-native';
+import React, { forwardRef } from 'react';
+import { View as RNView, ViewStyle } from 'react-native';
 import { ViewProps } from './types';
 import viewStyles from './View.styles';
 
-const View: React.FC<ViewProps> = ({
+const View = forwardRef<RNView, ViewProps>(({
   children,
   spacing = 'none',
   marginVariant = 'none',
@@ -18,7 +18,7 @@ const View: React.FC<ViewProps> = ({
   borderColor,
   style,
   testID,
-}) => {
+}, ref) => {
   viewStyles.useVariants({
     spacing,
     margin: marginVariant,
@@ -47,10 +47,12 @@ const View: React.FC<ViewProps> = ({
   ];
 
   return (
-    <RNView style={viewStyleArray} testID={testID}>
+    <RNView ref={ref} style={viewStyleArray} testID={testID}>
       {children}
     </RNView>
   );
-};
+});
+
+View.displayName = 'View';
 
 export default View; 

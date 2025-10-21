@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button } from '@idealyst/components';
+import { Screen, View, Text, Button } from '@idealyst/components';
 import Progress from '../Progress';
 
 export const ProgressExamples: React.FC = () => {
@@ -14,6 +14,7 @@ export const ProgressExamples: React.FC = () => {
   }, []);
 
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xlarge" weight="bold">Progress Examples</Text>
 
@@ -30,7 +31,7 @@ export const ProgressExamples: React.FC = () => {
       <View spacing="md">
         <Text size="large" weight="semibold">Sizes</Text>
         <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <Progress value={60} size="sm" />
+          <Progress value={60} size="small" />
           <Progress value={60} size="medium" />
           <Progress value={60} size="large" />
         </View>
@@ -129,6 +130,7 @@ export const ProgressExamples: React.FC = () => {
         </View>
       </View>
     </View>
+    </Screen>
   );
 };
 

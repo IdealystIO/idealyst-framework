@@ -1,11 +1,5 @@
 import React from 'react';
-import { Screen } from '../Screen';
-import { View } from '../View';
-import { Text } from '../Text';
-import { Breadcrumb } from '../Breadcrumb';
-import { Divider } from '../Divider';
-import { Icon } from '../Icon';
-import type { BreadcrumbItem } from '../Breadcrumb/types';
+import { Screen, View , Text, Breadcrumb, Divider, Icon, BreadcrumbItem } from '../index';
 
 export const BreadcrumbExamples = () => {
   const basicItems: BreadcrumbItem[] = [

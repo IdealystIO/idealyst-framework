@@ -28,6 +28,12 @@ export const menuStyles = StyleSheet.create((theme) => ({
     width: 'fit-content',
   },
 
+  menuItemContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: 200,
+  },
+
   menuItem: {
     display: 'flex',
     flexDirection: 'row',
@@ -137,6 +143,7 @@ export const menuStyles = StyleSheet.create((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    color: theme.colors.text.secondary,
 
     variants: {
       size: {

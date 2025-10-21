@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, Button } from '@idealyst/components';
+import { Screen, View, Text, Button } from '@idealyst/components';
 import Tooltip from '../Tooltip';
 
 export const TooltipExamples: React.FC = () => {
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xlarge" weight="bold">Tooltip Examples</Text>
 
@@ -20,14 +21,14 @@ export const TooltipExamples: React.FC = () => {
           <Tooltip content="Top tooltip" placement="top">
             <Button variant="outlined">Top</Button>
           </Tooltip>
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <View style={{ flexDirection: 'row', gap: 16 }}>
             <Tooltip content="Left tooltip" placement="left">
               <Button variant="outlined">Left</Button>
             </Tooltip>
             <Tooltip content="Right tooltip" placement="right">
               <Button variant="outlined">Right</Button>
             </Tooltip>
-          </div>
+          </View>
           <Tooltip content="Bottom tooltip" placement="bottom">
             <Button variant="outlined">Bottom</Button>
           </Tooltip>
@@ -36,7 +37,7 @@ export const TooltipExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Sizes</Text>
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+        <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           <Tooltip content="Small tooltip" size="sm">
             <Button variant="outlined" size="sm">Small</Button>
           </Tooltip>
@@ -46,12 +47,12 @@ export const TooltipExamples: React.FC = () => {
           <Tooltip content="Large tooltip" size="lg">
             <Button variant="outlined" size="lg">Large</Button>
           </Tooltip>
-        </div>
+        </View>
       </View>
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Intent Colors</Text>
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+        <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           <Tooltip content="Primary tooltip" intent="primary">
             <Button variant="contained" intent="primary">Primary</Button>
           </Tooltip>
@@ -67,12 +68,12 @@ export const TooltipExamples: React.FC = () => {
           <Tooltip content="Neutral tooltip" intent="neutral">
             <Button variant="contained" intent="neutral">Neutral</Button>
           </Tooltip>
-        </div>
+        </View>
       </View>
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Custom Delay</Text>
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+        <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           <Tooltip content="Instant (0ms)" delay={0}>
             <Button variant="outlined">No Delay</Button>
           </Tooltip>
@@ -82,7 +83,7 @@ export const TooltipExamples: React.FC = () => {
           <Tooltip content="Slow (1000ms)" delay={1000}>
             <Button variant="outlined">Slow</Button>
           </Tooltip>
-        </div>
+        </View>
       </View>
 
       <View spacing="md">
@@ -94,30 +95,31 @@ export const TooltipExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">On Text</Text>
-        <div>
+        <View>
           <Tooltip content="Additional information">
-            <Text style={{ textDecoration: 'underline', cursor: 'pointer' }}>
+            <Text style={{ textDecorationLine: 'underline' }}>
               Hover over this text
             </Text>
           </Tooltip>
-        </div>
+        </View>
       </View>
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Rich Content</Text>
         <Tooltip
           content={
-            <div>
-              <strong>Rich Tooltip</strong>
-              <div>With multiple lines</div>
-              <div>and formatting</div>
-            </div>
+            <View spacing="xs">
+              <Text weight="bold">Rich Tooltip</Text>
+              <Text>With multiple lines</Text>
+              <Text>and formatting</Text>
+            </View>
           }
         >
           <Button variant="outlined">Rich Content</Button>
         </Tooltip>
       </View>
     </View>
+    </Screen>
   );
 };
 

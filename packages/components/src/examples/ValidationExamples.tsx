@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { View } from 'react-native';
+import { Screen, View } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import Text from '../Text';
 import Button from '../Button';
@@ -39,6 +39,7 @@ export function ValidationExamples() {
   };
 
   return (
+    <Screen background="primary" padding="lg">
     <View style={{ padding: 20, gap: 16 }}>
       <Text size="large" weight="bold">
         Theme Validation Examples
@@ -89,6 +90,7 @@ export function ValidationExamples() {
         </Text>
       </View>
     </View>
+    </Screen>
   );
 }
 

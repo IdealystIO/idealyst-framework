@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Badge } from '@idealyst/components';
+import { Screen, View, Text, Badge } from '@idealyst/components';
 import { List, ListItem, ListSection } from '../List';
 
 export const ListExamples: React.FC = () => {
@@ -7,6 +7,7 @@ export const ListExamples: React.FC = () => {
   const [selectedNav, setSelectedNav] = useState('dashboard');
 
   return (
+    <Screen background="primary" padding="lg">
     <View spacing="lg">
       <Text size="xl" weight="bold">List Examples</Text>
 
@@ -280,6 +281,7 @@ export const ListExamples: React.FC = () => {
         </List>
       </View>
     </View>
+    </Screen>
   );
 };
 

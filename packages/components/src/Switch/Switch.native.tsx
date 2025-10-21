@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Pressable, Animated } from 'react-native';
-import Text from '../Text';
+import { Pressable } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { switchStyles } from './Switch.styles';
+import Text from '../Text';
 import type { SwitchProps } from './types';
 
 const Switch: React.FC<SwitchProps> = ({
@@ -15,16 +16,22 @@ const Switch: React.FC<SwitchProps> = ({
   style,
   testID,
 }) => {
-  const animatedValue = React.useRef(new Animated.Value(checked ? 1 : 0)).current;
+  switchStyles.useVariants({
+    size,
+    checked,
+    intent,
+    disabled,
+    position: labelPosition,
+  });
+
+  const progress = useSharedValue(checked ? 1 : 0);
 
   React.useEffect(() => {
-    Animated.spring(animatedValue, {
-      toValue: checked ? 1 : 0,
-      useNativeDriver: true,
-      friction: 8,
-      tension: 100,
-    }).start();
-  }, [checked, animatedValue]);
+    progress.value = withSpring(checked ? 1 : 0, {
+      damping: 15,
+      stiffness: 150,
+    });
+  }, [checked, progress]);
 
   const handlePress = () => {
     if (!disabled && onCheckedChange) {
@@ -32,53 +39,39 @@ const Switch: React.FC<SwitchProps> = ({
     }
   };
 
-  const getTrackStyles = () => {
-    const trackStyles = [
-      switchStyles.switchTrack,
-      size === 'small' && switchStyles.switchTrackSmall,
-      size === 'medium' && switchStyles.switchTrackMedium,
-      size === 'large' && switchStyles.switchTrackLarge,
-    ];
-
-    if (checked) {
-      trackStyles.push(switchStyles.switchTrackChecked);
-      if (intent === 'success') trackStyles.push(switchStyles.switchTrackCheckedSuccess);
-      if (intent === 'error') trackStyles.push(switchStyles.switchTrackCheckedError);
-      if (intent === 'warning') trackStyles.push(switchStyles.switchTrackCheckedWarning);
-      if (intent === 'neutral') trackStyles.push(switchStyles.switchTrackCheckedNeutral);
-    }
-
-    if (disabled) {
-      trackStyles.push(switchStyles.switchTrackDisabled);
-    }
-
-    return trackStyles;
+  const getThumbDistance = () => {
+    if (size === 'small') return 16;
+    if (size === 'large') return 24;
+    return 20;
   };
 
-  const getThumbTranslation = () => {
-    let distance = 16;
-    if (size === 'medium') distance = 20;
-    if (size === 'large') distance = 24;
-
-    return animatedValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [2, distance + 2],
-    });
+  // Native-specific thumb styles
+  const getThumbSize = () => {
+    if (size === 'small') return 16;
+    if (size === 'large') return 24;
+    return 20;
   };
 
-  const getThumbStyles = () => {
-    const thumbStyles = [
-      switchStyles.switchThumb,
-      size === 'small' && switchStyles.switchThumbSmall,
-      size === 'medium' && switchStyles.switchThumbMedium,
-      size === 'large' && switchStyles.switchThumbLarge,
-      {
-        transform: [{ translateX: getThumbTranslation() }],
-      },
-    ];
-
-    return thumbStyles;
+  const getTrackHeight = () => {
+    if (size === 'small') return 20;
+    if (size === 'large') return 28;
+    return 24;
   };
+
+  const thumbSize = getThumbSize();
+  const thumbDistance = getThumbDistance();
+  const trackHeight = getTrackHeight();
+  const thumbTop = (trackHeight - thumbSize) / 2;
+
+  const thumbAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateX: progress.value * thumbDistance + 2,
+        },
+      ],
+    };
+  });
 
   const switchElement = (
     <Pressable
@@ -89,8 +82,25 @@ const Switch: React.FC<SwitchProps> = ({
       accessibilityRole="switch"
       accessibilityState={{ checked, disabled }}
     >
-      <Animated.View style={getTrackStyles()}>
-        <Animated.View style={getThumbStyles()} />
+      <Animated.View style={switchStyles.switchTrack}>
+        <Animated.View
+          style={[
+            {
+              position: 'absolute',
+              top: thumbTop,
+              width: thumbSize,
+              height: thumbSize,
+              backgroundColor: 'white',
+              borderRadius: thumbSize / 2,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.2,
+              shadowRadius: 3,
+              elevation: 2,
+            },
+            thumbAnimatedStyle,
+          ]}
+        />
       </Animated.View>
     </Pressable>
   );
@@ -102,16 +112,13 @@ const Switch: React.FC<SwitchProps> = ({
         disabled={disabled}
         style={[switchStyles.container, style]}
       >
+        {labelPosition === 'left' && (
+          <Text style={switchStyles.label}>{label}</Text>
+        )}
         {switchElement}
-        <Text
-          style={[
-            switchStyles.label,
-            disabled && switchStyles.labelDisabled,
-            labelPosition === 'left' && switchStyles.labelLeft,
-          ]}
-        >
-          {label}
-        </Text>
+        {labelPosition === 'right' && (
+          <Text style={switchStyles.label}>{label}</Text>
+        )}
       </Pressable>
     );
   }

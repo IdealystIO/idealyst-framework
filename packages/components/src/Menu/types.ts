@@ -18,10 +18,10 @@ export interface MenuItem {
 }
 
 export interface MenuProps {
+  children: React.ReactNode;
   items: MenuItem[];
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  anchor: React.RefObject<HTMLElement>;
   placement?: MenuPlacement;
   closeOnSelection?: boolean;
   size?: MenuSizeVariant;

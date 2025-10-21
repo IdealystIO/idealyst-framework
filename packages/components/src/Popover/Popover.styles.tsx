@@ -4,23 +4,34 @@ export const popoverStyles = StyleSheet.create((theme) => ({
   container: {
     backgroundColor: theme.colors.surface.primary,
     borderRadius: theme.borderRadius.md,
-    border: `1px solid ${theme.colors.border.primary}`,
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    transition: 'opacity 150ms ease-out, transform 150ms ease-out',
-    transformOrigin: 'center center',
+    borderWidth: 1,
+    borderColor: theme.colors.border.primary,
+
+    // Native shadows
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
+
+    _web: {
+      border: `1px solid ${theme.colors.border.primary}`,
+      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+      transition: 'opacity 150ms ease-out, transform 150ms ease-out',
+      transformOrigin: 'center center',
+    },
   },
-  
+
   content: {
     padding: theme.spacing.md,
   },
-  
+
   arrow: {
     position: 'absolute',
     width: 12,
     height: 12,
     backgroundColor: theme.colors.surface.primary,
-    transform: 'rotate(45deg)',
-    
+
     variants: {
       placement: {
         top: {
@@ -77,19 +88,16 @@ export const popoverStyles = StyleSheet.create((theme) => ({
         },
       },
     },
-    
+
     _web: {
+      transform: 'rotate(45deg)',
       boxShadow: '-2px 2px 4px rgba(0, 0, 0, 0.1)',
     },
   },
-  
+
   // Native-specific backdrop
   backdrop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    flex: 1,
     backgroundColor: 'transparent',
   },
 }));

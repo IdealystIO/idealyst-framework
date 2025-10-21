@@ -1,4 +1,4 @@
-import ChipComponent from './Chip';
+import ChipComponent from './Chip.web';
 
 export default ChipComponent;
 export { ChipComponent as Chip };

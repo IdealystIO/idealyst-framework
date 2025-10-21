@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import { Screen } from '../Screen';
-import { View } from '../View';
-import { Text } from '../Text';
-import { Alert } from '../Alert';
-import { Button } from '../Button';
-import { Divider } from '../Divider';
-
+import { Alert, Screen, View, Text, Divider, Button } from '../index';
 export const AlertExamples = () => {
   const [successVisible, setSuccessVisible] = useState(true);
   const [errorVisible, setErrorVisible] = useState(true);
