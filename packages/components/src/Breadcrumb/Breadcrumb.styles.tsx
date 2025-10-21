@@ -6,7 +6,7 @@ export const breadcrumbContainerStyles = StyleSheet.create((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'nowrap',
+    flexWrap: 'wrap',
     gap: 8,
   },
 }));
@@ -139,22 +139,66 @@ export const breadcrumbSeparatorStyles = StyleSheet.create((theme) => ({
 // Ellipsis stylesheet
 export const breadcrumbEllipsisStyles = StyleSheet.create((theme) => ({
   ellipsis: {
-    fontFamily: theme.typography.fontFamily.medium,
-    color: theme.colors.text.secondary,
-
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
     variants: {
       size: {
         sm: {
-          fontSize: 12,
-          lineHeight: 16,
+          width: 14,
+          height: 14,
         },
         md: {
-          fontSize: 14,
-          lineHeight: 20,
+          width: 16,
+          height: 16,
         },
         lg: {
-          fontSize: 16,
-          lineHeight: 24,
+          width: 18,
+          height: 18,
+        },
+      },
+      intent: {
+        primary: {
+          color: theme.intents.primary.main,
+        },
+        neutral: {
+          color: theme.colors.text.secondary,
+        },
+      },
+    },
+  },
+}));
+
+// Menu button stylesheet
+export const breadcrumbMenuButtonStyles = StyleSheet.create((theme) => ({
+  button: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    variants: {
+      size: {
+        sm: {
+          width: 14,
+          height: 14,
+        },
+        md: {
+          width: 16,
+          height: 16,
+        },
+        lg: {
+          width: 18,
+          height: 18,
+        },
+      },
+      intent: {
+        primary: {
+          color: theme.intents.primary.main,
+        },
+        neutral: {
+          color: theme.colors.text.secondary,
         },
       },
     },

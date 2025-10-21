@@ -47,4 +47,10 @@ export interface BreadcrumbProps {
 
   /** Test ID for testing */
   testID?: string;
+
+  /** Enable responsive collapsing on narrow screens */
+  responsive?: boolean;
+
+  /** Minimum number of items to show before collapsing (default: 3) */
+  minVisibleItems?: number;
 }

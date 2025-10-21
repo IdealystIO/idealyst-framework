@@ -227,6 +227,85 @@ export const BreadcrumbExamples = () => {
             size="sm"
           />
         </View>
+
+        <View spacing="md">
+          <Text size="large" weight="semibold">Responsive Breadcrumbs</Text>
+          <Text size="small" color="secondary">
+            Automatically collapses middle items into a dropdown menu on narrow screens
+          </Text>
+          <View spacing="sm">
+            <View spacing="xs">
+              <Text size="medium" weight="semibold">Default (minVisibleItems: 3)</Text>
+              <Text size="small" color="secondary">Shows first item + dropdown + last item</Text>
+              <Breadcrumb
+                items={longPathItems}
+                responsive
+              />
+            </View>
+            <View spacing="xs">
+              <Text size="medium" weight="semibold">More Visible Items (minVisibleItems: 4)</Text>
+              <Text size="small" color="secondary">Shows first item + dropdown + last 2 items</Text>
+              <Breadcrumb
+                items={longPathItems}
+                responsive
+                minVisibleItems={4}
+              />
+            </View>
+            <View spacing="xs">
+              <Text size="medium" weight="semibold">Fewer Items (minVisibleItems: 2)</Text>
+              <Text size="small" color="secondary">Shows first item + dropdown (all items collapsed)</Text>
+              <Breadcrumb
+                items={longPathItems}
+                responsive
+                minVisibleItems={2}
+              />
+            </View>
+          </View>
+        </View>
+
+        <View spacing="md">
+          <Text size="large" weight="semibold">Responsive with Icons</Text>
+          <Breadcrumb
+            items={[
+              {
+                label: 'Root',
+                icon: 'harddisk',
+                onPress: () => console.log('Root'),
+              },
+              {
+                label: 'Users',
+                icon: 'account-group',
+                onPress: () => console.log('Users'),
+              },
+              {
+                label: 'Documents',
+                icon: 'folder',
+                onPress: () => console.log('Documents'),
+              },
+              {
+                label: 'Projects',
+                icon: 'folder',
+                onPress: () => console.log('Projects'),
+              },
+              {
+                label: 'Work',
+                icon: 'folder',
+                onPress: () => console.log('Work'),
+              },
+              {
+                label: 'project-files',
+                icon: 'folder-open',
+                onPress: () => console.log('project-files'),
+              },
+              {
+                label: 'index.tsx',
+                icon: 'file-document',
+              },
+            ]}
+            responsive
+            separator="/"
+          />
+        </View>
       </View>
     </Screen>
   );

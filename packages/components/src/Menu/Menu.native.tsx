@@ -9,6 +9,7 @@ import { menuStyles } from './Menu.styles';
 import type { MenuProps, MenuItem as MenuItemType } from './types';
 import { Divider } from '../Divider';
 import MenuItem from './MenuItem.native';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 const Menu = forwardRef<View, MenuProps>(({
   children,
@@ -21,6 +22,7 @@ const Menu = forwardRef<View, MenuProps>(({
   testID,
 }, ref) => {
   const triggerRef = useRef<any>(null);
+  const mergedTriggerRef = useMergeRefs(ref, triggerRef);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, width: 0 });
 
   const handleTriggerPress = () => {
@@ -110,7 +112,6 @@ const Menu = forwardRef<View, MenuProps>(({
                 position: 'absolute',
                 top: menuPosition.top,
                 left: menuPosition.left,
-                minWidth: menuPosition.width || 200,
               },
               style,
             ]}
@@ -154,7 +155,7 @@ const Menu = forwardRef<View, MenuProps>(({
 
   return (
     <>
-      <View ref={ref} collapsable={false}>
+      <View ref={mergedTriggerRef} collapsable={false}>
         {trigger}
       </View>
 
