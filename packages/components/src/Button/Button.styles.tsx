@@ -12,6 +12,7 @@ export const buttonStyles = StyleSheet.create((theme) => ({
     transition: 'all 0.2s ease',
     // Set default color to prevent fallback to theme.colors.text.placeholder
     color: theme.intents.primary.on,
+
     
     // All variants defined here
     variants: {

@@ -26,7 +26,7 @@ export const ExampleWebLayout: React.FC = () => {
         <View background='primary' style={{ height: '100vh', flexDirection: 'column', overflow: 'hidden' }}>
             {/* Header */}
             <View style={{
-                paddingHorizontal: 16,
+                paddingRight: 32,
                 borderBottomWidth: 1,
                 borderBottomStyle: 'solid',
                 borderBottomColor: theme.colors.border.primary,
@@ -52,7 +52,7 @@ export const ExampleWebLayout: React.FC = () => {
                     </Badge>
                 </View>
 
-                <View style={{ flexDirection: 'row', gap: 8 }}>
+                <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
                     <Button
                         leftIcon="magnify"
                         size='lg'
