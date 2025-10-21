@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 
-export const alertStyles = StyleSheet.create((theme) => ({
+// Container stylesheet
+export const alertContainerStyles = StyleSheet.create((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -18,6 +19,7 @@ export const alertStyles = StyleSheet.create((theme) => ({
         soft: {},
       },
       intent: {
+        primary: {},
         success: {},
         error: {},
         warning: {},
@@ -28,6 +30,14 @@ export const alertStyles = StyleSheet.create((theme) => ({
 
     compoundVariants: [
       // Filled variants
+      {
+        variant: 'filled',
+        intent: 'primary',
+        styles: {
+          backgroundColor: theme.intents.primary.main,
+          borderColor: theme.intents.primary.main,
+        },
+      },
       {
         variant: 'filled',
         intent: 'success',
@@ -71,6 +81,14 @@ export const alertStyles = StyleSheet.create((theme) => ({
       // Outlined variants
       {
         variant: 'outlined',
+        intent: 'primary',
+        styles: {
+          backgroundColor: 'transparent',
+          borderColor: theme.intents.primary.main,
+        },
+      },
+      {
+        variant: 'outlined',
         intent: 'success',
         styles: {
           backgroundColor: 'transparent',
@@ -110,6 +128,14 @@ export const alertStyles = StyleSheet.create((theme) => ({
         },
       },
       // Soft variants
+      {
+        variant: 'soft',
+        intent: 'primary',
+        styles: {
+          backgroundColor: theme.intents.primary.container,
+          borderColor: theme.intents.primary.container,
+        },
+      },
       {
         variant: 'soft',
         intent: 'success',
@@ -152,7 +178,10 @@ export const alertStyles = StyleSheet.create((theme) => ({
       },
     ],
   },
+}));
 
+// Icon container stylesheet
+export const alertIconStyles = StyleSheet.create((theme) => ({
   iconContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -168,6 +197,7 @@ export const alertStyles = StyleSheet.create((theme) => ({
         soft: {},
       },
       intent: {
+        primary: {},
         success: {},
         error: {},
         warning: {},
@@ -178,6 +208,11 @@ export const alertStyles = StyleSheet.create((theme) => ({
 
     compoundVariants: [
       // Filled variant colors
+      {
+        variant: 'filled',
+        intent: 'primary',
+        styles: { color: theme.intents.primary.onMain },
+      },
       {
         variant: 'filled',
         intent: 'success',
@@ -206,6 +241,11 @@ export const alertStyles = StyleSheet.create((theme) => ({
       // Outlined and soft variants
       {
         variant: 'outlined',
+        intent: 'primary',
+        styles: { color: theme.intents.primary.main },
+      },
+      {
+        variant: 'outlined',
         intent: 'success',
         styles: { color: theme.intents.success.main },
       },
@@ -228,6 +268,11 @@ export const alertStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'neutral',
         styles: { color: theme.colors.text.primary },
+      },
+      {
+        variant: 'soft',
+        intent: 'primary',
+        styles: { color: theme.intents.primary.main },
       },
       {
         variant: 'soft',
@@ -256,14 +301,20 @@ export const alertStyles = StyleSheet.create((theme) => ({
       },
     ],
   },
+}));
 
+// Content container stylesheet
+export const alertContentStyles = StyleSheet.create((theme) => ({
   content: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     gap: theme.spacing.xs,
   },
+}));
 
+// Title stylesheet
+export const alertTitleStyles = StyleSheet.create((theme) => ({
   title: {
     fontFamily: theme.typography.fontFamily.sans,
     fontSize: 16,
@@ -277,6 +328,7 @@ export const alertStyles = StyleSheet.create((theme) => ({
         soft: {},
       },
       intent: {
+        primary: {},
         success: {},
         error: {},
         warning: {},
@@ -287,6 +339,11 @@ export const alertStyles = StyleSheet.create((theme) => ({
 
     compoundVariants: [
       // Filled variants
+      {
+        variant: 'filled',
+        intent: 'primary',
+        styles: { color: theme.intents.primary.onMain },
+      },
       {
         variant: 'filled',
         intent: 'success',
@@ -315,6 +372,11 @@ export const alertStyles = StyleSheet.create((theme) => ({
       // Outlined and soft variants
       {
         variant: 'outlined',
+        intent: 'primary',
+        styles: { color: theme.intents.primary.main },
+      },
+      {
+        variant: 'outlined',
         intent: 'success',
         styles: { color: theme.intents.success.main },
       },
@@ -337,6 +399,11 @@ export const alertStyles = StyleSheet.create((theme) => ({
         variant: 'outlined',
         intent: 'neutral',
         styles: { color: theme.colors.text.primary },
+      },
+      {
+        variant: 'soft',
+        intent: 'primary',
+        styles: { color: theme.intents.primary.main },
       },
       {
         variant: 'soft',
@@ -365,7 +432,10 @@ export const alertStyles = StyleSheet.create((theme) => ({
       },
     ],
   },
+}));
 
+// Message stylesheet
+export const alertMessageStyles = StyleSheet.create((theme) => ({
   message: {
     fontFamily: theme.typography.fontFamily.sans,
     fontSize: 14,
@@ -378,6 +448,7 @@ export const alertStyles = StyleSheet.create((theme) => ({
         soft: {},
       },
       intent: {
+        primary: {},
         success: {},
         error: {},
         warning: {},
@@ -388,6 +459,11 @@ export const alertStyles = StyleSheet.create((theme) => ({
 
     compoundVariants: [
       // Filled variants
+      {
+        variant: 'filled',
+        intent: 'primary',
+        styles: { color: theme.intents.primary.onMain },
+      },
       {
         variant: 'filled',
         intent: 'success',
@@ -414,6 +490,11 @@ export const alertStyles = StyleSheet.create((theme) => ({
         styles: { color: theme.colors.text.primary },
       },
       // Outlined and soft variants
+      {
+        variant: 'outlined',
+        intent: 'primary',
+        styles: { color: theme.colors.text.primary },
+      },
       {
         variant: 'outlined',
         intent: 'success',
@@ -466,14 +547,20 @@ export const alertStyles = StyleSheet.create((theme) => ({
       },
     ],
   },
+}));
 
+// Actions stylesheet
+export const alertActionsStyles = StyleSheet.create((theme) => ({
   actions: {
     marginTop: theme.spacing.xs,
     display: 'flex',
     flexDirection: 'row',
     gap: theme.spacing.sm,
   },
+}));
 
+// Close button stylesheet
+export const alertCloseButtonStyles = StyleSheet.create((theme) => ({
   closeButton: {
     padding: 4,
     backgroundColor: 'transparent',

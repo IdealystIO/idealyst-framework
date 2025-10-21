@@ -2,25 +2,28 @@ import { StyleSheet } from "react-native-unistyles";
 
 const viewStyles = StyleSheet.create((theme) => ({
   view: {
+    display: 'flex',
+    flexDirection: 'column',
+
     variants: {
       spacing: {
         none: {
-          padding: 0,
+          gap: 0,
         },
         xs: {
-          padding: theme.spacing.xs,
+          gap: theme.spacing.xs,
         },
         sm: {
-          padding: theme.spacing.sm,
+          gap: theme.spacing.sm,
         },
         md: {
-          padding: theme.spacing.md,
+          gap: theme.spacing.md,
         },
         lg: {
-          padding: theme.spacing.lg,
+          gap: theme.spacing.lg,
         },
         xl: {
-          padding: theme.spacing.xl,
+          gap: theme.spacing.xl,
         },
       },
       margin: {

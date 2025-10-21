@@ -53,7 +53,6 @@ const componentGroups: ComponentGroup[] = [
         items: [
             { label: 'Breadcrumb', path: '/breadcrumb', icon: 'chevron-right' },
             { label: 'TabBar', path: '/tabbar', icon: 'tab' },
-            { label: 'Tabs', path: '/tabs', icon: 'tab' },
         ],
     },
     {

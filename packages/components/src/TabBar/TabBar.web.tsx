@@ -6,7 +6,70 @@ import {
   tabBarLabelStyles,
   tabBarIndicatorStyles
 } from './TabBar.styles';
-import type { TabBarProps } from './types';
+import type { TabBarProps, TabBarItem } from './types';
+import useMergeRefs from '../hooks/useMergeRefs';
+
+interface TabProps {
+  item: TabBarItem;
+  isActive: boolean;
+  onClick: () => void;
+  size: TabBarProps['size'];
+  variant: TabBarProps['variant'];
+  pillMode: TabBarProps['pillMode'];
+  testID?: string;
+  tabRef: (el: HTMLButtonElement | null) => void;
+}
+
+const Tab: React.FC<TabProps> = ({
+  item,
+  isActive,
+  onClick,
+  size,
+  variant,
+  pillMode,
+  testID,
+  tabRef,
+}) => {
+  // Apply tab and label variants for this specific tab
+  tabBarTabStyles.useVariants({
+    size,
+    variant,
+    active: isActive,
+    disabled: Boolean(item.disabled),
+    pillMode,
+  });
+  tabBarLabelStyles.useVariants({
+    size,
+    variant,
+    pillMode,
+    active: isActive,
+    disabled: Boolean(item.disabled),
+  });
+
+  const tabProps = getWebProps([tabBarTabStyles.tab]);
+  const labelProps = getWebProps([tabBarLabelStyles.tabLabel]);
+
+  // Merge refs from getWebProps with our tracking ref
+  const mergedRef = useMergeRefs<HTMLButtonElement>(
+    tabProps.ref as React.Ref<HTMLButtonElement>,
+    tabRef
+  );
+
+  return (
+    <button
+      {...tabProps}
+      ref={mergedRef}
+      onClick={onClick}
+      disabled={item.disabled}
+      role="tab"
+      aria-selected={isActive}
+      aria-disabled={item.disabled}
+      data-testid={`${testID}-tab-${item.value}`}
+    >
+      <span {...labelProps}>{item.label}</span>
+    </button>
+  );
+};
 
 const TabBar: React.FC<TabBarProps> = ({
   items,
@@ -40,7 +103,6 @@ const TabBar: React.FC<TabBarProps> = ({
         left: buttonRect.left - containerRect.left,
         width: buttonRect.width,
       };
-
       setIndicatorStyle(newStyle);
     }
   };
@@ -83,65 +145,58 @@ const TabBar: React.FC<TabBarProps> = ({
   tabBarIndicatorStyles.useVariants({ variant, pillMode });
   const indicatorProps = getWebProps([tabBarIndicatorStyles.indicator]);
 
+  // Merge container ref with getWebProps ref
+  const mergedContainerRef = useMergeRefs<HTMLDivElement>(
+    containerProps.ref as React.Ref<HTMLDivElement>,
+    containerRef
+  );
+
+  // For pills variant, calculate height from parent
+  const indicatorInlineStyle: React.CSSProperties = {
+    ...indicatorProps.style,
+    left: `${indicatorStyle.left}px`,
+    width: `${indicatorStyle.width}px`,
+  };
+
+  // For pills variant, use calc() to set height based on top/bottom
+  if (variant === 'pills') {
+    indicatorInlineStyle.height = 'calc(100% - 8px)'; // 100% minus top(4px) + bottom(4px)
+  }
+
   return (
     <div
-      ref={containerRef}
       {...containerProps}
+      ref={mergedContainerRef}
       role="tablist"
       data-testid={testID}
     >
       {/* Sliding indicator */}
       <div
         {...indicatorProps}
-        style={{
-          ...indicatorProps.style,
-          left: `${indicatorStyle.left}px`,
-          width: `${indicatorStyle.width}px`,
-        }}
+        style={indicatorInlineStyle}
       />
 
       {items.map((item) => {
         const isActive = value === item.value;
 
-        // Apply tab and label variants for this specific tab
-        tabBarTabStyles.useVariants({
-          size,
-          variant,
-          active: isActive,
-          disabled: Boolean(item.disabled),
-          pillMode,
-        });
-        tabBarLabelStyles.useVariants({
-          size,
-          variant,
-          pillMode,
-          active: isActive,
-          disabled: Boolean(item.disabled),
-        });
-
-        const tabProps = getWebProps([tabBarTabStyles.tab]);
-        const labelProps = getWebProps([tabBarLabelStyles.tabLabel]);
-
         return (
-          <button
+          <Tab
             key={item.value}
-            ref={(el) => {
+            item={item}
+            isActive={isActive}
+            onClick={() => handleTabClick(item.value, item.disabled)}
+            size={size}
+            variant={variant}
+            pillMode={pillMode}
+            testID={testID}
+            tabRef={(el) => {
               tabRefs.current[item.value] = el;
               // Update indicator when active tab ref is set
               if (el && isActive) {
                 requestAnimationFrame(() => updateIndicator());
               }
             }}
-            {...tabProps}
-            onClick={() => handleTabClick(item.value, item.disabled)}
-            disabled={item.disabled}
-            role="tab"
-            aria-selected={isActive}
-            aria-disabled={item.disabled}
-            data-testid={`${testID}-tab-${item.value}`}
-          >
-            <span {...labelProps}>{item.label}</span>
-          </button>
+          />
         );
       })}
     </div>

@@ -17,7 +17,6 @@ export const tabBarContainerStyles = StyleSheet.create((theme) => ({
         pills: {
           borderBottomWidth: 0,
           padding: 4,
-          borderRadius: theme.borderRadius.full,
           gap: 4,
           backgroundColor: theme.colors.surface.secondary,
           overflow: 'hidden',
