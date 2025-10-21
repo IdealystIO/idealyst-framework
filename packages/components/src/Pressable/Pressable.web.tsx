@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, forwardRef } from 'react';
 import { PressableProps } from './types';
 
-const Pressable: React.FC<PressableProps> = ({
+const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
   children,
   onPress,
   onPressIn,
@@ -11,7 +11,7 @@ const Pressable: React.FC<PressableProps> = ({
   testID,
   accessibilityLabel,
   accessibilityRole = 'button',
-}) => {
+}, ref) => {
   const [isPressed, setIsPressed] = useState(false);
 
   const handleMouseDown = useCallback(() => {
@@ -51,6 +51,7 @@ const Pressable: React.FC<PressableProps> = ({
 
   return (
     <div
+      ref={ref}
       role={accessibilityRole}
       tabIndex={disabled ? -1 : 0}
       style={webStyle}
@@ -66,6 +67,8 @@ const Pressable: React.FC<PressableProps> = ({
       {children}
     </div>
   );
-};
+});
+
+Pressable.displayName = 'Pressable';
 
 export default Pressable;

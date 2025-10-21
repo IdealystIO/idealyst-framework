@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import MdiIcon from '@mdi/react';
 import { IconProps } from './types';
 import iconStyles from './Icon.styles';
 import { getWebProps } from 'react-native-unistyles/web';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 // Internal props that include the transformed path from Babel plugin
 interface InternalIconProps extends IconProps {
   path?: string; // Added by Babel plugin transformation
 }
 
-const Icon: React.FC<IconProps> = (props: InternalIconProps) => {
+const Icon = forwardRef<HTMLDivElement, IconProps>((props: InternalIconProps, ref) => {
   const {
     name,
     size = 'md',
@@ -26,11 +27,14 @@ const Icon: React.FC<IconProps> = (props: InternalIconProps) => {
   // Check if we have a path prop (from Babel plugin transformation)
   const { path } = restProps as { path?: string };
   const iconProps = getWebProps(styles.icon);
-  
+
+  const mergedRef = useMergeRefs(ref, iconProps.ref);
+
   // Use MDI React icon when path is provided (transformed by Babel plugin)
   return (
     <div
-      {...iconProps}>
+      {...iconProps}
+      ref={mergedRef}>
       <MdiIcon
         path={path}
         size={'100%'}
@@ -40,7 +44,8 @@ const Icon: React.FC<IconProps> = (props: InternalIconProps) => {
       />
     </div>
   );
-  
-};
+});
+
+Icon.displayName = 'Icon';
 
 export default Icon; 

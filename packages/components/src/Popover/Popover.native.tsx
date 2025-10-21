@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Modal, View, TouchableWithoutFeedback, BackHandler } from 'react-native';
+import { Modal, View, TouchableWithoutFeedback, BackHandler, Dimensions } from 'react-native';
 import { PopoverProps } from './types';
 import { popoverStyles } from './Popover.styles';
 
@@ -17,6 +17,8 @@ const Popover: React.FC<PopoverProps> = ({
 }) => {
   const popoverRef = useRef<View>(null);
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [popoverSize, setPopoverSize] = useState({ width: 0, height: 0 });
+  const anchorMeasurements = useRef({ x: 0, y: 0, width: 0, height: 0 });
 
   // Apply variants
   popoverStyles.useVariants({});
@@ -47,16 +49,30 @@ const Popover: React.FC<PopoverProps> = ({
   // Measure anchor position when opening
   useEffect(() => {
     if (open && anchorRefToUse?.current) {
-      // Small delay to ensure layout is complete
-      setTimeout(() => {
-        anchorRefToUse.current?.measureInWindow((x: number, y: number, width: number, height: number) => {
-          calculatePopoverPosition(x, y, width, height);
-        });
-      }, 100);
+      anchorRefToUse.current?.measureInWindow((x: number, y: number, width: number, height: number) => {
+        anchorMeasurements.current = { x, y, width, height };
+        calculatePopoverPosition(x, y, width, height);
+      });
     }
   }, [open, placement, anchorRefToUse]);
 
+  // Recalculate position when popover size changes
+  useEffect(() => {
+    if (open && popoverSize.width > 0 && popoverSize.height > 0) {
+      const { x, y, width, height } = anchorMeasurements.current;
+      if (x > 0 || y > 0) {
+        calculatePopoverPosition(x, y, width, height);
+      }
+    }
+  }, [popoverSize, open]);
+
   const calculatePopoverPosition = (x: number, y: number, width: number, height: number) => {
+    const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+    // Use measured size if available, otherwise use estimates
+    const popoverWidth = popoverSize.width || 200;
+    const popoverHeight = popoverSize.height || 150;
+    const padding = 12; // Minimum padding from screen edges
+
     let top = 0;
     let left = 0;
 
@@ -97,6 +113,20 @@ const Popover: React.FC<PopoverProps> = ({
         left = x;
     }
 
+    // Keep popover within viewport bounds
+    if (left < padding) {
+      left = padding;
+    }
+    if (left + popoverWidth > screenWidth - padding) {
+      left = screenWidth - popoverWidth - padding;
+    }
+    if (top < padding) {
+      top = padding;
+    }
+    if (top + popoverHeight > screenHeight - padding) {
+      top = screenHeight - popoverHeight - padding;
+    }
+
     setPopoverPosition({ top, left, width });
   };
 
@@ -106,6 +136,17 @@ const Popover: React.FC<PopoverProps> = ({
     }
   };
 
+  const handlePopoverLayout = (event: any) => {
+    const { width, height } = event.nativeEvent.layout;
+    // Only update if size has changed significantly (to avoid infinite loops)
+    if (Math.abs(width - popoverSize.width) > 1 || Math.abs(height - popoverSize.height) > 1) {
+      setPopoverSize({ width, height });
+    }
+  };
+
+  const { width: screenWidth } = Dimensions.get('window');
+  const maxPopoverWidth = screenWidth - 24; // 12px padding on each side
+
   const popoverStyle = [
     popoverStyles.container,
     {
@@ -113,6 +154,7 @@ const Popover: React.FC<PopoverProps> = ({
       top: popoverPosition.top,
       left: popoverPosition.left,
       minWidth: popoverPosition.width || 200,
+      maxWidth: maxPopoverWidth,
     },
     style,
   ];
@@ -132,7 +174,7 @@ const Popover: React.FC<PopoverProps> = ({
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <View style={popoverStyles.backdrop}>
           <TouchableWithoutFeedback>
-            <View ref={popoverRef} style={popoverStyle}>
+            <View ref={popoverRef} style={popoverStyle} onLayout={handlePopoverLayout}>
               {showArrow && <View style={popoverStyles.arrow} />}
               <View style={popoverStyles.content}>
                 {children}

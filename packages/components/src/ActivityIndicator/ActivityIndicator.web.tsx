@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { ActivityIndicatorProps } from './types';
 import { activityIndicatorStyles } from './ActivityIndicator.styles';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
+const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   animating = true,
   size = 'medium',
   intent = 'primary',
@@ -11,7 +12,7 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
   style,
   testID,
   hidesWhenStopped = true,
-}) => {
+}, ref) => {
   // Handle numeric size
   const sizeVariant = typeof size === 'number' ? 'medium' : size;
   const customSize = typeof size === 'number' ? size : undefined;
@@ -56,6 +57,8 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
   const containerProps = getWebProps(containerStyleArray);
   const spinnerProps = getWebProps(spinnerStyleArray);
 
+  const mergedRef = useMergeRefs(ref, containerProps.ref);
+
   return (
     <>
       {/* Inject keyframes animation into the document head */}
@@ -67,11 +70,13 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
           }
         `}
       </style>
-      <div {...containerProps} data-testid={testID}>
+      <div {...containerProps} ref={mergedRef} data-testid={testID}>
         <div {...spinnerProps} />
       </div>
     </>
   );
-};
+});
+
+ActivityIndicator.displayName = 'ActivityIndicator';
 
 export default ActivityIndicator;

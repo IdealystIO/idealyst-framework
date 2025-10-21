@@ -1,11 +1,12 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { chipStyles } from './Chip.styles';
 import type { ChipProps } from './types';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const Chip: React.FC<ChipProps> = ({
+const Chip = forwardRef<HTMLDivElement, ChipProps>(({
   label,
   variant = 'filled',
   intent = 'primary',
@@ -20,7 +21,7 @@ const Chip: React.FC<ChipProps> = ({
   disabled = false,
   style,
   testID,
-}) => {
+}, ref) => {
   chipStyles.useVariants({
     size,
     variant,
@@ -90,9 +91,12 @@ const Chip: React.FC<ChipProps> = ({
 
   const isClickable = (onPress && !disabled) || (selectable && !disabled);
 
+  const mergedRef = useMergeRefs(ref, containerProps.ref);
+
   return (
     <div
       className={containerProps.className}
+      ref={mergedRef}
       style={{
         ...containerProps.style,
         cursor: isClickable ? 'pointer' : 'default',
@@ -151,6 +155,8 @@ const Chip: React.FC<ChipProps> = ({
       )}
     </div>
   );
-};
+});
+
+Chip.displayName = 'Chip';
 
 export default Chip;

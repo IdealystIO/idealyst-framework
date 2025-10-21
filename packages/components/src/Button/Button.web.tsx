@@ -1,8 +1,9 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef, useEffect, useRef, useImperativeHandle } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
 import { IconSvg } from '../Icon/IconSvg.web';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 // Extended props to include path props added by Babel plugin
 interface InternalButtonProps extends ButtonProps {
@@ -10,7 +11,9 @@ interface InternalButtonProps extends ButtonProps {
   rightIconPath?: string;
 }
 
-const Button: React.FC<ButtonProps> = (props: InternalButtonProps) => {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButtonProps, ref) => {
+  console.log('[Button.web] Rendering with ref:', ref);
+
   const {
     title,
     children,
@@ -26,6 +29,7 @@ const Button: React.FC<ButtonProps> = (props: InternalButtonProps) => {
     style,
     testID,
   } = props;
+
   const handleClick = () => {
     if (!disabled && onPress) {
       onPress();
@@ -82,9 +86,12 @@ const Button: React.FC<ButtonProps> = (props: InternalButtonProps) => {
   // Determine if we need to wrap content in icon container
   const hasIcons = leftIcon || rightIcon;
 
+  const mergedRef = useMergeRefs(ref, webProps.ref);
+
   return (
     <button
       {...webProps}
+      ref={mergedRef}
       onClick={handleClick}
       disabled={disabled}
       data-testid={testID}
@@ -100,6 +107,8 @@ const Button: React.FC<ButtonProps> = (props: InternalButtonProps) => {
       )}
     </button>
   );
-};
+});
+
+Button.displayName = 'Button';
 
 export default Button; 

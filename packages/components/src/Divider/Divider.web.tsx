@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { DividerProps } from './types';
 import { dividerStyles } from './Divider.styles';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const Divider: React.FC<DividerProps> = ({
+const Divider = forwardRef<HTMLDivElement, DividerProps>(({
   orientation = 'horizontal',
   variant = 'solid',
   thickness = 'thin',
@@ -14,7 +15,7 @@ const Divider: React.FC<DividerProps> = ({
   style,
   testID,
   accessibilityLabel,
-}) => {
+}, ref) => {
   // Apply variants for main divider
   dividerStyles.useVariants({
     orientation,
@@ -41,11 +42,15 @@ const Divider: React.FC<DividerProps> = ({
   const contentProps = getWebProps(contentStyleArray);
   const lineProps = getWebProps(lineStyleArray);
 
+  const mergedDividerRef = useMergeRefs(ref, dividerProps.ref);
+  const mergedContainerRef = useMergeRefs(ref, containerProps.ref);
+
   // If no children, render simple divider
   if (!children) {
     return (
       <div
         {...dividerProps}
+        ref={mergedDividerRef}
         data-testid={testID}
         aria-label={accessibilityLabel}
         role="separator"
@@ -57,6 +62,7 @@ const Divider: React.FC<DividerProps> = ({
   return (
     <div
       {...containerProps}
+      ref={mergedContainerRef}
       data-testid={testID}
       aria-label={accessibilityLabel}
       role="separator"
@@ -68,6 +74,8 @@ const Divider: React.FC<DividerProps> = ({
       <div {...lineProps} />
     </div>
   );
-};
+});
+
+Divider.displayName = 'Divider';
 
 export default Divider; 

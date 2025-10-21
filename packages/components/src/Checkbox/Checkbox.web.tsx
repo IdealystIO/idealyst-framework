@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CheckboxProps } from './types';
 import { checkboxStyles, checkboxLabelStyles, checkboxCheckmarkStyles, checkboxHelperStyles } from './Checkbox.styles';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const Checkbox: React.FC<CheckboxProps> = ({
+const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   checked = false,
   indeterminate = false,
   disabled = false,
@@ -21,7 +22,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   required = false,
   error,
   helperText,
-}) => {
+}, ref) => {
   const [internalChecked, setInternalChecked] = useState(checked);
   
   useEffect(() => {
@@ -81,8 +82,10 @@ const Checkbox: React.FC<CheckboxProps> = ({
   const labelContent = children || label;
   const displayHelperText = error || helperText;
 
+  const mergedRef = useMergeRefs(ref, wrapperProps.ref);
+
   return (
-    <div {...wrapperProps}>
+    <div {...wrapperProps} ref={mergedRef}>
       <label {...containerProps}>
         <div style={{ position: 'relative' }}>
           <input
@@ -130,6 +133,8 @@ const Checkbox: React.FC<CheckboxProps> = ({
       )}
     </div>
   );
-};
+});
+
+Checkbox.displayName = 'Checkbox';
 
 export default Checkbox; 

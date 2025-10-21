@@ -36,8 +36,10 @@ export const popoverStyles = StyleSheet.create((theme) => ({
       placement: {
         top: {
           bottom: -6,
-          left: '50%',
-          marginLeft: -6,
+          _web: {
+            left: '50%',
+            marginLeft: -6,
+          },
         },
         'top-start': {
           bottom: -6,
@@ -49,8 +51,10 @@ export const popoverStyles = StyleSheet.create((theme) => ({
         },
         bottom: {
           top: -6,
-          left: '50%',
-          marginLeft: -6,
+          _web: {
+            left: '50%',
+            marginLeft: -6,
+          },
         },
         'bottom-start': {
           top: -6,
@@ -62,8 +66,10 @@ export const popoverStyles = StyleSheet.create((theme) => ({
         },
         left: {
           right: -6,
-          top: '50%',
-          marginTop: -6,
+          _web: {
+            top: '50%',
+            marginTop: -6,
+          },
         },
         'left-start': {
           right: -6,
@@ -75,8 +81,10 @@ export const popoverStyles = StyleSheet.create((theme) => ({
         },
         right: {
           left: -6,
-          top: '50%',
-          marginTop: -6,
+          _web: {
+            top: '50%',
+            marginTop: -6,
+          },
         },
         'right-start': {
           left: -6,

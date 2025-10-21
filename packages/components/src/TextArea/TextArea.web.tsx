@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { textAreaStyles } from './TextArea.styles';
 import type { TextAreaProps } from './types';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const TextArea: React.FC<TextAreaProps> = ({
+const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',
   onChange,
@@ -24,7 +25,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   style,
   textareaStyle,
   testID,
-}) => {
+}, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -101,8 +102,10 @@ const TextArea: React.FC<TextAreaProps> = ({
     ...(autoGrow && maxHeight && textareaRef.current && textareaRef.current.scrollHeight > maxHeight && { overflowY: 'auto' }),
   };
 
+  const mergedRef = useMergeRefs(ref, containerProps.ref);
+
   return (
-    <div {...containerProps} data-testid={testID}>
+    <div {...containerProps} ref={mergedRef} data-testid={testID}>
       {label && (
         <label {...labelProps}>{label}</label>
       )}
@@ -157,6 +160,8 @@ const TextArea: React.FC<TextAreaProps> = ({
       )}
     </div>
   );
-};
+});
+
+TextArea.displayName = 'TextArea';
 
 export default TextArea;

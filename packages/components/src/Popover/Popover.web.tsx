@@ -1,8 +1,9 @@
-import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState, useCallback, forwardRef } from 'react';
 import { createPortal } from 'react-dom';
 import { getWebProps } from 'react-native-unistyles/web';
 import { PopoverProps, PopoverPlacement } from './types';
 import { popoverStyles } from './Popover.styles';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 interface PopoverPosition {
   top: number;
@@ -115,7 +116,7 @@ const calculatePosition = (
   return { ...position, placement: finalPlacement };
 };
 
-const Popover: React.FC<PopoverProps> = ({
+const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
   open,
   onOpenChange,
   anchor,
@@ -126,7 +127,7 @@ const Popover: React.FC<PopoverProps> = ({
   closeOnEscapeKey = true,
   showArrow = false,
   testID,
-}) => {
+}, ref) => {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
@@ -187,14 +188,15 @@ const Popover: React.FC<PopoverProps> = ({
   // Position calculation after DOM is ready
   useLayoutEffect(() => {
     if (shouldRender && isVisible) {
-      // Use a microtask to ensure the ref is attached
-      Promise.resolve().then(() => {
+      // Small delay to ensure both popover and anchor refs are attached
+      const timeout = setTimeout(() => {
         if (popoverRef.current) {
           updatePosition();
         }
-      });
+      }, 0);
+      return () => clearTimeout(timeout);
     }
-  }, [shouldRender, isVisible, anchor, placement, offset, showArrow]);
+  }, [shouldRender, isVisible, anchor, placement, offset, showArrow, updatePosition]);
 
   // Update position on scroll/resize
   useEffect(() => {
@@ -264,11 +266,11 @@ const Popover: React.FC<PopoverProps> = ({
   ]);
   const contentProps = getWebProps([popoverStyles.content]);
 
-  console.log(position)
-  
+  const mergedPopoverRef = useMergeRefs(ref, popoverRef);
+
   const popoverContent = (
     <div
-      ref={popoverRef}
+      ref={mergedPopoverRef}
       style={{
         position: 'fixed',
         zIndex: 9999,
@@ -286,6 +288,8 @@ const Popover: React.FC<PopoverProps> = ({
   );
 
   return createPortal(popoverContent, document.body);
-};
+});
+
+Popover.displayName = 'Popover';
 
 export default Popover;

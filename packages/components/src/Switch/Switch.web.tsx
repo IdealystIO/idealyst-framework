@@ -1,11 +1,12 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { switchStyles } from './Switch.styles';
 import type { SwitchProps } from './types';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const Switch: React.FC<SwitchProps> = ({
+const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   checked = false,
   onCheckedChange,
   disabled = false,
@@ -17,7 +18,7 @@ const Switch: React.FC<SwitchProps> = ({
   disabledIcon,
   style,
   testID,
-}) => {
+}, ref) => {
   const handleClick = () => {
     if (!disabled && onCheckedChange) {
       onCheckedChange(!checked);
@@ -61,8 +62,12 @@ const Switch: React.FC<SwitchProps> = ({
     return null;
   };
 
+  const mergedButtonRef = useMergeRefs(ref as React.Ref<HTMLButtonElement>, switchContainerProps.ref);
+  const mergedContainerRef = useMergeRefs(ref as React.Ref<HTMLDivElement>, containerProps.ref);
+
   const switchElement = (
     <button
+      ref={mergedButtonRef}
       onClick={handleClick}
       disabled={disabled}
       data-testid={testID}
@@ -91,6 +96,7 @@ const Switch: React.FC<SwitchProps> = ({
     return (
       <div
         {...containerProps}
+        ref={mergedContainerRef}
         style={{
           ...containerProps.style,
           cursor: disabled ? 'not-allowed' : 'pointer',
@@ -110,6 +116,8 @@ const Switch: React.FC<SwitchProps> = ({
   }
 
   return switchElement;
-};
+});
+
+Switch.displayName = 'Switch';
 
 export default Switch;

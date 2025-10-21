@@ -1,15 +1,16 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { BadgeProps } from './types';
 import { badgeStyles } from './Badge.styles';
 import { IconSvg } from '../Icon/IconSvg.web';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 // Extended props to include path props added by Babel plugin
 interface InternalBadgeProps extends BadgeProps {
   iconPath?: string;
 }
 
-const Badge: React.FC<BadgeProps> = (props: InternalBadgeProps) => {
+const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps, ref) => {
   const {
     children,
     size = 'medium',
@@ -55,10 +56,13 @@ const Badge: React.FC<BadgeProps> = (props: InternalBadgeProps) => {
     return null;
   };
 
+  const mergedRef = useMergeRefs(ref, badgeProps.ref);
+
   if (variant === 'dot') {
     return (
       <span
         {...badgeProps}
+        ref={mergedRef}
         data-testid={testID}
         role="status"
         aria-label="status indicator"
@@ -71,6 +75,7 @@ const Badge: React.FC<BadgeProps> = (props: InternalBadgeProps) => {
   return (
     <span
       {...badgeProps}
+      ref={mergedRef}
       data-testid={testID}
       role="status"
     >
@@ -84,6 +89,8 @@ const Badge: React.FC<BadgeProps> = (props: InternalBadgeProps) => {
       )}
     </span>
   );
-};
+});
+
+Badge.displayName = 'Badge';
 
 export default Badge; 

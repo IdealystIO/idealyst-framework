@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { ViewProps } from './types';
 import viewStyles from './View.styles';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const View: React.FC<ViewProps> = ({
+const View = forwardRef<HTMLDivElement, ViewProps>(({
   children,
   spacing = 'none',
   marginVariant = 'none',
   background = 'transparent',
-  radius = 'none',  
+  radius = 'none',
   border = 'none',
   backgroundColor,
   padding,
@@ -18,7 +19,7 @@ const View: React.FC<ViewProps> = ({
   borderColor,
   style,
   testID,
-}) => {
+}, ref) => {
   viewStyles.useVariants({
     spacing,
     margin: marginVariant,
@@ -47,14 +48,19 @@ const View: React.FC<ViewProps> = ({
   // Use getWebProps to generate className and ref for web
   const webProps = getWebProps(viewStyleArray);
 
+  const mergedRef = useMergeRefs(ref, webProps.ref);
+
   return (
     <div
       {...webProps}
+      ref={mergedRef}
       data-testid={testID}
     >
       {children}
     </div>
   );
-};
+});
+
+View.displayName = 'View';
 
 export default View; 

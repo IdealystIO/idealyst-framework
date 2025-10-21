@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef } from 'react';
 import { createPortal } from 'react-dom';
 import { getWebProps } from 'react-native-unistyles/web';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
 import Icon from '../Icon';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-
-const Dialog: React.FC<DialogProps> = ({
+const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   open,
   onOpenChange,
   title,
@@ -18,7 +18,7 @@ const Dialog: React.FC<DialogProps> = ({
   closeOnEscapeKey = true,
   style,
   testID,
-}) => {
+}, ref) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousActiveElementRef = useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -112,9 +112,9 @@ const Dialog: React.FC<DialogProps> = ({
     { opacity: isVisible ? 1 : 0 }
   ]);
   const containerProps = getWebProps([
-    dialogStyles.container, 
+    dialogStyles.container,
     style,
-    isVisible 
+    isVisible
       ? { opacity: 1, transform: 'scale(1) translateY(0px)' }
       : { opacity: 0, transform: 'scale(0.96) translateY(-4px)' }
   ]);
@@ -123,9 +123,12 @@ const Dialog: React.FC<DialogProps> = ({
   const closeButtonProps = getWebProps([dialogStyles.closeButton]);
   const contentProps = getWebProps([dialogStyles.content]);
 
+  const mergedBackdropRef = useMergeRefs(ref, backdropProps.ref);
+
   const dialogContent = (
     <div
       {...backdropProps}
+      ref={mergedBackdropRef}
       onClick={handleBackdropClick}
       data-testid={testID}
     >
@@ -165,6 +168,8 @@ const Dialog: React.FC<DialogProps> = ({
   );
 
   return createPortal(dialogContent, document.body);
-};
+});
+
+Dialog.displayName = 'Dialog';
 
 export default Dialog;

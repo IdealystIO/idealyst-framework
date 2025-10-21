@@ -1,9 +1,10 @@
-import React, { useState, isValidElement } from 'react';
+import React, { useState, isValidElement, useRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { InputProps } from './types';
 import { inputStyles } from './Input.styles';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   value,
@@ -94,17 +95,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   const passwordToggleIconProps = getWebProps([inputStyles.passwordToggleIcon]);
 
   // Get input props
-  const { ref: inputRef, ...inputWebProps } = getWebProps([inputStyles.input]);
+  const inputWebProps = getWebProps([inputStyles.input]);
 
-  // Forward the ref while still providing unistyles with access
-  const handleRef = (r: HTMLInputElement | null) => {
-    inputRef.current = r;
-    if (typeof ref === 'function') {
-      ref(r);
-    } else if (ref) {
-      ref.current = r;
-    }
-  };
+  // Merge the forwarded ref with unistyles ref for the input
+  const mergedInputRef = useMergeRefs(ref, inputWebProps.ref);
 
   // Helper to render left icon
   const renderLeftIcon = () => {
@@ -171,7 +165,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
       {/* Input */}
       <input
         {...inputWebProps}
-        ref={handleRef}
+        ref={mergedInputRef}
         type={getInputType()}
         value={value}
         onChange={handleChange}
@@ -202,5 +196,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     </div>
   );
 });
+
+Input.displayName = 'Input';
 
 export default Input; 

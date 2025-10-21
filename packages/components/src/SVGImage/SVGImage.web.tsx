@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { SVGImageProps } from './types';
 import { svgImageStyles } from './SVGImage.styles';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const SVGImage: React.FC<SVGImageProps> = ({
+const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
   source,
   width,
   height,
@@ -14,7 +15,7 @@ const SVGImage: React.FC<SVGImageProps> = ({
   style,
   testID,
   ...props
-}) => {
+}, ref) => {
   // Apply variants using Unistyles 3.0 pattern
   if (intent) {
     svgImageStyles.useVariants({
@@ -29,8 +30,10 @@ const SVGImage: React.FC<SVGImageProps> = ({
   // Handle React components (imported SVG components)
   if (typeof source === 'function') {
     const SvgComponent = source;
+    const componentContainerProps = getWebProps([svgImageStyles.container, style]);
+    const mergedRefForComponent = useMergeRefs(ref, componentContainerProps.ref);
     return (
-      <div {...getWebProps([svgImageStyles.container, style])} {...props} data-testid={testID}>
+      <div {...componentContainerProps} ref={mergedRefForComponent} {...props} data-testid={testID}>
         <SvgComponent
           width={finalWidth || 24}
           height={finalHeight || 24}
@@ -78,8 +81,10 @@ const SVGImage: React.FC<SVGImageProps> = ({
     }),
   };
 
+  const mergedRef = useMergeRefs(ref, containerWebProps.ref);
+
   return (
-    <div {...containerWebProps} {...props} data-testid={testID}>
+    <div {...containerWebProps} ref={mergedRef} {...props} data-testid={testID}>
       <img
         {...imageWebProps}
         src={sourceUrl}
@@ -88,6 +93,8 @@ const SVGImage: React.FC<SVGImageProps> = ({
       />
     </div>
   );
-};
+});
+
+SVGImage.displayName = 'SVGImage';
 
 export default SVGImage;

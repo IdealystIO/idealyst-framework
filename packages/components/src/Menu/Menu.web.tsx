@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { menuStyles } from './Menu.styles';
 import type { MenuProps } from './types';
 import MenuItem from './MenuItem.web';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const Menu: React.FC<MenuProps> = ({
+const Menu = forwardRef<HTMLDivElement, MenuProps>(({
   children,
   items,
   open = false,
@@ -14,7 +15,7 @@ const Menu: React.FC<MenuProps> = ({
   size = 'medium',
   style,
   testID,
-}) => {
+}, ref) => {
   const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -140,6 +141,8 @@ const Menu: React.FC<MenuProps> = ({
     }
   };
 
+  const mergedMenuRef = useMergeRefs(ref, menuRef);
+
   return (
     <>
       <div ref={triggerRef} onClick={handleTriggerClick} style={{ display: 'inline-block' }}>
@@ -150,7 +153,7 @@ const Menu: React.FC<MenuProps> = ({
         <>
           <div {...overlayProps} />
           <div
-            ref={menuRef}
+            ref={mergedMenuRef}
             className={menuProps.className}
             style={{
               ...menuProps.style,
@@ -188,6 +191,8 @@ const Menu: React.FC<MenuProps> = ({
       )}
     </>
   );
-};
+});
+
+Menu.displayName = 'Menu';
 
 export default Menu;

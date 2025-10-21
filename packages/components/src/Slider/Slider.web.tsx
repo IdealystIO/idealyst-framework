@@ -1,11 +1,12 @@
-import React, { useState, useRef, useCallback, isValidElement } from 'react';
+import React, { useState, useRef, useCallback, isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { sliderStyles } from './Slider.styles';
 import type { SliderProps } from './types';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const Slider: React.FC<SliderProps> = ({
+const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   value: controlledValue,
   defaultValue = 0,
   min = 0,
@@ -22,7 +23,7 @@ const Slider: React.FC<SliderProps> = ({
   onValueCommit,
   style,
   testID,
-}) => {
+}, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isDragging, setIsDragging] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -152,8 +153,10 @@ const Slider: React.FC<SliderProps> = ({
     return null;
   };
 
+  const mergedRef = useMergeRefs(ref, containerProps.ref);
+
   return (
-    <div {...containerProps} data-testid={testID}>
+    <div {...containerProps} ref={mergedRef} data-testid={testID}>
       {showValue && (
         <div {...valueLabelProps}>
           {value}
@@ -233,6 +236,8 @@ const Slider: React.FC<SliderProps> = ({
       )}
     </div>
   );
-};
+});
+
+Slider.displayName = 'Slider';
 
 export default Slider;

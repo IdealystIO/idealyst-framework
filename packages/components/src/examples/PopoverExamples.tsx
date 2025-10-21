@@ -29,9 +29,11 @@ export const PopoverExamples = () => {
         {/* Basic Popover */}
         <View spacing="md">
           <Text size="medium" weight="semibold">Basic Popover</Text>
-          <Button ref={basicButtonRef} onPress={() => setBasicOpen(true)}>
-            Open Basic Popover
-          </Button>
+            <Button
+              ref={basicButtonRef}
+              onPress={() => setBasicOpen(true)}>
+              Open Basic Popover
+            </Button>
           <Popover
             open={basicOpen}
             onOpenChange={setBasicOpen}
@@ -54,14 +56,18 @@ export const PopoverExamples = () => {
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {placements.map((placement) => (
               <View key={placement.id}>
-                <Button
+                <View
                   ref={(ref) => (placementButtonRefs.current[placement.id] = ref)}
-                  size="sm"
-                  variant="outlined"
-                  onPress={() => setPlacementOpen(placement.id)}
+                  style={{ display: 'inline-block' }}
                 >
-                  {placement.label}
-                </Button>
+                  <Button
+                    size="sm"
+                    variant="outlined"
+                    onPress={() => setPlacementOpen(placement.id)}
+                  >
+                    {placement.label}
+                  </Button>
+                </View>
                 {placementOpen === placement.id && (
                   <Popover
                     open={true}
@@ -88,14 +94,15 @@ export const PopoverExamples = () => {
         {/* Arrow Example */}
         <View spacing="md">
           <Text size="medium" weight="semibold">With Arrow</Text>
-          <Button
-            ref={arrowButtonRef}
-            variant="contained"
-            intent="success"
-            onPress={() => setArrowOpen(true)}
-          >
-            Popover with Arrow
-          </Button>
+          <View ref={arrowButtonRef} style={{ display: 'inline-block' }}>
+            <Button
+              variant="contained"
+              intent="success"
+              onPress={() => setArrowOpen(true)}
+            >
+              Popover with Arrow
+            </Button>
+          </View>
           <Popover
             open={arrowOpen}
             onOpenChange={setArrowOpen}

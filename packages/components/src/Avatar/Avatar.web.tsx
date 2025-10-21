@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { AvatarProps } from './types';
 import { avatarStyles } from './Avatar.styles';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const Avatar: React.FC<AvatarProps> = ({
+const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
   src,
   alt,
   fallback,
@@ -11,7 +12,7 @@ const Avatar: React.FC<AvatarProps> = ({
   shape = 'circle',
   style,
   testID,
-}) => {
+}, ref) => {
   const [hasError, setHasError] = useState(false);
 
   avatarStyles.useVariants({
@@ -21,7 +22,7 @@ const Avatar: React.FC<AvatarProps> = ({
 
   const avatarStyleArray = [avatarStyles.avatar, style];
   const avatarProps = getWebProps(avatarStyleArray);
-  
+
   // Generate fallback text styles with proper theming and size
   const fallbackStyleArray = [avatarStyles.fallback];
   const fallbackProps = getWebProps(fallbackStyleArray);
@@ -30,8 +31,10 @@ const Avatar: React.FC<AvatarProps> = ({
     setHasError(true);
   };
 
+  const mergedRef = useMergeRefs(ref, avatarProps.ref);
+
   return (
-    <div {...avatarProps} data-testid={testID}>
+    <div {...avatarProps} ref={mergedRef} data-testid={testID}>
       {src && !hasError ? (
         <img
           src={src}
@@ -46,6 +49,8 @@ const Avatar: React.FC<AvatarProps> = ({
       )}
     </div>
   );
-};
+});
+
+Avatar.displayName = 'Avatar';
 
 export default Avatar; 

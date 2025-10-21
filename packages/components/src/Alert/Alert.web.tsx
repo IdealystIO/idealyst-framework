@@ -1,9 +1,10 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { alertStyles } from './Alert.styles';
 import type { AlertProps } from './types';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 // Default icons for each intent
 const defaultIcons = {
@@ -14,7 +15,7 @@ const defaultIcons = {
   neutral: 'record-circle',
 };
 
-const Alert: React.FC<AlertProps> = ({
+const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   title,
   message,
   children,
@@ -27,7 +28,7 @@ const Alert: React.FC<AlertProps> = ({
   actions,
   style,
   testID,
-}) => {
+}, ref) => {
   alertStyles.useVariants({
     variant,
     intent,
@@ -64,9 +65,12 @@ const Alert: React.FC<AlertProps> = ({
     return null;
   };
 
+  const mergedRef = useMergeRefs(ref, containerProps.ref);
+
   return (
     <div
       className={containerProps.className}
+      ref={mergedRef}
       style={containerProps.style}
       data-testid={testID}
       role="alert"
@@ -112,6 +116,8 @@ const Alert: React.FC<AlertProps> = ({
       )}
     </div>
   );
-};
+});
+
+Alert.displayName = 'Alert';
 
 export default Alert;

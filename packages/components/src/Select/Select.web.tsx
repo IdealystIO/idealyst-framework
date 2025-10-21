@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 // @ts-ignore - web-specific import
 import { getWebProps } from 'react-native-unistyles/web';
 import { SelectProps, SelectOption } from './types';
@@ -6,8 +6,9 @@ import { selectStyles } from './Select.styles';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
 import { PositionedPortal } from '../internal/PositionedPortal';
+import useMergeRefs from '../hooks/useMergeRefs';
 
-const Select: React.FC<SelectProps> = ({
+const Select = forwardRef<HTMLDivElement, SelectProps>(({
   options,
   value,
   onValueChange,
@@ -25,7 +26,7 @@ const Select: React.FC<SelectProps> = ({
   style,
   testID,
   accessibilityLabel,
-}) => {
+}, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -138,8 +139,10 @@ const Select: React.FC<SelectProps> = ({
     triggerRef.current?.focus();
   };
 
+  const mergedRef = useMergeRefs(ref, containerWebProps.ref);
+
   return (
-    <div {...containerWebProps} data-testid={testID}>
+    <div {...containerWebProps} ref={mergedRef} data-testid={testID}>
       {label && (
         <label {...getWebProps([selectStyles.label])}>
           {label}
@@ -270,6 +273,8 @@ const Select: React.FC<SelectProps> = ({
       )}
     </div>
   );
-};
+});
+
+Select.displayName = 'Select';
 
 export default Select;
