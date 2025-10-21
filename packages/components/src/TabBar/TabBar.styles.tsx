@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 
-export const tabBarStyles = StyleSheet.create((theme) => ({
+// Container stylesheet
+export const tabBarContainerStyles = StyleSheet.create((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -9,14 +10,60 @@ export const tabBarStyles = StyleSheet.create((theme) => ({
     borderBottomWidth: 1,
     borderBottomStyle: 'solid',
     borderBottomColor: theme.colors.border.primary,
-  },
 
+    variants: {
+      variant: {
+        default: {},
+        pills: {
+          borderBottomWidth: 0,
+          padding: 4,
+          borderRadius: theme.borderRadius.full,
+          gap: 4,
+          backgroundColor: theme.colors.surface.secondary,
+          overflow: 'hidden',
+          alignSelf: 'flex-start',
+        },
+        underline: {},
+      },
+      size: {
+        small: {},
+        medium: {},
+        large: {},
+      },
+      pillMode: {
+        light: {},
+        dark: {},
+      },
+    },
+
+    compoundVariants: [
+      // Pills on light backgrounds - use light surface background
+      {
+        variant: 'pills',
+        pillMode: 'light',
+        styles: {
+          backgroundColor: theme.colors.surface.secondary,
+        },
+      },
+      // Pills on dark backgrounds - use darker surface background
+      {
+        variant: 'pills',
+        pillMode: 'dark',
+        styles: {
+          backgroundColor: theme.colors.surface.inverse
+        },
+      },
+    ],
+  },
+}));
+
+// Tab stylesheet
+export const tabBarTabStyles = StyleSheet.create((theme) => ({
   tab: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
     border: 'none',
     cursor: 'pointer',
     outline: 'none',
@@ -25,7 +72,8 @@ export const tabBarStyles = StyleSheet.create((theme) => ({
     fontWeight: theme.typography.fontWeight.medium,
     color: theme.colors.text.secondary,
     position: 'relative',
-    zIndex: 1,
+    zIndex: 2,
+    backgroundColor: 'transparent',
 
     variants: {
       size: {
@@ -48,8 +96,9 @@ export const tabBarStyles = StyleSheet.create((theme) => ({
       variant: {
         default: {},
         pills: {
-          borderRadius: theme.borderRadius.md,
-          marginRight: theme.spacing.xs,
+          borderRadius: theme.borderRadius.full,
+          marginRight: 0,
+          backgroundColor: 'transparent',
         },
         underline: {},
       },
@@ -70,48 +119,45 @@ export const tabBarStyles = StyleSheet.create((theme) => ({
           },
         },
       },
+      pillMode: {
+        light: {},
+        dark: {},
+      },
     },
 
     compoundVariants: [
+      // Pills variant - compact padding for all sizes
+      {
+        variant: 'pills',
+        size: 'small',
+        styles: {
+          paddingVertical: 4,
+          paddingHorizontal: 12,
+        },
+      },
+      {
+        variant: 'pills',
+        size: 'medium',
+        styles: {
+          paddingVertical: 6,
+          paddingHorizontal: 16,
+        },
+      },
+      {
+        variant: 'pills',
+        size: 'large',
+        styles: {
+          paddingVertical: 8,
+          paddingHorizontal: 20,
+        },
+      },
+
       // Pills variant - active text color
       {
         variant: 'pills',
         active: true,
-        intent: 'primary',
         styles: {
           color: theme.intents.primary.on,
-        },
-      },
-      {
-        variant: 'pills',
-        active: true,
-        intent: 'success',
-        styles: {
-          color: theme.intents.success.on,
-        },
-      },
-      {
-        variant: 'pills',
-        active: true,
-        intent: 'error',
-        styles: {
-          color: theme.intents.error.on,
-        },
-      },
-      {
-        variant: 'pills',
-        active: true,
-        intent: 'warning',
-        styles: {
-          color: theme.intents.warning.on,
-        },
-      },
-      {
-        variant: 'pills',
-        active: true,
-        intent: 'neutral',
-        styles: {
-          color: theme.intents.neutral.on,
         },
       },
 
@@ -119,88 +165,143 @@ export const tabBarStyles = StyleSheet.create((theme) => ({
       {
         variant: 'underline',
         active: true,
-        intent: 'primary',
         styles: {
           color: theme.intents.primary.main,
         },
       },
-      {
-        variant: 'underline',
-        active: true,
-        intent: 'success',
-        styles: {
-          color: theme.intents.success.main,
+    ],
+  },
+}));
+
+// Tab label stylesheet
+export const tabBarLabelStyles = StyleSheet.create((theme) => ({
+  tabLabel: {
+    position: 'relative',
+    zIndex: 3,
+    fontFamily: theme.typography.fontFamily.sans,
+    fontWeight: theme.typography.fontWeight.medium,
+    color: theme.colors.text.secondary,
+
+    variants: {
+      size: {
+        small: {
+          fontSize: 14,
+          lineHeight: 20,
+        },
+        medium: {
+          fontSize: 16,
+          lineHeight: 24,
+        },
+        large: {
+          fontSize: 18,
+          lineHeight: 28,
         },
       },
+      variant: {
+        default: {},
+        pills: {},
+        underline: {},
+      },
+      active: {
+        true: {
+          color: theme.colors.text.primary,
+        },
+        false: {},
+      },
+      disabled: {
+        true: {
+          opacity: 0.5,
+        },
+        false: {},
+      },
+      pillMode: {
+        light: {},
+        dark: {},
+      },
+    },
+
+    compoundVariants: [
+      // Pills light mode - light text on active (dark pill)
       {
-        variant: 'underline',
+        variant: 'pills',
+        pillMode: 'light',
         active: true,
-        intent: 'error',
         styles: {
-          color: theme.intents.error.main,
+          color: theme.colors.text.primary,
         },
       },
+      // Pills dark mode - dark text on active (light pill)
       {
-        variant: 'underline',
+        variant: 'pills',
+        pillMode: 'dark',
         active: true,
-        intent: 'warning',
         styles: {
-          color: theme.intents.warning.main,
+          color: theme.colors.text.primary,
         },
       },
+      // Underline variant - active text color
       {
         variant: 'underline',
         active: true,
-        intent: 'neutral',
         styles: {
-          color: theme.intents.neutral.main,
+          color: theme.intents.primary.main,
         },
       },
     ],
   },
+}));
 
+
+// Indicator stylesheet
+export const tabBarIndicatorStyles = StyleSheet.create((theme) => ({
   indicator: {
     position: 'absolute',
-    bottom: 0,
-    height: 2,
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     pointerEvents: 'none',
+    zIndex: 1,
 
     variants: {
       variant: {
         default: {
           bottom: -1,
           height: 2,
+          backgroundColor: theme.intents.primary.main,
         },
         pills: {
-          height: '100%',
-          borderRadius: theme.borderRadius.md,
-          bottom: 0,
-          top: 0,
-          zIndex: 0,
+          borderRadius: theme.borderRadius.full,
+          bottom: 4,
+          top: 4,
+          left: 0,
         },
         underline: {
           bottom: -1,
           height: 2,
-        },
-      },
-      intent: {
-        primary: {
           backgroundColor: theme.intents.primary.main,
         },
-        success: {
-          backgroundColor: theme.intents.success.main,
-        },
-        error: {
-          backgroundColor: theme.intents.error.main,
-        },
-        warning: {
-          backgroundColor: theme.intents.warning.main,
-        },
-        neutral: {
-          backgroundColor: theme.intents.neutral.main,
-        },
+      },
+      pillMode: {
+        light: {},
+        dark: {},
       },
     },
+
+    compoundVariants: [
+      // Pills light mode - darker pill
+      {
+        variant: 'pills',
+        pillMode: 'light',
+        styles: {
+          backgroundColor: theme.colors.surface.tertiary,
+        },
+      },
+      // Pills dark mode - lighter pill
+      {
+        variant: 'pills',
+        pillMode: 'dark',
+        styles: {
+          backgroundColor: theme.colors.surface.secondary,
+        },
+      },
+    ],
   },
 }));

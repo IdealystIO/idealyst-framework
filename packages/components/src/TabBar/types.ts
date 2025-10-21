@@ -1,10 +1,10 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '../theme';
+import type { ButtonSize } from '../theme';
 
 // Component-specific type aliases for future extensibility
-export type TabBarIntentVariant = IntentVariant;
 export type TabBarSizeVariant = ButtonSize;
 export type TabBarVariant = 'default' | 'pills' | 'underline';
+export type TabBarPillMode = 'light' | 'dark';
 
 export interface TabBarItem {
   value: string;
@@ -19,7 +19,8 @@ export interface TabBarProps {
   onChange?: (value: string) => void;
   variant?: TabBarVariant;
   size?: TabBarSizeVariant;
-  intent?: TabBarIntentVariant;
+  /** Mode for pills variant: 'light' for light backgrounds (dark pill), 'dark' for dark backgrounds (light pill) */
+  pillMode?: TabBarPillMode;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }

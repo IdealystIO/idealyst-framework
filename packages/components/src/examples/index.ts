@@ -18,7 +18,6 @@ export { SwitchExamples } from './SwitchExamples';
 export { RadioButtonExamples } from './RadioButtonExamples';
 export { ProgressExamples } from './ProgressExamples';
 export { TextAreaExamples } from './TextAreaExamples';
-export { TabsExamples } from './TabsExamples';
 export { TabBarExamples } from './TabBarExamples';
 export { TooltipExamples } from './TooltipExamples';
 export { AccordionExamples } from './AccordionExamples';

@@ -1,7 +1,12 @@
 import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { View, TouchableOpacity, Text, ScrollView } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { tabBarStyles } from './TabBar.styles';
+import {
+  tabBarContainerStyles,
+  tabBarTabStyles,
+  tabBarLabelStyles,
+  tabBarIndicatorStyles
+} from './TabBar.styles';
 import type { TabBarProps } from './types';
 
 const TabBar = forwardRef<View, TabBarProps>(({
@@ -11,7 +16,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
   onChange,
   variant = 'default',
   size = 'medium',
-  intent = 'primary',
+  pillMode = 'light',
   style,
   testID,
 }, ref) => {
@@ -27,7 +32,10 @@ const TabBar = forwardRef<View, TabBarProps>(({
   const updateIndicatorPosition = (itemValue: string) => {
     const layout = tabLayouts.current[itemValue];
     if (layout) {
-      indicatorPosition.value = withSpring(layout.x, {
+      // For pills variant, account for container padding
+      const containerPadding = variant === 'pills' ? 4 : 0;
+
+      indicatorPosition.value = withSpring(layout.x + containerPadding, {
         damping: 30,
         stiffness: 300,
       });
@@ -61,9 +69,6 @@ const TabBar = forwardRef<View, TabBarProps>(({
     onChange?.(itemValue);
   };
 
-  // Apply container variants
-  tabBarStyles.useVariants({ variant, intent });
-
   const indicatorAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: indicatorPosition.value }],
@@ -71,52 +76,66 @@ const TabBar = forwardRef<View, TabBarProps>(({
     };
   });
 
+  // Apply container and indicator variants right before rendering
+  tabBarContainerStyles.useVariants({ variant, size, pillMode });
+  tabBarIndicatorStyles.useVariants({ variant, pillMode });
+
   return (
-    <View ref={ref} style={[tabBarStyles.container, style]} testID={testID}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ flexDirection: 'row' }}
-      >
-        {items.map((item) => {
-          const isActive = value === item.value;
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ position: 'relative' }}
+    >
+      <View ref={ref} style={[tabBarContainerStyles.container, style]} testID={testID}>
+        {/* Animated indicator - render first so it's behind */}
+        <Animated.View
+          style={[
+            tabBarIndicatorStyles.indicator,
+            indicatorAnimatedStyle,
+          ]}
+        />
 
-          // Apply tab variants for this specific tab
-          tabBarStyles.useVariants({
-            size,
-            variant,
-            intent,
-            active: isActive,
-            disabled: Boolean(item.disabled),
-          });
+        {/* Tabs - render second so they're on top */}
+        <View style={{ flexDirection: 'row' }}>
+          {items.map((item) => {
+            const isActive = value === item.value;
 
-          return (
-            <TouchableOpacity
-              key={item.value}
-              onLayout={(event) => {
-                const { x, width } = event.nativeEvent.layout;
-                handleTabLayout(item.value, x, width);
-              }}
-              style={tabBarStyles.tab}
-              onPress={() => handleTabClick(item.value, item.disabled)}
-              disabled={item.disabled}
-              activeOpacity={0.7}
-              testID={`${testID}-tab-${item.value}`}
-            >
-              <Text style={tabBarStyles.tabLabel}>{item.label}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+            // Apply tab and label variants for this specific tab
+            tabBarTabStyles.useVariants({
+              size,
+              variant,
+              active: isActive,
+              disabled: Boolean(item.disabled),
+              pillMode,
+            });
+            tabBarLabelStyles.useVariants({
+              size,
+              variant,
+              pillMode,
+              active: isActive,
+              disabled: Boolean(item.disabled),
+            });
 
-      {/* Animated indicator */}
-      <Animated.View
-        style={[
-          tabBarStyles.indicator,
-          indicatorAnimatedStyle,
-        ]}
-      />
-    </View>
+            return (
+              <TouchableOpacity
+                key={item.value}
+                onLayout={(event) => {
+                  const { x, width } = event.nativeEvent.layout;
+                  handleTabLayout(item.value, x, width);
+                }}
+                style={tabBarTabStyles.tab}
+                onPress={() => handleTabClick(item.value, item.disabled)}
+                disabled={item.disabled}
+                activeOpacity={0.7}
+                testID={`${testID}-tab-${item.value}`}
+              >
+                <Text style={tabBarLabelStyles.tabLabel}>{item.label}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    </ScrollView>
   );
 });
 

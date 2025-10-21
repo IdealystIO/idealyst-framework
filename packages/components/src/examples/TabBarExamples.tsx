@@ -6,7 +6,7 @@ import type { TabBarItem } from '../TabBar/types';
 export const TabBarExamples: React.FC = () => {
   const [activeTab, setActiveTab] = useState('tab1');
   const [variantTab, setVariantTab] = useState('home');
-  const [intentTab, setIntentTab] = useState('tab1');
+  const [pillTab, setPillTab] = useState('tab1');
 
   const basicTabs: TabBarItem[] = [
     { value: 'tab1', label: 'Tab 1' },
@@ -62,6 +62,7 @@ export const TabBarExamples: React.FC = () => {
               value={variantTab}
               onChange={setVariantTab}
               variant="pills"
+              pillMode="light"
             />
           </View>
           <View spacing="xs">
@@ -101,43 +102,28 @@ export const TabBarExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Intent Colors</Text>
+        <Text size="large" weight="semibold">Pill Modes</Text>
         <View spacing="sm">
-          <TabBar
-            items={basicTabs}
-            value={intentTab}
-            onChange={setIntentTab}
-            intent="primary"
-            variant="pills"
-          />
-          <TabBar
-            items={basicTabs}
-            value={intentTab}
-            onChange={setIntentTab}
-            intent="success"
-            variant="pills"
-          />
-          <TabBar
-            items={basicTabs}
-            value={intentTab}
-            onChange={setIntentTab}
-            intent="warning"
-            variant="pills"
-          />
-          <TabBar
-            items={basicTabs}
-            value={intentTab}
-            onChange={setIntentTab}
-            intent="error"
-            variant="pills"
-          />
-          <TabBar
-            items={basicTabs}
-            value={intentTab}
-            onChange={setIntentTab}
-            intent="neutral"
-            variant="pills"
-          />
+          <View spacing="xs">
+            <Text size="small" weight="medium">Light Mode (dark pill on light background)</Text>
+            <TabBar
+              items={basicTabs}
+              value={pillTab}
+              onChange={setPillTab}
+              variant="pills"
+              pillMode="light"
+            />
+          </View>
+          <View spacing="xs">
+            <Text size="small" weight="medium">Dark Mode (light pill on dark background)</Text>
+            <TabBar
+              items={basicTabs}
+              value={pillTab}
+              onChange={setPillTab}
+              variant="pills"
+              pillMode="dark"
+            />
+          </View>
         </View>
       </View>
 
@@ -148,33 +134,6 @@ export const TabBarExamples: React.FC = () => {
           value={activeTab}
           onChange={setActiveTab}
         />
-      </View>
-
-      <View spacing="md">
-        <Text size="large" weight="semibold">Intent with Underline</Text>
-        <View spacing="sm">
-          <TabBar
-            items={basicTabs}
-            value={activeTab}
-            onChange={setActiveTab}
-            intent="primary"
-            variant="underline"
-          />
-          <TabBar
-            items={basicTabs}
-            value={activeTab}
-            onChange={setActiveTab}
-            intent="success"
-            variant="underline"
-          />
-          <TabBar
-            items={basicTabs}
-            value={activeTab}
-            onChange={setActiveTab}
-            intent="error"
-            variant="underline"
-          />
-        </View>
       </View>
     </View>
     </Screen>

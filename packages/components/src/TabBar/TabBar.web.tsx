@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import { tabBarStyles } from './TabBar.styles';
+import {
+  tabBarContainerStyles,
+  tabBarTabStyles,
+  tabBarLabelStyles,
+  tabBarIndicatorStyles
+} from './TabBar.styles';
 import type { TabBarProps } from './types';
 
 const TabBar: React.FC<TabBarProps> = ({
@@ -10,7 +15,7 @@ const TabBar: React.FC<TabBarProps> = ({
   onChange,
   variant = 'default',
   size = 'medium',
-  intent = 'primary',
+  pillMode = 'light',
   style,
   testID,
 }) => {
@@ -71,12 +76,12 @@ const TabBar: React.FC<TabBarProps> = ({
     onChange?.(itemValue);
   };
 
-  // Apply container variants
-  const containerProps = getWebProps([tabBarStyles.container, style]);
+  // Apply container and indicator variants
+  tabBarContainerStyles.useVariants({ variant, size, pillMode });
+  const containerProps = getWebProps([tabBarContainerStyles.container, style]);
 
-  // Apply indicator variants
-  tabBarStyles.useVariants({ variant, intent });
-  const indicatorProps = getWebProps([tabBarStyles.indicator]);
+  tabBarIndicatorStyles.useVariants({ variant, pillMode });
+  const indicatorProps = getWebProps([tabBarIndicatorStyles.indicator]);
 
   return (
     <div
@@ -98,16 +103,24 @@ const TabBar: React.FC<TabBarProps> = ({
       {items.map((item) => {
         const isActive = value === item.value;
 
-        // Apply tab variants for this specific tab
-        tabBarStyles.useVariants({
+        // Apply tab and label variants for this specific tab
+        tabBarTabStyles.useVariants({
           size,
           variant,
-          intent,
+          active: isActive,
+          disabled: Boolean(item.disabled),
+          pillMode,
+        });
+        tabBarLabelStyles.useVariants({
+          size,
+          variant,
+          pillMode,
           active: isActive,
           disabled: Boolean(item.disabled),
         });
 
-        const tabProps = getWebProps([tabBarStyles.tab]);
+        const tabProps = getWebProps([tabBarTabStyles.tab]);
+        const labelProps = getWebProps([tabBarLabelStyles.tabLabel]);
 
         return (
           <button
@@ -127,7 +140,7 @@ const TabBar: React.FC<TabBarProps> = ({
             aria-disabled={item.disabled}
             data-testid={`${testID}-tab-${item.value}`}
           >
-            {item.label}
+            <span {...labelProps}>{item.label}</span>
           </button>
         );
       })}
