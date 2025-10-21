@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { DrawerContentWrapper } from './DrawerContentWrapper.native';
+import { HeaderWrapper } from './HeaderWrapper.native';
 import React from 'react';
 import { useUnistyles } from 'react-native-unistyles';
 import { useIsFocused } from '@react-navigation/native';
@@ -83,11 +84,31 @@ const createThemeAwareComponent = (OriginalComponent: React.ComponentType<any>) 
 export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
     const NavigatorType = getNavigatorType(params);
 
+    // Wrap screenOptions to provide navigation context to headerRight
+    const screenOptions = params.options?.headerRight
+        ? (navProps: any) => {
+            const baseOptions = typeof params.options === 'function'
+                ? params.options(navProps)
+                : params.options;
+
+            return {
+                ...baseOptions,
+                headerRight: () => (
+                    <HeaderWrapper
+                        content={baseOptions.headerRight}
+                        route={params}
+                        navigation={navProps.navigation}
+                    />
+                ),
+            };
+        }
+        : params.options;
+
     // Special handling for drawer navigator with custom sidebar
     if (params.layout === 'drawer' && params.sidebarComponent) {
         return () => (
             <NavigatorType.Navigator
-                screenOptions={params.options}
+                screenOptions={screenOptions}
                 drawerContent={(drawerProps: any) => (
                     <DrawerContentWrapper
                         route={params}
@@ -102,7 +123,7 @@ export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
     }
 
     return () => (
-        <NavigatorType.Navigator screenOptions={params.options}>
+        <NavigatorType.Navigator screenOptions={screenOptions}>
             {params.routes.map((child, index) => buildScreen(child, NavigatorType, parentPath, index))}
         </NavigatorType.Navigator>
     )

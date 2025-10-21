@@ -39,6 +39,7 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
   if (borderColor) dynamicStyles.borderColor = borderColor;
 
   // Use getWebProps to generate className and ref for web
+  // Pass all styles to getWebProps - it handles the web-specific merging
   const webProps = getWebProps(viewStyles.view);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
@@ -46,7 +47,7 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
   return (
     <div
       {...webProps}
-      style={[webProps.style, style, dynamicStyles]}
+      style={style}
       ref={mergedRef}
       data-testid={testID}
     >

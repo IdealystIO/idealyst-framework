@@ -5,6 +5,7 @@ import { buildNavigator } from '../routing';
 
 const NavigatorContext = createContext<NavigatorContextValue>({
     navigate: () => {},
+    route: undefined,
 });
 
 export const NavigatorProvider = ({
@@ -40,7 +41,8 @@ export const NavigatorProvider = ({
     }, [route]);
     
     return (
-        <NavigatorContext.Provider value={{ 
+        <NavigatorContext.Provider value={{
+            route,
             navigate: navigateFunction,
         }}>
             <RouteComponent />

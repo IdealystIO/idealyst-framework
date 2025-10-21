@@ -29,6 +29,8 @@ export interface ListProps {
   size?: ListSizeVariant;
   style?: StyleProp<ViewStyle>;
   testID?: string;
+  scrollable?: boolean;
+  maxHeight?: number | string;
 }
 
 export interface ListSectionProps {

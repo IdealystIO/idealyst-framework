@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
+import { useListContext } from './ListContext';
 
 const ListItem = forwardRef<View | TouchableOpacity, ListItemProps>(({
   id,
@@ -14,17 +15,22 @@ const ListItem = forwardRef<View | TouchableOpacity, ListItemProps>(({
   selected = false,
   disabled = false,
   indent = 0,
-  size = 'md',
+  size,
   onPress,
   style,
   testID,
 }, ref) => {
+  const listContext = useListContext();
   const isClickable = !disabled && !!onPress;
+
+  // Use explicit size prop, fallback to context size, then default
+  const effectiveSize = size ?? listContext.size ?? 'md';
+  const effectiveVariant = listContext.variant ?? 'default';
 
   // Apply variants
   listStyles.useVariants({
-    size,
-    variant: 'default',
+    size: effectiveSize,
+    variant: effectiveVariant,
     active,
     selected,
     disabled,

@@ -5,11 +5,13 @@ import { Outlet } from '../router';
 import { UnistylesRuntime, useUnistyles } from 'react-native-unistyles';
 import { getNextTheme, getThemeDisplayName, isHighContrastTheme } from './unistyles';
 import ExampleSidebar from './ExampleSidebar';
+import ExampleSearchDialog from './ExampleSearchDialog';
 
 
 export const ExampleWebLayout: React.FC = () => {
     const navigator = useNavigator();
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [showSearch, setShowSearch] = useState(false);
     const currentTheme = UnistylesRuntime.themeName || 'light';
     const { theme } = useUnistyles();
 
@@ -52,6 +54,13 @@ export const ExampleWebLayout: React.FC = () => {
 
                 <View style={{ flexDirection: 'row', gap: 8 }}>
                     <Button
+                        leftIcon="magnify"
+                        size='lg'
+                        intent='neutral'
+                        variant='text'
+                        onPress={() => setShowSearch(true)}
+                    />
+                    <Button
                         variant="outlined"
                         intent="primary"
                         size="sm"
@@ -61,6 +70,9 @@ export const ExampleWebLayout: React.FC = () => {
                     </Button>
                 </View>
             </View>
+
+            {/* Search Dialog */}
+            <ExampleSearchDialog open={showSearch} onOpenChange={setShowSearch} />
 
             {/* Main Content Area with Sidebar */}
             <View style={{ flex: 1, flexDirection: 'row', overflow: 'hidden' }}>

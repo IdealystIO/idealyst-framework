@@ -1,7 +1,8 @@
-import React, { Children, cloneElement, isValidElement, forwardRef } from 'react';
-import { View } from 'react-native';
+import React, { forwardRef } from 'react';
+import { View, ScrollView } from 'react-native';
 import { listStyles } from './List.styles';
 import type { ListProps } from './types';
+import { ListProvider } from './ListContext';
 
 const List = forwardRef<View, ListProps>(({
   children,
@@ -9,28 +10,44 @@ const List = forwardRef<View, ListProps>(({
   size = 'md',
   style,
   testID,
+  scrollable = false,
+  maxHeight,
 }, ref) => {
   // Apply variants
   listStyles.useVariants({
     variant,
     size,
+    scrollable,
   });
 
-  // Clone children to pass down variant and size context
-  const enhancedChildren = Children.map(children, (child) => {
-    if (isValidElement(child)) {
-      return cloneElement(child, {
-        ...child.props,
-        variant,
-        size,
-      } as any);
-    }
-    return child;
-  });
+  const containerStyle = [
+    listStyles.container,
+    maxHeight ? { maxHeight } : undefined,
+    style,
+  ];
+
+  const content = (
+    <ListProvider value={{ variant, size }}>
+      {children}
+    </ListProvider>
+  );
+
+  if (scrollable) {
+    return (
+      <ScrollView
+        ref={ref as any}
+        style={containerStyle}
+        testID={testID}
+        showsVerticalScrollIndicator={true}
+      >
+        {content}
+      </ScrollView>
+    );
+  }
 
   return (
-    <View ref={ref} style={[listStyles.container, style]} testID={testID}>
-      {enhancedChildren}
+    <View ref={ref} style={containerStyle} testID={testID}>
+      {content}
     </View>
   );
 });

@@ -26,6 +26,15 @@ export const listStyles = StyleSheet.create((theme) => ({
           backgroundColor: 'transparent',
         },
       },
+      scrollable: {
+        true: {
+          overflow: 'auto',
+          _web: {
+            overflowY: 'auto',
+          },
+        },
+        false: {},
+      },
     },
   },
 

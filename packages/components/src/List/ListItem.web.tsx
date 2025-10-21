@@ -4,6 +4,7 @@ import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { useListContext } from './ListContext';
 
 const ListItem: React.FC<ListItemProps> = ({
   id,
@@ -15,17 +16,22 @@ const ListItem: React.FC<ListItemProps> = ({
   selected = false,
   disabled = false,
   indent = 0,
-  size = 'md',
+  size,
   onPress,
   style,
   testID,
 }) => {
+  const listContext = useListContext();
   const isClickable = !disabled && !!onPress;
+
+  // Use explicit size prop, fallback to context size, then default
+  const effectiveSize = size ?? listContext.size ?? 'md';
+  const effectiveVariant = listContext.variant ?? 'default';
 
   // Apply variants
   listStyles.useVariants({
-    size,
-    variant: 'default',
+    size: effectiveSize,
+    variant: effectiveVariant,
     active,
     selected,
     disabled,

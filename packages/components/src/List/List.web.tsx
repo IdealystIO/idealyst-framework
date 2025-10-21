@@ -1,7 +1,8 @@
-import React, { Children, cloneElement, isValidElement } from 'react';
+import React from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { listStyles } from './List.styles';
 import type { ListProps } from './types';
+import { ListProvider } from './ListContext';
 
 const List: React.FC<ListProps> = ({
   children,
@@ -9,36 +10,34 @@ const List: React.FC<ListProps> = ({
   size = 'md',
   style,
   testID,
+  scrollable = false,
+  maxHeight,
 }) => {
   // Apply variants
   listStyles.useVariants({
     variant,
     size,
+    scrollable,
   });
 
-  const containerProps = getWebProps([listStyles.container, style]);
+  const containerStyle = [
+    listStyles.container,
+    maxHeight ? { maxHeight } : undefined,
+    style,
+  ];
 
-  // Clone children to pass down variant and size context
-  const enhancedChildren = Children.map(children, (child) => {
-    if (isValidElement(child)) {
-      // Pass variant and size to ListItem children
-      return cloneElement(child, {
-        ...child.props,
-        variant,
-        size,
-      } as any);
-    }
-    return child;
-  });
+  const containerProps = getWebProps(containerStyle);
 
   return (
-    <div
-      {...containerProps}
-      role="list"
-      data-testid={testID}
-    >
-      {enhancedChildren}
-    </div>
+    <ListProvider value={{ variant, size }}>
+      <div
+        {...containerProps}
+        role="list"
+        data-testid={testID}
+      >
+        {children}
+      </div>
+    </ListProvider>
   );
 };
 

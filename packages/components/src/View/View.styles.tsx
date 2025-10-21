@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native-unistyles";
 const viewStyles = StyleSheet.create((theme) => ({
   view: {
     display: 'flex',
-    flexDirection: 'column',
 
     variants: {
       spacing: {
