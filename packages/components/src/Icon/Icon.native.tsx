@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IconProps } from './types';
 import iconStyles from './Icon.styles';
 
-const Icon: React.FC<IconProps> = ({
+const Icon = forwardRef<any, IconProps>(({
   name,
   size = 'md',
   color,
   style,
   testID,
   accessibilityLabel,
-}: IconProps) => {
+}: IconProps, ref) => {
 
   // Use Unistyles v3 with color and size variants
   iconStyles.useVariants({ color, size });
@@ -20,6 +20,7 @@ const Icon: React.FC<IconProps> = ({
 
   return (
     <MaterialCommunityIcons
+      ref={ref}
       name={name}
       size={iconSize}
       style={[iconStyles.icon, style]}
@@ -27,6 +28,8 @@ const Icon: React.FC<IconProps> = ({
       accessibilityLabel={accessibilityLabel}
     />
   );
-};
+});
+
+Icon.displayName = 'Icon';
 
 export default Icon; 

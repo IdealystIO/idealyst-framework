@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { SVGImageProps } from './types';
 import { svgImageStyles } from './SVGImage.styles';
 
-const SVGImage: React.FC<SVGImageProps> = ({
+const SVGImage = forwardRef<View, SVGImageProps>(({
   source,
   width,
   height,
@@ -14,7 +14,7 @@ const SVGImage: React.FC<SVGImageProps> = ({
   style,
   testID,
   ...props
-}) => {
+}, ref) => {
   // Apply variants using Unistyles 3.0 pattern
   if (intent) {
     svgImageStyles.useVariants({
@@ -30,7 +30,7 @@ const SVGImage: React.FC<SVGImageProps> = ({
   if (typeof source === 'function') {
     const SvgComponent = source;
     return (
-      <View style={[svgImageStyles.container, style]} testID={testID} {...props}>
+      <View ref={ref} style={[svgImageStyles.container, style]} testID={testID} {...props}>
         <SvgComponent
           width={finalWidth}
           height={finalHeight}
@@ -43,9 +43,9 @@ const SVGImage: React.FC<SVGImageProps> = ({
 
   // Mode 2: Handle URI-based SVG loading
   const sourceUri = typeof source === 'string' ? source : source.uri;
-  
+
   return (
-    <View style={[svgImageStyles.container, style]} testID={testID} {...props}>
+    <View ref={ref} style={[svgImageStyles.container, style]} testID={testID} {...props}>
       <SvgUri
         uri={sourceUri}
         width={finalWidth}
@@ -55,6 +55,8 @@ const SVGImage: React.FC<SVGImageProps> = ({
       />
     </View>
   );
-};
+});
+
+SVGImage.displayName = 'SVGImage';
 
 export default SVGImage;

@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect, Children } from 'react';
+import React, { useState, useRef, useEffect, Children, forwardRef } from 'react';
 import { View, TouchableOpacity, Text, ScrollView, Animated } from 'react-native';
 import { tabsStyles } from './Tabs.styles';
 import type { TabsProps, TabProps } from './types';
 
-const Tabs: React.FC<TabsProps> = ({
+const Tabs = forwardRef<View, TabsProps>(({
   children,
   value: controlledValue,
   defaultValue,
@@ -13,7 +13,7 @@ const Tabs: React.FC<TabsProps> = ({
   intent = 'primary',
   style,
   testID,
-}) => {
+}, ref) => {
   const tabs = Children.toArray(children).filter(
     (child): child is React.ReactElement<TabProps> =>
       React.isValidElement(child) && typeof child.type !== 'string'
@@ -78,7 +78,7 @@ const Tabs: React.FC<TabsProps> = ({
   });
 
   return (
-    <View style={[tabsStyles.container, style]} testID={testID}>
+    <View ref={ref} style={[tabsStyles.container, style]} testID={testID}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -127,6 +127,8 @@ const Tabs: React.FC<TabsProps> = ({
       />
     </View>
   );
-};
+});
+
+Tabs.displayName = 'Tabs';
 
 export default Tabs;

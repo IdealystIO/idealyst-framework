@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { StyleSheet } from 'react-native-unistyles';
 import { Text as RNText } from 'react-native';
 import { TextProps } from './types';
 import textStyles from './Text.styles';
 
-const Text: React.FC<TextProps> = ({
+const Text = forwardRef<RNText, TextProps>(({
   children,
   size = 'md',
   weight = 'normal',
@@ -12,7 +12,7 @@ const Text: React.FC<TextProps> = ({
   align = 'left',
   style,
   testID,
-}) => {
+}, ref) => {
   textStyles.useVariants({
     size,
     weight,
@@ -21,16 +21,19 @@ const Text: React.FC<TextProps> = ({
   });
 
   return (
-    <RNText 
+    <RNText
+      ref={ref}
       style={[
         textStyles.text,
         style,
-      ]} 
+      ]}
       testID={testID}
     >
       {children}
     </RNText>
   );
-};
+});
+
+Text.displayName = 'Text';
 
 export default Text; 

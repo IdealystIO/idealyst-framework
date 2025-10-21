@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, forwardRef } from 'react';
 import { View, Pressable } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, runOnJS, withSpring } from 'react-native-reanimated';
@@ -8,7 +8,7 @@ import Text from '../Text';
 import type { SliderProps } from './types';
 import { isIconName } from '../Icon/icon-resolver';
 
-const Slider: React.FC<SliderProps> = ({
+const Slider = forwardRef<View, SliderProps>(({
   value: controlledValue,
   defaultValue = 0,
   min = 0,
@@ -25,7 +25,7 @@ const Slider: React.FC<SliderProps> = ({
   onValueCommit,
   style,
   testID,
-}) => {
+}, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [trackWidthState, setTrackWidthState] = useState(0);
   const trackWidth = useSharedValue(0);
@@ -160,7 +160,7 @@ const Slider: React.FC<SliderProps> = ({
   };
 
   return (
-    <View style={[sliderStyles.container, style]} testID={testID}>
+    <View ref={ref} style={[sliderStyles.container, style]} testID={testID}>
       {showValue && (
         <View style={sliderStyles.valueLabel}>
           <Text>{value}</Text>
@@ -249,6 +249,8 @@ const Slider: React.FC<SliderProps> = ({
       )}
     </View>
   );
-};
+});
+
+Slider.displayName = 'Slider';
 
 export default Slider;

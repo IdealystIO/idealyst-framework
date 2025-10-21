@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, forwardRef } from 'react';
 import { Modal, View, TouchableWithoutFeedback, BackHandler, Dimensions } from 'react-native';
 import { PopoverProps } from './types';
 import { popoverStyles } from './Popover.styles';
 
-const Popover: React.FC<PopoverProps> = ({
+const Popover = forwardRef<View, PopoverProps>(({
   open,
   onOpenChange,
   anchor,
@@ -14,7 +14,7 @@ const Popover: React.FC<PopoverProps> = ({
   showArrow = false,
   style,
   testID,
-}) => {
+}, ref) => {
   const popoverRef = useRef<View>(null);
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0, width: 0 });
   const [popoverSize, setPopoverSize] = useState({ width: 0, height: 0 });
@@ -174,7 +174,7 @@ const Popover: React.FC<PopoverProps> = ({
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <View style={popoverStyles.backdrop}>
           <TouchableWithoutFeedback>
-            <View ref={popoverRef} style={popoverStyle} onLayout={handlePopoverLayout}>
+            <View ref={ref} style={popoverStyle} onLayout={handlePopoverLayout}>
               {showArrow && <View style={popoverStyles.arrow} />}
               <View style={popoverStyles.content}>
                 {children}
@@ -185,6 +185,8 @@ const Popover: React.FC<PopoverProps> = ({
       </TouchableWithoutFeedback>
     </Modal>
   );
-};
+});
+
+Popover.displayName = 'Popover';
 
 export default Popover;

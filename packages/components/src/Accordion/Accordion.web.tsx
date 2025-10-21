@@ -9,7 +9,7 @@ interface AccordionItemProps {
   item: AccordionItemType;
   isExpanded: boolean;
   onToggle: () => void;
-  size: 'small' | 'medium' | 'large';
+  size: AccordionProps['size'];
   testID?: string;
 }
 

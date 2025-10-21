@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View, Text } from 'react-native';
 import { DividerProps } from './types';
 import { dividerStyles } from './Divider.styles';
 
-const Divider: React.FC<DividerProps> = ({
+const Divider = forwardRef<View, DividerProps>(({
   orientation = 'horizontal',
   variant = 'solid',
   thickness = 'thin',
@@ -14,7 +14,7 @@ const Divider: React.FC<DividerProps> = ({
   style,
   testID,
   accessibilityLabel,
-}) => {
+}, ref) => {
   // Apply variants for main divider
   dividerStyles.useVariants({
     orientation,
@@ -72,6 +72,7 @@ const Divider: React.FC<DividerProps> = ({
     if (variant === 'dashed' || variant === 'dotted') {
       return (
         <View
+          ref={ref}
           style={[
             dividerStyle,
             getDashedStyle(),
@@ -82,9 +83,10 @@ const Divider: React.FC<DividerProps> = ({
         />
       );
     }
-    
+
     return (
       <View
+        ref={ref}
         style={[dividerStyles.divider, style]}
         testID={testID}
         accessibilityLabel={accessibilityLabel || "divider"}
@@ -129,6 +131,7 @@ const Divider: React.FC<DividerProps> = ({
 
   return (
     <View
+      ref={ref}
       style={dividerStyles.container}
       testID={testID}
       accessibilityLabel={accessibilityLabel || "divider with content"}
@@ -140,6 +143,8 @@ const Divider: React.FC<DividerProps> = ({
       {renderLineSegment()}
     </View>
   );
-};
+});
+
+Divider.displayName = 'Divider';
 
 export default Divider; 

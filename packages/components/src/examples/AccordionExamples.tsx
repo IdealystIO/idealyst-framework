@@ -39,10 +39,10 @@ export const AccordionExamples: React.FC = () => {
       id: 'rich2',
       title: 'Another Section',
       content: (
-        <div>
+        <View>
           <Text>This section contains rich content with multiple paragraphs.</Text>
           <Text style={{ marginTop: 8 }}>You can include any React components here.</Text>
-        </div>
+        </View>
       ),
     },
   ];
@@ -96,15 +96,15 @@ export const AccordionExamples: React.FC = () => {
         <View spacing="sm">
           <View spacing="xs">
             <Text size="small" weight="medium">Small</Text>
-            <Accordion items={basicItems} size="small" variant="separated" />
+            <Accordion items={basicItems} size="sm" variant="separated" />
           </View>
           <View spacing="xs">
             <Text size="small" weight="medium">Medium (default)</Text>
-            <Accordion items={basicItems} size="medium" variant="separated" />
+            <Accordion items={basicItems} size="md" variant="separated" />
           </View>
           <View spacing="xs">
             <Text size="small" weight="medium">Large</Text>
-            <Accordion items={basicItems} size="large" variant="separated" />
+            <Accordion items={basicItems} size="lg" variant="separated" />
           </View>
         </View>
       </View>

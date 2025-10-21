@@ -1,4 +1,4 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Icon } from '../Icon';
 import { menuItemStyles } from './MenuItem.styles';
@@ -12,7 +12,7 @@ interface MenuItemProps {
   testID?: string;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, size = 'medium', testID }) => {
+const MenuItem = forwardRef<Pressable, MenuItemProps>(({ item, onPress, size = 'medium', testID }, ref) => {
   // Initialize styles with useVariants
   menuItemStyles.useVariants({
     size,
@@ -40,6 +40,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, size = 'medium', tes
 
   return (
     <Pressable
+      ref={ref}
       style={menuItemStyles.item}
       onPress={() => onPress(item)}
       disabled={item.disabled}
@@ -60,6 +61,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, size = 'medium', tes
       </Text>
     </Pressable>
   );
-};
+});
+
+MenuItem.displayName = 'MenuItem';
 
 export default MenuItem;

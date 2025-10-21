@@ -1,4 +1,4 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { alertStyles } from './Alert.styles';
@@ -14,7 +14,7 @@ const defaultIcons = {
   neutral: 'circle',
 };
 
-const Alert: React.FC<AlertProps> = ({
+const Alert = forwardRef<View, AlertProps>(({
   title,
   message,
   children,
@@ -27,7 +27,7 @@ const Alert: React.FC<AlertProps> = ({
   actions,
   style,
   testID,
-}) => {
+}, ref) => {
   alertStyles.useVariants({
     variant,
     intent,
@@ -56,6 +56,7 @@ const Alert: React.FC<AlertProps> = ({
 
   return (
     <View
+      ref={ref}
       style={[alertStyles.container, style]}
       testID={testID}
       accessibilityRole="alert"
@@ -104,6 +105,8 @@ const Alert: React.FC<AlertProps> = ({
       )}
     </View>
   );
-};
+});
+
+Alert.displayName = 'Alert';
 
 export default Alert;

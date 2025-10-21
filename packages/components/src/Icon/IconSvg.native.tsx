@@ -18,23 +18,25 @@ interface IconSvgProps {
   'data-testid'?: string;
 }
 
-export const IconSvg: React.FC<IconSvgProps> = ({
+export const IconSvg = React.forwardRef<View, IconSvgProps>(({
   path,
   size = 24,
   color = 'currentColor',
   style,
   'data-testid': testID,
-}) => {
+}, ref) => {
   // Convert size to number if it's a string
   const sizeNum = typeof size === 'string' ? parseFloat(size) : size;
 
   return (
-    <View style={[{ width: sizeNum, height: sizeNum }, style]} testID={testID}>
+    <View ref={ref} style={[{ width: sizeNum, height: sizeNum }, style]} testID={testID}>
       <Svg viewBox="0 0 24 24" width={sizeNum} height={sizeNum}>
         <Path d={path} fill={color} />
       </Svg>
     </View>
   );
-};
+});
+
+IconSvg.displayName = 'IconSvg';
 
 export default IconSvg;

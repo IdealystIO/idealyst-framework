@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, forwardRef } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { SelectProps, SelectOption } from './types';
 import { selectStyles } from './Select.styles';
 
-const Select: React.FC<SelectProps> = ({
+const Select = forwardRef<View, SelectProps>(({
   options,
   value,
   onValueChange,
@@ -33,7 +33,7 @@ const Select: React.FC<SelectProps> = ({
   style,
   testID,
   accessibilityLabel,
-}) => {
+}, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number; width: number } | null>(null);
@@ -270,7 +270,7 @@ const Select: React.FC<SelectProps> = ({
   };
 
   return (
-    <View style={[selectStyles.container, style]} testID={testID}>
+    <View ref={ref} style={[selectStyles.container, style]} testID={testID}>
       {label && (
         <Text style={selectStyles.label}>
           {label}
@@ -320,6 +320,8 @@ const Select: React.FC<SelectProps> = ({
       )}
     </View>
   );
-};
+});
+
+Select.displayName = 'Select';
 
 export default Select;

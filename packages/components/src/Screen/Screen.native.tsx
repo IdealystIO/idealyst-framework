@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View as RNView, ScrollView as RNScrollView } from 'react-native';
 import { ScreenProps } from './types';
 import { screenStyles } from './Screen.styles';
 
-const Screen: React.FC<ScreenProps> = ({
+const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   children,
   background = 'primary',
   padding = 'md',
@@ -12,7 +12,7 @@ const Screen: React.FC<ScreenProps> = ({
   contentInset,
   style,
   testID,
-}) => {
+}, ref) => {
   screenStyles.useVariants({
     background,
     padding,
@@ -35,6 +35,7 @@ const Screen: React.FC<ScreenProps> = ({
   if (scrollable) {
     return (
       <RNScrollView
+        ref={ref as any}
         style={screenStyleArray}
         contentContainerStyle={contentContainerStyle}
         testID={testID}
@@ -45,10 +46,12 @@ const Screen: React.FC<ScreenProps> = ({
   }
 
   return (
-    <RNView style={screenStyleArray} testID={testID}>
+    <RNView ref={ref as any} style={screenStyleArray} testID={testID}>
       {children}
     </RNView>
   );
-};
+});
+
+Screen.displayName = 'Screen';
 
 export default Screen; 

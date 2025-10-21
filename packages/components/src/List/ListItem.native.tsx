@@ -1,10 +1,10 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 
-const ListItem: React.FC<ListItemProps> = ({
+const ListItem = forwardRef<View | TouchableOpacity, ListItemProps>(({
   id,
   label,
   children,
@@ -18,7 +18,7 @@ const ListItem: React.FC<ListItemProps> = ({
   onPress,
   style,
   testID,
-}) => {
+}, ref) => {
   const isClickable = !disabled && !!onPress;
 
   // Apply variants
@@ -82,6 +82,7 @@ const ListItem: React.FC<ListItemProps> = ({
   if (isClickable) {
     return (
       <TouchableOpacity
+        ref={ref as any}
         style={combinedStyle}
         onPress={onPress}
         disabled={disabled}
@@ -94,10 +95,12 @@ const ListItem: React.FC<ListItemProps> = ({
   }
 
   return (
-    <View style={combinedStyle} testID={testID}>
+    <View ref={ref as any} style={combinedStyle} testID={testID}>
       {content}
     </View>
   );
-};
+});
+
+ListItem.displayName = 'ListItem';
 
 export default ListItem;

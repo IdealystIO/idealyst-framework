@@ -1,15 +1,15 @@
-import React, { Children, cloneElement, isValidElement } from 'react';
+import React, { Children, cloneElement, isValidElement, forwardRef } from 'react';
 import { View } from 'react-native';
 import { listStyles } from './List.styles';
 import type { ListProps } from './types';
 
-const List: React.FC<ListProps> = ({
+const List = forwardRef<View, ListProps>(({
   children,
   variant = 'default',
   size = 'md',
   style,
   testID,
-}) => {
+}, ref) => {
   // Apply variants
   listStyles.useVariants({
     variant,
@@ -29,10 +29,12 @@ const List: React.FC<ListProps> = ({
   });
 
   return (
-    <View style={[listStyles.container, style]} testID={testID}>
+    <View ref={ref} style={[listStyles.container, style]} testID={testID}>
       {enhancedChildren}
     </View>
   );
-};
+});
+
+List.displayName = 'List';
 
 export default List;

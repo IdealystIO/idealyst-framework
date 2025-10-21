@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { tableStyles } from './Table.styles';
 import type { TableProps, TableColumn } from './types';
 
-function Table<T = any>({
+function TableInner<T = any>({
   columns,
   data,
   variant = 'default',
@@ -12,7 +12,7 @@ function Table<T = any>({
   onRowPress,
   style,
   testID,
-}: TableProps<T>) {
+}: TableProps<T>, ref: React.Ref<ScrollView>) {
   // Apply variants
   tableStyles.useVariants({
     variant,
@@ -33,6 +33,7 @@ function Table<T = any>({
 
   return (
     <ScrollView
+      ref={ref}
       horizontal
       style={[tableStyles.container, style]}
       testID={testID}
@@ -111,5 +112,11 @@ function Table<T = any>({
     </ScrollView>
   );
 }
+
+const Table = forwardRef(TableInner) as <T = any>(
+  props: TableProps<T> & { ref?: React.Ref<ScrollView> }
+) => React.ReactElement;
+
+(Table as any).displayName = 'Table';
 
 export default Table;

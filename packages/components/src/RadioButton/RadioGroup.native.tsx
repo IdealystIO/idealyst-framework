@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View } from 'react-native';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioGroupProps } from './types';
@@ -11,7 +11,7 @@ const RadioGroupContext = React.createContext<{
 
 export const useRadioGroup = () => React.useContext(RadioGroupContext);
 
-const RadioGroup: React.FC<RadioGroupProps> = ({
+const RadioGroup = forwardRef<View, RadioGroupProps>(({
   value,
   onValueChange,
   disabled = false,
@@ -19,11 +19,12 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   children,
   style,
   testID,
-}) => {
+}, ref) => {
 
   return (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>
       <View
+        ref={ref}
         style={[
           radioButtonStyles.groupContainer,
           orientation === 'horizontal' ? radioButtonStyles.groupHorizontal : radioButtonStyles.groupVertical,
@@ -36,6 +37,8 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
       </View>
     </RadioGroupContext.Provider>
   );
-};
+});
+
+RadioGroup.displayName = 'RadioGroup';
 
 export default RadioGroup;

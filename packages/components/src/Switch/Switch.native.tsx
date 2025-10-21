@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { switchStyles } from './Switch.styles';
 import Text from '../Text';
 import type { SwitchProps } from './types';
 
-const Switch: React.FC<SwitchProps> = ({
+const Switch = forwardRef<Pressable, SwitchProps>(({
   checked = false,
   onCheckedChange,
   disabled = false,
@@ -15,7 +15,7 @@ const Switch: React.FC<SwitchProps> = ({
   size = 'medium',
   style,
   testID,
-}) => {
+}, ref) => {
   switchStyles.useVariants({
     size,
     checked,
@@ -75,6 +75,7 @@ const Switch: React.FC<SwitchProps> = ({
 
   const switchElement = (
     <Pressable
+      ref={!label ? ref : undefined}
       onPress={handlePress}
       disabled={disabled}
       style={switchStyles.switchContainer}
@@ -108,6 +109,7 @@ const Switch: React.FC<SwitchProps> = ({
   if (label) {
     return (
       <Pressable
+        ref={ref}
         onPress={handlePress}
         disabled={disabled}
         style={[switchStyles.container, style]}
@@ -124,6 +126,8 @@ const Switch: React.FC<SwitchProps> = ({
   }
 
   return switchElement;
-};
+});
+
+Switch.displayName = 'Switch';
 
 export default Switch;

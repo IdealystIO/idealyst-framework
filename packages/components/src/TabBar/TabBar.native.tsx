@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { View, TouchableOpacity, Text, ScrollView } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { tabBarStyles } from './TabBar.styles';
 import type { TabBarProps } from './types';
 
-const TabBar: React.FC<TabBarProps> = ({
+const TabBar = forwardRef<View, TabBarProps>(({
   items,
   value: controlledValue,
   defaultValue,
@@ -14,7 +14,7 @@ const TabBar: React.FC<TabBarProps> = ({
   intent = 'primary',
   style,
   testID,
-}) => {
+}, ref) => {
   const firstItemValue = items[0]?.value || '';
   const [internalValue, setInternalValue] = useState(defaultValue || firstItemValue);
 
@@ -72,7 +72,7 @@ const TabBar: React.FC<TabBarProps> = ({
   });
 
   return (
-    <View style={[tabBarStyles.container, style]} testID={testID}>
+    <View ref={ref} style={[tabBarStyles.container, style]} testID={testID}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -118,6 +118,8 @@ const TabBar: React.FC<TabBarProps> = ({
       />
     </View>
   );
-};
+});
+
+TabBar.displayName = 'TabBar';
 
 export default TabBar;

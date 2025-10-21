@@ -94,15 +94,14 @@ export const PopoverExamples = () => {
         {/* Arrow Example */}
         <View spacing="md">
           <Text size="medium" weight="semibold">With Arrow</Text>
-          <View ref={arrowButtonRef} style={{ display: 'inline-block' }}>
-            <Button
-              variant="contained"
-              intent="success"
-              onPress={() => setArrowOpen(true)}
-            >
-              Popover with Arrow
-            </Button>
-          </View>
+          <Button
+            ref={arrowButtonRef}
+            variant="contained"
+            intent="success"
+            onPress={() => setArrowOpen(true)}
+          >
+            Popover with Arrow
+          </Button>
           <Popover
             open={arrowOpen}
             onOpenChange={setArrowOpen}

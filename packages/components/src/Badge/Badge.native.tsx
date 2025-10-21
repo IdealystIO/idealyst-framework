@@ -1,11 +1,11 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { View, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { BadgeProps } from './types';
 import { badgeStyles } from './Badge.styles';
 import { isIconName } from '../Icon/icon-resolver';
 
-const Badge: React.FC<BadgeProps> = ({
+const Badge = forwardRef<View, BadgeProps>(({
   children,
   icon,
   size = 'medium',
@@ -13,7 +13,7 @@ const Badge: React.FC<BadgeProps> = ({
   color = 'blue',
   style,
   testID,
-}) => {
+}, ref) => {
   badgeStyles.useVariants({
     size,
     variant: variant as any,
@@ -56,6 +56,7 @@ const Badge: React.FC<BadgeProps> = ({
 
   return (
     <View
+      ref={ref}
       style={[badgeStyles.badge, style]}
       testID={testID}
       accessibilityLabel="badge"
@@ -76,6 +77,8 @@ const Badge: React.FC<BadgeProps> = ({
       )}
     </View>
   );
-};
+});
+
+Badge.displayName = 'Badge';
 
 export default Badge; 

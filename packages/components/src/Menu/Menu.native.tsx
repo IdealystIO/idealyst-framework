@@ -1,4 +1,4 @@
-import React, { useRef, useState, isValidElement, cloneElement } from 'react';
+import React, { useRef, useState, isValidElement, cloneElement, forwardRef } from 'react';
 import {
   View,
   Modal,
@@ -10,7 +10,7 @@ import type { MenuProps, MenuItem as MenuItemType } from './types';
 import { Divider } from '../Divider';
 import MenuItem from './MenuItem.native';
 
-const Menu: React.FC<MenuProps> = ({
+const Menu = forwardRef<View, MenuProps>(({
   children,
   items,
   open,
@@ -19,7 +19,7 @@ const Menu: React.FC<MenuProps> = ({
   style,
   size,
   testID,
-}) => {
+}, ref) => {
   const triggerRef = useRef<any>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, width: 0 });
 
@@ -154,13 +154,15 @@ const Menu: React.FC<MenuProps> = ({
 
   return (
     <>
-      <View ref={triggerRef} collapsable={false}>
+      <View ref={ref} collapsable={false}>
         {trigger}
       </View>
 
       {renderMenu()}
     </>
   );
-};
+});
+
+Menu.displayName = 'Menu';
 
 export default Menu;

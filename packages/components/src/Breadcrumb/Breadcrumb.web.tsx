@@ -1,29 +1,149 @@
 import React, { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import { breadcrumbStyles } from './Breadcrumb.styles';
-import type { BreadcrumbProps, BreadcrumbItem } from './types';
+import {
+  breadcrumbContainerStyles,
+  breadcrumbItemStyles,
+  breadcrumbSeparatorStyles,
+  breadcrumbEllipsisStyles
+} from './Breadcrumb.styles';
+import type { BreadcrumbProps, BreadcrumbItem as BreadcrumbItemType } from './types';
 import { IconSvg } from '../Icon/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+
+interface BreadcrumbItemProps {
+  item: BreadcrumbItemType;
+  isLast: boolean;
+  size: BreadcrumbProps['size'];
+  intent: BreadcrumbProps['intent'];
+  itemStyle?: BreadcrumbProps['itemStyle'];
+}
+
+const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, intent, itemStyle }) => {
+  // Apply variants for this item only
+  breadcrumbItemStyles.useVariants({
+    size,
+    intent,
+    disabled: item.disabled || false,
+    isLast,
+    clickable: !!item.onPress && !item.disabled,
+  });
+
+  const itemProps = getWebProps([breadcrumbItemStyles.item]);
+  const itemTextProps = getWebProps([breadcrumbItemStyles.itemText, itemStyle]);
+  const iconProps = getWebProps([breadcrumbItemStyles.icon]);
+
+  const handleClick = () => {
+    if (!item.disabled && item.onPress) {
+      item.onPress();
+    }
+  };
+
+  const renderIcon = () => {
+    if (!item.icon) return null;
+
+    if (isIconName(item.icon)) {
+      const iconPath = resolveIconPath(item.icon);
+      return (
+        <IconSvg
+          path={iconPath}
+          {...iconProps}
+          aria-label={item.icon}
+        />
+      );
+    } else if (isValidElement(item.icon)) {
+      return item.icon;
+    }
+
+    return null;
+  };
+
+  const content = (
+    <div {...itemProps}>
+      {item.icon && (
+        <span
+          {...iconProps}
+          style={{
+            ...iconProps.style,
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {renderIcon()}
+        </span>
+      )}
+      <span {...itemTextProps}>
+        {item.label}
+      </span>
+    </div>
+  );
+
+  if (item.onPress && !item.disabled) {
+    return (
+      <button
+        onClick={handleClick}
+        style={{
+          background: 'none',
+          border: 'none',
+          padding: 0,
+          cursor: 'pointer',
+          textDecoration: 'none',
+        }}
+        disabled={item.disabled}
+        aria-current={isLast ? 'page' : undefined}
+      >
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <div aria-current={isLast ? 'page' : undefined}>
+      {content}
+    </div>
+  );
+};
+
+interface BreadcrumbSeparatorProps {
+  separator: React.ReactNode;
+  size: BreadcrumbProps['size'];
+  separatorStyle?: BreadcrumbProps['separatorStyle'];
+}
+
+const BreadcrumbSeparator: React.FC<BreadcrumbSeparatorProps> = ({ separator, size, separatorStyle }) => {
+  breadcrumbSeparatorStyles.useVariants({ size });
+  const separatorProps = getWebProps([breadcrumbSeparatorStyles.separator, separatorStyle]);
+
+  return (
+    <span {...separatorProps} aria-hidden="true">
+      {separator}
+    </span>
+  );
+};
+
+interface BreadcrumbEllipsisProps {
+  size: BreadcrumbProps['size'];
+}
+
+const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size }) => {
+  breadcrumbEllipsisStyles.useVariants({ size });
+  const ellipsisProps = getWebProps([breadcrumbEllipsisStyles.ellipsis]);
+
+  return <span {...ellipsisProps}>...</span>;
+};
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({
   items,
   separator = '/',
   maxItems,
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   style,
   itemStyle,
   separatorStyle,
   testID,
 }) => {
-  breadcrumbStyles.useVariants({
-    size,
-    intent,
-  });
-
-  const containerProps = getWebProps([breadcrumbStyles.container, style]);
-  const separatorProps = getWebProps([breadcrumbStyles.separator, separatorStyle]);
-  const ellipsisProps = getWebProps([breadcrumbStyles.ellipsis]);
+  const containerProps = getWebProps([breadcrumbContainerStyles.container, style]);
 
   // Handle truncation logic
   let displayItems = items;
@@ -36,107 +156,8 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
     displayItems = [...firstItems, ...lastItems];
   }
 
-  const renderItem = (item: BreadcrumbItem, index: number, isLast: boolean) => {
-    const iconProps = getWebProps([breadcrumbStyles.icon]);
-    const itemTextProps = getWebProps([
-      breadcrumbStyles.itemText,
-      itemStyle,
-    ]);
-
-    breadcrumbStyles.useVariants({
-      size,
-      intent,
-      disabled: item.disabled || false,
-      isLast,
-      clickable: !!item.onPress && !item.disabled,
-    });
-
-    const handleClick = () => {
-      if (!item.disabled && item.onPress) {
-        item.onPress();
-      }
-    };
-
-    // Helper to render icon
-    const renderIcon = () => {
-      if (!item.icon) return null;
-
-      if (isIconName(item.icon)) {
-        // Resolve icon name to path and render with IconSvg
-        const iconPath = resolveIconPath(item.icon);
-        return (
-          <IconSvg
-            path={iconPath}
-            {...iconProps}
-            aria-label={item.icon}
-          />
-        );
-      } else if (isValidElement(item.icon)) {
-        // Render custom component as-is
-        return item.icon;
-      }
-
-      return null;
-    };
-
-    const content = (
-      <div
-        className={getWebProps([breadcrumbStyles.item]).className}
-        style={getWebProps([breadcrumbStyles.item]).style}
-      >
-        {item.icon && (
-          <span
-            className={iconProps.className}
-            style={{
-              ...iconProps.style,
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {renderIcon()}
-          </span>
-        )}
-        <span className={itemTextProps.className} style={itemTextProps.style}>
-          {item.label}
-        </span>
-      </div>
-    );
-
-    if (item.onPress && !item.disabled) {
-      return (
-        <button
-          key={index}
-          onClick={handleClick}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            cursor: 'pointer',
-            textDecoration: 'none',
-          }}
-          disabled={item.disabled}
-          aria-current={isLast ? 'page' : undefined}
-        >
-          {content}
-        </button>
-      );
-    }
-
-    return (
-      <div key={index} aria-current={isLast ? 'page' : undefined}>
-        {content}
-      </div>
-    );
-  };
-
   return (
-    <nav
-      className={containerProps.className}
-      style={containerProps.style}
-      aria-label="Breadcrumb"
-      data-testid={testID}
-    >
+    <nav {...containerProps} aria-label="Breadcrumb" data-testid={testID}>
       {displayItems.map((item, index) => {
         const isLast = index === displayItems.length - 1;
         const shouldShowEllipsis = showEllipsis && index === 1;
@@ -145,32 +166,21 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
           <React.Fragment key={index}>
             {shouldShowEllipsis && (
               <>
-                <span
-                  className={ellipsisProps.className}
-                  style={ellipsisProps.style}
-                >
-                  ...
-                </span>
-                <span
-                  className={separatorProps.className}
-                  style={separatorProps.style}
-                  aria-hidden="true"
-                >
-                  {separator}
-                </span>
+                <BreadcrumbEllipsis size={size} />
+                <BreadcrumbSeparator separator={separator} size={size} separatorStyle={separatorStyle} />
               </>
             )}
 
-            {renderItem(item, index, isLast)}
+            <BreadcrumbItem
+              item={item}
+              isLast={isLast}
+              size={size}
+              intent={intent}
+              itemStyle={itemStyle}
+            />
 
             {!isLast && (
-              <span
-                className={separatorProps.className}
-                style={separatorProps.style}
-                aria-hidden="true"
-              >
-                {separator}
-              </span>
+              <BreadcrumbSeparator separator={separator} size={size} separatorStyle={separatorStyle} />
             )}
           </React.Fragment>
         );

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { View, Text, Image } from 'react-native';
 import { AvatarProps } from './types';
 import { avatarStyles } from './Avatar.styles';
 
-const Avatar: React.FC<AvatarProps> = ({
+const Avatar = forwardRef<View, AvatarProps>(({
   src,
   alt,
   fallback,
@@ -11,7 +11,7 @@ const Avatar: React.FC<AvatarProps> = ({
   shape = 'circle',
   style,
   testID,
-}) => {
+}, ref) => {
   const [hasError, setHasError] = useState(false);
 
   avatarStyles.useVariants({
@@ -24,7 +24,7 @@ const Avatar: React.FC<AvatarProps> = ({
   };
 
   return (
-    <View style={[avatarStyles.avatar, style]} testID={testID}>
+    <View ref={ref} style={[avatarStyles.avatar, style]} testID={testID}>
       {src && !hasError ? (
         <Image
           source={typeof src === 'string' ? { uri: src } : src}
@@ -39,6 +39,8 @@ const Avatar: React.FC<AvatarProps> = ({
       )}
     </View>
   );
-};
+});
+
+Avatar.displayName = 'Avatar';
 
 export default Avatar; 

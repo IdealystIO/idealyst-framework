@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { ActivityIndicator as RNActivityIndicator, View } from 'react-native';
 import { ActivityIndicatorProps } from './types';
 import { activityIndicatorStyles } from './ActivityIndicator.styles';
 
-const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
+const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
   animating = true,
   size = 'medium',
   intent = 'primary',
@@ -11,7 +11,7 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
   style,
   testID,
   hidesWhenStopped = true,
-}) => {
+}, ref) => {
   // Handle numeric size
   const sizeVariant = typeof size === 'number' ? 'medium' : size;
   const customSize = typeof size === 'number' ? size : undefined;
@@ -38,6 +38,7 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
         },
         style
       ]}
+      ref={ref}
       testID={testID}
     >
       <RNActivityIndicator
@@ -48,6 +49,8 @@ const ActivityIndicator: React.FC<ActivityIndicatorProps> = ({
       />
     </View>
   );
-};
+});
+
+ActivityIndicator.displayName = 'ActivityIndicator';
 
 export default ActivityIndicator;

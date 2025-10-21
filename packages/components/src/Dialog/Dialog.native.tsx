@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, forwardRef } from 'react';
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
 
-const Dialog: React.FC<DialogProps> = ({
+const Dialog = forwardRef<View, DialogProps>(({
   open,
   onOpenChange,
   title,
@@ -16,7 +16,7 @@ const Dialog: React.FC<DialogProps> = ({
   animationType = 'fade',
   style,
   testID,
-}) => {
+}, ref) => {
   const backdropOpacity = useSharedValue(0);
   const containerScale = useSharedValue(0.9);
   const containerOpacity = useSharedValue(0);
@@ -108,7 +108,7 @@ const Dialog: React.FC<DialogProps> = ({
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <Animated.View style={[dialogStyles.backdrop, backdropAnimatedStyle]}>
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <Animated.View style={[dialogStyles.container, style, containerAnimatedStyle]}>
+            <Animated.View ref={ref as any} style={[dialogStyles.container, style, containerAnimatedStyle]}>
               {(title || showCloseButton) && (
                 <View style={dialogStyles.header}>
                   {title && (
@@ -137,6 +137,8 @@ const Dialog: React.FC<DialogProps> = ({
       </TouchableWithoutFeedback>
     </Modal>
   );
-};
+});
+
+Dialog.displayName = 'Dialog';
 
 export default Dialog;

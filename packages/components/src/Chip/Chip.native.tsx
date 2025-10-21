@@ -1,11 +1,11 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { chipStyles } from './Chip.styles';
 import { isIconName } from '../Icon/icon-resolver';
 import type { ChipProps } from './types';
 
-const Chip: React.FC<ChipProps> = ({
+const Chip = forwardRef<Pressable, ChipProps>(({
   label,
   variant = 'filled',
   intent = 'primary',
@@ -19,7 +19,7 @@ const Chip: React.FC<ChipProps> = ({
   disabled = false,
   style,
   testID,
-}) => {
+}, ref) => {
   chipStyles.useVariants({
     size,
     variant,
@@ -67,8 +67,8 @@ const Chip: React.FC<ChipProps> = ({
 
   const isClickable = (onPress && !disabled) || (selectable && !disabled);
 
-  const content = (
-    <View style={[chipStyles.container, style]} testID={testID}>
+  const innerContent = (
+    <>
       {icon && <View style={chipStyles.icon}>{renderIcon()}</View>}
 
       <Text style={chipStyles.label}>{label}</Text>
@@ -89,12 +89,13 @@ const Chip: React.FC<ChipProps> = ({
           />
         </Pressable>
       )}
-    </View>
+    </>
   );
 
   if (isClickable) {
     return (
       <Pressable
+        ref={ref}
         onPress={handlePress}
         disabled={disabled}
         accessibilityRole="button"
@@ -103,12 +104,20 @@ const Chip: React.FC<ChipProps> = ({
           selected: selectable ? selected : undefined,
         }}
       >
-        {content}
+        <View style={[chipStyles.container, style]} testID={testID}>
+          {innerContent}
+        </View>
       </Pressable>
     );
   }
 
-  return content;
-};
+  return (
+    <View ref={ref as any} style={[chipStyles.container, style]} testID={testID}>
+      {innerContent}
+    </View>
+  );
+});
+
+Chip.displayName = 'Chip';
 
 export default Chip;

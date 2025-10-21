@@ -1,25 +1,167 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, LayoutAnimation, Platform, UIManager } from 'react-native';
+import React, { useState, forwardRef, useEffect } from 'react';
+import { View, TouchableOpacity, LayoutChangeEvent } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { accordionStyles } from './Accordion.styles';
 import Text from '../Text';
-import type { AccordionProps } from './types';
+import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
 
-// Enable LayoutAnimation on Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
+interface AccordionItemProps {
+  item: AccordionItemType;
+  isExpanded: boolean;
+  onToggle: () => void;
+  size: AccordionProps['size'];
+  variant: AccordionProps['variant'];
+  intent: AccordionProps['intent'];
+  isLast: boolean;
+  testID?: string;
 }
 
-const Accordion: React.FC<AccordionProps> = ({
+const AccordionItem: React.FC<AccordionItemProps> = ({
+  item,
+  isExpanded,
+  onToggle,
+  size,
+  variant,
+  intent,
+  isLast,
+  testID,
+}) => {
+  const contentHeight = useSharedValue(0);
+  const iconRotation = useSharedValue(0);
+  const [measuredHeight, setMeasuredHeight] = useState(0);
+
+  // Apply item-specific variants
+  accordionStyles.useVariants({
+    variant,
+    isLast,
+    size,
+    expanded: isExpanded,
+    disabled: Boolean(item.disabled),
+    intent,
+  });
+
+  const iconStyle = accordionStyles.icon;
+  const headerTextColor = accordionStyles.header.color || '#000';
+
+  // Animate height and icon rotation when expanded state changes
+  useEffect(() => {
+    contentHeight.value = withTiming(
+      isExpanded ? measuredHeight : 0,
+      {
+        duration: 250,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1), // Material Design standard easing
+      }
+    );
+    iconRotation.value = withTiming(
+      isExpanded ? 180 : 0,
+      {
+        duration: 200,
+        easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+      }
+    );
+  }, [isExpanded, measuredHeight]);
+
+  const animatedContentStyle = useAnimatedStyle(() => ({
+    height: contentHeight.value,
+    overflow: 'hidden',
+  }));
+
+  const animatedIconStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${iconRotation.value}deg` }],
+  }));
+
+  const handleContentLayout = (event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout;
+    if (height > 0 && height !== measuredHeight) {
+      setMeasuredHeight(height);
+    }
+  };
+
+  return (
+    <View style={accordionStyles.item} testID={testID}>
+      <TouchableOpacity
+        style={accordionStyles.header}
+        onPress={onToggle}
+        disabled={item.disabled}
+        activeOpacity={0.7}
+      >
+        <View style={accordionStyles.title}>
+          <Text style={{ color: headerTextColor }}>
+            {item.title}
+          </Text>
+        </View>
+        <Animated.View style={[accordionStyles.icon, animatedIconStyle]}>
+          <MaterialCommunityIcons
+            name="chevron-down"
+            size={iconStyle.width || 20}
+            color={iconStyle.color || headerTextColor}
+          />
+        </Animated.View>
+      </TouchableOpacity>
+
+      {/* Hidden view for measuring content height */}
+      <View
+        style={{ position: 'absolute', opacity: 0, zIndex: -1 }}
+        onLayout={handleContentLayout}
+      >
+        <View
+          style={{
+            padding: accordionStyles.contentInner.padding,
+            paddingTop: accordionStyles.contentInner.paddingTop,
+          }}
+        >
+          {typeof item.content === 'string' ? (
+            <Text
+              style={{
+                color: accordionStyles.contentInner.color,
+                fontSize: accordionStyles.contentInner.fontSize,
+              }}
+            >
+              {item.content}
+            </Text>
+          ) : (
+            item.content
+          )}
+        </View>
+      </View>
+
+      {/* Animated visible content */}
+      <Animated.View style={animatedContentStyle}>
+        <View
+          style={{
+            padding: accordionStyles.contentInner.padding,
+            paddingTop: accordionStyles.contentInner.paddingTop,
+          }}
+        >
+          {typeof item.content === 'string' ? (
+            <Text
+              style={{
+                color: accordionStyles.contentInner.color,
+                fontSize: accordionStyles.contentInner.fontSize,
+              }}
+            >
+              {item.content}
+            </Text>
+          ) : (
+            item.content
+          )}
+        </View>
+      </Animated.View>
+    </View>
+  );
+};
+
+const Accordion = forwardRef<View, AccordionProps>(({
   items,
   allowMultiple = false,
   defaultExpanded = [],
   variant = 'default',
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   style,
   testID,
-}) => {
+}, ref) => {
   const [expandedItems, setExpandedItems] = useState<string[]>(defaultExpanded);
 
   // Apply variants
@@ -31,9 +173,6 @@ const Accordion: React.FC<AccordionProps> = ({
 
   const toggleItem = (itemId: string, disabled?: boolean) => {
     if (disabled) return;
-
-    // Configure layout animation
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
     setExpandedItems((prev) => {
       const isExpanded = prev.includes(itemId);
@@ -49,70 +188,24 @@ const Accordion: React.FC<AccordionProps> = ({
   };
 
   return (
-    <View style={[accordionStyles.container, style]} testID={testID}>
-      {items.map((item, index) => {
-        const isExpanded = expandedItems.includes(item.id);
-        const isLast = index === items.length - 1;
-
-        // Apply item-specific variants
-        const itemStylesheet = accordionStyles;
-        itemStylesheet.useVariants({
-          variant,
-          isLast,
-          size,
-          expanded: isExpanded,
-          disabled: Boolean(item.disabled),
-          intent,
-        });
-
-        const iconStyle = accordionStyles.icon;
-        const headerTextColor = accordionStyles.header.color || '#000';
-
-        return (
-          <View
-            key={item.id}
-            style={accordionStyles.item}
-            testID={`${testID}-item-${item.id}`}
-          >
-            <TouchableOpacity
-              style={accordionStyles.header}
-              onPress={() => toggleItem(item.id, item.disabled)}
-              disabled={item.disabled}
-              activeOpacity={0.7}
-            >
-              <View style={accordionStyles.title}>
-                <Text style={{ color: headerTextColor }}>
-                  {item.title}
-                </Text>
-              </View>
-              <View
-                style={[
-                  accordionStyles.icon,
-                  {
-                    transform: [{ rotate: isExpanded ? '180deg' : '0deg' }],
-                  },
-                ]}
-              >
-                <MaterialCommunityIcons
-                  name="chevron-down"
-                  size={iconStyle.width || 20}
-                  color={iconStyle.color || headerTextColor}
-                />
-              </View>
-            </TouchableOpacity>
-
-            {isExpanded && (
-              <View style={accordionStyles.content}>
-                <View style={accordionStyles.contentInner}>
-                  {item.content}
-                </View>
-              </View>
-            )}
-          </View>
-        );
-      })}
+    <View ref={ref} style={[accordionStyles.container, style]} testID={testID}>
+      {items.map((item, index) => (
+        <AccordionItem
+          key={item.id}
+          item={item}
+          isExpanded={expandedItems.includes(item.id)}
+          onToggle={() => toggleItem(item.id, item.disabled)}
+          size={size}
+          variant={variant}
+          intent={intent}
+          isLast={index === items.length - 1}
+          testID={`${testID}-item-${item.id}`}
+        />
+      ))}
     </View>
   );
-};
+});
+
+Accordion.displayName = 'Accordion';
 
 export default Accordion;

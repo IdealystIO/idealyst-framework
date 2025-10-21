@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect, isValidElement, cloneElement } from 'react';
+import React, { useState, useRef, useEffect, isValidElement, cloneElement, forwardRef } from 'react';
 import { View, Modal, Text, Pressable } from 'react-native';
 import { tooltipStyles } from './Tooltip.styles';
 import type { TooltipProps } from './types';
 
-const Tooltip: React.FC<TooltipProps> = ({
+const Tooltip = forwardRef<View, TooltipProps>(({
   content,
   children,
   placement = 'top',
@@ -12,7 +12,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   size = 'medium',
   style,
   testID,
-}) => {
+}, ref) => {
   const [visible, setVisible] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, width: 0 });
   const triggerRef = useRef<any>(null);
@@ -128,7 +128,7 @@ const Tooltip: React.FC<TooltipProps> = ({
 
   return (
     <>
-      <View ref={triggerRef} collapsable={false} style={style}>
+      <View ref={ref} collapsable={false} style={style}>
         {trigger}
       </View>
 
@@ -160,6 +160,8 @@ const Tooltip: React.FC<TooltipProps> = ({
       )}
     </>
   );
-};
+});
+
+Tooltip.displayName = 'Tooltip';
 
 export default Tooltip;

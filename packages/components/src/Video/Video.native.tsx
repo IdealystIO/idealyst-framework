@@ -13,7 +13,7 @@ try {
   console.warn('react-native-video not installed. Video component will not work on native.');
 }
 
-const Video: React.FC<VideoProps> = ({
+const Video = React.forwardRef<View, VideoProps>(({
   source,
   poster,
   width,
@@ -32,13 +32,13 @@ const Video: React.FC<VideoProps> = ({
   borderRadius,
   style,
   testID,
-}) => {
+}, ref) => {
   // Apply variants
   videoStyles.useVariants({});
 
   if (!RNVideo) {
     return (
-      <View style={[videoStyles.container, { width, height, aspectRatio, borderRadius }, style]} testID={testID}>
+      <View ref={ref} style={[videoStyles.container, { width, height, aspectRatio, borderRadius }, style]} testID={testID}>
         <View style={videoStyles.fallback}>
           {/* Fallback when react-native-video is not installed */}
         </View>
@@ -83,7 +83,7 @@ const Video: React.FC<VideoProps> = ({
   };
 
   return (
-    <View style={containerStyle} testID={testID}>
+    <View ref={ref} style={containerStyle} testID={testID}>
       <RNVideo
         source={videoSource}
         poster={poster}
@@ -102,6 +102,8 @@ const Video: React.FC<VideoProps> = ({
       />
     </View>
   );
-};
+});
+
+Video.displayName = 'Video';
 
 export default Video;

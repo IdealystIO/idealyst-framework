@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, forwardRef } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -11,7 +11,7 @@ import Animated, {
 import { skeletonStyles } from './Skeleton.styles';
 import type { SkeletonProps, SkeletonGroupProps } from './types';
 
-const Skeleton: React.FC<SkeletonProps> = ({
+const Skeleton = forwardRef<View, SkeletonProps>(({
   width = '100%',
   height = 20,
   shape = 'rectangle',
@@ -19,7 +19,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
   animation = 'pulse',
   style,
   testID,
-}) => {
+}, ref) => {
   skeletonStyles.useVariants({
     shape,
     animation,
@@ -79,6 +79,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
 
   return (
     <Animated.View
+      ref={ref as any}
       style={[
         skeletonStyles.skeleton,
         customStyles,
@@ -104,7 +105,9 @@ const Skeleton: React.FC<SkeletonProps> = ({
       )}
     </Animated.View>
   );
-};
+});
+
+Skeleton.displayName = 'Skeleton';
 
 export const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
   count = 3,

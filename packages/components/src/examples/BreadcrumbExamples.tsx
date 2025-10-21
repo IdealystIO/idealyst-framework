@@ -64,161 +64,169 @@ export const BreadcrumbExamples = () => {
   ];
 
   return (
-    <Screen background="primary" safeArea>
-      <View spacing="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
+    <Screen background="primary" safeArea padding="lg">
+      <View spacing="xl" style={{ maxWidth: 800, width: '100%', marginHorizontal: 'auto' }}>
         <Text size="xlarge" weight="bold">Breadcrumb Examples</Text>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Basic Breadcrumb</Text>
+        <View spacing="md">
+          <Text size="large" weight="semibold">Basic Breadcrumb</Text>
+          <Breadcrumb items={basicItems} />
+        </View>
 
-        <Breadcrumb items={basicItems} />
+        <View spacing="md">
+          <Text size="large" weight="semibold">With Icons (Components)</Text>
+          <Breadcrumb items={withIconsItems} />
+          <Text size="small" color="secondary">Using Icon components</Text>
+        </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">With Icons (Components)</Text>
+        <View spacing="md">
+          <Text size="large" weight="semibold">With Icons (Icon Names)</Text>
+          <Breadcrumb items={withIconNamesItems} />
+          <Text size="small" color="secondary">Using icon name strings (recommended)</Text>
+        </View>
 
-        <Breadcrumb items={withIconsItems} />
-        <Text size="small" color="secondary">Using Icon components</Text>
+        <View spacing="md">
+          <Text size="large" weight="semibold">Custom Separator</Text>
+          <View spacing="sm">
+            <Breadcrumb items={basicItems} separator=">" />
+            <Breadcrumb items={basicItems} separator="•" />
+            <Breadcrumb items={basicItems} separator={<Icon name="chevron-right" size="sm" />} />
+          </View>
+        </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">With Icons (Icon Names)</Text>
+        <View spacing="md">
+          <Text size="large" weight="semibold">Sizes</Text>
+          <View spacing="sm">
+            <View spacing="xs">
+              <Text size="medium" weight="semibold">Small</Text>
+              <Breadcrumb items={basicItems} size="sm" />
+            </View>
+            <View spacing="xs">
+              <Text size="medium" weight="semibold">Medium (Default)</Text>
+              <Breadcrumb items={basicItems} size="md" />
+            </View>
+            <View spacing="xs">
+              <Text size="medium" weight="semibold">Large</Text>
+              <Breadcrumb items={basicItems} size="lg" />
+            </View>
+          </View>
+        </View>
 
-        <Breadcrumb items={withIconNamesItems} />
-        <Text size="small" color="secondary">Using icon name strings (recommended)</Text>
+        <View spacing="md">
+          <Text size="large" weight="semibold">Intent Colors</Text>
+          <View spacing="sm">
+            <View spacing="xs">
+              <Text size="medium" weight="semibold">Primary (Default)</Text>
+              <Breadcrumb items={basicItems} intent="primary" />
+            </View>
+            <View spacing="xs">
+              <Text size="medium" weight="semibold">Neutral</Text>
+              <Breadcrumb items={basicItems} intent="neutral" />
+            </View>
+          </View>
+        </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Custom Separator</Text>
+        <View spacing="md">
+          <Text size="large" weight="semibold">Truncation</Text>
+          <View spacing="sm">
+            <View spacing="xs">
+              <Text size="small" color="secondary">Full path (7 items):</Text>
+              <Breadcrumb items={longPathItems} />
+            </View>
+            <View spacing="xs">
+              <Text size="small" color="secondary">Truncated to 4 items (shows first + last 3):</Text>
+              <Breadcrumb items={longPathItems} maxItems={4} />
+            </View>
+            <View spacing="xs">
+              <Text size="small" color="secondary">Truncated to 3 items (shows first + last 2):</Text>
+              <Breadcrumb items={longPathItems} maxItems={3} />
+            </View>
+          </View>
+        </View>
 
-        <Breadcrumb
-          items={basicItems}
-          separator=">"
-        />
+        <View spacing="md">
+          <Text size="large" weight="semibold">With Disabled Items</Text>
+          <Breadcrumb
+            items={[
+              { label: 'Home', onPress: () => console.log('Home') },
+              { label: 'Disabled Level', onPress: () => console.log('Disabled'), disabled: true },
+              { label: 'Active Level', onPress: () => console.log('Active') },
+              { label: 'Current Page' },
+            ]}
+          />
+        </View>
 
-        <Breadcrumb
-          items={basicItems}
-          separator="•"
-        />
+        <View spacing="md">
+          <Text size="large" weight="semibold">Non-clickable Items</Text>
+          <Breadcrumb
+            items={[
+              { label: 'Home' },
+              { label: 'Products' },
+              { label: 'Category' },
+              { label: 'Item' },
+            ]}
+          />
+          <Text size="small" color="secondary">None of these items are clickable</Text>
+        </View>
 
-        <Breadcrumb
-          items={basicItems}
-          separator={<Icon name="chevron-right" size="sm" />}
-        />
+        <View spacing="md">
+          <Text size="large" weight="semibold">Mixed Clickable & Non-clickable</Text>
+          <Breadcrumb
+            items={[
+              { label: 'Home', onPress: () => console.log('Home') },
+              { label: 'Static Section' },
+              { label: 'Products', onPress: () => console.log('Products') },
+              { label: 'Current Product' },
+            ]}
+          />
+        </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Sizes</Text>
+        <View spacing="md">
+          <Text size="large" weight="semibold">File System Example</Text>
+          <Breadcrumb
+            items={[
+              {
+                label: 'Root',
+                icon: <Icon name="harddisk" size="sm" />,
+                onPress: () => console.log('Root'),
+              },
+              {
+                label: 'Users',
+                icon: <Icon name="account-group" size="sm" />,
+                onPress: () => console.log('Users'),
+              },
+              {
+                label: 'Documents',
+                icon: <Icon name="folder" size="sm" />,
+                onPress: () => console.log('Documents'),
+              },
+              {
+                label: 'project-files',
+                icon: <Icon name="folder-open" size="sm" />,
+                onPress: () => console.log('project-files'),
+              },
+              {
+                label: 'index.tsx',
+                icon: <Icon name="file-document" size="sm" />,
+              },
+            ]}
+            separator="/"
+          />
+        </View>
 
-        <Text size="medium" weight="semibold">Small</Text>
-        <Breadcrumb items={basicItems} size="small" />
-
-        <Text size="medium" weight="semibold">Medium (Default)</Text>
-        <Breadcrumb items={basicItems} size="medium" />
-
-        <Text size="medium" weight="semibold">Large</Text>
-        <Breadcrumb items={basicItems} size="large" />
-
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Intent Colors</Text>
-
-        <Text size="medium" weight="semibold">Primary (Default)</Text>
-        <Breadcrumb items={basicItems} intent="primary" />
-
-        <Text size="medium" weight="semibold">Neutral</Text>
-        <Breadcrumb items={basicItems} intent="neutral" />
-
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Truncation</Text>
-
-        <Text size="small" color="secondary">Full path (7 items):</Text>
-        <Breadcrumb items={longPathItems} />
-
-        <Text size="small" color="secondary">Truncated to 4 items (shows first + last 3):</Text>
-        <Breadcrumb items={longPathItems} maxItems={4} />
-
-        <Text size="small" color="secondary">Truncated to 3 items (shows first + last 2):</Text>
-        <Breadcrumb items={longPathItems} maxItems={3} />
-
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">With Disabled Items</Text>
-
-        <Breadcrumb
-          items={[
-            { label: 'Home', onPress: () => console.log('Home') },
-            { label: 'Disabled Level', onPress: () => console.log('Disabled'), disabled: true },
-            { label: 'Active Level', onPress: () => console.log('Active') },
-            { label: 'Current Page' },
-          ]}
-        />
-
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Non-clickable Items</Text>
-
-        <Breadcrumb
-          items={[
-            { label: 'Home' },
-            { label: 'Products' },
-            { label: 'Category' },
-            { label: 'Item' },
-          ]}
-        />
-        <Text size="small" color="secondary">None of these items are clickable</Text>
-
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Mixed Clickable & Non-clickable</Text>
-
-        <Breadcrumb
-          items={[
-            { label: 'Home', onPress: () => console.log('Home') },
-            { label: 'Static Section' },
-            { label: 'Products', onPress: () => console.log('Products') },
-            { label: 'Current Product' },
-          ]}
-        />
-
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">File System Example</Text>
-
-        <Breadcrumb
-          items={[
-            {
-              label: 'Root',
-              icon: <Icon name="harddisk" size="sm" />,
-              onPress: () => console.log('Root'),
-            },
-            {
-              label: 'Users',
-              icon: <Icon name="account-group" size="sm" />,
-              onPress: () => console.log('Users'),
-            },
-            {
-              label: 'Documents',
-              icon: <Icon name="folder" size="sm" />,
-              onPress: () => console.log('Documents'),
-            },
-            {
-              label: 'project-files',
-              icon: <Icon name="folder-open" size="sm" />,
-              onPress: () => console.log('project-files'),
-            },
-            {
-              label: 'index.tsx',
-              icon: <Icon name="file-document" size="sm" />,
-            },
-          ]}
-          separator="/"
-        />
-
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">E-commerce Example</Text>
-
-        <Breadcrumb
-          items={[
-            { label: 'Shop', onPress: () => console.log('Shop') },
-            { label: 'Electronics', onPress: () => console.log('Electronics') },
-            { label: 'Computers', onPress: () => console.log('Computers') },
-            { label: 'Laptops', onPress: () => console.log('Laptops') },
-            { label: 'Gaming Laptops' },
-          ]}
-          size="small"
-        />
+        <View spacing="md">
+          <Text size="large" weight="semibold">E-commerce Example</Text>
+          <Breadcrumb
+            items={[
+              { label: 'Shop', onPress: () => console.log('Shop') },
+              { label: 'Electronics', onPress: () => console.log('Electronics') },
+              { label: 'Computers', onPress: () => console.log('Computers') },
+              { label: 'Laptops', onPress: () => console.log('Laptops') },
+              { label: 'Gaming Laptops' },
+            ]}
+            size="sm"
+          />
+        </View>
       </View>
     </Screen>
   );

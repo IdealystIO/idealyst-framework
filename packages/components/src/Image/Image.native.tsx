@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { Image as RNImage, View } from 'react-native';
 import { imageStyles } from './Image.styles';
 import type { ImageProps } from './types';
 import ActivityIndicator from '../ActivityIndicator';
 
-const Image: React.FC<ImageProps> = ({
+const Image = forwardRef<View, ImageProps>(({
   source,
   alt,
   width,
@@ -19,7 +19,7 @@ const Image: React.FC<ImageProps> = ({
   style,
   testID,
   accessibilityLabel,
-}) => {
+}, ref) => {
   // Apply variants
   imageStyles.useVariants({});
 
@@ -58,7 +58,7 @@ const Image: React.FC<ImageProps> = ({
   ];
 
   return (
-    <View style={containerStyle} testID={testID}>
+    <View ref={ref} style={containerStyle} testID={testID}>
       <RNImage
         source={imageSource as any}
         style={[imageStyles.image, { borderRadius }]}
@@ -81,6 +81,8 @@ const Image: React.FC<ImageProps> = ({
       )}
     </View>
   );
-};
+});
+
+Image.displayName = 'Image';
 
 export default Image;

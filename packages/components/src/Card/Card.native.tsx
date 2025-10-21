@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View, Pressable } from 'react-native';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
 
-const Card: React.FC<CardProps> = ({
+const Card = forwardRef<View | Pressable, CardProps>(({
   children,
   variant = 'default',
   padding = 'medium',
@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = ({
   style,
   testID,
   accessibilityLabel,
-}) => {
+}, ref) => {
   // Apply variants
   cardStyles.useVariants({
     variant: variant as any,
@@ -30,6 +30,7 @@ const Card: React.FC<CardProps> = ({
   const Component = clickable ? Pressable : View;
 
   const componentProps = {
+    ref: ref as any,
     style: [cardStyles.card, style],
     testID,
     accessibilityLabel,
@@ -47,6 +48,8 @@ const Card: React.FC<CardProps> = ({
       {children}
     </Component>
   );
-};
+});
+
+Card.displayName = 'Card';
 
 export default Card; 

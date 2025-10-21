@@ -90,15 +90,15 @@ export const accordionStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
           padding: 10,
         },
-        medium: {
+        md: {
           fontSize: 16,
           padding: 14,
         },
-        large: {
+        lg: {
           fontSize: 18,
           padding: 18,
         },
@@ -186,17 +186,17 @@ export const accordionStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
           padding: 10,
           paddingTop: 0,
         },
-        medium: {
+        md: {
           fontSize: 16,
           padding: 14,
           paddingTop: 0,
         },
-        large: {
+        lg: {
           fontSize: 18,
           padding: 18,
           paddingTop: 0,

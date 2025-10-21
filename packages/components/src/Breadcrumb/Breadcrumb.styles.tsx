@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 
-export const breadcrumbStyles = StyleSheet.create((theme) => ({
+// Container stylesheet (no variants needed)
+export const breadcrumbContainerStyles = StyleSheet.create((theme) => ({
   container: {
     display: 'flex',
     flexDirection: 'row',
@@ -8,7 +9,10 @@ export const breadcrumbStyles = StyleSheet.create((theme) => ({
     flexWrap: 'nowrap',
     gap: 8,
   },
+}));
 
+// Item stylesheet
+export const breadcrumbItemStyles = StyleSheet.create((theme) => ({
   item: {
     display: 'flex',
     flexDirection: 'row',
@@ -21,15 +25,15 @@ export const breadcrumbStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 12,
           lineHeight: 16,
         },
-        medium: {
+        md: {
           fontSize: 14,
           lineHeight: 20,
         },
-        large: {
+        lg: {
           fontSize: 16,
           lineHeight: 24,
         },
@@ -90,59 +94,65 @@ export const breadcrumbStyles = StyleSheet.create((theme) => ({
   icon: {
     variants: {
       size: {
-        small: {
+        sm: {
           width: 14,
           height: 14,
         },
-        medium: {
+        md: {
           width: 16,
           height: 16,
         },
-        large: {
+        lg: {
           width: 18,
           height: 18,
         },
       },
     },
   },
+}));
 
+// Separator stylesheet
+export const breadcrumbSeparatorStyles = StyleSheet.create((theme) => ({
   separator: {
     fontFamily: theme.typography.fontFamily.regular,
     color: theme.colors.text.tertiary,
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 12,
           lineHeight: 16,
         },
-        medium: {
+        md: {
           fontSize: 14,
           lineHeight: 20,
         },
-        large: {
+        lg: {
           fontSize: 16,
           lineHeight: 24,
         },
       },
     },
   },
+}));
 
+// Ellipsis stylesheet
+export const breadcrumbEllipsisStyles = StyleSheet.create((theme) => ({
   ellipsis: {
     fontFamily: theme.typography.fontFamily.medium,
     color: theme.colors.text.secondary,
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 12,
           lineHeight: 16,
         },
-        medium: {
+        md: {
           fontSize: 14,
           lineHeight: 20,
         },
-        large: {
+        lg: {
           fontSize: 16,
           lineHeight: 24,
         },

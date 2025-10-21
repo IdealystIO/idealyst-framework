@@ -86,6 +86,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   // Determine if we need to wrap content in icon container
   const hasIcons = leftIcon || rightIcon;
 
+  // Merge unistyles web ref with forwarded ref
   const mergedRef = useMergeRefs(ref, webProps.ref);
 
   return (

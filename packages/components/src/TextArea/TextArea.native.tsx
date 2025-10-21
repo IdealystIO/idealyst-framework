@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { View, TextInput, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from 'react-native';
 import { textAreaStyles } from './TextArea.styles';
 import Text from '../Text';
 import type { TextAreaProps } from './types';
 
-const TextArea: React.FC<TextAreaProps> = ({
+const TextArea = forwardRef<TextInput, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',
   onChange,
@@ -24,7 +24,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   style,
   textareaStyle,
   testID,
-}) => {
+}, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
 
@@ -115,6 +115,7 @@ const TextArea: React.FC<TextAreaProps> = ({
 
       <View style={textAreaStyles.textareaContainer}>
         <TextInput
+          ref={ref}
           style={[
             textAreaStyles.textarea,
             {
@@ -160,6 +161,8 @@ const TextArea: React.FC<TextAreaProps> = ({
       )}
     </View>
   );
-};
+});
+
+TextArea.displayName = 'TextArea';
 
 export default TextArea;

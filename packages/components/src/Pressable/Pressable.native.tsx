@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { PressableProps } from './types';
 
-const Pressable: React.FC<PressableProps> = ({
+const Pressable = forwardRef<View, PressableProps>(({
   children,
   onPress,
   onPressIn,
@@ -12,7 +12,7 @@ const Pressable: React.FC<PressableProps> = ({
   testID,
   accessibilityLabel,
   accessibilityRole,
-}) => {
+}, ref) => {
   return (
     <TouchableWithoutFeedback
       onPress={disabled ? undefined : onPress}
@@ -23,11 +23,13 @@ const Pressable: React.FC<PressableProps> = ({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole={accessibilityRole}
     >
-      <View style={style}>
+      <View ref={ref} style={style}>
         {children}
       </View>
     </TouchableWithoutFeedback>
   );
-};
+});
+
+Pressable.displayName = 'Pressable';
 
 export default Pressable;

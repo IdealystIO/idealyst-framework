@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CheckboxProps } from './types';
 import { checkboxStyles, checkboxLabelStyles, checkboxCheckmarkStyles, checkboxHelperStyles } from './Checkbox.styles';
 
-const Checkbox: React.FC<CheckboxProps> = ({
+const Checkbox = forwardRef<View, CheckboxProps>(({
   checked = false,
   indeterminate = false,
   disabled = false,
@@ -20,7 +20,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   required = false,
   error,
   helperText,
-}) => {
+}, ref) => {
   const [internalChecked, setInternalChecked] = useState(checked);
   
   useEffect(() => {
@@ -65,7 +65,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   const displayHelperText = error || helperText;
 
   return (
-    <View style={[checkboxStyles.wrapper, style]}>
+    <View ref={ref} style={[checkboxStyles.wrapper, style]}>
       <Pressable
         onPress={handlePress}
         disabled={disabled}
@@ -97,6 +97,8 @@ const Checkbox: React.FC<CheckboxProps> = ({
       )}
     </View>
   );
-};
+});
+
+Checkbox.displayName = 'Checkbox';
 
 export default Checkbox; 

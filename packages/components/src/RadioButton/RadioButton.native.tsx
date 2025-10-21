@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View, Pressable, Animated } from 'react-native';
 import Text from '../Text';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioButtonProps } from './types';
 import { useRadioGroup } from './RadioGroup.native';
 
-const RadioButton: React.FC<RadioButtonProps> = ({
+const RadioButton = forwardRef<Pressable, RadioButtonProps>(({
   value,
   checked: checkedProp,
   onPress,
@@ -15,7 +15,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   intent = 'primary',
   style,
   testID,
-}) => {
+}, ref) => {
   const group = useRadioGroup();
 
   const checked = group.value !== undefined ? group.value === value : checkedProp;
@@ -57,6 +57,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
 
   return (
     <Pressable
+      ref={ref}
       onPress={handlePress}
       disabled={disabled}
       style={[radioButtonStyles.container, style]}
@@ -81,6 +82,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       )}
     </Pressable>
   );
-};
+});
+
+RadioButton.displayName = 'RadioButton';
 
 export default RadioButton;

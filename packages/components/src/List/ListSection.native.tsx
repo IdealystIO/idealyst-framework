@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { View, Text } from 'react-native';
 import { listStyles } from './List.styles';
 import type { ListSectionProps } from './types';
 
-const ListSection: React.FC<ListSectionProps> = ({
+const ListSection = forwardRef<View, ListSectionProps>(({
   title,
   children,
   collapsed = false,
   style,
   testID,
-}) => {
+}, ref) => {
   return (
-    <View style={[listStyles.section, style]} testID={testID}>
+    <View ref={ref} style={[listStyles.section, style]} testID={testID}>
       {title && (
         <Text style={listStyles.sectionTitle}>
           {title}
@@ -24,6 +24,8 @@ const ListSection: React.FC<ListSectionProps> = ({
       )}
     </View>
   );
-};
+});
+
+ListSection.displayName = 'ListSection';
 
 export default ListSection;

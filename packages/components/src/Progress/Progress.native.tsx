@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, forwardRef } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -15,7 +15,7 @@ import type { ProgressProps } from './types';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const Progress: React.FC<ProgressProps> = ({
+const Progress = forwardRef<View, ProgressProps>(({
   value = 0,
   max = 100,
   variant = 'linear',
@@ -27,7 +27,7 @@ const Progress: React.FC<ProgressProps> = ({
   rounded = true,
   style,
   testID,
-}) => {
+}, ref) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
   // Apply variants
@@ -154,7 +154,7 @@ const Progress: React.FC<ProgressProps> = ({
   });
 
   return (
-    <View style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
+    <View ref={ref} style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
       <View style={progressStyles.linearTrack}>
         {indeterminate ? (
           <Animated.View style={[progressStyles.indeterminateBar, indeterminateAnimatedStyle]} />
@@ -169,6 +169,8 @@ const Progress: React.FC<ProgressProps> = ({
       )}
     </View>
   );
-};
+});
+
+Progress.displayName = 'Progress';
 
 export default Progress;

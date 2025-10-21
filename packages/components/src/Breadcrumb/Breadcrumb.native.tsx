@@ -1,24 +1,115 @@
-import React from 'react';
+import React, { forwardRef, isValidElement } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { breadcrumbStyles } from './Breadcrumb.styles';
-import type { BreadcrumbProps, BreadcrumbItem } from './types';
+import {
+  breadcrumbContainerStyles,
+  breadcrumbItemStyles,
+  breadcrumbSeparatorStyles,
+  breadcrumbEllipsisStyles
+} from './Breadcrumb.styles';
+import type { BreadcrumbProps, BreadcrumbItem as BreadcrumbItemType } from './types';
+import Icon from '../Icon';
+import type { IconName } from '../Icon/icon-types';
 
-const Breadcrumb: React.FC<BreadcrumbProps> = ({
+interface BreadcrumbItemProps {
+  item: BreadcrumbItemType;
+  isLast: boolean;
+  size: BreadcrumbProps['size'];
+  intent: BreadcrumbProps['intent'];
+  itemStyle?: BreadcrumbProps['itemStyle'];
+}
+
+const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, intent, itemStyle }) => {
+  // Apply variants for this item only
+  breadcrumbItemStyles.useVariants({
+    size,
+    intent,
+    disabled: item.disabled || false,
+    isLast,
+    clickable: !!item.onPress && !item.disabled,
+  });
+
+  const iconStyle = breadcrumbItemStyles.icon;
+
+  const renderIcon = () => {
+    if (!item.icon) return null;
+
+    if (typeof item.icon === 'string') {
+      const iconSize = iconStyle.width || 16;
+      return (
+        <Icon
+          name={item.icon as IconName}
+          size={iconSize}
+          style={iconStyle}
+        />
+      );
+    } else if (isValidElement(item.icon)) {
+      return item.icon;
+    }
+
+    return null;
+  };
+
+  const content = (
+    <View style={[breadcrumbItemStyles.item, itemStyle]}>
+      {item.icon && <View style={iconStyle}>{renderIcon()}</View>}
+      <Text style={breadcrumbItemStyles.itemText}>{item.label}</Text>
+    </View>
+  );
+
+  if (item.onPress && !item.disabled) {
+    return (
+      <Pressable
+        onPress={item.onPress}
+        disabled={item.disabled}
+        accessibilityRole="link"
+        accessibilityState={{
+          disabled: item.disabled,
+        }}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
+  return <View>{content}</View>;
+};
+
+interface BreadcrumbSeparatorProps {
+  separator: React.ReactNode;
+  size: BreadcrumbProps['size'];
+  separatorStyle?: BreadcrumbProps['separatorStyle'];
+}
+
+const BreadcrumbSeparator: React.FC<BreadcrumbSeparatorProps> = ({ separator, size, separatorStyle }) => {
+  breadcrumbSeparatorStyles.useVariants({ size });
+  const sepStyle = breadcrumbSeparatorStyles.separator;
+
+  if (typeof separator === 'string') {
+    return <Text style={[sepStyle, separatorStyle]}>{separator}</Text>;
+  }
+  return <View style={[sepStyle, separatorStyle]}>{separator}</View>;
+};
+
+interface BreadcrumbEllipsisProps {
+  size: BreadcrumbProps['size'];
+}
+
+const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size }) => {
+  breadcrumbEllipsisStyles.useVariants({ size });
+  return <Text style={breadcrumbEllipsisStyles.ellipsis}>...</Text>;
+};
+
+const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
   items,
   separator = '/',
   maxItems,
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   style,
   itemStyle,
   separatorStyle,
   testID,
-}) => {
-  breadcrumbStyles.useVariants({
-    size,
-    intent,
-  });
-
+}, ref) => {
   // Handle truncation logic
   let displayItems = items;
   let showEllipsis = false;
@@ -30,44 +121,10 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
     displayItems = [...firstItems, ...lastItems];
   }
 
-  const renderItem = (item: BreadcrumbItem, index: number, isLast: boolean) => {
-    breadcrumbStyles.useVariants({
-      size,
-      intent,
-      disabled: item.disabled || false,
-      isLast,
-      clickable: !!item.onPress && !item.disabled,
-    });
-
-    const content = (
-      <View style={[breadcrumbStyles.item, itemStyle]}>
-        {item.icon && <View style={breadcrumbStyles.icon}>{item.icon}</View>}
-        <Text style={breadcrumbStyles.itemText}>{item.label}</Text>
-      </View>
-    );
-
-    if (item.onPress && !item.disabled) {
-      return (
-        <Pressable
-          key={index}
-          onPress={item.onPress}
-          disabled={item.disabled}
-          accessibilityRole="link"
-          accessibilityState={{
-            disabled: item.disabled,
-          }}
-        >
-          {content}
-        </Pressable>
-      );
-    }
-
-    return <View key={index}>{content}</View>;
-  };
-
   return (
     <View
-      style={[breadcrumbStyles.container, style]}
+      ref={ref}
+      style={[breadcrumbContainerStyles.container, style]}
       testID={testID}
       accessibilityRole="navigation"
       accessibilityLabel="Breadcrumb"
@@ -80,25 +137,29 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
           <React.Fragment key={index}>
             {shouldShowEllipsis && (
               <>
-                <Text style={breadcrumbStyles.ellipsis}>...</Text>
-                <Text style={[breadcrumbStyles.separator, separatorStyle]}>
-                  {typeof separator === 'string' ? separator : '/'}
-                </Text>
+                <BreadcrumbEllipsis size={size} />
+                <BreadcrumbSeparator separator={separator} size={size} separatorStyle={separatorStyle} />
               </>
             )}
 
-            {renderItem(item, index, isLast)}
+            <BreadcrumbItem
+              item={item}
+              isLast={isLast}
+              size={size}
+              intent={intent}
+              itemStyle={itemStyle}
+            />
 
             {!isLast && (
-              <Text style={[breadcrumbStyles.separator, separatorStyle]}>
-                {typeof separator === 'string' ? separator : '/'}
-              </Text>
+              <BreadcrumbSeparator separator={separator} size={size} separatorStyle={separatorStyle} />
             )}
           </React.Fragment>
         );
       })}
     </View>
   );
-};
+});
+
+Breadcrumb.displayName = 'Breadcrumb';
 
 export default Breadcrumb;

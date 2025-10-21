@@ -51,6 +51,7 @@
     "react-native": ">=0.60.0",
     "react-native-edge-to-edge": "*",
     "react-native-nitro-modules": "*",
+    "react-native-reanimated": ">=3.0.0",
     "react-native-unistyles": ">=3.0.0"
   },
   "peerDependenciesMeta": {
@@ -73,6 +74,9 @@
       "optional": true
     },
     "react-native-nitro-modules": {
+      "optional": true
+    },
+    "react-native-reanimated": {
       "optional": true
     },
     "react-native-unistyles": {
