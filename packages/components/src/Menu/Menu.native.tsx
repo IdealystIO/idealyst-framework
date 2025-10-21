@@ -89,15 +89,12 @@ const Menu: React.FC<MenuProps> = ({
     onOpenChange?.(false);
   };
 
-  // Apply base menu styles
-  menuStyles.useVariants({ size });
-
   const renderMenu = () => {
-    if (!menuPosition || menuPosition.top === 0) return null;
+    const isPositioned = menuPosition && menuPosition.top !== 0;
 
     return (
       <Modal
-        visible={open}
+        visible={open && isPositioned}
         transparent
         animationType="none"
         onRequestClose={() => onOpenChange?.(false)}
@@ -124,15 +121,13 @@ const Menu: React.FC<MenuProps> = ({
               style={{ maxHeight: 300 }}
             >
               {items.map((item, index) => {
-                if (item.separator) {
-                  return <Divider key={`separator-${index}`} />;
-                }
 
                 return (
                   <MenuItem
                     key={item.id || index}
                     item={item}
                     onPress={handleItemPress}
+                    size={size}
                     testID={testID ? `${testID}-item-${item.id || index}` : undefined}
                   />
                 );

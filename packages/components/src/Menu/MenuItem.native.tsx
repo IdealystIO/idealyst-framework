@@ -1,31 +1,35 @@
 import React, { isValidElement } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Icon } from '../Icon';
-import { menuStyles } from './Menu.styles';
+import { menuItemStyles } from './MenuItem.styles';
 import type { MenuItem as MenuItemType } from './types';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 
 interface MenuItemProps {
   item: MenuItemType;
   onPress: (item: MenuItemType) => void;
+  size?: 'small' | 'medium' | 'large';
   testID?: string;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, testID }) => {
-  // Apply variants for this specific item
-  menuStyles.useVariants({
+const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, size = 'medium', testID }) => {
+  // Initialize styles with useVariants
+  menuItemStyles.useVariants({
+    size,
     disabled: Boolean(item.disabled),
     intent: item.intent || 'neutral',
   });
+
+  console.log(Icon)
 
   const renderIcon = () => {
     if (!item.icon) return null;
 
     if (typeof item.icon === 'string') {
       return (
-        <Icon
-          name={item.icon}
-          size={16}
-          style={menuStyles.menuItemIcon}
+        <MaterialDesignIcons
+          name={item.icon as any}
+          style={menuItemStyles.icon}
         />
       );
     } else if (isValidElement(item.icon)) {
@@ -36,7 +40,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, testID }) => {
 
   return (
     <Pressable
-      style={menuStyles.menuItem}
+      style={menuItemStyles.item}
       onPress={() => onPress(item)}
       disabled={item.disabled}
       accessibilityRole="menuitem"
@@ -47,11 +51,11 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, testID }) => {
       testID={testID}
     >
       {item.icon && (
-        <View style={menuStyles.menuItemIcon}>
+        <View>
           {renderIcon()}
         </View>
       )}
-      <Text style={menuStyles.menuItemLabel}>
+      <Text style={menuItemStyles.label}>
         {item.label}
       </Text>
     </Pressable>

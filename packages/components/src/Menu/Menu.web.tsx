@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState, isValidElement } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { menuStyles } from './Menu.styles';
 import type { MenuProps } from './types';
-import { IconSvg } from '../Icon/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import MenuItem from './MenuItem.web';
 
 const Menu: React.FC<MenuProps> = ({
   children,
@@ -174,58 +173,14 @@ const Menu: React.FC<MenuProps> = ({
             );
           }
 
-          // Apply item-specific variants
-          const itemStylesheet = menuStyles;
-          itemStylesheet.useVariants({
-            size,
-            disabled: Boolean(item.disabled),
-            intent: item.intent || 'neutral',
-          });
-
-          const itemProps = getWebProps([menuStyles.menuItem]);
-          const iconProps = getWebProps([menuStyles.menuItemIcon]);
-          const labelProps = getWebProps([menuStyles.menuItemLabel]);
-
-
-          console.log(iconProps)
-
-          // Helper to render icon
-          const renderIcon = () => {
-            if (!item.icon) return null;
-
-            if (isIconName(item.icon)) {
-              // Resolve icon name to path and render with IconSvg
-              const iconPath = resolveIconPath(item.icon);
-              return (
-                <IconSvg
-                  path={iconPath}
-                  {...iconProps}
-                  aria-label={item.icon}
-                />
-              );
-            } else if (isValidElement(item.icon)) {
-              // Render custom component as-is
-              return <span className={iconProps.className} style={iconProps.style}>{item.icon}</span>;
-            }
-
-            return null;
-          };
-
           return (
-            <button
-              key={item.id}
-              className={itemProps.className}
-              style={itemProps.style}
-              onClick={() => handleItemClick(item)}
-              disabled={item.disabled}
-              role="menuitem"
-              data-testid={`${testID}-item-${item.id}`}
-            >
-              {renderIcon()}
-              <span className={labelProps.className}>
-                {item.label}
-              </span>
-            </button>
+            <MenuItem
+              key={item.id || index}
+              item={item}
+              onPress={handleItemClick}
+              size={size}
+              testID={testID ? `${testID}-item-${item.id || index}` : undefined}
+            />
           );
         })}
           </div>
