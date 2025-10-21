@@ -40,14 +40,8 @@ const View = forwardRef<RNView, ViewProps>(({
     return baseStyles;
   };
 
-  const viewStyleArray = [
-    viewStyles.view,
-    getStyles(),
-    style,
-  ];
-
   return (
-    <RNView ref={ref} style={viewStyleArray} testID={testID}>
+    <RNView ref={ref} style={[viewStyles.view, getStyles(), style]} testID={testID}>
       {children}
     </RNView>
   );

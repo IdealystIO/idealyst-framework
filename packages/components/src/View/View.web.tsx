@@ -38,21 +38,15 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
   if (borderWidth !== undefined) dynamicStyles.borderWidth = borderWidth;
   if (borderColor) dynamicStyles.borderColor = borderColor;
 
-  // Create the style array following the official documentation pattern
-  const viewStyleArray = [
-    viewStyles.view,
-    dynamicStyles,
-    style,
-  ];
-
   // Use getWebProps to generate className and ref for web
-  const webProps = getWebProps(viewStyleArray);
+  const webProps = getWebProps(viewStyles.view);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
 
   return (
     <div
       {...webProps}
+      style={[webProps.style, style, dynamicStyles]}
       ref={mergedRef}
       data-testid={testID}
     >
