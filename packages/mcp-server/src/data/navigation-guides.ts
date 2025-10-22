@@ -555,7 +555,7 @@ header={{
   height: 80,
   content: (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16 }}>
-      <Text size="large" weight="bold">Dashboard</Text>
+      <Text size="lg" weight="bold">Dashboard</Text>
       <UserMenu />
     </View>
   )
@@ -750,7 +750,7 @@ export const DashboardLayout: React.FC<StackLayoutProps> = ({
             alignItems: 'center',
             padding: 16
           }}>
-            <Text size="xlarge" weight="bold">Dashboard</Text>
+            <Text size="xl" weight="bold">Dashboard</Text>
             <View style={{ flexDirection: 'row', gap: 16 }}>
               <NotificationBell />
               <UserAvatar />

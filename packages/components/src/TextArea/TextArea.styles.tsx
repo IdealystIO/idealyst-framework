@@ -43,17 +43,17 @@ export const textAreaStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
           padding: 8,
           lineHeight: 20,
         },
-        medium: {
+        md: {
           fontSize: 16,
           padding: 12,
           lineHeight: 24,
         },
-        large: {
+        lg: {
           fontSize: 18,
           padding: 16,
           lineHeight: 28,

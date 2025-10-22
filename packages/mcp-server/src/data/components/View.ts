@@ -38,7 +38,7 @@ export const View = {
 import { View, Text, Button } from '@idealyst/components';
 
 <View spacing="md" background="surface" radius="md" style={{ padding: 16 }}>
-  <Text size="large" weight="bold">Card Title</Text>
+  <Text size="lg" weight="bold">Card Title</Text>
   <Text>Card content with consistent spacing</Text>
   <Button>Action</Button>
 </View>
@@ -84,7 +84,7 @@ import { View, Text, Button } from '@idealyst/components';
     <Icon name="information-outline" size="lg" color="primary" />
     <View spacing="xs" style={{ flex: 1 }}>
       <Text weight="bold">Important Information</Text>
-      <Text size="small">This is an informational message</Text>
+      <Text size="sm">This is an informational message</Text>
     </View>
   </View>
 </View>`,
@@ -101,7 +101,7 @@ function Example() {
 
   return (
     <View spacing="lg" style={{ padding: 16 }}>
-      <Card variant="outlined" padding="medium">
+      <Card variant="outlined" padding="md">
         <View spacing="md">
           <Text weight="bold">Dynamic List</Text>
           <View spacing="sm">

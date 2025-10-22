@@ -113,7 +113,7 @@ function CustomCard() {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View spacing="xs">
             <Text weight="bold">Custom Card</Text>
-            <Text size="small">Tap to {selected ? 'deselect' : 'select'}</Text>
+            <Text size="sm">Tap to {selected ? 'deselect' : 'select'}</Text>
           </View>
           {selected && (
             <Icon name="check-circle" size="lg" color="primary" />

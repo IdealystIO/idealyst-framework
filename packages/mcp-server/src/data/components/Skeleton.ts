@@ -87,7 +87,7 @@ function Example() {
 
   if (loading) {
     return (
-      <Card padding="medium">
+      <Card padding="md">
         <View spacing="md">
           <Skeleton width="80%" height={24} shape="rounded" />
           <SkeletonGroup
@@ -100,9 +100,9 @@ function Example() {
   }
 
   return (
-    <Card padding="medium">
+    <Card padding="md">
       <View spacing="md">
-        <Text size="large" weight="bold">{data.title}</Text>
+        <Text size="lg" weight="bold">{data.title}</Text>
         <Text>{data.content}</Text>
       </View>
     </Card>

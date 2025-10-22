@@ -6,17 +6,17 @@ import { HelloWorld } from '../components/HelloWorld';
 const HomeScreen = () => (
   <Screen>
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">Home</Text>
-      <Text size="medium">Welcome to your {{projectName}} app!</Text>
+      <Text size="xl" weight="bold">Home</Text>
+      <Text size="md">Welcome to your {{projectName}} app!</Text>
       <View spacing="md" style={{ marginTop: 24 }}>
-        <Text size="small">
+        <Text size="sm">
           This app uses tab navigation. Navigate between tabs using the bottom bar on mobile or the top tabs on web.
         </Text>
       </View>
       
       {/* API Testing Component */}
       <View spacing="md" style={{ marginTop: 32 }}>
-        <Text size="medium" weight="semibold">API Test</Text>
+        <Text size="md" weight="semibold">API Test</Text>
         <HelloWorld name="{{projectName}}" />
       </View>
     </View>
@@ -26,10 +26,10 @@ const HomeScreen = () => (
 const ProfileScreen = () => (
   <Screen>
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">Profile</Text>
-      <Text size="medium">User profile and account settings</Text>
+      <Text size="xl" weight="bold">Profile</Text>
+      <Text size="md">User profile and account settings</Text>
       <View spacing="md" style={{ marginTop: 24 }}>
-        <Text size="small">
+        <Text size="sm">
           Manage your account details and preferences here.
         </Text>
       </View>
@@ -40,10 +40,10 @@ const ProfileScreen = () => (
 const SettingsScreen = () => (
   <Screen>
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">Settings</Text>
-      <Text size="medium">App configuration and preferences</Text>
+      <Text size="xl" weight="bold">Settings</Text>
+      <Text size="md">App configuration and preferences</Text>
       <View spacing="md" style={{ marginTop: 24 }}>
-        <Text size="small">
+        <Text size="sm">
           Customize your app experience with various settings and options.
         </Text>
       </View>

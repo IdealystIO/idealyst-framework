@@ -13,7 +13,7 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   label,
   labelPosition = 'right',
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   enabledIcon,
   disabledIcon,
   style,
@@ -27,7 +27,7 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
 
   // Apply variants using the correct Unistyles v3 pattern
   switchStyles.useVariants({
-    size: size as 'small' | 'medium' | 'large',
+    size: size as 'sm' | 'md' | 'lg',
     checked: checked as boolean,
     intent: intent as 'primary' | 'success' | 'error' | 'warning' | 'neutral',
     disabled: disabled as boolean,

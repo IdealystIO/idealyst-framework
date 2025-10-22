@@ -31,7 +31,7 @@ import { Screen, View, Text } from '@idealyst/components';
 
 <Screen background="primary" padding="md" safeArea>
   <View spacing="lg">
-    <Text size="xlarge" weight="bold">Screen Title</Text>
+    <Text size="xl" weight="bold">Screen Title</Text>
     <Text>Screen content goes here</Text>
   </View>
 </Screen>
@@ -58,7 +58,7 @@ import { Screen, View, Text } from '@idealyst/components';
     <View style={{ alignItems: 'center' }}>
       <Icon name="check-circle" size="xl" color="success" />
     </View>
-    <Text align="center" size="xlarge" weight="bold">
+    <Text align="center" size="xl" weight="bold">
       Success!
     </Text>
     <Text align="center">
@@ -81,7 +81,7 @@ function Example() {
       scrollable
     >
       <View spacing="lg">
-        <Text size="xlarge" weight="bold">
+        <Text size="xl" weight="bold">
           Settings
         </Text>
         <Button

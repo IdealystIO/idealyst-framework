@@ -124,7 +124,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
                 intent={isDateSelected(date) ? 'primary' : 'neutral'}
                 disabled={isDateDisabled(date)}
                 onPress={() => handleDateSelect(date)}
-                size="small"
+                size="sm"
                 style={buttonStyle}
               >
                 {date.getDate()}

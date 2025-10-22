@@ -17,7 +17,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   rightIcon,
   showPasswordToggle,
   autoCapitalize = 'sentences',
-  size = 'medium',
+  size = 'md',
   variant = 'default',
   hasError = false,
   style,

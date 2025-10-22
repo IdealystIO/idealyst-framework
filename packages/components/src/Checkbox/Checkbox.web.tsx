@@ -11,7 +11,7 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   indeterminate = false,
   disabled = false,
   onCheckedChange,
-  size = 'medium',
+  size = 'md',
   intent = 'primary',
   variant = 'default',
   label,

@@ -5,7 +5,7 @@ import { activityIndicatorStyles } from './ActivityIndicator.styles';
 
 const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
   animating = true,
-  size = 'medium',
+  size = 'md',
   intent = 'primary',
   color,
   style,
@@ -13,11 +13,11 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
   hidesWhenStopped = true,
 }, ref) => {
   // Handle numeric size
-  const sizeVariant = typeof size === 'number' ? 'medium' : size;
+  const sizeVariant = typeof size === 'number' ? 'md' : size;
   const customSize = typeof size === 'number' ? size : undefined;
-  
+
   // Map our size variants to React Native's size prop
-  const rnSize = sizeVariant === 'small' ? 'small' : 'large';
+  const rnSize = sizeVariant === 'sm' ? 'small' : 'large';
   
   activityIndicatorStyles.useVariants({
     size: sizeVariant,

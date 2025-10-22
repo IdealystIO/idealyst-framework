@@ -73,7 +73,7 @@ export function DataGridShowcase({
       width: showAllColumns ? 120 : 100,
       sortable: true,
       render: (value) => (
-        <Badge variant="outlined" size="small">
+        <Badge variant="outlined" size="sm">
           {value}
         </Badge>
       ),
@@ -96,7 +96,7 @@ export function DataGridShowcase({
       sortable: true,
       render: (value, row) => (
         <Text
-          size="small"
+          size="sm"
           style={{ 
             color: row.status === 'out-of-stock' ? '#ef4444' : 
                    row.status === 'low-stock' ? '#f59e0b' : '#22c55e' 
@@ -114,7 +114,7 @@ export function DataGridShowcase({
         const intent = value === 'in-stock' ? 'success' : 
                        value === 'low-stock' ? 'warning' : 'error';
         return (
-          <Badge variant="filled" intent={intent} size="small">
+          <Badge variant="filled" intent={intent} size="sm">
             {value}
           </Badge>
         );
@@ -171,13 +171,13 @@ export function DataGridShowcase({
   return (
     <Screen background="primary" safeArea scrollable={false}>
       <View spacing={showAllColumns ? "lg" : "md"} style={{ padding: showAllColumns ? 16 : 12, flex: 1 }}>
-        <Text size={showAllColumns ? "xlarge" : "large"} weight="bold">
+        <Text size={showAllColumns ? "xl" : "lg"} weight="bold">
           DataGrid {showAllColumns ? 'Component ' : ''}Showcase
         </Text>
         
         <Card variant="outlined">
           <View spacing={showAllColumns ? "md" : "sm"}>
-            <Text weight="semibold" size="medium">Controls</Text>
+            <Text weight="semibold" size="md">Controls</Text>
             
             <View 
               spacing="sm" 
@@ -190,7 +190,7 @@ export function DataGridShowcase({
             >
               <Button
                 variant="outlined"
-                size="small"
+                size="sm"
                 onPress={() => setVirtualized(!virtualized)}
               >
                 {virtualized ? 'Disable' : 'Enable'} Virtualization
@@ -200,7 +200,7 @@ export function DataGridShowcase({
                 <View style={{ flexDirection: 'row', gap: 8 }}>
                   <Button
                     variant="outlined"
-                    size="small"
+                    size="sm"
                     onPress={() => setSelectedRows([])}
                     disabled={selectedRows.length === 0}
                   >
@@ -210,7 +210,7 @@ export function DataGridShowcase({
                   <Button
                     variant="outlined"
                     intent="error"
-                    size="small"
+                    size="sm"
                     onPress={handleDeleteSelected}
                     disabled={selectedRows.length === 0}
                   >
@@ -223,7 +223,7 @@ export function DataGridShowcase({
                 <>
                   <Button
                     variant="outlined"
-                    size="small"
+                    size="sm"
                     onPress={() => setSelectedRows([])}
                     disabled={selectedRows.length === 0}
                   >
@@ -233,7 +233,7 @@ export function DataGridShowcase({
                   <Button
                     variant="outlined"
                     intent="error"
-                    size="small"
+                    size="sm"
                     onPress={handleDeleteSelected}
                     disabled={selectedRows.length === 0}
                   >
@@ -244,7 +244,7 @@ export function DataGridShowcase({
               
               <Button
                 variant="outlined"
-                size="small"
+                size="sm"
                 onPress={handleResetData}
               >
                 Reset Data
@@ -252,9 +252,9 @@ export function DataGridShowcase({
             </View>
             
             <View spacing="xs">
-              <Text size="small">• {showAllColumns ? 'Total ' : ''}Products: {products.length}</Text>
-              <Text size="small">• Selected: {selectedRows.length}</Text>
-              <Text size="small">• Virtualization: {virtualized ? (showAllColumns ? 'Enabled' : 'On') : (showAllColumns ? 'Disabled' : 'Off')}</Text>
+              <Text size="sm">• {showAllColumns ? 'Total ' : ''}Products: {products.length}</Text>
+              <Text size="sm">• Selected: {selectedRows.length}</Text>
+              <Text size="sm">• Virtualization: {virtualized ? (showAllColumns ? 'Enabled' : 'On') : (showAllColumns ? 'Disabled' : 'Off')}</Text>
             </View>
           </View>
         </Card>
@@ -280,14 +280,14 @@ export function DataGridShowcase({
         
         <Card variant="outlined">
           <View spacing={showAllColumns ? "sm" : "xs"}>
-            <Text weight="semibold" size="medium">Features {showAllColumns ? 'Demonstrated' : ''}</Text>
-            <Text size="small">✓ Virtualized rendering{showAllColumns ? ` with ${productCount} rows` : ''}</Text>
-            <Text size="small">✓ Sortable columns{showAllColumns ? ' (ID, Name, Category, Price, Stock, Vendor, Date)' : ''}</Text>
-            <Text size="small">✓ Multi-row selection{showAllColumns ? ' with visual feedback' : ''}</Text>
-            <Text size="small">✓ Custom cell rendering{showAllColumns ? ' (badges, colored text)' : ''}</Text>
-            <Text size="small">✓ Sticky header{showAllColumns ? ' while scrolling' : ''}</Text>
-            <Text size="small">✓ Alternating row colors</Text>
-            {showAllColumns && <Text size="small">✓ Responsive column widths</Text>}
+            <Text weight="semibold" size="md">Features {showAllColumns ? 'Demonstrated' : ''}</Text>
+            <Text size="sm">✓ Virtualized rendering{showAllColumns ? ` with ${productCount} rows` : ''}</Text>
+            <Text size="sm">✓ Sortable columns{showAllColumns ? ' (ID, Name, Category, Price, Stock, Vendor, Date)' : ''}</Text>
+            <Text size="sm">✓ Multi-row selection{showAllColumns ? ' with visual feedback' : ''}</Text>
+            <Text size="sm">✓ Custom cell rendering{showAllColumns ? ' (badges, colored text)' : ''}</Text>
+            <Text size="sm">✓ Sticky header{showAllColumns ? ' while scrolling' : ''}</Text>
+            <Text size="sm">✓ Alternating row colors</Text>
+            {showAllColumns && <Text size="sm">✓ Responsive column widths</Text>}
           </View>
         </Card>
       </View>

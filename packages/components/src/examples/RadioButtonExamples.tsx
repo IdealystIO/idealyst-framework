@@ -11,20 +11,20 @@ export const RadioButtonExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="lg">
-        <Text size="xlarge" weight="bold">RadioButton Examples</Text>
+        <Text size="xl" weight="bold">RadioButton Examples</Text>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Basic RadioGroup</Text>
+        <Text size="lg" weight="semibold">Basic RadioGroup</Text>
         <RadioGroup value={selectedValue} onValueChange={setSelectedValue}>
           <RadioButton value="option1" label="Option 1" />
           <RadioButton value="option2" label="Option 2" />
           <RadioButton value="option3" label="Option 3" />
         </RadioGroup>
-        <Text size="small" color="secondary">Selected: {selectedValue}</Text>
+        <Text size="sm" color="secondary">Selected: {selectedValue}</Text>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Horizontal RadioGroup</Text>
+        <Text size="lg" weight="semibold">Horizontal RadioGroup</Text>
         <RadioGroup
           value={selectedColor}
           onValueChange={setSelectedColor}
@@ -34,11 +34,11 @@ export const RadioButtonExamples: React.FC = () => {
           <RadioButton value="green" label="Green" />
           <RadioButton value="blue" label="Blue" />
         </RadioGroup>
-        <Text size="small" color="secondary">Selected: {selectedColor}</Text>
+        <Text size="sm" color="secondary">Selected: {selectedColor}</Text>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Disabled Options</Text>
+        <Text size="lg" weight="semibold">With Disabled Options</Text>
         <RadioGroup value={selectedSize} onValueChange={setSelectedSize}>
           <RadioButton value="small" label="Small" />
           <RadioButton value="medium" label="Medium" />
@@ -48,7 +48,7 @@ export const RadioButtonExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Disabled Group</Text>
+        <Text size="lg" weight="semibold">Disabled Group</Text>
         <RadioGroup value="option1" disabled>
           <RadioButton value="option1" label="Option A" />
           <RadioButton value="option2" label="Option B" />
@@ -57,34 +57,34 @@ export const RadioButtonExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Sizes</Text>
+        <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm">
           <RadioButton
             value="small"
             label="Small"
-            size="small"
-            checked={selectedSize === 'small'}
+            size="sm"
+            checked={selectedSize === 'sm'}
             onPress={() => setSelectedSize('small')}
           />
           <RadioButton
             value="medium"
             label="Medium"
-            size="medium"
-            checked={selectedSize === 'medium'}
+            size="md"
+            checked={selectedSize === 'md'}
             onPress={() => setSelectedSize('medium')}
           />
           <RadioButton
             value="large"
             label="Large"
-            size="large"
-            checked={selectedSize === 'large'}
+            size="lg"
+            checked={selectedSize === 'lg'}
             onPress={() => setSelectedSize('large')}
           />
         </View>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Intents</Text>
+        <Text size="lg" weight="semibold">Intents</Text>
         <View spacing="sm">
           <RadioButton
             value="primary"
@@ -125,7 +125,7 @@ export const RadioButtonExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Standalone RadioButtons</Text>
+        <Text size="lg" weight="semibold">Standalone RadioButtons</Text>
         <View spacing="sm">
           <RadioButton
             value="standalone1"

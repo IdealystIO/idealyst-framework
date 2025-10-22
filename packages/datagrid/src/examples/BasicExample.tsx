@@ -57,7 +57,7 @@ export function BasicExample() {
       width: 100,
       render: (value) => (
         <View style={{ paddingHorizontal: 8, paddingVertical: 4, backgroundColor: '#f0f0f0', borderRadius: 4 }}>
-          <Text size="small">{value}</Text>
+          <Text size="sm">{value}</Text>
         </View>
       ),
     },
@@ -67,7 +67,7 @@ export function BasicExample() {
       width: 100,
       render: (value) => (
         <Text 
-          size="small" 
+          size="sm" 
           weight="medium"
           style={{ color: value === 'active' ? '#22c55e' : '#ef4444' }}
         >
@@ -103,13 +103,13 @@ export function BasicExample() {
 
   return (
     <View spacing="lg" style={{ padding: 20 }}>
-      <Text size="xlarge" weight="bold">DataGrid Example</Text>
+      <Text size="xl" weight="bold">DataGrid Example</Text>
       
       <View spacing="sm">
         <Text>Selected rows: {selectedRows.length}</Text>
         {selectedRows.length > 0 && (
           <Button 
-            size="small" 
+            size="sm" 
             variant="outlined"
             onPress={() => setSelectedRows([])}
           >

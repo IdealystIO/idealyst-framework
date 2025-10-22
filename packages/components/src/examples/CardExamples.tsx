@@ -9,36 +9,36 @@ export const CardExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
-      <Text size="large" weight="bold" align="center">
+      <Text size="lg" weight="bold" align="center">
         Card Examples
       </Text>
       
       {/* Card Variants */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Variants</Text>
+        <Text size="md" weight="semibold">Variants</Text>
         <View spacing="sm" style={{ gap: 10 }}>
-          <Card variant="default" padding="medium">
+          <Card variant="default" padding="md">
             <Text>Default Card</Text>
             <Text size="sm" color="secondary">
               This is a default card with standard styling
             </Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Outlined Card</Text>
             <Text size="sm" color="secondary">
               This is an outlined card with border
             </Text>
           </Card>
           
-          <Card variant="elevated" padding="medium">
+          <Card variant="elevated" padding="md">
             <Text>Elevated Card</Text>
             <Text size="sm" color="secondary">
               This is an elevated card with shadow
             </Text>
           </Card>
           
-          <Card variant="filled" padding="medium">
+          <Card variant="filled" padding="md">
             <Text>Filled Card</Text>
             <Text size="sm" color="secondary">
               This is a filled card with background
@@ -49,29 +49,29 @@ export const CardExamples = () => {
 
       {/* Card Intents */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Intents</Text>
+        <Text size="md" weight="semibold">Intents</Text>
         <View spacing="sm" style={{ gap: 10 }}>
-          <Card intent="neutral" padding="medium" variant="outlined">
+          <Card intent="neutral" padding="md" variant="outlined">
             <Text>Neutral Card</Text>
           </Card>
           
-          <Card intent="primary" padding="medium" variant="outlined">
+          <Card intent="primary" padding="md" variant="outlined">
             <Text>Primary Card</Text>
           </Card>
           
-          <Card intent="success" padding="medium" variant="outlined">
+          <Card intent="success" padding="md" variant="outlined">
             <Text>Success Card</Text>
           </Card>
           
-          <Card intent="error" padding="medium" variant="outlined">
+          <Card intent="error" padding="md" variant="outlined">
             <Text>Error Card</Text>
           </Card>
           
-          <Card intent="warning" padding="medium" variant="outlined">
+          <Card intent="warning" padding="md" variant="outlined">
             <Text>Warning Card</Text>
           </Card>
           
-          <Card intent="info" padding="medium" variant="outlined">
+          <Card intent="info" padding="md" variant="outlined">
             <Text>Info Card</Text>
           </Card>
         </View>
@@ -79,21 +79,21 @@ export const CardExamples = () => {
 
       {/* Card Padding */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Padding</Text>
+        <Text size="md" weight="semibold">Padding</Text>
         <View spacing="sm">
           <Card padding="none" variant="outlined">
             <Text>No Padding</Text>
           </Card>
           
-          <Card padding="small" variant="outlined">
+          <Card padding="sm" variant="outlined">
             <Text>Small Padding</Text>
           </Card>
           
-          <Card padding="medium" variant="outlined">
+          <Card padding="md" variant="outlined">
             <Text>Medium Padding</Text>
           </Card>
           
-          <Card padding="large" variant="outlined">
+          <Card padding="lg" variant="outlined">
             <Text>Large Padding</Text>
           </Card>
         </View>
@@ -101,21 +101,21 @@ export const CardExamples = () => {
 
       {/* Card Radius */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Border Radius</Text>
+        <Text size="md" weight="semibold">Border Radius</Text>
         <View spacing="sm">
-          <Card radius="none" variant="outlined" padding="medium">
+          <Card radius="none" variant="outlined" padding="md">
             <Text>No Radius</Text>
           </Card>
           
-          <Card radius="small" variant="outlined" padding="medium">
+          <Card radius="sm" variant="outlined" padding="md">
             <Text>Small Radius</Text>
           </Card>
           
-          <Card radius="medium" variant="outlined" padding="medium">
+          <Card radius="md" variant="outlined" padding="md">
             <Text>Medium Radius</Text>
           </Card>
           
-          <Card radius="large" variant="outlined" padding="medium">
+          <Card radius="lg" variant="outlined" padding="md">
             <Text>Large Radius</Text>
           </Card>
         </View>
@@ -123,13 +123,13 @@ export const CardExamples = () => {
 
       {/* Clickable Cards */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Interactive Cards</Text>
+        <Text size="md" weight="semibold">Interactive Cards</Text>
         <View spacing="sm">
           <Card 
             clickable 
             onPress={() => handleCardPress('clickable')} 
             variant="outlined" 
-            padding="medium"
+            padding="md"
           >
             <Text weight="semibold">Clickable Card</Text>
             <Text size="sm" color="secondary">
@@ -142,7 +142,7 @@ export const CardExamples = () => {
             disabled 
             onPress={() => handleCardPress('disabled')} 
             variant="outlined" 
-            padding="medium"
+            padding="md"
           >
             <Text weight="semibold">Disabled Card</Text>
             <Text size="sm" color="secondary">
@@ -154,9 +154,9 @@ export const CardExamples = () => {
 
       {/* Complex Card Layout */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Complex Layout</Text>
-        <Card variant="elevated" padding="large" radius="medium">
-          <Text size="large" weight="bold">Product Card</Text>
+        <Text size="md" weight="semibold">Complex Layout</Text>
+        <Card variant="elevated" padding="lg" radius="md">
+          <Text size="lg" weight="bold">Product Card</Text>
           <Text size="sm" color="secondary" style={{ marginVertical: 8 }}>
             This is a more complex card layout with multiple elements
           </Text>

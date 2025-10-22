@@ -29,25 +29,25 @@ export const TabBarExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">TabBar Examples</Text>
+      <Text size="xl" weight="bold">TabBar Examples</Text>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Basic TabBar</Text>
+        <Text size="lg" weight="semibold">Basic TabBar</Text>
         <TabBar
           items={basicTabs}
           value={activeTab}
           onChange={setActiveTab}
         />
-        <Text size="small" color="secondary">
+        <Text size="sm" color="secondary">
           Active tab: {activeTab}
         </Text>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Variants</Text>
+        <Text size="lg" weight="semibold">Variants</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="small" weight="medium">Default</Text>
+            <Text size="sm" weight="medium">Default</Text>
             <TabBar
               items={variantTabs}
               value={variantTab}
@@ -56,7 +56,7 @@ export const TabBarExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Pills</Text>
+            <Text size="sm" weight="medium">Pills</Text>
             <TabBar
               items={variantTabs}
               value={variantTab}
@@ -66,7 +66,7 @@ export const TabBarExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Underline</Text>
+            <Text size="sm" weight="medium">Underline</Text>
             <TabBar
               items={variantTabs}
               value={variantTab}
@@ -78,34 +78,34 @@ export const TabBarExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Sizes</Text>
+        <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm">
           <TabBar
             items={basicTabs}
             value={activeTab}
             onChange={setActiveTab}
-            size="small"
+            size="sm"
           />
           <TabBar
             items={basicTabs}
             value={activeTab}
             onChange={setActiveTab}
-            size="medium"
+            size="md"
           />
           <TabBar
             items={basicTabs}
             value={activeTab}
             onChange={setActiveTab}
-            size="large"
+            size="lg"
           />
         </View>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Pill Modes</Text>
+        <Text size="lg" weight="semibold">Pill Modes</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="small" weight="medium">Light Mode (dark pill on light background)</Text>
+            <Text size="sm" weight="medium">Light Mode (dark pill on light background)</Text>
             <TabBar
               items={basicTabs}
               value={pillTab}
@@ -115,7 +115,7 @@ export const TabBarExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Dark Mode (light pill on dark background)</Text>
+            <Text size="sm" weight="medium">Dark Mode (light pill on dark background)</Text>
             <TabBar
               items={basicTabs}
               value={pillTab}
@@ -128,7 +128,7 @@ export const TabBarExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Disabled Tabs</Text>
+        <Text size="lg" weight="semibold">Disabled Tabs</Text>
         <TabBar
           items={disabledTabs}
           value={activeTab}

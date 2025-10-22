@@ -18,7 +18,7 @@ export const TextArea = {
 - \`resize\`: 'none' | 'vertical' | 'horizontal' | 'both' - Resize behavior (web)
 - \`showCharacterCount\`: boolean - Show character count
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'small' | 'medium' | 'large' - TextArea size
+- \`size\`: 'sm' | 'md' | 'lg' - TextArea size
 - \`style\`: ViewStyle - Additional styles
 - \`textareaStyle\`: TextStyle - Textarea-specific styles
 - \`testID\`: string - Test identifier
@@ -76,9 +76,9 @@ function Example() {
     variants: `import { TextArea, View } from '@idealyst/components';
 
 <View spacing="md">
-  <TextArea label="Small" size="small" rows={3} />
-  <TextArea label="Medium" size="medium" rows={4} />
-  <TextArea label="Large" size="large" rows={5} />
+  <TextArea label="Small" size="sm" rows={3} />
+  <TextArea label="Medium" size="md" rows={4} />
+  <TextArea label="Large" size="lg" rows={5} />
 </View>`,
 
     "with-icons": `import { TextArea, View, Text } from '@idealyst/components';
@@ -101,7 +101,7 @@ function Example() {
         minHeight={100}
         maxHeight={300}
       />
-      <Text size="small" color="secondary">
+      <Text size="sm" color="secondary">
         {feedback.length}/{maxLength} characters
       </Text>
     </View>

@@ -53,7 +53,7 @@ export default function App() {
   return (
     <Screen background="primary">
       <View spacing="lg" style={{ flex: 1, justifyContent: 'center' }}>
-        <Text size="large" weight="bold" align="center">
+        <Text size="lg" weight="bold" align="center">
           Welcome to Idealyst Components
         </Text>
         <Button
@@ -125,7 +125,7 @@ import { Screen, View, Text, Button } from '@idealyst/components';
 
 <Screen background="primary" safeArea>
   <View spacing="lg">
-    <Text size="xlarge" weight="bold">Welcome</Text>
+    <Text size="xl" weight="bold">Welcome</Text>
     <Text>Get started with your app</Text>
     <Button variant="contained" intent="primary" onPress={() => {}}>
       Get Started
@@ -139,7 +139,7 @@ import { Screen, View, Text, Button } from '@idealyst/components';
 import { View, Text, Input, Checkbox, Button } from '@idealyst/components';
 
 <View spacing="md">
-  <Text size="large" weight="bold">Sign Up</Text>
+  <Text size="lg" weight="bold">Sign Up</Text>
   <Input label="Email" value={email} onChangeText={setEmail} />
   <Input label="Password" value={password} onChangeText={setPassword} secureTextEntry />
   <Checkbox checked={agreed} onCheckedChange={setAgreed} label="I agree to terms" />
@@ -155,7 +155,7 @@ import { SVGImage, View, Text } from '@idealyst/components';
 import LogoIcon from './assets/logo.svg';
 
 <View spacing="md">
-  <Text size="large" weight="bold">My App</Text>
+  <Text size="lg" weight="bold">My App</Text>
   
   {/* Imported SVG */}
   <SVGImage source={LogoIcon} size={40} intent="primary" />
@@ -180,7 +180,7 @@ import { View, Card, Text, Avatar, Badge } from '@idealyst/components';
         <Avatar src={item.avatar} fallback={item.initials} />
         <View spacing="xs" style={{ flex: 1 }}>
           <Text weight="bold">{item.title}</Text>
-          <Text size="small" color="secondary">{item.subtitle}</Text>
+          <Text size="sm" color="secondary">{item.subtitle}</Text>
         </View>
         {item.badge && <Badge color="red">{item.badge}</Badge>}
       </View>

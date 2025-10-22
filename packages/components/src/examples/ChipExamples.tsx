@@ -22,10 +22,10 @@ export const ChipExamples = () => {
   return (
     <Screen background="primary" safeArea>
       <View spacing="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
-        <Text size="xlarge" weight="bold">Chip Examples</Text>
+        <Text size="xl" weight="bold">Chip Examples</Text>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Basic Chips</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Basic Chips</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Default" />
@@ -36,41 +36,41 @@ export const ChipExamples = () => {
           <Chip label="Neutral" intent="neutral" />
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Variants</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Variants</Text>
 
-        <Text size="medium" weight="semibold">Filled (Default)</Text>
+        <Text size="md" weight="semibold">Filled (Default)</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Filled Primary" variant="filled" intent="primary" />
           <Chip label="Filled Success" variant="filled" intent="success" />
           <Chip label="Filled Error" variant="filled" intent="error" />
         </View>
 
-        <Text size="medium" weight="semibold">Outlined</Text>
+        <Text size="md" weight="semibold">Outlined</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Outlined Primary" variant="outlined" intent="primary" />
           <Chip label="Outlined Success" variant="outlined" intent="success" />
           <Chip label="Outlined Error" variant="outlined" intent="error" />
         </View>
 
-        <Text size="medium" weight="semibold">Soft</Text>
+        <Text size="md" weight="semibold">Soft</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Soft Primary" variant="soft" intent="primary" />
           <Chip label="Soft Success" variant="soft" intent="success" />
           <Chip label="Soft Error" variant="soft" intent="error" />
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Sizes</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Sizes</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-          <Chip label="Small" size="small" />
-          <Chip label="Medium" size="medium" />
-          <Chip label="Large" size="large" />
+          <Chip label="Small" size="sm" />
+          <Chip label="Medium" size="md" />
+          <Chip label="Large" size="lg" />
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">With Icons</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">With Icons</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Star" icon="star" />
@@ -79,8 +79,8 @@ export const ChipExamples = () => {
           <Chip label="Info" icon="information" variant="outlined" />
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Deletable Chips</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Deletable Chips</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {tags.map(tag => (
@@ -94,10 +94,10 @@ export const ChipExamples = () => {
             />
           ))}
         </View>
-        <Text size="small" color="secondary">Click the X to remove tags</Text>
+        <Text size="sm" color="secondary">Click the X to remove tags</Text>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Selectable Chips</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Selectable Chips</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {['Option 1', 'Option 2', 'Option 3', 'Option 4'].map(option => (
@@ -112,12 +112,12 @@ export const ChipExamples = () => {
             />
           ))}
         </View>
-        <Text size="small" color="secondary">
+        <Text size="sm" color="secondary">
           Selected: {Array.from(selectedChips).join(', ') || 'None'}
         </Text>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Clickable Chips</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Clickable Chips</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip
@@ -133,8 +133,8 @@ export const ChipExamples = () => {
           />
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Disabled State</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Disabled State</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Disabled" disabled />
@@ -143,8 +143,8 @@ export const ChipExamples = () => {
           <Chip label="Disabled Selectable" selectable onPress={() => {}} disabled />
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Filter Example</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Filter Example</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip
@@ -181,15 +181,15 @@ export const ChipExamples = () => {
           />
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Category Tags</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Category Tags</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          <Chip label="Design" variant="soft" intent="primary" size="small" />
-          <Chip label="Development" variant="soft" intent="success" size="small" />
-          <Chip label="Marketing" variant="soft" intent="warning" size="small" />
-          <Chip label="Sales" variant="soft" intent="error" size="small" />
-          <Chip label="Support" variant="soft" intent="neutral" size="small" />
+          <Chip label="Design" variant="soft" intent="primary" size="sm" />
+          <Chip label="Development" variant="soft" intent="success" size="sm" />
+          <Chip label="Marketing" variant="soft" intent="warning" size="sm" />
+          <Chip label="Sales" variant="soft" intent="error" size="sm" />
+          <Chip label="Support" variant="soft" intent="neutral" size="sm" />
         </View>
       </View>
     </Screen>

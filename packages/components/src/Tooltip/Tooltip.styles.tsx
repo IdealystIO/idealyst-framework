@@ -22,15 +22,15 @@ export const tooltipStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 12,
           padding: 6,
         },
-        medium: {
+        md: {
           fontSize: 14,
           padding: 8,
         },
-        large: {
+        lg: {
           fontSize: 16,
           padding: 10,
         },

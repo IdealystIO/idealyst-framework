@@ -10,7 +10,7 @@ export const TabBar = {
 - \`defaultValue\`: string - Default tab (uncontrolled)
 - \`onChange\`: (value: string) => void - Tab change handler
 - \`variant\`: 'default' | 'pills' | 'underline' - Visual style
-- \`size\`: 'small' | 'medium' | 'large' - Tab size
+- \`size\`: 'sm' | 'md' | 'lg' - Tab size
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
 - \`style\`: ViewStyle - Additional styles
 - \`testID\`: string - Test identifier
@@ -137,7 +137,7 @@ function Example() {
         onChange={setActiveTab}
         variant="pills"
       />
-      <Card variant="outlined" padding="medium">
+      <Card variant="outlined" padding="md">
         {renderContent()}
       </Card>
     </View>

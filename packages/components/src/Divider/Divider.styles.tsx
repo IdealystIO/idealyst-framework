@@ -21,7 +21,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         thin: {
           // Handled by orientation compound variants
         },
-        medium: {
+        md: {
           // Handled by orientation compound variants
         },
         thick: {
@@ -86,13 +86,13 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         none: {
           margin: 0,
         },
-        small: {
+        sm: {
           // Handled by orientation compound variants
         },
-        medium: {
+        md: {
           // Handled by orientation compound variants
         },
-        large: {
+        lg: {
           // Handled by orientation compound variants
         },
       },
@@ -494,13 +494,13 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         none: {
           gap: 0,
         },
-        small: {
+        sm: {
           gap: theme.spacing.sm,
         },
-        medium: {
+        md: {
           gap: theme.spacing.md,
         },
-        large: {
+        lg: {
           gap: theme.spacing.lg,
         },
       },
@@ -543,7 +543,7 @@ export const dividerStyles = StyleSheet.create((theme) => ({
         thin: {
           // Handled by orientation compound variants
         },
-        medium: {
+        md: {
           // Handled by orientation compound variants
         },
         thick: {

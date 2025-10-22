@@ -5,13 +5,13 @@ export const ThemeExtensionExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="lg">
-        <Text size="large" weight="bold" align="center">
+        <Text size="lg" weight="bold" align="center">
           Extended Theme Test
         </Text>
         
         {/* Extended Colors */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Extended Colors</Text>
+          <Text size="md" weight="semibold">Extended Colors</Text>
                      <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
              <Badge color={"orange" as any}>Orange</Badge>
              <Badge color={"teal" as any}>Teal</Badge>
@@ -31,7 +31,7 @@ export const ThemeExtensionExamples = () => {
 
         {/* Extended Intents */}
                           <View spacing="md">
-           <Text size="medium" weight="semibold">Extended Intents</Text>
+           <Text size="md" weight="semibold">Extended Intents</Text>
            <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
              <Button intent={"accent" as any}>Accent Button</Button>
              <Button intent={"feature" as any}>Feature Button</Button>
@@ -47,7 +47,7 @@ export const ThemeExtensionExamples = () => {
 
          {/* Mixed Usage */}
          <View spacing="md">
-           <Text size="medium" weight="semibold">Mixed Extended Usage</Text>
+           <Text size="md" weight="semibold">Mixed Extended Usage</Text>
            
            <Card>
              <View spacing="sm">
@@ -68,7 +68,7 @@ export const ThemeExtensionExamples = () => {
 
          {/* Form with Extended Colors */}
          <View spacing="md">
-           <Text size="medium" weight="semibold">Form with Extended Styling</Text>
+           <Text size="md" weight="semibold">Form with Extended Styling</Text>
            
            <Input 
              placeholder="Input with accent intent" 

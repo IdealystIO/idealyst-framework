@@ -10,15 +10,15 @@ export const avatarStyles = StyleSheet.create((theme) => ({
     
     variants: {
       size: {
-        small: {
+        sm: {
           width: 32,
           height: 32,
         },
-        medium: {
+        md: {
           width: 40,
           height: 40,
         },
-        large: {
+        lg: {
           width: 48,
           height: 48,
         },
@@ -49,13 +49,13 @@ export const avatarStyles = StyleSheet.create((theme) => ({
     
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
         },
-        medium: {
+        md: {
           fontSize: 16,
         },
-        large: {
+        lg: {
           fontSize: 18,
         },
         xlarge: {

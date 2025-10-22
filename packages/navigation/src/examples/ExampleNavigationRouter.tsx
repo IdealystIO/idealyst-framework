@@ -12,13 +12,13 @@ const HomeScreen = () => {
     return (
         <Screen>
             <View spacing='lg' padding={12}>
-                <Text size="xlarge" weight="bold">
+                <Text size="xl" weight="bold">
                     Welcome to Idealyst Components
                 </Text>
 
                 <Card>
                     <View spacing="md" style={{ padding: 16 }}>
-                        <Text size="large" weight="semibold">
+                        <Text size="lg" weight="semibold">
                             Getting Started
                         </Text>
                         <Text>
@@ -30,7 +30,7 @@ const HomeScreen = () => {
 
                 <Card>
                     <View spacing="md" style={{ padding: 16 }}>
-                        <Text size="large" weight="semibold">
+                        <Text size="lg" weight="semibold">
                             Features
                         </Text>
                         <View spacing="sm">
@@ -45,7 +45,7 @@ const HomeScreen = () => {
 
                 <Card>
                     <View spacing="md" style={{ padding: 16 }}>
-                        <Text size="large" weight="semibold">
+                        <Text size="lg" weight="semibold">
                             Theme Controls
                         </Text>
                         <Text>

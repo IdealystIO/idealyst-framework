@@ -9,7 +9,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   placement = 'top',
   delay = 200,
   intent = 'neutral',
-  size = 'medium',
+  size = 'md',
   style,
   testID,
 }) => {

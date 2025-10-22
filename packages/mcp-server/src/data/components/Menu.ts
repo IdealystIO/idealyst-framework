@@ -15,7 +15,7 @@ export const Menu = {
 - \`anchor\`: React.RefObject<HTMLElement> - Anchor element to position menu
 - \`placement\`: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right' - Menu placement
 - \`closeOnSelection\`: boolean - Close menu when item selected (default: true)
-- \`size\`: 'small' | 'medium' | 'large' - Menu item size
+- \`size\`: 'sm' | 'md' | 'lg' - Menu item size
 - \`style\`: ViewStyle - Additional custom styles
 - \`testID\`: string - Test identifier
 `,
@@ -85,9 +85,9 @@ const items = [
     variants: `import { Menu } from '@idealyst/components';
 
 // Different sizes
-<Menu items={items} open={open} onOpenChange={setOpen} anchor={ref} size="small" />
-<Menu items={items} open={open} onOpenChange={setOpen} anchor={ref} size="medium" />
-<Menu items={items} open={open} onOpenChange={setOpen} anchor={ref} size="large" />`,
+<Menu items={items} open={open} onOpenChange={setOpen} anchor={ref} size="sm" />
+<Menu items={items} open={open} onOpenChange={setOpen} anchor={ref} size="md" />
+<Menu items={items} open={open} onOpenChange={setOpen} anchor={ref} size="lg" />`,
 
     "with-icons": `import { Menu, Button } from '@idealyst/components';
 import { useRef, useState } from 'react';

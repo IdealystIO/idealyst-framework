@@ -35,7 +35,7 @@ export const DefaultStackLayout: React.FC<DefaultStackLayoutProps> = ({
                             
                             {options.headerTitle && (
                                 typeof options.headerTitle === 'string' ? (
-                                    <Text size="large" weight="bold" style={{ marginLeft: options.headerLeft ? 12 : 0 }}>
+                                    <Text size="lg" weight="bold" style={{ marginLeft: options.headerLeft ? 12 : 0 }}>
                                         {options.headerTitle}
                                     </Text>
                                 ) : (

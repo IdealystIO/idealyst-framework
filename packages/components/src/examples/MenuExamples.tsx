@@ -50,7 +50,7 @@ export const MenuExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">Menu Examples</Text>
+      <Text size="xl" weight="bold">Menu Examples</Text>
 
       {selectedAction && (
         <View spacing="sm" style={{ padding: 12, backgroundColor: '#f0f0f0', borderRadius: 8 }}>
@@ -59,7 +59,7 @@ export const MenuExamples: React.FC = () => {
       )}
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Basic Menu</Text>
+        <Text size="lg" weight="semibold">Basic Menu</Text>
         <Menu
           items={basicItems}
           open={basicMenuOpen}
@@ -72,7 +72,7 @@ export const MenuExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Placement Options</Text>
+        <Text size="lg" weight="semibold">Placement Options</Text>
         <Menu
           items={basicItems}
           open={placementMenuOpen}
@@ -86,7 +86,7 @@ export const MenuExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Icons</Text>
+        <Text size="lg" weight="semibold">With Icons</Text>
         <Menu
           items={iconNameItems}
           open={iconNameMenuOpen}
@@ -99,7 +99,7 @@ export const MenuExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Intent Colors</Text>
+        <Text size="lg" weight="semibold">Intent Colors</Text>
         <Menu
           items={intentItems}
           open={intentMenuOpen}
@@ -112,7 +112,7 @@ export const MenuExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Separators</Text>
+        <Text size="lg" weight="semibold">With Separators</Text>
         <Menu
           items={separatorItems}
           open={separatorMenuOpen}
@@ -125,7 +125,7 @@ export const MenuExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Disabled Items</Text>
+        <Text size="lg" weight="semibold">Disabled Items</Text>
         <Menu
           items={disabledItems}
           open={disabledMenuOpen}

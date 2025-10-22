@@ -8,7 +8,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
   src,
   alt,
   fallback,
-  size = 'medium',
+  size = 'md',
   shape = 'circle',
   style,
   testID,

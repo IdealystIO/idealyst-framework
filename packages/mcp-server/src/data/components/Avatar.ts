@@ -5,7 +5,7 @@ export const Avatar = {
 - \`src\`: string | any - Image source (URL or require())
 - \`alt\`: string - Alt text for the image
 - \`fallback\`: string - Fallback text displayed when no image (usually initials)
-- \`size\`: 'small' | 'medium' | 'large' | 'xlarge' - Avatar size
+- \`size\`: 'sm' | 'md' | 'lg' | 'xl' - Avatar size
 - \`shape\`: 'circle' | 'square' - Avatar shape
 - \`color\`: ColorVariant - Background color for fallback (from theme palette)
 - \`style\`: any - Additional custom styles
@@ -33,7 +33,7 @@ import { Avatar } from '@idealyst/components';
   src="https://example.com/avatar.jpg"
   alt="John Doe"
   fallback="JD"
-  size="large"
+  size="lg"
   shape="circle"
 />
 `,
@@ -42,16 +42,16 @@ import { Avatar } from '@idealyst/components';
 
 <Avatar
   fallback="JD"
-  size="medium"
+  size="md"
 />`,
 
     variants: `import { Avatar, View } from '@idealyst/components';
 
 <View style={{ flexDirection: 'row', gap: 8 }}>
-  <Avatar fallback="SM" size="small" />
-  <Avatar fallback="MD" size="medium" />
-  <Avatar fallback="LG" size="large" />
-  <Avatar fallback="XL" size="xlarge" />
+  <Avatar fallback="SM" size="sm" />
+  <Avatar fallback="MD" size="md" />
+  <Avatar fallback="LG" size="lg" />
+  <Avatar fallback="XL" size="xl" />
 </View>`,
 
     "with-icons": `import { Avatar, View } from '@idealyst/components';
@@ -83,11 +83,11 @@ function UserProfile({ user }) {
         src={user.avatar}
         alt={user.name}
         fallback={user.initials}
-        size="xlarge"
+        size="xl"
         color="primary"
       />
       <Text weight="bold">{user.name}</Text>
-      <Text size="small" color="secondary">{user.email}</Text>
+      <Text size="sm" color="secondary">{user.email}</Text>
     </View>
   );
 }`,

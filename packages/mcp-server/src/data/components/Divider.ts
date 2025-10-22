@@ -7,7 +7,7 @@ export const Divider = {
 - \`thickness\`: 'thin' | 'medium' | 'thick' - The thickness of the divider
 - \`intent\`: IntentVariant - The color intent
 - \`length\`: 'full' | 'auto' | number - The length (percentage or fixed)
-- \`spacing\`: 'none' | 'small' | 'medium' | 'large' - Spacing around divider
+- \`spacing\`: 'none' | 'sm' | 'md' | 'lg' - Spacing around divider
 - \`children\`: ReactNode - Content in center (horizontal dividers)
 - \`style\`: any - Additional custom styles
 - \`testID\`: string - Test identifier
@@ -33,7 +33,7 @@ import { Divider, View, Text } from '@idealyst/components';
 
 <View spacing="md">
   <Text>Content above</Text>
-  <Divider spacing="medium" />
+  <Divider spacing="md" />
   <Text>Content below</Text>
 </View>
 `,
@@ -54,8 +54,8 @@ import { Divider, View, Text } from '@idealyst/components';
 
 <View spacing="lg">
   <Text>Section 1</Text>
-  <Divider spacing="medium">
-    <Text size="small" color="secondary">OR</Text>
+  <Divider spacing="md">
+    <Text size="sm" color="secondary">OR</Text>
   </Divider>
   <Text>Section 2</Text>
 </View>`,

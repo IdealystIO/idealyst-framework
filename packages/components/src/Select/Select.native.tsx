@@ -25,7 +25,7 @@ const Select = forwardRef<View, SelectProps>(({
   label,
   variant = 'outlined',
   intent = 'neutral',
-  size = 'medium',
+  size = 'md',
   searchable = false,
   filterOption,
   presentationMode = 'dropdown',

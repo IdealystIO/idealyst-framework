@@ -4,7 +4,7 @@ category: "display",
     props: `
 - \`variant\`: 'filled' | 'outlined' | 'dot' - Visual style
 - \`color\`: string - Badge color from theme palette
-- \`size\`: 'small' | 'medium' | 'large' - Badge size
+- \`size\`: 'sm' | 'md' | 'lg' - Badge size
 - \`icon\`: string | ReactNode - Icon to display
 - \`children\`: ReactNode - Badge content (text/number)
 `,

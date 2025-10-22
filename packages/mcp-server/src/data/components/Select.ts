@@ -16,7 +16,7 @@ export const Select = {
 - \`label\`: string - Label text above select
 - \`variant\`: 'outlined' | 'filled' - Visual style
 - \`intent\`: IntentVariant - Color scheme
-- \`size\`: 'small' | 'medium' | 'large' - Select size
+- \`size\`: 'sm' | 'md' | 'lg' - Select size
 - \`searchable\`: boolean - Enable search/filter (web only)
 - \`filterOption\`: (option, searchTerm) => boolean - Custom filter function
 - \`presentationMode\`: 'dropdown' | 'actionSheet' - iOS presentation (native only)
@@ -83,9 +83,9 @@ const options = [
 const options = [{ value: '1', label: 'Option' }];
 
 <View spacing="md">
-  <Select options={options} variant="outlined" size="small" />
-  <Select options={options} variant="filled" size="medium" />
-  <Select options={options} variant="outlined" size="large" />
+  <Select options={options} variant="outlined" size="sm" />
+  <Select options={options} variant="filled" size="md" />
+  <Select options={options} variant="outlined" size="lg" />
 </View>`,
 
     "with-icons": `import { Select } from '@idealyst/components';

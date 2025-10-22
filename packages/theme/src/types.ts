@@ -178,7 +178,7 @@ export type InteractiveVariant =
 /**
  * Common padding/size presets
  */
-export type PaddingVariant = 'none' | 'small' | 'medium' | 'large';
+export type PaddingVariant = 'none' | 'sm' | 'md' | 'lg';
 
 // =============================================================================
 // TEXT/TYPOGRAPHY VARIANTS

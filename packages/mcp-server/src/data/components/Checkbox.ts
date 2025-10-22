@@ -6,7 +6,7 @@ export const Checkbox = {
 - \`indeterminate\`: boolean - Whether the checkbox is in an indeterminate state
 - \`disabled\`: boolean - Whether the checkbox is disabled
 - \`onCheckedChange\`: (checked: boolean) => void - Called when checkbox state changes
-- \`size\`: 'small' | 'medium' | 'large' - Checkbox size
+- \`size\`: 'sm' | 'md' | 'lg' - Checkbox size
 - \`intent\`: IntentVariant - Color scheme
 - \`variant\`: 'default' | 'outlined' - Visual style
 - \`label\`: string - Label text to display next to checkbox
@@ -59,9 +59,9 @@ function Example() {
     variants: `import { Checkbox, View } from '@idealyst/components';
 
 <View spacing="sm">
-  <Checkbox label="Small" size="small" />
-  <Checkbox label="Medium" size="medium" />
-  <Checkbox label="Large" size="large" />
+  <Checkbox label="Small" size="sm" />
+  <Checkbox label="Medium" size="md" />
+  <Checkbox label="Large" size="lg" />
 </View>`,
 
     "with-icons": `import { Checkbox, View } from '@idealyst/components';

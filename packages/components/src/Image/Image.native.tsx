@@ -70,7 +70,7 @@ const Image = forwardRef<View, ImageProps>(({
 
       {isLoading && !hasError && (
         <View style={imageStyles.placeholder}>
-          {placeholder || <ActivityIndicator size="medium" />}
+          {placeholder || <ActivityIndicator size="md" />}
         </View>
       )}
 

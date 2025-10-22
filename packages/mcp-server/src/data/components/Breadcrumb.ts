@@ -10,7 +10,7 @@ export const Breadcrumb = {
 - \`separator\`: ReactNode - Custom separator between items (default: '/')
 - \`maxItems\`: number - Maximum number of items before truncating
 - \`intent\`: 'primary' | 'neutral' - Intent color for links
-- \`size\`: 'small' | 'medium' | 'large' - Size of breadcrumb text
+- \`size\`: 'sm' | 'md' | 'lg' - Size of breadcrumb text
 - \`style\`: StyleProp<ViewStyle> - Custom container style
 - \`itemStyle\`: StyleProp<ViewStyle> - Custom item style
 - \`separatorStyle\`: StyleProp<TextStyle> - Custom separator style
@@ -64,9 +64,9 @@ const items = [
 ];
 
 <View spacing="md">
-  <Breadcrumb items={items} size="small" />
-  <Breadcrumb items={items} size="medium" />
-  <Breadcrumb items={items} size="large" />
+  <Breadcrumb items={items} size="sm" />
+  <Breadcrumb items={items} size="md" />
+  <Breadcrumb items={items} size="lg" />
 </View>`,
 
     "with-icons": `import { Breadcrumb } from '@idealyst/components';

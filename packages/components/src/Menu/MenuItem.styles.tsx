@@ -22,15 +22,15 @@ export const menuItemStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           paddingVertical: 6,
           paddingHorizontal: 8,
         },
-        medium: {
+        md: {
           paddingVertical: 10,
           paddingHorizontal: 12,
         },
-        large: {
+        lg: {
           paddingVertical: 12,
           paddingHorizontal: 16,
         },
@@ -103,17 +103,17 @@ export const menuItemStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 16,
           height: 16,
           fontSize: 16,
         },
-        medium: {
+        md: {
           width: 20,
           height: 20,
           fontSize: 20,
         },
-        large: {
+        lg: {
           width: 24,
           height: 24,
           fontSize: 24,
@@ -128,13 +128,13 @@ export const menuItemStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
         },
-        medium: {
+        md: {
           fontSize: 16,
         },
-        large: {
+        lg: {
           fontSize: 18,
         },
       },

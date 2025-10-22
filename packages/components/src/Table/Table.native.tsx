@@ -7,7 +7,7 @@ function TableInner<T = any>({
   columns,
   data,
   variant = 'default',
-  size = 'medium',
+  size = 'md',
   stickyHeader = false,
   onRowPress,
   style,

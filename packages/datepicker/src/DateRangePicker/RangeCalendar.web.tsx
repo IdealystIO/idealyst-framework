@@ -246,7 +246,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
       <div {...headerProps}>
         <Button 
           variant="text" 
-          size="small" 
+          size="sm" 
           onPress={goToPreviousMonth} 
           disabled={disabled}
           style={getWebProps([rangeCalendarStyles.headerButton]).style}
@@ -257,7 +257,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
         <div {...headerTitleProps} style={{ display: 'flex', gap: '8px' }}>
           <Button
             variant="text"
-            size="small"
+            size="sm"
             onPress={() => setOverlayMode('month')}
             disabled={disabled}
             style={{ padding: '4px 8px' }}
@@ -266,7 +266,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
           </Button>
           <Button
             variant="text"
-            size="small"
+            size="sm"
             onPress={() => setOverlayMode('year')}
             disabled={disabled}
             style={{ padding: '4px 8px' }}
@@ -277,7 +277,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
         
         <Button 
           variant="text" 
-          size="small" 
+          size="sm" 
           onPress={goToNextMonth} 
           disabled={disabled}
           style={getWebProps([rangeCalendarStyles.headerButton]).style}
@@ -306,7 +306,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
                 variant="text"
                 disabled={isDateDisabled(dayInfo.date)}
                 onPress={() => handleDateClick(dayInfo.date)}
-                size="small"
+                size="sm"
                 style={{
                   ...getWebProps([rangeCalendarStyles.dayButton]).style,
                   backgroundColor: isDateSelected(dayInfo.date) 

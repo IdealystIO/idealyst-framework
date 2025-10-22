@@ -43,15 +43,15 @@ export const inputStyles = StyleSheet.create((theme) => ({
         },
       },
       size: {
-        small: {
+        sm: {
           height: 36,
           paddingHorizontal: theme.spacing.xs,
         },
-        medium: {
+        md: {
           height: 44,
           paddingHorizontal: theme.spacing.sm,
         },
-        large: {
+        lg: {
           height: 52,
           paddingHorizontal: theme.spacing.md,
         },
@@ -138,13 +138,13 @@ export const inputStyles = StyleSheet.create((theme) => ({
     flexShrink: 0,
     variants: {
       size: {
-        small: {
+        sm: {
           marginRight: theme.spacing.xs,
         },
-        medium: {
+        md: {
           marginRight: theme.spacing.xs,
         },
-        large: {
+        lg: {
           marginRight: theme.spacing.sm,
         },
       },
@@ -157,13 +157,13 @@ export const inputStyles = StyleSheet.create((theme) => ({
     flexShrink: 0,
     variants: {
       size: {
-        small: {
+        sm: {
           marginLeft: theme.spacing.xs,
         },
-        medium: {
+        md: {
           marginLeft: theme.spacing.xs,
         },
-        large: {
+        lg: {
           marginLeft: theme.spacing.sm,
         },
       },
@@ -173,7 +173,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
     color: theme.colors.text.secondary,
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 16,
           width: 16,
           height: 16,
@@ -182,7 +182,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
           minHeight: 16,
           maxHeight: 16,
         },
-        medium: {
+        md: {
           fontSize: 20,
           width: 20,
           height: 20,
@@ -191,7 +191,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
           minHeight: 20,
           maxHeight: 20,
         },
-        large: {
+        lg: {
           fontSize: 24,
           width: 24,
           height: 24,
@@ -211,7 +211,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
     color: theme.colors.text.secondary,
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 16,
           width: 16,
           height: 16,
@@ -220,7 +220,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
           minHeight: 16,
           maxHeight: 16,
         },
-        medium: {
+        md: {
           fontSize: 20,
           width: 20,
           height: 20,
@@ -229,7 +229,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
           minHeight: 20,
           maxHeight: 20,
         },
-        large: {
+        lg: {
           fontSize: 24,
           width: 24,
           height: 24,
@@ -252,13 +252,13 @@ export const inputStyles = StyleSheet.create((theme) => ({
     padding: 0,
     variants: {
       size: {
-        small: {
+        sm: {
           marginLeft: theme.spacing.xs,
         },
-        medium: {
+        md: {
           marginLeft: theme.spacing.xs,
         },
-        large: {
+        lg: {
           marginLeft: theme.spacing.sm,
         },
       },
@@ -277,7 +277,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
     color: theme.colors.text.secondary,
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 16,
           width: 16,
           height: 16,
@@ -286,7 +286,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
           minHeight: 16,
           maxHeight: 16,
         },
-        medium: {
+        md: {
           fontSize: 20,
           width: 20,
           height: 20,
@@ -295,7 +295,7 @@ export const inputStyles = StyleSheet.create((theme) => ({
           minHeight: 20,
           maxHeight: 20,
         },
-        large: {
+        lg: {
           fontSize: 24,
           width: 24,
           height: 24,
@@ -316,13 +316,13 @@ export const inputStyles = StyleSheet.create((theme) => ({
     fontWeight: theme.typography.fontWeight.regular,
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: theme.typography.fontSize.sm,
         },
-        medium: {
+        md: {
           fontSize: theme.typography.fontSize.md,
         },
-        large: {
+        lg: {
           fontSize: theme.typography.fontSize.lg,
         },
       },

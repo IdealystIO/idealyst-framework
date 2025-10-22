@@ -4,7 +4,7 @@ category: "display",
     props: `
 List Props:
 - \`variant\`: 'default' | 'bordered' | 'divided' - Visual style
-- \`size\`: 'small' | 'medium' | 'large' - Item size
+- \`size\`: 'sm' | 'md' | 'lg' - Item size
 - \`children\`: ListItem | ListSection - List content
 
 ListItem Props:

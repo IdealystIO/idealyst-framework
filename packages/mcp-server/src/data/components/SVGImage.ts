@@ -65,7 +65,7 @@ import ReactLogo from './react-logo.svg';
   <SVGImage source={ReactLogo} size={32} color="#61dafb" />
   <View spacing="xs">
     <Text weight="bold">React Application</Text>
-    <Text size="small">Built with React & React Native</Text>
+    <Text size="sm">Built with React & React Native</Text>
   </View>
 </View>`,
 
@@ -84,21 +84,21 @@ function Example() {
       <SVGImage source={AppIcon} size={size} intent={intent} />
 
       <View style={{ flexDirection: 'row', gap: 8 }}>
-        <Button size="small" onPress={() => setSize(Math.max(24, size - 12))}>
+        <Button size="sm" onPress={() => setSize(Math.max(24, size - 12))}>
           Smaller
         </Button>
-        <Button size="small" onPress={() => setSize(Math.min(96, size + 12))}>
+        <Button size="sm" onPress={() => setSize(Math.min(96, size + 12))}>
           Larger
         </Button>
       </View>
 
       <View spacing="xs">
-        <Text size="small">Intent:</Text>
+        <Text size="sm">Intent:</Text>
         <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
           {intents.map((i) => (
             <Button
               key={i}
-              size="small"
+              size="sm"
               variant={intent === i ? 'contained' : 'outlined'}
               onPress={() => setIntent(i)}
             >

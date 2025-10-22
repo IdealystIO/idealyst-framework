@@ -8,7 +8,7 @@ RadioButton Props:
 - \`onPress\`: () => void - Press handler
 - \`disabled\`: boolean - Whether disabled
 - \`label\`: string - Label text
-- \`size\`: 'small' | 'medium' | 'large' - Radio size
+- \`size\`: 'sm' | 'md' | 'lg' - Radio size
 - \`intent\`: 'primary' | 'success' | 'error' | 'warning' | 'neutral' - Color scheme
 - \`style\`: ViewStyle - Additional styles
 - \`testID\`: string - Test identifier
@@ -74,9 +74,9 @@ function Example() {
 
   {/* Horizontal */}
   <RadioGroup value={value} onValueChange={setValue} orientation="horizontal">
-    <RadioButton value="1" label="Small" size="small" />
-    <RadioButton value="2" label="Medium" size="medium" />
-    <RadioButton value="3" label="Large" size="large" />
+    <RadioButton value="1" label="Small" size="sm" />
+    <RadioButton value="2" label="Medium" size="md" />
+    <RadioButton value="3" label="Large" size="lg" />
   </RadioGroup>
 </View>`,
 
@@ -120,7 +120,7 @@ function Example() {
           <Card
             key={option.value}
             variant={shipping === option.value ? 'outlined' : 'default'}
-            padding="small"
+            padding="sm"
             clickable
             onPress={() => setShipping(option.value)}
           >

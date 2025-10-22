@@ -5,7 +5,7 @@ category: "display",
 - \`label\`: string - Chip text
 - \`variant\`: 'filled' | 'outlined' | 'soft' - Visual style
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'small' | 'medium' | 'large' - Chip size
+- \`size\`: 'sm' | 'md' | 'lg' - Chip size
 - \`icon\`: IconName | ReactNode - Leading icon
 - \`deletable\`: boolean - Show delete button
 - \`onDelete\`: () => void - Delete handler

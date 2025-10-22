@@ -19,7 +19,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   label,
   variant = 'outlined',
   intent = 'neutral',
-  size = 'medium',
+  size = 'md',
   searchable = false,
   filterOption,
   maxHeight = 240,

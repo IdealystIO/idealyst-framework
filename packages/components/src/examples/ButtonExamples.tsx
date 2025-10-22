@@ -9,13 +9,13 @@ export const ButtonExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
-      <Text size="large" weight="bold" align="center">
+      <Text size="lg" weight="bold" align="center">
         Button Examples
       </Text>
       
       {/* Button Variants */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Variants</Text>
+        <Text size="md" weight="semibold">Variants</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button 
             variant="contained" 
@@ -43,7 +43,7 @@ export const ButtonExamples = () => {
 
       {/* Button Sizes */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Sizes</Text>
+        <Text size="md" weight="semibold">Sizes</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Button
             size="sm"
@@ -74,7 +74,7 @@ export const ButtonExamples = () => {
 
       {/* Button Intents */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Intents</Text>
+        <Text size="md" weight="semibold">Intents</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button 
             intent="primary"
@@ -116,7 +116,7 @@ export const ButtonExamples = () => {
 
       {/* Disabled States */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Disabled States</Text>
+        <Text size="md" weight="semibold">Disabled States</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
             variant="contained"
@@ -147,7 +147,7 @@ export const ButtonExamples = () => {
 
       {/* Buttons with Icons */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Buttons with Icons</Text>
+        <Text size="md" weight="semibold">Buttons with Icons</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
             variant="contained"
@@ -195,7 +195,7 @@ export const ButtonExamples = () => {
 
       {/* Icon-only Buttons */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Icon-only Buttons</Text>
+        <Text size="md" weight="semibold">Icon-only Buttons</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Button
             variant="contained"
@@ -235,7 +235,7 @@ export const ButtonExamples = () => {
 
       {/* Different Intents with Icons */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Icons with Different Intents</Text>
+        <Text size="md" weight="semibold">Icons with Different Intents</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
             variant="contained"

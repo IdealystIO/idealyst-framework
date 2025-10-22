@@ -4,8 +4,8 @@ category: "display",
     props: `
 - \`variant\`: 'default' | 'outlined' | 'elevated' | 'filled' - Visual style
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`padding\`: 'none' | 'small' | 'medium' | 'large' - Internal padding
-- \`radius\`: 'none' | 'small' | 'medium' | 'large' - Border radius
+- \`padding\`: 'none' | 'sm' | 'md' | 'lg' - Internal padding
+- \`radius\`: 'none' | 'sm' | 'md' | 'lg' - Border radius
 - \`clickable\`: boolean - Make card interactive
 - \`onPress\`: () => void - Press handler (when clickable)
 - \`children\`: ReactNode - Card content
@@ -26,10 +26,10 @@ category: "display",
     usage: `
 import { Card, Text, View } from '@idealyst/components';
 
-<Card variant="elevated" padding="medium">
+<Card variant="elevated" padding="md">
   <View spacing="sm">
     <Text weight="bold">Card Title</Text>
-    <Text size="small">Card content goes here</Text>
+    <Text size="sm">Card content goes here</Text>
   </View>
 </Card>
 `,

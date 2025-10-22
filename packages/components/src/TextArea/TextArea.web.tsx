@@ -21,7 +21,7 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   resize = 'none',
   showCharacterCount = false,
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   style,
   textareaStyle,
   testID,

@@ -9,7 +9,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   onOpenChange,
   title,
   children,
-  size = 'medium',
+  size = 'md',
   variant = 'default',
   showCloseButton = true,
   closeOnBackdropClick = true,

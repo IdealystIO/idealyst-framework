@@ -131,17 +131,17 @@ export const tableStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           padding: theme.spacing.sm,
           fontSize: 13,
           lineHeight: 18,
         },
-        medium: {
+        md: {
           padding: theme.spacing.md,
           fontSize: 14,
           lineHeight: 20,
         },
-        large: {
+        lg: {
           padding: theme.spacing.lg,
           fontSize: 15,
           lineHeight: 22,
@@ -182,17 +182,17 @@ export const tableStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           padding: theme.spacing.sm,
           fontSize: 13,
           lineHeight: 18,
         },
-        medium: {
+        md: {
           padding: theme.spacing.md,
           fontSize: 14,
           lineHeight: 20,
         },
-        large: {
+        lg: {
           padding: theme.spacing.lg,
           fontSize: 15,
           lineHeight: 22,

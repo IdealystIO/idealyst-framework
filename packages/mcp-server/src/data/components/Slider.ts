@@ -14,7 +14,7 @@ export const Slider = {
   - \`value\`: number - Mark position
   - \`label\`: string - Mark label (optional)
 - \`intent\`: 'primary' | 'success' | 'error' | 'warning' | 'neutral' - Color scheme
-- \`size\`: 'small' | 'medium' | 'large' - Slider size
+- \`size\`: 'sm' | 'md' | 'lg' - Slider size
 - \`icon\`: IconName | React.ReactNode - Icon displayed in thumb
 - \`onValueChange\`: (value: number) => void - Called during drag
 - \`onValueCommit\`: (value: number) => void - Called when drag ends
@@ -69,9 +69,9 @@ function Example() {
     variants: `import { Slider, View } from '@idealyst/components';
 
 <View spacing="md">
-  <Slider size="small" value={25} />
-  <Slider size="medium" value={50} />
-  <Slider size="large" value={75} />
+  <Slider size="sm" value={25} />
+  <Slider size="md" value={50} />
+  <Slider size="lg" value={75} />
 </View>`,
 
     "with-icons": `import { Slider, View, Text, Icon } from '@idealyst/components';

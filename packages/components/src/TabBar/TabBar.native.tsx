@@ -15,7 +15,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
   defaultValue,
   onChange,
   variant = 'default',
-  size = 'medium',
+  size = 'md',
   pillMode = 'light',
   style,
   testID,

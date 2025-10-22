@@ -6,8 +6,8 @@ import { cardStyles } from './Card.styles';
 const Card = forwardRef<View | Pressable, CardProps>(({
   children,
   variant = 'default',
-  padding = 'medium',
-  radius = 'medium',
+  padding = 'md',
+  radius = 'md',
   intent = 'neutral',
   clickable = false,
   onPress,

@@ -25,9 +25,9 @@ export const tabBarContainerStyles = StyleSheet.create((theme) => ({
         underline: {},
       },
       size: {
-        small: {},
-        medium: {},
-        large: {},
+        sm: {},
+        md: {},
+        lg: {},
       },
       pillMode: {
         light: {},
@@ -76,17 +76,17 @@ export const tabBarTabStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
           padding: 8,
           lineHeight: 20,
         },
-        medium: {
+        md: {
           fontSize: 16,
           padding: 12,
           lineHeight: 24,
         },
-        large: {
+        lg: {
           fontSize: 18,
           padding: 16,
           lineHeight: 28,
@@ -128,7 +128,7 @@ export const tabBarTabStyles = StyleSheet.create((theme) => ({
       // Pills variant - compact padding for all sizes
       {
         variant: 'pills',
-        size: 'small',
+        size: 'sm',
         styles: {
           paddingVertical: 4,
           paddingHorizontal: 12,
@@ -136,7 +136,7 @@ export const tabBarTabStyles = StyleSheet.create((theme) => ({
       },
       {
         variant: 'pills',
-        size: 'medium',
+        size: 'md',
         styles: {
           paddingVertical: 6,
           paddingHorizontal: 16,
@@ -144,7 +144,7 @@ export const tabBarTabStyles = StyleSheet.create((theme) => ({
       },
       {
         variant: 'pills',
-        size: 'large',
+        size: 'lg',
         styles: {
           paddingVertical: 8,
           paddingHorizontal: 20,
@@ -183,15 +183,15 @@ export const tabBarLabelStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 14,
           lineHeight: 20,
         },
-        medium: {
+        md: {
           fontSize: 16,
           lineHeight: 24,
         },
-        large: {
+        lg: {
           fontSize: 18,
           lineHeight: 28,
         },

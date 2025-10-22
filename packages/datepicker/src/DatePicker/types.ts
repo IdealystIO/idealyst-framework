@@ -36,7 +36,7 @@ export interface DatePickerProps {
   locale?: string;
   
   /** Size variant */
-  size?: 'small' | 'medium' | 'large';
+  size?: 'sm' | 'md' | 'lg';
   
   /** Visual variant */
   variant?: 'outlined' | 'filled';

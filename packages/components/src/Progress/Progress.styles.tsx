@@ -12,13 +12,13 @@ export const progressStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           height: 4,
         },
-        medium: {
+        md: {
           height: 8,
         },
-        large: {
+        lg: {
           height: 12,
         },
       },
@@ -107,15 +107,15 @@ export const progressStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 32,
           height: 32,
         },
-        medium: {
+        md: {
           width: 48,
           height: 48,
         },
-        large: {
+        lg: {
           width: 64,
           height: 64,
         },
@@ -155,13 +155,13 @@ export const progressStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 12,
         },
-        medium: {
+        md: {
           fontSize: 14,
         },
-        large: {
+        lg: {
           fontSize: 16,
         },
       },
@@ -175,13 +175,13 @@ export const progressStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 10,
         },
-        medium: {
+        md: {
           fontSize: 12,
         },
-        large: {
+        lg: {
           fontSize: 14,
         },
       },

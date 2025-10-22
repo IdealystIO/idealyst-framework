@@ -5,52 +5,52 @@ export const SkeletonExamples = () => {
   return (
     <Screen background="primary" safeArea>
       <View spacing="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
-        <Text size="xlarge" weight="bold">Skeleton Examples</Text>
+        <Text size="xl" weight="bold">Skeleton Examples</Text>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Basic Shapes</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Basic Shapes</Text>
 
-        <Text size="medium" weight="semibold">Rectangle (Default)</Text>
+        <Text size="md" weight="semibold">Rectangle (Default)</Text>
         <Skeleton width="100%" height={40} shape="rectangle" />
 
-        <Text size="medium" weight="semibold">Rounded</Text>
+        <Text size="md" weight="semibold">Rounded</Text>
         <Skeleton width="100%" height={40} shape="rounded" />
 
-        <Text size="medium" weight="semibold">Circle</Text>
+        <Text size="md" weight="semibold">Circle</Text>
         <Skeleton width={64} height={64} shape="circle" />
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Custom Border Radius</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Custom Border Radius</Text>
 
         <Skeleton width="100%" height={40} shape="rounded" borderRadius={4} />
         <Skeleton width="100%" height={40} shape="rounded" borderRadius={16} />
         <Skeleton width="100%" height={40} shape="rounded" borderRadius={24} />
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Animation Types</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Animation Types</Text>
 
-        <Text size="medium" weight="semibold">Pulse (Default)</Text>
+        <Text size="md" weight="semibold">Pulse (Default)</Text>
         <Skeleton width="100%" height={40} animation="pulse" />
 
-        <Text size="medium" weight="semibold">Wave</Text>
+        <Text size="md" weight="semibold">Wave</Text>
         <Skeleton width="100%" height={40} animation="wave" />
 
-        <Text size="medium" weight="semibold">None</Text>
+        <Text size="md" weight="semibold">None</Text>
         <Skeleton width="100%" height={40} animation="none" />
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Skeleton Groups</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Skeleton Groups</Text>
 
-        <Text size="medium" weight="semibold">Default Group (3 items)</Text>
+        <Text size="md" weight="semibold">Default Group (3 items)</Text>
         <SkeletonGroup />
 
-        <Text size="medium" weight="semibold">Custom Count (5 items)</Text>
+        <Text size="md" weight="semibold">Custom Count (5 items)</Text>
         <SkeletonGroup count={5} />
 
-        <Text size="medium" weight="semibold">Custom Spacing</Text>
+        <Text size="md" weight="semibold">Custom Spacing</Text>
         <SkeletonGroup count={3} spacing={20} />
 
-        <Text size="medium" weight="semibold">Custom Skeleton Props</Text>
+        <Text size="md" weight="semibold">Custom Skeleton Props</Text>
         <SkeletonGroup
           count={4}
           spacing={16}
@@ -61,8 +61,8 @@ export const SkeletonExamples = () => {
           }}
         />
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Profile Card Loading</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Profile Card Loading</Text>
 
         <Card variant="outlined">
           <View spacing="md">
@@ -77,8 +77,8 @@ export const SkeletonExamples = () => {
           </View>
         </Card>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Article Card Loading</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Article Card Loading</Text>
 
         <Card variant="outlined">
           <View spacing="md">
@@ -96,8 +96,8 @@ export const SkeletonExamples = () => {
           </View>
         </Card>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">List Item Loading</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">List Item Loading</Text>
 
         <Card variant="outlined">
           <View spacing="md">
@@ -113,8 +113,8 @@ export const SkeletonExamples = () => {
           </View>
         </Card>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Table Loading</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Table Loading</Text>
 
         <Card variant="outlined">
           <View spacing="sm">
@@ -125,7 +125,7 @@ export const SkeletonExamples = () => {
               <Skeleton width="25%" height={20} shape="rounded" />
               <Skeleton width="25%" height={20} shape="rounded" />
             </View>
-            <Divider spacing="small" />
+            <Divider spacing="sm" />
             {/* Rows */}
             {[1, 2, 3, 4, 5].map((row) => (
               <View key={row} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
@@ -138,8 +138,8 @@ export const SkeletonExamples = () => {
           </View>
         </Card>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Dashboard Card Loading</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Dashboard Card Loading</Text>
 
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           {[1, 2, 3, 4].map((card) => (
@@ -153,8 +153,8 @@ export const SkeletonExamples = () => {
           ))}
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Comment Thread Loading</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Comment Thread Loading</Text>
 
         <Card variant="outlined">
           <View spacing="md">
@@ -176,8 +176,8 @@ export const SkeletonExamples = () => {
           </View>
         </Card>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Mixed Shapes and Sizes</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Mixed Shapes and Sizes</Text>
 
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Skeleton width={80} height={80} shape="circle" />
@@ -192,8 +192,8 @@ export const SkeletonExamples = () => {
           <Skeleton width={64} height={64} shape="circle" />
         </View>
 
-        <Divider spacing="medium" />
-        <Text size="large" weight="semibold">Custom Widths</Text>
+        <Divider spacing="md" />
+        <Text size="lg" weight="semibold">Custom Widths</Text>
 
         <Skeleton width={100} height={20} shape="rounded" />
         <Skeleton width="25%" height={20} shape="rounded" />

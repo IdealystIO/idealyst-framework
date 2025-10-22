@@ -27,7 +27,7 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
     <View style={calendarHeaderStyles.container}>
       <Button 
         variant="text" 
-        size="small" 
+        size="sm" 
         onPress={onPreviousMonth} 
         disabled={disabled}
         style={calendarHeaderStyles.navButton}
@@ -57,7 +57,7 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
       
       <Button 
         variant="text" 
-        size="small" 
+        size="sm" 
         onPress={onNextMonth} 
         disabled={disabled}
         style={calendarHeaderStyles.navButton}

@@ -7,15 +7,15 @@ export const activityIndicatorStyles = StyleSheet.create((theme) => ({
     
     variants: {
       size: {
-        small: {
+        sm: {
           width: 20,
           height: 20,
         },
-        medium: {
+        md: {
           width: 36,
           height: 36,
         },
-        large: {
+        lg: {
           width: 48,
           height: 48,
         },
@@ -51,17 +51,17 @@ export const activityIndicatorStyles = StyleSheet.create((theme) => ({
     
     variants: {
       size: {
-        small: {
+        sm: {
           width: 20,
           height: 20,
           borderWidth: 2,
         },
-        medium: {
+        md: {
           width: 36,
           height: 36,
           borderWidth: 3,
         },
-        large: {
+        lg: {
           width: 48,
           height: 48,
           borderWidth: 4,

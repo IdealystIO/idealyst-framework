@@ -56,66 +56,66 @@ export const AccordionExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">Accordion Examples</Text>
+      <Text size="xl" weight="bold">Accordion Examples</Text>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Basic Accordion</Text>
+        <Text size="lg" weight="semibold">Basic Accordion</Text>
         <Accordion items={basicItems} />
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Allow Multiple Expanded</Text>
+        <Text size="lg" weight="semibold">Allow Multiple Expanded</Text>
         <Accordion items={basicItems} allowMultiple />
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Default Expanded</Text>
+        <Text size="lg" weight="semibold">Default Expanded</Text>
         <Accordion items={basicItems} defaultExpanded={['item1', 'item2']} allowMultiple />
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Variants</Text>
+        <Text size="lg" weight="semibold">Variants</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="small" weight="medium">Default</Text>
+            <Text size="sm" weight="medium">Default</Text>
             <Accordion items={basicItems} variant="default" />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Separated</Text>
+            <Text size="sm" weight="medium">Separated</Text>
             <Accordion items={basicItems} variant="separated" />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Bordered</Text>
+            <Text size="sm" weight="medium">Bordered</Text>
             <Accordion items={basicItems} variant="bordered" />
           </View>
         </View>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Sizes</Text>
+        <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="small" weight="medium">Small</Text>
+            <Text size="sm" weight="medium">Small</Text>
             <Accordion items={basicItems} size="sm" variant="separated" />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Medium (default)</Text>
+            <Text size="sm" weight="medium">Medium (default)</Text>
             <Accordion items={basicItems} size="md" variant="separated" />
           </View>
           <View spacing="xs">
-            <Text size="small" weight="medium">Large</Text>
+            <Text size="sm" weight="medium">Large</Text>
             <Accordion items={basicItems} size="lg" variant="separated" />
           </View>
         </View>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Rich Content</Text>
+        <Text size="lg" weight="semibold">Rich Content</Text>
         <Accordion items={richContentItems} variant="bordered" />
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Disabled Items</Text>
+        <Text size="lg" weight="semibold">Disabled Items</Text>
         <Accordion items={disabledItems} variant="separated" />
       </View>
     </View>

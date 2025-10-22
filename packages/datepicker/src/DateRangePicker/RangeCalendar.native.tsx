@@ -224,7 +224,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
       <View style={rangeCalendarStyles.header}>
         <Button 
           variant="text" 
-          size="small" 
+          size="sm" 
           onPress={goToPreviousMonth} 
           disabled={disabled}
           style={rangeCalendarStyles.headerButton}
@@ -234,7 +234,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <Button
             variant="text"
-            size="small"
+            size="sm"
             onPress={() => setOverlayMode('month')}
             disabled={disabled}
             style={{ padding: 4 }}
@@ -243,7 +243,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
           </Button>
           <Button
             variant="text"
-            size="small"
+            size="sm"
             onPress={() => setOverlayMode('year')}
             disabled={disabled}
             style={{ padding: 4 }}
@@ -253,7 +253,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
         </View>
         <Button 
           variant="text" 
-          size="small" 
+          size="sm" 
           onPress={goToNextMonth} 
           disabled={disabled}
           style={rangeCalendarStyles.headerButton}

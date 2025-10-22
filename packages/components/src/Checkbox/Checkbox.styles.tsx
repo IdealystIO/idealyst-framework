@@ -39,15 +39,15 @@ export const checkboxStyles = StyleSheet.create((theme) => ({
     
     variants: {
       size: {
-        small: {
+        sm: {
           width: 16,
           height: 16,
         },
-        medium: {
+        md: {
           width: 20,
           height: 20,
         },
-        large: {
+        lg: {
           width: 24,
           height: 24,
         },
@@ -220,13 +220,13 @@ export const checkboxLabelStyles = StyleSheet.create((theme) => ({
     
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: theme.typography?.fontSize?.sm || 14,
         },
-        medium: {
+        md: {
           fontSize: theme.typography?.fontSize?.md || 16,
         },
-        large: {
+        lg: {
           fontSize: theme.typography?.fontSize?.lg || 18,
         },
       },
@@ -252,15 +252,15 @@ export const checkboxCheckmarkStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 12,
           height: 12,
         },
-        medium: {
+        md: {
           width: 14,
           height: 14,
         },
-        large: {
+        lg: {
           width: 16,
           height: 16,
         },

@@ -19,24 +19,24 @@ This file provides comprehensive component documentation for LLMs working with t
 - **Divider**: Content separator (`orientation="horizontal|vertical"`, `spacing`, `intent`)
 
 ### Typography
-- **Text**: Styled text (`size="small|medium|large|xlarge"`, `weight="light|normal|medium|semibold|bold"`, `color`, `intent`, `align`)
+- **Text**: Styled text (`size="sm|md|lg|xl"`, `weight="light|normal|medium|semibold|bold"`, `color`, `intent`, `align`)
 
 ### Form Components
-- **Button**: Interactive button (`variant="contained|outlined|text"`, `intent="primary|neutral|success|error|warning"`, `size="small|medium|large"`)
+- **Button**: Interactive button (`variant="contained|outlined|text"`, `intent="primary|neutral|success|error|warning"`, `size="sm|md|lg"`)
 - **Input**: Text input (`label`, `placeholder`, `error`, `helperText`, `multiline`, `secureTextEntry`)
 - **Checkbox**: Form checkbox (`checked`, `onCheckedChange`, `label`, `disabled`, `intent`)
 
 ### Display Components
 - **Card**: Content container (`variant="default|outlined|elevated|filled"`, `padding`, `radius`, `clickable`, `intent`)
-- **Badge**: Status indicator (`variant="filled|outlined|dot"`, `color`, `size="small|medium|large"`)
-- **Avatar**: Profile picture (`src`, `fallback`, `size="small|medium|large|xlarge"`, `shape="circle|square"`)
+- **Badge**: Status indicator (`variant="filled|outlined|dot"`, `color`, `size="sm|md|lg"`)
+- **Avatar**: Profile picture (`src`, `fallback`, `size="sm|md|lg|xl"`, `shape="circle|square"`)
 
 ### Utility Components
 - **Icon**: Icon display (`name`, `size`, `color`, `intent`)
 - **SVGImage**: SVG rendering (`source`, `width`, `height`, `size`, `color`, `intent`)
 
 ### Overlay Components
-- **Dialog**: Modal dialog (`open`, `onOpenChange`, `title`, `size="small|medium|large"`, `variant="default"`, `showCloseButton`, `closeOnBackdropClick`, `closeOnEscapeKey`)
+- **Dialog**: Modal dialog (`open`, `onOpenChange`, `title`, `size="sm|md|lg"`, `variant="default"`, `showCloseButton`, `closeOnBackdropClick`, `closeOnEscapeKey`)
 - **Popover**: Contextual overlay (`open`, `onOpenChange`, `anchor`, `placement="top|bottom|left|right"`, `offset`, `closeOnClickOutside`, `closeOnEscapeKey`, `showArrow`)
 
 ## Intent System
@@ -54,7 +54,7 @@ All components use a consistent intent-based color system:
 ```tsx
 <Screen background="primary" safeArea>
   <View spacing="lg">
-    <Text size="xlarge" weight="bold">Title</Text>
+    <Text size="xl" weight="bold">Title</Text>
     <Text>Content</Text>
   </View>
 </Screen>
@@ -81,7 +81,7 @@ import MyIcon from './assets/icon.svg';
 <Card variant="outlined" clickable onPress={handlePress}>
   <View spacing="sm">
     <Text weight="bold">Title</Text>
-    <Text size="small" color="secondary">Subtitle</Text>
+    <Text size="sm" color="secondary">Subtitle</Text>
   </View>
 </Card>
 ```
@@ -94,7 +94,7 @@ const [dialogOpen, setDialogOpen] = useState(false);
   open={dialogOpen}
   onOpenChange={setDialogOpen}
   title="Confirm Action"
-  size="medium"
+  size="md"
 >
   <View spacing="md">
     <Text>Are you sure you want to proceed?</Text>

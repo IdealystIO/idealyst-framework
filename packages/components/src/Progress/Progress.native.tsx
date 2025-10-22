@@ -20,7 +20,7 @@ const Progress = forwardRef<View, ProgressProps>(({
   max = 100,
   variant = 'linear',
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   indeterminate = false,
   showLabel = false,
   label,
@@ -65,14 +65,14 @@ const Progress = forwardRef<View, ProgressProps>(({
   }, [percentage, indeterminate]);
 
   const getCircularSize = () => {
-    if (size === 'small') return 32;
-    if (size === 'large') return 64;
+    if (size === 'sm') return 32;
+    if (size === 'lg') return 64;
     return 48;
   };
 
   if (variant === 'circular') {
     const circularSize = getCircularSize();
-    const strokeWidth = size === 'small' ? 3 : size === 'large' ? 5 : 4;
+    const strokeWidth = size === 'sm' ? 3 : size === 'lg' ? 5 : 4;
     const radius = (circularSize - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
 

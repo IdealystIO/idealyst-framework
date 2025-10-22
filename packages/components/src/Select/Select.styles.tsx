@@ -41,15 +41,15 @@ export const selectStyles = StyleSheet.create((theme) => ({
         },
       },
       size: {
-        small: {
+        sm: {
           paddingHorizontal: theme.spacing.xs,
           minHeight: 36,
         },
-        medium: {
+        md: {
           paddingHorizontal: theme.spacing.sm,
           minHeight: 44,
         },
-        large: {
+        lg: {
           paddingHorizontal: theme.spacing.md,
           minHeight: 52,
         },

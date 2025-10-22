@@ -20,7 +20,7 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
   helperText,
   showCharacterCount = false,
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   style,
   textareaStyle,
   testID,
@@ -82,14 +82,14 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
     }
 
     const lineHeights = {
-      small: 20,
-      medium: 24,
-      large: 28,
+      sm: 20,
+      md: 24,
+      lg: 28,
     };
     const paddings = {
-      small: 8,
-      medium: 12,
-      large: 16,
+      sm: 8,
+      md: 12,
+      lg: 16,
     };
 
     const lineHeight = lineHeights[size];

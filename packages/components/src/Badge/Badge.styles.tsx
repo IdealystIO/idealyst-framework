@@ -22,17 +22,17 @@ export const badgeStyles = StyleSheet.create((theme) => ({
     
     variants: {
       size: {
-        small: {
+        sm: {
           minWidth: 16,
           height: 16,
           paddingHorizontal: 4,
         },
-        medium: {
+        md: {
           minWidth: 20,
           height: 20,
           paddingHorizontal: 6,
         },
-        large: {
+        lg: {
           minWidth: 24,
           height: 24,
           paddingHorizontal: 8,
@@ -81,7 +81,7 @@ export const badgeStyles = StyleSheet.create((theme) => ({
       ...generateBadgeCompoundVariants(theme),
       // Web-specific text size variants
       {
-        size: 'small',
+        size: 'sm',
         styles: {
           _web: {
             fontSize: 10,
@@ -89,7 +89,7 @@ export const badgeStyles = StyleSheet.create((theme) => ({
         },
       },
       {
-        size: 'medium',
+        size: 'md',
         styles: {
           _web: {
             fontSize: 12,
@@ -97,7 +97,7 @@ export const badgeStyles = StyleSheet.create((theme) => ({
         },
       },
       {
-        size: 'large',
+        size: 'lg',
         styles: {
           _web: {
             fontSize: 14,
@@ -124,15 +124,15 @@ export const badgeStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 10,
           height: 10,
         },
-        medium: {
+        md: {
           width: 12,
           height: 12,
         },
-        large: {
+        lg: {
           width: 14,
           height: 14,
         },
@@ -147,15 +147,15 @@ export const badgeStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 10,
           lineHeight: 12, // Tight line height for better vertical centering
         },
-        medium: {
+        md: {
           fontSize: 12,
           lineHeight: 14,
         },
-        large: {
+        lg: {
           fontSize: 14,
           lineHeight: 16,
         },

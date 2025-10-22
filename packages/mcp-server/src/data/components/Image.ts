@@ -92,7 +92,7 @@ import { Image, ActivityIndicator } from '@idealyst/components';
   />
   <View spacing="sm" style={{ padding: 16 }}>
     <Text weight="bold">Image Title</Text>
-    <Text size="small">Description text</Text>
+    <Text size="sm">Description text</Text>
   </View>
 </Card>`,
 

@@ -97,7 +97,7 @@ export function DataGrid<T extends Record<string, any>>({
           >
             <Text 
               weight="bold" 
-              size="small"
+              size="sm"
               onPress={column.sortable ? () => handleSort(column) : undefined}
               style={{ 
                 color: '#374151',
@@ -163,7 +163,7 @@ export function DataGrid<T extends Record<string, any>>({
                 ]}
               >
                 {typeof cellContent === 'string' || typeof cellContent === 'number' ? (
-                  <Text size="small" numberOfLines={1}>
+                  <Text size="sm" numberOfLines={1}>
                     {cellContent}
                   </Text>
                 ) : (

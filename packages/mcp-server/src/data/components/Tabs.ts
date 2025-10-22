@@ -13,7 +13,7 @@ Tabs Props:
 - \`defaultValue\`: string - Default tab (uncontrolled)
 - \`onChange\`: (value: string) => void - Tab change handler
 - \`variant\`: 'default' | 'pills' | 'underline' - Visual style
-- \`size\`: 'small' | 'medium' | 'large' - Tab size
+- \`size\`: 'sm' | 'md' | 'lg' - Tab size
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
 - \`style\`: ViewStyle - Additional styles
 - \`testID\`: string - Test identifier
@@ -86,7 +86,7 @@ import { Tabs, Tab, Text } from '@idealyst/components';
 
 <Tabs defaultValue="profile" variant="pills" intent="primary">
   <Tab value="profile" label="Profile">
-    <Card padding="medium">
+    <Card padding="md">
       <View spacing="md">
         <Text weight="bold">Profile Settings</Text>
         <Text>Update your profile information</Text>
@@ -94,7 +94,7 @@ import { Tabs, Tab, Text } from '@idealyst/components';
     </Card>
   </Tab>
   <Tab value="security" label="Security">
-    <Card padding="medium">
+    <Card padding="md">
       <View spacing="md">
         <Text weight="bold">Security Settings</Text>
         <Text>Manage your security preferences</Text>

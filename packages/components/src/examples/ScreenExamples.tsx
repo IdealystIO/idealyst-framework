@@ -5,14 +5,14 @@ export const ScreenExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="lg">
-        <Text size="large" weight="bold" align="center">
+        <Text size="lg" weight="bold" align="center">
           Screen Examples
         </Text>
         
         {/* Background Examples */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Background Variants</Text>
-          <Text size="small" color="secondary">
+          <Text size="md" weight="semibold">Background Variants</Text>
+          <Text size="sm" color="secondary">
             Each Screen should have a different background color
           </Text>
           
@@ -20,8 +20,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="primary" padding="sm">
                 <View spacing="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                  <Text size="small" weight="bold">Primary</Text>
-                  <Text size="small" color="secondary">Surface</Text>
+                  <Text size="sm" weight="bold">Primary</Text>
+                  <Text size="sm" color="secondary">Surface</Text>
                 </View>
               </Screen>
             </View>
@@ -29,8 +29,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="sm">
                 <View spacing="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                  <Text size="small" weight="bold">Secondary</Text>
-                  <Text size="small" color="secondary">Surface</Text>
+                  <Text size="sm" weight="bold">Secondary</Text>
+                  <Text size="sm" color="secondary">Surface</Text>
                 </View>
               </Screen>
             </View>
@@ -38,8 +38,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="tertiary" padding="sm">
                 <View spacing="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                  <Text size="small" weight="bold">Tertiary</Text>
-                  <Text size="small" color="secondary">Surface</Text>
+                  <Text size="sm" weight="bold">Tertiary</Text>
+                  <Text size="sm" color="secondary">Surface</Text>
                 </View>
               </Screen>
             </View>
@@ -47,8 +47,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="inverse" padding="sm">
                 <View spacing="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                  <Text size="small" weight="bold" color="primary">Inverse</Text>
-                  <Text size="small" color="secondary">Surface</Text>
+                  <Text size="sm" weight="bold" color="primary">Inverse</Text>
+                  <Text size="sm" color="secondary">Surface</Text>
                 </View>
               </Screen>
             </View>
@@ -57,8 +57,8 @@ export const ScreenExamples = () => {
 
         {/* Padding Examples */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Padding Variants</Text>
-          <Text size="small" color="secondary">
+          <Text size="md" weight="semibold">Padding Variants</Text>
+          <Text size="sm" color="secondary">
             Different padding options for Screen content
           </Text>
           
@@ -66,8 +66,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="none">
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(255,0,0,0.1)' }}>
-                  <Text size="small" weight="bold">None</Text>
-                  <Text size="small" color="secondary">No padding</Text>
+                  <Text size="sm" weight="bold">None</Text>
+                  <Text size="sm" color="secondary">No padding</Text>
                 </View>
               </Screen>
             </View>
@@ -75,8 +75,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="sm">
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(255,0,0,0.1)' }}>
-                  <Text size="small" weight="bold">Small</Text>
-                  <Text size="small" color="secondary">8px</Text>
+                  <Text size="sm" weight="bold">Small</Text>
+                  <Text size="sm" color="secondary">8px</Text>
                 </View>
               </Screen>
             </View>
@@ -84,8 +84,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="md">
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(255,0,0,0.1)' }}>
-                  <Text size="small" weight="bold">Medium</Text>
-                  <Text size="small" color="secondary">16px</Text>
+                  <Text size="sm" weight="bold">Medium</Text>
+                  <Text size="sm" color="secondary">16px</Text>
                 </View>
               </Screen>
             </View>
@@ -93,8 +93,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="lg">
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(255,0,0,0.1)' }}>
-                  <Text size="small" weight="bold">Large</Text>
-                  <Text size="small" color="secondary">24px</Text>
+                  <Text size="sm" weight="bold">Large</Text>
+                  <Text size="sm" color="secondary">24px</Text>
                 </View>
               </Screen>
             </View>
@@ -103,8 +103,8 @@ export const ScreenExamples = () => {
 
         {/* Safe Area Examples */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Safe Area</Text>
-          <Text size="small" color="secondary">
+          <Text size="md" weight="semibold">Safe Area</Text>
+          <Text size="sm" color="secondary">
             Safe area padding for mobile devices
           </Text>
           
@@ -112,8 +112,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="tertiary" padding="sm" safeArea={false}>
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(0,255,0,0.1)' }}>
-                  <Text size="small" weight="bold">No Safe Area</Text>
-                  <Text size="small" color="secondary">Standard</Text>
+                  <Text size="sm" weight="bold">No Safe Area</Text>
+                  <Text size="sm" color="secondary">Standard</Text>
                 </View>
               </Screen>
             </View>
@@ -121,8 +121,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="tertiary" padding="sm" safeArea={true}>
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(0,255,0,0.1)' }}>
-                  <Text size="small" weight="bold">Safe Area</Text>
-                  <Text size="small" color="secondary">Mobile</Text>
+                  <Text size="sm" weight="bold">Safe Area</Text>
+                  <Text size="sm" color="secondary">Mobile</Text>
                 </View>
               </Screen>
             </View>
@@ -131,17 +131,17 @@ export const ScreenExamples = () => {
 
         {/* Usage Examples */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Common Usage</Text>
+          <Text size="md" weight="semibold">Common Usage</Text>
           <View style={{ height: 120, borderWidth: 1, borderColor: '#ccc' }}>
             <Screen background="primary" padding="lg">
               <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                <Text size="large" weight="bold" align="center">
+                <Text size="lg" weight="bold" align="center">
                   App Screen Layout
                 </Text>
-                <Text size="medium" color="secondary" align="center">
+                <Text size="md" color="secondary" align="center">
                   Primary background with large padding
                 </Text>
-                <Text size="small" color="secondary" align="center">
+                <Text size="sm" color="secondary" align="center">
                   Perfect for main app screens
                 </Text>
               </View>

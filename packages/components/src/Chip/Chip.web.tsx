@@ -10,7 +10,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
   label,
   variant = 'filled',
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   icon,
   deletable = false,
   onDelete,

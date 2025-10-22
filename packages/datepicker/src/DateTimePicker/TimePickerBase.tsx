@@ -218,7 +218,7 @@ export const TimePickerBase: React.FC<TimePickerBaseProps> = ({
         {mode === '12h' && ampm && (
           <Button
             variant="outlined"
-            size="small"
+            size="sm"
             onPress={toggleAmPm}
             disabled={disabled}
             style={timePickerStyles.ampmButton}

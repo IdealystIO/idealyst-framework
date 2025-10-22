@@ -19,7 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   rightIcon,
   showPasswordToggle,
   autoCapitalize = 'sentences',
-  size = 'medium',
+  size = 'md',
   variant = 'default',
   hasError = false,
   style,
@@ -78,7 +78,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
 
   // Apply variants for container
   inputStyles.useVariants({
-    size: size as 'small' | 'medium' | 'large',
+    size: size as 'sm' | 'md' | 'lg',
     variant: variant as 'default' | 'outlined' | 'filled' | 'bare',
     focused: isFocused,
     hasError,

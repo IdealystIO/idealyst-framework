@@ -7,10 +7,10 @@ export const AlertExamples = () => {
   return (
     <Screen background="primary" safeArea>
       <View spacing="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
-        <Text size="xlarge" weight="bold">Alert Examples</Text>
+        <Text size="xl" weight="bold">Alert Examples</Text>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Intent Variants</Text>
+          <Text size="lg" weight="semibold">Intent Variants</Text>
 
           <View spacing="sm">
             <Alert
@@ -52,10 +52,10 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Style Variants</Text>
+          <Text size="lg" weight="semibold">Style Variants</Text>
 
           <View spacing="sm">
-            <Text size="medium" weight="semibold">Filled</Text>
+            <Text size="md" weight="semibold">Filled</Text>
             <Alert
               variant="filled"
               intent="primary"
@@ -65,7 +65,7 @@ export const AlertExamples = () => {
           </View>
 
           <View spacing="sm">
-            <Text size="medium" weight="semibold">Outlined</Text>
+            <Text size="md" weight="semibold">Outlined</Text>
             <Alert
               variant="outlined"
               intent="primary"
@@ -75,7 +75,7 @@ export const AlertExamples = () => {
           </View>
 
           <View spacing="sm">
-            <Text size="medium" weight="semibold">Soft (Default)</Text>
+            <Text size="md" weight="semibold">Soft (Default)</Text>
             <Alert
               variant="soft"
               intent="primary"
@@ -86,7 +86,7 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Without Icons</Text>
+          <Text size="lg" weight="semibold">Without Icons</Text>
 
           <Alert
             intent="success"
@@ -97,7 +97,7 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Custom Icons</Text>
+          <Text size="lg" weight="semibold">Custom Icons</Text>
 
           <View spacing="sm">
             <Alert
@@ -117,7 +117,7 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Dismissible Alerts</Text>
+          <Text size="lg" weight="semibold">Dismissible Alerts</Text>
 
           <View spacing="sm">
             {successVisible && (
@@ -156,7 +156,7 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">With Actions</Text>
+          <Text size="lg" weight="semibold">With Actions</Text>
 
           <View spacing="sm">
             <Alert
@@ -165,10 +165,10 @@ export const AlertExamples = () => {
               message="You have unsaved changes. Do you want to save them?"
               actions={
                 <View style={{ flexDirection: 'row', gap: 8 }}>
-                  <Button variant="contained" intent="primary" size="small">
+                  <Button variant="contained" intent="primary" size="sm">
                     Save
                   </Button>
-                  <Button variant="outlined" intent="neutral" size="small">
+                  <Button variant="outlined" intent="neutral" size="sm">
                     Discard
                   </Button>
                 </View>
@@ -181,7 +181,7 @@ export const AlertExamples = () => {
               title="New Feature Available"
               message="Check out our new collaboration features."
               actions={
-                <Button variant="text" intent="primary" size="small">
+                <Button variant="text" intent="primary" size="sm">
                   Learn More
                 </Button>
               }
@@ -190,25 +190,25 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">With Children</Text>
+          <Text size="lg" weight="semibold">With Children</Text>
 
           <Alert
             intent="info"
             title="Custom Content"
           >
             <View spacing="sm">
-              <Text size="small">You can use children to add custom content:</Text>
+              <Text size="sm">You can use children to add custom content:</Text>
               <View style={{ paddingLeft: 16 }}>
-                <Text size="small">• Custom formatted text</Text>
-                <Text size="small">• Lists and structured content</Text>
-                <Text size="small">• Any React components</Text>
+                <Text size="sm">• Custom formatted text</Text>
+                <Text size="sm">• Lists and structured content</Text>
+                <Text size="sm">• Any React components</Text>
               </View>
             </View>
           </Alert>
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Complex Example</Text>
+          <Text size="lg" weight="semibold">Complex Example</Text>
 
           <Alert
             variant="filled"
@@ -219,10 +219,10 @@ export const AlertExamples = () => {
             onDismiss={() => console.log('Dismissed')}
             actions={
               <View style={{ flexDirection: 'row', gap: 8 }}>
-                <Button variant="outlined" size="small" onPress={() => console.log('View order')}>
+                <Button variant="outlined" size="sm" onPress={() => console.log('View order')}>
                   View Order
                 </Button>
-                <Button variant="outlined" size="small" onPress={() => console.log('Track')}>
+                <Button variant="outlined" size="sm" onPress={() => console.log('Track')}>
                   Track Shipment
                 </Button>
               </View>
@@ -231,7 +231,7 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">All Intent Colors (Soft Variant)</Text>
+          <Text size="lg" weight="semibold">All Intent Colors (Soft Variant)</Text>
 
           <View spacing="sm">
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
@@ -246,7 +246,7 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">All Intent Colors (Outlined Variant)</Text>
+          <Text size="lg" weight="semibold">All Intent Colors (Outlined Variant)</Text>
 
           <View spacing="sm">
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
@@ -261,7 +261,7 @@ export const AlertExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">All Intent Colors (Filled Variant)</Text>
+          <Text size="lg" weight="semibold">All Intent Colors (Filled Variant)</Text>
 
           <View spacing="sm">
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (

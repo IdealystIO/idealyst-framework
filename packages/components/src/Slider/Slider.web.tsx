@@ -17,7 +17,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   showMinMax = false,
   marks = [],
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   icon,
   onValueChange,
   onValueCommit,

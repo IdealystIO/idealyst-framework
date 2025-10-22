@@ -72,7 +72,7 @@ function MyComponent() {
 | `error` | `string` | - | Error message |
 | `helperText` | `string` | - | Helper text |
 | `format` | `string` | `'MM/dd/yyyy'` | Date display format |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Size variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size variant |
 | `variant` | `'outlined' \| 'filled'` | `'outlined'` | Visual variant |
 
 ## Examples

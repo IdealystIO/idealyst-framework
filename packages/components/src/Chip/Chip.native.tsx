@@ -9,7 +9,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
   label,
   variant = 'filled',
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   icon,
   deletable = false,
   onDelete,
@@ -43,8 +43,8 @@ const Chip = forwardRef<Pressable, ChipProps>(({
   };
 
   // Map chip size to icon size
-  const iconSize = size === 'small' ? 12 : size === 'medium' ? 14 : 16;
-  const deleteIconSize = size === 'small' ? 10 : size === 'medium' ? 11 : 12;
+  const iconSize = size === 'sm' ? 12 : size === 'md' ? 14 : 16;
+  const deleteIconSize = size === 'sm' ? 10 : size === 'md' ? 11 : 12;
 
   // Helper to render icon
   const renderIcon = () => {

@@ -11,19 +11,19 @@ export const chipStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           paddingHorizontal: 8,
           paddingVertical: 2,
           minHeight: 20,
           borderRadius: 999,
         },
-        medium: {
+        md: {
           paddingHorizontal: 10,
           paddingVertical: 2,
           minHeight: 24,
           borderRadius: 999,
         },
-        large: {
+        lg: {
           paddingHorizontal: 12,
           paddingVertical: 3,
           minHeight: 28,
@@ -233,15 +233,15 @@ export const chipStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 11,
           lineHeight: 14,
         },
-        medium: {
+        md: {
           fontSize: 12,
           lineHeight: 16,
         },
-        large: {
+        lg: {
           fontSize: 14,
           lineHeight: 18,
         },
@@ -362,15 +362,15 @@ export const chipStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 12,
           height: 12,
         },
-        medium: {
+        md: {
           width: 14,
           height: 14,
         },
-        large: {
+        lg: {
           width: 16,
           height: 16,
         },
@@ -494,15 +494,15 @@ export const chipStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 12,
           height: 12,
         },
-        medium: {
+        md: {
           width: 14,
           height: 14,
         },
-        large: {
+        lg: {
           width: 16,
           height: 16,
         },
@@ -513,13 +513,13 @@ export const chipStyles = StyleSheet.create((theme) => ({
   deleteIcon: {
     variants: {
       size: {
-        small: {
+        sm: {
           fontSize: 10,
         },
-        medium: {
+        md: {
           fontSize: 11,
         },
-        large: {
+        lg: {
           fontSize: 12,
         },
       },

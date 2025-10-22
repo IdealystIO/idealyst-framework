@@ -10,7 +10,7 @@ export const Accordion = {
 - \`allowMultiple\`: boolean - Allow multiple items to be expanded simultaneously (default: false)
 - \`defaultExpanded\`: string[] - Array of item IDs to expand by default
 - \`variant\`: 'default' | 'separated' | 'bordered' - Visual style variant
-- \`size\`: 'small' | 'medium' | 'large' - Size of accordion items
+- \`size\`: 'sm' | 'md' | 'lg' - Size of accordion items
 - \`style\`: ViewStyle - Additional custom styles
 - \`testID\`: string - Test identifier
 `,

@@ -6,7 +6,7 @@ export const TooltipExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">Tooltip Examples</Text>
+      <Text size="xl" weight="bold">Tooltip Examples</Text>
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Basic Tooltip</Text>

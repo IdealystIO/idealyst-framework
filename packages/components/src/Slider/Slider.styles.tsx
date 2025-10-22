@@ -19,13 +19,13 @@ export const sliderStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           height: 4,
         },
-        medium: {
+        md: {
           height: 6,
         },
-        large: {
+        lg: {
           height: 8,
         },
       },
@@ -84,15 +84,15 @@ export const sliderStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 16,
           height: 16,
         },
-        medium: {
+        md: {
           width: 20,
           height: 20,
         },
-        large: {
+        lg: {
           width: 24,
           height: 24,
         },
@@ -147,7 +147,7 @@ export const sliderStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 10,
           height: 10,
           minWidth: 10,
@@ -155,7 +155,7 @@ export const sliderStyles = StyleSheet.create((theme) => ({
           minHeight: 10,
           maxHeight: 10,
         },
-        medium: {
+        md: {
           width: 12,
           height: 12,
           minWidth: 12,
@@ -163,7 +163,7 @@ export const sliderStyles = StyleSheet.create((theme) => ({
           minHeight: 12,
           maxHeight: 12,
         },
-        large: {
+        lg: {
           width: 16,
           height: 16,
           minWidth: 16,
@@ -227,13 +227,13 @@ export const sliderStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           height: 8,
         },
-        medium: {
+        md: {
           height: 10,
         },
-        large: {
+        lg: {
           height: 12,
         },
       },

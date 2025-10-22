@@ -6,7 +6,7 @@ import useMergeRefs from '../hooks/useMergeRefs';
 
 const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   animating = true,
-  size = 'medium',
+  size = 'md',
   intent = 'primary',
   color,
   style,
@@ -14,12 +14,12 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   hidesWhenStopped = true,
 }, ref) => {
   // Handle numeric size
-  const sizeVariant = typeof size === 'number' ? 'medium' : size;
+  const sizeVariant = typeof size === 'number' ? 'md' : size;
   const customSize = typeof size === 'number' ? size : undefined;
-  
+
   // Apply variants using the correct Unistyles 3.0 pattern
   activityIndicatorStyles.useVariants({
-    size: sizeVariant as 'small' | 'medium' | 'large',
+    size: sizeVariant as 'sm' | 'md' | 'lg',
     intent: intent as 'primary' | 'success' | 'error' | 'warning' | 'neutral',
     animating: animating as boolean,
   });

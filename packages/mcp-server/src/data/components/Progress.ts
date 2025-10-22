@@ -6,7 +6,7 @@ export const Progress = {
 - \`max\`: number - Maximum value (default: 100)
 - \`variant\`: 'linear' | 'circular' - Progress bar style
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'small' | 'medium' | 'large' - Size of progress indicator
+- \`size\`: 'sm' | 'md' | 'lg' - Size of progress indicator
 - \`indeterminate\`: boolean - Show indeterminate/loading state
 - \`showLabel\`: boolean - Show percentage label
 - \`label\`: string - Custom label text
@@ -50,7 +50,7 @@ import { Progress } from '@idealyst/components';
 <View spacing="md">
   <Progress value={30} variant="linear" intent="primary" />
   <Progress value={60} variant="linear" intent="success" />
-  <Progress value={value} variant="circular" size="large" showLabel />
+  <Progress value={value} variant="circular" size="lg" showLabel />
 </View>`,
 
     "with-icons": `import { Progress, View, Text } from '@idealyst/components';

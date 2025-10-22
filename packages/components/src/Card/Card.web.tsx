@@ -7,8 +7,8 @@ import useMergeRefs from '../hooks/useMergeRefs';
 const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   children,
   variant = 'default',
-  padding = 'medium',
-  radius = 'medium',
+  padding = 'md',
+  radius = 'md',
   intent = 'neutral',
   clickable = false,
   onPress,

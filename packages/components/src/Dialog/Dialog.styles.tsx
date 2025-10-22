@@ -35,15 +35,15 @@ export const dialogStyles = StyleSheet.create((theme) => ({
     
     variants: {
       size: {
-        small: {
+        sm: {
           width: '90%',
           maxWidth: 400,
         },
-        medium: {
+        md: {
           width: '90%',
           maxWidth: 600,
         },
-        large: {
+        lg: {
           width: '90%',
           maxWidth: 800,
         },

@@ -11,7 +11,7 @@ export const Table = {
   - \`align\`: 'left' | 'center' | 'right' - Text alignment
 - \`data\`: T[] - Array of data objects
 - \`variant\`: 'default' | 'bordered' | 'striped' - Visual style
-- \`size\`: 'small' | 'medium' | 'large' - Cell padding/size
+- \`size\`: 'sm' | 'md' | 'lg' - Cell padding/size
 - \`stickyHeader\`: boolean - Keep header fixed on scroll
 - \`onRowPress\`: (row: T, index: number) => void - Row click handler
 - \`style\`: ViewStyle - Additional styles
@@ -122,7 +122,7 @@ function Example() {
       title: 'Actions',
       render: (_, row) => (
         <Button
-          size="small"
+          size="sm"
           variant="outlined"
           onPress={() => setSelected(row)}
         >

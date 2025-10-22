@@ -9,7 +9,7 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   indeterminate = false,
   disabled = false,
   onCheckedChange,
-  size = 'medium',
+  size = 'md',
   intent = 'primary',
   variant = 'default',
   label,

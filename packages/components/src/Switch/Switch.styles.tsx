@@ -16,15 +16,15 @@ export const switchStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 36,
           height: 20,
         },
-        medium: {
+        md: {
           width: 44,
           height: 24,
         },
-        large: {
+        lg: {
           width: 52,
           height: 28,
         },
@@ -105,17 +105,17 @@ export const switchStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 16,
           height: 16,
           left: 2,
         },
-        medium: {
+        md: {
           width: 20,
           height: 20,
           left: 2,
         },
-        large: {
+        lg: {
           width: 24,
           height: 24,
           left: 2,
@@ -129,42 +129,42 @@ export const switchStyles = StyleSheet.create((theme) => ({
 
     compoundVariants: [
       {
-        size: 'small',
+        size: 'sm',
         checked: true,
         styles: {
           transform: 'translateY(-50%) translateX(16px)',
         },
       },
       {
-        size: 'small',
+        size: 'sm',
         checked: false,
         styles: {
           transform: 'translateY(-50%) translateX(0)',
         },
       },
       {
-        size: 'medium',
+        size: 'md',
         checked: true,
         styles: {
           transform: 'translateY(-50%) translateX(20px)',
         },
       },
       {
-        size: 'medium',
+        size: 'md',
         checked: false,
         styles: {
           transform: 'translateY(-50%) translateX(0)',
         },
       },
       {
-        size: 'large',
+        size: 'lg',
         checked: true,
         styles: {
           transform: 'translateY(-50%) translateX(24px)',
         },
       },
       {
-        size: 'large',
+        size: 'lg',
         checked: false,
         styles: {
           transform: 'translateY(-50%) translateX(0)',
@@ -180,15 +180,15 @@ export const switchStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 10,
           height: 10,
         },
-        medium: {
+        md: {
           width: 12,
           height: 12,
         },
-        large: {
+        lg: {
           width: 14,
           height: 14,
         },

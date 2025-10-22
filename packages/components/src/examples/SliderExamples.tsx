@@ -10,64 +10,64 @@ export const SliderExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="lg">
-        <Text size="xlarge" weight="bold">Slider Examples</Text>
+        <Text size="xl" weight="bold">Slider Examples</Text>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Basic Slider</Text>
+        <Text size="lg" weight="semibold">Basic Slider</Text>
         <Slider
           value={basicValue}
           onValueChange={setBasicValue}
           showValue
         />
-        <Text size="small" color="secondary">Value: {basicValue}</Text>
+        <Text size="sm" color="secondary">Value: {basicValue}</Text>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Sizes</Text>
+        <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <View spacing="xs">
-            <Text size="small">Small</Text>
-            <Slider defaultValue={30} size="small" />
+            <Text size="sm">Small</Text>
+            <Slider defaultValue={30} size="sm" />
           </View>
           <View spacing="xs">
-            <Text size="small">Medium (default)</Text>
-            <Slider defaultValue={50} size="medium" />
+            <Text size="sm">Medium (default)</Text>
+            <Slider defaultValue={50} size="md" />
           </View>
           <View spacing="xs">
-            <Text size="small">Large</Text>
-            <Slider defaultValue={70} size="large" />
+            <Text size="sm">Large</Text>
+            <Slider defaultValue={70} size="lg" />
           </View>
         </View>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Intent Colors</Text>
+        <Text size="lg" weight="semibold">Intent Colors</Text>
         <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <View spacing="xs">
-            <Text size="small">Primary</Text>
+            <Text size="sm">Primary</Text>
             <Slider defaultValue={60} intent="primary" />
           </View>
           <View spacing="xs">
-            <Text size="small">Success</Text>
+            <Text size="sm">Success</Text>
             <Slider defaultValue={60} intent="success" />
           </View>
           <View spacing="xs">
-            <Text size="small">Error</Text>
+            <Text size="sm">Error</Text>
             <Slider defaultValue={60} intent="error" />
           </View>
           <View spacing="xs">
-            <Text size="small">Warning</Text>
+            <Text size="sm">Warning</Text>
             <Slider defaultValue={60} intent="warning" />
           </View>
           <View spacing="xs">
-            <Text size="small">Neutral</Text>
+            <Text size="sm">Neutral</Text>
             <Slider defaultValue={60} intent="neutral" />
           </View>
         </View>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Min/Max Labels</Text>
+        <Text size="lg" weight="semibold">With Min/Max Labels</Text>
         <Slider
           defaultValue={50}
           showMinMax
@@ -75,10 +75,10 @@ export const SliderExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Custom Range & Step</Text>
+        <Text size="lg" weight="semibold">Custom Range & Step</Text>
         <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <View spacing="xs">
-            <Text size="small">Range: 0-10, Step: 1</Text>
+            <Text size="sm">Range: 0-10, Step: 1</Text>
             <Slider
               min={0}
               max={10}
@@ -89,7 +89,7 @@ export const SliderExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small">Range: -50 to 50, Step: 5</Text>
+            <Text size="sm">Range: -50 to 50, Step: 5</Text>
             <Slider
               min={-50}
               max={50}
@@ -103,7 +103,7 @@ export const SliderExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Marks</Text>
+        <Text size="lg" weight="semibold">With Marks</Text>
         <Slider
           min={0}
           max={100}
@@ -119,7 +119,7 @@ export const SliderExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Volume Control</Text>
+        <Text size="lg" weight="semibold">Volume Control</Text>
         <Slider
           value={volumeValue}
           onValueChange={setVolumeValue}
@@ -136,10 +136,10 @@ export const SliderExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Icons</Text>
+        <Text size="lg" weight="semibold">With Icons</Text>
         <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <View spacing="xs">
-            <Text size="small">Volume with icon</Text>
+            <Text size="sm">Volume with icon</Text>
             <Slider
               defaultValue={60}
               icon="volume-high"
@@ -148,7 +148,7 @@ export const SliderExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small">Brightness with icon</Text>
+            <Text size="sm">Brightness with icon</Text>
             <Slider
               defaultValue={75}
               icon="brightness-6"
@@ -157,7 +157,7 @@ export const SliderExamples: React.FC = () => {
             />
           </View>
           <View spacing="xs">
-            <Text size="small">Temperature with icon</Text>
+            <Text size="sm">Temperature with icon</Text>
             <Slider
               defaultValue={22}
               min={10}
@@ -171,7 +171,7 @@ export const SliderExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Temperature Control</Text>
+        <Text size="lg" weight="semibold">Temperature Control</Text>
         <Slider
           value={temperatureValue}
           onValueChange={setTemperatureValue}
@@ -182,11 +182,11 @@ export const SliderExamples: React.FC = () => {
           showMinMax
           intent="warning"
         />
-        <Text size="small" color="secondary">Temperature: {temperatureValue}°C</Text>
+        <Text size="sm" color="secondary">Temperature: {temperatureValue}°C</Text>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Disabled</Text>
+        <Text size="lg" weight="semibold">Disabled</Text>
         <Slider
           defaultValue={60}
           disabled

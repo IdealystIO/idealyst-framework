@@ -180,7 +180,7 @@ export const Calendar: React.FC<CalendarProps> = memo(({
       <View style={calendarStyles.header}>
         <Button 
           variant="text" 
-          size="small" 
+          size="sm" 
           onPress={goToPreviousMonth} 
           disabled={disabled}
           style={calendarStyles.headerButton}
@@ -190,7 +190,7 @@ export const Calendar: React.FC<CalendarProps> = memo(({
         <Text weight="semibold">{monthName}</Text>
         <Button 
           variant="text" 
-          size="small" 
+          size="sm" 
           onPress={goToNextMonth} 
           disabled={disabled}
           style={calendarStyles.headerButton}

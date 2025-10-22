@@ -23,10 +23,10 @@ export const SwitchExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">Switch Examples</Text>
+      <Text size="xl" weight="bold">Switch Examples</Text>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Basic Switch</Text>
+        <Text size="lg" weight="semibold">Basic Switch</Text>
         <Switch
           checked={basicChecked}
           onCheckedChange={setBasicChecked}
@@ -34,7 +34,7 @@ export const SwitchExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Label</Text>
+        <Text size="lg" weight="semibold">With Label</Text>
         <Switch
           checked={labelledChecked}
           onCheckedChange={setLabelledChecked}
@@ -43,7 +43,7 @@ export const SwitchExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Label Position</Text>
+        <Text size="lg" weight="semibold">Label Position</Text>
         <Switch
           checked={labelledChecked}
           onCheckedChange={setLabelledChecked}
@@ -53,31 +53,31 @@ export const SwitchExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Sizes</Text>
+        <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm">
           <Switch
             checked={basicChecked}
             onCheckedChange={setBasicChecked}
-            size="small"
+            size="sm"
             label="Small"
           />
           <Switch
             checked={basicChecked}
             onCheckedChange={setBasicChecked}
-            size="medium"
+            size="md"
             label="Medium (default)"
           />
           <Switch
             checked={basicChecked}
             onCheckedChange={setBasicChecked}
-            size="large"
+            size="lg"
             label="Large"
           />
         </View>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Intent Colors</Text>
+        <Text size="lg" weight="semibold">Intent Colors</Text>
         <View spacing="sm">
           <Switch
             checked={intentChecked.primary}
@@ -113,7 +113,7 @@ export const SwitchExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Icons</Text>
+        <Text size="lg" weight="semibold">With Icons</Text>
         <View spacing="sm">
           <Switch
             checked={iconChecked.basic}
@@ -145,7 +145,7 @@ export const SwitchExamples: React.FC = () => {
             disabledIcon="volume-off"
             intent="warning"
             label="Sound"
-            size="large"
+            size="lg"
           />
           <Switch
             checked={iconChecked.wifi}
@@ -154,13 +154,13 @@ export const SwitchExamples: React.FC = () => {
             disabledIcon="wifi-off"
             intent="error"
             label="WiFi Connection"
-            size="small"
+            size="sm"
           />
         </View>
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Disabled States</Text>
+        <Text size="lg" weight="semibold">Disabled States</Text>
         <View spacing="sm">
           <Switch
             checked={false}

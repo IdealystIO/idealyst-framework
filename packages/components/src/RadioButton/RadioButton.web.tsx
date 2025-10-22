@@ -10,7 +10,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   onPress,
   disabled: disabledProp = false,
   label,
-  size = 'medium',
+  size = 'md',
   intent = 'primary',
   style,
   testID,

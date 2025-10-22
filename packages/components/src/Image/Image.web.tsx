@@ -77,7 +77,7 @@ const Image: React.FC<ImageProps> = ({
           className={placeholderProps.className}
           style={placeholderProps.style}
         >
-          {placeholder || <ActivityIndicator size="medium" />}
+          {placeholder || <ActivityIndicator size="md" />}
         </div>
       )}
 

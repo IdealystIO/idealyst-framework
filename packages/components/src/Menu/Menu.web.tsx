@@ -12,7 +12,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
   onOpenChange,
   placement = 'bottom-start',
   closeOnSelection = true,
-  size = 'medium',
+  size = 'md',
   style,
   testID,
 }, ref) => {

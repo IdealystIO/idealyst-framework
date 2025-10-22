@@ -13,7 +13,7 @@ interface InternalBadgeProps extends BadgeProps {
 const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps, ref) => {
   const {
     children,
-    size = 'medium',
+    size = 'md',
     variant = 'filled',
     color = 'blue',
     icon,

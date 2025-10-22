@@ -281,7 +281,7 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
           <View style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
             <Button
               variant="text"
-              size="small"
+              size="sm"
               onPress={() => setViewMode('date')}
               disabled={disabled}
             >
@@ -290,7 +290,7 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
             {value.endDate && (
               <Button
                 variant="text"
-                size="small"
+                size="sm"
                 onPress={() => setViewMode('end-time')}
                 disabled={disabled}
               >
@@ -315,7 +315,7 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
           <View style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
             <Button
               variant="text"
-              size="small"
+              size="sm"
               onPress={() => setViewMode('start-time')}
               disabled={disabled}
             >
@@ -323,7 +323,7 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
             </Button>
             <Button
               variant="text"
-              size="small"
+              size="sm"
               onPress={() => setViewMode('date')}
               disabled={disabled}
             >

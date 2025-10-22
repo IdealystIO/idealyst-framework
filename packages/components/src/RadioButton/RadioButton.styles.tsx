@@ -19,15 +19,15 @@ export const radioButtonStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 14,
           height: 14,
         },
-        medium: {
+        md: {
           width: 18,
           height: 18,
         },
-        large: {
+        lg: {
           width: 22,
           height: 22,
         },
@@ -136,15 +136,15 @@ export const radioButtonStyles = StyleSheet.create((theme) => ({
 
     variants: {
       size: {
-        small: {
+        sm: {
           width: 10,
           height: 10,
         },
-        medium: {
+        md: {
           width: 12,
           height: 12,
         },
-        large: {
+        lg: {
           width: 16,
           height: 16,
         },

@@ -11,13 +11,13 @@ export const CheckboxExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
-      <Text size="large" weight="bold" align="center">
+      <Text size="lg" weight="bold" align="center">
         Checkbox Examples
       </Text>
       
       {/* Basic Checkbox */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Basic Checkbox</Text>
+        <Text size="md" weight="semibold">Basic Checkbox</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Checkbox
             checked={basicChecked}
@@ -39,22 +39,22 @@ export const CheckboxExamples = () => {
 
       {/* Checkbox Sizes */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Sizes</Text>
+        <Text size="md" weight="semibold">Sizes</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Checkbox
-            size="small"
+            size="sm"
             checked={true}
             onCheckedChange={() => {}}
             label="Small checkbox"
           />
           <Checkbox
-            size="medium"
+            size="md"
             checked={true}
             onCheckedChange={() => {}}
             label="Medium checkbox"
           />
           <Checkbox
-            size="large"
+            size="lg"
             checked={true}
             onCheckedChange={() => {}}
             label="Large checkbox"
@@ -64,7 +64,7 @@ export const CheckboxExamples = () => {
 
       {/* Checkbox Intents */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Intents</Text>
+        <Text size="md" weight="semibold">Intents</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Checkbox
             intent="primary"
@@ -107,7 +107,7 @@ export const CheckboxExamples = () => {
 
       {/* Checkbox Variants */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Variants</Text>
+        <Text size="md" weight="semibold">Variants</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Checkbox
             variant="default"
@@ -126,7 +126,7 @@ export const CheckboxExamples = () => {
 
       {/* Checkbox States */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">States</Text>
+        <Text size="md" weight="semibold">States</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Checkbox
             checked={false}
@@ -161,7 +161,7 @@ export const CheckboxExamples = () => {
 
       {/* Checkbox with Custom Children */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Custom Content</Text>
+        <Text size="md" weight="semibold">Custom Content</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Checkbox
             checked={true}
@@ -177,7 +177,7 @@ export const CheckboxExamples = () => {
           >
             <View>
               <Text weight="semibold">Multi-line Label</Text>
-              <Text size="small" color="secondary">
+              <Text size="sm" color="secondary">
                 This checkbox has a more complex label with multiple lines
               </Text>
             </View>
@@ -187,7 +187,7 @@ export const CheckboxExamples = () => {
 
       {/* Checkbox with Helper Text and Errors */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">With Helper Text</Text>
+        <Text size="md" weight="semibold">With Helper Text</Text>
         <View spacing="sm" style={{ gap: 10 }}>
           <Checkbox
             checked={true}

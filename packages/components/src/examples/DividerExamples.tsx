@@ -5,25 +5,25 @@ export const DividerExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
-      <Text size="large" weight="bold" align="center">
+      <Text size="lg" weight="bold" align="center">
         Divider Examples
       </Text>
       
       {/* Horizontal Dividers */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Horizontal Dividers</Text>
+        <Text size="md" weight="semibold">Horizontal Dividers</Text>
         <View style={{ gap: 10 }}>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Content above</Text>
             <Divider orientation="horizontal" />
             <Text>Content below</Text>
           </Card>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Content above</Text>
             <Divider orientation="horizontal" variant="dashed" />
             <Text>Content below</Text>
           </Card>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Content above</Text>
             <Divider orientation="horizontal" variant="dotted" />
             <Text>Content below</Text>
@@ -33,19 +33,19 @@ export const DividerExamples = () => {
 
       {/* Divider Variants */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Variants</Text>
+        <Text size="md" weight="semibold">Variants</Text>
         <View style={{ gap: 10 }}>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Solid divider</Text>
             <Divider variant="solid" />
             <Text>Content below</Text>
           </Card>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Dashed divider</Text>
             <Divider variant="dashed" />
             <Text>Content below</Text>
           </Card>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Dotted divider</Text>
             <Divider variant="dotted" />
             <Text>Content below</Text>
@@ -55,19 +55,19 @@ export const DividerExamples = () => {
 
       {/* Divider Thickness */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Thickness</Text>
+        <Text size="md" weight="semibold">Thickness</Text>
         <View style={{ gap: 10 }}>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Thin divider</Text>
             <Divider thickness="thin" />
             <Text>Content below</Text>
           </Card>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Medium divider</Text>
             <Divider thickness="medium" />
             <Text>Content below</Text>
           </Card>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Thick divider</Text>
             <Divider thickness="thick" />
             <Text>Content below</Text>
@@ -77,45 +77,45 @@ export const DividerExamples = () => {
 
       {/* Divider Intents */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Intents</Text>
+        <Text size="md" weight="semibold">Intents</Text>
         <View style={{ gap: 10 }}>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Primary divider</Text>
             <Divider intent="primary" />
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
                     <Text>Neutral divider</Text>
         <Divider intent="neutral" />
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Neutral divider</Text>
             <Divider intent="neutral" />
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Success divider</Text>
             <Divider intent="success" />
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Error divider</Text>
             <Divider intent="error" />
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Warning divider</Text>
             <Divider intent="warning" />
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Info divider</Text>
             <Divider intent="info" />
             <Text>Content below</Text>
@@ -125,29 +125,29 @@ export const DividerExamples = () => {
 
       {/* Divider Spacing */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Spacing</Text>
+        <Text size="md" weight="semibold">Spacing</Text>
         <View style={{ gap: 10 }}>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>No spacing</Text>
             <Divider spacing="none" />
             <Text>Content immediately after</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Small spacing</Text>
-            <Divider spacing="small" />
+            <Divider spacing="sm" />
             <Text>Content with small spacing</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Medium spacing</Text>
-            <Divider spacing="medium" />
+            <Divider spacing="md" />
             <Text>Content with medium spacing</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Large spacing</Text>
-            <Divider spacing="large" />
+            <Divider spacing="lg" />
             <Text>Content with large spacing</Text>
           </Card>
         </View>
@@ -155,20 +155,20 @@ export const DividerExamples = () => {
 
       {/* Divider with Content */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">With Content</Text>
+        <Text size="md" weight="semibold">With Content</Text>
         <View style={{ gap: 10 }}>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Content above</Text>
-            <Divider spacing="medium">
-              <Text size="small" color="secondary">OR</Text>
+            <Divider spacing="md">
+              <Text size="sm" color="secondary">OR</Text>
             </Divider>
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Content above</Text>
-            <Divider spacing="medium" intent="primary">
-              <Text size="small" color="primary" weight="semibold">SECTION</Text>
+            <Divider spacing="md" intent="primary">
+              <Text size="sm" color="primary" weight="semibold">SECTION</Text>
             </Divider>
             <Text>Content below</Text>
           </Card>
@@ -177,8 +177,8 @@ export const DividerExamples = () => {
 
       {/* Vertical Dividers */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Vertical Dividers</Text>
-        <Card variant="outlined" padding="medium">
+        <Text size="md" weight="semibold">Vertical Dividers</Text>
+        <Card variant="outlined" padding="md">
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Text>Left</Text>
             <Divider orientation="vertical" />
@@ -191,21 +191,21 @@ export const DividerExamples = () => {
 
       {/* Custom Length */}
       <View spacing="md">
-        <Text size="medium" weight="semibold">Custom Length</Text>
+        <Text size="md" weight="semibold">Custom Length</Text>
         <View style={{ gap: 10 }}>
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Auto length</Text>
             <Divider length="auto" />
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>Full length</Text>
             <Divider length="full" />
             <Text>Content below</Text>
           </Card>
           
-          <Card variant="outlined" padding="medium">
+          <Card variant="outlined" padding="md">
             <Text>50% length</Text>
             <Divider length={50} />
             <Text>Content below</Text>

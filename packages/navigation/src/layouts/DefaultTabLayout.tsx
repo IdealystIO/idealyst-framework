@@ -33,7 +33,7 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                             {options.headerLeft && React.createElement(options.headerLeft as any)}
                             
                             {typeof options.headerTitle === 'string' ? (
-                                <Text size="large" weight="bold" style={{ marginLeft: options.headerLeft ? 12 : 0 }}>
+                                <Text size="lg" weight="bold" style={{ marginLeft: options.headerLeft ? 12 : 0 }}>
                                     {options.headerTitle}
                                 </Text>
                             ) : (
@@ -67,7 +67,7 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                                 key={route.path}
                                 variant={isActive ? 'contained' : 'outlined'}
                                 intent={isActive ? 'primary' : undefined}
-                                size="small"
+                                size="sm"
                                 onPress={() => navigator.navigate({
                                     path: route.fullPath
                                 })}
@@ -85,7 +85,7 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                                     />
                                 )}
                                 <Text 
-                                    size="small" 
+                                    size="sm" 
                                     color={isActive ? 'white' : 'primary'}
                                     weight={isActive ? 'semibold' : 'medium'}
                                 >

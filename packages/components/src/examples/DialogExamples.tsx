@@ -10,13 +10,13 @@ export const DialogExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
-        <Text size="large" weight="bold" align="center">
+        <Text size="lg" weight="bold" align="center">
           Dialog Examples
         </Text>
         
         {/* Basic Dialog */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Basic Dialog</Text>
+          <Text size="md" weight="semibold">Basic Dialog</Text>
           <Button onPress={() => setBasicOpen(true)}>
             Open Basic Dialog
           </Button>
@@ -40,7 +40,7 @@ export const DialogExamples = () => {
 
         {/* Dialog Variants */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Dialog Variants</Text>
+          <Text size="md" weight="semibold">Dialog Variants</Text>
           <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
             <Button onPress={() => setAlertOpen(true)}>
               Alert Dialog
@@ -99,7 +99,7 @@ export const DialogExamples = () => {
 
         {/* Dialog Sizes */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Dialog Sizes</Text>
+          <Text size="md" weight="semibold">Dialog Sizes</Text>
           <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
             {['small', 'medium', 'large'].map((size) => (
               <Button 
@@ -116,7 +116,7 @@ export const DialogExamples = () => {
               open={!!sizesOpen}
               onOpenChange={() => setSizesOpen(null)}
               title={`${sizesOpen.charAt(0).toUpperCase() + sizesOpen.slice(1)} Dialog`}
-              size={sizesOpen as 'small' | 'medium' | 'large'}
+              size={sizesOpen as 'sm' | 'md' | 'lg'}
             >
               <Text>
                 This is a {sizesOpen} dialog. The width and maximum width are adjusted based on the size prop.
@@ -137,17 +137,17 @@ export const DialogExamples = () => {
 
         {/* Dialog Options */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Dialog Options</Text>
-          <Text size="small" color="secondary">
+          <Text size="md" weight="semibold">Dialog Options</Text>
+          <Text size="sm" color="secondary">
             • Close on backdrop click: Enabled by default, disabled for confirmation dialog above
           </Text>
-          <Text size="small" color="secondary">
+          <Text size="sm" color="secondary">
             • Close on escape key: Enabled by default (web only)
           </Text>
-          <Text size="small" color="secondary">
+          <Text size="sm" color="secondary">
             • Hardware back button: Handled automatically (native only)
           </Text>
-          <Text size="small" color="secondary">
+          <Text size="sm" color="secondary">
             • Focus management: Automatic focus trapping and restoration (web only)
           </Text>
         </View>

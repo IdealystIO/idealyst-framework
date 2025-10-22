@@ -3,7 +3,7 @@ export const ActivityIndicator = {
   description: "Loading spinner/indicator for showing ongoing processes or loading states",
   props: `
 - \`animating\`: boolean - Whether the indicator is animating/visible (default: true)
-- \`size\`: 'small' | 'medium' | 'large' | number - Size of the indicator (default: medium)
+- \`size\`: 'sm' | 'md' | 'lg' | number - Size of the indicator (default: md)
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme (default: primary)
 - \`color\`: string - Custom color override (overrides intent)
 - \`style\`: ViewStyle - Additional custom styles
@@ -20,8 +20,8 @@ export const ActivityIndicator = {
   ],
   bestPractices: [
     "Use 'primary' intent for general loading states",
-    "Use 'small' size for inline loading indicators",
-    "Use 'large' size for full-screen loading overlays",
+    "Use 'sm' size for inline loading indicators",
+    "Use 'lg' size for full-screen loading overlays",
     "Always provide context about what is loading",
     "Consider using with overlay for blocking operations",
   ],
@@ -29,7 +29,7 @@ export const ActivityIndicator = {
 import { ActivityIndicator, View, Text } from '@idealyst/components';
 
 <View spacing="md">
-  <ActivityIndicator size="large" intent="primary" />
+  <ActivityIndicator size="lg" intent="primary" />
   <Text>Loading data...</Text>
 </View>
 `,
@@ -41,16 +41,16 @@ import { ActivityIndicator, View, Text } from '@idealyst/components';
     variants: `import { ActivityIndicator, View } from '@idealyst/components';
 
 <View spacing="md">
-  <ActivityIndicator size="small" />
-  <ActivityIndicator size="medium" />
-  <ActivityIndicator size="large" />
+  <ActivityIndicator size="sm" />
+  <ActivityIndicator size="md" />
+  <ActivityIndicator size="lg" />
   <ActivityIndicator size={48} />
 </View>`,
 
     "with-icons": `import { ActivityIndicator, View, Text } from '@idealyst/components';
 
 <View spacing="sm" style={{ alignItems: 'center' }}>
-  <ActivityIndicator intent="success" size="large" />
+  <ActivityIndicator intent="success" size="lg" />
   <Text>Processing...</Text>
 </View>`,
 
@@ -73,7 +73,7 @@ function Example() {
       </Button>
       {loading && (
         <View spacing="sm" style={{ alignItems: 'center' }}>
-          <ActivityIndicator size="large" />
+          <ActivityIndicator size="lg" />
           <Text>Loading...</Text>
         </View>
       )}

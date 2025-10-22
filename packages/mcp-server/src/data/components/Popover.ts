@@ -102,7 +102,7 @@ const [open, setOpen] = useState(false);
       <Icon name="information" size="md" color="primary" />
       <Text weight="bold">Help</Text>
     </View>
-    <Text size="small">This feature allows you to...</Text>
+    <Text size="sm">This feature allows you to...</Text>
   </View>
 </Popover>`,
 
@@ -137,13 +137,13 @@ function Example() {
           <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'flex-end' }}>
             <Button
               variant="outlined"
-              size="small"
+              size="sm"
               onPress={() => setOpen(false)}
             >
               Cancel
             </Button>
             <Button
-              size="small"
+              size="sm"
               onPress={() => {
                 handleSave(value);
                 setOpen(false);

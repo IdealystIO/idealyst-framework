@@ -3,7 +3,7 @@ export const Text = {
   description: "Styled text component with size, weight, and color variants",
   props: `
 - \`children\`: ReactNode - The text content to display
-- \`size\`: 'small' | 'medium' | 'large' | 'xlarge' - Text size variant
+- \`size\`: 'sm' | 'md' | 'lg' | 'xl' - Text size variant
 - \`weight\`: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' - Font weight
 - \`color\`: DisplayColorVariant - Text color from theme
 - \`align\`: 'left' | 'center' | 'right' - Text alignment
@@ -19,7 +19,7 @@ export const Text = {
     "Inherits parent text styles",
   ],
   bestPractices: [
-    "Use semantic sizes (xlarge for headings, small for captions)",
+    "Use semantic sizes (xl for headings, sm for captions)",
     "Use appropriate weights for hierarchy",
     "Prefer theme colors over custom colors",
     "Use 'left' alignment for body text",
@@ -29,11 +29,11 @@ export const Text = {
   usage: `
 import { Text } from '@idealyst/components';
 
-<Text size="xlarge" weight="bold" color="primary">
+<Text size="xl" weight="bold" color="primary">
   Heading Text
 </Text>
 
-<Text size="medium" color="secondary">
+<Text size="md" color="secondary">
   Body text with normal weight
 </Text>
 `,
@@ -45,10 +45,10 @@ import { Text } from '@idealyst/components';
     variants: `import { Text, View } from '@idealyst/components';
 
 <View spacing="md">
-  <Text size="small">Small text</Text>
-  <Text size="medium">Medium text</Text>
-  <Text size="large">Large text</Text>
-  <Text size="xlarge">Extra large text</Text>
+  <Text size="sm">Small text</Text>
+  <Text size="md">Medium text</Text>
+  <Text size="lg">Large text</Text>
+  <Text size="xl">Extra large text</Text>
 </View>`,
 
     "with-icons": `import { Text, View, Icon } from '@idealyst/components';
@@ -68,7 +68,7 @@ function Example() {
 
   return (
     <View spacing="md">
-      <Text size="xlarge" weight="bold" align="center">
+      <Text size="xl" weight="bold" align="center">
         Counter: {count}
       </Text>
 
@@ -77,7 +77,7 @@ function Example() {
         <Button onPress={() => setCount(count + 1)}>+</Button>
       </View>
 
-      <Text size="small" color="secondary" align="center">
+      <Text size="sm" color="secondary" align="center">
         Click buttons to change the count
       </Text>
     </View>

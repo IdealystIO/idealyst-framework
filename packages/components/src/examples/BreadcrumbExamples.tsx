@@ -66,27 +66,27 @@ export const BreadcrumbExamples = () => {
   return (
     <Screen background="primary" safeArea padding="lg">
       <View spacing="xl" style={{ maxWidth: 800, width: '100%', marginHorizontal: 'auto' }}>
-        <Text size="xlarge" weight="bold">Breadcrumb Examples</Text>
+        <Text size="xl" weight="bold">Breadcrumb Examples</Text>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Basic Breadcrumb</Text>
+          <Text size="lg" weight="semibold">Basic Breadcrumb</Text>
           <Breadcrumb items={basicItems} />
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">With Icons (Components)</Text>
+          <Text size="lg" weight="semibold">With Icons (Components)</Text>
           <Breadcrumb items={withIconsItems} />
-          <Text size="small" color="secondary">Using Icon components</Text>
+          <Text size="sm" color="secondary">Using Icon components</Text>
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">With Icons (Icon Names)</Text>
+          <Text size="lg" weight="semibold">With Icons (Icon Names)</Text>
           <Breadcrumb items={withIconNamesItems} />
-          <Text size="small" color="secondary">Using icon name strings (recommended)</Text>
+          <Text size="sm" color="secondary">Using icon name strings (recommended)</Text>
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Custom Separator</Text>
+          <Text size="lg" weight="semibold">Custom Separator</Text>
           <View spacing="sm">
             <Breadcrumb items={basicItems} separator=">" />
             <Breadcrumb items={basicItems} separator="•" />
@@ -95,57 +95,57 @@ export const BreadcrumbExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Sizes</Text>
+          <Text size="lg" weight="semibold">Sizes</Text>
           <View spacing="sm">
             <View spacing="xs">
-              <Text size="medium" weight="semibold">Small</Text>
+              <Text size="md" weight="semibold">Small</Text>
               <Breadcrumb items={basicItems} size="sm" />
             </View>
             <View spacing="xs">
-              <Text size="medium" weight="semibold">Medium (Default)</Text>
+              <Text size="md" weight="semibold">Medium (Default)</Text>
               <Breadcrumb items={basicItems} size="md" />
             </View>
             <View spacing="xs">
-              <Text size="medium" weight="semibold">Large</Text>
+              <Text size="md" weight="semibold">Large</Text>
               <Breadcrumb items={basicItems} size="lg" />
             </View>
           </View>
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Intent Colors</Text>
+          <Text size="lg" weight="semibold">Intent Colors</Text>
           <View spacing="sm">
             <View spacing="xs">
-              <Text size="medium" weight="semibold">Primary (Default)</Text>
+              <Text size="md" weight="semibold">Primary (Default)</Text>
               <Breadcrumb items={basicItems} intent="primary" />
             </View>
             <View spacing="xs">
-              <Text size="medium" weight="semibold">Neutral</Text>
+              <Text size="md" weight="semibold">Neutral</Text>
               <Breadcrumb items={basicItems} intent="neutral" />
             </View>
           </View>
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Truncation</Text>
+          <Text size="lg" weight="semibold">Truncation</Text>
           <View spacing="sm">
             <View spacing="xs">
-              <Text size="small" color="secondary">Full path (7 items):</Text>
+              <Text size="sm" color="secondary">Full path (7 items):</Text>
               <Breadcrumb items={longPathItems} />
             </View>
             <View spacing="xs">
-              <Text size="small" color="secondary">Truncated to 4 items (shows first + last 3):</Text>
+              <Text size="sm" color="secondary">Truncated to 4 items (shows first + last 3):</Text>
               <Breadcrumb items={longPathItems} maxItems={4} />
             </View>
             <View spacing="xs">
-              <Text size="small" color="secondary">Truncated to 3 items (shows first + last 2):</Text>
+              <Text size="sm" color="secondary">Truncated to 3 items (shows first + last 2):</Text>
               <Breadcrumb items={longPathItems} maxItems={3} />
             </View>
           </View>
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">With Disabled Items</Text>
+          <Text size="lg" weight="semibold">With Disabled Items</Text>
           <Breadcrumb
             items={[
               { label: 'Home', onPress: () => console.log('Home') },
@@ -157,7 +157,7 @@ export const BreadcrumbExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Non-clickable Items</Text>
+          <Text size="lg" weight="semibold">Non-clickable Items</Text>
           <Breadcrumb
             items={[
               { label: 'Home' },
@@ -166,11 +166,11 @@ export const BreadcrumbExamples = () => {
               { label: 'Item' },
             ]}
           />
-          <Text size="small" color="secondary">None of these items are clickable</Text>
+          <Text size="sm" color="secondary">None of these items are clickable</Text>
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Mixed Clickable & Non-clickable</Text>
+          <Text size="lg" weight="semibold">Mixed Clickable & Non-clickable</Text>
           <Breadcrumb
             items={[
               { label: 'Home', onPress: () => console.log('Home') },
@@ -182,7 +182,7 @@ export const BreadcrumbExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">File System Example</Text>
+          <Text size="lg" weight="semibold">File System Example</Text>
           <Breadcrumb
             items={[
               {
@@ -215,7 +215,7 @@ export const BreadcrumbExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">E-commerce Example</Text>
+          <Text size="lg" weight="semibold">E-commerce Example</Text>
           <Breadcrumb
             items={[
               { label: 'Shop', onPress: () => console.log('Shop') },
@@ -229,22 +229,22 @@ export const BreadcrumbExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Responsive Breadcrumbs</Text>
-          <Text size="small" color="secondary">
+          <Text size="lg" weight="semibold">Responsive Breadcrumbs</Text>
+          <Text size="sm" color="secondary">
             Automatically collapses middle items into a dropdown menu on narrow screens
           </Text>
           <View spacing="sm">
             <View spacing="xs">
-              <Text size="medium" weight="semibold">Default (minVisibleItems: 3)</Text>
-              <Text size="small" color="secondary">Shows first item + dropdown + last item</Text>
+              <Text size="md" weight="semibold">Default (minVisibleItems: 3)</Text>
+              <Text size="sm" color="secondary">Shows first item + dropdown + last item</Text>
               <Breadcrumb
                 items={longPathItems}
                 responsive
               />
             </View>
             <View spacing="xs">
-              <Text size="medium" weight="semibold">More Visible Items (minVisibleItems: 4)</Text>
-              <Text size="small" color="secondary">Shows first item + dropdown + last 2 items</Text>
+              <Text size="md" weight="semibold">More Visible Items (minVisibleItems: 4)</Text>
+              <Text size="sm" color="secondary">Shows first item + dropdown + last 2 items</Text>
               <Breadcrumb
                 items={longPathItems}
                 responsive
@@ -252,8 +252,8 @@ export const BreadcrumbExamples = () => {
               />
             </View>
             <View spacing="xs">
-              <Text size="medium" weight="semibold">Fewer Items (minVisibleItems: 2)</Text>
-              <Text size="small" color="secondary">Shows first item + dropdown (all items collapsed)</Text>
+              <Text size="md" weight="semibold">Fewer Items (minVisibleItems: 2)</Text>
+              <Text size="sm" color="secondary">Shows first item + dropdown (all items collapsed)</Text>
               <Breadcrumb
                 items={longPathItems}
                 responsive
@@ -264,7 +264,7 @@ export const BreadcrumbExamples = () => {
         </View>
 
         <View spacing="md">
-          <Text size="large" weight="semibold">Responsive with Icons</Text>
+          <Text size="lg" weight="semibold">Responsive with Icons</Text>
           <Breadcrumb
             items={[
               {

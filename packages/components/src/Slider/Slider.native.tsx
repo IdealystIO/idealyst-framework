@@ -19,7 +19,7 @@ const Slider = forwardRef<View, SliderProps>(({
   showMinMax = false,
   marks = [],
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   icon,
   onValueChange,
   onValueCommit,
@@ -118,8 +118,8 @@ const Slider = forwardRef<View, SliderProps>(({
   const composedGesture = Gesture.Race(panGesture, tapGesture);
 
   const getThumbSize = () => {
-    if (size === 'small') return 16;
-    if (size === 'large') return 24;
+    if (size === 'sm') return 16;
+    if (size === 'lg') return 24;
     return 20;
   };
 
@@ -203,7 +203,7 @@ const Slider = forwardRef<View, SliderProps>(({
                             { left: markPosition },
                           ]}
                         >
-                          <Text size="small">{mark.label}</Text>
+                          <Text size="sm">{mark.label}</Text>
                         </View>
                       )}
                     </View>
@@ -243,8 +243,8 @@ const Slider = forwardRef<View, SliderProps>(({
 
       {showMinMax && (
         <View style={sliderStyles.minMaxLabels}>
-          <Text style={sliderStyles.minMaxLabel} size="small">{min}</Text>
-          <Text style={sliderStyles.minMaxLabel} size="small">{max}</Text>
+          <Text style={sliderStyles.minMaxLabel} size="sm">{min}</Text>
+          <Text style={sliderStyles.minMaxLabel} size="sm">{max}</Text>
         </View>
       )}
     </View>

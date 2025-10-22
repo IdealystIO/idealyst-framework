@@ -11,10 +11,10 @@ export const TextAreaExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">TextArea Examples</Text>
+      <Text size="xl" weight="bold">TextArea Examples</Text>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Basic TextArea</Text>
+        <Text size="lg" weight="semibold">Basic TextArea</Text>
         <TextArea
           value={basicValue}
           onChange={setBasicValue}
@@ -24,7 +24,7 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Auto-Growing TextArea</Text>
+        <Text size="lg" weight="semibold">Auto-Growing TextArea</Text>
         <TextArea
           label="Auto-grow with min/max height"
           value={autoGrowValue}
@@ -38,7 +38,7 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Label</Text>
+        <Text size="lg" weight="semibold">With Label</Text>
         <TextArea
           label="Description"
           value={basicValue}
@@ -49,20 +49,20 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Sizes</Text>
+        <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm">
           <TextArea
-            size="small"
+            size="sm"
             placeholder="Small textarea"
             rows={3}
           />
           <TextArea
-            size="medium"
+            size="md"
             placeholder="Medium textarea (default)"
             rows={3}
           />
           <TextArea
-            size="large"
+            size="lg"
             placeholder="Large textarea"
             rows={3}
           />
@@ -70,7 +70,7 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Intent Colors</Text>
+        <Text size="lg" weight="semibold">Intent Colors</Text>
         <View spacing="sm">
           <TextArea
             intent="primary"
@@ -96,7 +96,7 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Character Limit</Text>
+        <Text size="lg" weight="semibold">With Character Limit</Text>
         <TextArea
           label="Limited Input"
           value={limitedValue}
@@ -109,7 +109,7 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Error State</Text>
+        <Text size="lg" weight="semibold">Error State</Text>
         <TextArea
           label="Required Field"
           value={errorValue}
@@ -121,7 +121,7 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Resize Options</Text>
+        <Text size="lg" weight="semibold">Resize Options</Text>
         <View spacing="sm">
           <TextArea
             placeholder="Resize: none"
@@ -147,7 +147,7 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Custom Styling</Text>
+        <Text size="lg" weight="semibold">Custom Styling</Text>
         <TextArea
           label="Monospace Font"
           placeholder="Code or monospace text..."
@@ -157,7 +157,7 @@ export const TextAreaExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Disabled State</Text>
+        <Text size="lg" weight="semibold">Disabled State</Text>
         <TextArea
           label="Disabled"
           value="This textarea is disabled"

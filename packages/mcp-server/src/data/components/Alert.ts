@@ -110,11 +110,11 @@ function Example() {
           onDismiss={() => setShowAlert(false)}
           actions={
             <View style={{ flexDirection: 'row', gap: 8 }}>
-              <Button size="small" onPress={() => setShowAlert(false)}>
+              <Button size="sm" onPress={() => setShowAlert(false)}>
                 Cancel
               </Button>
               <Button
-                size="small"
+                size="sm"
                 intent="warning"
                 onPress={() => {
                   handleSave();

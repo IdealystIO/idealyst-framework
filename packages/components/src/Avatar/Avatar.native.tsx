@@ -7,7 +7,7 @@ const Avatar = forwardRef<View, AvatarProps>(({
   src,
   alt,
   fallback,
-  size = 'medium',
+  size = 'md',
   shape = 'circle',
   style,
   testID,

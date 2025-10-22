@@ -137,15 +137,15 @@ export const TableExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
     <View spacing="lg">
-      <Text size="xlarge" weight="bold">Table Examples</Text>
+      <Text size="xl" weight="bold">Table Examples</Text>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Basic Table</Text>
+        <Text size="lg" weight="semibold">Basic Table</Text>
         <Table columns={userColumns} data={users} />
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Variants</Text>
+        <Text size="lg" weight="semibold">Variants</Text>
         <View spacing="sm">
           <View spacing="xs">
             <Text size="sm" weight="medium">Default</Text>
@@ -175,7 +175,7 @@ export const TableExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Sizes</Text>
+        <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm">
           <View spacing="xs">
             <Text size="sm" weight="medium">Small</Text>
@@ -191,7 +191,7 @@ export const TableExamples: React.FC = () => {
             <Table
               columns={userColumns}
               data={users.slice(0, 2)}
-              size="medium"
+              size="md"
               variant="bordered"
             />
           </View>
@@ -200,7 +200,7 @@ export const TableExamples: React.FC = () => {
             <Table
               columns={userColumns}
               data={users.slice(0, 2)}
-              size="large"
+              size="lg"
               variant="bordered"
             />
           </View>
@@ -208,12 +208,12 @@ export const TableExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Custom Rendering</Text>
+        <Text size="lg" weight="semibold">Custom Rendering</Text>
         <Table columns={productColumns} data={products} variant="striped" />
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Clickable Rows</Text>
+        <Text size="lg" weight="semibold">Clickable Rows</Text>
         <Table
           columns={userColumns}
           data={users}
@@ -226,7 +226,7 @@ export const TableExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">With Actions</Text>
+        <Text size="lg" weight="semibold">With Actions</Text>
         <Table
           columns={actionColumns}
           data={users}
@@ -235,7 +235,7 @@ export const TableExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Column Alignment</Text>
+        <Text size="lg" weight="semibold">Column Alignment</Text>
         <Table
           columns={[
             { key: 'name', title: 'Product', dataIndex: 'name', align: 'left' },
@@ -248,7 +248,7 @@ export const TableExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Fixed Column Widths</Text>
+        <Text size="lg" weight="semibold">Fixed Column Widths</Text>
         <Table
           columns={[
             { key: 'id', title: 'ID', dataIndex: 'id', width: '60px' },
@@ -262,7 +262,7 @@ export const TableExamples: React.FC = () => {
       </View>
 
       <View spacing="md">
-        <Text size="large" weight="semibold">Empty Table</Text>
+        <Text size="lg" weight="semibold">Empty Table</Text>
         <Table
           columns={userColumns}
           data={[]}

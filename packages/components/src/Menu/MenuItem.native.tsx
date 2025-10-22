@@ -2,17 +2,17 @@ import React, { isValidElement, forwardRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Icon } from '../Icon';
 import { menuItemStyles } from './MenuItem.styles';
-import type { MenuItem as MenuItemType } from './types';
+import type { MenuItem as MenuItemType, MenuSizeVariant } from './types';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 
 interface MenuItemProps {
   item: MenuItemType;
   onPress: (item: MenuItemType) => void;
-  size?: 'small' | 'medium' | 'large';
+  size?: MenuSizeVariant;
   testID?: string;
 }
 
-const MenuItem = forwardRef<Pressable, MenuItemProps>(({ item, onPress, size = 'medium', testID }, ref) => {
+const MenuItem = forwardRef<Pressable, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
   // Initialize styles with useVariants
   menuItemStyles.useVariants({
     size,

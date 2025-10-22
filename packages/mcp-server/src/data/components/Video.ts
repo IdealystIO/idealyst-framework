@@ -103,7 +103,7 @@ import { Video } from '@idealyst/components';
   />
   <View spacing="sm" style={{ padding: 16 }}>
     <Text weight="bold">Video Title</Text>
-    <Text size="small">Video description and details</Text>
+    <Text size="sm">Video description and details</Text>
   </View>
 </Card>`,
 
@@ -148,14 +148,14 @@ function Example() {
 
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <Button
-            size="small"
+            size="sm"
             variant="outlined"
             onPress={() => videoRef.current?.play()}
           >
             Play
           </Button>
           <Button
-            size="small"
+            size="sm"
             variant="outlined"
             onPress={() => videoRef.current?.pause()}
           >

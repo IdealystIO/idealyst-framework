@@ -7,7 +7,7 @@ export const Tooltip = {
 - \`placement\`: 'top' | 'bottom' | 'left' | 'right' - Tooltip placement
 - \`delay\`: number - Delay before showing tooltip (milliseconds)
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'small' | 'medium' | 'large' - Tooltip size
+- \`size\`: 'sm' | 'md' | 'lg' - Tooltip size
 - \`style\`: ViewStyle - Additional styles
 - \`testID\`: string - Test identifier
 `,
@@ -97,7 +97,7 @@ function ActionButtons() {
         </Tooltip>
       </View>
 
-      <Text size="small" color="secondary">
+      <Text size="sm" color="secondary">
         Hover over buttons to see tooltips
       </Text>
     </View>

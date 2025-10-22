@@ -8,7 +8,7 @@ export const Switch = {
 - \`label\`: string - Label text next to switch
 - \`labelPosition\`: 'left' | 'right' - Position of label relative to switch
 - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'small' | 'medium' | 'large' - Switch size
+- \`size\`: 'sm' | 'md' | 'lg' - Switch size
 - \`enabledIcon\`: IconName | ReactNode - Icon shown when enabled
 - \`disabledIcon\`: IconName | ReactNode - Icon shown when disabled
 - \`style\`: ViewStyle - Additional styles
@@ -56,9 +56,9 @@ function Example() {
     variants: `import { Switch, View } from '@idealyst/components';
 
 <View spacing="md">
-  <Switch label="Small" size="small" checked />
-  <Switch label="Medium" size="medium" checked />
-  <Switch label="Large" size="large" checked />
+  <Switch label="Small" size="sm" checked />
+  <Switch label="Medium" size="md" checked />
+  <Switch label="Large" size="lg" checked />
 </View>`,
 
     "with-icons": `import { Switch, View } from '@idealyst/components';
@@ -94,7 +94,7 @@ function SettingsPanel() {
   };
 
   return (
-    <Card variant="outlined" padding="medium">
+    <Card variant="outlined" padding="md">
       <View spacing="md">
         <Text weight="bold">Privacy Settings</Text>
 

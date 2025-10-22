@@ -11,7 +11,7 @@ const RadioButton = forwardRef<Pressable, RadioButtonProps>(({
   onPress,
   disabled: disabledProp = false,
   label,
-  size = 'medium',
+  size = 'md',
   intent = 'primary',
   style,
   testID,

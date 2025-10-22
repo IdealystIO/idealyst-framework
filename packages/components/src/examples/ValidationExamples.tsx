@@ -41,7 +41,7 @@ export function ValidationExamples() {
   return (
     <Screen background="primary" padding="lg">
     <View style={{ padding: 20, gap: 16 }}>
-      <Text size="large" weight="bold">
+      <Text size="lg" weight="bold">
         Theme Validation Examples
       </Text>
       
@@ -67,7 +67,7 @@ export function ValidationExamples() {
           Click to Test Invalid Props (check console)
         </Button>
         
-        <Text size="small" color="secondary">
+        <Text size="sm" color="secondary">
           Note: The invalid examples are triggered programmatically to avoid 
           runtime TypeScript errors. In real usage, TypeScript would catch 
           most of these at compile time.
@@ -77,13 +77,13 @@ export function ValidationExamples() {
       {/* Extensibility example */}
       <View style={{ gap: 8 }}>
         <Text weight="semibold">🔧 Extensibility:</Text>
-        <Text size="small">
+        <Text size="sm">
           When you add new colors to your theme palette (e.g., 'orange', 'teal'), 
           they automatically become available in all components that use ColorVariant.
           The validation system will recognize them as valid options.
         </Text>
         
-        <Text size="small">
+        <Text size="sm">
           Example: If you add 'orange' to your theme.palettes, then 
           &lt;Text color="orange"&gt; and &lt;Badge color="orange"&gt; 
           will work without any code changes to the components.

@@ -47,13 +47,13 @@ export const cardStyles = StyleSheet.create((theme) => ({
         none: {
           padding: 0,
         },
-        small: {
+        sm: {
           padding: theme.spacing.sm,
         },
-        medium: {
+        md: {
           padding: theme.spacing.md,
         },
-        large: {
+        lg: {
           padding: theme.spacing.lg,
         },
       },
@@ -61,13 +61,13 @@ export const cardStyles = StyleSheet.create((theme) => ({
         none: {
           borderRadius: 0,
         },
-        small: {
+        sm: {
           borderRadius: theme.borderRadius.sm,
         },
-        medium: {
+        md: {
           borderRadius: theme.borderRadius.md,
         },
-        large: {
+        lg: {
           borderRadius: theme.borderRadius.lg,
         },
       },

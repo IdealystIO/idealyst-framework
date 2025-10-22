@@ -12,7 +12,7 @@ const Switch = forwardRef<Pressable, SwitchProps>(({
   label,
   labelPosition = 'right',
   intent = 'primary',
-  size = 'medium',
+  size = 'md',
   style,
   testID,
 }, ref) => {
@@ -40,21 +40,21 @@ const Switch = forwardRef<Pressable, SwitchProps>(({
   };
 
   const getThumbDistance = () => {
-    if (size === 'small') return 16;
-    if (size === 'large') return 24;
+    if (size === 'sm') return 16;
+    if (size === 'lg') return 24;
     return 20;
   };
 
   // Native-specific thumb styles
   const getThumbSize = () => {
-    if (size === 'small') return 16;
-    if (size === 'large') return 24;
+    if (size === 'sm') return 16;
+    if (size === 'lg') return 24;
     return 20;
   };
 
   const getTrackHeight = () => {
-    if (size === 'small') return 20;
-    if (size === 'large') return 28;
+    if (size === 'sm') return 20;
+    if (size === 'lg') return 28;
     return 24;
   };
 

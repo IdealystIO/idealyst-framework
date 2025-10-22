@@ -145,7 +145,7 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
       }}>
         <Button
           variant={isDateStep ? 'primary' : 'outlined'}
-          size="small"
+          size="sm"
           onPress={() => setViewMode('date')}
           disabled={disabled}
           style={{ flex: 1 }}
@@ -154,7 +154,7 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
         </Button>
         <Button
           variant={isTimeStep ? 'primary' : 'outlined'}
-          size="small"
+          size="sm"
           onPress={() => setViewMode('time')}
           disabled={disabled || !value}
           style={{ flex: 1 }}
@@ -190,7 +190,7 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
           <View style={{ marginTop: 12, alignItems: 'flex-start' }}>
             <Button
               variant="text"
-              size="small"
+              size="sm"
               onPress={() => setViewMode('date')}
               disabled={disabled}
             >

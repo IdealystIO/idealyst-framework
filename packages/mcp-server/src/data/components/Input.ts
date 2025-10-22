@@ -14,7 +14,7 @@ category: "form",
 - \`rightIcon\`: IconName | ReactNode - Icon to display on the right side
 - \`showPasswordToggle\`: boolean - Show password visibility toggle for password inputs (defaults to true for password type)
 - \`autoCapitalize\`: 'none' | 'sentences' | 'words' | 'characters' - Auto-capitalization behavior
-- \`size\`: 'small' | 'medium' | 'large' - Input size
+- \`size\`: 'sm' | 'md' | 'lg' - Input size
 - \`variant\`: 'default' | 'outlined' | 'filled' | 'bare' - Style variant
 - \`intent\`: IntentVariant - Color scheme (for focus states)
 - \`hasError\`: boolean - Error state (deprecated: use intent="error")
@@ -63,13 +63,13 @@ function Example() {
       variants: `import { Input } from '@idealyst/components';
 
 // Small size
-<Input size="small" placeholder="Small input" />
+<Input size="sm" placeholder="Small input" />
 
 // Medium size (default)
-<Input size="medium" placeholder="Medium input" />
+<Input size="md" placeholder="Medium input" />
 
 // Large size
-<Input size="large" placeholder="Large input" />
+<Input size="lg" placeholder="Large input" />
 
 // Outlined variant
 <Input variant="outlined" placeholder="Outlined" />

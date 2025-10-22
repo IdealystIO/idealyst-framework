@@ -5,14 +5,14 @@ export const SVGImageExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="none">
-        <Text size="large" weight="bold" align="center">
+        <Text size="lg" weight="bold" align="center">
           SVG Image Examples
         </Text>
         
         {/* Local SVG File Example */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Loading Local SVG File</Text>
-          <Text size="small">
+          <Text size="md" weight="semibold">Loading Local SVG File</Text>
+          <Text size="sm">
             Using the test-logo.svg file - works on web, limited support on React Native
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -40,8 +40,8 @@ export const SVGImageExamples = () => {
 
         {/* Intent Colors */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Intent Colors</Text>
-          <Text size="small">
+          <Text size="md" weight="semibold">Intent Colors</Text>
+          <Text size="sm">
             SVG images with theme-based coloring
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -74,8 +74,8 @@ export const SVGImageExamples = () => {
 
         {/* Custom Colors */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Custom Colors</Text>
-          <Text size="small">
+          <Text size="md" weight="semibold">Custom Colors</Text>
+          <Text size="sm">
             Direct color specification
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -102,8 +102,8 @@ export const SVGImageExamples = () => {
 
         {/* Remote URL Example */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Loading from URL</Text>
-          <Text size="small">
+          <Text size="md" weight="semibold">Loading from URL</Text>
+          <Text size="sm">
             SVG images loaded from remote URLs (web only for security)
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -129,8 +129,8 @@ export const SVGImageExamples = () => {
 
         {/* Resize Modes */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Resize Modes</Text>
-          <Text size="small">
+          <Text size="md" weight="semibold">Resize Modes</Text>
+          <Text size="sm">
             Different ways to fit SVG images in containers
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -163,21 +163,21 @@ export const SVGImageExamples = () => {
 
         {/* Usage Tips */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Usage Tips</Text>
+          <Text size="md" weight="semibold">Usage Tips</Text>
           <View spacing="sm">
-            <Text size="small">
+            <Text size="sm">
               • <Text weight="semibold">Local files:</Text> Use relative paths for bundled SVG files
             </Text>
-            <Text size="small">
+            <Text size="sm">
               • <Text weight="semibold">Remote URLs:</Text> Use {`{ uri: "https://..." }`} format
             </Text>
-            <Text size="small">
+            <Text size="sm">
               • <Text weight="semibold">React Native:</Text> Local SVGs have limited support - use remote URLs or convert to PNG
             </Text>
-            <Text size="small">
+            <Text size="sm">
               • <Text weight="semibold">Coloring:</Text> Works best with single-color SVG icons
             </Text>
-            <Text size="small">
+            <Text size="sm">
               • <Text weight="semibold">Performance:</Text> Cache remote SVGs for better performance
             </Text>
           </View>

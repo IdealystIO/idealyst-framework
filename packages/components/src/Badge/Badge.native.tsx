@@ -8,7 +8,7 @@ import { isIconName } from '../Icon/icon-resolver';
 const Badge = forwardRef<View, BadgeProps>(({
   children,
   icon,
-  size = 'medium',
+  size = 'md',
   variant = 'filled',
   color = 'blue',
   style,
@@ -21,7 +21,7 @@ const Badge = forwardRef<View, BadgeProps>(({
   });
 
   // Map badge size to icon size
-  const iconSize = size === 'small' ? 12 : size === 'medium' ? 14 : 16;
+  const iconSize = size === 'sm' ? 12 : size === 'md' ? 14 : 16;
 
   // Helper to render icon
   const renderIcon = () => {

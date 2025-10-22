@@ -5,7 +5,7 @@ category: "overlay",
 - \`open\`: boolean - Control dialog visibility
 - \`onOpenChange\`: (open: boolean) => void - Open state change handler
 - \`title\`: string - Dialog title
-- \`size\`: 'small' | 'medium' | 'large' | 'fullscreen' - Dialog size
+- \`size\`: 'sm' | 'md' | 'lg' | 'fullscreen' - Dialog size
 - \`variant\`: 'default' | 'alert' - Visual style
 - \`showCloseButton\`: boolean - Show close button
 - \`closeOnBackdropClick\`: boolean - Close when clicking backdrop
@@ -44,7 +44,7 @@ function Example() {
         open={open}
         onOpenChange={setOpen}
         title="Confirm Action"
-        size="medium"
+        size="md"
       >
         <View spacing="md">
           <Text>Are you sure you want to proceed?</Text>
@@ -84,7 +84,7 @@ function Example() {
 <Dialog open={open} onOpenChange={setOpen} title="Delete Item">
   <View spacing="md">
     <View style={{ alignItems: 'center' }}>
-      <Icon name="delete" size="xlarge" color="error" />
+      <Icon name="delete" size="xl" color="error" />
     </View>
     <Text>This action cannot be undone. Continue?</Text>
     <Button intent="error" onPress={handleDelete}>Delete</Button>

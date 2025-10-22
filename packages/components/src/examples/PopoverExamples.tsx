@@ -22,13 +22,13 @@ export const PopoverExamples = () => {
   return (
     <Screen background="primary" padding="lg">
       <View spacing="lg">
-        <Text size="large" weight="bold" align="center">
+        <Text size="lg" weight="bold" align="center">
           Popover Examples
         </Text>
 
         {/* Basic Popover */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Basic Popover</Text>
+          <Text size="md" weight="semibold">Basic Popover</Text>
             <Button
               ref={basicButtonRef}
               onPress={() => setBasicOpen(true)}>
@@ -52,7 +52,7 @@ export const PopoverExamples = () => {
 
         {/* Placement Examples */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Placement Options</Text>
+          <Text size="md" weight="semibold">Placement Options</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {placements.map((placement) => (
               <View key={placement.id}>
@@ -93,7 +93,7 @@ export const PopoverExamples = () => {
 
         {/* Arrow Example */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">With Arrow</Text>
+          <Text size="md" weight="semibold">With Arrow</Text>
           <Button
             ref={arrowButtonRef}
             variant="contained"
@@ -123,7 +123,7 @@ export const PopoverExamples = () => {
 
         {/* Features Description */}
         <View spacing="md">
-          <Text size="medium" weight="semibold">Features</Text>
+          <Text size="md" weight="semibold">Features</Text>
           <View spacing="sm">
             <Text size="sm" color="secondary">
               • Automatically positions within viewport bounds
