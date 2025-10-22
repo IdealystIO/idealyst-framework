@@ -1711,11 +1711,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/components@workspace:packages/components":
+"@idealyst/components@npm:^1.0.83, @idealyst/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
+    "@idealyst/theme": "npm:^1.0.83"
     "@types/react": "npm:^19.1.0"
+    react: "npm:^19.1.0"
+    react-native: "npm:^0.80.1"
+    react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@idealyst/theme": ^1.0.83
@@ -1728,6 +1732,7 @@ __metadata:
     react-native: ">=0.60.0"
     react-native-edge-to-edge: "*"
     react-native-nitro-modules: "*"
+    react-native-reanimated: ">=3.0.0"
     react-native-unistyles: ">=3.0.0"
   peerDependenciesMeta:
     "@idealyst/theme":
@@ -1744,6 +1749,8 @@ __metadata:
       optional: true
     react-native-nitro-modules:
       optional: true
+    react-native-reanimated:
+      optional: true
     react-native-unistyles:
       optional: true
     react-native-vector-icons:
@@ -1751,12 +1758,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/datagrid@workspace:packages/datagrid":
+"@idealyst/datagrid@npm:^1.0.83, @idealyst/datagrid@workspace:packages/datagrid":
   version: 0.0.0-use.local
   resolution: "@idealyst/datagrid@workspace:packages/datagrid"
   dependencies:
+    "@idealyst/components": "npm:^1.0.83"
+    "@idealyst/theme": "npm:^1.0.83"
     "@types/react": "npm:^19.1.0"
     "@types/react-window": "npm:^1.8.8"
+    react: "npm:^19.1.0"
+    react-native: "npm:^0.80.1"
+    react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@idealyst/components": ^1.0.83
@@ -1779,11 +1791,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/datepicker@workspace:packages/datepicker":
+"@idealyst/datepicker@npm:^1.0.83, @idealyst/datepicker@workspace:packages/datepicker":
   version: 0.0.0-use.local
   resolution: "@idealyst/datepicker@workspace:packages/datepicker"
   dependencies:
+    "@idealyst/components": "npm:^1.0.83"
+    "@idealyst/theme": "npm:^1.0.83"
     "@types/react": "npm:^19.1.0"
+    react: "npm:^19.1.0"
+    react-native: "npm:^0.80.1"
+    react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@idealyst/components": ^1.0.83
@@ -1822,8 +1839,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/navigation@workspace:packages/navigation"
   dependencies:
+    "@idealyst/components": "npm:^1.0.83"
+    "@idealyst/datagrid": "npm:^1.0.83"
+    "@idealyst/datepicker": "npm:^1.0.83"
+    "@idealyst/theme": "npm:^1.0.83"
     "@types/react": "npm:^19.1.8"
     "@types/react-dom": "npm:^19.1.6"
+    react: "npm:^19.1.0"
+    react-native: "npm:^0.80.1"
+    react-native-unistyles: "npm:^3.0.10"
     react-router: "npm:7.9.1"
     typescript: "npm:^5.0.0"
   peerDependencies:
@@ -1881,7 +1905,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/theme@workspace:packages/theme":
+"@idealyst/theme@npm:^1.0.83, @idealyst/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
@@ -6933,6 +6957,23 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/830c2c6271125a7b9f8f473485cc66d44d0cc592ccd9978f98e3ee0e7081b1d53b94b42736381bfe369dc5132eda4540bfb6d1c4102e7f6a782fd8a7e257af7d
+  languageName: node
+  linkType: hard
+
+"react-native-unistyles@npm:^3.0.10":
+  version: 3.0.15
+  resolution: "react-native-unistyles@npm:3.0.15"
+  peerDependencies:
+    "@react-native/normalize-colors": "*"
+    react: "*"
+    react-native: ">=0.76.0"
+    react-native-edge-to-edge: "*"
+    react-native-nitro-modules: "*"
+    react-native-reanimated: "*"
+  peerDependenciesMeta:
+    react-native-reanimated:
+      optional: true
+  checksum: 10/383701cfe4736d0202008b097925d65b0093540cfcb680d978d319e3fc05ce82db5b1346ffc5c6716e5773e61fa56cc3414d8930cd8b5b9dba0639adfa2ca04f
   languageName: node
   linkType: hard
 

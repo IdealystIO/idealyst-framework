@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { accordionStyles } from './Accordion.styles';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
 
 interface AccordionItemProps {

@@ -60,8 +60,15 @@
     "react-router-dom": ">=6.0.0"
   },
   "devDependencies": {
+    "@idealyst/components": "^1.0.83",
+    "@idealyst/datagrid": "^1.0.83",
+    "@idealyst/datepicker": "^1.0.83",
+    "@idealyst/theme": "^1.0.83",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "react-native-unistyles": "^3.0.10",
     "react-router": "7.9.1",
     "typescript": "^5.0.0"
   },

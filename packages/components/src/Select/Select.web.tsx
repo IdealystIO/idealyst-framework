@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { SelectProps, SelectOption } from './types';
 import { selectStyles } from './Select.styles';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import useMergeRefs from '../hooks/useMergeRefs';

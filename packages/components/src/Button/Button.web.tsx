@@ -2,7 +2,7 @@ import React, { isValidElement, forwardRef, useEffect, useRef, useImperativeHand
 import { getWebProps } from 'react-native-unistyles/web';
 import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 // Extended props to include path props added by Babel plugin

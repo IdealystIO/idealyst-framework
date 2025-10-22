@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, isValidElement, forwardRef } from
 import { getWebProps } from 'react-native-unistyles/web';
 import { sliderStyles } from './Slider.styles';
 import type { SliderProps } from './types';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 

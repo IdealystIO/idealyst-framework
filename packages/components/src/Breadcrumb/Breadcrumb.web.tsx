@@ -8,7 +8,7 @@ import {
   breadcrumbMenuButtonStyles
 } from './Breadcrumb.styles';
 import type { BreadcrumbProps, BreadcrumbItem as BreadcrumbItemType } from './types';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 import Menu from '../Menu/Menu.web';
 import type { MenuItem } from '../Menu/types';

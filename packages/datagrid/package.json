@@ -61,8 +61,13 @@
     }
   },
   "devDependencies": {
+    "@idealyst/components": "^1.0.83",
+    "@idealyst/theme": "^1.0.83",
     "@types/react": "^19.1.0",
     "@types/react-window": "^1.8.8",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "react-native-unistyles": "^3.0.10",
     "typescript": "^5.0.0"
   },
   "files": [

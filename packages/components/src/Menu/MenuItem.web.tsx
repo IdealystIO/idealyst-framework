@@ -2,7 +2,7 @@ import React, { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { menuItemStyles } from './MenuItem.styles';
 import type { MenuItem as MenuItemType, MenuSizeVariant } from './types';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 
 interface MenuItemProps {

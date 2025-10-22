@@ -2,7 +2,7 @@ import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { BadgeProps } from './types';
 import { badgeStyles } from './Badge.styles';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 // Extended props to include path props added by Babel plugin

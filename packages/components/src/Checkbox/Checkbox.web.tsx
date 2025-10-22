@@ -2,7 +2,7 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CheckboxProps } from './types';
 import { checkboxStyles, checkboxLabelStyles, checkboxCheckmarkStyles, checkboxHelperStyles } from './Checkbox.styles';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 

@@ -2,7 +2,7 @@ import React, { useState, isValidElement, useRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { InputProps } from './types';
 import { inputStyles } from './Input.styles';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 

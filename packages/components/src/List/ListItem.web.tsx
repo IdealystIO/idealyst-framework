@@ -2,7 +2,7 @@ import React, { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
-import { IconSvg } from '../Icon/IconSvg.web';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 import { useListContext } from './ListContext';
 
