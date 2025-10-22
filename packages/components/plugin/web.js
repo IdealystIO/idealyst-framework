@@ -52,8 +52,6 @@ module.exports = function ({ types: t }, options = {}) {
         } else {
           console.warn(`[mdi-auto-import-enhanced] Invalid manifest format in ${fullPath}. Expected { "icons": ["icon-name", ...] }`);
         }
-      } else {
-        debugLog(`[mdi-auto-import-enhanced] No manifest found at ${fullPath}`);
       }
     } catch (error) {
       console.warn(`[mdi-auto-import-enhanced] Error loading manifest from ${manifestPath}: ${error.message}`);

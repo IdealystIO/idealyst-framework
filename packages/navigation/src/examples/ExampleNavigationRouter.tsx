@@ -10,8 +10,8 @@ import HeaderRight from './HeaderRight';
 
 const HomeScreen = () => {
     return (
-        <Screen spacing="lg">
-            <View spacing='lg'>
+        <Screen>
+            <View spacing='lg' padding={12}>
                 <Text size="xlarge" weight="bold">
                     Welcome to Idealyst Components
                 </Text>

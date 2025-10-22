@@ -33,7 +33,7 @@ export default defineConfig({
               ],
             },
           ],
-          [path.resolve(__dirname, "../../../../packages/components/plugin/web.js"), { root: "src", debug: true }],
+          [path.resolve(__dirname, "../../../../packages/components/plugin/web.js"), { root: "src" }],
         ],
       },
     }),
