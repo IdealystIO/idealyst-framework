@@ -1,6 +1,7 @@
 import type { ColorPaletteShade } from './variants';
 import { commonThemeProperties } from './common';
 import { Theme } from './theme';
+import { newTheme } from './newTheme';
 
 // =============================================================================
 // TYPES
@@ -514,62 +515,7 @@ export function createTheme(config: ThemeConfig): any {
       secondary: intents.neutral.main,
     },
 
-    newTheme: {
-      intents: {
-        primary: {
-          primary: '#3b82f6',
-          contrast: '#ffffff',
-        },
-        success: {
-          primary: '#22c55e',
-          contrast: '#ffffff',
-        },
-        error: {
-          primary: '#ef4444',
-          contrast: '#ffffff',
-        },
-        warning: {
-          primary: '#f97316',
-          contrast: '#ffffff',
-        },
-        neutral: {
-          primary: '#6b7280',
-          contrast: '#ffffff',
-        },
-      },
-      colors: {
-        ...colors,
-      },
-      sizes: {
-        button: {
-          xs: {
-            paddingVertical: 4,
-            paddingHorizontal: 8,
-            minHeight: 24,
-          },
-          sm: {
-            paddingVertical: 6,
-            paddingHorizontal: 12,
-            minHeight: 32,
-          },
-          md: {
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-            minHeight: 40,
-          },
-          lg: {
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            minHeight: 48,
-          },
-          xl: {
-            paddingVertical: 12,
-            paddingHorizontal: 24,
-            minHeight: 56,
-          }
-        }
-      }
-    } as Theme
+    newTheme: newTheme,
   };
 
   return theme;
