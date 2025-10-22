@@ -192,6 +192,7 @@ export function createDarkColorMappings(): ThemeConfig['colors'] {
 // Create default light theme using the explicit theme builder
 export function createDefaultLightTheme() {
   return createTheme({
+    
     name: 'DefaultLight',
     mode: 'light',
     palettes: createStandardPalettes(),

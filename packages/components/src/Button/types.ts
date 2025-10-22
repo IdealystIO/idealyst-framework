@@ -4,7 +4,7 @@ import type { IntentVariant, ButtonSize } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
 
 // Component-specific type aliases for future extensibility
-export type ButtonVariant = 'contained' | 'outlined' | 'text';
+export type ButtonType = 'contained' | 'outlined' | 'text';
 export type ButtonIntentVariant = IntentVariant;
 export type ButtonSizeVariant = ButtonSize;
 
@@ -30,9 +30,9 @@ export interface ButtonProps {
   disabled?: boolean;
 
   /**
-   * The visual style variant of the button
+   * The visual style type of the button
    */
-  variant?: ButtonVariant;
+  type?: ButtonType;
 
   /**
    * The intent/color scheme of the button

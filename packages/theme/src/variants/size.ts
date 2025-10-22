@@ -9,6 +9,7 @@ import { AllComponentSizes, Size, SizeValue, Theme } from "../theme";
  * @returns 
  */
 export function buildSizeVariants<T extends keyof AllComponentSizes>(theme: Theme, component: T, builder: (value: AllComponentSizes[T][Size]) => Styles): Record<Size, Styles> {
+    console.log(theme, component);
     const variants = {} as Record<Size, Styles>;
     for (const size in theme.sizes[component]) {
         variants[size as Size] = builder(theme.sizes[component][size as Size]);

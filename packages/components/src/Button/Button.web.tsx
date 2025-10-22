@@ -19,7 +19,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     children,
     onPress,
     disabled = false,
-    variant = 'contained',
+    type = 'contained',
     intent = 'primary',
     size = 'md',
     leftIcon,
@@ -38,10 +38,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
 
   // Apply variants using the correct Unistyles 3.0 pattern
   buttonStyles.useVariants({
-    size: size as 'sm' | 'md' | 'lg',
-    intent: intent as 'primary' | 'success' | 'error' | 'warning' | 'neutral',
-    variant: variant as 'contained' | 'outlined' | 'text',
-    disabled: disabled as boolean,
+    size,
+    intent,
+    type,
+    disabled,
   });
 
   // Create the style array following the official documentation pattern
@@ -52,6 +52,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
 
   // Use getWebProps to generate className and ref for web
   const webProps = getWebProps(buttonStyleArray);
+
+  console.log(webProps)
 
   // Icon container styles
   const iconContainerProps = getWebProps([buttonStyles.iconContainer]);

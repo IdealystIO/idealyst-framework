@@ -36,13 +36,13 @@ export const ExampleWebLayout: React.FC = () => {
             }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Button
-                        variant="text"
+                        type="text"
                         leftIcon="menu"
                         size="lg"
                         onPress={() => setSidebarCollapsed(!sidebarCollapsed)}
                         style={{ padding: 8 }}
                     />
-                    <Button variant='text' size="lg">
+                    <Button type='text' size="lg">
                         <Text weight="bold" size="lg">
                             Idealyst Components
                         </Text>
@@ -57,11 +57,11 @@ export const ExampleWebLayout: React.FC = () => {
                         leftIcon="magnify"
                         size='lg'
                         intent='neutral'
-                        variant='text'
+                        type='text'
                         onPress={() => setShowSearch(true)}
                     />
                     <Button
-                        variant="outlined"
+                        type="outlined"
                         intent="primary"
                         size="sm"
                         onPress={cycleTheme}

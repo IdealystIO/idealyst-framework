@@ -18,21 +18,21 @@ export const ButtonExamples = () => {
         <Text size="md" weight="semibold">Variants</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button 
-            variant="contained" 
+            type="contained" 
             intent="primary"
             onPress={() => handlePress('contained')}
           >
             Contained
           </Button>
           <Button 
-            variant="outlined" 
+            type="outlined" 
             intent="primary"
             onPress={() => handlePress('outlined')}
           >
             Outlined
           </Button>
           <Button 
-            variant="text" 
+            type="text" 
             intent="primary"
             onPress={() => handlePress('text')}
           >
@@ -47,7 +47,7 @@ export const ButtonExamples = () => {
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Button
             size="sm"
-            variant="contained"
+            type="contained"
             intent="primary"
             onPress={() => handlePress('sm')}
           >
@@ -55,7 +55,7 @@ export const ButtonExamples = () => {
           </Button>
           <Button
             size="md"
-            variant="contained"
+            type="contained"
             intent="primary"
             onPress={() => handlePress('md')}
           >
@@ -63,7 +63,7 @@ export const ButtonExamples = () => {
           </Button>
           <Button
             size="lg"
-            variant="contained"
+            type="contained"
             intent="primary"
             onPress={() => handlePress('lg')}
           >
@@ -78,35 +78,35 @@ export const ButtonExamples = () => {
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button 
             intent="primary"
-            variant="contained"
+            type="contained"
             onPress={() => handlePress('primary')}
           >
             Primary
           </Button>
           <Button 
             intent="neutral"
-            variant="contained"
+            type="contained"
             onPress={() => handlePress('neutral')}
           >
             Neutral
           </Button>
           <Button 
             intent="success"
-            variant="contained"
+            type="contained"
             onPress={() => handlePress('success')}
           >
             Success
           </Button>
           <Button 
             intent="error"
-            variant="contained"
+            type="contained"
             onPress={() => handlePress('error')}
           >
             Error
           </Button>
           <Button 
             intent="warning"
-            variant="contained"
+            type="contained"
             onPress={() => handlePress('warning')}
           >
             Warning
@@ -119,7 +119,7 @@ export const ButtonExamples = () => {
         <Text size="md" weight="semibold">Disabled States</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
-            variant="contained"
+            type="contained"
             intent="primary"
             disabled
             onPress={() => handlePress('disabled-contained')}
@@ -127,7 +127,7 @@ export const ButtonExamples = () => {
             Disabled Contained
           </Button>
           <Button
-            variant="outlined"
+            type="outlined"
             intent="primary"
             disabled
             onPress={() => handlePress('disabled-outlined')}
@@ -135,7 +135,7 @@ export const ButtonExamples = () => {
             Disabled Outlined
           </Button>
           <Button
-            variant="text"
+            type="text"
             intent="primary"
             disabled
             onPress={() => handlePress('disabled-text')}
@@ -150,7 +150,7 @@ export const ButtonExamples = () => {
         <Text size="md" weight="semibold">Buttons with Icons</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
-            variant="contained"
+            type="contained"
             intent="primary"
             leftIcon="plus"
             onPress={() => handlePress('icon-left')}
@@ -158,7 +158,7 @@ export const ButtonExamples = () => {
             Add Item
           </Button>
           <Button
-            variant="contained"
+            type="contained"
             intent="success"
             rightIcon="check"
             onPress={() => handlePress('icon-right')}
@@ -166,7 +166,7 @@ export const ButtonExamples = () => {
             Save
           </Button>
           <Button
-            variant="contained"
+            type="contained"
             intent="error"
             leftIcon="delete"
             rightIcon="alert"
@@ -175,7 +175,7 @@ export const ButtonExamples = () => {
             Delete
           </Button>
           <Button
-            variant="outlined"
+            type="outlined"
             intent="primary"
             leftIcon="download"
             onPress={() => handlePress('icon-outlined')}
@@ -183,7 +183,7 @@ export const ButtonExamples = () => {
             Download
           </Button>
           <Button
-            variant="text"
+            type="text"
             intent="primary"
             leftIcon="pencil"
             onPress={() => handlePress('icon-text')}
@@ -198,34 +198,34 @@ export const ButtonExamples = () => {
         <Text size="md" weight="semibold">Icon-only Buttons</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Button
-            variant="contained"
+            type="contained"
             intent="primary"
             leftIcon="home"
             size="sm"
             onPress={() => handlePress('icon-only-small')}
           />
           <Button
-            variant="contained"
+            type="contained"
             intent="primary"
             leftIcon="cog"
             size="md"
             onPress={() => handlePress('icon-only-medium')}
           />
           <Button
-            variant="contained"
+            type="contained"
             intent="primary"
             leftIcon="heart"
             size="lg"
             onPress={() => handlePress('icon-only-large')}
           />
           <Button
-            variant="outlined"
+            type="outlined"
             intent="success"
             leftIcon="check-circle"
             onPress={() => handlePress('icon-only-outlined')}
           />
           <Button
-            variant="text"
+            type="text"
             intent="error"
             leftIcon="close-circle"
             onPress={() => handlePress('icon-only-text')}
@@ -238,7 +238,7 @@ export const ButtonExamples = () => {
         <Text size="md" weight="semibold">Icons with Different Intents</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
-            variant="contained"
+            type="contained"
             intent="primary"
             leftIcon="information"
             onPress={() => handlePress('info')}
@@ -246,7 +246,7 @@ export const ButtonExamples = () => {
             Info
           </Button>
           <Button
-            variant="contained"
+            type="contained"
             intent="success"
             leftIcon="check-circle"
             onPress={() => handlePress('success')}
@@ -254,7 +254,7 @@ export const ButtonExamples = () => {
             Success
           </Button>
           <Button
-            variant="contained"
+            type="contained"
             intent="warning"
             leftIcon="alert"
             onPress={() => handlePress('warning')}
@@ -262,7 +262,7 @@ export const ButtonExamples = () => {
             Warning
           </Button>
           <Button
-            variant="contained"
+            type="contained"
             intent="error"
             leftIcon="alert-circle"
             onPress={() => handlePress('error')}
