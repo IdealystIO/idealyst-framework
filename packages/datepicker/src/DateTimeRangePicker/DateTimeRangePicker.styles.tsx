@@ -6,7 +6,7 @@ export const dateTimeRangePickerStyles = StyleSheet.create((theme) => ({
   },
 
   label: {
-    fontSize: theme.typography?.sizes?.small || 14,
+    fontSize: theme.typography?.fontSize?.sm || 14,
     fontWeight: '600',
     color: theme.colors?.text?.primary || '#111827',
     marginBottom: theme.spacing?.xs || 4,
@@ -33,13 +33,13 @@ export const dateTimeRangePickerStyles = StyleSheet.create((theme) => ({
   },
 
   selectedRangeLabel: {
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     fontWeight: '500',
     color: theme.colors?.text?.secondary || '#6b7280',
   },
 
   selectedRangeValue: {
-    fontSize: theme.typography?.sizes?.medium || 16,
+    fontSize: theme.typography?.fontSize?.md || 16,
     fontWeight: '600',
     color: theme.colors?.text?.primary || '#111827',
   },
@@ -49,7 +49,7 @@ export const dateTimeRangePickerStyles = StyleSheet.create((theme) => ({
   },
 
   sectionLabel: {
-    fontSize: theme.typography?.sizes?.small || 14,
+    fontSize: theme.typography?.fontSize?.sm || 14,
     fontWeight: '600',
     color: theme.colors?.text?.primary || '#111827',
   },
@@ -79,19 +79,19 @@ export const dateTimeRangePickerStyles = StyleSheet.create((theme) => ({
   },
 
   timeGroupLabel: {
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     fontWeight: '500',
     color: theme.colors?.text?.secondary || '#6b7280',
   },
 
   errorText: {
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     color: theme.colors?.semantic?.error || '#dc2626',
     marginTop: theme.spacing?.xs || 4,
   },
 
   helperText: {
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     color: theme.colors?.text?.secondary || '#6b7280',
     marginTop: theme.spacing?.xs || 4,
   },

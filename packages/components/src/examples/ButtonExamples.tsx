@@ -49,7 +49,7 @@ export const ButtonExamples = () => {
             size="sm"
             variant="contained"
             intent="primary"
-            onPress={() => handlePress('small')}
+            onPress={() => handlePress('sm')}
           >
             Small
           </Button>
@@ -57,7 +57,7 @@ export const ButtonExamples = () => {
             size="md"
             variant="contained"
             intent="primary"
-            onPress={() => handlePress('medium')}
+            onPress={() => handlePress('md')}
           >
             Medium
           </Button>
@@ -65,7 +65,7 @@ export const ButtonExamples = () => {
             size="lg"
             variant="contained"
             intent="primary"
-            onPress={() => handlePress('large')}
+            onPress={() => handlePress('lg')}
           >
             Large
           </Button>

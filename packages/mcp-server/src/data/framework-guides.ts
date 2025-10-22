@@ -156,7 +156,8 @@ Many components offer visual variants:
 
 ### Sizes
 Most components support size variants:
-- \`small\`, \`medium\`, \`large\`
+- \`sm\`, \`md\`, \`lg\`
+- Sometimes 'xs' and 'xl', but varies by component
 
 ## Icon Support
 
@@ -262,10 +263,11 @@ Themes are defined with:
       mono: 'Monospace',
     },
     fontSize: {
-      small: 12,
-      medium: 14,
-      large: 16,
-      xlarge: 20,
+      xs: 12,
+      sm: 14,
+      md: 16,
+      lg: 18,
+      xl: 20,
     },
     fontWeight: {
       light: '300',

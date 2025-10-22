@@ -5,7 +5,7 @@ import { RadioButton, RadioGroup } from '../RadioButton';
 export const RadioButtonExamples: React.FC = () => {
   const [selectedValue, setSelectedValue] = useState('option1');
   const [selectedColor, setSelectedColor] = useState('blue');
-  const [selectedSize, setSelectedSize] = useState('medium');
+  const [selectedSize, setSelectedSize] = useState('md');
   const [selectedIntent, setSelectedIntent] = useState('primary');
 
   return (
@@ -40,10 +40,10 @@ export const RadioButtonExamples: React.FC = () => {
       <View spacing="md">
         <Text size="lg" weight="semibold">With Disabled Options</Text>
         <RadioGroup value={selectedSize} onValueChange={setSelectedSize}>
-          <RadioButton value="small" label="Small" />
-          <RadioButton value="medium" label="Medium" />
-          <RadioButton value="large" label="Large" disabled />
-          <RadioButton value="xlarge" label="Extra Large" />
+          <RadioButton value="sm" label="Small" />
+          <RadioButton value="md" label="Medium" />
+          <RadioButton value="lg" label="Large" disabled />
+          <RadioButton value="xl" label="Extra Large" />
         </RadioGroup>
       </View>
 
@@ -60,25 +60,25 @@ export const RadioButtonExamples: React.FC = () => {
         <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm">
           <RadioButton
-            value="small"
+            value="sm"
             label="Small"
             size="sm"
             checked={selectedSize === 'sm'}
-            onPress={() => setSelectedSize('small')}
+            onPress={() => setSelectedSize('sm')}
           />
           <RadioButton
-            value="medium"
+            value="md"
             label="Medium"
             size="md"
             checked={selectedSize === 'md'}
-            onPress={() => setSelectedSize('medium')}
+            onPress={() => setSelectedSize('md')}
           />
           <RadioButton
-            value="large"
+            value="lg"
             label="Large"
             size="lg"
             checked={selectedSize === 'lg'}
-            onPress={() => setSelectedSize('large')}
+            onPress={() => setSelectedSize('lg')}
           />
         </View>
       </View>

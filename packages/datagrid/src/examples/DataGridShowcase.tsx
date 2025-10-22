@@ -84,7 +84,7 @@ export function DataGridShowcase({
       width: showAllColumns ? 100 : 80,
       sortable: true,
       render: (value) => (
-        <Text weight="semibold" size={showAllColumns ? 'medium' : 'small'}>
+        <Text weight="semibold" size={showAllColumns ? 'md' : 'sm'}>
           ${value.toFixed(2)}
         </Text>
       ),

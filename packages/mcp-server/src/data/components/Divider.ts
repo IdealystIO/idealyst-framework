@@ -4,7 +4,7 @@ export const Divider = {
   props: `
 - \`orientation\`: 'horizontal' | 'vertical' - The orientation of the divider
 - \`variant\`: 'solid' | 'dashed' | 'dotted' - The visual style
-- \`thickness\`: 'thin' | 'medium' | 'thick' - The thickness of the divider
+- \`thickness\`: 'thin' | 'md' | 'thick' - The thickness of the divider
 - \`intent\`: IntentVariant - The color intent
 - \`length\`: 'full' | 'auto' | number - The length (percentage or fixed)
 - \`spacing\`: 'none' | 'sm' | 'md' | 'lg' - Spacing around divider
@@ -25,7 +25,7 @@ export const Divider = {
     "Use horizontal dividers to separate vertical content",
     "Use vertical dividers in horizontal layouts (toolbars, menus)",
     "Keep divider thickness subtle unless emphasizing separation",
-    "Use 'medium' spacing for standard content separation",
+    "Use 'md' spacing for standard content separation",
     "Add text content sparingly for important section breaks",
   ],
   usage: `

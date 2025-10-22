@@ -101,21 +101,21 @@ export const DialogExamples = () => {
         <View spacing="md">
           <Text size="md" weight="semibold">Dialog Sizes</Text>
           <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
-            {['small', 'medium', 'large'].map((size) => (
-              <Button 
+            {['sm', 'md', 'lg'].map((size) => (
+              <Button
                 key={size}
                 onPress={() => setSizesOpen(size)}
               >
-                {size.charAt(0).toUpperCase() + size.slice(1)} Dialog
+                {size === 'sm' ? 'Small' : size === 'md' ? 'Medium' : 'Large'} Dialog
               </Button>
             ))}
           </View>
-          
+
           {sizesOpen && (
             <Dialog
               open={!!sizesOpen}
               onOpenChange={() => setSizesOpen(null)}
-              title={`${sizesOpen.charAt(0).toUpperCase() + sizesOpen.slice(1)} Dialog`}
+              title={`${sizesOpen === 'sm' ? 'Small' : sizesOpen === 'md' ? 'Medium' : 'Large'} Dialog`}
               size={sizesOpen as 'sm' | 'md' | 'lg'}
             >
               <Text>

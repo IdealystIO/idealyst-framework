@@ -7,7 +7,7 @@ export const datePickerStyles = StyleSheet.create((theme) => ({
   
   label: {
     marginBottom: theme.spacing?.sm || 8,
-    fontSize: theme.typography?.sizes?.small || 14,
+    fontSize: theme.typography?.fontSize?.sm || 14,
     fontWeight: '500',
     color: theme.colors?.text?.primary || '#1f2937',
   },
@@ -51,26 +51,26 @@ export const datePickerStyles = StyleSheet.create((theme) => ({
   },
 
   selectedDateLabel: {
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     color: theme.colors?.text?.secondary || '#6b7280',
     marginBottom: 4,
   },
 
   selectedDateValue: {
-    fontSize: theme.typography?.sizes?.medium || 16,
+    fontSize: theme.typography?.fontSize?.md || 16,
     fontWeight: '600',
     color: theme.colors?.text?.primary || '#1f2937',
   },
 
   errorText: {
     marginTop: 4,
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     color: theme.colors?.text?.error || '#dc2626',
   },
 
   helperText: {
     marginTop: 4,
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     color: theme.colors?.text?.secondary || '#6b7280',
   },
 }));

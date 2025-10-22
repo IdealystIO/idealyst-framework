@@ -9,7 +9,7 @@ export const DateInput: React.FC<DateInputProps> = (props) => {
     label,
     error,
     helperText,
-    size = 'medium',
+    size = 'md',
     variant = 'outlined',
     disabled = false,
     style,

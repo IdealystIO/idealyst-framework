@@ -78,7 +78,7 @@ export const calendarStyles = StyleSheet.create((theme) => ({
   },
 
   pickerButton: {
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     paddingHorizontal: theme.spacing?.xs || 6,
     paddingVertical: theme.spacing?.xs || 4,
     minHeight: 32,
@@ -144,7 +144,7 @@ export const calendarStyles = StyleSheet.create((theme) => ({
   },
 
   weekdayText: {
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     fontWeight: '500',
     color: theme.colors?.text?.secondary || '#6b7280',
   },
@@ -185,7 +185,7 @@ export const calendarStyles = StyleSheet.create((theme) => ({
     minHeight: 28,
     padding: 0,
     borderRadius: theme.borderRadius?.sm || 6,
-    fontSize: theme.typography?.sizes?.small || 13,
+    fontSize: theme.typography?.fontSize?.sm || 13,
     alignItems: 'center',
     justifyContent: 'center',
     

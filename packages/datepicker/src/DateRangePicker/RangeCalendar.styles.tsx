@@ -68,7 +68,7 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
   },
 
   weekdayText: {
-    fontSize: theme.typography?.sizes?.small || 12,
+    fontSize: theme.typography?.fontSize?.sm || 12,
     fontWeight: '500',
     color: theme.colors?.text?.secondary || '#6b7280',
   },
@@ -120,7 +120,7 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
     padding: 0,
     margin: 0,
     borderRadius: theme.borderRadius?.sm || 6,
-    fontSize: theme.typography?.sizes?.small || 13,
+    fontSize: theme.typography?.fontSize?.sm || 13,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
