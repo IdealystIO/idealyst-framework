@@ -319,7 +319,7 @@ function createInputStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>)
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const inputStyles: ReturnType<typeof createInputStylesheet> = StyleSheet.create((theme: Theme) => {
+export const inputStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     leftIconContainer: createLeftIconContainerStyles(theme, {}),
@@ -331,16 +331,3 @@ export const inputStyles: ReturnType<typeof createInputStylesheet> = StyleSheet.
     input: createInputStyles(theme, {}),
   };
 });
-
-function createInputStylesheet(theme: Theme, expanded?: Partial<InputStylesheet>): InputStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        leftIconContainer: createLeftIconContainerStyles(theme, expanded?.leftIconContainer || {}),
-        rightIconContainer: createRightIconContainerStyles(theme, expanded?.rightIconContainer || {}),
-        leftIcon: createLeftIconStyles(theme, expanded?.leftIcon || {}),
-        rightIcon: createRightIconStyles(theme, expanded?.rightIcon || {}),
-        passwordToggle: createPasswordToggleStyles(theme, expanded?.passwordToggle || {}),
-        passwordToggleIcon: createPasswordToggleIconStyles(theme, expanded?.passwordToggleIcon || {}),
-        input: createInputStyles(theme, expanded?.input || {}),
-    };
-}

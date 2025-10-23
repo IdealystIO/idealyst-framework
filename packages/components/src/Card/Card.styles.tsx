@@ -134,14 +134,8 @@ function createCardStyles(theme: Theme, expanded: Partial<ExpandedCardStyles>)  
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const cardStyles: ReturnType<typeof createCardStylesheet> = StyleSheet.create((theme: Theme) => {
+export const cardStyles = StyleSheet.create((theme: Theme) => {
   return {
     card: createCardStyles(theme, {}),
   };
 });
-
-function createCardStylesheet(theme: Theme, expanded?: Partial<CardStylesheet>) {
-    return {
-        card: createCardStyles(theme, expanded?.card || {}),
-    };
-}

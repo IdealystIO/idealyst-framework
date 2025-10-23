@@ -75,16 +75,9 @@ function createTooltipStyles(theme: Theme, expanded: Partial<ExpandedTooltipTool
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const tooltipStyles: ReturnType<typeof createTooltipStylesheet> = StyleSheet.create((theme: Theme) => {
+export const tooltipStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     tooltip: createTooltipStyles(theme, {}),
   };
 });
-
-function createTooltipStylesheet(theme: Theme, expanded?: Partial<TooltipStylesheet>): TooltipStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        tooltip: createTooltipStyles(theme, expanded?.tooltip || {}),
-    };
-}

@@ -325,7 +325,7 @@ export const createTableStylesheet = (theme: Theme, expanded?: Partial<TableStyl
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const tableStyles: ReturnType<typeof createTableStylesheet> = StyleSheet.create((theme: Theme) => {
+export const tableStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme, {}),
         table: createTableStyles(theme, {}),

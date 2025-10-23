@@ -295,7 +295,7 @@ function createLineStyles(theme: Theme, expanded: Partial<ExpandedDividerStyles>
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const dividerStyles: ReturnType<typeof createDividerStylesheet> = StyleSheet.create((theme: Theme) => {
+export const dividerStyles = StyleSheet.create((theme: Theme) => {
   return {
     divider: createDividerStyles(theme, {}),
     container: createContainerStyles(theme, {}),
@@ -303,12 +303,3 @@ export const dividerStyles: ReturnType<typeof createDividerStylesheet> = StyleSh
     line: createLineStyles(theme, {}),
   };
 });
-
-function createDividerStylesheet(theme: Theme, expanded?: Partial<DividerStylesheet>): DividerStylesheet {
-    return {
-        divider: createDividerStyles(theme, expanded?.divider || {}),
-        container: createContainerStyles(theme, expanded?.container || {}),
-        content: createContentStyles(theme, expanded?.content || {}),
-        line: createLineStyles(theme, expanded?.line || {}),
-    };
-}

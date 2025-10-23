@@ -43,18 +43,10 @@ function createFallbackStyles(theme: Theme, expanded: Partial<ExpandedVideoStyle
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const videoStyles: ReturnType<typeof createVideoStylesheet> = StyleSheet.create((theme: Theme) => {
+export const videoStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     video: createVideoStyles(theme, {}),
     fallback: createFallbackStyles(theme, {}),
   };
 });
-
-function createVideoStylesheet(theme: Theme, expanded?: Partial<VideoStylesheet>): VideoStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        video: createVideoStyles(theme, expanded?.video || {}),
-        fallback: createFallbackStyles(theme, expanded?.fallback || {}),
-    };
-}

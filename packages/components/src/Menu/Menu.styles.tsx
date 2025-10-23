@@ -204,7 +204,7 @@ export const createMenuStylesheet = (theme: Theme, expanded?: Partial<MenuStyles
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const menuStyles: ReturnType<typeof createMenuStylesheet> = StyleSheet.create((theme: Theme) => {
+export const menuStyles = StyleSheet.create((theme: Theme) => {
     return {
         overlay: createOverlayStyles(theme, {}),
         menu: createMenuStyles(theme, {}),

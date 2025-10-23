@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Color, getColorFromString } from '@idealyst/theme';
+import { buildSizeVariants } from '../utils/buildSizeVariants';
 import { deepMerge } from '../utils/deepMerge';
 
 type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -54,14 +55,8 @@ function createIconStyles(theme: Theme, expanded: Partial<ExpandedIconStyles>): 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const iconStyles: ReturnType<typeof createIconStylesheet> = StyleSheet.create((theme: Theme) => {
+export const iconStyles = StyleSheet.create((theme: Theme) => {
   return {
     icon: createIconStyles(theme, {}),
   };
 });
-
-function createIconStylesheet(theme: Theme, expanded?: Partial<IconStylesheet>) {
-    return {
-        icon: createIconStyles(theme, expanded?.icon || {}),
-    };
-}

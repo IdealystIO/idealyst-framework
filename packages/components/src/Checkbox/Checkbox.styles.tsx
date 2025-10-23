@@ -246,7 +246,7 @@ function createHelperTextStyles(theme: Theme, expanded: Partial<ExpandedCheckbox
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const checkboxStyles: ReturnType<typeof createCheckboxStylesheet> = StyleSheet.create((theme: Theme) => {
+export const checkboxStyles = StyleSheet.create((theme: Theme) => {
   return {
     wrapper: createWrapperStyles(theme, {}),
     container: createContainerStyles(theme, {}),
@@ -256,14 +256,3 @@ export const checkboxStyles: ReturnType<typeof createCheckboxStylesheet> = Style
     helperText: createHelperTextStyles(theme, {}),
   };
 });
-
-function createCheckboxStylesheet(theme: Theme, expanded?: Partial<CheckboxStylesheet>): CheckboxStylesheet {
-    return {
-        wrapper: createWrapperStyles(theme, expanded?.wrapper || {}),
-        container: createContainerStyles(theme, expanded?.container || {}),
-        checkbox: createCheckboxStyles(theme, expanded?.checkbox || {}),
-        label: createLabelStyles(theme, expanded?.label || {}),
-        checkmark: createCheckmarkStyles(theme, expanded?.checkmark || {}),
-        helperText: createHelperTextStyles(theme, expanded?.helperText || {}),
-    };
-}

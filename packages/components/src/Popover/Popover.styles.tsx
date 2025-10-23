@@ -135,7 +135,7 @@ function createBackdropStyles(theme: Theme, expanded: Partial<ExpandedPopoverSty
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const popoverStyles: ReturnType<typeof createPopoverStylesheet> = StyleSheet.create((theme: Theme) => {
+export const popoverStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     content: createContentStyles(theme, {}),
@@ -143,12 +143,3 @@ export const popoverStyles: ReturnType<typeof createPopoverStylesheet> = StyleSh
     backdrop: createBackdropStyles(theme, {}),
   };
 });
-
-function createPopoverStylesheet(theme: Theme, expanded?: Partial<PopoverStylesheet>): PopoverStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        content: createContentStyles(theme, expanded?.content || {}),
-        arrow: createArrowStyles(theme, expanded?.arrow || {}),
-        backdrop: createBackdropStyles(theme, expanded?.backdrop || {}),
-    };
-}

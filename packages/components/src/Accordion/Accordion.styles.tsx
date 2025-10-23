@@ -296,7 +296,7 @@ export const createAccordionStylesheet = (theme: Theme, expanded?: Partial<Accor
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const accordionStyles: ReturnType<typeof createAccordionStylesheet> = StyleSheet.create((theme: Theme) => {
+export const accordionStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme, {}),
         item: createItemStyles(theme, {}),

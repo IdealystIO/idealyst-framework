@@ -67,7 +67,7 @@ function createLoadingIndicatorStyles(theme: Theme, expanded: Partial<ExpandedIm
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const imageStyles: ReturnType<typeof createImageStylesheet> = StyleSheet.create((theme: Theme) => {
+export const imageStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     image: createImageStyles(theme, {}),
@@ -76,13 +76,3 @@ export const imageStyles: ReturnType<typeof createImageStylesheet> = StyleSheet.
     loadingIndicator: createLoadingIndicatorStyles(theme, {}),
   };
 });
-
-function createImageStylesheet(theme: Theme, expanded?: Partial<ImageStylesheet>): ImageStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        image: createImageStyles(theme, expanded?.image || {}),
-        placeholder: createPlaceholderStyles(theme, expanded?.placeholder || {}),
-        fallback: createFallbackStyles(theme, expanded?.fallback || {}),
-        loadingIndicator: createLoadingIndicatorStyles(theme, expanded?.loadingIndicator || {}),
-    };
-}

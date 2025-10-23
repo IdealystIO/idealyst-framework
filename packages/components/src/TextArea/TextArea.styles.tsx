@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import { buildSizeVariants } from '../utils/buildSizeVariants';
 import { deepMerge } from '../utils/deepMerge';
 
 type TextAreaSize = Size;
@@ -238,7 +239,7 @@ export const createTextAreaStylesheet = (theme: Theme, expanded?: Partial<TextAr
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const textAreaStyles: ReturnType<typeof createTextAreaStylesheet> = StyleSheet.create((theme: Theme) => {
+export const textAreaStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme, {}),
         label: createLabelStyles(theme, {}),

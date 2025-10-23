@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import { buildSizeVariants } from '../utils/buildSizeVariants';
 import { deepMerge } from '../utils/deepMerge';
 
 type SwitchSize = Size;
@@ -205,7 +206,7 @@ function createLabelStyles(theme: Theme, expanded: Partial<ExpandedLabelStyles>)
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const switchStyles: ReturnType<typeof createSwitchStylesheet> = StyleSheet.create((theme: Theme) => {
+export const switchStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     switchContainer: createSwitchContainerStyles(theme, {}),
@@ -215,14 +216,3 @@ export const switchStyles: ReturnType<typeof createSwitchStylesheet> = StyleShee
     label: createLabelStyles(theme, {}),
   };
 });
-
-function createSwitchStylesheet(theme: Theme, expanded?: Partial<SwitchStylesheet>): SwitchStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        switchContainer: createSwitchContainerStyles(theme, expanded?.switchContainer || {}),
-        switchTrack: createSwitchTrackStyles(theme, expanded?.switchTrack || {}),
-        switchThumb: createSwitchThumbStyles(theme, expanded?.switchThumb || {}),
-        thumbIcon: createThumbIconStyles(theme, expanded?.thumbIcon || {}),
-        label: createLabelStyles(theme, expanded?.label || {}),
-    };
-}

@@ -325,7 +325,7 @@ export const createSliderStylesheet = (theme: Theme, expanded?: Partial<SliderSt
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const sliderStyles: ReturnType<typeof createSliderStylesheet> = StyleSheet.create((theme: Theme) => {
+export const sliderStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme, {}),
         sliderWrapper: createSliderWrapperStyles(theme, {}),

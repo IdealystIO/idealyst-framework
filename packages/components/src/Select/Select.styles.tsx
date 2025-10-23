@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme } from '@idealyst/theme';
+import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { deepMerge } from '../utils/deepMerge';
 
 // Type definitions
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -23,46 +25,6 @@ type SelectOptionVariants = {
 
 type SelectHelperTextVariants = {
     error: boolean;
-}
-
-// Helper functions
-function isPlainObject(value: unknown): value is Record<string, any> {
-  return (
-    value !== null &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    Object.prototype.toString.call(value) === '[object Object]'
-  )
-}
-
-function deepMerge<T extends Record<string, any>, S extends Record<string, any>>(
-  target: T,
-  source: S
-): T & S {
-  const result: Record<string, any> = { ...target }
-
-  for (const key in source) {
-    if (Object.prototype.hasOwnProperty.call(source, key)) {
-      const sourceValue = source[key]
-      const targetValue = result[key]
-
-      if (isPlainObject(targetValue) && isPlainObject(sourceValue)) {
-        result[key] = deepMerge(targetValue, sourceValue)
-      } else {
-        result[key] = sourceValue
-      }
-    }
-  }
-
-  return result as T & S
-}
-
-function buildSizeVariants<T>(theme: Theme, component: string, builder: (value: any) => any): Record<Size, any> {
-    const variants = {} as Record<Size, any>;
-    for (const size in (theme.sizes as any)[component]) {
-        variants[size as Size] = builder((theme.sizes as any)[component][size as Size]);
-    }
-    return variants;
 }
 
 function createTriggerTypeVariants(theme: Theme) {

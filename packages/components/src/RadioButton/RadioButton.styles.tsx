@@ -166,7 +166,7 @@ function createGroupContainerStyles(theme: Theme, expanded: Partial<ExpandedRadi
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const radioButtonStyles: ReturnType<typeof createRadioButtonStylesheet> = StyleSheet.create((theme: Theme) => {
+export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     radio: createRadioStyles(theme, {}),
@@ -175,13 +175,3 @@ export const radioButtonStyles: ReturnType<typeof createRadioButtonStylesheet> =
     groupContainer: createGroupContainerStyles(theme, {}),
   };
 });
-
-function createRadioButtonStylesheet(theme: Theme, expanded?: Partial<RadioButtonStylesheet>): RadioButtonStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        radio: createRadioStyles(theme, expanded?.radio || {}),
-        radioDot: createRadioDotStyles(theme, expanded?.radioDot || {}),
-        label: createLabelStyles(theme, expanded?.label || {}),
-        groupContainer: createGroupContainerStyles(theme, expanded?.groupContainer || {}),
-    };
-}

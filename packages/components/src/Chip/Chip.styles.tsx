@@ -181,7 +181,7 @@ function createDeleteIconStyles(theme: Theme, expanded: Partial<ExpandedChipStyl
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const chipStyles: ReturnType<typeof createChipStylesheet> = StyleSheet.create((theme: Theme) => {
+export const chipStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     label: createLabelStyles(theme, {}),
@@ -190,13 +190,3 @@ export const chipStyles: ReturnType<typeof createChipStylesheet> = StyleSheet.cr
     deleteIcon: createDeleteIconStyles(theme, {}),
   };
 });
-
-function createChipStylesheet(theme: Theme, expanded?: Partial<ChipStylesheet>): ChipStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        label: createLabelStyles(theme, expanded?.label || {}),
-        icon: createIconStyles(theme, expanded?.icon || {}),
-        deleteButton: createDeleteButtonStyles(theme, expanded?.deleteButton || {}),
-        deleteIcon: createDeleteIconStyles(theme, expanded?.deleteIcon || {}),
-    };
-}

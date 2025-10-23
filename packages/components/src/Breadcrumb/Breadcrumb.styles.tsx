@@ -197,7 +197,7 @@ export const createBreadcrumbStylesheet = (theme: Theme, expanded?: Partial<Brea
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const breadcrumbStyles: ReturnType<typeof createBreadcrumbStylesheet> = StyleSheet.create((theme: Theme) => {
+export const breadcrumbStyles = StyleSheet.create((theme: Theme) => {
     const stylesheet = createBreadcrumbStylesheet(theme);
     return {
         container: stylesheet.container,

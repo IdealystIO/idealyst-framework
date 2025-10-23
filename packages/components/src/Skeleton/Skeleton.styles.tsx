@@ -60,16 +60,9 @@ function createGroupStyles(theme: Theme, expanded: Partial<ExpandedSkeletonGroup
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const skeletonStyles: ReturnType<typeof createSkeletonStylesheet> = StyleSheet.create((theme: Theme) => {
+export const skeletonStyles = StyleSheet.create((theme: Theme) => {
   return {
     skeleton: createSkeletonStyles(theme, {}),
     group: createGroupStyles(theme, {}),
   };
 });
-
-function createSkeletonStylesheet(theme: Theme, expanded?: Partial<SkeletonStylesheet>): SkeletonStylesheet {
-    return {
-        skeleton: createSkeletonStyles(theme, expanded?.skeleton || {}),
-        group: createGroupStyles(theme, expanded?.group || {}),
-    };
-}

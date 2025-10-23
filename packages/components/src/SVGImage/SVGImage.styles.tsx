@@ -82,16 +82,9 @@ function createImageStyles(theme: Theme, expanded: Partial<ExpandedSVGImageStyle
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const svgImageStyles: ReturnType<typeof createSVGImageStylesheet> = StyleSheet.create((theme: Theme) => {
+export const svgImageStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     image: createImageStyles(theme, {}),
   };
 });
-
-function createSVGImageStylesheet(theme: Theme, expanded?: Partial<SVGImageStylesheet>): SVGImageStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        image: createImageStyles(theme, expanded?.image || {}),
-    };
-}

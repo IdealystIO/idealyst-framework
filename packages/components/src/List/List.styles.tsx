@@ -346,7 +346,7 @@ export const createListStylesheet = (theme: Theme, expanded?: Partial<ListStyles
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const listStyles: ReturnType<typeof createListStylesheet> = StyleSheet.create((theme: Theme) => {
+export const listStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme, {}),
         item: createItemStyles(theme, {}),

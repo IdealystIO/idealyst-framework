@@ -200,7 +200,7 @@ export const createDialogStylesheet = (theme: Theme, expanded?: Partial<DialogSt
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const dialogStyles: ReturnType<typeof createDialogStylesheet> = StyleSheet.create((theme: Theme) => {
+export const dialogStyles = StyleSheet.create((theme: Theme) => {
     return {
         backdrop: createBackdropStyles(theme, {}),
         container: createContainerStyles(theme, {}),

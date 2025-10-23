@@ -127,14 +127,8 @@ function createViewStyles(theme: Theme, expanded: Partial<ExpandedViewStyles>): 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const viewStyles: ReturnType<typeof createViewStylesheet> = StyleSheet.create((theme: Theme) => {
+export const viewStyles = StyleSheet.create((theme: Theme) => {
   return {
     view: createViewStyles(theme, {}),
   };
 });
-
-function createViewStylesheet(theme: Theme, expanded?: Partial<ViewStylesheet>): ViewStylesheet {
-    return {
-        view: createViewStyles(theme, expanded?.view || {}),
-    };
-}

@@ -164,7 +164,7 @@ const createButtonTextStyles = (theme: Theme, expanded: Partial<ExpandedButtonSt
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const buttonStyles: ReturnType<typeof createButtonStylesheet> = StyleSheet.create((theme: Theme) => {
+export const buttonStyles = StyleSheet.create((theme: Theme) => {
     return {
         button: createButtonStyles(theme, {}),
         icon: createButtonIconStyles(theme, {}),
@@ -172,12 +172,3 @@ export const buttonStyles: ReturnType<typeof createButtonStylesheet> = StyleShee
         text: createButtonTextStyles(theme, {}),
     };
 });
-
-function createButtonStylesheet(theme: Theme, expanded?: Partial<ButtonStylesheet>): ButtonStylesheet {
-    return {
-        button: createButtonStyles(theme, expanded?.button || {}),
-        icon: createButtonIconStyles(theme, expanded?.icon || {}),
-        iconContainer: createButtonIconContainerStyles(theme, expanded?.iconContainer || {}),
-        text: createButtonTextStyles(theme, expanded?.text || {}),
-    };
-}

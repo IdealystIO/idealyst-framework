@@ -164,7 +164,7 @@ function createCircularLabelStyles(theme: Theme, expanded: Partial<ExpandedProgr
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const progressStyles: ReturnType<typeof createProgressStylesheet> = StyleSheet.create((theme: Theme) => {
+export const progressStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: createContainerStyles(theme, {}),
     linearTrack: createLinearTrackStyles(theme, {}),
@@ -177,17 +177,3 @@ export const progressStyles: ReturnType<typeof createProgressStylesheet> = Style
     circularLabel: createCircularLabelStyles(theme, {}),
   };
 });
-
-function createProgressStylesheet(theme: Theme, expanded?: Partial<ProgressStylesheet>): ProgressStylesheet {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        linearTrack: createLinearTrackStyles(theme, expanded?.linearTrack || {}),
-        linearBar: createLinearBarStyles(theme, expanded?.linearBar || {}),
-        indeterminateBar: createIndeterminateBarStyles(theme, expanded?.indeterminateBar || {}),
-        circularContainer: createCircularContainerStyles(theme, expanded?.circularContainer || {}),
-        circularTrack: createCircularTrackStyles(theme, expanded?.circularTrack || {}),
-        circularBar: createCircularBarStyles(theme, expanded?.circularBar || {}),
-        label: createLabelStyles(theme, expanded?.label || {}),
-        circularLabel: createCircularLabelStyles(theme, expanded?.circularLabel || {}),
-    };
-}

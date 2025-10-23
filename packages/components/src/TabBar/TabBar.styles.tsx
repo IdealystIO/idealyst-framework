@@ -389,7 +389,7 @@ export const createTabBarStylesheet = (theme: Theme, expanded?: Partial<TabBarSt
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const tabBarStyles: ReturnType<typeof createTabBarStylesheet> = StyleSheet.create((theme: Theme) => {
+export const tabBarStyles = StyleSheet.create((theme: Theme) => {
     const stylesheet = createTabBarStylesheet(theme);
     return {
         container: stylesheet.container,

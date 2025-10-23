@@ -145,7 +145,7 @@ function createTextStyles(theme: Theme, expanded?: Partial<ExpandedBadgeStyles>)
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const badgeStyles: ReturnType<typeof createBadgeStylesheet> = StyleSheet.create((theme: Theme) => {
+export const badgeStyles = StyleSheet.create((theme: Theme) => {
   return {
     badge: createBadgeStyles(theme, {}),
     content: createContentStyles(theme, {}),
@@ -153,12 +153,3 @@ export const badgeStyles: ReturnType<typeof createBadgeStylesheet> = StyleSheet.
     text: createTextStyles(theme, {}),
   };
 });
-
-function createBadgeStylesheet(theme: Theme, expanded?: Partial<BadgeStylesheet>) {
-    return {
-        badge: createBadgeStyles(theme, expanded?.badge || {}),
-        content: createContentStyles(theme, expanded?.content || {}),
-        icon: createIconStyles(theme, expanded?.icon || {}),
-        text: createTextStyles(theme, expanded?.text || {}),
-    };
-}

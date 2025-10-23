@@ -234,7 +234,7 @@ export const createAlertStylesheet = (theme: Theme, expanded?: Partial<AlertStyl
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const alertStyles: ReturnType<typeof createAlertStylesheet> = StyleSheet.create((theme: Theme) => {
+export const alertStyles = StyleSheet.create((theme: Theme) => {
     const stylesheet = createAlertStylesheet(theme);
     return {
         container: stylesheet.container,
