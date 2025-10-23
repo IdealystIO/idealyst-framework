@@ -2,5 +2,5 @@ import { StyleSheet } from 'react-native-unistyles';
 import { createSVGImageStylesheet } from '@idealyst/theme';
 
 export const svgImageStyles = StyleSheet.create(theme => {
-  return createSVGImageStylesheet((theme as any).newTheme as any);
+  return createSVGImageStylesheet(theme.newTheme);
 });

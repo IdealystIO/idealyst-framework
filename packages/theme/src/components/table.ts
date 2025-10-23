@@ -1,9 +1,10 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
-import { Theme } from "../theme";
+import { Theme, Size } from "../theme";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
 type TableType = 'default' | 'bordered' | 'striped';
-type TableSize = 'sm' | 'md' | 'lg';
+type TableSize = Size;
 type TableAlign = 'left' | 'center' | 'right';
 
 type TableContainerVariants = {
@@ -137,23 +138,11 @@ function createRowCompoundVariants(theme: Theme): CompoundVariants<keyof TableRo
  * Create size variants for header cell
  */
 function createHeaderCellSizeVariants(theme: Theme) {
-    return {
-        sm: {
-            padding: 8,
-            fontSize: 13,
-            lineHeight: 18,
-        },
-        md: {
-            padding: 16,
-            fontSize: 14,
-            lineHeight: 20,
-        },
-        lg: {
-            padding: 24,
-            fontSize: 15,
-            lineHeight: 22,
-        },
-    };
+    return buildSizeVariants(theme, 'table', (size) => ({
+        padding: size.padding,
+        fontSize: size.fontSize,
+        lineHeight: size.lineHeight,
+    }));
 }
 
 /**
@@ -181,23 +170,11 @@ function createHeaderCellTypeVariants(theme: Theme) {
  * Create size variants for cell
  */
 function createCellSizeVariants(theme: Theme) {
-    return {
-        sm: {
-            padding: 8,
-            fontSize: 13,
-            lineHeight: 18,
-        },
-        md: {
-            padding: 16,
-            fontSize: 14,
-            lineHeight: 20,
-        },
-        lg: {
-            padding: 24,
-            fontSize: 15,
-            lineHeight: 22,
-        },
-    };
+    return buildSizeVariants(theme, 'table', (size) => ({
+        padding: size.padding,
+        fontSize: size.fontSize,
+        lineHeight: size.lineHeight,
+    }));
 }
 
 /**

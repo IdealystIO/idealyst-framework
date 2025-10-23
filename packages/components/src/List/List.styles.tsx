@@ -2,5 +2,5 @@ import { StyleSheet } from 'react-native-unistyles';
 import { createListStylesheet } from '@idealyst/theme';
 
 export const listStyles = StyleSheet.create((theme) => {
-  return createListStylesheet((theme as any).newTheme as any);
+  return createListStylesheet(theme.newTheme);
 });

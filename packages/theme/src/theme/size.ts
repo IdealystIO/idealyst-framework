@@ -21,6 +21,9 @@ export type AllComponentSizes = {
     list: Record<Size, ListSizeValue>;
     menu: Record<Size, MenuSizeValue>;
     text: Record<Size, TextSizeValue>;
+    tabBar: Record<Size, TabBarSizeValue>;
+    table: Record<Size, TableSizeValue>;
+    tooltip: Record<Size, TooltipSizeValue>;
 }
 
 
@@ -153,4 +156,21 @@ export type MenuSizeValue = {
 export type TextSizeValue = {
     fontSize: SizeValue;
     lineHeight: SizeValue;
+}
+
+export type TabBarSizeValue = {
+    fontSize: SizeValue;
+    lineHeight: SizeValue;
+    padding: SizeValue;
+}
+
+export type TableSizeValue = {
+    padding: SizeValue;
+    fontSize: SizeValue;
+    lineHeight: SizeValue;
+}
+
+export type TooltipSizeValue = {
+    fontSize: SizeValue;
+    padding: SizeValue;
 }

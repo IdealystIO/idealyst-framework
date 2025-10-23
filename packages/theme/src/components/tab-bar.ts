@@ -1,8 +1,9 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
-import { Theme } from "../theme";
+import { Theme, Size } from "../theme";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type TabBarSize = 'sm' | 'md' | 'lg';
+type TabBarSize = Size;
 type TabBarType = 'default' | 'pills' | 'underline';
 type PillMode = 'light' | 'dark';
 
@@ -70,24 +71,12 @@ function createContainerCompoundVariants(theme: Theme): CompoundVariants<keyof T
 /**
  * Create size variants for tab
  */
-function createTabSizeVariants() {
-    return {
-        sm: {
-            fontSize: 14,
-            padding: 8,
-            lineHeight: 20,
-        },
-        md: {
-            fontSize: 16,
-            padding: 12,
-            lineHeight: 24,
-        },
-        lg: {
-            fontSize: 18,
-            padding: 16,
-            lineHeight: 28,
-        },
-    };
+function createTabSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'tabBar', (size) => ({
+        fontSize: size.fontSize,
+        padding: size.padding,
+        lineHeight: size.lineHeight,
+    }));
 }
 
 /**
@@ -96,6 +85,14 @@ function createTabSizeVariants() {
 function createTabCompoundVariants(theme: Theme): CompoundVariants<keyof TabBarTabVariants> {
     return [
         // Pills variant - compact padding for all sizes
+        {
+            type: 'pills',
+            size: 'xs',
+            styles: {
+                paddingVertical: 2,
+                paddingHorizontal: 10,
+            },
+        },
         {
             type: 'pills',
             size: 'sm',
@@ -120,6 +117,14 @@ function createTabCompoundVariants(theme: Theme): CompoundVariants<keyof TabBarT
                 paddingHorizontal: 20,
             },
         },
+        {
+            type: 'pills',
+            size: 'xl',
+            styles: {
+                paddingVertical: 10,
+                paddingHorizontal: 24,
+            },
+        },
         // Pills variant - active text color
         {
             type: 'pills',
@@ -142,21 +147,11 @@ function createTabCompoundVariants(theme: Theme): CompoundVariants<keyof TabBarT
 /**
  * Create size variants for label
  */
-function createLabelSizeVariants() {
-    return {
-        sm: {
-            fontSize: 14,
-            lineHeight: 20,
-        },
-        md: {
-            fontSize: 16,
-            lineHeight: 24,
-        },
-        lg: {
-            fontSize: 18,
-            lineHeight: 28,
-        },
-    };
+function createLabelSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'tabBar', (size) => ({
+        fontSize: size.fontSize,
+        lineHeight: size.lineHeight,
+    }));
 }
 
 /**
@@ -240,9 +235,11 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTabBarCon
                 underline: {},
             },
             size: {
+                xs: {},
                 sm: {},
                 md: {},
                 lg: {},
+                xl: {},
             },
             pillMode: {
                 light: {},
@@ -265,7 +262,7 @@ const createTabStyles = (theme: Theme, expanded: Partial<ExpandedTabBarTabStyles
         zIndex: 2,
         backgroundColor: 'transparent',
         variants: {
-            size: createTabSizeVariants(),
+            size: createTabSizeVariants(theme),
             type: {
                 default: {},
                 pills: {
@@ -318,7 +315,7 @@ const createTabLabelStyles = (theme: Theme, expanded: Partial<ExpandedTabBarLabe
         fontWeight: '500',
         color: theme.colors.text.secondary,
         variants: {
-            size: createLabelSizeVariants(),
+            size: createLabelSizeVariants(theme),
             type: {
                 default: {},
                 pills: {},

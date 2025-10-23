@@ -1,9 +1,10 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
-import { Theme } from "../theme";
+import { Theme, Size } from "../theme";
 import { Intent } from "../theme/intent";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type TooltipSize = 'sm' | 'md' | 'lg';
+type TooltipSize = Size;
 type TooltipIntent = Intent;
 type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
@@ -32,36 +33,22 @@ export type TooltipStylesheet = {
 /**
  * Create size variants for tooltip
  */
-function createTooltipSizeVariants() {
-    return {
-        sm: {
-            fontSize: 12,
-            padding: 6,
-        },
-        md: {
-            fontSize: 14,
-            padding: 8,
-        },
-        lg: {
-            fontSize: 16,
-            padding: 10,
-        },
-    };
+function createTooltipSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'tooltip', (size) => ({
+        fontSize: size.fontSize,
+        padding: size.padding,
+    }));
 }
 
 /**
- * Create intent variants for tooltip
+ * Get background and text colors for a tooltip intent
  */
-function createTooltipIntentVariants(theme: Theme) {
-    const variants: Record<TooltipIntent, any> = {} as any;
-    for (const intent in theme.intents) {
-        const intentKey = intent as TooltipIntent;
-        variants[intentKey] = {
-            backgroundColor: theme.intents[intentKey].primary,
-            color: theme.intents[intentKey].contrast,
-        };
-    }
-    return variants;
+function getTooltipColors(theme: Theme, intent: TooltipIntent) {
+    const intentValue = theme.intents[intent];
+    return {
+        backgroundColor: intentValue.primary,
+        color: intentValue.contrast,
+    };
 }
 
 /**
@@ -109,56 +96,23 @@ function createArrowPlacementVariants() {
 }
 
 /**
- * Create compound variants for arrow (placement + intent combinations for border colors)
+ * Get arrow border color based on placement and intent
  */
-function createArrowCompoundVariants(theme: Theme): CompoundVariants<keyof TooltipArrowVariants> {
-    const variants: CompoundVariants<keyof TooltipArrowVariants> = [];
+function getArrowBorderColor(theme: Theme, placement: TooltipPlacement, intent: TooltipIntent) {
+    const color = theme.intents[intent].primary;
 
-    // Top placement - set borderTopColor for each intent
-    for (const intent in theme.intents) {
-        variants.push({
-            placement: 'top',
-            intent: intent as TooltipIntent,
-            styles: {
-                borderTopColor: theme.intents[intent as TooltipIntent].primary,
-            },
-        });
+    switch (placement) {
+        case 'top':
+            return { borderTopColor: color };
+        case 'bottom':
+            return { borderBottomColor: color };
+        case 'left':
+            return { borderLeftColor: color };
+        case 'right':
+            return { borderRightColor: color };
+        default:
+            return {};
     }
-
-    // Bottom placement - set borderBottomColor for each intent
-    for (const intent in theme.intents) {
-        variants.push({
-            placement: 'bottom',
-            intent: intent as TooltipIntent,
-            styles: {
-                borderBottomColor: theme.intents[intent as TooltipIntent].primary,
-            },
-        });
-    }
-
-    // Left placement - set borderLeftColor for each intent
-    for (const intent in theme.intents) {
-        variants.push({
-            placement: 'left',
-            intent: intent as TooltipIntent,
-            styles: {
-                borderLeftColor: theme.intents[intent as TooltipIntent].primary,
-            },
-        });
-    }
-
-    // Right placement - set borderRightColor for each intent
-    for (const intent in theme.intents) {
-        variants.push({
-            placement: 'right',
-            intent: intent as TooltipIntent,
-            styles: {
-                borderRightColor: theme.intents[intent as TooltipIntent].primary,
-            },
-        });
-    }
-
-    return variants;
 }
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTooltipStyles>): ExpandedTooltipStyles => {
@@ -170,91 +124,90 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTooltipSt
     }, expanded);
 }
 
-const createTooltipStyles = (theme: Theme, expanded: Partial<ExpandedTooltipTooltipStyles>): ExpandedTooltipTooltipStyles => {
-    return deepMerge({
-        borderRadius: 8,
-        maxWidth: 300,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
-        elevation: 4,
-        variants: {
-            size: createTooltipSizeVariants(),
-            intent: createTooltipIntentVariants(theme),
-            visible: {
-                true: {
-                    opacity: 1,
-                },
-                false: {
-                    opacity: 0,
-                },
-            },
-            placement: {
-                top: {},
-                bottom: {},
-                left: {},
-                right: {},
-            },
-        },
-        _web: {
-            position: 'absolute',
-            zIndex: 1000,
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-            pointerEvents: 'none',
-            opacity: 0,
-            transition: 'opacity 0.2s ease',
-            whiteSpace: 'nowrap',
+const createTooltipStyles = (theme: Theme, expanded: Partial<ExpandedTooltipTooltipStyles>) => {
+    return ({ intent }: TooltipTooltipVariants) => {
+        const colors = getTooltipColors(theme, intent);
+        return deepMerge({
+            borderRadius: 8,
+            maxWidth: 300,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.15,
+            shadowRadius: 8,
+            elevation: 4,
+            ...colors,
             variants: {
+                size: createTooltipSizeVariants(theme),
+                visible: {
+                    true: {
+                        opacity: 1,
+                    },
+                    false: {
+                        opacity: 0,
+                    },
+                },
                 placement: {
-                    top: {
-                        bottom: '100%',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        marginBottom: 8,
-                    },
-                    bottom: {
-                        top: '100%',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        marginTop: 8,
-                    },
-                    left: {
-                        right: '100%',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        marginRight: 8,
-                    },
-                    right: {
-                        left: '100%',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        marginLeft: 8,
+                    top: {},
+                    bottom: {},
+                    left: {},
+                    right: {},
+                },
+            },
+            _web: {
+                position: 'absolute',
+                zIndex: 1000,
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                pointerEvents: 'none',
+                opacity: 0,
+                transition: 'opacity 0.2s ease',
+                whiteSpace: 'nowrap',
+                variants: {
+                    placement: {
+                        top: {
+                            bottom: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            marginBottom: 8,
+                        },
+                        bottom: {
+                            top: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            marginTop: 8,
+                        },
+                        left: {
+                            right: '100%',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            marginRight: 8,
+                        },
+                        right: {
+                            left: '100%',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            marginLeft: 8,
+                        },
                     },
                 },
             },
-        },
-    }, expanded);
+        }, expanded);
+    }
 }
 
-const createArrowStyles = (theme: Theme, expanded: Partial<ExpandedTooltipArrowStyles>): ExpandedTooltipArrowStyles => {
-    return deepMerge({
-        position: 'absolute',
-        width: 0,
-        height: 0,
-        borderStyle: 'solid',
-        variants: {
-            placement: createArrowPlacementVariants(),
-            intent: {
-                primary: {},
-                neutral: {},
-                success: {},
-                error: {},
-                warning: {},
+const createArrowStyles = (theme: Theme, expanded: Partial<ExpandedTooltipArrowStyles>) => {
+    return ({ placement, intent }: TooltipArrowVariants) => {
+        const borderColor = getArrowBorderColor(theme, placement, intent);
+        return deepMerge({
+            position: 'absolute',
+            width: 0,
+            height: 0,
+            borderStyle: 'solid',
+            ...borderColor,
+            variants: {
+                placement: createArrowPlacementVariants(),
             },
-        },
-        compoundVariants: createArrowCompoundVariants(theme),
-    }, expanded);
+        }, expanded);
+    }
 }
 
 export const createTooltipStylesheet = (theme: Theme, expanded?: Partial<TooltipStylesheet>): TooltipStylesheet => {

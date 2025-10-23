@@ -1,7 +1,8 @@
-import { ButtonSizeValue, ColorValue, Pallet, Theme } from "./theme";
+import { ColorValue, Pallet } from "./theme";
+import { Theme } from "./theme/index";
 import { Color, Shade, Size } from "./types";
 
-export const newTheme = {
+export const newTheme: Theme = {
       intents: {
         primary: {
           primary: '#3b82f6',
@@ -673,6 +674,82 @@ export const newTheme = {
           xl: {
             fontSize: 24,
             lineHeight: 31.92,
+          }
+        },
+        tabBar: {
+          xs: {
+            fontSize: 12,
+            lineHeight: 18,
+            padding: 6,
+          },
+          sm: {
+            fontSize: 14,
+            lineHeight: 20,
+            padding: 8,
+          },
+          md: {
+            fontSize: 16,
+            lineHeight: 24,
+            padding: 12,
+          },
+          lg: {
+            fontSize: 18,
+            lineHeight: 28,
+            padding: 16,
+          },
+          xl: {
+            fontSize: 20,
+            lineHeight: 32,
+            padding: 20,
+          }
+        },
+        table: {
+          xs: {
+            padding: 6,
+            fontSize: 12,
+            lineHeight: 16,
+          },
+          sm: {
+            padding: 8,
+            fontSize: 13,
+            lineHeight: 18,
+          },
+          md: {
+            padding: 16,
+            fontSize: 14,
+            lineHeight: 20,
+          },
+          lg: {
+            padding: 24,
+            fontSize: 15,
+            lineHeight: 22,
+          },
+          xl: {
+            padding: 32,
+            fontSize: 16,
+            lineHeight: 24,
+          }
+        },
+        tooltip: {
+          xs: {
+            fontSize: 11,
+            padding: 4,
+          },
+          sm: {
+            fontSize: 12,
+            padding: 6,
+          },
+          md: {
+            fontSize: 14,
+            padding: 8,
+          },
+          lg: {
+            fontSize: 16,
+            padding: 10,
+          },
+          xl: {
+            fontSize: 18,
+            padding: 12,
           }
         }
       }
