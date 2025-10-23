@@ -53,7 +53,7 @@ export const useSmartPosition = ({
   const anchorRef = useRef<any>(null);
   const anchorMeasurements = useRef<{ x: number; y: number; width: number; height: number } | null>(null);
   const previousHeightRef = useRef<number>(0);
-  const rafRef = useRef<number | null>(null);
+  const rafRef = useRef<any | null>(null);
   const insets = useSafeAreaInsets();
 
   // Calculate position based on anchor and content measurements
@@ -101,18 +101,15 @@ export const useSmartPosition = ({
       }
 
       // Wait for next frame to allow layout to settle before showing
-      rafRef.current = requestAnimationFrame(() => {
-        if (__DEV__) {
-          console.log('[useSmartPosition] Layout settled, marking as positioned');
-        }
-        setIsPositioned(true);
-        rafRef.current = null;
-      });
+      rafRef.current = setTimeout(() => {
+          setIsPositioned(true);
+          rafRef.current = null;
+      }, 20)
     }
 
     return () => {
       if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
+        clearTimeout(rafRef.current);
         rafRef.current = null;
       }
     };
@@ -152,7 +149,7 @@ export const useSmartPosition = ({
   // Reset state (call when closing modal)
   const reset = () => {
     if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
+      clearTimeout(rafRef.current);
       rafRef.current = null;
     }
     setIsPositioned(false);

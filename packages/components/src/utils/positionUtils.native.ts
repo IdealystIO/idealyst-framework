@@ -148,17 +148,38 @@ const fitsInViewport = (
   const bottom = position.top + contentSize.height;
 
   // Calculate bounds in window coordinates
-  const topBound = padding; // Allow content starting near top of window
+  // Respect safe areas to avoid overlapping with system UI
+  const topBound = padding + (safeAreaInsets?.top || 0);
   const leftBound = padding + (safeAreaInsets?.left || 0);
   const rightBound = windowSize.width - padding - (safeAreaInsets?.right || 0);
-  const bottomBound = windowSize.height - padding - (safeAreaInsets?.bottom || 0);
+  const bottomBound = windowSize.height - topBound - (safeAreaInsets?.bottom || 0) - padding;
 
-  return (
+  // Add a buffer to account for floating point precision and give some breathing room
+  const buffer = 2;
+
+  const fits = (
     position.left >= leftBound &&
     position.top >= topBound &&
-    right <= rightBound &&
-    bottom <= bottomBound
+    right <= rightBound - buffer &&
+    bottom <= bottomBound - buffer
   );
+
+  console.log(bottom, bottomBound);
+
+  if (__DEV__) {
+    console.log('[fitsInViewport]', {
+      position,
+      contentSize,
+      windowSize,
+      safeAreaInsets,
+      bounds: { topBound, leftBound, rightBound, bottomBound },
+      edges: { right, bottom },
+      fits,
+      bottomOverflow: bottom > bottomBound ? bottom - bottomBound : 0
+    });
+  }
+
+  return fits;
 };
 
 /**
@@ -177,8 +198,7 @@ export const calculateSmartPosition = (
   const padding = 12;
 
   // Calculate actual usable space accounting for safe areas
-  // Allow overlap with header (lenient top), but respect bottom (home indicator, etc)
-  const topBound = padding; // Allow overlap with header by starting from top of window
+  const topBound = padding;
   const rightBound = windowWidth - padding - (safeAreaInsets?.right || 0);
   const bottomBound = windowHeight - padding - (safeAreaInsets?.bottom || 0);
   const leftBound = padding + (safeAreaInsets?.left || 0);
@@ -188,7 +208,13 @@ export const calculateSmartPosition = (
 
   // Check if it fits using window dimensions
   const windowSize = { width: windowWidth, height: windowHeight };
-  if (fitsInViewport(position, contentSize, windowSize, padding, safeAreaInsets)) {
+  const originalFits = fitsInViewport(position, contentSize, windowSize, padding, safeAreaInsets);
+
+  if (__DEV__) {
+    console.log('[calculateSmartPosition] Original placement:', placement, 'fits:', originalFits, 'position:', position);
+  }
+
+  if (originalFits) {
     if (matchWidth) {
       position.width = anchor.width;
     }
@@ -198,8 +224,13 @@ export const calculateSmartPosition = (
   // Try flipping to opposite side
   const oppositePlacement = getOppositePlacement(placement);
   let flippedPosition = calculatePositionForPlacement(anchor, contentSize, oppositePlacement, offset);
+  const flippedFits = fitsInViewport(flippedPosition, contentSize, windowSize, padding, safeAreaInsets);
 
-  if (fitsInViewport(flippedPosition, contentSize, windowSize, padding, safeAreaInsets)) {
+  if (__DEV__) {
+    console.log('[calculateSmartPosition] Flipped placement:', oppositePlacement, 'fits:', flippedFits, 'position:', flippedPosition);
+  }
+
+  if (flippedFits) {
     if (matchWidth) {
       flippedPosition.width = anchor.width;
     }
@@ -230,8 +261,16 @@ export const calculateSmartPosition = (
 
   // If nothing fits perfectly, constrain to viewport bounds as fallback
   // This handles when content is too large to fit anywhere
+  if (__DEV__) {
+    console.log('[calculateSmartPosition] Nothing fits, constraining to bounds. Original position:', position, 'bounds:', { topBound, bottomBound, leftBound, rightBound });
+  }
+
   position.left = Math.max(leftBound, Math.min(position.left, rightBound - contentSize.width));
   position.top = Math.max(topBound, Math.min(position.top, bottomBound - contentSize.height));
+
+  if (__DEV__) {
+    console.log('[calculateSmartPosition] Constrained position:', position);
+  }
 
   if (matchWidth) {
     position.width = anchor.width;
