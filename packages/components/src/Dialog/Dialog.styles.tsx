@@ -64,149 +64,104 @@ function createContainerTypeVariants(theme: Theme) {
     };
 }
 
-const createBackdropStyles = (theme: Theme): ExpandedDialogStyles => {
-    return {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        _web: {
-            position: 'fixed',
-            transition: 'opacity 150ms ease-out',
-        },
-    };
-}
-
-const createContainerStyles = (theme: Theme): ExpandedDialogStyles => {
-    return {
-        backgroundColor: theme.colors.surface.primary,
-        borderRadius: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.25,
-        shadowRadius: 20,
-        elevation: 10,
-        maxHeight: '90%',
-        variants: {
-            size: createContainerSizeVariants(),
-            type: createContainerTypeVariants(theme),
-        },
-        _web: {
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'auto',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-            transition: 'opacity 150ms ease-out, transform 150ms ease-out',
-            transformOrigin: 'center center',
-        },
-    };
-}
-
-const createHeaderStyles = (theme: Theme): ExpandedDialogStyles => {
-    return {
-        borderBottomWidth: 1,
-        borderBottomColor: theme.colors.border.primary,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        _web: {
-            borderBottomStyle: 'solid',
-        },
-    };
-}
-
-const createTitleStyles = (theme: Theme): ExpandedDialogStyles => {
-    return {
-        marginLeft: 24,
-        fontSize: 18,
-        paddingVertical: 16,
-        fontWeight: '600',
-        color: theme.colors.text.primary,
-        flex: 1,
-        _web: {
-            paddingVertical: 4,
-        },
-    };
-}
-
-const createCloseButtonStyles = (theme: Theme): ExpandedDialogStyles => {
-    return {
-        width: 32,
-        height: 32,
-        marginRight: 16,
-        borderRadius: 16,
-        backgroundColor: 'transparent',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        _web: {
-            border: 'none',
-            cursor: 'pointer',
-            _hover: {
-                backgroundColor: theme.colors.surface.secondary,
-            },
-        },
-    };
-}
-
-const createCloseButtonTextStyles = (theme: Theme): ExpandedDialogStyles => {
-    return {
-        fontSize: 18,
-        color: theme.colors.text.secondary,
-        fontWeight: '500',
-    };
-}
-
-const createContentStyles = (theme: Theme): ExpandedDialogStyles => {
-    return {
-        padding: 24,
-        _web: {
-            overflow: 'visible',
-            maxHeight: 'none',
-        },
-    };
-}
-
-const createModalStyles = (theme: Theme): ExpandedDialogStyles => {
-    return {
-        margin: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-    };
-}
-
-export const createDialogStylesheet = (theme: Theme): DialogStylesheet => {
-    return {
-        backdrop: createBackdropStyles(theme),
-        container: createContainerStyles(theme),
-        header: createHeaderStyles(theme),
-        title: createTitleStyles(theme),
-        closeButton: createCloseButtonStyles(theme),
-        closeButtonText: createCloseButtonTextStyles(theme),
-        content: createContentStyles(theme),
-        modal: createModalStyles(theme),
-    };
-}
-
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const dialogStyles = StyleSheet.create((theme: Theme) => {
     return {
-        backdrop: createBackdropStyles(theme),
-        container: createContainerStyles(theme),
-        header: createHeaderStyles(theme),
-        title: createTitleStyles(theme),
-        closeButton: createCloseButtonStyles(theme),
-        closeButtonText: createCloseButtonTextStyles(theme),
-        content: createContentStyles(theme),
-        modal: createModalStyles(theme),
+        backdrop: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            _web: {
+                position: 'fixed',
+                transition: 'opacity 150ms ease-out',
+            },
+        },
+        container: {
+            backgroundColor: theme.colors.surface.primary,
+            borderRadius: 12,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.25,
+            shadowRadius: 20,
+            elevation: 10,
+            maxHeight: '90%',
+            variants: {
+                size: createContainerSizeVariants(),
+                type: createContainerTypeVariants(theme),
+            },
+            _web: {
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'auto',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                transition: 'opacity 150ms ease-out, transform 150ms ease-out',
+                transformOrigin: 'center center',
+            },
+        },
+        header: {
+            borderBottomWidth: 1,
+            borderBottomColor: theme.colors.border.primary,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            _web: {
+                borderBottomStyle: 'solid',
+            },
+        },
+        title: {
+            marginLeft: 24,
+            fontSize: 18,
+            paddingVertical: 16,
+            fontWeight: '600',
+            color: theme.colors.text.primary,
+            flex: 1,
+            _web: {
+                paddingVertical: 4,
+            },
+        },
+        closeButton: {
+            width: 32,
+            height: 32,
+            marginRight: 16,
+            borderRadius: 16,
+            backgroundColor: 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            _web: {
+                border: 'none',
+                cursor: 'pointer',
+                _hover: {
+                    backgroundColor: theme.colors.surface.secondary,
+                },
+            },
+        },
+        closeButtonText: {
+            fontSize: 18,
+            color: theme.colors.text.secondary,
+            fontWeight: '500',
+        },
+        content: {
+            padding: 24,
+            _web: {
+                overflow: 'visible',
+                maxHeight: 'none',
+            },
+        },
+        modal: {
+            margin: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
     };
 });

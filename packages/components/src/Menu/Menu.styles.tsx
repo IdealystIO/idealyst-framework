@@ -88,49 +88,6 @@ function createLabelSizeVariants(theme: Theme) {
     }));
 }
 
-const createOverlayStyles = (theme: Theme): ExpandedMenuStyles => {
-    return {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 999,
-        backgroundColor: 'transparent',
-    };
-}
-
-const createMenuStyles = (theme: Theme): ExpandedMenuStyles => {
-    return {
-        position: 'absolute',
-        zIndex: 1000,
-        backgroundColor: theme.colors.surface.primary,
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: theme.colors.border.primary,
-        borderRadius: 8,
-        minWidth: 120,
-        maxWidth: 400,
-        padding: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        _web: {
-            border: `1px solid ${theme.colors.border.primary}`,
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            width: 'fit-content',
-        },
-    };
-}
-
-const createSeparatorStyles = (theme: Theme): ExpandedMenuStyles => {
-    return {
-        height: 1,
-        backgroundColor: theme.colors.border.primary,
-        marginTop: 4,
-        marginBottom: 4,
-    };
-}
-
 const createItemStyles = (theme: Theme) => {
     return ({ intent }: MenuVariants) => {
         const hoverStyles = getItemHoverStyles(theme, intent);
@@ -168,48 +125,60 @@ const createItemStyles = (theme: Theme) => {
     }
 }
 
-const createIconStyles = (theme: Theme): ExpandedMenuStyles => {
-    return {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-        marginRight: 8,
-        variants: {
-            size: createIconSizeVariants(theme),
-        },
-    };
-}
-
-const createLabelStyles = (theme: Theme): ExpandedMenuStyles => {
-    return {
-        flex: 1,
-        color: theme.colors.text.primary,
-        variants: {
-            size: createLabelSizeVariants(theme),
-        },
-    };
-}
-
-export const createMenuStylesheet = (theme: Theme): MenuStylesheet => {
-    return {
-        overlay: createOverlayStyles(theme),
-        menu: createMenuStyles(theme),
-        separator: createSeparatorStyles(theme),
-        item: createItemStyles(theme),
-        icon: createIconStyles(theme),
-        label: createLabelStyles(theme),
-    };
-}
-
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const menuStyles = StyleSheet.create((theme: Theme) => {
     return {
-        overlay: createOverlayStyles(theme),
-        menu: createMenuStyles(theme),
-        separator: createSeparatorStyles(theme),
+        overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 999,
+            backgroundColor: 'transparent',
+        },
+        menu: {
+            position: 'absolute',
+            zIndex: 1000,
+            backgroundColor: theme.colors.surface.primary,
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: theme.colors.border.primary,
+            borderRadius: 8,
+            minWidth: 120,
+            maxWidth: 400,
+            padding: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            _web: {
+                border: `1px solid ${theme.colors.border.primary}`,
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                width: 'fit-content',
+            },
+        },
+        separator: {
+            height: 1,
+            backgroundColor: theme.colors.border.primary,
+            marginTop: 4,
+            marginBottom: 4,
+        },
         item: createItemStyles(theme),
-        icon: createIconStyles(theme),
-        label: createLabelStyles(theme),
+        icon: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            marginRight: 8,
+            variants: {
+                size: createIconSizeVariants(theme),
+            },
+        },
+        label: {
+            flex: 1,
+            color: theme.colors.text.primary,
+            variants: {
+                size: createLabelSizeVariants(theme),
+            },
+        },
     };
 });

@@ -85,25 +85,6 @@ function getIconColor(theme: Theme, intent: BreadcrumbIntent) {
     return theme.colors.text.secondary;
 }
 
-const createContainerStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
-    return {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: 8,
-    };
-}
-
-const createItemStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
-    return {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 4,
-    };
-}
-
 const createItemTextStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
     return {
         variants: {
@@ -143,14 +124,6 @@ const createSeparatorStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
     };
 }
 
-const createEllipsisStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
-    return {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    };
-}
-
 const createEllipsisIconStyles = (theme: Theme) => {
     return ({ intent }: BreadcrumbVariants) => {
         return {
@@ -160,13 +133,6 @@ const createEllipsisIconStyles = (theme: Theme) => {
             },
         };
     }
-}
-
-const createMenuButtonStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
-    return {
-        paddingVertical: 4,
-        paddingHorizontal: 8,
-    };
 }
 
 const createMenuButtonIconStyles = (theme: Theme) => {
@@ -180,73 +146,89 @@ const createMenuButtonIconStyles = (theme: Theme) => {
     }
 }
 
-export const createBreadcrumbStylesheet = (theme: Theme): BreadcrumbStylesheet => {
-    return {
-        container: createContainerStyles(theme),
-        item: createItemStyles(theme),
-        itemText: createItemTextStyles(theme),
-        icon: createIconStyles(theme),
-        separator: createSeparatorStyles(theme),
-        ellipsis: createEllipsisStyles(theme),
-        ellipsisIcon: createEllipsisIconStyles(theme),
-        menuButton: createMenuButtonStyles(theme),
-        menuButtonIcon: createMenuButtonIconStyles(theme),
-    };
-}
-
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const breadcrumbStyles = StyleSheet.create((theme: Theme) => {
-    const stylesheet = createBreadcrumbStylesheet(theme);
     return {
-        container: stylesheet.container,
-        item: stylesheet.item,
-        itemText: stylesheet.itemText,
-        icon: stylesheet.icon,
-        separator: stylesheet.separator,
-        ellipsis: stylesheet.ellipsis,
-        ellipsisIcon: stylesheet.ellipsisIcon,
-        menuButton: stylesheet.menuButton,
-        menuButtonIcon: stylesheet.menuButtonIcon,
+        container: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 8,
+        },
+        item: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 4,
+        },
+        itemText: createItemTextStyles(theme),
+        icon: createIconStyles(theme),
+        separator: createSeparatorStyles(theme),
+        ellipsis: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        ellipsisIcon: createEllipsisIconStyles(theme),
+        menuButton: {
+            paddingVertical: 4,
+            paddingHorizontal: 8,
+        },
+        menuButtonIcon: createMenuButtonIconStyles(theme),
     };
 });
 
 // Export individual style sheets for backwards compatibility
 export const breadcrumbContainerStyles = StyleSheet.create((theme: Theme) => {
-    const breadcrumbStyles = createBreadcrumbStylesheet(theme);
     return {
-        container: breadcrumbStyles.container,
+        container: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 8,
+        },
     };
 });
 
 export const breadcrumbItemStyles = StyleSheet.create((theme: Theme) => {
-    const breadcrumbStyles = createBreadcrumbStylesheet(theme);
     return {
-        item: breadcrumbStyles.item,
-        itemText: breadcrumbStyles.itemText,
-        icon: breadcrumbStyles.icon,
+        item: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 4,
+        },
+        itemText: createItemTextStyles(theme),
+        icon: createIconStyles(theme),
     };
 });
 
 export const breadcrumbSeparatorStyles = StyleSheet.create((theme: Theme) => {
-    const breadcrumbStyles = createBreadcrumbStylesheet(theme);
     return {
-        separator: breadcrumbStyles.separator,
+        separator: createSeparatorStyles(theme),
     };
 });
 
 export const breadcrumbEllipsisStyles = StyleSheet.create((theme: Theme) => {
-    const breadcrumbStyles = createBreadcrumbStylesheet(theme);
     return {
-        ellipsis: breadcrumbStyles.ellipsis,
-        icon: breadcrumbStyles.ellipsisIcon,
+        ellipsis: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        icon: createEllipsisIconStyles(theme),
     };
 });
 
 export const breadcrumbMenuButtonStyles = StyleSheet.create((theme: Theme) => {
-    const breadcrumbStyles = createBreadcrumbStylesheet(theme);
     return {
-        button: breadcrumbStyles.menuButton,
-        icon: breadcrumbStyles.menuButtonIcon,
+        button: {
+            paddingVertical: 4,
+            paddingHorizontal: 8,
+        },
+        icon: createMenuButtonIconStyles(theme),
     };
 });

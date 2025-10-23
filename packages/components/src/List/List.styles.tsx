@@ -224,37 +224,6 @@ const createItemStyles = (theme: Theme): ExpandedListStyles => {
     };
 }
 
-const createItemContentStyles = (theme: Theme) => {
-    return {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-        gap: 8,
-    };
-}
-
-const createLeadingStyles = (theme: Theme) => {
-    return {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 8,
-        color: theme.colors.text.secondary,
-        variants: {
-            size: createIconSizeVariants(theme),
-        },
-    };
-}
-
-const createLabelContainerStyles = (theme: Theme) => {
-    return {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-    };
-}
-
 const createLabelStyles = (theme: Theme) => {
     return {
         fontWeight: '500',
@@ -278,85 +247,68 @@ const createLabelStyles = (theme: Theme) => {
     };
 }
 
-const createTrailingStyles = (theme: Theme) => {
-    return {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: 8,
-        color: theme.colors.text.secondary,
-        flexShrink: 0,
-    };
-}
-
-const createTrailingIconStyles = (theme: Theme) => {
-    return {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        variants: {
-            size: createIconSizeVariants(theme),
-        },
-    };
-}
-
-const createSectionStyles = (theme: Theme) => {
-    return {
-        display: 'flex',
-        flexDirection: 'column',
-    };
-}
-
-const createSectionTitleStyles = (theme: Theme) => {
-    return {
-        fontWeight: '600',
-        fontSize: 12,
-        lineHeight: 16,
-        textTransform: 'uppercase',
-        letterSpacing: 0.5,
-        color: theme.colors.text.secondary,
-        padding: 8,
-        paddingBottom: 4,
-    };
-}
-
-const createSectionContentStyles = (theme: Theme) => {
-    return {
-        display: 'flex',
-        flexDirection: 'column',
-    };
-}
-
-export const createListStylesheet = (theme: Theme) => {
-    return {
-        container: createContainerStyles(theme),
-        item: createItemStyles(theme),
-        itemContent: createItemContentStyles(theme),
-        leading: createLeadingStyles(theme),
-        labelContainer: createLabelContainerStyles(theme),
-        label: createLabelStyles(theme),
-        trailing: createTrailingStyles(theme),
-        trailingIcon: createTrailingIconStyles(theme),
-        section: createSectionStyles(theme),
-        sectionTitle: createSectionTitleStyles(theme),
-        sectionContent: createSectionContentStyles(theme),
-    };
-}
-
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const listStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme),
         item: createItemStyles(theme),
-        itemContent: createItemContentStyles(theme),
-        leading: createLeadingStyles(theme),
-        labelContainer: createLabelContainerStyles(theme),
+        itemContent: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            flex: 1,
+            gap: 8,
+        },
+        leading: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginRight: 8,
+            color: theme.colors.text.secondary,
+            variants: {
+                size: createIconSizeVariants(theme),
+            },
+        },
+        labelContainer: {
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+        },
         label: createLabelStyles(theme),
-        trailing: createTrailingStyles(theme),
-        trailingIcon: createTrailingIconStyles(theme),
-        section: createSectionStyles(theme),
-        sectionTitle: createSectionTitleStyles(theme),
-        sectionContent: createSectionContentStyles(theme),
+        trailing: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginLeft: 8,
+            color: theme.colors.text.secondary,
+            flexShrink: 0,
+        },
+        trailingIcon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            variants: {
+                size: createIconSizeVariants(theme),
+            },
+        },
+        section: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        sectionTitle: {
+            fontWeight: '600',
+            fontSize: 12,
+            lineHeight: 16,
+            textTransform: 'uppercase',
+            letterSpacing: 0.5,
+            color: theme.colors.text.secondary,
+            padding: 8,
+            paddingBottom: 4,
+        },
+        sectionContent: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
     };
 });

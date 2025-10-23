@@ -81,10 +81,9 @@ function createLabelSizeVariants(theme: Theme) {
     }));
 }
 
-/**
- * Generate menu item stylesheet
- */
-export const createMenuItemStylesheet = (theme: Theme) => {
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const menuItemStyles = StyleSheet.create((theme: Theme) => {
     return {
         item: {
             flexDirection: 'row',
@@ -145,10 +144,4 @@ export const createMenuItemStylesheet = (theme: Theme) => {
             },
         },
     };
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const menuItemStyles = StyleSheet.create((theme: Theme) => {
-    return createMenuItemStylesheet(theme);
 });

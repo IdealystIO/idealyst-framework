@@ -205,15 +205,6 @@ const createHeaderStyles = (theme: Theme): ExpandedAccordionStyles => {
 }
 
 /**
- * Generate accordion title styles
- */
-const createTitleStyles = (theme: Theme): ExpandedAccordionStyles => {
-    return {
-        flex: 1,
-    };
-}
-
-/**
  * Generate accordion icon styles
  */
 const createIconStyles = (theme: Theme) => {
@@ -278,21 +269,6 @@ const createContentInnerStyles = (theme: Theme): ExpandedAccordionStyles => {
     };
 }
 
-/**
- * Generate accordion stylesheet
- */
-export const createAccordionStylesheet = (theme: Theme): AccordionStylesheet => {
-    return {
-        container: createContainerStyles(theme),
-        item: createItemStyles(theme),
-        header: createHeaderStyles(theme),
-        title: createTitleStyles(theme),
-        icon: createIconStyles(theme),
-        content: createContentStyles(theme),
-        contentInner: createContentInnerStyles(theme),
-    };
-}
-
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const accordionStyles = StyleSheet.create((theme: Theme) => {
@@ -300,7 +276,9 @@ export const accordionStyles = StyleSheet.create((theme: Theme) => {
         container: createContainerStyles(theme),
         item: createItemStyles(theme),
         header: createHeaderStyles(theme),
-        title: createTitleStyles(theme),
+        title: {
+            flex: 1,
+        },
         icon: createIconStyles(theme),
         content: createContentStyles(theme),
         contentInner: createContentInnerStyles(theme),

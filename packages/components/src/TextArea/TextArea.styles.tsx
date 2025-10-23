@@ -81,36 +81,6 @@ function getTextareaIntentStyles(theme: Theme, intent: TextAreaIntent, disabled:
     return baseStyles;
 }
 
-const createContainerStyles = (theme: Theme): ExpandedTextAreaStyles => {
-    return {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 4,
-    };
-}
-
-const createLabelStyles = (theme: Theme): ExpandedTextAreaLabelStyles => {
-    return {
-        fontSize: 14,
-        fontWeight: '500',
-        color: theme.colors.text.primary,
-        variants: {
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                },
-                false: {},
-            },
-        },
-    };
-}
-
-const createTextareaContainerStyles = (theme: Theme): ExpandedTextAreaStyles => {
-    return {
-        position: 'relative',
-    };
-}
-
 const createTextareaStyles = (theme: Theme) => {
     return ({ intent, disabled, hasError }: { intent: TextAreaIntent, disabled: boolean, hasError: boolean }) => {
         const intentStyles = getTextareaIntentStyles(theme, intent, disabled, hasError);
@@ -177,74 +147,68 @@ const createTextareaStyles = (theme: Theme) => {
     }
 }
 
-const createHelperTextStyles = (theme: Theme): ExpandedTextAreaHelperTextStyles => {
-    return {
-        fontSize: 12,
-        color: theme.colors.text.secondary,
-        variants: {
-            hasError: {
-                true: {
-                    color: theme.intents.error.primary,
-                },
-                false: {},
-            },
-        },
-    };
-}
-
-const createFooterStyles = (theme: Theme): ExpandedTextAreaStyles => {
-    return {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 4,
-    };
-}
-
-const createCharacterCountStyles = (theme: Theme): ExpandedTextAreaCharacterCountStyles => {
-    return {
-        fontSize: 12,
-        color: theme.colors.text.secondary,
-        variants: {
-            isNearLimit: {
-                true: {
-                    color: theme.intents.warning.primary,
-                },
-                false: {},
-            },
-            isAtLimit: {
-                true: {
-                    color: theme.intents.error.primary,
-                },
-                false: {},
-            },
-        },
-    };
-}
-
-export const createTextAreaStylesheet = (theme: Theme): TextAreaStylesheet => {
-    return {
-        container: createContainerStyles(theme),
-        label: createLabelStyles(theme),
-        textareaContainer: createTextareaContainerStyles(theme),
-        textarea: createTextareaStyles(theme),
-        helperText: createHelperTextStyles(theme),
-        footer: createFooterStyles(theme),
-        characterCount: createCharacterCountStyles(theme),
-    };
-}
-
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const textAreaStyles = StyleSheet.create((theme: Theme) => {
     return {
-        container: createContainerStyles(theme),
-        label: createLabelStyles(theme),
-        textareaContainer: createTextareaContainerStyles(theme),
+        container: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4,
+        },
+        label: {
+            fontSize: 14,
+            fontWeight: '500',
+            color: theme.colors.text.primary,
+            variants: {
+                disabled: {
+                    true: {
+                        opacity: 0.5,
+                    },
+                    false: {},
+                },
+            },
+        },
+        textareaContainer: {
+            position: 'relative',
+        },
         textarea: createTextareaStyles(theme),
-        helperText: createHelperTextStyles(theme),
-        footer: createFooterStyles(theme),
-        characterCount: createCharacterCountStyles(theme),
+        helperText: {
+            fontSize: 12,
+            color: theme.colors.text.secondary,
+            variants: {
+                hasError: {
+                    true: {
+                        color: theme.intents.error.primary,
+                    },
+                    false: {},
+                },
+            },
+        },
+        footer: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 4,
+        },
+        characterCount: {
+            fontSize: 12,
+            color: theme.colors.text.secondary,
+            variants: {
+                isNearLimit: {
+                    true: {
+                        color: theme.intents.warning.primary,
+                    },
+                    false: {},
+                },
+                isAtLimit: {
+                    true: {
+                        color: theme.intents.error.primary,
+                    },
+                    false: {},
+                },
+            },
+        },
     };
 });

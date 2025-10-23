@@ -232,10 +232,6 @@ const createTheadStyles = (theme: Theme): ExpandedTableHeadStyles => {
     };
 }
 
-const createTbodyStyles = (theme: Theme): ExpandedTableStyles => {
-    return {};
-}
-
 const createRowStyles = (theme: Theme): ExpandedTableRowStyles => {
     return {
         variants: {
@@ -310,18 +306,6 @@ const createCellStyles = (theme: Theme): ExpandedTableCellStyles => {
     };
 }
 
-export const createTableStylesheet = (theme: Theme): TableStylesheet => {
-    return {
-        container: createContainerStyles(theme),
-        table: createTableStyles(theme),
-        thead: createTheadStyles(theme),
-        tbody: createTbodyStyles(theme),
-        row: createRowStyles(theme),
-        headerCell: createHeaderCellStyles(theme),
-        cell: createCellStyles(theme),
-    };
-}
-
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const tableStyles = StyleSheet.create((theme: Theme) => {
@@ -329,7 +313,7 @@ export const tableStyles = StyleSheet.create((theme: Theme) => {
         container: createContainerStyles(theme),
         table: createTableStyles(theme),
         thead: createTheadStyles(theme),
-        tbody: createTbodyStyles(theme),
+        tbody: {},
         row: createRowStyles(theme),
         headerCell: createHeaderCellStyles(theme),
         cell: createCellStyles(theme),

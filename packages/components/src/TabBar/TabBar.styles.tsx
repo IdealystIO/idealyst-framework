@@ -377,52 +377,38 @@ const createIndicatorStyles = (theme: Theme): ExpandedTabBarIndicatorStyles => {
     };
 }
 
-export const createTabBarStylesheet = (theme: Theme): TabBarStylesheet => {
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const tabBarStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme),
         tab: createTabStyles(theme),
         tabLabel: createTabLabelStyles(theme),
         indicator: createIndicatorStyles(theme),
     };
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const tabBarStyles = StyleSheet.create((theme: Theme) => {
-    const stylesheet = createTabBarStylesheet(theme);
-    return {
-        container: stylesheet.container,
-        tab: stylesheet.tab,
-        tabLabel: stylesheet.tabLabel,
-        indicator: stylesheet.indicator,
-    };
 });
 
 // Export individual style sheets for backwards compatibility
 export const tabBarContainerStyles = StyleSheet.create((theme: Theme) => {
-    const tabBarStyles = createTabBarStylesheet(theme);
     return {
-        container: tabBarStyles.container,
+        container: createContainerStyles(theme),
     };
 });
 
 export const tabBarTabStyles = StyleSheet.create((theme: Theme) => {
-    const tabBarStyles = createTabBarStylesheet(theme);
     return {
-        tab: tabBarStyles.tab,
+        tab: createTabStyles(theme),
     };
 });
 
 export const tabBarLabelStyles = StyleSheet.create((theme: Theme) => {
-    const tabBarStyles = createTabBarStylesheet(theme);
     return {
-        tabLabel: tabBarStyles.tabLabel,
+        tabLabel: createTabLabelStyles(theme),
     };
 });
 
 export const tabBarIndicatorStyles = StyleSheet.create((theme: Theme) => {
-    const tabBarStyles = createTabBarStylesheet(theme);
     return {
-        indicator: tabBarStyles.indicator,
+        indicator: createIndicatorStyles(theme),
     };
 });

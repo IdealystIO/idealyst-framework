@@ -155,10 +155,9 @@ const createMessageStyles = (theme: Theme) => {
     }
 }
 
-/**
- * Generate alert stylesheet
- */
-export const createAlertStylesheet = (theme: Theme): AlertStylesheet => {
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const alertStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme),
         iconContainer: createIconContainerStyles(theme),
@@ -201,71 +200,80 @@ export const createAlertStylesheet = (theme: Theme): AlertStylesheet => {
             height: 16,
         },
     };
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const alertStyles = StyleSheet.create((theme: Theme) => {
-    const stylesheet = createAlertStylesheet(theme);
-    return {
-        container: stylesheet.container,
-        iconContainer: stylesheet.iconContainer,
-        content: stylesheet.content,
-        title: stylesheet.title,
-        message: stylesheet.message,
-        actions: stylesheet.actions,
-        closeButton: stylesheet.closeButton,
-        closeIcon: stylesheet.closeIcon,
-    };
 });
 
 // Export individual style sheets for backwards compatibility
 export const alertContainerStyles = StyleSheet.create((theme: Theme) => {
-    const styles = createAlertStylesheet(theme);
     return {
-        container: styles.container,
+        container: createContainerStyles(theme),
     };
 });
 
 export const alertIconStyles = StyleSheet.create((theme: Theme) => {
-    const styles = createAlertStylesheet(theme);
     return {
-        iconContainer: styles.iconContainer,
+        iconContainer: createIconContainerStyles(theme),
     };
 });
 
 export const alertContentStyles = StyleSheet.create((theme: Theme) => {
-    const styles = createAlertStylesheet(theme);
     return {
-        content: styles.content,
+        content: {
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4,
+        },
     };
 });
 
 export const alertTitleStyles = StyleSheet.create((theme: Theme) => {
-    const styles = createAlertStylesheet(theme);
     return {
-        title: styles.title,
+        title: createTitleStyles(theme),
     };
 });
 
 export const alertMessageStyles = StyleSheet.create((theme: Theme) => {
-    const styles = createAlertStylesheet(theme);
     return {
-        message: styles.message,
+        message: createMessageStyles(theme),
     };
 });
 
 export const alertActionsStyles = StyleSheet.create((theme: Theme) => {
-    const styles = createAlertStylesheet(theme);
     return {
-        actions: styles.actions,
+        actions: {
+            marginTop: 4,
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 8,
+        },
     };
 });
 
 export const alertCloseButtonStyles = StyleSheet.create((theme: Theme) => {
-    const styles = createAlertStylesheet(theme);
     return {
-        closeButton: styles.closeButton,
-        closeIcon: styles.closeIcon,
+        closeButton: {
+            padding: 4,
+            backgroundColor: 'transparent',
+            borderRadius: 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            _web: {
+                border: 'none',
+                cursor: 'pointer',
+                outline: 'none',
+                _hover: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                },
+            },
+        },
+        closeIcon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 16,
+            height: 16,
+        },
     };
 });
