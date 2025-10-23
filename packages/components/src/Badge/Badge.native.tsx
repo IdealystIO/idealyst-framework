@@ -20,6 +20,10 @@ const Badge = forwardRef<View, BadgeProps>(({
     color,
   });
 
+  // Call dynamic styles with color variant
+  const badgeStyle = badgeStyles.badge({ color });
+  const textStyle = badgeStyles.text({ color });
+
   // Map badge size to icon size
   const iconSize = size === 'sm' ? 12 : size === 'md' ? 14 : 16;
 
@@ -32,7 +36,7 @@ const Badge = forwardRef<View, BadgeProps>(({
         <MaterialCommunityIcons
           name={icon}
           size={iconSize}
-          color={badgeStyles.text.color}
+          color={textStyle.color}
         />
       );
     } else if (isValidElement(icon)) {
@@ -45,7 +49,7 @@ const Badge = forwardRef<View, BadgeProps>(({
   if (type === 'dot') {
     return (
       <View
-        style={[badgeStyles.badge, style]}
+        style={[badgeStyle, style]}
         testID={testID}
         accessibilityLabel="status indicator"
       />
@@ -58,21 +62,21 @@ const Badge = forwardRef<View, BadgeProps>(({
   return (
     <View
       ref={ref}
-      style={[badgeStyles.badge, style]}
+      style={[badgeStyle, style]}
       testID={testID}
       accessibilityLabel="badge"
     >
       {hasIcon && hasChildren ? (
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           {renderIcon()}
-          <Text style={badgeStyles.text}>
+          <Text style={textStyle}>
             {children}
           </Text>
         </View>
       ) : hasIcon ? (
         renderIcon()
       ) : (
-        <Text style={badgeStyles.text}>
+        <Text style={textStyle}>
           {children}
         </Text>
       )}

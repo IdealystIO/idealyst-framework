@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { View as RNView, ViewStyle } from 'react-native';
 import { ViewProps } from './types';
-import viewStyles from './View.styles';
+import { viewStyles } from './View.styles';
 
 const View = forwardRef<RNView, ViewProps>(({
   children,

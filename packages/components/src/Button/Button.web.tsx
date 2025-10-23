@@ -12,7 +12,6 @@ interface InternalButtonProps extends ButtonProps {
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButtonProps, ref) => {
-  console.log('[Button.web] Rendering with ref:', ref);
 
   const {
     title,
@@ -52,8 +51,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
 
   // Use getWebProps to generate className and ref for web
   const webProps = getWebProps(buttonStyleArray);
-
-  console.log(webProps)
 
   // Icon container styles
   const iconContainerProps = getWebProps([buttonStyles.iconContainer]);

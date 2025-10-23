@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { TextProps } from './types';
-import textStyles from './Text.styles';
+import { textStyles } from './Text.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 const Text = forwardRef<HTMLSpanElement, TextProps>(({

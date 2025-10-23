@@ -1,10 +1,6 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { BackgroundVariant, SpacingVariant } from '../theme';
-
-// Component-specific type aliases for future extensibility
-export type ScreenBackgroundVariant = BackgroundVariant;
-export type ScreenPaddingVariant = SpacingVariant;
+import { Size, Surface } from '@idealyst/theme';
 
 export interface ScreenProps {
   /**
@@ -15,12 +11,12 @@ export interface ScreenProps {
   /**
    * Background variant - controls the background color
    */
-  background?: ScreenBackgroundVariant;
+  background?: Surface | 'transparent';
 
   /**
    * Screen padding variant
    */
-  padding?: ScreenPaddingVariant;
+  padding?: Size | 'none';
 
   /**
    * Safe area padding for mobile devices

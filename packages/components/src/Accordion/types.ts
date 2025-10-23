@@ -1,10 +1,9 @@
+import { Size } from '@idealyst/theme';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '../theme';
 
 // Component-specific type aliases for future extensibility
 export type AccordionVariant = 'default' | 'separated' | 'bordered';
-export type AccordionIntentVariant = IntentVariant;
-export type AccordionSizeVariant = ButtonSize;
+export type AccordionSizeVariant = Size;
 
 export interface AccordionItem {
   id: string;
@@ -18,7 +17,6 @@ export interface AccordionProps {
   allowMultiple?: boolean;
   defaultExpanded?: string[];
   variant?: AccordionVariant;
-  intent?: AccordionIntentVariant;
   size?: AccordionSizeVariant;
   style?: StyleProp<ViewStyle>;
   testID?: string;

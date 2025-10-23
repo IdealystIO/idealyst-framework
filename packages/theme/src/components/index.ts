@@ -15,6 +15,7 @@ export * from "./image";
 export * from "./input";
 export * from "./list";
 export * from "./menu";
+export * from "./menu-item";
 export * from "./popover";
 export * from "./pressable";
 export * from "./progress";
@@ -33,4 +34,4 @@ export * from "./tooltip";
 export * from "./video";
 export * from "./view";
 
-export type StyledComponent = 'accordion' | 'activity-indicator' | 'alert' | 'avatar' | 'badge' | 'breadcrumb' | 'button' | 'card' | 'checkbox' | 'chip' | 'dialog' | 'divider' | 'icon' | 'image' | 'input' | 'list' | 'menu' | 'popover' | 'pressable' | 'progress' | 'radio-button' | 'screen' | 'select' | 'skeleton' | 'slider' | 'svg-image' | 'switch' | 'tab-bar' | 'table' | 'text' | 'textarea' | 'tooltip' | 'video' | 'view'
+export type StyledComponent = 'accordion' | 'activity-indicator' | 'alert' | 'avatar' | 'badge' | 'breadcrumb' | 'button' | 'card' | 'checkbox' | 'chip' | 'dialog' | 'divider' | 'icon' | 'image' | 'input' | 'list' | 'menu' | 'menu-item' | 'popover' | 'pressable' | 'progress' | 'radio-button' | 'screen' | 'select' | 'skeleton' | 'slider' | 'svg-image' | 'switch' | 'tab-bar' | 'table' | 'text' | 'textarea' | 'tooltip' | 'video' | 'view'

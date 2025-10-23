@@ -17,28 +17,28 @@ export const CardExamples = () => {
       <View spacing="md">
         <Text size="md" weight="semibold">Variants</Text>
         <View spacing="sm" style={{ gap: 10 }}>
-          <Card variant="default" padding="md">
+          <Card type="default" padding="md">
             <Text>Default Card</Text>
             <Text size="sm" color="secondary">
               This is a default card with standard styling
             </Text>
           </Card>
           
-          <Card variant="outlined" padding="md">
+          <Card type="outlined" padding="md">
             <Text>Outlined Card</Text>
             <Text size="sm" color="secondary">
               This is an outlined card with border
             </Text>
           </Card>
           
-          <Card variant="elevated" padding="md">
+          <Card type="elevated" padding="md">
             <Text>Elevated Card</Text>
             <Text size="sm" color="secondary">
               This is an elevated card with shadow
             </Text>
           </Card>
           
-          <Card variant="filled" padding="md">
+          <Card type="filled" padding="md">
             <Text>Filled Card</Text>
             <Text size="sm" color="secondary">
               This is a filled card with background
@@ -51,27 +51,27 @@ export const CardExamples = () => {
       <View spacing="md">
         <Text size="md" weight="semibold">Intents</Text>
         <View spacing="sm" style={{ gap: 10 }}>
-          <Card intent="neutral" padding="md" variant="outlined">
+          <Card intent="neutral" padding="md" type="outlined">
             <Text>Neutral Card</Text>
           </Card>
           
-          <Card intent="primary" padding="md" variant="outlined">
+          <Card intent="primary" padding="md" type="outlined">
             <Text>Primary Card</Text>
           </Card>
           
-          <Card intent="success" padding="md" variant="outlined">
+          <Card intent="success" padding="md" type="outlined">
             <Text>Success Card</Text>
           </Card>
           
-          <Card intent="error" padding="md" variant="outlined">
+          <Card intent="error" padding="md" type="outlined">
             <Text>Error Card</Text>
           </Card>
           
-          <Card intent="warning" padding="md" variant="outlined">
+          <Card intent="warning" padding="md" type="outlined">
             <Text>Warning Card</Text>
           </Card>
           
-          <Card intent="info" padding="md" variant="outlined">
+          <Card intent="info" padding="md" type="outlined">
             <Text>Info Card</Text>
           </Card>
         </View>
@@ -81,19 +81,19 @@ export const CardExamples = () => {
       <View spacing="md">
         <Text size="md" weight="semibold">Padding</Text>
         <View spacing="sm">
-          <Card padding="none" variant="outlined">
+          <Card padding="none" type="outlined">
             <Text>No Padding</Text>
           </Card>
           
-          <Card padding="sm" variant="outlined">
+          <Card padding="sm" type="outlined">
             <Text>Small Padding</Text>
           </Card>
           
-          <Card padding="md" variant="outlined">
+          <Card padding="md" type="outlined">
             <Text>Medium Padding</Text>
           </Card>
           
-          <Card padding="lg" variant="outlined">
+          <Card padding="lg" type="outlined">
             <Text>Large Padding</Text>
           </Card>
         </View>
@@ -103,19 +103,19 @@ export const CardExamples = () => {
       <View spacing="md">
         <Text size="md" weight="semibold">Border Radius</Text>
         <View spacing="sm">
-          <Card radius="none" variant="outlined" padding="md">
+          <Card radius="none" type="outlined" padding="md">
             <Text>No Radius</Text>
           </Card>
           
-          <Card radius="sm" variant="outlined" padding="md">
+          <Card radius="sm" type="outlined" padding="md">
             <Text>Small Radius</Text>
           </Card>
           
-          <Card radius="md" variant="outlined" padding="md">
+          <Card radius="md" type="outlined" padding="md">
             <Text>Medium Radius</Text>
           </Card>
           
-          <Card radius="lg" variant="outlined" padding="md">
+          <Card radius="lg" type="outlined" padding="md">
             <Text>Large Radius</Text>
           </Card>
         </View>
@@ -128,7 +128,7 @@ export const CardExamples = () => {
           <Card 
             clickable 
             onPress={() => handleCardPress('clickable')} 
-            variant="outlined" 
+            type="outlined" 
             padding="md"
           >
             <Text weight="semibold">Clickable Card</Text>
@@ -141,7 +141,7 @@ export const CardExamples = () => {
             clickable 
             disabled 
             onPress={() => handleCardPress('disabled')} 
-            variant="outlined" 
+            type="outlined" 
             padding="md"
           >
             <Text weight="semibold">Disabled Card</Text>
@@ -155,16 +155,16 @@ export const CardExamples = () => {
       {/* Complex Card Layout */}
       <View spacing="md">
         <Text size="md" weight="semibold">Complex Layout</Text>
-        <Card variant="elevated" padding="lg" radius="md">
+        <Card type="elevated" padding="lg" radius="md">
           <Text size="lg" weight="bold">Product Card</Text>
           <Text size="sm" color="secondary" style={{ marginVertical: 8 }}>
             This is a more complex card layout with multiple elements
           </Text>
           <View style={{ flexDirection: 'row', gap: 8, marginTop: 12 }}>
-            <Button size="sm" variant="contained" intent="primary">
+            <Button size="sm" type="contained" intent="primary">
               Buy Now
             </Button>
-            <Button size="sm" variant="outlined" intent="neutral">
+            <Button size="sm" type="outlined" intent="neutral">
               Add to Cart
             </Button>
           </View>

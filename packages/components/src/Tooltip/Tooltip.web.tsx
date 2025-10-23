@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { tooltipStyles } from './Tooltip.styles';
 import type { TooltipProps } from './types';
+import { PositionedPortal } from '../internal/PositionedPortal';
 
 const Tooltip: React.FC<TooltipProps> = ({
   content,
@@ -15,18 +16,16 @@ const Tooltip: React.FC<TooltipProps> = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
-  // Apply variants
+  // Apply variants - PositionedPortal handles positioning and visibility
   tooltipStyles.useVariants({
     size,
     intent,
-    placement,
-    visible,
   });
 
   const containerProps = getWebProps([tooltipStyles.container, style]);
-  const tooltipProps = getWebProps([tooltipStyles.tooltip({ intent })]);
-  const arrowProps = getWebProps([tooltipStyles.arrow({ placement, intent })]);
+  const tooltipContentProps = getWebProps([tooltipStyles.tooltip]);
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {
@@ -55,29 +54,34 @@ const Tooltip: React.FC<TooltipProps> = ({
   }, []);
 
   return (
-    <div
-      {...containerProps}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      data-testid={testID}
-    >
-      {children}
+    <>
+      <div
+        ref={anchorRef}
+        {...containerProps}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        data-testid={testID}
+      >
+        {children}
+      </div>
 
-      {visible && (
+      <PositionedPortal
+        open={visible}
+        anchor={anchorRef}
+        placement={placement}
+        offset={8}
+        zIndex={1000}
+      >
         <div
-          className={tooltipProps.className}
-          style={tooltipProps.style}
+          className={tooltipContentProps.className}
+          style={tooltipContentProps.style}
           role="tooltip"
           data-testid={`${testID}-tooltip`}
         >
           {content}
-          <div
-            className={arrowProps.className}
-            style={arrowProps.style}
-          />
         </div>
-      )}
-    </div>
+      </PositionedPortal>
+    </>
   );
 };
 

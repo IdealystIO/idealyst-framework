@@ -28,6 +28,10 @@ const Chip = forwardRef<Pressable, ChipProps>(({
     disabled,
   });
 
+  // Call dynamic styles with intent and selected variants
+  const iconStyle = chipStyles.icon({ intent, selected });
+  const labelStyle = chipStyles.label({ intent, selected });
+
   const handlePress = () => {
     if (disabled) return;
     if (onPress) {
@@ -51,7 +55,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
     if (!icon) return null;
 
     if (typeof icon === 'string' && isIconName(icon)) {
-      const iconColor = chipStyles.icon.color || '#000';
+      const iconColor = iconStyle.color || '#000';
       return (
         <MaterialCommunityIcons
           name={icon}
@@ -69,9 +73,9 @@ const Chip = forwardRef<Pressable, ChipProps>(({
 
   const innerContent = (
     <>
-      {icon && <View style={chipStyles.icon({ intent, selected })}>{renderIcon()}</View>}
+      {icon && <View style={iconStyle}>{renderIcon()}</View>}
 
-      <Text style={chipStyles.label({ intent, selected })}>{label}</Text>
+      <Text style={labelStyle}>{label}</Text>
 
       {deletable && onDelete && (
         <Pressable
@@ -85,7 +89,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
           <MaterialCommunityIcons
             name="close"
             size={deleteIconSize}
-            color={chipStyles.label.color || '#000'}
+            color={labelStyle.color || '#000'}
           />
         </Pressable>
       )}

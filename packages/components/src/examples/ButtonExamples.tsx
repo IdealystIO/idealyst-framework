@@ -1,5 +1,5 @@
 import React from 'react';
-import { Screen, View, Button, Text } from '../index';
+import { Screen, View, Button, Text } from '@idealyst/components';
 
 export const ButtonExamples = () => {
   const handlePress = (buttonType: string) => {
@@ -7,7 +7,7 @@ export const ButtonExamples = () => {
   };
 
   return (
-    <Screen background="primary" padding="lg">
+    <Screen background="primary">
       <View spacing="none">
       <Text size="lg" weight="bold" align="center">
         Button Examples

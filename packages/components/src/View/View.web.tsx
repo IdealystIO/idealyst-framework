@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { ViewProps } from './types';
-import viewStyles from './View.styles';
+import { viewStyles } from './View.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 const View = forwardRef<HTMLDivElement, ViewProps>(({

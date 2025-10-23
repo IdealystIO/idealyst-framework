@@ -1910,6 +1910,7 @@ __metadata:
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
     "@types/react": "npm:^19.1.0"
+    react-native-unistyles: "npm:>=3.0.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
     react-native-unistyles: ">=3.0.0"

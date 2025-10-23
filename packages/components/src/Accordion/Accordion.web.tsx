@@ -33,7 +33,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const itemProps = getWebProps([accordionStyles.item]);
   const headerProps = getWebProps([accordionStyles.header]);
   const titleProps = getWebProps([accordionStyles.title]);
-  const iconProps = getWebProps([accordionStyles.icon({ intent })]);
+  const iconProps = getWebProps([accordionStyles.icon]);
   const contentProps = getWebProps([accordionStyles.content]);
   const contentInnerProps = getWebProps([accordionStyles.contentInner]);
 
@@ -109,7 +109,6 @@ const Accordion: React.FC<AccordionProps> = ({
   allowMultiple = false,
   defaultExpanded = [],
   variant = 'default',
-  intent = 'primary',
   size = 'md',
   style,
   testID,
@@ -119,7 +118,6 @@ const Accordion: React.FC<AccordionProps> = ({
   // Apply variants
   accordionStyles.useVariants({
     variant,
-    intent,
     size,
   });
 
@@ -150,7 +148,6 @@ const Accordion: React.FC<AccordionProps> = ({
           isExpanded={expandedItems.includes(item.id)}
           onToggle={() => toggleItem(item.id, item.disabled)}
           size={size}
-          intent={intent}
           testID={`${testID}-item-${item.id}`}
         />
       ))}

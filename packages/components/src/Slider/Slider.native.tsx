@@ -170,7 +170,7 @@ const Slider = forwardRef<View, SliderProps>(({
       <View style={sliderStyles.sliderWrapper}>
         <GestureDetector gesture={composedGesture}>
           <View
-            style={sliderStyles.track}
+            style={[sliderStyles.track, { width: '100%' }]}
             onLayout={(e) => {
               const width = e.nativeEvent.layout.width;
               trackWidth.value = width;
@@ -217,20 +217,13 @@ const Slider = forwardRef<View, SliderProps>(({
               style={[
                 sliderStyles.thumb({ intent, disabled }),
                 {
+                  // Manual positioning/sizing for native layout
                   position: 'absolute',
                   top: '50%',
                   marginTop: -thumbSize / 2,
                   width: thumbSize,
                   height: thumbSize,
-                  backgroundColor: 'white',
                   borderRadius: thumbSize / 2,
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 4,
-                  elevation: 3,
-                  alignItems: 'center',
-                  justifyContent: 'center',
                 },
                 thumbAnimatedStyle,
               ]}

@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import MdiIcon from '@mdi/react';
 import { IconProps } from './types';
-import iconStyles from './Icon.styles';
+import { iconStyles } from './Icon.styles';
 import { getWebProps } from 'react-native-unistyles/web';
 import useMergeRefs from '../hooks/useMergeRefs';
 
@@ -15,18 +15,18 @@ const Icon = forwardRef<HTMLDivElement, IconProps>((props: InternalIconProps, re
     name,
     size = 'md',
     color,
+    intent,
     style,
     testID,
     accessibilityLabel,
     ...restProps
   } = props;
 
-  // Use Unistyles v3 with color and size variants
-  const styles = iconStyles.useVariants({ color, size });
-  
+
   // Check if we have a path prop (from Babel plugin transformation)
   const { path } = restProps as { path?: string };
-  const iconProps = getWebProps(styles.icon);
+  // @ts-expect-error - Dynamic style function, TS doesn't narrow union type correctly
+  const iconProps = getWebProps(iconStyles.icon({ intent, color}));
 
   const mergedRef = useMergeRefs(ref, iconProps.ref);
 

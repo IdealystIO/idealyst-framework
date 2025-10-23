@@ -28,14 +28,10 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
     color,
   });
 
-  const badgeStyleArray = [badgeStyles.badge({ color }), style];
-  const badgeProps = getWebProps(badgeStyleArray);
-
-  const contentProps = getWebProps([badgeStyles.content]);
-
-  // Icon styles - size variant is applied from the badge useVariants call above
-  const iconStyleArray = [badgeStyles.icon];
-  const iconProps = getWebProps(iconStyleArray);
+  const badgeProps = getWebProps(badgeStyles.badge({ color }));
+  const contentProps = getWebProps(badgeStyles.content);
+  const textProps = getWebProps(badgeStyles.text({ color }));
+  const iconProps = getWebProps([badgeStyles.icon, badgeStyles.text({ color })]);
 
   // Helper to render icon
   const renderIcon = (iconProp: typeof icon, path?: string) => {
@@ -62,6 +58,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
     return (
       <span
         {...badgeProps}
+        style={style}
         ref={mergedRef}
         data-testid={testID}
         role="status"
@@ -75,6 +72,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
   return (
     <span
       {...badgeProps}
+      style={style}
       ref={mergedRef}
       data-testid={testID}
       role="status"
@@ -82,10 +80,14 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
       {hasIcon ? (
         <span {...contentProps}>
           {renderIcon(icon, iconPath)}
+          <span {...textProps}>
+            {children}
+            </span>
+          </span>
+      ) : (
+        <span {...textProps}>
           {children}
         </span>
-      ) : (
-        children
       )}
     </span>
   );

@@ -1,8 +1,50 @@
-import { ColorValue, Pallet } from "./theme";
+import { ButtonSizeValue, ColorValue, Pallet, Shade, Size } from "./theme";
 import { Theme } from "./theme/index";
-import { Color, Shade, Size } from "./types";
 
-export const newTheme: Theme = {
+export const lightTheme: Theme = {
+       shadows: {
+        none: {},
+        sm: {
+          elevation: 1,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.18,
+          shadowRadius: 1.0,
+          _web: {
+            boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.18)',
+          },
+        },
+        md: {
+          elevation: 3,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 3 },
+          shadowOpacity: 0.2,
+          shadowRadius: 4.65,
+          _web: {
+            boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)',
+          },
+        },
+        lg: {
+          elevation: 6,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.23,
+          shadowRadius: 6.27,
+          _web: {
+            boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.23)',
+          },
+        },
+        xl: {
+          elevation: 12,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 12 },
+          shadowOpacity: 0.25,
+          shadowRadius: 16.0,
+          _web: {
+            boxShadow: '0px 12px 24px rgba(0, 0, 0, 0.25)',
+          },
+        },
+      },
       intents: {
         primary: {
           primary: '#3b82f6',
@@ -582,8 +624,8 @@ export const newTheme: Theme = {
         },
         list: {
           xs: {
-            paddingVertical: 4,
-            paddingHorizontal: 6,
+            paddingVertical: 2,
+            paddingHorizontal: 3,
             minHeight: 28,
             iconSize: 14,
             labelFontSize: 12,
@@ -598,24 +640,24 @@ export const newTheme: Theme = {
             labelLineHeight: 20,
           },
           md: {
-            paddingVertical: 16,
-            paddingHorizontal: 16,
+            paddingVertical: 4,
+            paddingHorizontal: 12,
             minHeight: 44,
             iconSize: 20,
             labelFontSize: 16,
             labelLineHeight: 24,
           },
           lg: {
-            paddingVertical: 24,
-            paddingHorizontal: 24,
+            paddingVertical: 6,
+            paddingHorizontal: 16,
             minHeight: 52,
             iconSize: 24,
             labelFontSize: 18,
             labelLineHeight: 28,
           },
           xl: {
-            paddingVertical: 28,
-            paddingHorizontal: 28,
+            paddingVertical: 8,
+            paddingHorizontal: 20,
             minHeight: 60,
             iconSize: 28,
             labelFontSize: 20,
@@ -758,30 +800,67 @@ export const newTheme: Theme = {
     function generateColorPallette() {
       const colors = {} as Record<Pallet, Record<Shade, ColorValue>>
 
-      const baseColors: Record<string, string> = {
+      const baseColors: Record<Pallet, ColorValue> = {
         red: '#ef4444',
         blue: '#3b82f6',
         green: '#22c55e',
         yellow: '#f59e0b',
         purple: '#8b5cf6',
-        pink: '#ec4899',
         gray: '#6b7280',
-        indigo: '#6366f1',
-        teal: '#14b8a6',
         orange: '#f97316',
+        black: '#000000',
+        white: '#ffffff',
       };
 
-      const shades = [50,100,200,300,400,500,600,700,800,900];
+      // Helper function to convert hex to RGB
+      const hexToRgb = (hex: string): [number, number, number] => {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return [r, g, b];
+      };
+
+      // Helper function to convert RGB to hex
+      const rgbToHex = (r: number, g: number, b: number): string => {
+        const toHex = (n: number) => Math.round(n).toString(16).padStart(2, '0');
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+      };
+
+      // Helper function to interpolate between two colors
+      const interpolate = (color1: [number, number, number], color2: [number, number, number], factor: number): [number, number, number] => {
+        return [
+          color1[0] + (color2[0] - color1[0]) * factor,
+          color1[1] + (color2[1] - color1[1]) * factor,
+          color1[2] + (color2[2] - color1[2]) * factor,
+        ];
+      };
+
+      const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+      const white: [number, number, number] = [255, 255, 255];
+      const black: [number, number, number] = [0, 0, 0];
 
       for (const [colorName, baseColor] of Object.entries(baseColors)) {
         colors[colorName] = {} as Record<Shade, ColorValue>;
+        const baseRgb = hexToRgb(baseColor);
+
         for (const shade of shades) {
-          // Simple algorithm to generate shades (for demonstration purposes)
-          const shadeValue = Math.max(0, Math.min(255, parseInt(baseColor.slice(1), 16) - (shade - 500) * 2));
-          const shadeHex = `#${shadeValue.toString(16).padStart(6, '0')}`;
-          colors[colorName][shade] = shadeHex;
+          if (shade === 500) {
+            // 500 is the base color
+            colors[colorName][shade] = baseColor;
+          } else if (shade < 500) {
+            // Lighter shades - interpolate towards white
+            // 50 is closest to white, 400 is closest to base
+            const factor = (500 - shade) / 450; // 450 = 500 - 50
+            const interpolated = interpolate(baseRgb, white, factor);
+            colors[colorName][shade] = rgbToHex(...interpolated);
+          } else {
+            // Darker shades - interpolate towards black
+            // 600 is closest to base, 900 is closest to black
+            const factor = (shade - 500) / 400; // 400 = 900 - 500
+            const interpolated = interpolate(baseRgb, black, factor);
+            colors[colorName][shade] = rgbToHex(...interpolated);
+          }
         }
-        colors[colorName] = baseColor;
       }
 
       return colors;

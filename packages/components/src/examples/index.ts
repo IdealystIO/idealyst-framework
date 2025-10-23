@@ -31,5 +31,3 @@ export { SkeletonExamples } from './SkeletonExamples';
 export { ChipExamples } from './ChipExamples';
 export { BreadcrumbExamples } from './BreadcrumbExamples';
 export { ThemeExtensionExamples } from './ThemeExtensionExamples';
-export { extendedThemes, } from './extendedTheme';
-export type { ExtendedColorVariant, ExtendedIntentVariant } from './extendedTheme';

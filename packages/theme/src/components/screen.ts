@@ -1,7 +1,5 @@
 import { StylesheetStyles } from "../styles";
-import { Theme } from "../theme";
 import { Surface } from "../theme/surface";
-import { deepMerge } from "../util/deepMerge";
 
 type ScreenBackground = Surface | 'transparent';
 type ScreenPadding = 'none' | 'sm' | 'md' | 'lg' | 'xl';
@@ -18,69 +16,10 @@ export type ScreenStylesheet = {
 }
 
 /**
- * Create background variants for screen
+ * NOTE: The screen stylesheet implementation has been moved to
+ * @idealyst/components/src/Screen/Screen.styles.tsx
+ *
+ * This was necessary because Unistyles' Babel transform on native cannot resolve
+ * function calls to extract variant structures at compile time. The styles must be
+ * inlined directly in StyleSheet.create() for variants to work on native.
  */
-function createBackgroundVariants(theme: Theme) {
-    const variants: any = {
-        transparent: {
-            backgroundColor: 'transparent',
-        },
-    };
-
-    // Add all surface colors programmatically
-    for (const surface in theme.colors.surface) {
-        variants[surface] = {
-            backgroundColor: theme.colors.surface[surface as Surface],
-        };
-    }
-
-    return variants;
-}
-
-/**
- * Create padding variants for screen
- */
-function createPaddingVariants(theme: Theme) {
-    // TODO: Add spacing to theme
-    return {
-        none: {
-            padding: 0,
-        },
-        sm: {
-            padding: 8,
-        },
-        md: {
-            padding: 16,
-        },
-        lg: {
-            padding: 24,
-        },
-        xl: {
-            padding: 32,
-        },
-    };
-}
-
-const createScreenStyles = (theme: Theme, expanded: Partial<ExpandedScreenStyles>): ExpandedScreenStyles => {
-    return deepMerge({
-        flex: 1,
-        backgroundColor: theme.colors.surface.primary,
-        variants: {
-            background: createBackgroundVariants(theme),
-            padding: createPaddingVariants(theme),
-        },
-        _web: {
-            overflow: 'auto',
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100%',
-            boxSizing: 'border-box',
-        },
-    }, expanded);
-}
-
-export const createScreenStylesheet = (theme: Theme, expanded?: Partial<ScreenStylesheet>): ScreenStylesheet => {
-    return {
-        screen: createScreenStyles(theme, expanded?.screen || {}),
-    };
-}

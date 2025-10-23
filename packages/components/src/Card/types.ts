@@ -4,7 +4,7 @@ import type { IntentVariant } from '../theme/variants';
 
 // Component-specific type aliases for future extensibility
 export type CardIntentVariant = IntentVariant;
-export type CardVariant = 'default' | 'outlined' | 'elevated' | 'filled';
+export type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
 export type CardPaddingVariant = 'none' | 'sm' | 'md' | 'lg';
 export type CardRadiusVariant = 'none' | 'sm' | 'md' | 'lg';
 
@@ -17,7 +17,7 @@ export interface CardProps {
   /**
    * The visual style variant of the card
    */
-  variant?: CardVariant;
+  type?: CardType;
 
   /**
    * The padding size inside the card

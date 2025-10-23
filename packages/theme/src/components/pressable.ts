@@ -1,6 +1,4 @@
 import { StylesheetStyles } from "../styles";
-import { Theme } from "../theme";
-import { deepMerge } from "../util/deepMerge";
 
 type PressableVariants = {
     disabled: boolean;
@@ -12,36 +10,11 @@ export type PressableStylesheet = {
     container: ExpandedPressableStyles;
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedPressableStyles>): ExpandedPressableStyles => {
-    return deepMerge({
-        variants: {
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                    _web: {
-                        cursor: 'default',
-                        userSelect: 'none',
-                        WebkitUserSelect: 'none',
-                    },
-                },
-                false: {
-                    _web: {
-                        cursor: 'pointer',
-                        userSelect: 'none',
-                        WebkitUserSelect: 'none',
-                    },
-                },
-            },
-        },
-        _web: {
-            outline: 'none',
-            WebkitTapHighlightColor: 'transparent',
-        },
-    }, expanded);
-}
-
-export const createPressableStylesheet = (theme: Theme, expanded?: Partial<PressableStylesheet>): PressableStylesheet => {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-    };
-}
+/**
+ * NOTE: The pressable stylesheet implementation has been moved to
+ * @idealyst/components/src/Pressable/Pressable.styles.tsx
+ *
+ * This was necessary because Unistyles' Babel transform on native cannot resolve
+ * function calls to extract variant structures at compile time. The styles must be
+ * inlined directly in StyleSheet.create() for variants to work on native.
+ */

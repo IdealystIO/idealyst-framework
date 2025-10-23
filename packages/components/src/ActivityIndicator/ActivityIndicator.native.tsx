@@ -25,8 +25,11 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
     animating,
   });
 
+  // Call dynamic style with intent variant
+  const spinnerStyle = activityIndicatorStyles.spinner({ intent });
+
   // Get the color from styles or use custom color
-  const indicatorColor = color || activityIndicatorStyles.spinner.color;
+  const indicatorColor = color || spinnerStyle.color;
 
   return (
     <View

@@ -129,10 +129,9 @@ export type { TableProps, TableColumn } from './Table/types';
 export type { MenuProps, MenuItem } from './Menu/types';
 export type { ImageProps } from './Image/types';
 export type { VideoProps, VideoSource } from './Video/types';
-export type { AlertProps, AlertIntent, AlertVariant } from './Alert/types';
+export type { AlertProps, AlertVariant } from './Alert/types';
 export type { SkeletonProps, SkeletonGroupProps, SkeletonShape, SkeletonAnimation } from './Skeleton/types';
-export type { ChipProps, ChipSize, ChipVariant, ChipIntent } from './Chip/types';
+export type { ChipProps, ChipSize, ChipIntent } from './Chip/types';
 export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
 
-export { breakpoints } from '@idealyst/theme';
 export type { AppTheme } from '@idealyst/theme';

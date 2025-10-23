@@ -96,12 +96,12 @@ export const IconExamples = () => {
           <Text size="md" weight="semibold">Color Variants</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <View style={{ alignItems: 'center', gap: 4 }}>
-              <Icon name="home-account" size="md" color="primary" />
-              <Text size="sm">Primary</Text>
+              <Icon name="home-account" size="md" intent="primary" />
+              <Text size="sm">Intent Primary</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
-              <Icon name="check" size="md" color="secondary" />
-              <Text size="sm">Secondary</Text>
+              <Icon name="check" size="md" intent="success" />
+              <Text size="sm">Intent Success</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="alert-circle" size="md" color="blue" />
@@ -118,14 +118,6 @@ export const IconExamples = () => {
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="text" size="md" color="orange" />
               <Text size="sm">Orange</Text>
-            </View>
-            <View style={{ alignItems: 'center', gap: 4 }}>
-              <Icon name="text" size="md" color="disabled" />
-              <Text size="sm">Disabled</Text>
-            </View>
-            <View style={{ alignItems: 'center', gap: 4 }}>
-              <Icon name="text" size="md" color="muted" />
-              <Text size="sm">Muted</Text>
             </View>
           </View>
         </View>

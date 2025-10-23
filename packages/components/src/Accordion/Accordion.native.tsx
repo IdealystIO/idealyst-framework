@@ -40,7 +40,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     disabled: Boolean(item.disabled),
   });
 
-  const iconStyle = accordionStyles.icon({ intent });
+  const iconStyle = accordionStyles.icon;
   const headerTextColor = accordionStyles.header.color || '#000';
 
   // Animate height and icon rotation when expanded state changes

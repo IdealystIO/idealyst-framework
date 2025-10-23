@@ -1,6 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from "./icon-types";
 import type { DisplayColorVariant, IconSize } from '../theme/variants';
+import { Color, Intent, IntentValue } from '@idealyst/theme';
 
 /**
  * @deprecated Use IconSize from theme instead
@@ -21,7 +22,11 @@ export interface IconProps {
   /**
    * Predefined color variant based on theme
    */
-  color?: DisplayColorVariant;
+  color?: Color;
+  /**
+   * Intent variant for the icon
+   */
+  intent?: Intent;
 
   /**
    * Additional styles (platform-specific)

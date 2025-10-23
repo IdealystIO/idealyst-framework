@@ -1,15 +1,15 @@
 import React, { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CardProps } from './types';
-import { cardStyles, cardHoverStyles } from './Card.styles';
+import { cardStyles } from './Card.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   children,
-  variant = 'default',
+  type = 'default',
   padding = 'md',
   radius = 'md',
-  intent = 'neutral',
+  intent,
   clickable = false,
   onPress,
   disabled = false,
@@ -25,32 +25,27 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
 
   // Apply variants
   cardStyles.useVariants({
-    variant: variant as any,
     padding,
+    type,
     radius,
     intent,
     clickable,
     disabled,
   });
 
-  // Create style arrays
-  const cardStyleArray = [
-    cardStyles.card,
-    clickable && !disabled && cardHoverStyles.clickableHover,
-    style,
-  ].filter(Boolean);
 
   // Generate web props
-  const webProps = getWebProps(cardStyleArray);
+  const webProps = getWebProps(cardStyles.card({ intent }));
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
 
   // Use appropriate HTML element based on clickable state
-  const Component = clickable ? 'button' : 'div';
+  const Component: any = clickable ? 'button' : 'div';
 
   return (
     <Component
       {...webProps}
+      style={style}
       ref={mergedRef as any}
       onClick={clickable ? handleClick : undefined}
       disabled={clickable && disabled}

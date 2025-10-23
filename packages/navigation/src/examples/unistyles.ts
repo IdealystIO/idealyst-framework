@@ -1,31 +1,25 @@
-import { breakpoints, defaultLightTheme, defaultDarkTheme } from '@idealyst/theme';
-import { highContrastThemes } from './highContrastThemes';
+import { lightTheme, darkTheme } from '@idealyst/theme';
 import { StyleSheet } from 'react-native-unistyles';
 
 // Extend UnistylesThemes to include high contrast themes
 // This overrides the more limited declaration from the components package
 declare module 'react-native-unistyles' {
   export interface UnistylesThemes {
-    light: typeof defaultLightTheme;
-    dark: typeof defaultDarkTheme;
-    lightHighContrast: typeof highContrastThemes.lightHighContrast;
-    darkHighContrast: typeof highContrastThemes.darkHighContrast;
+    light: typeof lightTheme,
+    dark: typeof darkTheme,
   }
 }
-
+  
 // Configure with all themes, including high contrast variants
 // This will override any previous configuration
 StyleSheet.configure({
   themes: {
-    light: defaultLightTheme,
-    dark: defaultDarkTheme,
-    lightHighContrast: highContrastThemes.lightHighContrast,
-    darkHighContrast: highContrastThemes.darkHighContrast,
+    light: lightTheme,
+    dark: darkTheme,
   },
   settings: {
     initialTheme: 'light',
   },
-  breakpoints,
 });
 
 // Export theme names for easy reference

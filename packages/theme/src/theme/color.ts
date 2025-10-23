@@ -1,4 +1,4 @@
-export type Pallet = 'red' | 'blue' | 'green' | 'yellow' | 'gray' | 'black' | 'white';
+export type Pallet = 'red' | 'orange' | 'blue' | 'green' | 'yellow' | 'purple' | 'gray' | 'black' | 'white';
 export type Shade = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 export type Color = `${Pallet}.${Shade}` | Pallet;
 export type ColorValue = string;
