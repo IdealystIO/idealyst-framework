@@ -134,34 +134,6 @@ function createFocusedVariants(theme: Theme, type: InputType, hasError: boolean)
     }
 }
 
-/**
- * Create size variants for icon containers
- */
-function createIconContainerSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'input', (size) => ({
-        marginRight: size.iconMargin,
-    }));
-}
-
-/**
- * Create size variants for icons
- */
-function createIconSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'input', (size) => ({
-        fontSize: size.iconSize,
-        width: size.iconSize,
-        height: size.iconSize,
-    }));
-}
-
-/**
- * Create size variants for input
- */
-function createInputSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'input', (size) => ({
-        fontSize: size.fontSize,
-    }));
-}
 
 function createContainerStyles(theme: Theme) {
     return ({ type, hasError }: InputVariants) => {
@@ -222,7 +194,9 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
         justifyContent: 'center',
         flexShrink: 0,
         variants: {
-            size: createIconContainerSizeVariants(theme),
+            size: buildSizeVariants(theme, 'input', (size) => ({
+                marginRight: size.iconMargin,
+            })),
         },
     },
     rightIconContainer: {
@@ -239,7 +213,11 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
     leftIcon: {
         color: theme.colors.text.secondary,
         variants: {
-            size: createIconSizeVariants(theme),
+            size: buildSizeVariants(theme, 'input', (size) => ({
+                fontSize: size.iconSize,
+                width: size.iconSize,
+                height: size.iconSize,
+            })),
         },
     },
     rightIcon: {
@@ -249,7 +227,11 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
         flexShrink: 0,
         color: theme.colors.text.secondary,
         variants: {
-            size: createIconSizeVariants(theme),
+            size: buildSizeVariants(theme, 'input', (size) => ({
+            fontSize: size.iconSize,
+            width: size.iconSize,
+            height: size.iconSize,
+        })),
         },
     },
     passwordToggle: {
@@ -282,7 +264,11 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
         flexShrink: 0,
         color: theme.colors.text.secondary,
         variants: {
-            size: createIconSizeVariants(theme),
+            size: buildSizeVariants(theme, 'input', (size) => ({
+                fontSize: size.iconSize,
+                width: size.iconSize,
+                height: size.iconSize,
+            })),
         },
     },
     input: {
@@ -292,7 +278,9 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
         color: theme.colors.text.primary,
         fontWeight: '400',
         variants: {
-            size: createInputSizeVariants(theme),
+            size: buildSizeVariants(theme, 'input', (size) => ({
+                fontSize: size.fontSize,
+            })),
         },
         _web: {
             border: 'none',

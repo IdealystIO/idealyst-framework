@@ -31,7 +31,7 @@ const Card = forwardRef<View | Pressable, CardProps>(({
 
   const componentProps = {
     ref: ref as any,
-    style: [cardStyles.card, style],
+    style: [cardStyles.card({ intent }), style],
     testID,
     accessibilityLabel,
     // Only use button role for clickable cards in React Native

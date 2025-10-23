@@ -56,30 +56,6 @@ function createCardTypeVariants(theme: Theme, intent?: CardIntent) {
 }
 
 /**
- * Create padding variants for card
- */
-function createCardPaddingVariants(theme: Theme) {
-    return {
-        none: { padding: 0 },
-        sm: { padding: 8 },
-        md: { padding: 16 },
-        lg: { padding: 24 },
-    };
-}
-
-/**
- * Create radius variants for card
- */
-function createCardRadiusVariants(theme: Theme) {
-    return {
-        none: { borderRadius: 0 },
-        sm: { borderRadius: 4 },
-        md: { borderRadius: 8 },
-        lg: { borderRadius: 12 },
-    };
-}
-
-/**
  * Generate card styles
  */
 function createCardStyles(theme: Theme)  {
@@ -90,8 +66,18 @@ function createCardStyles(theme: Theme)  {
             overflow: 'hidden',
             variants: {
                 type: createCardTypeVariants(theme, intent),
-                padding: createCardPaddingVariants(theme),
-                radius: createCardRadiusVariants(theme),
+                padding: {
+                    none: { padding: 0 },
+                    sm: { padding: 8 },
+                    md: { padding: 16 },
+                    lg: { padding: 24 },
+                },
+                radius: {
+                    none: { borderRadius: 0 },
+                    sm: { borderRadius: 4 },
+                    md: { borderRadius: 8 },
+                    lg: { borderRadius: 12 },
+                },
                 clickable: {
                     true: {
                         _web: {
