@@ -7,7 +7,7 @@ import type { ChipProps } from './types';
 
 const Chip = forwardRef<Pressable, ChipProps>(({
   label,
-  variant = 'filled',
+  type = 'filled',
   intent = 'primary',
   size = 'md',
   icon,
@@ -22,7 +22,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
 }, ref) => {
   chipStyles.useVariants({
     size,
-    variant,
+    type,
     intent,
     selected: selectable ? selected : false,
     disabled,
@@ -69,9 +69,9 @@ const Chip = forwardRef<Pressable, ChipProps>(({
 
   const innerContent = (
     <>
-      {icon && <View style={chipStyles.icon}>{renderIcon()}</View>}
+      {icon && <View style={chipStyles.icon({ intent, selected })}>{renderIcon()}</View>}
 
-      <Text style={chipStyles.label}>{label}</Text>
+      <Text style={chipStyles.label({ intent, selected })}>{label}</Text>
 
       {deletable && onDelete && (
         <Pressable
@@ -104,7 +104,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
           selected: selectable ? selected : undefined,
         }}
       >
-        <View style={[chipStyles.container, style]} testID={testID}>
+        <View style={[chipStyles.container({ intent, selected }), style]} testID={testID}>
           {innerContent}
         </View>
       </Pressable>
@@ -112,7 +112,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
   }
 
   return (
-    <View ref={ref as any} style={[chipStyles.container, style]} testID={testID}>
+    <View ref={ref as any} style={[chipStyles.container({ intent, selected }), style]} testID={testID}>
       {innerContent}
     </View>
   );

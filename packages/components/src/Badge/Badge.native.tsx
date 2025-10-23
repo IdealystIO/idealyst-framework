@@ -9,14 +9,14 @@ const Badge = forwardRef<View, BadgeProps>(({
   children,
   icon,
   size = 'md',
-  variant = 'filled',
+  type = 'filled',
   color = 'blue',
   style,
   testID,
 }, ref) => {
   badgeStyles.useVariants({
     size,
-    variant: variant as any,
+    type,
     color,
   });
 
@@ -41,7 +41,8 @@ const Badge = forwardRef<View, BadgeProps>(({
     return null;
   };
 
-  if (variant === 'dot') {
+
+  if (type === 'dot') {
     return (
       <View
         style={[badgeStyles.badge, style]}

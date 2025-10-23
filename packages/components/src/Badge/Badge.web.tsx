@@ -14,7 +14,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
   const {
     children,
     size = 'md',
-    variant = 'filled',
+    type = 'filled',
     color = 'blue',
     icon,
     iconPath,
@@ -24,11 +24,11 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
 
   badgeStyles.useVariants({
     size,
-    variant: variant as any,
+    type,
     color,
   });
 
-  const badgeStyleArray = [badgeStyles.badge, style];
+  const badgeStyleArray = [badgeStyles.badge({ color }), style];
   const badgeProps = getWebProps(badgeStyleArray);
 
   const contentProps = getWebProps([badgeStyles.content]);
@@ -58,7 +58,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
 
   const mergedRef = useMergeRefs(ref, badgeProps.ref);
 
-  if (variant === 'dot') {
+  if (type === 'dot') {
     return (
       <span
         {...badgeProps}

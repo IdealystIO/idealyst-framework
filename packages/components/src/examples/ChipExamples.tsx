@@ -41,23 +41,23 @@ export const ChipExamples = () => {
 
         <Text size="md" weight="semibold">Filled (Default)</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          <Chip label="Filled Primary" variant="filled" intent="primary" />
-          <Chip label="Filled Success" variant="filled" intent="success" />
-          <Chip label="Filled Error" variant="filled" intent="error" />
+          <Chip label="Filled Primary" type="filled" intent="primary" />
+          <Chip label="Filled Success" type="filled" intent="success" />
+          <Chip label="Filled Error" type="filled" intent="error" />
         </View>
 
         <Text size="md" weight="semibold">Outlined</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          <Chip label="Outlined Primary" variant="outlined" intent="primary" />
-          <Chip label="Outlined Success" variant="outlined" intent="success" />
-          <Chip label="Outlined Error" variant="outlined" intent="error" />
+          <Chip label="Outlined Primary" type="outlined" intent="primary" />
+          <Chip label="Outlined Success" type="outlined" intent="success" />
+          <Chip label="Outlined Error" type="outlined" intent="error" />
         </View>
 
         <Text size="md" weight="semibold">Soft</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          <Chip label="Soft Primary" variant="soft" intent="primary" />
-          <Chip label="Soft Success" variant="soft" intent="success" />
-          <Chip label="Soft Error" variant="soft" intent="error" />
+          <Chip label="Soft Primary" type="soft" intent="primary" />
+          <Chip label="Soft Success" type="soft" intent="success" />
+          <Chip label="Soft Error" type="soft" intent="error" />
         </View>
 
         <Divider spacing="md" />
@@ -76,7 +76,7 @@ export const ChipExamples = () => {
           <Chip label="Star" icon="star" />
           <Chip label="Heart" icon="heart" intent="error" />
           <Chip label="Check" icon="check" intent="success" />
-          <Chip label="Info" icon="information" variant="outlined" />
+          <Chip label="Info" icon="information" type="outlined" />
         </View>
 
         <Divider spacing="md" />
@@ -90,7 +90,7 @@ export const ChipExamples = () => {
               deletable
               onDelete={() => removeTag(tag)}
               intent="primary"
-              variant="outlined"
+              type="outlined"
             />
           ))}
         </View>
@@ -108,7 +108,7 @@ export const ChipExamples = () => {
               selected={selectedChips.has(option)}
               onPress={() => toggleChip(option)}
               intent="primary"
-              variant="outlined"
+              type="outlined"
             />
           ))}
         </View>
@@ -128,7 +128,7 @@ export const ChipExamples = () => {
           <Chip
             label="Another action"
             onPress={() => console.log('Clicked')}
-            variant="outlined"
+            type="outlined"
             intent="success"
           />
         </View>
@@ -138,7 +138,7 @@ export const ChipExamples = () => {
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Disabled" disabled />
-          <Chip label="Disabled Outlined" variant="outlined" disabled />
+          <Chip label="Disabled Outlined" type="outlined" disabled />
           <Chip label="Disabled Deletable" deletable onDelete={() => {}} disabled />
           <Chip label="Disabled Selectable" selectable onPress={() => {}} disabled />
         </View>
@@ -152,7 +152,7 @@ export const ChipExamples = () => {
             selectable
             selected={selectedChips.has('filter-all')}
             onPress={() => toggleChip('filter-all')}
-            variant="soft"
+            type="soft"
             intent="neutral"
           />
           <Chip
@@ -160,7 +160,7 @@ export const ChipExamples = () => {
             selectable
             selected={selectedChips.has('filter-active')}
             onPress={() => toggleChip('filter-active')}
-            variant="soft"
+            type="soft"
             intent="success"
           />
           <Chip
@@ -168,7 +168,7 @@ export const ChipExamples = () => {
             selectable
             selected={selectedChips.has('filter-completed')}
             onPress={() => toggleChip('filter-completed')}
-            variant="soft"
+            type="soft"
             intent="primary"
           />
           <Chip
@@ -176,7 +176,7 @@ export const ChipExamples = () => {
             selectable
             selected={selectedChips.has('filter-archived')}
             onPress={() => toggleChip('filter-archived')}
-            variant="soft"
+            type="soft"
             intent="neutral"
           />
         </View>
@@ -185,11 +185,11 @@ export const ChipExamples = () => {
         <Text size="lg" weight="semibold">Category Tags</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          <Chip label="Design" variant="soft" intent="primary" size="sm" />
-          <Chip label="Development" variant="soft" intent="success" size="sm" />
-          <Chip label="Marketing" variant="soft" intent="warning" size="sm" />
-          <Chip label="Sales" variant="soft" intent="error" size="sm" />
-          <Chip label="Support" variant="soft" intent="neutral" size="sm" />
+          <Chip label="Design" type="soft" intent="primary" size="sm" />
+          <Chip label="Development" type="soft" intent="success" size="sm" />
+          <Chip label="Marketing" type="soft" intent="warning" size="sm" />
+          <Chip label="Sales" type="soft" intent="error" size="sm" />
+          <Chip label="Support" type="soft" intent="neutral" size="sm" />
         </View>
       </View>
     </Screen>

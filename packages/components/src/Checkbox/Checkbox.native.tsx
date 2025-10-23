@@ -2,7 +2,7 @@ import React, { useState, useEffect, forwardRef } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CheckboxProps } from './types';
-import { checkboxStyles, checkboxLabelStyles, checkboxCheckmarkStyles, checkboxHelperStyles } from './Checkbox.styles';
+import { checkboxStyles } from './Checkbox.styles';
 
 const Checkbox = forwardRef<View, CheckboxProps>(({
   checked = false,
@@ -22,43 +22,41 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   helperText,
 }, ref) => {
   const [internalChecked, setInternalChecked] = useState(checked);
-  
+
   useEffect(() => {
     setInternalChecked(checked);
   }, [checked]);
 
   const handlePress = () => {
     if (disabled) return;
-    
+
     const newChecked = !internalChecked;
     setInternalChecked(newChecked);
     onCheckedChange?.(newChecked);
   };
 
-  // Apply variants for main checkbox
+  // Apply variants
   checkboxStyles.useVariants({
-    size,
-    intent,
-    variant: variant as any,
-    checked: internalChecked,
-    disabled,
-  });
-
-  // Apply variants for label
-  checkboxLabelStyles.useVariants({
-    size,
-    disabled,
-  });
-
-  // Apply variants for checkmark
-  checkboxCheckmarkStyles.useVariants({
-    size,
-    visible: internalChecked,
-  });
-
-  // Apply variants for helper text
-  checkboxHelperStyles.useVariants({
-    error: !!error,
+    wrapper: {},
+    container: {},
+    checkbox: {
+      size,
+      intent,
+      variant: variant as any,
+      checked: internalChecked,
+      disabled,
+    },
+    label: {
+      size,
+      disabled,
+    },
+    checkmark: {
+      size,
+      visible: internalChecked,
+    },
+    helperText: {
+      error: !!error,
+    },
   });
 
   const labelContent = children || label;

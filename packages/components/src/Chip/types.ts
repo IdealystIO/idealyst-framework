@@ -7,7 +7,7 @@ import type { ButtonSize, IntentVariant } from '../theme';
  */
 export type ChipSize = ButtonSize;
 
-export type ChipVariant = 'filled' | 'outlined' | 'soft';
+export type ChipType = 'filled' | 'outlined' | 'soft';
 
 /**
  * @deprecated Use IntentVariant from theme instead
@@ -19,7 +19,7 @@ export interface ChipProps {
   label: string;
 
   /** Visual style variant */
-  variant?: ChipVariant;
+  type: ChipType;
 
   /** Color intent/semantic meaning */
   intent?: ChipIntent;

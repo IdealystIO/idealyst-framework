@@ -8,7 +8,7 @@ import useMergeRefs from '../hooks/useMergeRefs';
 
 const Chip = forwardRef<HTMLDivElement, ChipProps>(({
   label,
-  variant = 'filled',
+  type = 'filled',
   intent = 'primary',
   size = 'md',
   icon,
@@ -24,17 +24,17 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
 }, ref) => {
   chipStyles.useVariants({
     size,
-    variant,
+    type,
     intent,
-    selected: selectable ? selected : false,
+    selectable,
     disabled,
   });
 
-  const containerProps = getWebProps([chipStyles.container, style]);
-  const labelProps = getWebProps([chipStyles.label]);
-  const iconProps = getWebProps([chipStyles.icon]);
+  const containerProps = getWebProps([chipStyles.container({ intent, selected }), style]);
+  const labelProps = getWebProps([chipStyles.label({ intent, selected })]);
+  const iconProps = getWebProps([chipStyles.icon({ intent, selected })]);
   const deleteButtonProps = getWebProps([chipStyles.deleteButton]);
-  const deleteIconProps = getWebProps([chipStyles.deleteIcon]);
+  const deleteIconProps = getWebProps([chipStyles.deleteIcon({ intent, selected })]);
 
   const handleClick = () => {
     if (disabled) return;

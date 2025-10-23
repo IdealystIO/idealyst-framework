@@ -10,7 +10,7 @@ const Button = forwardRef<TouchableOpacity, ButtonProps>((props, ref) => {
     title,
     onPress,
     disabled = false,
-    variant = 'contained',
+    type = 'contained',
     intent = 'primary',
     size = 'md',
     leftIcon,
@@ -23,12 +23,19 @@ const Button = forwardRef<TouchableOpacity, ButtonProps>((props, ref) => {
   buttonStyles.useVariants({
     size,
     intent,
-    variant,
+    type,
     disabled,
   });
 
   // Map button size to icon size
-  const iconSize = size === 'sm' ? 14 : size === 'lg' ? 18 : 16;
+  const iconSizeMap = {
+    xs: 12,
+    sm: 14,
+    md: 16,
+    lg: 18,
+    xl: 20,
+  } as const;
+  const iconSize = iconSizeMap[size];
 
   // Helper to render icon - uses the icon styles from buttonStyles
   const renderIcon = (icon: string | React.ReactNode) => {

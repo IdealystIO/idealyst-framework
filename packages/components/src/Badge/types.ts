@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { DisplayColorVariant, BadgeSize } from '../theme/variants';
+import type { DisplayColorVariant, BadgeSize, ColorVariant } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
 
 // Component-specific type aliases for future extensibility
 export type BadgeColorVariant = DisplayColorVariant;
 export type BadgeSizeVariant = BadgeSize;
-export type BadgeVariant = 'filled' | 'outlined' | 'dot';
+export type BadgeType = 'filled' | 'outlined' | 'dot';
 
 export interface BadgeProps {
   /**
@@ -22,12 +22,12 @@ export interface BadgeProps {
   /**
    * The visual style variant of the badge
    */
-  variant?: BadgeVariant;
+  type?: BadgeType;
 
   /**
    * The color scheme of the badge
    */
-  color?: BadgeColorVariant;
+  color?: ColorVariant;
 
   /**
    * Icon to display. Can be an icon name or custom component (ReactNode)

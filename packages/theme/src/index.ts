@@ -168,4 +168,4 @@ export const themeDocumentation = {
   },
 } as const; 
 
-export { createButtonStylesheet } from './components/button';
+export * from './components';

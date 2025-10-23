@@ -1,32 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
+import { createSkeletonStylesheet } from '@idealyst/theme';
 
-export const skeletonStyles = StyleSheet.create((theme) => ({
-  skeleton: {
-    backgroundColor: theme.colors.surface.secondary,
-    overflow: 'hidden',
-
-    variants: {
-      shape: {
-        rectangle: {
-          borderRadius: 0,
-        },
-        rounded: {
-          borderRadius: 8,
-        },
-        circle: {
-          borderRadius: 9999,
-        },
-      },
-      animation: {
-        pulse: {},
-        wave: {},
-        none: {},
-      },
-    },
-  },
-
-  group: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-}));
+export const skeletonStyles = StyleSheet.create(theme => {
+  return createSkeletonStylesheet((theme as any).newTheme as any);
+});

@@ -1,3 +1,36 @@
+export * from "./accordion";
+export * from "./activity-indicator";
+export * from "./alert";
+export * from "./avatar";
+export * from "./badge";
+export * from "./breadcrumb";
 export * from "./button";
+export * from "./card";
+export * from "./checkbox";
+export * from "./chip";
+export * from "./dialog";
+export * from "./divider";
+export * from "./icon";
+export * from "./image";
+export * from "./input";
+export * from "./list";
+export * from "./menu";
+export * from "./popover";
+export * from "./pressable";
+export * from "./progress";
+export * from "./radio-button";
+export * from "./screen";
+export * from "./select";
+export * from "./skeleton";
+export * from "./slider";
+export * from "./svg-image";
+export * from "./switch";
+export * from "./tab-bar";
+export * from "./table";
+export * from "./text";
+export * from "./textarea";
+export * from "./tooltip";
+export * from "./video";
+export * from "./view";
 
-export type StyledComponent = 'button'
+export type StyledComponent = 'accordion' | 'activity-indicator' | 'alert' | 'avatar' | 'badge' | 'breadcrumb' | 'button' | 'card' | 'checkbox' | 'chip' | 'dialog' | 'divider' | 'icon' | 'image' | 'input' | 'list' | 'menu' | 'popover' | 'pressable' | 'progress' | 'radio-button' | 'screen' | 'select' | 'skeleton' | 'slider' | 'svg-image' | 'switch' | 'tab-bar' | 'table' | 'text' | 'textarea' | 'tooltip' | 'video' | 'view'

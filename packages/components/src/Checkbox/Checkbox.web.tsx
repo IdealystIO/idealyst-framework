@@ -1,7 +1,7 @@
 import React, { useState, useEffect, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CheckboxProps } from './types';
-import { checkboxStyles, checkboxLabelStyles, checkboxCheckmarkStyles, checkboxHelperStyles } from './Checkbox.styles';
+import { checkboxStyles } from './Checkbox.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
@@ -24,52 +24,35 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   helperText,
 }, ref) => {
   const [internalChecked, setInternalChecked] = useState(checked);
-  
+
   useEffect(() => {
     setInternalChecked(checked);
   }, [checked]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
-    
+
     const newChecked = event.target.checked;
     setInternalChecked(newChecked);
     onCheckedChange?.(newChecked);
   };
 
-  // Apply variants for main checkbox
+  // Apply variants
   checkboxStyles.useVariants({
     size,
     intent,
-    variant: variant as any,
-    checked: internalChecked,
+    variant,
     disabled,
-  });
-
-  // Apply variants for label
-  checkboxLabelStyles.useVariants({
-    size,
-    disabled,
-  });
-
-  // Apply variants for checkmark
-  checkboxCheckmarkStyles.useVariants({
-    size,
-    visible: internalChecked,
-  });
-
-  // Apply variants for helper text
-  checkboxHelperStyles.useVariants({
-    error: !!error,
+    error: Boolean(error),
   });
 
   // Create style arrays
   const wrapperStyleArray = [checkboxStyles.wrapper, style];
   const containerStyleArray = [checkboxStyles.container];
   const checkboxStyleArray = [checkboxStyles.checkbox];
-  const labelStyleArray = [checkboxLabelStyles.label];
-  const helperTextStyleArray = [checkboxHelperStyles.helperText];
-  const checkmarkStyleArray = [checkboxCheckmarkStyles.checkmark];
+  const labelStyleArray = [checkboxStyles.label];
+  const helperTextStyleArray = [checkboxStyles.helperText];
+  const checkmarkStyleArray = [checkboxStyles.checkmark];
 
   // Generate web props
   const wrapperProps = getWebProps(wrapperStyleArray);
