@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef, useEffect } from 'react';
+import React, { useState, useRef, forwardRef } from 'react';
 import {
   View,
   Text,
@@ -10,12 +10,12 @@ import {
   Platform,
   Animated,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SelectProps, SelectOption } from './types';
 import { selectStyles } from './Select.styles';
-import { calculateSmartPosition, calculateAvailableHeight } from '../utils/positionUtils.native';
 import { BoundedModalContent } from '../internal/BoundedModalContent.native';
+import { useSmartPosition } from '../hooks/useSmartPosition.native';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 const Select = forwardRef<View, SelectProps>(({
   options,
@@ -39,82 +39,25 @@ const Select = forwardRef<View, SelectProps>(({
 }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number; width: number }>({ top: 0, left: 0, width: 0 });
-  const [dropdownSize, setDropdownSize] = useState({ width: 0, height: 0 });
-  const [isPositioned, setIsPositioned] = useState(false);
   const scaleAnim = useRef(new Animated.Value(0)).current;
-  const triggerRef = useRef<any>(null);
-  const anchorMeasurements = useRef<{ x: number; y: number; width: number; height: number } | null>(null);
-  const insets = useSafeAreaInsets();
 
+  const {
+    position: dropdownPosition,
+    size: dropdownSize,
+    isPositioned,
+    anchorRef: triggerRef,
+    measureAndPosition,
+    handleLayout: handleDropdownLayout,
+    reset: resetPosition,
+  } = useSmartPosition({
+    placement: 'bottom-start',
+    offset: 4,
+    maxHeight,
+    matchWidth: true,
+  });
+
+  const mergedTriggerRef = useMergeRefs(ref, triggerRef);
   const selectedOption = options.find(option => option.value === value);
-
-  // Helper function to calculate dropdown position
-  const calculateDropdownPosition = (x: number, y: number, width: number, height: number) => {
-    if (__DEV__) {
-      console.log('[Select] 6. Calculate desired position');
-    }
-
-    // For flip detection, we need to use maxHeight to properly detect insufficient space
-    // But once we have a measured height, use that for tighter positioning
-    // Wait for first measurement before positioning to avoid gaps
-    let heightForPositioning = maxHeight;
-
-    if (dropdownSize.height > 0) {
-      // We have a measured height - use it if it's less than maxHeight
-      heightForPositioning = Math.min(dropdownSize.height, maxHeight);
-    }
-
-    const desiredSize = {
-      width: dropdownSize.width,
-      height: heightForPositioning
-    };
-
-    // Calculate position with flip detection
-    const position = calculateSmartPosition(
-      { x, y, width, height },
-      desiredSize,
-      'bottom-start',
-      4,
-      true,
-      insets
-    );
-
-    if (__DEV__) {
-      console.log('[Select] Position calculation:', {
-        anchorY: y,
-        anchorHeight: height,
-        measuredHeight: dropdownSize.height,
-        heightForPositioning,
-        maxHeight,
-        calculatedTop: position.top,
-        willFlipAbove: position.top < y,
-      });
-    }
-
-    if (__DEV__) {
-      console.log('[Select] 7. Show component at position:', position);
-    }
-
-    setDropdownPosition({
-      top: position.top,
-      left: position.left,
-      width: position.width || width,
-    });
-
-    // Mark as positioned after the next frame to allow layout to stabilize
-    requestAnimationFrame(() => {
-      setIsPositioned(true);
-    });
-  };
-
-  // Recalculate position when dropdown size changes
-  useEffect(() => {
-    if (isOpen && anchorMeasurements.current && dropdownSize.width > 0 && dropdownSize.height > 0) {
-      const { x, y, width, height } = anchorMeasurements.current;
-      calculateDropdownPosition(x, y, width, height);
-    }
-  }, [dropdownSize, isOpen]);
 
   // Filter options based on search term
   const filteredOptions = searchable && searchTerm
@@ -142,35 +85,20 @@ const Select = forwardRef<View, SelectProps>(({
     if (Platform.OS === 'ios' && presentationMode === 'actionSheet') {
       showIOSActionSheet();
     } else {
-      // Measure trigger position before opening
-      triggerRef.current?.measureInWindow((x: number, y: number, width: number, height: number) => {
-        if (__DEV__) {
-          console.log('[Select] 1. Handle Press - Anchor measured:', { x, y, width, height });
-        }
+      // Measure and position dropdown
+      measureAndPosition();
 
-        // Store anchor measurements for potential recalculation
-        anchorMeasurements.current = { x, y, width, height };
+      // Open the modal (it will be invisible with opacity 0 until positioned)
+      setIsOpen(true);
+      setSearchTerm('');
 
-        // Set initial position to bottom-start (will be adjusted after measurement)
-        // Don't use -9999 as that prevents proper layout
-        setDropdownPosition({ top: y + height + 4, left: x, width });
-
-        if (__DEV__) {
-          console.log('[Select] 2. Set open state with initial position');
-        }
-
-        // Open the modal (it will be invisible with opacity 0 until positioned)
-        setIsOpen(true);
-        setIsPositioned(false);
-        setSearchTerm('');
-        // Animate dropdown appearance
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          useNativeDriver: true,
-          tension: 300,
-          friction: 20,
-        }).start();
-      });
+      // Animate dropdown appearance
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+        tension: 300,
+        friction: 20,
+      }).start();
     }
   };
 
@@ -212,25 +140,9 @@ const Select = forwardRef<View, SelectProps>(({
       friction: 20,
     }).start(() => {
       setIsOpen(false);
-      setIsPositioned(false);
+      resetPosition();
       setSearchTerm('');
     });
-  };
-
-  const handleDropdownLayout = (event: any) => {
-    const { width, height } = event.nativeEvent.layout;
-
-    if (__DEV__) {
-      console.log('[Select] 4. Layout measured:', { width, height, current: dropdownSize });
-    }
-
-    // Only update if size has changed significantly
-    if (Math.abs(width - dropdownSize.width) > 1 || Math.abs(height - dropdownSize.height) > 1) {
-      if (__DEV__) {
-        console.log('[Select] 5. Setting dimensions (state update)');
-      }
-      setDropdownSize({ width, height });
-    }
   };
 
   const handleSearchChange = (text: string) => {
@@ -299,10 +211,6 @@ const Select = forwardRef<View, SelectProps>(({
     const isMeasured = dropdownSize.height > 0;
     const shouldShow = isMeasured && isPositioned;
 
-    if (__DEV__) {
-      console.log('[Select] 3. Render popover, isMeasured:', isMeasured, 'isPositioned:', isPositioned);
-    }
-
     return (
       <Modal
         visible={true}
@@ -350,7 +258,6 @@ const Select = forwardRef<View, SelectProps>(({
               style={selectStyles.optionsList}
               showsVerticalScrollIndicator={true}
             >
-              {__DEV__ && console.log('[Select] Rendering', filteredOptions.length, 'options')}
               {filteredOptions.map((option) => (
                   <Pressable
                     key={option.value}
@@ -397,7 +304,7 @@ const Select = forwardRef<View, SelectProps>(({
       )}
 
       <Pressable
-        ref={triggerRef}
+        ref={mergedTriggerRef}
         style={selectStyles.trigger({ type: variant, intent })}
         onPress={handleTriggerPress}
         disabled={disabled}

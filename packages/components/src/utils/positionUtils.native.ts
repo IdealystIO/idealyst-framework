@@ -237,19 +237,5 @@ export const calculateSmartPosition = (
     position.width = anchor.width;
   }
 
-  if (__DEV__) {
-    const willGoOffBottom = position.top + contentSize.height > bottomBound;
-    if (willGoOffBottom) {
-      console.warn('[PositionUtils] Content may go off bottom:', {
-        placement,
-        contentHeight: contentSize.height,
-        positionTop: position.top,
-        bottomBound,
-        overflow: (position.top + contentSize.height) - bottomBound,
-        windowHeight,
-      });
-    }
-  }
-
   return position;
 };

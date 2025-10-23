@@ -20,8 +20,6 @@ const MenuItem = forwardRef<Pressable, MenuItemProps>(({ item, onPress, size = '
     intent: item.intent || 'neutral',
   });
 
-  console.log(Icon)
-
   const renderIcon = () => {
     if (!item.icon) return null;
 
