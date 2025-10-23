@@ -10,11 +10,11 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
   onChange,
   placeholder,
   disabled = false,
-  rows = 4,
   minHeight,
   maxHeight,
   autoGrow = false,
   maxLength,
+  rows = 4,
   label,
   error,
   helperText,
@@ -72,40 +72,6 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
   };
 
   const showFooter = (error || helperText) || (showCharacterCount && maxLength);
-  const isNearLimit = maxLength ? value.length >= maxLength * 0.9 : false;
-  const isAtLimit = maxLength ? value.length >= maxLength : false;
-
-  // Calculate approximate height based on rows and size
-  const getTextInputHeight = () => {
-    if (autoGrow && contentHeight !== undefined) {
-      return contentHeight;
-    }
-
-    const lineHeights = {
-      sm: 20,
-      md: 24,
-      lg: 28,
-    };
-    const paddings = {
-      sm: 8,
-      md: 12,
-      lg: 16,
-    };
-
-    const lineHeight = lineHeights[size];
-    const padding = paddings[size];
-
-    const calculatedHeight = lineHeight * rows + padding * 2;
-
-    // Apply minHeight if specified
-    if (minHeight && calculatedHeight < minHeight) {
-      return minHeight;
-    }
-
-    return calculatedHeight;
-  };
-
-  const inputHeight = getTextInputHeight();
 
   return (
     <View style={[textAreaStyles.container, style]} testID={testID}>
@@ -119,10 +85,10 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
           style={[
             textAreaStyles.textarea({ intent, disabled, hasError }),
             {
-              height: inputHeight,
               textAlignVertical: 'top',
             },
             maxHeight && { maxHeight },
+            { height: autoGrow ? contentHeight : rows * 24 },
             textareaStyle,
           ]}
           value={value}
@@ -131,7 +97,7 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
           placeholder={placeholder}
           editable={!disabled}
           multiline
-          numberOfLines={autoGrow ? undefined : rows}
+          numberOfLines={0}
           maxLength={maxLength}
           placeholderTextColor="#999"
         />
