@@ -40,7 +40,7 @@ const Progress: React.FC<ProgressProps> = ({
 
     const containerProps = getWebProps([progressStyles.circularContainer, style]);
     const labelProps = getWebProps([progressStyles.circularLabel]);
-    const barProps = getWebProps([progressStyles.circularBar]);
+    const barProps = getWebProps([progressStyles.circularBar({ intent })]);
 
     // Get track color directly from styles
     const trackColor = progressStyles.circularTrack.stroke;
@@ -99,8 +99,8 @@ const Progress: React.FC<ProgressProps> = ({
   // Linear progress
   const containerProps = getWebProps([progressStyles.container, style]);
   const trackProps = getWebProps([progressStyles.linearTrack]);
-  const barProps = getWebProps([progressStyles.linearBar]);
-  const indeterminateProps = getWebProps([progressStyles.indeterminateBar]);
+  const barProps = getWebProps([progressStyles.linearBar({ intent })]);
+  const indeterminateProps = getWebProps([progressStyles.indeterminateBar({ intent })]);
   const labelProps = getWebProps([progressStyles.label]);
 
   return (

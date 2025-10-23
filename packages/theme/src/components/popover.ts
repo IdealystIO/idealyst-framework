@@ -87,10 +87,10 @@ function createArrowPlacementVariants(theme: Theme) {
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedPopoverStyles>): ExpandedPopoverStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-        borderRadius: theme.borderRadius?.md || 8,
+        backgroundColor: theme.colors.surface.primary,
+        borderRadius: 8,
         borderWidth: 1,
-        borderColor: theme.colors?.border?.primary || '#e0e0e0',
+        borderColor: theme.colors.border.primary,
         borderStyle: 'solid',
         // Native shadows
         shadowColor: '#000',
@@ -99,7 +99,7 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedPopoverSt
         shadowRadius: 12,
         elevation: 8,
         _web: {
-            border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+            border: `1px solid ${theme.colors.border.primary}`,
             boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
             transition: 'opacity 150ms ease-out, transform 150ms ease-out',
             transformOrigin: 'center center',
@@ -109,7 +109,7 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedPopoverSt
 
 const createContentStyles = (theme: Theme, expanded: Partial<ExpandedPopoverStyles>): ExpandedPopoverStyles => {
     return deepMerge({
-        padding: theme.spacing?.md || 16,
+        padding: 16,
     }, expanded);
 }
 
@@ -118,7 +118,7 @@ const createArrowStyles = (theme: Theme, expanded: Partial<ExpandedPopoverStyles
         position: 'absolute',
         width: 12,
         height: 12,
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+        backgroundColor: theme.colors.surface.primary,
         variants: {
             placement: createArrowPlacementVariants(theme),
         },

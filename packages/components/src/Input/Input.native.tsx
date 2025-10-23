@@ -64,7 +64,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   // Apply variants to the stylesheet
   inputStyles.useVariants({
     size,
-    variant,
+    type: variant,
     focused: isFocused,
     hasError,
     disabled,
@@ -111,7 +111,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   };
 
   return (
-    <View style={[inputStyles.container, style]} testID={testID}>
+    <View style={[inputStyles.container({ type: variant, hasError }), style]} testID={testID}>
       {/* Left Icon */}
       {leftIcon && (
         <View style={inputStyles.leftIconContainer}>

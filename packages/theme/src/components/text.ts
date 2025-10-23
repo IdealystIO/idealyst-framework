@@ -1,9 +1,11 @@
 import { StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Color } from "../theme/colors";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type TextSize = 'sm' | 'md' | 'lg' | 'xl';
+type TextSize = Size;
 type TextWeight = 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
 type TextAlign = 'left' | 'center' | 'right';
 
@@ -24,25 +26,10 @@ export type TextStylesheet = {
  * Create size variants for text
  */
 function createSizeVariants(theme: Theme) {
-    // TODO: Add typography to theme
-    return {
-        sm: {
-            fontSize: 14,
-            lineHeight: 21,
-        },
-        md: {
-            fontSize: 16,
-            lineHeight: 24,
-        },
-        lg: {
-            fontSize: 18,
-            lineHeight: 25.2,
-        },
-        xl: {
-            fontSize: 24,
-            lineHeight: 31.92,
-        },
-    };
+    return buildSizeVariants(theme, 'text', (size) => ({
+        fontSize: size.fontSize,
+        lineHeight: size.lineHeight,
+    }));
 }
 
 /**

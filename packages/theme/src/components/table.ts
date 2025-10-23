@@ -56,31 +56,31 @@ function createContainerTypeVariants(theme: Theme) {
         default: {
             borderWidth: 1,
             borderStyle: 'solid',
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
-            borderRadius: theme.borderRadius?.md || 8,
+            borderColor: theme.colors.border.primary,
+            borderRadius: 8,
             overflow: 'hidden',
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         bordered: {
             borderWidth: 1,
             borderStyle: 'solid',
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
-            borderRadius: theme.borderRadius?.md || 8,
+            borderColor: theme.colors.border.primary,
+            borderRadius: 8,
             overflow: 'hidden',
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         striped: {
             borderWidth: 1,
             borderStyle: 'solid',
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
-            borderRadius: theme.borderRadius?.md || 8,
+            borderColor: theme.colors.border.primary,
+            borderRadius: 8,
             overflow: 'hidden',
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
     };
@@ -95,19 +95,19 @@ function createRowTypeVariants(theme: Theme) {
         bordered: {
             borderBottomWidth: 1,
             borderBottomStyle: 'solid',
-            borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderBottomColor: theme.colors.border.primary,
             _web: {
-                borderBottom: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                borderBottom: `1px solid ${theme.colors.border.primary}`,
             },
         },
         striped: {
             borderBottomWidth: 1,
             borderBottomStyle: 'solid',
-            borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderBottomColor: theme.colors.border.primary,
             _web: {
-                borderBottom: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                borderBottom: `1px solid ${theme.colors.border.primary}`,
                 ':nth-child(even)': {
-                    backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+                    backgroundColor: theme.colors.surface.secondary,
                 },
             },
         },
@@ -124,8 +124,8 @@ function createRowCompoundVariants(theme: Theme): CompoundVariants<keyof TableRo
             clickable: true,
             styles: {
                 _web: {
-                    ':hover': {
-                        backgroundColor: theme.colors?.surface?.tertiary || '#e0e0e0',
+                    _hover: {
+                        backgroundColor: theme.colors.surface.tertiary,
                     },
                 },
             },
@@ -139,17 +139,17 @@ function createRowCompoundVariants(theme: Theme): CompoundVariants<keyof TableRo
 function createHeaderCellSizeVariants(theme: Theme) {
     return {
         sm: {
-            padding: theme.spacing?.sm || 8,
+            padding: 8,
             fontSize: 13,
             lineHeight: 18,
         },
         md: {
-            padding: theme.spacing?.md || 16,
+            padding: 16,
             fontSize: 14,
             lineHeight: 20,
         },
         lg: {
-            padding: theme.spacing?.lg || 24,
+            padding: 24,
             fontSize: 15,
             lineHeight: 22,
         },
@@ -165,9 +165,9 @@ function createHeaderCellTypeVariants(theme: Theme) {
         bordered: {
             borderRightWidth: 1,
             borderRightStyle: 'solid',
-            borderRightColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderRightColor: theme.colors.border.primary,
             _web: {
-                borderRight: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                borderRight: `1px solid ${theme.colors.border.primary}`,
                 ':last-child': {
                     borderRight: 'none',
                 },
@@ -183,17 +183,17 @@ function createHeaderCellTypeVariants(theme: Theme) {
 function createCellSizeVariants(theme: Theme) {
     return {
         sm: {
-            padding: theme.spacing?.sm || 8,
+            padding: 8,
             fontSize: 13,
             lineHeight: 18,
         },
         md: {
-            padding: theme.spacing?.md || 16,
+            padding: 16,
             fontSize: 14,
             lineHeight: 20,
         },
         lg: {
-            padding: theme.spacing?.lg || 24,
+            padding: 24,
             fontSize: 15,
             lineHeight: 22,
         },
@@ -209,9 +209,9 @@ function createCellTypeVariants(theme: Theme) {
         bordered: {
             borderRightWidth: 1,
             borderRightStyle: 'solid',
-            borderRightColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderRightColor: theme.colors.border.primary,
             _web: {
-                borderRight: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                borderRight: `1px solid ${theme.colors.border.primary}`,
                 ':last-child': {
                     borderRight: 'none',
                 },
@@ -234,7 +234,6 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTableCont
 const createTableStyles = (theme: Theme, expanded: Partial<ExpandedTableStyles>): ExpandedTableStyles => {
     return deepMerge({
         width: '100%',
-        fontFamily: theme.typography?.fontFamily?.sans,
         _web: {
             borderCollapse: 'collapse',
         },
@@ -243,7 +242,7 @@ const createTableStyles = (theme: Theme, expanded: Partial<ExpandedTableStyles>)
 
 const createTheadStyles = (theme: Theme, expanded: Partial<ExpandedTableHeadStyles>): ExpandedTableHeadStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+        backgroundColor: theme.colors.surface.secondary,
         variants: {
             sticky: {
                 true: {
@@ -269,8 +268,8 @@ const createRowStyles = (theme: Theme, expanded: Partial<ExpandedTableRowStyles>
                 true: {
                     _web: {
                         cursor: 'pointer',
-                        ':hover': {
-                            backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+                        _hover: {
+                            backgroundColor: theme.colors.surface.secondary,
                         },
                     },
                 },
@@ -287,13 +286,13 @@ const createRowStyles = (theme: Theme, expanded: Partial<ExpandedTableRowStyles>
 const createHeaderCellStyles = (theme: Theme, expanded: Partial<ExpandedTableHeaderCellStyles>): ExpandedTableHeaderCellStyles => {
     return deepMerge({
         textAlign: 'left',
-        fontWeight: theme.typography?.fontWeight?.semibold || '600',
-        color: theme.colors?.text?.primary || '#000000',
+        fontWeight: '600',
+        color: theme.colors.text.primary,
         borderBottomWidth: 2,
         borderBottomStyle: 'solid',
-        borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+        borderBottomColor: theme.colors.border.primary,
         _web: {
-            borderBottom: `2px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+            borderBottom: `2px solid ${theme.colors.border.primary}`,
         },
         variants: {
             size: createHeaderCellSizeVariants(theme),
@@ -316,7 +315,7 @@ const createHeaderCellStyles = (theme: Theme, expanded: Partial<ExpandedTableHea
 const createCellStyles = (theme: Theme, expanded: Partial<ExpandedTableCellStyles>): ExpandedTableCellStyles => {
     return deepMerge({
         textAlign: 'left',
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         variants: {
             size: createCellSizeVariants(theme),
             align: {

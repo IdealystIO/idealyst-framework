@@ -1,9 +1,11 @@
 import { StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type ProgressSize = 'sm' | 'md' | 'lg';
+type ProgressSize = Size;
 type ProgressIntent = Intent;
 
 type ProgressVariants = {
@@ -29,89 +31,70 @@ export type ProgressStylesheet = {
 /**
  * Create size variants for linear track
  */
-function createLinearTrackSizeVariants() {
-    return {
-        sm: { height: 4 },
-        md: { height: 8 },
-        lg: { height: 12 },
-    };
+function createLinearTrackSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'progress', (size) => ({
+        height: size.linearHeight,
+    }));
 }
 
 /**
- * Create intent variants for linear bar
+ * Get linear bar background color based on intent
  */
-function createLinearBarIntentVariants(theme: Theme) {
-    const variants: Record<ProgressIntent, any> = {} as any;
-    for (const intent in theme.intents) {
-        variants[intent as ProgressIntent] = {
-            backgroundColor: theme.intents[intent as keyof typeof theme.intents].primary,
-        };
-    }
-    return variants;
+function getLinearBarColor(theme: Theme, intent: ProgressIntent) {
+    return theme.intents[intent].primary;
 }
 
 /**
  * Create size variants for circular container
  */
-function createCircularContainerSizeVariants() {
-    return {
-        sm: { width: 32, height: 32 },
-        md: { width: 48, height: 48 },
-        lg: { width: 64, height: 64 },
-    };
+function createCircularContainerSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'progress', (size) => ({
+        width: size.circularSize,
+        height: size.circularSize,
+    }));
 }
 
 /**
- * Create intent variants for circular bar
+ * Get circular bar stroke color based on intent
  */
-function createCircularBarIntentVariants(theme: Theme) {
-    const variants: Record<ProgressIntent, any> = {} as any;
-    for (const intent in theme.intents) {
-        variants[intent as ProgressIntent] = {
-            stroke: theme.intents[intent as keyof typeof theme.intents].primary,
-        };
-    }
-    return variants;
+function getCircularBarColor(theme: Theme, intent: ProgressIntent) {
+    return theme.intents[intent].primary;
 }
 
 /**
  * Create size variants for label
  */
-function createLabelSizeVariants() {
-    return {
-        sm: { fontSize: 12 },
-        md: { fontSize: 14 },
-        lg: { fontSize: 16 },
-    };
+function createLabelSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'progress', (size) => ({
+        fontSize: size.labelFontSize,
+    }));
 }
 
 /**
  * Create size variants for circular label
  */
-function createCircularLabelSizeVariants() {
-    return {
-        sm: { fontSize: 10 },
-        md: { fontSize: 12 },
-        lg: { fontSize: 14 },
-    };
+function createCircularLabelSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'progress', (size) => ({
+        fontSize: size.circularLabelFontSize,
+    }));
 }
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles => {
     return deepMerge({
-        gap: theme.spacing?.xs || 4,
+        gap: 4,
     }, expanded);
 }
 
 const createLinearTrackStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.border?.secondary || '#e0e0e0',
+        backgroundColor: theme.colors.border.secondary,
         overflow: 'hidden',
         position: 'relative',
         variants: {
-            size: createLinearTrackSizeVariants(),
+            size: createLinearTrackSizeVariants(theme),
             rounded: {
                 true: {
-                    borderRadius: theme.borderRadius?.full || 9999,
+                    borderRadius: 9999,
                 },
                 false: {
                     borderRadius: 0,
@@ -121,43 +104,47 @@ const createLinearTrackStyles = (theme: Theme, expanded: Partial<ExpandedProgres
     }, expanded);
 }
 
-const createLinearBarStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles => {
-    return deepMerge({
-        height: '100%',
-        variants: {
-            intent: createLinearBarIntentVariants(theme),
-            rounded: {
-                true: {
-                    borderRadius: theme.borderRadius?.full || 9999,
-                },
-                false: {
-                    borderRadius: 0,
+const createLinearBarStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>) => {
+    return ({ intent }: { intent: ProgressIntent }) => {
+        return deepMerge({
+            height: '100%',
+            backgroundColor: getLinearBarColor(theme, intent),
+            variants: {
+                rounded: {
+                    true: {
+                        borderRadius: 9999,
+                    },
+                    false: {
+                        borderRadius: 0,
+                    },
                 },
             },
-        },
-        _web: {
-            transition: 'width 0.3s ease',
-        },
-    }, expanded);
+            _web: {
+                transition: 'width 0.3s ease',
+            },
+        }, expanded);
+    }
 }
 
-const createIndeterminateBarStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles => {
-    return deepMerge({
-        position: 'absolute',
-        height: '100%',
-        width: '40%',
-        variants: {
-            intent: createLinearBarIntentVariants(theme),
-            rounded: {
-                true: {
-                    borderRadius: theme.borderRadius?.full || 9999,
-                },
-                false: {
-                    borderRadius: 0,
+const createIndeterminateBarStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>) => {
+    return ({ intent }: { intent: ProgressIntent }) => {
+        return deepMerge({
+            position: 'absolute',
+            height: '100%',
+            width: '40%',
+            backgroundColor: getLinearBarColor(theme, intent),
+            variants: {
+                rounded: {
+                    true: {
+                        borderRadius: 9999,
+                    },
+                    false: {
+                        borderRadius: 0,
+                    },
                 },
             },
-        },
-    }, expanded);
+        }, expanded);
+    }
 }
 
 const createCircularContainerStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles => {
@@ -166,31 +153,31 @@ const createCircularContainerStyles = (theme: Theme, expanded: Partial<ExpandedP
         justifyContent: 'center',
         position: 'relative',
         variants: {
-            size: createCircularContainerSizeVariants(),
+            size: createCircularContainerSizeVariants(theme),
         },
     }, expanded);
 }
 
 const createCircularTrackStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles => {
     return deepMerge({
-        stroke: theme.colors?.border?.secondary || '#e0e0e0',
+        stroke: theme.colors.border.secondary,
     }, expanded);
 }
 
-const createCircularBarStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles => {
-    return deepMerge({
-        variants: {
-            intent: createCircularBarIntentVariants(theme),
-        },
-    }, expanded);
+const createCircularBarStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>) => {
+    return ({ intent }: { intent: ProgressIntent }) => {
+        return deepMerge({
+            stroke: getCircularBarColor(theme, intent),
+        }, expanded);
+    }
 }
 
 const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles => {
     return deepMerge({
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         textAlign: 'center',
         variants: {
-            size: createLabelSizeVariants(),
+            size: createLabelSizeVariants(theme),
         },
     }, expanded);
 }
@@ -199,9 +186,9 @@ const createCircularLabelStyles = (theme: Theme, expanded: Partial<ExpandedProgr
     return deepMerge({
         position: 'absolute',
         fontWeight: '600',
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         variants: {
-            size: createCircularLabelSizeVariants(),
+            size: createCircularLabelSizeVariants(theme),
         },
     }, expanded);
 }

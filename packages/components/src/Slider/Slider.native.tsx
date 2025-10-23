@@ -146,7 +146,7 @@ const Slider = forwardRef<View, SliderProps>(({
     if (!icon) return null;
 
     if (typeof icon === 'string' && isIconName(icon)) {
-      const iconStyle = sliderStyles.thumbIcon;
+      const iconStyle = sliderStyles.thumbIcon({ intent });
       return (
         <MaterialCommunityIcons
           name={icon}
@@ -179,7 +179,7 @@ const Slider = forwardRef<View, SliderProps>(({
           >
             {/* Filled track */}
             <Animated.View
-              style={[sliderStyles.filledTrack, filledTrackAnimatedStyle]}
+              style={[sliderStyles.filledTrack({ intent }), filledTrackAnimatedStyle]}
             />
 
             {/* Marks */}
@@ -215,7 +215,7 @@ const Slider = forwardRef<View, SliderProps>(({
             {/* Thumb */}
             <Animated.View
               style={[
-                sliderStyles.thumb,
+                sliderStyles.thumb({ intent, disabled }),
                 {
                   position: 'absolute',
                   top: '50%',

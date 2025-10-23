@@ -38,17 +38,16 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   style,
   testID,
 }, ref) => {
-  // Apply variants to each stylesheet
-  alertContainerStyles.useVariants({ variant, intent });
-  alertIconStyles.useVariants({ variant, intent });
-  alertTitleStyles.useVariants({ variant, intent });
-  alertMessageStyles.useVariants({ variant, intent });
+  // Apply variants to stylesheets that don't use dynamic styles
+  alertContentStyles.useVariants({});
+  alertActionsStyles.useVariants({});
+  alertCloseButtonStyles.useVariants({});
 
-  const containerProps = getWebProps([alertContainerStyles.container, style]);
-  const iconContainerProps = getWebProps([alertIconStyles.iconContainer]);
+  const containerProps = getWebProps([alertContainerStyles.container({ type: variant, intent }), style]);
+  const iconContainerProps = getWebProps([alertIconStyles.iconContainer({ type: variant, intent })]);
   const contentProps = getWebProps([alertContentStyles.content]);
-  const titleProps = getWebProps([alertTitleStyles.title]);
-  const messageProps = getWebProps([alertMessageStyles.message]);
+  const titleProps = getWebProps([alertTitleStyles.title({ type: variant, intent })]);
+  const messageProps = getWebProps([alertMessageStyles.message({ type: variant, intent })]);
   const actionsProps = getWebProps([alertActionsStyles.actions]);
   const closeButtonProps = getWebProps([alertCloseButtonStyles.closeButton]);
   const closeIconProps = getWebProps([alertCloseButtonStyles.closeIcon]);

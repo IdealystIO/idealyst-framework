@@ -19,9 +19,9 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
 
   // Apply variants using the correct Unistyles 3.0 pattern
   activityIndicatorStyles.useVariants({
-    size: sizeVariant as 'sm' | 'md' | 'lg',
-    intent: intent as 'primary' | 'success' | 'error' | 'warning' | 'neutral',
-    animating: animating as boolean,
+    size: sizeVariant,
+    intent,
+    animating,
   });
 
   // Don't render if not animating and hidesWhenStopped is true

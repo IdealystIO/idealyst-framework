@@ -54,7 +54,7 @@ const Select = forwardRef<View, SelectProps>(({
 
   // Apply styles with variants
   selectStyles.useVariants({
-    variant: variant as any,
+    type: variant,
     size,
     intent,
     disabled,
@@ -279,7 +279,7 @@ const Select = forwardRef<View, SelectProps>(({
 
       <Pressable
         ref={triggerRef}
-        style={selectStyles.trigger}
+        style={selectStyles.trigger({ type: variant, intent })}
         onPress={handleTriggerPress}
         disabled={disabled}
         accessibilityLabel={accessibilityLabel || label}

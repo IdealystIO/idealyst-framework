@@ -1,9 +1,9 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '../theme';
+import type { IntentVariant, SizeVariant } from '../theme';
 
 // Component-specific type aliases for future extensibility
 export type ActivityIndicatorIntentVariant = IntentVariant;
-export type ActivityIndicatorSizeVariant = ButtonSize | number;
+export type ActivityIndicatorSizeVariant = SizeVariant | number;
 
 export interface ActivityIndicatorProps {
   /**

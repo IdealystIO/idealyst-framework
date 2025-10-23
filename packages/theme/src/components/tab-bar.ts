@@ -54,14 +54,14 @@ function createContainerCompoundVariants(theme: Theme): CompoundVariants<keyof T
             type: 'pills',
             pillMode: 'light',
             styles: {
-                backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+                backgroundColor: theme.colors.surface.secondary,
             },
         },
         {
             type: 'pills',
             pillMode: 'dark',
             styles: {
-                backgroundColor: theme.colors?.surface?.inverse || '#000000',
+                backgroundColor: theme.colors.surface.inverse,
             },
         },
     ];
@@ -170,7 +170,7 @@ function createLabelCompoundVariants(theme: Theme): CompoundVariants<keyof TabBa
             pillMode: 'light',
             active: true,
             styles: {
-                color: theme.colors?.text?.primary || '#000000',
+                color: theme.colors.text.primary,
             },
         },
         // Pills dark mode - dark text on active (light pill)
@@ -179,7 +179,7 @@ function createLabelCompoundVariants(theme: Theme): CompoundVariants<keyof TabBa
             pillMode: 'dark',
             active: true,
             styles: {
-                color: theme.colors?.text?.primary || '#000000',
+                color: theme.colors.text.primary,
             },
         },
         // Underline variant - active text color
@@ -203,7 +203,7 @@ function createIndicatorCompoundVariants(theme: Theme): CompoundVariants<keyof T
             type: 'pills',
             pillMode: 'light',
             styles: {
-                backgroundColor: theme.colors?.surface?.tertiary || '#e0e0e0',
+                backgroundColor: theme.colors.surface.tertiary,
             },
         },
         // Pills dark mode - lighter pill
@@ -211,7 +211,7 @@ function createIndicatorCompoundVariants(theme: Theme): CompoundVariants<keyof T
             type: 'pills',
             pillMode: 'dark',
             styles: {
-                backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+                backgroundColor: theme.colors.surface.secondary,
             },
         },
     ];
@@ -225,7 +225,7 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTabBarCon
         position: 'relative',
         borderBottomWidth: 1,
         borderBottomStyle: 'solid',
-        borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+        borderBottomColor: theme.colors.border.primary,
         variants: {
             type: {
                 default: {},
@@ -233,7 +233,7 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTabBarCon
                     borderBottomWidth: 0,
                     padding: 4,
                     gap: 4,
-                    backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+                    backgroundColor: theme.colors.surface.secondary,
                     overflow: 'hidden',
                     alignSelf: 'flex-start',
                 },
@@ -259,9 +259,8 @@ const createTabStyles = (theme: Theme, expanded: Partial<ExpandedTabBarTabStyles
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        fontFamily: theme.typography?.fontFamily?.sans,
-        fontWeight: theme.typography?.fontWeight?.medium || '500',
-        color: theme.colors?.text?.secondary || '#666666',
+        fontWeight: '500',
+        color: theme.colors.text.secondary,
         position: 'relative',
         zIndex: 2,
         backgroundColor: 'transparent',
@@ -270,7 +269,7 @@ const createTabStyles = (theme: Theme, expanded: Partial<ExpandedTabBarTabStyles
             type: {
                 default: {},
                 pills: {
-                    borderRadius: theme.borderRadius?.full || 9999,
+                    borderRadius: 9999,
                     marginRight: 0,
                     backgroundColor: 'transparent',
                 },
@@ -278,7 +277,7 @@ const createTabStyles = (theme: Theme, expanded: Partial<ExpandedTabBarTabStyles
             },
             active: {
                 true: {
-                    color: theme.colors?.text?.primary || '#000000',
+                    color: theme.colors.text.primary,
                 },
                 false: {},
             },
@@ -291,8 +290,8 @@ const createTabStyles = (theme: Theme, expanded: Partial<ExpandedTabBarTabStyles
                 },
                 false: {
                     _web: {
-                        ':hover': {
-                            color: theme.colors?.text?.primary || '#000000',
+                        _hover: {
+                            color: theme.colors.text.primary,
                         },
                     },
                 },
@@ -316,9 +315,8 @@ const createTabLabelStyles = (theme: Theme, expanded: Partial<ExpandedTabBarLabe
     return deepMerge({
         position: 'relative',
         zIndex: 3,
-        fontFamily: theme.typography?.fontFamily?.sans,
-        fontWeight: theme.typography?.fontWeight?.medium || '500',
-        color: theme.colors?.text?.secondary || '#666666',
+        fontWeight: '500',
+        color: theme.colors.text.secondary,
         variants: {
             size: createLabelSizeVariants(),
             type: {
@@ -328,7 +326,7 @@ const createTabLabelStyles = (theme: Theme, expanded: Partial<ExpandedTabBarLabe
             },
             active: {
                 true: {
-                    color: theme.colors?.text?.primary || '#000000',
+                    color: theme.colors.text.primary,
                 },
                 false: {},
             },
@@ -360,7 +358,7 @@ const createIndicatorStyles = (theme: Theme, expanded: Partial<ExpandedTabBarInd
                     backgroundColor: theme.intents.primary.primary,
                 },
                 pills: {
-                    borderRadius: theme.borderRadius?.full || 9999,
+                    borderRadius: 9999,
                     bottom: 4,
                     top: 4,
                     left: 0,

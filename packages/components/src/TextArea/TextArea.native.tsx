@@ -117,7 +117,7 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
         <TextInput
           ref={ref}
           style={[
-            textAreaStyles.textarea,
+            textAreaStyles.textarea({ intent, disabled, hasError }),
             {
               height: inputHeight,
               textAlignVertical: 'top',

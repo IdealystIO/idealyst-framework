@@ -1,9 +1,11 @@
 import { StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type SliderSize = 'sm' | 'md' | 'lg';
+type SliderSize = Size;
 type SliderIntent = Intent;
 
 type SliderTrackVariants = {
@@ -56,130 +58,87 @@ export type SliderStylesheet = {
 /**
  * Create size variants for track
  */
-function createTrackSizeVariants() {
-    return {
-        sm: { height: 4 },
-        md: { height: 6 },
-        lg: { height: 8 },
-    };
+function createTrackSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'slider', (size) => ({
+        height: size.trackHeight,
+    }));
 }
 
 /**
- * Create intent variants for filled track
+ * Get filled track color based on intent
  */
-function createFilledTrackIntentVariants(theme: Theme) {
-    const variants: Record<SliderIntent, any> = {} as any;
-    for (const intent in theme.intents) {
-        variants[intent as SliderIntent] = {
-            backgroundColor: theme.intents[intent as SliderIntent].primary,
-        };
-    }
-    return variants;
+function getFilledTrackColor(theme: Theme, intent: SliderIntent) {
+    return theme.intents[intent].primary;
 }
 
 /**
  * Create size variants for thumb
  */
-function createThumbSizeVariants() {
-    return {
-        sm: { width: 16, height: 16 },
-        md: { width: 20, height: 20 },
-        lg: { width: 24, height: 24 },
-    };
+function createThumbSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'slider', (size) => ({
+        width: size.thumbSize,
+        height: size.thumbSize,
+    }));
 }
 
 /**
- * Create intent variants for thumb
+ * Get thumb border color based on intent
  */
-function createThumbIntentVariants(theme: Theme) {
-    const variants: Record<SliderIntent, any> = {} as any;
-    for (const intent in theme.intents) {
-        variants[intent as SliderIntent] = {
-            borderWidth: 2,
-            borderStyle: 'solid',
-            borderColor: theme.intents[intent as SliderIntent].primary,
-        };
-    }
-    return variants;
+function getThumbBorderColor(theme: Theme, intent: SliderIntent) {
+    return theme.intents[intent].primary;
 }
 
 /**
  * Create size variants for thumb icon
  */
-function createThumbIconSizeVariants() {
-    return {
-        sm: {
-            width: 10,
-            height: 10,
-            minWidth: 10,
-            maxWidth: 10,
-            minHeight: 10,
-            maxHeight: 10,
-        },
-        md: {
-            width: 12,
-            height: 12,
-            minWidth: 12,
-            maxWidth: 12,
-            minHeight: 12,
-            maxHeight: 12,
-        },
-        lg: {
-            width: 16,
-            height: 16,
-            minWidth: 16,
-            maxWidth: 16,
-            minHeight: 16,
-            maxHeight: 16,
-        },
-    };
+function createThumbIconSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'slider', (size) => ({
+        width: size.thumbIconSize,
+        height: size.thumbIconSize,
+        minWidth: size.thumbIconSize,
+        maxWidth: size.thumbIconSize,
+        minHeight: size.thumbIconSize,
+        maxHeight: size.thumbIconSize,
+    }));
 }
 
 /**
- * Create intent variants for thumb icon
+ * Get thumb icon color based on intent
  */
-function createThumbIconIntentVariants(theme: Theme) {
-    const variants: Record<SliderIntent, any> = {} as any;
-    for (const intent in theme.intents) {
-        variants[intent as SliderIntent] = {
-            color: theme.intents[intent as SliderIntent].primary,
-        };
-    }
-    return variants;
+function getThumbIconColor(theme: Theme, intent: SliderIntent) {
+    return theme.intents[intent].primary;
 }
 
 /**
  * Create size variants for mark
  */
-function createMarkSizeVariants() {
-    return {
-        sm: { height: 8 },
-        md: { height: 10 },
-        lg: { height: 12 },
-    };
+function createMarkSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'slider', (size) => ({
+        height: size.markHeight,
+    }));
 }
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
     return deepMerge({
-        gap: theme.spacing?.xs || 4,
-        paddingVertical: theme.spacing?.sm || 8,
+        gap: 4,
+        paddingVertical: 8,
     }, expanded);
 }
 
 const createSliderWrapperStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
     return deepMerge({
         position: 'relative',
-        paddingVertical: theme.spacing?.xs || 4,
+        paddingVertical: 4,
     }, expanded);
 }
 
 const createTrackStyles = (theme: Theme, expanded: Partial<ExpandedSliderTrackStyles>): ExpandedSliderTrackStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.border?.secondary || '#d0d0d0',
-        borderRadius: theme.borderRadius?.full || 9999,
+        backgroundColor: theme.colors.border.secondary,
+        borderRadius: 9999,
         position: 'relative',
         variants: {
-            size: createTrackSizeVariants(),
+            size: createTrackSizeVariants(theme),
             disabled: {
                 true: {
                     opacity: 0.5,
@@ -189,64 +148,77 @@ const createTrackStyles = (theme: Theme, expanded: Partial<ExpandedSliderTrackSt
                 },
                 false: {
                     opacity: 1,
-                },
-            },
-        },
-        _web: {
-            cursor: 'pointer',
-        },
-    }, expanded);
-}
-
-const createFilledTrackStyles = (theme: Theme, expanded: Partial<ExpandedSliderFilledTrackStyles>): ExpandedSliderFilledTrackStyles => {
-    return deepMerge({
-        position: 'absolute',
-        height: '100%',
-        borderRadius: theme.borderRadius?.full || 9999,
-        top: 0,
-        left: 0,
-        variants: {
-            intent: createFilledTrackIntentVariants(theme),
-        },
-    }, expanded);
-}
-
-const createThumbStyles = (theme: Theme, expanded: Partial<ExpandedSliderThumbStyles>): ExpandedSliderThumbStyles => {
-    return deepMerge({
-        position: 'absolute',
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-        borderRadius: theme.borderRadius?.full || 9999,
-        top: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 2,
-        variants: {
-            size: createThumbSizeVariants(),
-            intent: createThumbIntentVariants(theme),
-            disabled: {
-                true: {
-                    _web: {
-                        cursor: 'not-allowed',
-                    },
-                },
-                false: {
                     _web: {
                         cursor: 'pointer',
                     },
                 },
             },
         },
-        _web: {
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-            transform: 'translate(-50%, -50%)',
-            transition: 'transform 0.15s ease, box-shadow 0.2s ease',
-        },
     }, expanded);
+}
+
+const createFilledTrackStyles = (theme: Theme, expanded: Partial<ExpandedSliderFilledTrackStyles>) => {
+    return ({ intent }: SliderFilledTrackVariants) => {
+        return deepMerge({
+            position: 'absolute',
+            height: '100%',
+            borderRadius: 9999,
+            top: 0,
+            left: 0,
+            backgroundColor: getFilledTrackColor(theme, intent),
+        }, expanded);
+    }
+}
+
+const createThumbStyles = (theme: Theme, expanded: Partial<ExpandedSliderThumbStyles>) => {
+    return ({ intent, disabled }: { intent: SliderIntent, disabled: boolean }) => {
+        return deepMerge({
+            position: 'absolute',
+            backgroundColor: theme.colors.surface.primary,
+            borderRadius: 9999,
+            borderWidth: 2,
+            borderStyle: 'solid',
+            borderColor: getThumbBorderColor(theme, intent),
+            top: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.2,
+            shadowRadius: 4,
+            elevation: 2,
+            variants: {
+                size: createThumbSizeVariants(theme),
+                disabled: {
+                    true: {
+                        opacity: 0.6,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
+                    },
+                    false: {
+                        opacity: 1,
+                        _web: {
+                            cursor: 'grab',
+                            _hover: {
+                                transform: 'translate(-50%, -50%) scale(1.05)',
+                            },
+                            _active: {
+                                cursor: 'grabbing',
+                                transform: 'translate(-50%, -50%) scale(1.1)',
+                            },
+                        },
+                    },
+                },
+            },
+            _web: {
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                transform: 'translate(-50%, -50%)',
+                transition: 'transform 0.15s ease, box-shadow 0.2s ease',
+            },
+        }, expanded);
+    }
 }
 
 const createThumbActiveStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
@@ -257,24 +229,26 @@ const createThumbActiveStyles = (theme: Theme, expanded: Partial<ExpandedSliderS
     }, expanded);
 }
 
-const createThumbIconStyles = (theme: Theme, expanded: Partial<ExpandedSliderThumbIconStyles>): ExpandedSliderThumbIconStyles => {
-    return deepMerge({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-        variants: {
-            size: createThumbIconSizeVariants(),
-            intent: createThumbIconIntentVariants(theme),
-        },
-    }, expanded);
+const createThumbIconStyles = (theme: Theme, expanded: Partial<ExpandedSliderThumbIconStyles>) => {
+    return ({ intent }: SliderThumbIconVariants) => {
+        return deepMerge({
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            color: getThumbIconColor(theme, intent),
+            variants: {
+                size: createThumbIconSizeVariants(theme),
+            },
+        }, expanded);
+    }
 }
 
 const createValueLabelStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
     return deepMerge({
         fontSize: 12,
-        fontWeight: theme.typography?.fontWeight?.semibold || '600',
-        color: theme.colors?.text?.primary || '#000000',
+        fontWeight: '600',
+        color: theme.colors.text.primary,
         textAlign: 'center',
     }, expanded);
 }
@@ -283,14 +257,14 @@ const createMinMaxLabelsStyles = (theme: Theme, expanded: Partial<ExpandedSlider
     return deepMerge({
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: theme.spacing?.xs || 4,
+        marginTop: 4,
     }, expanded);
 }
 
 const createMinMaxLabelStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
     return deepMerge({
         fontSize: 12,
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
     }, expanded);
 }
 
@@ -308,10 +282,10 @@ const createMarkStyles = (theme: Theme, expanded: Partial<ExpandedSliderMarkStyl
     return deepMerge({
         position: 'absolute',
         width: 2,
-        backgroundColor: theme.colors?.border?.secondary || '#d0d0d0',
+        backgroundColor: theme.colors.border.secondary,
         top: '50%',
         variants: {
-            size: createMarkSizeVariants(),
+            size: createMarkSizeVariants(theme),
         },
         _web: {
             transform: 'translate(-50%, -50%)',
@@ -323,7 +297,7 @@ const createMarkLabelStyles = (theme: Theme, expanded: Partial<ExpandedSliderSty
     return deepMerge({
         position: 'absolute',
         fontSize: 10,
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
         top: '100%',
         marginTop: 4,
         _web: {

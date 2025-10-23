@@ -32,8 +32,8 @@ export type DividerStylesheet = {
  * Helper to get intent colors
  */
 function getIntentColor(theme: Theme, intent: DividerIntent): string {
-    if (intent === 'secondary') return theme.colors?.border?.primary || '#e0e0e0';
-    if (intent === 'neutral') return theme.colors?.border?.secondary || '#f0f0f0';
+    if (intent === 'secondary') return theme.colors.border.primary;
+    if (intent === 'neutral') return theme.colors.border.secondary;
     if (intent === 'info') return theme.intents.primary.primary;
     return theme.intents[intent as Intent].primary;
 }
@@ -60,20 +60,20 @@ function createDividerCompoundVariants(theme: Theme): CompoundVariants<keyof Div
 
     // Horizontal spacing variants
     variants.push(
-        { orientation: 'horizontal', spacing: 'sm', styles: { marginVertical: theme.spacing?.sm || 8 } },
-        { orientation: 'horizontal', spacing: 'md', styles: { marginVertical: theme.spacing?.md || 16 } },
-        { orientation: 'horizontal', spacing: 'lg', styles: { marginVertical: theme.spacing?.lg || 24 } }
+        { orientation: 'horizontal', spacing: 'sm', styles: { marginVertical: 8 } },
+        { orientation: 'horizontal', spacing: 'md', styles: { marginVertical: 16 } },
+        { orientation: 'horizontal', spacing: 'lg', styles: { marginVertical: 24 } }
     );
 
     // Vertical spacing variants
     variants.push(
-        { orientation: 'vertical', spacing: 'sm', styles: { marginHorizontal: theme.spacing?.sm || 8 } },
-        { orientation: 'vertical', spacing: 'md', styles: { marginHorizontal: theme.spacing?.md || 16 } },
-        { orientation: 'vertical', spacing: 'lg', styles: { marginHorizontal: theme.spacing?.lg || 24 } }
+        { orientation: 'vertical', spacing: 'sm', styles: { marginHorizontal: 8 } },
+        { orientation: 'vertical', spacing: 'md', styles: { marginHorizontal: 16 } },
+        { orientation: 'vertical', spacing: 'lg', styles: { marginHorizontal: 24 } }
     );
 
     // Dashed variant compound styles
-    const borderColor = theme.colors?.border?.secondary || '#f0f0f0';
+    const borderColor = theme.colors.border.secondary;
     variants.push(
         {
             type: 'dashed',
@@ -190,7 +190,7 @@ function createLineCompoundVariants(): CompoundVariants<keyof DividerVariants> {
 
 const createDividerStyles = (theme: Theme, expanded: Partial<ExpandedDividerStyles>): ExpandedDividerStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.border?.secondary || '#f0f0f0',
+        backgroundColor: theme.colors.border.secondary,
         variants: {
             orientation: {
                 horizontal: {
@@ -228,8 +228,8 @@ const createDividerStyles = (theme: Theme, expanded: Partial<ExpandedDividerStyl
             },
             intent: {
                 primary: { backgroundColor: theme.intents.primary.primary },
-                secondary: { backgroundColor: theme.colors?.border?.primary || '#e0e0e0' },
-                neutral: { backgroundColor: theme.colors?.border?.secondary || '#f0f0f0' },
+                secondary: { backgroundColor: theme.colors.border.primary },
+                neutral: { backgroundColor: theme.colors.border.secondary },
                 success: { backgroundColor: theme.intents.success.primary },
                 error: { backgroundColor: theme.intents.error.primary },
                 warning: { backgroundColor: theme.intents.warning.primary },
@@ -267,9 +267,9 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedDividerSt
             },
             spacing: {
                 none: { gap: 0 },
-                sm: { gap: theme.spacing?.sm || 8 },
-                md: { gap: theme.spacing?.md || 16 },
-                lg: { gap: theme.spacing?.lg || 24 },
+                sm: { gap: 8 },
+                md: { gap: 16 },
+                lg: { gap: 24 },
             },
         },
     }, expanded);
@@ -277,16 +277,16 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedDividerSt
 
 const createContentStyles = (theme: Theme, expanded: Partial<ExpandedDividerStyles>): ExpandedDividerStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-        color: theme.colors?.text?.secondary || '#666666',
-        fontSize: theme.typography?.fontSize?.sm || 14,
+        backgroundColor: theme.colors.surface.primary,
+        color: theme.colors.text.secondary,
+        fontSize: 14,
         variants: {
             orientation: {
                 horizontal: {
-                    paddingHorizontal: theme.spacing?.sm || 8,
+                    paddingHorizontal: 8,
                 },
                 vertical: {
-                    paddingVertical: theme.spacing?.sm || 8,
+                    paddingVertical: 8,
                 },
             },
         },
@@ -295,7 +295,7 @@ const createContentStyles = (theme: Theme, expanded: Partial<ExpandedDividerStyl
 
 const createLineStyles = (theme: Theme, expanded: Partial<ExpandedDividerStyles>): ExpandedDividerStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.border?.secondary || '#f0f0f0',
+        backgroundColor: theme.colors.border.secondary,
         flex: 1,
         variants: {
             orientation: {

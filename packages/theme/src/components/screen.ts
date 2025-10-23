@@ -28,9 +28,9 @@ function createBackgroundVariants(theme: Theme) {
     };
 
     // Add all surface colors programmatically
-    for (const surface in theme.surfaces) {
+    for (const surface in theme.colors.surface) {
         variants[surface] = {
-            backgroundColor: theme.surfaces[surface as Surface],
+            backgroundColor: theme.colors.surface[surface as Surface],
         };
     }
 
@@ -64,7 +64,7 @@ function createPaddingVariants(theme: Theme) {
 const createScreenStyles = (theme: Theme, expanded: Partial<ExpandedScreenStyles>): ExpandedScreenStyles => {
     return deepMerge({
         flex: 1,
-        backgroundColor: theme.surfaces.primary,
+        backgroundColor: theme.colors.surface.primary,
         variants: {
             background: createBackgroundVariants(theme),
             padding: createPaddingVariants(theme),

@@ -36,9 +36,9 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
 
   const containerProps = getWebProps([switchStyles.container, style]);
   const switchContainerProps = getWebProps([switchStyles.switchContainer]);
-  const trackProps = getWebProps([switchStyles.switchTrack]);
-  const thumbProps = getWebProps([switchStyles.switchThumb]);
-  const thumbIconProps = getWebProps([switchStyles.thumbIcon]);
+  const trackProps = getWebProps([switchStyles.switchTrack({ checked, intent, disabled })]);
+  const thumbProps = getWebProps([switchStyles.switchThumb({ size, checked })]);
+  const thumbIconProps = getWebProps([switchStyles.thumbIcon({ checked, intent })]);
   const labelProps = getWebProps([switchStyles.label]);
 
   // Helper to render icon

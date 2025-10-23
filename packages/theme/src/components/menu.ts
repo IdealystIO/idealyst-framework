@@ -1,9 +1,11 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type MenuSize = 'sm' | 'md' | 'lg';
+type MenuSize = Size;
 type MenuIntent = Intent;
 
 type MenuVariants = {
@@ -27,45 +29,28 @@ export type MenuStylesheet = {
  * Create size variants for menu item
  */
 function createItemSizeVariants(theme: Theme) {
-    return {
-        sm: {
-            paddingVertical: theme.spacing?.xs || 4,
-            paddingHorizontal: theme.spacing?.sm || 8,
-        },
-        md: {
-            paddingVertical: theme.spacing?.sm || 8,
-            paddingHorizontal: theme.spacing?.md || 16,
-        },
-        lg: {
-            paddingVertical: theme.spacing?.md || 16,
-            paddingHorizontal: theme.spacing?.lg || 24,
-        },
-    };
+    return buildSizeVariants(theme, 'menu', (size) => ({
+        paddingVertical: size.paddingVertical,
+        paddingHorizontal: size.paddingHorizontal,
+    }));
 }
 
 /**
- * Create intent variants for menu item
+ * Get hover styles for menu item based on intent
  */
-function createItemIntentVariants(theme: Theme) {
-    const variants: Record<MenuIntent, any> = {} as any;
-    for (const intent in theme.intents) {
-        const intentKey = intent as MenuIntent;
-        const intentValue = theme.intents[intentKey];
-
-        if (intentKey === 'neutral') {
-            variants[intentKey] = {};
-        } else {
-            variants[intentKey] = {
-                _web: {
-                    ':hover': {
-                        backgroundColor: intentValue.container || intentValue.primary + '20',
-                        color: intentValue.primary,
-                    },
-                },
-            };
-        }
+function getItemHoverStyles(theme: Theme, intent: MenuIntent) {
+    if (intent === 'neutral') {
+        return {};
     }
-    return variants;
+    const intentValue = theme.intents[intent];
+    return {
+        _web: {
+            _hover: {
+                backgroundColor: intentValue.light + '20',
+                color: intentValue.primary,
+            },
+        },
+    };
 }
 
 /**
@@ -77,7 +62,7 @@ function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof MenuVa
             disabled: true,
             styles: {
                 _web: {
-                    ':hover': {
+                    _hover: {
                         backgroundColor: 'transparent',
                     },
                 },
@@ -89,35 +74,21 @@ function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof MenuVa
 /**
  * Create size variants for icon
  */
-function createIconSizeVariants() {
-    return {
-        sm: {
-            width: 16,
-            height: 16,
-            fontSize: 16,
-        },
-        md: {
-            width: 20,
-            height: 20,
-            fontSize: 20,
-        },
-        lg: {
-            width: 24,
-            height: 24,
-            fontSize: 24,
-        },
-    };
+function createIconSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'menu', (size) => ({
+        width: size.iconSize,
+        height: size.iconSize,
+        fontSize: size.iconSize,
+    }));
 }
 
 /**
  * Create size variants for label
  */
-function createLabelSizeVariants() {
-    return {
-        sm: { fontSize: 14 },
-        md: { fontSize: 16 },
-        lg: { fontSize: 18 },
-    };
+function createLabelSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'menu', (size) => ({
+        fontSize: size.labelFontSize,
+    }));
 }
 
 const createOverlayStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
@@ -136,18 +107,18 @@ const createMenuStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): 
     return deepMerge({
         position: 'absolute',
         zIndex: 1000,
-        backgroundColor: theme.colors?.surface?.elevated || '#ffffff',
+        backgroundColor: theme.colors.surface.primary,
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: theme.colors?.border?.primary || '#e0e0e0',
-        borderRadius: theme.borderRadius?.md || 8,
+        borderColor: theme.colors.border.primary,
+        borderRadius: 8,
         minWidth: 120,
         maxWidth: 400,
         padding: 4,
         display: 'flex',
         flexDirection: 'column',
         _web: {
-            border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+            border: `1px solid ${theme.colors.border.primary}`,
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
             width: 'fit-content',
         },
@@ -157,44 +128,47 @@ const createMenuStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): 
 const createSeparatorStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
     return deepMerge({
         height: 1,
-        backgroundColor: theme.colors?.border?.primary || '#e0e0e0',
+        backgroundColor: theme.colors.border.primary,
         marginTop: 4,
         marginBottom: 4,
     }, expanded);
 }
 
-const createItemStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
-    return deepMerge({
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'transparent',
-        borderRadius: theme.borderRadius?.sm || 4,
-        minHeight: 44,
-        variants: {
-            size: createItemSizeVariants(theme),
-            intent: createItemIntentVariants(theme),
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                    _web: {
-                        cursor: 'not-allowed',
+const createItemStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>) => {
+    return ({ intent }: MenuVariants) => {
+        const hoverStyles = getItemHoverStyles(theme, intent);
+        return deepMerge({
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: 'transparent',
+            borderRadius: 4,
+            minHeight: 44,
+            variants: {
+                size: createItemSizeVariants(theme),
+                disabled: {
+                    true: {
+                        opacity: 0.5,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
                     },
+                    false: {},
                 },
-                false: {},
             },
-        },
-        compoundVariants: createItemCompoundVariants(theme),
-        _web: {
-            cursor: 'pointer',
-            border: 'none',
-            outline: 'none',
-            transition: 'background-color 0.2s ease',
-            textAlign: 'left',
-            ':hover': {
-                backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+            compoundVariants: createItemCompoundVariants(theme),
+            _web: {
+                cursor: 'pointer',
+                border: 'none',
+                outline: 'none',
+                transition: 'background-color 0.2s ease',
+                textAlign: 'left',
+                _hover: {
+                    backgroundColor: theme.colors.surface.secondary,
+                },
             },
-        },
-    }, expanded);
+            ...hoverStyles,
+        }, expanded);
+    }
 }
 
 const createIconStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
@@ -202,9 +176,9 @@ const createIconStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): 
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
-        marginRight: theme.spacing?.sm || 8,
+        marginRight: 8,
         variants: {
-            size: createIconSizeVariants(),
+            size: createIconSizeVariants(theme),
         },
     }, expanded);
 }
@@ -212,9 +186,9 @@ const createIconStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): 
 const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
     return deepMerge({
         flex: 1,
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         variants: {
-            size: createLabelSizeVariants(),
+            size: createLabelSizeVariants(theme),
         },
     }, expanded);
 }

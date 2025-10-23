@@ -1,8 +1,10 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type BreadcrumbSize = 'sm' | 'md' | 'lg';
+type BreadcrumbSize = Size;
 type BreadcrumbIntent = 'primary' | 'neutral';
 
 type BreadcrumbVariants = {
@@ -30,12 +32,11 @@ export type BreadcrumbStylesheet = {
 /**
  * Create size variants for item text
  */
-function createItemTextSizeVariants() {
-    return {
-        sm: { fontSize: 12, lineHeight: 16 },
-        md: { fontSize: 14, lineHeight: 20 },
-        lg: { fontSize: 16, lineHeight: 24 },
-    };
+function createItemTextSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'breadcrumb', (size) => ({
+        fontSize: size.fontSize,
+        lineHeight: size.lineHeight,
+    }));
 }
 
 /**
@@ -55,13 +56,13 @@ function createItemTextCompoundVariants(theme: Theme): CompoundVariants<keyof Br
             intent: 'neutral',
             isLast: false,
             disabled: false,
-            styles: { color: theme.colors?.text?.secondary || '#666666' },
+            styles: { color: theme.colors.text.secondary },
         },
         {
             clickable: false,
             isLast: false,
             disabled: false,
-            styles: { color: theme.colors?.text?.secondary || '#666666' },
+            styles: { color: theme.colors.text.secondary },
         },
     ];
 }
@@ -69,22 +70,21 @@ function createItemTextCompoundVariants(theme: Theme): CompoundVariants<keyof Br
 /**
  * Create size variants for icons
  */
-function createIconSizeVariants() {
-    return {
-        sm: { width: 14, height: 14 },
-        md: { width: 16, height: 16 },
-        lg: { width: 18, height: 18 },
-    };
+function createIconSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'breadcrumb', (size) => ({
+        width: size.iconSize,
+        height: size.iconSize,
+    }));
 }
 
 /**
- * Create intent variants for ellipsis/menu icons
+ * Get icon color based on intent
  */
-function createIconIntentVariants(theme: Theme) {
-    return {
-        primary: { color: theme.intents.primary.primary },
-        neutral: { color: theme.colors?.text?.secondary || '#666666' },
-    };
+function getIconColor(theme: Theme, intent: BreadcrumbIntent) {
+    if (intent === 'primary') {
+        return theme.intents.primary.primary;
+    }
+    return theme.colors.text.secondary;
 }
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
@@ -108,19 +108,18 @@ const createItemStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyl
 
 const createItemTextStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
     return deepMerge({
-        fontFamily: theme.typography?.fontFamily?.sans,
         variants: {
-            size: createItemTextSizeVariants(),
+            size: createItemTextSizeVariants(theme),
             intent: { primary: {}, neutral: {} },
             disabled: {
                 true: {
                     opacity: 0.5,
-                    color: theme.colors?.text?.secondary || '#666666',
+                    color: theme.colors.text.secondary,
                 },
                 false: {},
             },
             isLast: {
-                true: { color: theme.colors?.text?.primary || '#000000' },
+                true: { color: theme.colors.text.primary },
                 false: {},
             },
             clickable: { true: {}, false: {} },
@@ -132,21 +131,16 @@ const createItemTextStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumb
 const createIconStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
     return deepMerge({
         variants: {
-            size: createIconSizeVariants(),
+            size: createIconSizeVariants(theme),
         },
     }, expanded);
 }
 
 const createSeparatorStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
     return deepMerge({
-        fontFamily: theme.typography?.fontFamily?.sans,
-        color: theme.colors?.text?.tertiary || '#999999',
+        color: theme.colors.text.tertiary,
         variants: {
-            size: {
-                sm: { fontSize: 12, lineHeight: 16 },
-                md: { fontSize: 14, lineHeight: 20 },
-                lg: { fontSize: 16, lineHeight: 24 },
-            },
+            size: createItemTextSizeVariants(theme),
         },
     }, expanded);
 }
@@ -159,13 +153,15 @@ const createEllipsisStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumb
     }, expanded);
 }
 
-const createEllipsisIconStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
-        variants: {
-            size: createIconSizeVariants(),
-            intent: createIconIntentVariants(theme),
-        },
-    }, expanded);
+const createEllipsisIconStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>) => {
+    return ({ intent }: BreadcrumbVariants) => {
+        return deepMerge({
+            color: getIconColor(theme, intent),
+            variants: {
+                size: createIconSizeVariants(theme),
+            },
+        }, expanded);
+    }
 }
 
 const createMenuButtonStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
@@ -175,13 +171,15 @@ const createMenuButtonStyles = (theme: Theme, expanded: Partial<ExpandedBreadcru
     }, expanded);
 }
 
-const createMenuButtonIconStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
-        variants: {
-            size: createIconSizeVariants(),
-            intent: createIconIntentVariants(theme),
-        },
-    }, expanded);
+const createMenuButtonIconStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>) => {
+    return ({ intent }: BreadcrumbVariants) => {
+        return deepMerge({
+            color: getIconColor(theme, intent),
+            variants: {
+                size: createIconSizeVariants(theme),
+            },
+        }, expanded);
+    }
 }
 
 export const createBreadcrumbStylesheet = (theme: Theme, expanded?: Partial<BreadcrumbStylesheet>): BreadcrumbStylesheet => {

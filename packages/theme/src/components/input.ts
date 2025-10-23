@@ -1,8 +1,10 @@
-import { CompoundVariants, StylesheetStyles } from "../styles";
+import { StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type InputSize = 'sm' | 'md' | 'lg';
+type InputSize = Size;
 type InputType = 'default' | 'outlined' | 'filled' | 'bare';
 
 type InputVariants = {
@@ -30,20 +32,10 @@ export type InputStylesheet = {
  * Create size variants for container
  */
 function createContainerSizeVariants(theme: Theme) {
-    return {
-        sm: {
-            height: 36,
-            paddingHorizontal: theme.spacing?.xs || 4,
-        },
-        md: {
-            height: 44,
-            paddingHorizontal: theme.spacing?.sm || 8,
-        },
-        lg: {
-            height: 52,
-            paddingHorizontal: theme.spacing?.md || 16,
-        },
-    };
+    return buildSizeVariants(theme, 'input', (size) => ({
+        height: size.height,
+        paddingHorizontal: size.paddingHorizontal,
+    }));
 }
 
 /**
@@ -52,25 +44,25 @@ function createContainerSizeVariants(theme: Theme) {
 function createContainerTypeVariants(theme: Theme) {
     return {
         default: {
-            backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+            backgroundColor: theme.colors.surface.primary,
             borderWidth: 1,
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderColor: theme.colors.border.primary,
             borderStyle: 'solid',
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         outlined: {
             backgroundColor: 'transparent',
             borderWidth: 1,
-            borderColor: theme.intents.primary.primary,
+            borderColor: theme.colors.border.primary,
             borderStyle: 'solid',
             _web: {
-                border: `1px solid ${theme.intents.primary.primary}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         filled: {
-            backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+            backgroundColor: theme.colors.surface.secondary,
             borderWidth: 0,
             _web: {
                 border: 'none',
@@ -87,157 +79,140 @@ function createContainerTypeVariants(theme: Theme) {
 }
 
 /**
- * Create compound variants for container
+ * Create focused state variants dynamically based on type and hasError
  */
-function createContainerCompoundVariants(theme: Theme): CompoundVariants<keyof InputVariants> {
-    return [
-        {
-            type: 'default',
-            focused: true,
-            styles: {
-                borderColor: theme.intents.primary.primary,
-                _web: {
-                    border: `1px solid ${theme.intents.primary.primary}`,
-                    boxShadow: `0 0 0 2px ${theme.intents.primary.primary}20`,
-                },
-            },
-        },
-        {
-            type: 'outlined',
-            focused: true,
-            styles: {
-                borderColor: theme.intents.primary.primary,
-                _web: {
-                    border: `2px solid ${theme.intents.primary.primary}`,
-                },
-            },
-        },
-        {
-            type: 'filled',
-            focused: true,
-            styles: {
-                _web: {
-                    boxShadow: `0 0 0 2px ${theme.intents.primary.primary}20`,
-                },
-            },
-        },
-        {
-            hasError: true,
-            focused: true,
-            styles: {
+function createFocusedVariants(theme: Theme, type: InputType, hasError: boolean) {
+    if (hasError) {
+        return {
+            true: {
                 borderColor: theme.intents.error.primary,
                 _web: {
                     border: `1px solid ${theme.intents.error.primary}`,
                     boxShadow: `0 0 0 2px ${theme.intents.error.primary}20`,
                 },
             },
-        },
-    ];
+            false: {},
+        };
+    }
+
+    const focusColor = theme.intents.primary.primary;
+
+    switch (type) {
+        case 'default':
+            return {
+                true: {
+                    borderColor: focusColor,
+                    _web: {
+                        border: `1px solid ${focusColor}`,
+                        boxShadow: `0 0 0 2px ${focusColor}20`,
+                    },
+                },
+                false: {},
+            };
+        case 'outlined':
+            return {
+                true: {
+                    borderColor: focusColor,
+                    _web: {
+                        border: `2px solid ${focusColor}`,
+                    },
+                },
+                false: {},
+            };
+        case 'filled':
+            return {
+                true: {
+                    _web: {
+                        boxShadow: `0 0 0 2px ${focusColor}20`,
+                    },
+                },
+                false: {},
+            };
+        case 'bare':
+            return {
+                true: {},
+                false: {},
+            };
+    }
 }
 
 /**
  * Create size variants for icon containers
  */
 function createIconContainerSizeVariants(theme: Theme) {
-    return {
-        sm: { marginRight: theme.spacing?.xs || 4 },
-        md: { marginRight: theme.spacing?.xs || 4 },
-        lg: { marginRight: theme.spacing?.sm || 8 },
-    };
+    return buildSizeVariants(theme, 'input', (size) => ({
+        marginRight: size.iconMargin,
+    }));
 }
 
 /**
  * Create size variants for icons
  */
-function createIconSizeVariants() {
-    return {
-        sm: {
-            fontSize: 16,
-            width: 16,
-            height: 16,
-            minWidth: 16,
-            maxWidth: 16,
-            minHeight: 16,
-            maxHeight: 16,
-        },
-        md: {
-            fontSize: 20,
-            width: 20,
-            height: 20,
-            minWidth: 20,
-            maxWidth: 20,
-            minHeight: 20,
-            maxHeight: 20,
-        },
-        lg: {
-            fontSize: 24,
-            width: 24,
-            height: 24,
-            minWidth: 24,
-            maxWidth: 24,
-            minHeight: 24,
-            maxHeight: 24,
-        },
-    };
+function createIconSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'input', (size) => ({
+        fontSize: size.iconSize,
+        width: size.iconSize,
+        height: size.iconSize,
+    }));
 }
 
 /**
  * Create size variants for input
  */
 function createInputSizeVariants(theme: Theme) {
-    return {
-        sm: { fontSize: theme.typography?.fontSize?.sm || 14 },
-        md: { fontSize: theme.typography?.fontSize?.md || 16 },
-        lg: { fontSize: theme.typography?.fontSize?.lg || 18 },
-    };
+    return buildSizeVariants(theme, 'input', (size) => ({
+        fontSize: size.fontSize,
+    }));
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>): ExpandedInputStyles => {
-    return deepMerge({
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        borderRadius: theme.borderRadius?.md || 8,
-        variants: {
-            size: createContainerSizeVariants(theme),
-            type: createContainerTypeVariants(theme),
-            focused: {
-                true: {},
-                false: {},
-            },
-            hasError: {
-                true: {
-                    borderColor: theme.intents.error.primary,
-                    _web: {
-                        border: `1px solid ${theme.intents.error.primary}`,
+const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>) => {
+    return ({ type, hasError }: InputVariants) => {
+        return deepMerge({
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+            borderRadius: 8,
+            variants: {
+                size: createContainerSizeVariants(theme),
+                type: createContainerTypeVariants(theme),
+                focused: createFocusedVariants(theme, type, hasError),
+                hasError: {
+                    true: {
+                        borderColor: theme.intents.error.primary,
+                        _web: {
+                            border: `1px solid ${theme.intents.error.primary}`,
+                        },
+                    },
+                    false: {},
+                },
+                disabled: {
+                    true: {
+                        opacity: 0.6,
+                        backgroundColor: theme.colors.surface.secondary,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
+                    },
+                    false: {
+                        _web: {
+                            cursor: 'text',
+                            _hover: {
+                                borderColor: theme.intents.primary.primary,
+                            },
+                        },
                     },
                 },
-                false: {},
             },
-            disabled: {
-                true: {
-                    opacity: 0.6,
-                    backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
-                    _web: {
-                        cursor: 'not-allowed',
-                    },
-                },
-                false: {},
+            _web: {
+                boxSizing: 'border-box',
+                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
             },
-        },
-        compoundVariants: createContainerCompoundVariants(theme),
-        _web: {
-            boxSizing: 'border-box',
-            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-            ':hover': {
-                borderColor: theme.intents.primary.primary,
-            },
-        },
-    }, expanded);
+        }, expanded);
+    }
 }
 
-const createLeftIconContainerStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>): ExpandedInputStyles => {
+const createLeftIconContainerStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>) => {
     return deepMerge({
         display: 'flex',
         alignItems: 'center',
@@ -249,45 +224,43 @@ const createLeftIconContainerStyles = (theme: Theme, expanded: Partial<ExpandedI
     }, expanded);
 }
 
-const createRightIconContainerStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>): ExpandedInputStyles => {
+const createRightIconContainerStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>) => {
     return deepMerge({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
         variants: {
-            size: {
-                sm: { marginLeft: theme.spacing?.xs || 4 },
-                md: { marginLeft: theme.spacing?.xs || 4 },
-                lg: { marginLeft: theme.spacing?.sm || 8 },
-            },
+            size: buildSizeVariants(theme, 'input', (size) => ({
+                marginLeft: size.iconMargin,
+            })),
         },
     }, expanded);
 }
 
-const createLeftIconStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>): ExpandedInputStyles => {
+const createLeftIconStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>) => {
     return deepMerge({
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
         variants: {
-            size: createIconSizeVariants(),
+            size: createIconSizeVariants(theme),
         },
     }, expanded);
 }
 
-const createRightIconStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>): ExpandedInputStyles => {
+const createRightIconStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>) => {
     return deepMerge({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
         variants: {
-            size: createIconSizeVariants(),
+            size: createIconSizeVariants(theme),
         },
     }, expanded);
 }
 
-const createPasswordToggleStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>): ExpandedInputStyles => {
+const createPasswordToggleStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>) => {
     return deepMerge({
         display: 'flex',
         alignItems: 'center',
@@ -295,43 +268,44 @@ const createPasswordToggleStyles = (theme: Theme, expanded: Partial<ExpandedInpu
         flexShrink: 0,
         padding: 0,
         variants: {
-            size: {
-                sm: { marginLeft: theme.spacing?.xs || 4 },
-                md: { marginLeft: theme.spacing?.xs || 4 },
-                lg: { marginLeft: theme.spacing?.sm || 8 },
-            },
+            size: buildSizeVariants(theme, 'input', (size) => ({
+                marginLeft: size.iconMargin,
+            })),
         },
         _web: {
             background: 'transparent',
             border: 'none',
             cursor: 'pointer',
-            ':hover': {
+            _hover: {
                 opacity: 0.7,
+            },
+            _active: {
+                opacity: 0.5,
             },
         },
     }, expanded);
 }
 
-const createPasswordToggleIconStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>): ExpandedInputStyles => {
+const createPasswordToggleIconStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>) => {
     return deepMerge({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
         variants: {
-            size: createIconSizeVariants(),
+            size: createIconSizeVariants(theme),
         },
     }, expanded);
 }
 
-const createInputStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>): ExpandedInputStyles => {
+const createInputStyles = (theme: Theme, expanded: Partial<ExpandedInputStyles>) => {
     return deepMerge({
         flex: 1,
         minWidth: 0,
         backgroundColor: 'transparent',
-        color: theme.colors?.text?.primary || '#000000',
-        fontWeight: theme.typography?.fontWeight?.regular || '400',
+        color: theme.colors.text.primary,
+        fontWeight: '400',
         variants: {
             size: createInputSizeVariants(theme),
         },

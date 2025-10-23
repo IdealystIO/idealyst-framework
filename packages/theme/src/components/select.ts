@@ -1,9 +1,11 @@
-import { CompoundVariants, StylesheetStyles } from "../styles";
+import { StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type SelectSize = 'sm' | 'md' | 'lg';
+type SelectSize = Size;
 type SelectType = 'outlined' | 'filled';
 type SelectIntent = Intent;
 
@@ -59,14 +61,14 @@ export type SelectStylesheet = {
 function createTriggerTypeVariants(theme: Theme) {
     return {
         outlined: {
-            backgroundColor: 'transparent',
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
+            backgroundColor: theme.colors.surface.primary,
+            borderColor: theme.colors.border.primary,
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         filled: {
-            backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+            backgroundColor: theme.colors.surface.secondary,
             borderColor: 'transparent',
             _web: {
                 border: '1px solid transparent',
@@ -79,129 +81,114 @@ function createTriggerTypeVariants(theme: Theme) {
  * Create size variants for trigger
  */
 function createTriggerSizeVariants(theme: Theme) {
-    return {
-        sm: {
-            paddingHorizontal: theme.spacing?.xs || 4,
-            minHeight: 36,
-        },
-        md: {
-            paddingHorizontal: theme.spacing?.sm || 8,
-            minHeight: 44,
-        },
-        lg: {
-            paddingHorizontal: theme.spacing?.md || 16,
-            minHeight: 52,
-        },
-    };
+    return buildSizeVariants(theme, 'select', (size) => ({
+        paddingHorizontal: size.paddingHorizontal,
+        minHeight: size.minHeight,
+    }));
 }
 
 /**
- * Create compound variants for trigger
+ * Create intent variants dynamically based on type
  */
-function createTriggerCompoundVariants(theme: Theme): CompoundVariants<keyof SelectTriggerVariants> {
-    const variants: CompoundVariants<keyof SelectTriggerVariants> = [];
-
-    // Outlined + Intent combinations
-    for (const intent in theme.intents) {
-        if (intent !== 'neutral') {
-            const intentKey = intent as SelectIntent;
-            variants.push({
-                type: 'outlined',
-                intent: intentKey,
-                styles: {
-                    borderColor: theme.intents[intentKey].primary,
-                    _web: {
-                        border: `1px solid ${theme.intents[intentKey].primary}`,
-                    },
-                },
-            });
-        }
+function createIntentVariants(theme: Theme, type: SelectType, intent: SelectIntent) {
+    if (intent === 'neutral') {
+        return {};
     }
 
-    return variants;
+    const intentValue = theme.intents[intent];
+
+    if (type === 'outlined') {
+        return {
+            borderColor: intentValue.primary,
+            _web: {
+                border: `1px solid ${intentValue.primary}`,
+            },
+        };
+    }
+
+    return {};
 }
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
         position: 'relative',
+        backgroundColor: theme.colors.surface.primary,
     }, expanded);
 }
 
 const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        fontSize: theme.typography?.fontSize?.sm || 14,
-        fontWeight: theme.typography?.fontWeight?.medium || '500',
-        color: theme.colors?.text?.primary || '#000000',
-        marginBottom: theme.spacing?.xs || 4,
+        fontSize: 14,
+        fontWeight: '500',
+        color: theme.colors.text.primary,
+        marginBottom: 4,
     }, expanded);
 }
 
-const createTriggerStyles = (theme: Theme, expanded: Partial<ExpandedSelectTriggerStyles>): ExpandedSelectTriggerStyles => {
-    return deepMerge({
-        position: 'relative',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: theme.spacing?.sm || 8,
-        borderRadius: theme.borderRadius?.md || 8,
-        borderWidth: 1,
-        borderStyle: 'solid',
-        minHeight: 44,
-        variants: {
-            type: createTriggerTypeVariants(theme),
-            size: createTriggerSizeVariants(theme),
-            intent: {
-                neutral: {},
-                primary: {},
-                success: {},
-                error: {},
-                warning: {},
-            },
-            disabled: {
-                true: {
-                    opacity: 0.6,
-                    _web: {
-                        cursor: 'not-allowed',
-                        ':hover': {
-                            borderColor: theme.colors?.border?.primary || '#e0e0e0',
+const createTriggerStyles = (theme: Theme, expanded: Partial<ExpandedSelectTriggerStyles>) => {
+    return ({ type, intent }: SelectTriggerVariants) => {
+        const intentStyles = createIntentVariants(theme, type, intent);
+
+        return deepMerge({
+            position: 'relative',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderRadius: 8,
+            borderWidth: 1,
+            borderStyle: 'solid',
+            ...intentStyles,
+            variants: {
+                type: createTriggerTypeVariants(theme),
+                size: createTriggerSizeVariants(theme),
+                disabled: {
+                    true: {
+                        opacity: 0.6,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
+                    },
+                    false: {
+                        _web: {
+                            cursor: 'pointer',
+                            _hover: {
+                                opacity: 0.9,
+                            },
+                            _active: {
+                                opacity: 0.8,
+                            },
                         },
                     },
                 },
-                false: {},
-            },
-            error: {
-                true: {
-                    borderColor: theme.intents.error.primary,
-                    _web: {
-                        border: `1px solid ${theme.intents.error.primary}`,
+                error: {
+                    true: {
+                        borderColor: theme.intents.error.primary,
+                        _web: {
+                            border: `1px solid ${theme.intents.error.primary}`,
+                        },
                     },
+                    false: {},
                 },
-                false: {},
-            },
-            focused: {
-                true: {
-                    borderColor: theme.intents.primary.primary,
-                    _web: {
-                        border: `2px solid ${theme.intents.primary.primary}`,
-                        outline: 'none',
+                focused: {
+                    true: {
+                        borderColor: theme.intents.primary.primary,
+                        _web: {
+                            border: `2px solid ${theme.intents.primary.primary}`,
+                            outline: 'none',
+                        },
                     },
+                    false: {},
                 },
-                false: {},
             },
-        },
-        compoundVariants: createTriggerCompoundVariants(theme),
-        _web: {
-            cursor: 'pointer',
-            display: 'flex',
-            boxSizing: 'border-box',
-            ':focus': {
-                outline: 'none',
+            _web: {
+                display: 'flex',
+                boxSizing: 'border-box',
+                _focus: {
+                    outline: 'none',
+                },
             },
-            ':hover': {
-                borderColor: theme.intents.primary.primary,
-            },
-        },
-    }, expanded);
+        }, expanded);
+    }
 }
 
 const createTriggerContentStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
@@ -214,23 +201,31 @@ const createTriggerContentStyles = (theme: Theme, expanded: Partial<ExpandedSele
 
 const createTriggerTextStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        fontSize: theme.typography?.fontSize?.md || 16,
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         flex: 1,
+        variants: {
+            size: buildSizeVariants(theme, 'select', (size) => ({
+                fontSize: size.fontSize,
+            })),
+        },
     }, expanded);
 }
 
 const createPlaceholderStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        fontSize: theme.typography?.fontSize?.md || 16,
-        color: theme.colors?.text?.disabled || '#999999',
+        color: theme.colors.text.secondary,
+        variants: {
+            size: buildSizeVariants(theme, 'select', (size) => ({
+                fontSize: size.fontSize,
+            })),
+        },
     }, expanded);
 }
 
 const createIconStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        marginLeft: theme.spacing?.xs || 4,
-        color: theme.colors?.text?.secondary || '#666666',
+        marginLeft: 4,
+        color: theme.colors.text.secondary,
     }, expanded);
 }
 
@@ -239,10 +234,14 @@ const createChevronStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyle
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: theme.spacing?.xs || 4,
-        color: theme.colors?.text?.secondary || '#666666',
-        width: 20,
-        height: 20,
+        marginLeft: 4,
+        color: theme.colors.text.secondary,
+        variants: {
+            size: buildSizeVariants(theme, 'select', (size) => ({
+                width: size.iconSize,
+                height: size.iconSize,
+            })),
+        },
         _web: {
             transition: 'transform 0.2s ease',
         },
@@ -261,11 +260,11 @@ const createDropdownStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyl
         top: '100%',
         left: 0,
         right: 0,
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-        borderRadius: theme.borderRadius?.md || 8,
+        backgroundColor: theme.colors.surface.primary,
+        borderRadius: 8,
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: theme.colors?.border?.primary || '#e0e0e0',
+        borderColor: theme.colors.border.primary,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.1,
@@ -276,7 +275,7 @@ const createDropdownStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyl
         minWidth: 200,
         overflow: 'hidden',
         _web: {
-            border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+            border: `1px solid ${theme.colors.border.primary}`,
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06)',
             overflowY: 'auto',
         },
@@ -285,29 +284,33 @@ const createDropdownStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyl
 
 const createSearchContainerStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        padding: theme.spacing?.sm || 8,
+        padding: 8,
         borderBottomWidth: 1,
         borderBottomStyle: 'solid',
-        borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+        borderBottomColor: theme.colors.border.primary,
         _web: {
-            borderBottom: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+            borderBottom: `1px solid ${theme.colors.border.primary}`,
         },
     }, expanded);
 }
 
 const createSearchInputStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        padding: theme.spacing?.xs || 4,
-        borderRadius: theme.borderRadius?.sm || 4,
+        padding: 4,
+        borderRadius: 4,
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: theme.colors?.border?.primary || '#e0e0e0',
-        fontSize: theme.typography?.fontSize?.sm || 14,
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+        borderColor: theme.colors.border.primary,
+        backgroundColor: theme.colors.surface.primary,
+        variants: {
+            size: buildSizeVariants(theme, 'select', (size) => ({
+                fontSize: size.fontSize,
+            })),
+        },
         _web: {
-            border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+            border: `1px solid ${theme.colors.border.primary}`,
             outline: 'none',
-            ':focus': {
+            _focus: {
                 borderColor: theme.intents.primary.primary,
             },
         },
@@ -316,21 +319,21 @@ const createSearchInputStyles = (theme: Theme, expanded: Partial<ExpandedSelectS
 
 const createOptionsListStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        paddingVertical: theme.spacing?.xs || 4,
+        paddingVertical: 4,
     }, expanded);
 }
 
 const createOptionStyles = (theme: Theme, expanded: Partial<ExpandedSelectOptionStyles>): ExpandedSelectOptionStyles => {
     return deepMerge({
-        paddingHorizontal: theme.spacing?.sm || 8,
-        paddingVertical: theme.spacing?.xs || 4,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
         flexDirection: 'row',
         alignItems: 'center',
         minHeight: 36,
         variants: {
             selected: {
                 true: {
-                    backgroundColor: theme.intents.primary.container || theme.intents.primary.primary + '20',
+                    backgroundColor: theme.intents.primary.light,
                 },
                 false: {},
             },
@@ -339,20 +342,23 @@ const createOptionStyles = (theme: Theme, expanded: Partial<ExpandedSelectOption
                     opacity: 0.5,
                     _web: {
                         cursor: 'not-allowed',
-                        ':hover': {
-                            backgroundColor: 'transparent',
+                    },
+                },
+                false: {
+                    _web: {
+                        cursor: 'pointer',
+                        _hover: {
+                            backgroundColor: theme.colors.surface.secondary,
+                        },
+                        _active: {
+                            opacity: 0.8,
                         },
                     },
                 },
-                false: {},
             },
         },
         _web: {
-            cursor: 'pointer',
             display: 'flex',
-            ':hover': {
-                backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
-            },
         },
     }, expanded);
 }
@@ -367,29 +373,33 @@ const createOptionContentStyles = (theme: Theme, expanded: Partial<ExpandedSelec
 
 const createOptionIconStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        marginRight: theme.spacing?.xs || 4,
+        marginRight: 4,
     }, expanded);
 }
 
 const createOptionTextStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        fontSize: theme.typography?.fontSize?.md || 16,
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         flex: 1,
+        variants: {
+            size: buildSizeVariants(theme, 'select', (size) => ({
+                fontSize: size.fontSize,
+            })),
+        },
     }, expanded);
 }
 
 const createOptionTextDisabledStyles = (theme: Theme, expanded: Partial<ExpandedSelectStyles>): ExpandedSelectStyles => {
     return deepMerge({
-        color: theme.colors?.text?.disabled || '#999999',
+        color: theme.colors.text.secondary,
     }, expanded);
 }
 
 const createHelperTextStyles = (theme: Theme, expanded: Partial<ExpandedSelectHelperTextStyles>): ExpandedSelectHelperTextStyles => {
     return deepMerge({
-        fontSize: theme.typography?.fontSize?.xs || 12,
-        marginTop: theme.spacing?.xs || 4,
-        color: theme.colors?.text?.secondary || '#666666',
+        fontSize: 12,
+        marginTop: 4,
+        color: theme.colors.text.secondary,
         variants: {
             error: {
                 true: {

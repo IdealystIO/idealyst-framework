@@ -83,7 +83,7 @@ const Switch = forwardRef<Pressable, SwitchProps>(({
       accessibilityRole="switch"
       accessibilityState={{ checked, disabled }}
     >
-      <Animated.View style={switchStyles.switchTrack}>
+      <Animated.View style={switchStyles.switchTrack({ checked, intent, disabled })}>
         <Animated.View
           style={[
             {

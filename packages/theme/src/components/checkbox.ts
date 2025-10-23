@@ -1,9 +1,10 @@
-import { CompoundVariants, StylesheetStyles } from "../styles";
+import { StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
 
-type CheckboxSize = 'sm' | 'md' | 'lg';
+type CheckboxSize = Size;
 type CheckboxIntent = Intent | 'info';
 type CheckboxType = 'default' | 'outlined';
 
@@ -41,9 +42,11 @@ function getIntentColors(theme: Theme, intent: CheckboxIntent) {
  */
 function createCheckboxSizeVariants() {
     return {
+        xs: { width: 14, height: 14 },
         sm: { width: 16, height: 16 },
         md: { width: 20, height: 20 },
         lg: { width: 24, height: 24 },
+        xl: { width: 28, height: 28 },
     };
 }
 
@@ -54,54 +57,51 @@ function createCheckboxTypeVariants(theme: Theme) {
     return {
         default: {
             borderWidth: 1,
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderColor: theme.colors.border.primary,
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         outlined: {
             borderWidth: 2,
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderColor: theme.colors.border.primary,
             _web: {
-                border: `2px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `2px solid ${theme.colors.border.primary}`,
             },
         },
     };
 }
 
 /**
- * Create compound variants for checkbox (checked + intent combinations)
+ * Create checked state variants dynamically based on intent
  */
-function createCheckboxCompoundVariants(theme: Theme): CompoundVariants<keyof CheckboxVariants> {
-    const variants: CompoundVariants<keyof CheckboxVariants> = [];
-    const intents: CheckboxIntent[] = ['primary', 'success', 'error', 'warning', 'neutral', 'info'];
+function createCheckedVariants(theme: Theme, intent: CheckboxIntent) {
+    const colors = getIntentColors(theme, intent);
 
-    for (const intent of intents) {
-        const colors = getIntentColors(theme, intent);
-        variants.push({
-            checked: true,
-            intent: intent,
-            styles: {
-                backgroundColor: colors.primary,
-                borderColor: colors.primary,
-                _web: {
-                    border: `1px solid ${colors.primary}`,
-                },
+    return {
+        true: {
+            backgroundColor: colors.primary,
+            borderColor: colors.primary,
+            _web: {
+                border: `1px solid ${colors.primary}`,
             },
-        });
-    }
-
-    return variants;
+        },
+        false: {
+            backgroundColor: 'transparent',
+        },
+    };
 }
 
 /**
  * Create size variants for label
  */
-function createLabelSizeVariants(theme: Theme) {
+function createLabelSizeVariants() {
     return {
-        sm: { fontSize: theme.typography?.fontSize?.sm || 14 },
-        md: { fontSize: theme.typography?.fontSize?.md || 16 },
-        lg: { fontSize: theme.typography?.fontSize?.lg || 18 },
+        xs: { fontSize: 12 },
+        sm: { fontSize: 14 },
+        md: { fontSize: 16 },
+        lg: { fontSize: 18 },
+        xl: { fontSize: 20 },
     };
 }
 
@@ -110,16 +110,18 @@ function createLabelSizeVariants(theme: Theme) {
  */
 function createCheckmarkSizeVariants() {
     return {
+        xs: { width: 10, height: 10 },
         sm: { width: 12, height: 12 },
         md: { width: 14, height: 14 },
         lg: { width: 16, height: 16 },
+        xl: { width: 20, height: 20 },
     };
 }
 
-const createWrapperStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>): ExpandedCheckboxStyles => {
+const createWrapperStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) => {
     return deepMerge({
         flexDirection: 'column',
-        gap: theme.spacing?.xs || 4,
+        gap: 4,
         _web: {
             display: 'flex',
             flexDirection: 'column',
@@ -129,76 +131,78 @@ const createWrapperStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxSty
     }, expanded);
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>): ExpandedCheckboxStyles => {
+const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) => {
     return deepMerge({
         flexDirection: 'row',
         alignItems: 'center',
-        gap: theme.spacing?.sm || 8,
+        gap: 8,
         _web: {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            gap: theme.spacing?.sm || 8,
+            gap: 8,
             width: 'fit-content',
             cursor: 'pointer',
         },
     }, expanded);
 }
 
-const createCheckboxStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>): ExpandedCheckboxStyles => {
+const createCheckboxStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) => {
+    return ({ intent }: CheckboxVariants) => {
+        return deepMerge({
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 4,
+            position: 'relative',
+            backgroundColor: 'transparent',
+            borderColor: theme.colors.border.primary,
+            variants: {
+                size: createCheckboxSizeVariants(),
+                type: createCheckboxTypeVariants(theme),
+                checked: createCheckedVariants(theme, intent),
+                disabled: {
+                    true: {
+                        opacity: 0.5,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
+                    },
+                    false: {
+                        opacity: 1,
+                        _web: {
+                            cursor: 'pointer',
+                            _hover: { opacity: 0.8 },
+                            _active: { opacity: 0.6 },
+                        },
+                    },
+                },
+            },
+            _web: {
+                outline: 'none',
+                display: 'flex',
+                boxSizing: 'border-box',
+                userSelect: 'none',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                appearance: 'none',
+                transition: 'all 0.2s ease',
+                _focus: {
+                    outline: `2px solid ${theme.intents.primary.primary}`,
+                    outlineOffset: '2px',
+                },
+            },
+        }, expanded);
+    }
+}
+
+const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) => {
     return deepMerge({
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: theme.borderRadius?.sm || 4,
-        position: 'relative',
+        color: theme.colors.text.primary,
         variants: {
-            size: createCheckboxSizeVariants(),
-            intent: {
-                primary: { backgroundColor: 'transparent', borderColor: theme.colors?.border?.primary || '#e0e0e0' },
-                success: { backgroundColor: 'transparent', borderColor: theme.colors?.border?.primary || '#e0e0e0' },
-                error: { backgroundColor: 'transparent', borderColor: theme.colors?.border?.primary || '#e0e0e0' },
-                warning: { backgroundColor: 'transparent', borderColor: theme.colors?.border?.primary || '#e0e0e0' },
-                neutral: { backgroundColor: 'transparent', borderColor: theme.colors?.border?.primary || '#e0e0e0' },
-                info: { backgroundColor: 'transparent', borderColor: theme.colors?.border?.primary || '#e0e0e0' },
-            },
-            type: createCheckboxTypeVariants(theme),
-            checked: {
-                true: {},
-                false: { backgroundColor: 'transparent' },
-            },
+            size: createLabelSizeVariants(),
             disabled: {
                 true: { opacity: 0.5 },
                 false: { opacity: 1 },
-            },
-        },
-        compoundVariants: createCheckboxCompoundVariants(theme),
-        _web: {
-            cursor: 'pointer',
-            outline: 'none',
-            display: 'flex',
-            boxSizing: 'border-box',
-            userSelect: 'none',
-            WebkitAppearance: 'none',
-            MozAppearance: 'none',
-            appearance: 'none',
-            transition: 'all 0.2s ease',
-            ':hover': { opacity: 0.8 },
-            ':focus': {
-                outline: `2px solid ${theme.intents.primary.primary}`,
-                outlineOffset: '2px',
-            },
-        },
-    }, expanded);
-}
-
-const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>): ExpandedCheckboxStyles => {
-    return deepMerge({
-        color: theme.colors?.text?.primary || '#000000',
-        variants: {
-            size: createLabelSizeVariants(theme),
-            disabled: {
-                true: { color: theme.colors?.text?.disabled || '#999999' },
-                false: { color: theme.colors?.text?.primary || '#000000' },
             },
         },
         _web: {
@@ -210,7 +214,7 @@ const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyle
     }, expanded);
 }
 
-const createCheckmarkStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>): ExpandedCheckboxStyles => {
+const createCheckmarkStyles = (_theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) => {
     return deepMerge({
         position: 'absolute',
         display: 'flex',
@@ -227,15 +231,15 @@ const createCheckmarkStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxS
     }, expanded);
 }
 
-const createHelperTextStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>): ExpandedCheckboxStyles => {
+const createHelperTextStyles = (theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) => {
     return deepMerge({
-        fontSize: theme.typography?.fontSize?.sm || 14,
-        color: theme.colors?.text?.secondary || '#666666',
+        fontSize: 14,
+        color: theme.colors.text.secondary,
         marginTop: 2,
         variants: {
             error: {
                 true: { color: theme.intents.error.primary },
-                false: { color: theme.colors?.text?.secondary || '#666666' },
+                false: { color: theme.colors.text.secondary },
             },
         },
     }, expanded);

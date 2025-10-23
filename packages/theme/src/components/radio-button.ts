@@ -1,9 +1,11 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type RadioButtonSize = 'sm' | 'md' | 'lg';
+type RadioButtonSize = Size;
 type RadioButtonIntent = Intent;
 type RadioGroupOrientation = 'horizontal' | 'vertical';
 
@@ -32,133 +34,119 @@ export type RadioButtonStylesheet = {
 /**
  * Create size variants for radio button
  */
-function createRadioSizeVariants() {
-    return {
-        sm: { width: 14, height: 14 },
-        md: { width: 18, height: 18 },
-        lg: { width: 22, height: 22 },
-    };
+function createRadioSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'radioButton', (size) => ({
+        width: size.radioSize,
+        height: size.radioSize,
+    }));
 }
 
 /**
- * Create compound variants for radio button
+ * Create checked variants dynamically based on intent
  */
-function createRadioCompoundVariants(theme: Theme): CompoundVariants<keyof RadioButtonVariants> {
-    const variants: CompoundVariants<keyof RadioButtonVariants> = [];
-
-    // Unchecked states - lighter border for unselected state
-    for (const intent in theme.intents) {
-        variants.push({
-            checked: false,
-            intent: intent as RadioButtonIntent,
-            styles: {
-                borderColor: theme.colors?.border?.primary || '#e0e0e0',
-            },
-        });
-    }
-
-    // Checked states - intent-colored border
-    for (const intent in theme.intents) {
-        const intentKey = intent as RadioButtonIntent;
-        variants.push({
-            checked: true,
-            intent: intentKey,
-            styles: {
-                borderColor: theme.intents[intentKey].primary,
-            },
-        });
-    }
-
-    return variants;
+function createCheckedVariants(theme: Theme, intent: RadioButtonIntent) {
+    const intentValue = theme.intents[intent];
+    return {
+        true: {
+            borderColor: intentValue.primary,
+        },
+        false: {
+            borderColor: theme.colors.border.primary,
+        },
+    };
 }
 
 /**
  * Create size variants for radio dot
  */
-function createRadioDotSizeVariants() {
-    return {
-        sm: { width: 10, height: 10 },
-        md: { width: 12, height: 12 },
-        lg: { width: 16, height: 16 },
-    };
+function createRadioDotSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'radioButton', (size) => ({
+        width: size.radioDotSize,
+        height: size.radioDotSize,
+    }));
 }
 
 /**
- * Create intent variants for radio dot
+ * Create intent variant for radio dot background color
  */
-function createRadioDotIntentVariants(theme: Theme) {
-    const variants: Record<RadioButtonIntent, any> = {} as any;
-    for (const intent in theme.intents) {
-        variants[intent as RadioButtonIntent] = {
-            backgroundColor: theme.intents[intent as RadioButtonIntent].primary,
-        };
-    }
-    return variants;
+function createRadioDotIntentColor(theme: Theme, intent: RadioButtonIntent) {
+    return theme.intents[intent].primary;
 }
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>): ExpandedRadioButtonStyles => {
     return deepMerge({
         flexDirection: 'row',
         alignItems: 'center',
-        gap: theme.spacing?.sm || 8,
-        paddingVertical: theme.spacing?.xs || 4,
-    }, expanded);
-}
-
-const createRadioStyles = (theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>): ExpandedRadioButtonStyles => {
-    return deepMerge({
-        borderRadius: theme.borderRadius?.full || 9999,
-        borderWidth: 1.5,
-        borderStyle: 'solid',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+        paddingVertical: 4,
         variants: {
-            size: createRadioSizeVariants(),
-            checked: {
-                true: {},
-                false: {},
-            },
-            intent: {
-                primary: {},
-                success: {},
-                error: {},
-                warning: {},
-                neutral: {},
-            },
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                    backgroundColor: theme.colors?.surface?.disabled || '#f5f5f5',
-                },
-                false: {
-                    opacity: 1,
-                    backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-                },
-            },
-        },
-        compoundVariants: createRadioCompoundVariants(theme),
-        _web: {
-            transition: 'all 0.2s ease',
+            size: buildSizeVariants(theme, 'radioButton', (size) => ({
+                gap: size.gap,
+            })),
         },
     }, expanded);
 }
 
-const createRadioDotStyles = (theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>): ExpandedRadioButtonStyles => {
-    return deepMerge({
-        borderRadius: theme.borderRadius?.full || 9999,
-        variants: {
-            size: createRadioDotSizeVariants(),
-            intent: createRadioDotIntentVariants(theme),
-        },
-    }, expanded);
+const createRadioStyles = (theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>) => {
+    return ({ intent }: RadioButtonVariants) => {
+        return deepMerge({
+            borderRadius: 9999,
+            borderWidth: 1.5,
+            borderStyle: 'solid',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: theme.colors.surface.primary,
+            variants: {
+                size: createRadioSizeVariants(theme),
+                checked: createCheckedVariants(theme, intent),
+                disabled: {
+                    true: {
+                        opacity: 0.5,
+                        backgroundColor: theme.colors.surface.tertiary,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
+                    },
+                    false: {
+                        opacity: 1,
+                        backgroundColor: theme.colors.surface.primary,
+                        _web: {
+                            cursor: 'pointer',
+                            _hover: {
+                                opacity: 0.8,
+                            },
+                            _active: {
+                                opacity: 0.6,
+                            },
+                        },
+                    },
+                },
+            },
+            _web: {
+                transition: 'all 0.2s ease',
+            },
+        }, expanded);
+    }
+}
+
+const createRadioDotStyles = (theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>) => {
+    return ({ intent }: RadioButtonVariants) => {
+        return deepMerge({
+            borderRadius: 9999,
+            backgroundColor: createRadioDotIntentColor(theme, intent),
+            variants: {
+                size: createRadioDotSizeVariants(theme),
+            },
+        }, expanded);
+    }
 }
 
 const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>): ExpandedRadioButtonStyles => {
     return deepMerge({
-        fontSize: 14,
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         variants: {
+            size: buildSizeVariants(theme, 'radioButton', (size) => ({
+                fontSize: size.fontSize,
+            })),
             disabled: {
                 true: {
                     opacity: 0.5,
@@ -173,13 +161,13 @@ const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedRadioButtonSt
 
 const createGroupContainerStyles = (theme: Theme, expanded: Partial<ExpandedRadioGroupStyles>): ExpandedRadioGroupStyles => {
     return deepMerge({
-        gap: theme.spacing?.xs || 4,
+        gap: 4,
         variants: {
             orientation: {
                 horizontal: {
                     flexDirection: 'row',
                     flexWrap: 'wrap',
-                    gap: theme.spacing?.md || 16,
+                    gap: 16,
                 },
                 vertical: {
                     flexDirection: 'column',

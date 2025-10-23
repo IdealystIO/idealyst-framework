@@ -62,9 +62,9 @@ function createBackgroundVariants(theme: Theme) {
     };
 
     // Add all surface colors programmatically
-    for (const surface in theme.surfaces) {
+    for (const surface in theme.colors.surface) {
         variants[surface] = {
-            backgroundColor: theme.surfaces[surface as Surface],
+            backgroundColor: theme.colors.surface[surface as Surface],
         };
     }
 

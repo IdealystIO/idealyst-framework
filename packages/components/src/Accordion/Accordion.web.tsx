@@ -33,7 +33,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const itemProps = getWebProps([accordionStyles.item]);
   const headerProps = getWebProps([accordionStyles.header]);
   const titleProps = getWebProps([accordionStyles.title]);
-  const iconProps = getWebProps([accordionStyles.icon]);
+  const iconProps = getWebProps([accordionStyles.icon({ intent })]);
   const contentProps = getWebProps([accordionStyles.content]);
   const contentInnerProps = getWebProps([accordionStyles.contentInner]);
 

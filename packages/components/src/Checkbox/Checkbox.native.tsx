@@ -37,26 +37,13 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
 
   // Apply variants
   checkboxStyles.useVariants({
-    wrapper: {},
-    container: {},
-    checkbox: {
-      size,
-      intent,
-      variant: variant as any,
-      checked: internalChecked,
-      disabled,
-    },
-    label: {
-      size,
-      disabled,
-    },
-    checkmark: {
-      size,
-      visible: internalChecked,
-    },
-    helperText: {
-      error: !!error,
-    },
+    size,
+    intent,
+    type: variant as any,
+    checked: internalChecked,
+    disabled,
+    visible: internalChecked || indeterminate,
+    error: !!error,
   });
 
   const labelContent = children || label;
@@ -73,23 +60,24 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
         accessibilityState={{ checked: internalChecked }}
         style={checkboxStyles.container}
       >
-        <View style={checkboxStyles.checkbox}>
+        <View style={checkboxStyles.checkbox({ intent })}>
           {(internalChecked || indeterminate) && (
             <MaterialCommunityIcons
               name={indeterminate ? 'minus' : 'check'}
-              size={checkboxCheckmarkStyles.checkmark.width}
-              color={checkboxCheckmarkStyles.checkmark.color}
+              size={14}
+              color="#ffffff"
+              style={checkboxStyles.checkmark}
             />
           )}
         </View>
         {labelContent && (
-          <Text style={checkboxLabelStyles.label}>
+          <Text style={checkboxStyles.label}>
             {labelContent}
           </Text>
         )}
       </Pressable>
       {displayHelperText && (
-        <Text style={checkboxHelperStyles.helperText}>
+        <Text style={checkboxStyles.helperText}>
           {error || helperText}
         </Text>
       )}

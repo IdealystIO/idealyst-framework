@@ -78,15 +78,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
 
   // Apply variants for container
   inputStyles.useVariants({
-    size: size as 'sm' | 'md' | 'lg',
-    variant: variant as 'default' | 'outlined' | 'filled' | 'bare',
+    size,
+    type: variant,
     focused: isFocused,
     hasError,
     disabled,
   });
 
   // Get web props for all styled elements
-  const containerProps = getWebProps([inputStyles.container, style]);
+  const containerProps = getWebProps([inputStyles.container({ type: variant, hasError }), style]);
   const leftIconContainerProps = getWebProps([inputStyles.leftIconContainer]);
   const rightIconContainerProps = getWebProps([inputStyles.rightIconContainer]);
   const leftIconProps = getWebProps([inputStyles.leftIcon]);

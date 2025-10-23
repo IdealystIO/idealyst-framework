@@ -39,8 +39,8 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   });
 
   const containerProps = getWebProps([radioButtonStyles.container, style]);
-  const radioProps = getWebProps([radioButtonStyles.radio]);
-  const dotProps = getWebProps([radioButtonStyles.radioDot]);
+  const radioProps = getWebProps([radioButtonStyles.radio({ intent })]);
+  const dotProps = getWebProps([radioButtonStyles.radioDot({ intent })]);
   const labelProps = getWebProps([radioButtonStyles.label]);
 
   return (

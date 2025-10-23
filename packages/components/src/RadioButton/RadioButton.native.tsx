@@ -65,10 +65,10 @@ const RadioButton = forwardRef<Pressable, RadioButtonProps>(({
       accessibilityRole="radio"
       accessibilityState={{ checked, disabled }}
     >
-      <View style={radioButtonStyles.radio}>
+      <View style={radioButtonStyles.radio({ intent })}>
         <Animated.View
           style={[
-            radioButtonStyles.radioDot,
+            radioButtonStyles.radioDot({ intent }),
             {
               transform: [{ scale: dotScale }],
             },

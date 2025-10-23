@@ -1,9 +1,11 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type TextAreaSize = 'sm' | 'md' | 'lg';
+type TextAreaSize = Size;
 type TextAreaIntent = Intent;
 type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
 
@@ -47,99 +49,55 @@ export type TextAreaStylesheet = {
 /**
  * Create size variants for textarea
  */
-function createTextareaSizeVariants() {
-    return {
-        sm: {
-            fontSize: 14,
-            padding: 8,
-            lineHeight: 20,
-        },
-        md: {
-            fontSize: 16,
-            padding: 12,
-            lineHeight: 24,
-        },
-        lg: {
-            fontSize: 18,
-            padding: 16,
-            lineHeight: 28,
-        },
-    };
+function createTextareaSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'textarea', (size) => ({
+        fontSize: size.fontSize,
+        padding: size.padding,
+        lineHeight: size.lineHeight,
+        minHeight: size.minHeight,
+    }));
 }
 
 /**
- * Create compound variants for textarea
+ * Get textarea styles based on intent, disabled, and hasError state
  */
-function createTextareaCompoundVariants(theme: Theme): CompoundVariants<keyof TextAreaTextareaVariants> {
-    return [
-        {
-            disabled: false,
-            hasError: false,
-            intent: 'primary',
-            styles: {
-                _web: {
-                    ':focus': {
-                        borderColor: theme.intents.primary.primary,
-                        boxShadow: `0 0 0 2px ${theme.intents.primary.primary}33`,
-                    },
-                },
-            },
+function getTextareaIntentStyles(theme: Theme, intent: TextAreaIntent, disabled: boolean, hasError: boolean) {
+    if (disabled || hasError) {
+        return {};
+    }
+
+    const intentValue = theme.intents[intent];
+    const baseStyles: any = {};
+
+    // For success and warning, set border color
+    if (intent === 'success' || intent === 'warning') {
+        baseStyles.borderColor = intentValue.primary;
+    }
+
+    // Focus styles for all intents when not disabled and not in error
+    baseStyles._web = {
+        _focus: {
+            borderColor: intentValue.primary,
+            boxShadow: `0 0 0 2px ${intentValue.primary}33`,
         },
-        {
-            disabled: false,
-            hasError: false,
-            intent: 'success',
-            styles: {
-                borderColor: theme.intents.success.primary,
-                _web: {
-                    ':focus': {
-                        boxShadow: `0 0 0 2px ${theme.intents.success.primary}33`,
-                    },
-                },
-            },
-        },
-        {
-            disabled: false,
-            hasError: false,
-            intent: 'warning',
-            styles: {
-                borderColor: theme.intents.warning.primary,
-                _web: {
-                    ':focus': {
-                        boxShadow: `0 0 0 2px ${theme.intents.warning.primary}33`,
-                    },
-                },
-            },
-        },
-        {
-            disabled: false,
-            hasError: false,
-            intent: 'neutral',
-            styles: {
-                _web: {
-                    ':focus': {
-                        borderColor: theme.intents.neutral.primary,
-                        boxShadow: `0 0 0 2px ${theme.intents.neutral.primary}33`,
-                    },
-                },
-            },
-        },
-    ];
+    };
+
+    return baseStyles;
 }
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaStyles>): ExpandedTextAreaStyles => {
     return deepMerge({
         display: 'flex',
         flexDirection: 'column',
-        gap: theme.spacing?.xs || 4,
+        gap: 4,
     }, expanded);
 }
 
 const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaLabelStyles>): ExpandedTextAreaLabelStyles => {
     return deepMerge({
         fontSize: 14,
-        fontWeight: theme.typography?.fontWeight?.medium || '500',
-        color: theme.colors?.text?.primary || '#000000',
+        fontWeight: '500',
+        color: theme.colors.text.primary,
         variants: {
             disabled: {
                 true: {
@@ -157,79 +115,76 @@ const createTextareaContainerStyles = (theme: Theme, expanded: Partial<ExpandedT
     }, expanded);
 }
 
-const createTextareaStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaTextareaStyles>): ExpandedTextAreaTextareaStyles => {
-    return deepMerge({
-        width: '100%',
-        color: theme.colors?.text?.primary || '#000000',
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: theme.colors?.border?.primary || '#e0e0e0',
-        borderRadius: theme.borderRadius?.md || 8,
-        lineHeight: 'normal',
-        variants: {
-            size: createTextareaSizeVariants(),
-            intent: {
-                primary: {},
-                neutral: {},
-                success: {},
-                error: {},
-                warning: {},
-            },
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                    backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
-                    _web: {
-                        cursor: 'not-allowed',
+const createTextareaStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaTextareaStyles>) => {
+    return ({ intent, disabled, hasError }: { intent: TextAreaIntent, disabled: boolean, hasError: boolean }) => {
+        const intentStyles = getTextareaIntentStyles(theme, intent, disabled, hasError);
+
+        return deepMerge({
+            width: '100%',
+            color: theme.colors.text.primary,
+            backgroundColor: theme.colors.surface.primary,
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: theme.colors.border.primary,
+            borderRadius: 8,
+            lineHeight: 'normal',
+            ...intentStyles,
+            variants: {
+                size: createTextareaSizeVariants(theme),
+                disabled: {
+                    true: {
+                        opacity: 0.5,
+                        backgroundColor: theme.colors.surface.secondary,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
                     },
+                    false: {},
                 },
-                false: {},
-            },
-            hasError: {
-                true: {
-                    borderColor: theme.intents.error.primary,
-                },
-                false: {},
-            },
-            resize: {
-                none: {
-                    _web: {
-                        resize: 'none',
+                hasError: {
+                    true: {
+                        borderColor: theme.intents.error.primary,
                     },
+                    false: {},
                 },
-                vertical: {
-                    _web: {
-                        resize: 'vertical',
+                resize: {
+                    none: {
+                        _web: {
+                            resize: 'none',
+                        },
                     },
-                },
-                horizontal: {
-                    _web: {
-                        resize: 'horizontal',
+                    vertical: {
+                        _web: {
+                            resize: 'vertical',
+                        },
                     },
-                },
-                both: {
-                    _web: {
-                        resize: 'both',
+                    horizontal: {
+                        _web: {
+                            resize: 'horizontal',
+                        },
+                    },
+                    both: {
+                        _web: {
+                            resize: 'both',
+                        },
                     },
                 },
             },
-        },
-        compoundVariants: createTextareaCompoundVariants(theme),
-        _web: {
-            fontFamily: 'inherit',
-            outline: 'none',
-            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-            boxSizing: 'border-box',
-            overflowY: 'hidden',
-        },
-    }, expanded);
+            _web: {
+                fontFamily: 'inherit',
+                outline: 'none',
+                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                boxSizing: 'border-box',
+                overflowY: 'hidden',
+            },
+        }, expanded);
+    }
 }
 
 const createHelperTextStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaHelperTextStyles>): ExpandedTextAreaHelperTextStyles => {
     return deepMerge({
         fontSize: 12,
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
         variants: {
             hasError: {
                 true: {
@@ -247,14 +202,14 @@ const createFooterStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaStyl
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: theme.spacing?.xs || 4,
+        gap: 4,
     }, expanded);
 }
 
 const createCharacterCountStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaCharacterCountStyles>): ExpandedTextAreaCharacterCountStyles => {
     return deepMerge({
         fontSize: 12,
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
         variants: {
             isNearLimit: {
                 true: {

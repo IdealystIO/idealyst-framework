@@ -63,7 +63,8 @@ const createButtonStyles = (theme: Theme, expanded: Partial<ExpandedButtonStyles
             borderRadius: 8, // TODO - replace with theme value or composition function
             fontWeight: '600',
             textAlign: 'center',
-            transition: 'all 0.2s ease',
+            transition: 'all 0.1s ease',
+
             variants: {
                 size: buildSizeVariants(theme, 'button', size => ({
                     paddingVertical: size.paddingVertical,
@@ -73,7 +74,15 @@ const createButtonStyles = (theme: Theme, expanded: Partial<ExpandedButtonStyles
                 type: createButtonTypeVariants(theme, intent),
                 disabled: {
                     true: { opacity: 0.6 },
-                    false: { opacity: 1 },
+                    false: { opacity: 1, _web: {
+                        cursor: 'pointer',
+                        _hover: {
+                            opacity: 0.90,
+                        },
+                        _active: {
+                            opacity: 0.75,
+                        },
+                    } },
                 },
             },
         }, expanded);
@@ -157,7 +166,7 @@ const createButtonTextStyles = (theme: Theme, expanded: Partial<ExpandedButtonSt
 /**
  * Generate button stylesheet
  */
-export const createButtonStylesheet = (theme: Theme, expanded?: Partial<ButtonStylesheet>): ButtonStylesheet => {
+export const createButtonStylesheet = (theme: Theme, expanded?: Partial<ButtonStylesheet>) => {
     return {
         button: createButtonStyles(theme, expanded?.button || {}),
         icon: createButtonIconStyles(theme, expanded?.icon || {}),

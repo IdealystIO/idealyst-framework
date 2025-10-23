@@ -39,30 +39,30 @@ function getIntentColors(theme: Theme, intent: CardIntent) {
 function createCardTypeVariants(theme: Theme) {
     return {
         default: {
-            backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+            backgroundColor: theme.colors.surface.primary,
             borderWidth: 1,
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderColor: theme.colors.border.primary,
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         outlined: {
             backgroundColor: 'transparent',
             borderWidth: 1,
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderColor: theme.colors.border.primary,
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         elevated: {
-            backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+            backgroundColor: theme.colors.surface.primary,
             borderWidth: 0,
             _web: {
                 border: 'none',
             },
         },
         filled: {
-            backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+            backgroundColor: theme.colors.surface.secondary,
             borderWidth: 0,
             _web: {
                 border: 'none',
@@ -77,9 +77,9 @@ function createCardTypeVariants(theme: Theme) {
 function createCardPaddingVariants(theme: Theme) {
     return {
         none: { padding: 0 },
-        sm: { padding: theme.spacing?.sm || 8 },
-        md: { padding: theme.spacing?.md || 16 },
-        lg: { padding: theme.spacing?.lg || 24 },
+        sm: { padding: 8 },
+        md: { padding: 16 },
+        lg: { padding: 24 },
     };
 }
 
@@ -89,9 +89,9 @@ function createCardPaddingVariants(theme: Theme) {
 function createCardRadiusVariants(theme: Theme) {
     return {
         none: { borderRadius: 0 },
-        sm: { borderRadius: theme.borderRadius?.sm || 4 },
-        md: { borderRadius: theme.borderRadius?.md || 8 },
-        lg: { borderRadius: theme.borderRadius?.lg || 12 },
+        sm: { borderRadius: 4 },
+        md: { borderRadius: 8 },
+        lg: { borderRadius: 12 },
     };
 }
 
@@ -106,11 +106,11 @@ function createCardCompoundVariants(theme: Theme): CompoundVariants<keyof CardVa
     variants.push({
         type: 'elevated',
         styles: {
-            shadowColor: theme.shadows?.md?.shadowColor || '#000',
-            shadowOffset: theme.shadows?.md?.shadowOffset || { width: 0, height: 2 },
-            shadowOpacity: theme.shadows?.md?.shadowOpacity || 0.1,
-            shadowRadius: theme.shadows?.md?.shadowRadius || 8,
-            elevation: theme.shadows?.md?.elevation || 3,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 8,
+            elevation: 3,
             _web: {
                 boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)',
             },
@@ -142,7 +142,7 @@ function createCardCompoundVariants(theme: Theme): CompoundVariants<keyof CardVa
                 type: 'filled',
                 intent: intent,
                 styles: {
-                    backgroundColor: colors.container || colors.primary + '20',
+                    backgroundColor: colors.light || colors.primary + '20',
                 },
             });
         }
@@ -156,7 +156,7 @@ function createCardCompoundVariants(theme: Theme): CompoundVariants<keyof CardVa
  */
 const createCardStyles = (theme: Theme, expanded: Partial<ExpandedCardStyles>): ExpandedCardStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+        backgroundColor: theme.colors.surface.primary,
         position: 'relative',
         overflow: 'hidden',
         variants: {
@@ -176,7 +176,7 @@ const createCardStyles = (theme: Theme, expanded: Partial<ExpandedCardStyles>): 
                     _web: {
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
-                        ':hover': {
+                        _hover: {
                             transform: 'translateY(-2px)',
                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06)',
                         },

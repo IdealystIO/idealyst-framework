@@ -1,9 +1,11 @@
 import { StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type ActivityIndicatorSize = 'sm' | 'md' | 'lg';
+type ActivityIndicatorSize = Size;
 type ActivityIndicatorIntent = Intent;
 
 type ActivityIndicatorVariants = {
@@ -22,76 +24,29 @@ export type ActivityIndicatorStylesheet = {
 /**
  * Create size variants for container
  */
-function createContainerSizeVariants() {
-    return {
-        sm: {
-            width: 20,
-            height: 20,
-        },
-        md: {
-            width: 36,
-            height: 36,
-        },
-        lg: {
-            width: 48,
-            height: 48,
-        },
-    };
-}
-
-/**
- * Create intent variants for container (empty but needed for type consistency)
- */
-function createContainerIntentVariants() {
-    return {
-        primary: {},
-        success: {},
-        error: {},
-        warning: {},
-        neutral: {},
-    };
+function createContainerSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'activityIndicator', (size) => ({
+        width: size.size,
+        height: size.size,
+    }));
 }
 
 /**
  * Create size variants for spinner
  */
-function createSpinnerSizeVariants() {
-    return {
-        sm: {
-            width: 20,
-            height: 20,
-            borderWidth: 2,
-        },
-        md: {
-            width: 36,
-            height: 36,
-            borderWidth: 3,
-        },
-        lg: {
-            width: 48,
-            height: 48,
-            borderWidth: 4,
-        },
-    };
+function createSpinnerSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'activityIndicator', (size) => ({
+        width: size.size,
+        height: size.size,
+        borderWidth: size.borderWidth,
+    }));
 }
 
 /**
- * Create intent variants for spinner
+ * Get spinner color based on intent
  */
-function createSpinnerIntentVariants(theme: Theme) {
-    const variants: Record<ActivityIndicatorIntent, any> = {} as any;
-
-    for (const intent in theme.intents) {
-        variants[intent as ActivityIndicatorIntent] = {
-            color: theme.intents[intent as keyof typeof theme.intents].primary,
-            _web: {
-                borderTopColor: theme.intents[intent as keyof typeof theme.intents].primary,
-                borderRightColor: theme.intents[intent as keyof typeof theme.intents].primary,
-            },
-        };
-    }
-
-    return variants;
+function getSpinnerColor(theme: Theme, intent: ActivityIndicatorIntent) {
+    return theme.intents[intent].primary;
 }
 
 /**
@@ -102,8 +57,7 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedActivityI
         alignItems: 'center',
         justifyContent: 'center',
         variants: {
-            size: createContainerSizeVariants(),
-            intent: createContainerIntentVariants(),
+            size: createContainerSizeVariants(theme),
             animating: {
                 true: {
                     opacity: 1,
@@ -119,24 +73,29 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedActivityI
 /**
  * Generate activity indicator spinner styles
  */
-const createSpinnerStyles = (theme: Theme, expanded: Partial<ExpandedActivityIndicatorStyles>): ExpandedActivityIndicatorStyles => {
-    return deepMerge({
-        borderRadius: 9999,
-        borderStyle: 'solid',
-        variants: {
-            size: createSpinnerSizeVariants(),
-            intent: createSpinnerIntentVariants(theme),
-            animating: {
-                true: {},
-                false: {},
+const createSpinnerStyles = (theme: Theme, expanded: Partial<ExpandedActivityIndicatorStyles>) => {
+    return ({ intent }: ActivityIndicatorVariants) => {
+        const color = getSpinnerColor(theme, intent);
+        return deepMerge({
+            borderRadius: 9999,
+            borderStyle: 'solid',
+            color,
+            variants: {
+                size: createSpinnerSizeVariants(theme),
+                animating: {
+                    true: {},
+                    false: {},
+                },
             },
-        },
-        _web: {
-            borderColor: 'transparent',
-            animation: 'spin 1s linear infinite',
-            boxSizing: 'border-box',
-        },
-    }, expanded);
+            _web: {
+                borderColor: 'transparent',
+                borderTopColor: color,
+                borderRightColor: color,
+                animation: 'spin 1s linear infinite',
+                boxSizing: 'border-box',
+            },
+        }, expanded);
+    }
 }
 
 /**

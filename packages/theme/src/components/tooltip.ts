@@ -172,7 +172,7 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTooltipSt
 
 const createTooltipStyles = (theme: Theme, expanded: Partial<ExpandedTooltipTooltipStyles>): ExpandedTooltipTooltipStyles => {
     return deepMerge({
-        borderRadius: theme.borderRadius?.md || 8,
+        borderRadius: 8,
         maxWidth: 300,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

@@ -66,6 +66,12 @@ export const newTheme = {
           'inverse-secondary': 'rgba(255, 255, 255, 0.9)',
           'inverse-tertiary': 'rgba(255, 255, 255, 0.7)',
         },
+        border: {
+          primary: '#e0e0e0',
+          secondary: '#d0d0d0',
+          tertiary: '#c0c0c0',
+          disabled: '#f0f0f0',
+        },
       },
       sizes: {
         button: {
@@ -224,6 +230,449 @@ export const newTheme = {
             width: 48,
             height: 48,
             fontSize: 48,
+          }
+        },
+        input: {
+          xs: {
+            height: 28,
+            paddingHorizontal: 6,
+            fontSize: 12,
+            iconSize: 12,
+            iconMargin: 4,
+          },
+          sm: {
+            height: 36,
+            paddingHorizontal: 8,
+            fontSize: 14,
+            iconSize: 16,
+            iconMargin: 4,
+          },
+          md: {
+            height: 44,
+            paddingHorizontal: 12,
+            fontSize: 16,
+            iconSize: 20,
+            iconMargin: 6,
+          },
+          lg: {
+            height: 52,
+            paddingHorizontal: 16,
+            fontSize: 18,
+            iconSize: 24,
+            iconMargin: 8,
+          },
+          xl: {
+            height: 60,
+            paddingHorizontal: 20,
+            fontSize: 20,
+            iconSize: 28,
+            iconMargin: 10,
+          }
+        },
+        radioButton: {
+          xs: {
+            radioSize: 12,
+            radioDotSize: 8,
+            fontSize: 12,
+            gap: 6,
+          },
+          sm: {
+            radioSize: 14,
+            radioDotSize: 10,
+            fontSize: 14,
+            gap: 8,
+          },
+          md: {
+            radioSize: 18,
+            radioDotSize: 12,
+            fontSize: 16,
+            gap: 8,
+          },
+          lg: {
+            radioSize: 22,
+            radioDotSize: 16,
+            fontSize: 18,
+            gap: 10,
+          },
+          xl: {
+            radioSize: 26,
+            radioDotSize: 20,
+            fontSize: 20,
+            gap: 12,
+          }
+        },
+        select: {
+          xs: {
+            paddingHorizontal: 8,
+            minHeight: 28,
+            fontSize: 12,
+            iconSize: 16,
+          },
+          sm: {
+            paddingHorizontal: 10,
+            minHeight: 36,
+            fontSize: 14,
+            iconSize: 18,
+          },
+          md: {
+            paddingHorizontal: 12,
+            minHeight: 44,
+            fontSize: 16,
+            iconSize: 20,
+          },
+          lg: {
+            paddingHorizontal: 16,
+            minHeight: 52,
+            fontSize: 18,
+            iconSize: 24,
+          },
+          xl: {
+            paddingHorizontal: 20,
+            minHeight: 60,
+            fontSize: 20,
+            iconSize: 28,
+          }
+        },
+        slider: {
+          xs: {
+            trackHeight: 2,
+            thumbSize: 12,
+            thumbIconSize: 8,
+            markHeight: 6,
+            labelFontSize: 10,
+          },
+          sm: {
+            trackHeight: 4,
+            thumbSize: 16,
+            thumbIconSize: 10,
+            markHeight: 8,
+            labelFontSize: 11,
+          },
+          md: {
+            trackHeight: 6,
+            thumbSize: 20,
+            thumbIconSize: 12,
+            markHeight: 10,
+            labelFontSize: 12,
+          },
+          lg: {
+            trackHeight: 8,
+            thumbSize: 24,
+            thumbIconSize: 16,
+            markHeight: 12,
+            labelFontSize: 13,
+          },
+          xl: {
+            trackHeight: 10,
+            thumbSize: 28,
+            thumbIconSize: 18,
+            markHeight: 14,
+            labelFontSize: 14,
+          }
+        },
+        switch: {
+          xs: {
+            trackWidth: 32,
+            trackHeight: 18,
+            thumbSize: 14,
+            thumbIconSize: 8,
+            translateX: 14,
+          },
+          sm: {
+            trackWidth: 36,
+            trackHeight: 20,
+            thumbSize: 16,
+            thumbIconSize: 10,
+            translateX: 16,
+          },
+          md: {
+            trackWidth: 44,
+            trackHeight: 24,
+            thumbSize: 20,
+            thumbIconSize: 12,
+            translateX: 20,
+          },
+          lg: {
+            trackWidth: 52,
+            trackHeight: 28,
+            thumbSize: 24,
+            thumbIconSize: 14,
+            translateX: 24,
+          },
+          xl: {
+            trackWidth: 60,
+            trackHeight: 32,
+            thumbSize: 28,
+            thumbIconSize: 16,
+            translateX: 28,
+          }
+        },
+        textarea: {
+          xs: {
+            fontSize: 12,
+            padding: 6,
+            lineHeight: 18,
+            minHeight: 60,
+          },
+          sm: {
+            fontSize: 14,
+            padding: 8,
+            lineHeight: 20,
+            minHeight: 80,
+          },
+          md: {
+            fontSize: 16,
+            padding: 12,
+            lineHeight: 24,
+            minHeight: 100,
+          },
+          lg: {
+            fontSize: 18,
+            padding: 16,
+            lineHeight: 28,
+            minHeight: 120,
+          },
+          xl: {
+            fontSize: 20,
+            padding: 20,
+            lineHeight: 32,
+            minHeight: 140,
+          }
+        },
+        avatar: {
+          xs: {
+            width: 24,
+            height: 24,
+            fontSize: 12,
+          },
+          sm: {
+            width: 32,
+            height: 32,
+            fontSize: 14,
+          },
+          md: {
+            width: 40,
+            height: 40,
+            fontSize: 16,
+          },
+          lg: {
+            width: 48,
+            height: 48,
+            fontSize: 18,
+          },
+          xl: {
+            width: 64,
+            height: 64,
+            fontSize: 24,
+          }
+        },
+        progress: {
+          xs: {
+            linearHeight: 2,
+            circularSize: 24,
+            labelFontSize: 10,
+            circularLabelFontSize: 8,
+          },
+          sm: {
+            linearHeight: 4,
+            circularSize: 32,
+            labelFontSize: 12,
+            circularLabelFontSize: 10,
+          },
+          md: {
+            linearHeight: 8,
+            circularSize: 48,
+            labelFontSize: 14,
+            circularLabelFontSize: 12,
+          },
+          lg: {
+            linearHeight: 12,
+            circularSize: 64,
+            labelFontSize: 16,
+            circularLabelFontSize: 14,
+          },
+          xl: {
+            linearHeight: 16,
+            circularSize: 80,
+            labelFontSize: 18,
+            circularLabelFontSize: 16,
+          }
+        },
+        accordion: {
+          xs: {
+            headerPadding: 8,
+            headerFontSize: 12,
+            iconSize: 16,
+            contentPadding: 8,
+          },
+          sm: {
+            headerPadding: 12,
+            headerFontSize: 14,
+            iconSize: 18,
+            contentPadding: 12,
+          },
+          md: {
+            headerPadding: 16,
+            headerFontSize: 16,
+            iconSize: 20,
+            contentPadding: 16,
+          },
+          lg: {
+            headerPadding: 20,
+            headerFontSize: 18,
+            iconSize: 24,
+            contentPadding: 20,
+          },
+          xl: {
+            headerPadding: 24,
+            headerFontSize: 20,
+            iconSize: 28,
+            contentPadding: 24,
+          }
+        },
+        activityIndicator: {
+          xs: {
+            size: 16,
+            borderWidth: 2,
+          },
+          sm: {
+            size: 20,
+            borderWidth: 2,
+          },
+          md: {
+            size: 36,
+            borderWidth: 3,
+          },
+          lg: {
+            size: 48,
+            borderWidth: 4,
+          },
+          xl: {
+            size: 64,
+            borderWidth: 5,
+          }
+        },
+        breadcrumb: {
+          xs: {
+            fontSize: 10,
+            lineHeight: 14,
+            iconSize: 12,
+          },
+          sm: {
+            fontSize: 12,
+            lineHeight: 16,
+            iconSize: 14,
+          },
+          md: {
+            fontSize: 14,
+            lineHeight: 20,
+            iconSize: 16,
+          },
+          lg: {
+            fontSize: 16,
+            lineHeight: 24,
+            iconSize: 18,
+          },
+          xl: {
+            fontSize: 18,
+            lineHeight: 28,
+            iconSize: 20,
+          }
+        },
+        list: {
+          xs: {
+            paddingVertical: 4,
+            paddingHorizontal: 6,
+            minHeight: 28,
+            iconSize: 14,
+            labelFontSize: 12,
+            labelLineHeight: 16,
+          },
+          sm: {
+            paddingVertical: 4,
+            paddingHorizontal: 8,
+            minHeight: 32,
+            iconSize: 16,
+            labelFontSize: 14,
+            labelLineHeight: 20,
+          },
+          md: {
+            paddingVertical: 16,
+            paddingHorizontal: 16,
+            minHeight: 44,
+            iconSize: 20,
+            labelFontSize: 16,
+            labelLineHeight: 24,
+          },
+          lg: {
+            paddingVertical: 24,
+            paddingHorizontal: 24,
+            minHeight: 52,
+            iconSize: 24,
+            labelFontSize: 18,
+            labelLineHeight: 28,
+          },
+          xl: {
+            paddingVertical: 28,
+            paddingHorizontal: 28,
+            minHeight: 60,
+            iconSize: 28,
+            labelFontSize: 20,
+            labelLineHeight: 32,
+          }
+        },
+        menu: {
+          xs: {
+            paddingVertical: 2,
+            paddingHorizontal: 6,
+            iconSize: 14,
+            labelFontSize: 12,
+          },
+          sm: {
+            paddingVertical: 4,
+            paddingHorizontal: 8,
+            iconSize: 16,
+            labelFontSize: 14,
+          },
+          md: {
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+            iconSize: 20,
+            labelFontSize: 16,
+          },
+          lg: {
+            paddingVertical: 16,
+            paddingHorizontal: 24,
+            iconSize: 24,
+            labelFontSize: 18,
+          },
+          xl: {
+            paddingVertical: 20,
+            paddingHorizontal: 28,
+            iconSize: 28,
+            labelFontSize: 20,
+          }
+        },
+        text: {
+          xs: {
+            fontSize: 12,
+            lineHeight: 18,
+          },
+          sm: {
+            fontSize: 14,
+            lineHeight: 21,
+          },
+          md: {
+            fontSize: 16,
+            lineHeight: 24,
+          },
+          lg: {
+            fontSize: 18,
+            lineHeight: 25.2,
+          },
+          xl: {
+            fontSize: 24,
+            lineHeight: 31.92,
           }
         }
       }

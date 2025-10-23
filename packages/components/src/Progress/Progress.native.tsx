@@ -78,7 +78,7 @@ const Progress = forwardRef<View, ProgressProps>(({
 
     // Get colors from stylesheet after applying variants
     const trackColor = progressStyles.circularTrack.stroke;
-    const barColor = progressStyles.circularBar.stroke;
+    const barColor = progressStyles.circularBar({ intent }).stroke;
 
     const circularAnimatedProps = useAnimatedProps(() => {
       const offset = indeterminate
@@ -157,9 +157,9 @@ const Progress = forwardRef<View, ProgressProps>(({
     <View ref={ref} style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
       <View style={progressStyles.linearTrack}>
         {indeterminate ? (
-          <Animated.View style={[progressStyles.indeterminateBar, indeterminateAnimatedStyle]} />
+          <Animated.View style={[progressStyles.indeterminateBar({ intent }), indeterminateAnimatedStyle]} />
         ) : (
-          <Animated.View style={[progressStyles.linearBar, barAnimatedStyle]} />
+          <Animated.View style={[progressStyles.linearBar({ intent }), barAnimatedStyle]} />
         )}
       </View>
       {showLabel && (

@@ -1,8 +1,10 @@
 import { StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type AvatarSize = 'sm' | 'md' | 'lg' | 'xlarge';
+type AvatarSize = Size;
 type AvatarShape = 'circle' | 'square';
 
 type AvatarVariants = {
@@ -21,25 +23,11 @@ export type AvatarStylesheet = {
 /**
  * Create size variants for avatar
  */
-function createAvatarSizeVariants() {
-    return {
-        sm: {
-            width: 32,
-            height: 32,
-        },
-        md: {
-            width: 40,
-            height: 40,
-        },
-        lg: {
-            width: 48,
-            height: 48,
-        },
-        xlarge: {
-            width: 64,
-            height: 64,
-        },
-    };
+function createAvatarSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'avatar', (size) => ({
+        width: size.width,
+        height: size.height,
+    }));
 }
 
 /**
@@ -51,7 +39,7 @@ function createAvatarShapeVariants(theme: Theme) {
             borderRadius: 9999,
         },
         square: {
-            borderRadius: theme.borderRadius?.md || 8,
+            borderRadius: 8,
         },
     };
 }
@@ -59,21 +47,10 @@ function createAvatarShapeVariants(theme: Theme) {
 /**
  * Create size variants for fallback text
  */
-function createFallbackSizeVariants() {
-    return {
-        sm: {
-            fontSize: 14,
-        },
-        md: {
-            fontSize: 16,
-        },
-        lg: {
-            fontSize: 18,
-        },
-        xlarge: {
-            fontSize: 24,
-        },
-    };
+function createFallbackSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'avatar', (size) => ({
+        fontSize: size.fontSize,
+    }));
 }
 
 /**
@@ -84,10 +61,10 @@ const createAvatarStyles = (theme: Theme, expanded: Partial<ExpandedAvatarStyles
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+        backgroundColor: theme.colors.surface.secondary,
         overflow: 'hidden',
         variants: {
-            size: createAvatarSizeVariants(),
+            size: createAvatarSizeVariants(theme),
             shape: createAvatarShapeVariants(theme),
         },
     }, expanded);
@@ -108,10 +85,10 @@ const createImageStyles = (theme: Theme, expanded: Partial<ExpandedAvatarStyles>
  */
 const createFallbackStyles = (theme: Theme, expanded: Partial<ExpandedAvatarStyles>): ExpandedAvatarStyles => {
     return deepMerge({
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         fontWeight: '600',
         variants: {
-            size: createFallbackSizeVariants(),
+            size: createFallbackSizeVariants(theme),
         },
     }, expanded);
 }

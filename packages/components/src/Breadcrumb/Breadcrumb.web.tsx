@@ -130,9 +130,9 @@ interface BreadcrumbEllipsisProps {
 }
 
 const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent }) => {
-  breadcrumbEllipsisStyles.useVariants({ size, intent });
+  breadcrumbEllipsisStyles.useVariants({ size });
   const ellipsisProps = getWebProps([breadcrumbEllipsisStyles.ellipsis]);
-  const iconProps = getWebProps([breadcrumbEllipsisStyles.icon]);
+  const iconProps = getWebProps([breadcrumbEllipsisStyles.icon({ intent })]);
   const ellipsisIconPath = resolveIconPath('dots-horizontal');
 
   return (
@@ -164,9 +164,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   const menuIconPath = resolveIconPath('dots-horizontal');
 
   // Apply variants for menu button
-  breadcrumbMenuButtonStyles.useVariants({ size, intent });
+  breadcrumbMenuButtonStyles.useVariants({ size });
   const menuButtonProps = getWebProps([breadcrumbMenuButtonStyles.button]);
-  const menuIconProps = getWebProps([breadcrumbMenuButtonStyles.icon]);
+  const menuIconProps = getWebProps([breadcrumbMenuButtonStyles.icon({ intent })]);
 
   // Handle responsive collapsing
   let displayItems = items;

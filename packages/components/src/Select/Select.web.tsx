@@ -47,7 +47,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
   // Apply styles with variants
   selectStyles.useVariants({
-    variant: variant as any,
+    type: variant,
     size,
     intent,
     disabled,
@@ -130,7 +130,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   ]);
 
   const triggerWebProps = getWebProps([
-    selectStyles.trigger,
+    selectStyles.trigger({ type: variant, intent }),
     isOpen && selectStyles.triggerOpen
   ]);
 

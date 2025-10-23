@@ -46,7 +46,7 @@ const Button = forwardRef<TouchableOpacity, ButtonProps>((props, ref) => {
         <MaterialCommunityIcons
           name={icon}
           size={iconSize}
-          style={buttonStyles.icon}
+          style={buttonStyles.icon({ intent })}
         />
       );
     } else if (isValidElement(icon)) {
@@ -69,18 +69,18 @@ const Button = forwardRef<TouchableOpacity, ButtonProps>((props, ref) => {
       disabled={disabled}
       testID={testID}
       activeOpacity={0.7}
-      style={[buttonStyles.button, style]}
+      style={[buttonStyles.button({ intent }), style]}
     >
       {hasIcons ? (
         <View style={buttonStyles.iconContainer}>
           {leftIcon && renderIcon(leftIcon)}
-          <Text style={buttonStyles.text}>
+          <Text style={buttonStyles.text({ intent })}>
             {buttonContent}
           </Text>
           {rightIcon && renderIcon(rightIcon)}
         </View>
       ) : (
-        <Text style={buttonStyles.text}>
+        <Text style={buttonStyles.text({ intent })}>
           {buttonContent}
         </Text>
       )}

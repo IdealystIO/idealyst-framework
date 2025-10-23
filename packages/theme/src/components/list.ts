@@ -1,8 +1,10 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type ListSize = 'sm' | 'md' | 'lg';
+type ListSize = Size;
 type ListType = 'default' | 'bordered' | 'divided';
 
 type ListVariants = {
@@ -40,14 +42,14 @@ function createContainerTypeVariants(theme: Theme) {
             backgroundColor: 'transparent',
         },
         bordered: {
-            backgroundColor: theme.colors?.surface?.primary || '#ffffff',
+            backgroundColor: theme.colors.surface.primary,
             borderWidth: 1,
             borderStyle: 'solid',
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
-            borderRadius: theme.borderRadius?.md || 8,
+            borderColor: theme.colors.border.primary,
+            borderRadius: 8,
             overflow: 'hidden',
             _web: {
-                border: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                border: `1px solid ${theme.colors.border.primary}`,
             },
         },
         divided: {
@@ -60,23 +62,11 @@ function createContainerTypeVariants(theme: Theme) {
  * Create size variants for item
  */
 function createItemSizeVariants(theme: Theme) {
-    return {
-        sm: {
-            paddingTop: theme.spacing?.xs || 4,
-            paddingBottom: theme.spacing?.xs || 4,
-            paddingLeft: theme.spacing?.sm || 8,
-            paddingRight: theme.spacing?.sm || 8,
-            minHeight: 32,
-        },
-        md: {
-            padding: theme.spacing?.md || 16,
-            minHeight: 44,
-        },
-        lg: {
-            padding: theme.spacing?.lg || 24,
-            minHeight: 52,
-        },
-    };
+    return buildSizeVariants(theme, 'list', (size) => ({
+        paddingVertical: size.paddingVertical,
+        paddingHorizontal: size.paddingHorizontal,
+        minHeight: size.minHeight,
+    }));
 }
 
 /**
@@ -89,9 +79,9 @@ function createItemTypeVariants(theme: Theme) {
         divided: {
             borderBottomWidth: 1,
             borderBottomStyle: 'solid',
-            borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderBottomColor: theme.colors.border.primary,
             _web: {
-                borderBottom: `1px solid ${theme.colors?.border?.primary || '#e0e0e0'}`,
+                borderBottom: `1px solid ${theme.colors.border.primary}`,
             },
         },
     };
@@ -116,7 +106,7 @@ function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof ListVa
             disabled: true,
             styles: {
                 _web: {
-                    ':hover': {
+                    _hover: {
                         backgroundColor: 'transparent',
                         borderRadius: 0,
                     },
@@ -127,7 +117,7 @@ function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof ListVa
             clickable: false,
             styles: {
                 _web: {
-                    ':hover': {
+                    _hover: {
                         backgroundColor: 'transparent',
                         borderRadius: 0,
                     },
@@ -140,23 +130,21 @@ function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof ListVa
 /**
  * Create size variants for leading/trailing icons
  */
-function createIconSizeVariants() {
-    return {
-        sm: { width: 16, height: 16 },
-        md: { width: 20, height: 20 },
-        lg: { width: 24, height: 24 },
-    };
+function createIconSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'list', (size) => ({
+        width: size.iconSize,
+        height: size.iconSize,
+    }));
 }
 
 /**
  * Create size variants for label
  */
-function createLabelSizeVariants() {
-    return {
-        sm: { fontSize: 14, lineHeight: 20 },
-        md: { fontSize: 16, lineHeight: 24 },
-        lg: { fontSize: 18, lineHeight: 28 },
-    };
+function createLabelSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'list', (size) => ({
+        fontSize: size.labelFontSize,
+        lineHeight: size.labelLineHeight,
+    }));
 }
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>): ExpandedListStyles => {
@@ -191,13 +179,13 @@ const createItemStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>): 
             type: createItemTypeVariants(theme),
             active: {
                 true: {
-                    backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+                    backgroundColor: theme.colors.surface.secondary,
                 },
                 false: {},
             },
             selected: {
                 true: {
-                    backgroundColor: theme.intents.primary.container || theme.intents.primary.primary + '20',
+                    backgroundColor: theme.intents.primary.light + '20',
                     borderLeftWidth: 3,
                     borderLeftColor: theme.intents.primary.primary,
                     _web: {
@@ -230,9 +218,9 @@ const createItemStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>): 
             cursor: 'pointer',
             outline: 'none',
             transition: 'background-color 0.2s ease, border-color 0.2s ease',
-            ':hover': {
-                backgroundColor: theme.colors?.interactive?.hover || theme.colors?.surface?.secondary || '#f5f5f5',
-                borderRadius: theme.borderRadius?.sm || 4,
+            _hover: {
+                backgroundColor: theme.colors.surface.secondary,
+                borderRadius: 4,
             },
         },
     }, expanded);
@@ -244,7 +232,7 @@ const createItemContentStyles = (theme: Theme, expanded: Partial<ExpandedListSty
         flexDirection: 'row',
         alignItems: 'center',
         flex: 1,
-        gap: theme.spacing?.sm || 8,
+        gap: 8,
     }, expanded);
 }
 
@@ -253,10 +241,10 @@ const createLeadingStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: theme.spacing?.sm || 8,
-        color: theme.colors?.text?.secondary || '#666666',
+        marginRight: 8,
+        color: theme.colors.text.secondary,
         variants: {
-            size: createIconSizeVariants(),
+            size: createIconSizeVariants(theme),
         },
     }, expanded);
 }
@@ -271,21 +259,20 @@ const createLabelContainerStyles = (theme: Theme, expanded: Partial<ExpandedList
 
 const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>): ExpandedListStyles => {
     return deepMerge({
-        fontFamily: theme.typography?.fontFamily?.sans,
-        fontWeight: theme.typography?.fontWeight?.medium || '500',
-        color: theme.colors?.text?.primary || '#000000',
+        fontWeight: '500',
+        color: theme.colors.text.primary,
         variants: {
-            size: createLabelSizeVariants(),
+            size: createLabelSizeVariants(theme),
             disabled: {
                 true: {
-                    color: theme.colors?.text?.disabled || '#999999',
+                    color: theme.colors.text.secondary,
                 },
                 false: {},
             },
             selected: {
                 true: {
                     color: theme.intents.primary.primary,
-                    fontWeight: theme.typography?.fontWeight?.semibold || '600',
+                    fontWeight: '600',
                 },
                 false: {},
             },
@@ -298,8 +285,8 @@ const createTrailingStyles = (theme: Theme, expanded: Partial<ExpandedListStyles
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: theme.spacing?.sm || 8,
-        color: theme.colors?.text?.secondary || '#666666',
+        marginLeft: 8,
+        color: theme.colors.text.secondary,
         flexShrink: 0,
     }, expanded);
 }
@@ -310,7 +297,7 @@ const createTrailingIconStyles = (theme: Theme, expanded: Partial<ExpandedListSt
         alignItems: 'center',
         justifyContent: 'center',
         variants: {
-            size: createIconSizeVariants(),
+            size: createIconSizeVariants(theme),
         },
     }, expanded);
 }
@@ -324,15 +311,14 @@ const createSectionStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>
 
 const createSectionTitleStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>): ExpandedListStyles => {
     return deepMerge({
-        fontFamily: theme.typography?.fontFamily?.sans,
-        fontWeight: theme.typography?.fontWeight?.semibold || '600',
+        fontWeight: '600',
         fontSize: 12,
         lineHeight: 16,
         textTransform: 'uppercase',
         letterSpacing: 0.5,
-        color: theme.colors?.text?.secondary || '#666666',
-        padding: theme.spacing?.sm || 8,
-        paddingBottom: theme.spacing?.xs || 4,
+        color: theme.colors.text.secondary,
+        padding: 8,
+        paddingBottom: 4,
     }, expanded);
 }
 

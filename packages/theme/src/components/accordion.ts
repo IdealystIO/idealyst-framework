@@ -1,9 +1,11 @@
 import { CompoundVariants, StylesheetStyles } from "../styles";
 import { Theme } from "../theme";
 import { Intent } from "../theme/intent";
+import { Size } from "../theme/size";
 import { deepMerge } from "../util/deepMerge";
+import { buildSizeVariants } from "../variants/size";
 
-type AccordionSize = 'sm' | 'md' | 'lg';
+type AccordionSize = Size;
 type AccordionType = 'default' | 'separated' | 'bordered';
 type AccordionIntent = Intent;
 
@@ -37,14 +39,14 @@ function createContainerTypeVariants(theme: Theme) {
             gap: 0,
         },
         separated: {
-            gap: theme.spacing?.sm || 8,
+            gap: 8,
         },
         bordered: {
             gap: 0,
             borderWidth: 1,
             borderStyle: 'solid',
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
-            borderRadius: theme.borderRadius?.md || 8,
+            borderColor: theme.colors.border.primary,
+            borderRadius: 8,
             overflow: 'hidden',
         },
     };
@@ -58,19 +60,19 @@ function createItemTypeVariants(theme: Theme) {
         default: {
             borderBottomWidth: 1,
             borderBottomStyle: 'solid',
-            borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderBottomColor: theme.colors.border.primary,
         },
         separated: {
             borderWidth: 1,
             borderStyle: 'solid',
-            borderColor: theme.colors?.border?.primary || '#e0e0e0',
-            borderRadius: theme.borderRadius?.md || 8,
+            borderColor: theme.colors.border.primary,
+            borderRadius: 8,
             overflow: 'hidden',
         },
         bordered: {
             borderBottomWidth: 1,
             borderBottomStyle: 'solid',
-            borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderBottomColor: theme.colors.border.primary,
         },
     };
 }
@@ -100,59 +102,39 @@ function createItemCompoundVariants(): CompoundVariants<keyof AccordionVariants>
 /**
  * Create size variants for header
  */
-function createHeaderSizeVariants() {
-    return {
-        sm: {
-            fontSize: 14,
-            padding: 10,
-        },
-        md: {
-            fontSize: 16,
-            padding: 14,
-        },
-        lg: {
-            fontSize: 18,
-            padding: 18,
-        },
-    };
+function createHeaderSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'accordion', (size) => ({
+        fontSize: size.headerFontSize,
+        padding: size.headerPadding,
+    }));
 }
 
 /**
- * Create intent variants for icon
+ * Get icon color based on intent
  */
-function createIconIntentVariants(theme: Theme) {
-    const variants: Record<AccordionIntent, any> = {} as any;
+function getIconColor(theme: Theme, intent: AccordionIntent) {
+    return theme.intents[intent].primary;
+}
 
-    for (const intent in theme.intents) {
-        variants[intent as AccordionIntent] = {
-            color: theme.intents[intent as keyof typeof theme.intents].primary,
-        };
-    }
-
-    return variants;
+/**
+ * Create size variants for icon
+ */
+function createIconSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'accordion', (size) => ({
+        width: size.iconSize,
+        height: size.iconSize,
+    }));
 }
 
 /**
  * Create size variants for content inner
  */
-function createContentInnerSizeVariants() {
-    return {
-        sm: {
-            fontSize: 14,
-            padding: 10,
-            paddingTop: 0,
-        },
-        md: {
-            fontSize: 16,
-            padding: 14,
-            paddingTop: 0,
-        },
-        lg: {
-            fontSize: 18,
-            padding: 18,
-            paddingTop: 0,
-        },
-    };
+function createContentInnerSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'accordion', (size) => ({
+        fontSize: size.headerFontSize,
+        padding: size.contentPadding,
+        paddingTop: 0,
+    }));
 }
 
 /**
@@ -197,17 +179,16 @@ const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedAccordionSty
         justifyContent: 'space-between',
         width: '100%',
         backgroundColor: 'transparent',
-        fontFamily: theme.typography?.fontFamily?.sans,
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         textAlign: 'left',
         variants: {
-            size: createHeaderSizeVariants(),
+            size: createHeaderSizeVariants(theme),
             expanded: {
                 true: {
-                    fontWeight: theme.typography?.fontWeight?.semibold || '600',
+                    fontWeight: '600',
                 },
                 false: {
-                    fontWeight: theme.typography?.fontWeight?.medium || '500',
+                    fontWeight: '500',
                 },
             },
             disabled: {
@@ -219,8 +200,9 @@ const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedAccordionSty
                 },
                 false: {
                     _web: {
-                        ':hover': {
-                            backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+                        cursor: 'pointer',
+                        _hover: {
+                            backgroundColor: theme.colors.surface.secondary,
                         },
                     },
                 },
@@ -228,7 +210,6 @@ const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedAccordionSty
         },
         _web: {
             border: 'none',
-            cursor: 'pointer',
             outline: 'none',
             transition: 'background-color 0.2s ease',
         },
@@ -247,31 +228,34 @@ const createTitleStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyl
 /**
  * Generate accordion icon styles
  */
-const createIconStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>): ExpandedAccordionStyles => {
-    return deepMerge({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: theme.spacing?.sm || 8,
-        variants: {
-            expanded: {
-                true: {
-                    _web: {
-                        transform: 'rotate(180deg)',
+const createIconStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>) => {
+    return ({ intent }: { intent: AccordionIntent }) => {
+        return deepMerge({
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginLeft: 8,
+            color: getIconColor(theme, intent),
+            variants: {
+                size: createIconSizeVariants(theme),
+                expanded: {
+                    true: {
+                        _web: {
+                            transform: 'rotate(180deg)',
+                        },
                     },
-                },
-                false: {
-                    _web: {
-                        transform: 'rotate(0deg)',
+                    false: {
+                        _web: {
+                            transform: 'rotate(0deg)',
+                        },
                     },
                 },
             },
-            intent: createIconIntentVariants(theme),
-        },
-        _web: {
-            transition: 'transform 0.2s ease',
-        },
-    }, expanded);
+            _web: {
+                transition: 'transform 0.2s ease',
+            },
+        }, expanded);
+    }
 }
 
 /**
@@ -301,9 +285,9 @@ const createContentStyles = (theme: Theme, expanded: Partial<ExpandedAccordionSt
  */
 const createContentInnerStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>): ExpandedAccordionStyles => {
     return deepMerge({
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
         variants: {
-            size: createContentInnerSizeVariants(),
+            size: createContentInnerSizeVariants(theme),
         },
     }, expanded);
 }

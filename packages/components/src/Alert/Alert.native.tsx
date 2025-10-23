@@ -37,11 +37,10 @@ const Alert = forwardRef<View, AlertProps>(({
   style,
   testID,
 }, ref) => {
-  // Apply variants to each stylesheet
-  alertContainerStyles.useVariants({ variant, intent });
-  alertIconStyles.useVariants({ variant, intent });
-  alertTitleStyles.useVariants({ variant, intent });
-  alertMessageStyles.useVariants({ variant, intent });
+  // Apply variants to stylesheets that don't use dynamic styles
+  alertContentStyles.useVariants({});
+  alertActionsStyles.useVariants({});
+  alertCloseButtonStyles.useVariants({});
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
 
@@ -50,7 +49,7 @@ const Alert = forwardRef<View, AlertProps>(({
     if (!displayIcon) return null;
 
     if (typeof displayIcon === 'string' && isIconName(displayIcon)) {
-      const iconColor = alertIconStyles.iconContainer.color || '#000';
+      const iconColor = alertIconStyles.iconContainer({ type: variant, intent }).color || '#000';
       return (
         <MaterialCommunityIcons
           name={displayIcon}
@@ -67,25 +66,25 @@ const Alert = forwardRef<View, AlertProps>(({
   return (
     <View
       ref={ref}
-      style={[alertContainerStyles.container, style]}
+      style={[alertContainerStyles.container({ type: variant, intent }), style]}
       testID={testID}
       accessibilityRole="alert"
     >
       {displayIcon && (
-        <View style={alertIconStyles.iconContainer}>
+        <View style={alertIconStyles.iconContainer({ type: variant, intent })}>
           {renderIcon()}
         </View>
       )}
 
       <View style={alertContentStyles.content}>
         {title && (
-          <Text style={alertTitleStyles.title}>
+          <Text style={alertTitleStyles.title({ type: variant, intent })}>
             {title}
           </Text>
         )}
 
         {message && (
-          <Text style={alertMessageStyles.message}>
+          <Text style={alertMessageStyles.message({ type: variant, intent })}>
             {message}
           </Text>
         )}

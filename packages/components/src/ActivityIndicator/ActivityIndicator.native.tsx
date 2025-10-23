@@ -18,7 +18,7 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
 
   // Map our size variants to React Native's size prop
   const rnSize = sizeVariant === 'sm' ? 'small' : 'large';
-  
+
   activityIndicatorStyles.useVariants({
     size: sizeVariant,
     intent,
@@ -29,7 +29,7 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
   const indicatorColor = color || activityIndicatorStyles.spinner.color;
 
   return (
-    <View 
+    <View
       style={[
         activityIndicatorStyles.container,
         customSize && {

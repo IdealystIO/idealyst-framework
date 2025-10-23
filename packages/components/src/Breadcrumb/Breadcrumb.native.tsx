@@ -99,11 +99,12 @@ interface BreadcrumbEllipsisProps {
 }
 
 const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent }) => {
-  breadcrumbEllipsisStyles.useVariants({ size, intent });
+  breadcrumbEllipsisStyles.useVariants({ size });
+  const iconStyle = breadcrumbEllipsisStyles.icon({ intent });
 
   return (
     <View style={breadcrumbEllipsisStyles.ellipsis}>
-      <Icon name="dots-horizontal" style={breadcrumbEllipsisStyles.icon} />
+      <Icon name="dots-horizontal" style={iconStyle} />
     </View>
   );
 };
@@ -124,7 +125,8 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Apply variants for menu button
-  breadcrumbMenuButtonStyles.useVariants({ size, intent });
+  breadcrumbMenuButtonStyles.useVariants({ size });
+  const menuIconStyle = breadcrumbMenuButtonStyles.icon({ intent });
 
   // Handle responsive collapsing
   let displayItems = items;
@@ -194,7 +196,7 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
                     accessibilityRole="button"
                     accessibilityLabel="Show more breadcrumb items"
                   >
-                    <Icon name="dots-horizontal" style={breadcrumbMenuButtonStyles.icon} />
+                    <Icon name="dots-horizontal" style={menuIconStyle} />
                   </Pressable>
                 </Menu>
                 <BreadcrumbSeparator separator={separator} size={size} separatorStyle={separatorStyle} />

@@ -57,11 +57,11 @@ function createContainerTypeVariants(theme: Theme) {
         default: {},
         alert: {
             borderTopWidth: 4,
-            borderTopColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderTopColor: theme.colors.border.primary,
         },
         confirmation: {
             borderTopWidth: 4,
-            borderTopColor: theme.colors?.border?.primary || '#e0e0e0',
+            borderTopColor: theme.colors.border.primary,
         },
     };
 }
@@ -87,8 +87,8 @@ const createBackdropStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyl
 
 const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
     return deepMerge({
-        backgroundColor: theme.colors?.surface?.primary || '#ffffff',
-        borderRadius: theme.borderRadius?.lg || 12,
+        backgroundColor: theme.colors.surface.primary,
+        borderRadius: 12,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.25,
@@ -114,7 +114,7 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedDialogSty
 const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
     return deepMerge({
         borderBottomWidth: 1,
-        borderBottomColor: theme.colors?.border?.primary || '#e0e0e0',
+        borderBottomColor: theme.colors.border.primary,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -127,14 +127,14 @@ const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles
 
 const createTitleStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
     return deepMerge({
-        marginLeft: theme.spacing?.lg || 24,
+        marginLeft: 24,
         fontSize: 18,
-        paddingVertical: theme.spacing?.md || 16,
+        paddingVertical: 16,
         fontWeight: '600',
-        color: theme.colors?.text?.primary || '#000000',
+        color: theme.colors.text.primary,
         flex: 1,
         _web: {
-            paddingVertical: theme.spacing?.xs || 4,
+            paddingVertical: 4,
         },
     }, expanded);
 }
@@ -143,7 +143,7 @@ const createCloseButtonStyles = (theme: Theme, expanded: Partial<ExpandedDialogS
     return deepMerge({
         width: 32,
         height: 32,
-        marginRight: theme.spacing?.md || 16,
+        marginRight: 16,
         borderRadius: 16,
         backgroundColor: 'transparent',
         display: 'flex',
@@ -152,8 +152,8 @@ const createCloseButtonStyles = (theme: Theme, expanded: Partial<ExpandedDialogS
         _web: {
             border: 'none',
             cursor: 'pointer',
-            ':hover': {
-                backgroundColor: theme.colors?.surface?.secondary || '#f5f5f5',
+            _hover: {
+                backgroundColor: theme.colors.surface.secondary,
             },
         },
     }, expanded);
@@ -162,14 +162,14 @@ const createCloseButtonStyles = (theme: Theme, expanded: Partial<ExpandedDialogS
 const createCloseButtonTextStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
     return deepMerge({
         fontSize: 18,
-        color: theme.colors?.text?.secondary || '#666666',
+        color: theme.colors.text.secondary,
         fontWeight: '500',
     }, expanded);
 }
 
 const createContentStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
     return deepMerge({
-        padding: theme.spacing?.lg || 24,
+        padding: 24,
         _web: {
             overflow: 'visible',
             maxHeight: 'none',
