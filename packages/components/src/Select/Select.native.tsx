@@ -39,8 +39,9 @@ const Select = forwardRef<View, SelectProps>(({
 }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number; width: number } | null>(null);
-  const [dropdownSize, setDropdownSize] = useState({ width: 200, height: 240 });
+  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number; width: number }>({ top: 0, left: 0, width: 0 });
+  const [dropdownSize, setDropdownSize] = useState({ width: 0, height: 0 });
+  const [isPositioned, setIsPositioned] = useState(false);
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const triggerRef = useRef<any>(null);
   const anchorMeasurements = useRef<{ x: number; y: number; width: number; height: number } | null>(null);
@@ -50,12 +51,19 @@ const Select = forwardRef<View, SelectProps>(({
 
   // Helper function to calculate dropdown position
   const calculateDropdownPosition = (x: number, y: number, width: number, height: number) => {
-    // For flip detection, use maxHeight so it properly detects when there's not enough space
-    // But if we have a measured size that's SMALLER than maxHeight, use that for final positioning
-    // to avoid unnecessary gaps (this happens when content naturally fits)
-    const heightForPositioning = dropdownSize.height > 0 && dropdownSize.height < maxHeight
-      ? dropdownSize.height
-      : maxHeight;
+    if (__DEV__) {
+      console.log('[Select] 6. Calculate desired position');
+    }
+
+    // For flip detection, we need to use maxHeight to properly detect insufficient space
+    // But once we have a measured height, use that for tighter positioning
+    // Wait for first measurement before positioning to avoid gaps
+    let heightForPositioning = maxHeight;
+
+    if (dropdownSize.height > 0) {
+      // We have a measured height - use it if it's less than maxHeight
+      heightForPositioning = Math.min(dropdownSize.height, maxHeight);
+    }
 
     const desiredSize = {
       width: dropdownSize.width,
@@ -72,10 +80,31 @@ const Select = forwardRef<View, SelectProps>(({
       insets
     );
 
+    if (__DEV__) {
+      console.log('[Select] Position calculation:', {
+        anchorY: y,
+        anchorHeight: height,
+        measuredHeight: dropdownSize.height,
+        heightForPositioning,
+        maxHeight,
+        calculatedTop: position.top,
+        willFlipAbove: position.top < y,
+      });
+    }
+
+    if (__DEV__) {
+      console.log('[Select] 7. Show component at position:', position);
+    }
+
     setDropdownPosition({
       top: position.top,
       left: position.left,
       width: position.width || width,
+    });
+
+    // Mark as positioned after the next frame to allow layout to stabilize
+    requestAnimationFrame(() => {
+      setIsPositioned(true);
     });
   };
 
@@ -115,12 +144,24 @@ const Select = forwardRef<View, SelectProps>(({
     } else {
       // Measure trigger position before opening
       triggerRef.current?.measureInWindow((x: number, y: number, width: number, height: number) => {
+        if (__DEV__) {
+          console.log('[Select] 1. Handle Press - Anchor measured:', { x, y, width, height });
+        }
+
         // Store anchor measurements for potential recalculation
         anchorMeasurements.current = { x, y, width, height };
 
-        // Calculate initial position
-        calculateDropdownPosition(x, y, width, height);
+        // Set initial position to bottom-start (will be adjusted after measurement)
+        // Don't use -9999 as that prevents proper layout
+        setDropdownPosition({ top: y + height + 4, left: x, width });
+
+        if (__DEV__) {
+          console.log('[Select] 2. Set open state with initial position');
+        }
+
+        // Open the modal (it will be invisible with opacity 0 until positioned)
         setIsOpen(true);
+        setIsPositioned(false);
         setSearchTerm('');
         // Animate dropdown appearance
         Animated.spring(scaleAnim, {
@@ -171,14 +212,23 @@ const Select = forwardRef<View, SelectProps>(({
       friction: 20,
     }).start(() => {
       setIsOpen(false);
+      setIsPositioned(false);
       setSearchTerm('');
     });
   };
 
   const handleDropdownLayout = (event: any) => {
     const { width, height } = event.nativeEvent.layout;
+
+    if (__DEV__) {
+      console.log('[Select] 4. Layout measured:', { width, height, current: dropdownSize });
+    }
+
     // Only update if size has changed significantly
     if (Math.abs(width - dropdownSize.width) > 1 || Math.abs(height - dropdownSize.height) > 1) {
+      if (__DEV__) {
+        console.log('[Select] 5. Setting dimensions (state update)');
+      }
       setDropdownSize({ width, height });
     }
   };
@@ -243,11 +293,19 @@ const Select = forwardRef<View, SelectProps>(({
   };
 
   const renderDropdown = () => {
-    if (!dropdownPosition) return null;
+    if (!isOpen) return null;
+
+    // Show dropdown only after it has been measured AND positioned
+    const isMeasured = dropdownSize.height > 0;
+    const shouldShow = isMeasured && isPositioned;
+
+    if (__DEV__) {
+      console.log('[Select] 3. Render popover, isMeasured:', isMeasured, 'isPositioned:', isPositioned);
+    }
 
     return (
       <Modal
-        visible={isOpen}
+        visible={true}
         transparent
         animationType="none"
         onRequestClose={closeDropdown}
@@ -261,15 +319,20 @@ const Select = forwardRef<View, SelectProps>(({
             left={dropdownPosition.left}
             width={dropdownPosition.width}
             maxHeight={maxHeight}
-            onLayout={handleDropdownLayout}
           >
             <Animated.View
               style={[
                 selectStyles.dropdown,
                 {
+                  position: 'relative', // Override absolute positioning from styles
+                  top: 0, // Override top: '100%' from styles
+                  left: 0, // Override left from styles
+                  right: undefined, // Remove right constraint
                   transform: [{ scale: scaleAnim }],
+                  opacity: shouldShow ? 1 : 0, // Hide until measured AND positioned
                 }
               ]}
+              onLayout={handleDropdownLayout}
             >
             {searchable && (
               <View style={selectStyles.searchContainer}>
@@ -287,6 +350,7 @@ const Select = forwardRef<View, SelectProps>(({
               style={selectStyles.optionsList}
               showsVerticalScrollIndicator={true}
             >
+              {__DEV__ && console.log('[Select] Rendering', filteredOptions.length, 'options')}
               {filteredOptions.map((option) => (
                   <Pressable
                     key={option.value}

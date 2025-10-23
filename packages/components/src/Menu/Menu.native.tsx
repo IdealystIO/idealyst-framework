@@ -27,7 +27,7 @@ const Menu = forwardRef<View, MenuProps>(({
   const triggerRef = useRef<any>(null);
   const mergedTriggerRef = useMergeRefs(ref, triggerRef);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, width: 0 });
-  const [menuSize, setMenuSize] = useState({ width: 200, height: 300 });
+  const [menuSize, setMenuSize] = useState({ width: 0, height: 0 });
   const anchorMeasurements = useRef<{ x: number; y: number; width: number; height: number } | null>(null);
   const insets = useSafeAreaInsets();
 
