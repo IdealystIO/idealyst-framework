@@ -11,7 +11,7 @@ export const ViewExamples = () => {
       {/* Spacing Examples */}
       <View spacing="md">
         <Text size="md" weight="semibold">Spacing Variants</Text>
-        <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
+        <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           <View spacing="none" background="secondary" border="thin">
             <Text size="sm">None</Text>
           </View>

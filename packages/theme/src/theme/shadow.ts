@@ -12,13 +12,7 @@ export type ShadowValue = {
     };
     shadowOpacity: number;
     shadowRadius: number;
-
-    // Web: box-shadow CSS property
     boxShadow?: string;
-
-    _web: {
-        boxShadow: string;
-    }
 } | {}
 
 export type AllShadowTypes = Record<ShadowVariant, ShadowValue>;

@@ -31,7 +31,8 @@ function createBadgeTypeVariants(theme: Theme, color: Color) {
         },
         outlined: {
             backgroundColor: 'transparent',
-            borderWidth: 1,
+            borderWidth: 2,
+            borderStyle: 'solid',
             borderColor: colorValue,
         },
         dot: {
@@ -49,7 +50,7 @@ function createBadgeTypeVariants(theme: Theme, color: Color) {
  * Create type variants for badge text
  */
 function createTextTypeVariants(theme: Theme, color: Color){
-    const colorValue = theme.colors.pallet[color];
+    const colorValue = getColorFromString(theme, color);
     return {
         filled: {
             color: theme.colors.text.inverse,
@@ -91,14 +92,6 @@ function createBadgeStyles(theme: Theme) {
         };
     }
 }
-
-/**
- * Generate badge content container styles
- */
-
-/**
- * Generate badge icon styles
- */
 
 /**
  * Generate badge text styles

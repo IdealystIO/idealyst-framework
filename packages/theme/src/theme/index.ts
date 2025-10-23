@@ -1,6 +1,5 @@
 import { AllColorTypes, Color, ColorValue } from "./color";
 import { Intent, IntentValue } from "./intent";
-import { Surface, SurfaceValue } from "./surface";
 import { AllComponentSizes, SizeValue } from "./size";
 import { AllShadowTypes } from "./shadow";
 
@@ -14,3 +13,4 @@ export type Theme = {
 export * from "./intent";
 export * from "./size";
 export * from "./color";
+export * from "./shadow";

@@ -6,43 +6,35 @@ export const lightTheme: Theme = {
         none: {},
         sm: {
           elevation: 1,
-          shadowColor: '#000',
+          shadowColor: 'rgb(0, 0, 0, 0.5)',
           shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.18,
+          shadowOpacity: 0.08,
           shadowRadius: 1.0,
-          _web: {
-            boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.18)',
-          },
+          boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.1)',
         },
         md: {
-          elevation: 3,
-          shadowColor: '#000',
+          elevation: 2,
+          shadowColor: 'rgb(0, 0, 0, 0.5)',
           shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: 0.2,
+          shadowOpacity: 0.1,
           shadowRadius: 4.65,
-          _web: {
-            boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)',
-          },
+          boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
         },
         lg: {
-          elevation: 6,
-          shadowColor: '#000',
+          elevation: 3,
+          shadowColor: 'rgb(0, 0, 0, 0.5)',
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.23,
+          shadowOpacity: 0.12,
           shadowRadius: 6.27,
-          _web: {
-            boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.23)',
-          },
+          boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.12)',
         },
         xl: {
-          elevation: 12,
-          shadowColor: '#000',
+          elevation: 4,
+          shadowColor: 'rgb(0, 0, 0, 0.5)',
           shadowOffset: { width: 0, height: 12 },
-          shadowOpacity: 0.25,
+          shadowOpacity: 0.14,
           shadowRadius: 16.0,
-          _web: {
-            boxShadow: '0px 12px 24px rgba(0, 0, 0, 0.25)',
-          },
+          boxShadow: '0px 12px 24px rgba(0, 0, 0, 0.18)',
         },
       },
       intents: {
@@ -82,14 +74,6 @@ export const lightTheme: Theme = {
           light: '#a5f3fc',
           dark: '#1e40af',
         },
-      },
-      surfaces: {
-        primary: '#ffffff',
-        secondary: '#f5f5f5',
-        tertiary: '#e0e0e0',
-        inverse: '#000000',
-        'inverse-secondary': 'rgba(0, 0, 0, 0.9)',
-        'inverse-tertiary': 'rgba(0, 0, 0, 0.7)',
       },
       colors: {
         pallet: generateColorPallette(),
@@ -792,6 +776,28 @@ export const lightTheme: Theme = {
           xl: {
             fontSize: 18,
             padding: 12,
+          },
+        },
+        view: {
+          xs: {
+            padding: 4,
+            spacing: 4,
+          },
+          sm: {
+            padding: 8,
+            spacing: 8,
+          },
+          md: {
+            padding: 16,
+            spacing: 16,
+          },
+          lg: {
+            padding: 24,
+            spacing: 24,
+          },
+          xl: {
+            padding: 32,
+            spacing: 32,
           }
         }
       }

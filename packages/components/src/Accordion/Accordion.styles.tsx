@@ -125,42 +125,30 @@ function createContentInnerSizeVariants(theme: Theme) {
     }));
 }
 
-/**
- * Generate accordion container styles
- */
-const createContainerStyles = (theme: Theme): ExpandedAccordionStyles => {
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const accordionStyles = StyleSheet.create((theme: Theme) => {
     return {
-        display: 'flex',
-        flexDirection: 'column',
-        variants: {
-            type: createContainerTypeVariants(theme),
-        },
-    };
-}
-
-/**
- * Generate accordion item styles
- */
-const createItemStyles = (theme: Theme): ExpandedAccordionStyles => {
-    return {
-        display: 'flex',
-        flexDirection: 'column',
-        variants: {
-            type: createItemTypeVariants(theme),
-            isLast: {
-                true: {},
-                false: {},
+        container: {
+            display: 'flex',
+            flexDirection: 'column',
+            variants: {
+                type: createContainerTypeVariants(theme),
             },
         },
-        compoundVariants: createItemCompoundVariants(),
-    };
-}
-
-/**
- * Generate accordion header styles
- */
-const createHeaderStyles = (theme: Theme): ExpandedAccordionStyles => {
-    return {
+        item: {
+            display: 'flex',
+            flexDirection: 'column',
+            variants: {
+                type: createItemTypeVariants(theme),
+                isLast: {
+                    true: {},
+                    false: {},
+                },
+            },
+            compoundVariants: createItemCompoundVariants(),
+        },
+        header: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -171,116 +159,86 @@ const createHeaderStyles = (theme: Theme): ExpandedAccordionStyles => {
         textAlign: 'left',
         variants: {
             size: createHeaderSizeVariants(theme),
-            expanded: {
-                true: {
-                    fontWeight: '600',
-                },
-                false: {
-                    fontWeight: '500',
-                },
-            },
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                    _web: {
-                        cursor: 'not-allowed',
+                expanded: {
+                    true: {
+                        fontWeight: '600',
+                    },
+                    false: {
+                        fontWeight: '500',
                     },
                 },
-                false: {
-                    _web: {
-                        cursor: 'pointer',
-                        _hover: {
-                            backgroundColor: theme.colors.surface.secondary,
+                disabled: {
+                    true: {
+                        opacity: 0.5,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
+                    },
+                    false: {
+                        _web: {
+                            cursor: 'pointer',
+                            _hover: {
+                                backgroundColor: theme.colors.surface.secondary,
+                            },
                         },
                     },
                 },
             },
-        },
-        _web: {
-            border: 'none',
-            outline: 'none',
-            transition: 'background-color 0.2s ease',
-        },
-    };
-}
-
-/**
- * Generate accordion icon styles
- */
-const createIconStyles = (theme: Theme) => {
-    return {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: 8,
-        color: theme.intents.primary.primary,
-        variants: {
-            size: createIconSizeVariants(theme),
-            expanded: {
-                true: {
-                    _web: {
-                        transform: 'rotate(180deg)',
-                    },
-                },
-                false: {
-                    _web: {
-                        transform: 'rotate(0deg)',
-                    },
-                },
+            _web: {
+                border: 'none',
+                outline: 'none',
+                transition: 'background-color 0.2s ease',
             },
         },
-        _web: {
-            transition: 'transform 0.2s ease',
-        },
-    };
-}
-
-/**
- * Generate accordion content styles
- */
-const createContentStyles = (theme: Theme): ExpandedAccordionStyles => {
-    return {
-        overflow: 'hidden',
-        variants: {
-            expanded: {
-                true: {
-                    maxHeight: 2000,
-                },
-                false: {
-                    maxHeight: 0,
-                },
-            },
-        },
-        _web: {
-            transition: 'height 0.15s ease, padding 0.3s ease',
-        },
-    };
-}
-
-/**
- * Generate accordion content inner styles
- */
-const createContentInnerStyles = (theme: Theme): ExpandedAccordionStyles => {
-    return {
-        color: theme.colors.text.secondary,
-        variants: {
-            size: createContentInnerSizeVariants(theme),
-        },
-    };
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const accordionStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        container: createContainerStyles(theme),
-        item: createItemStyles(theme),
-        header: createHeaderStyles(theme),
         title: {
             flex: 1,
         },
-        icon: createIconStyles(theme),
-        content: createContentStyles(theme),
-        contentInner: createContentInnerStyles(theme),
+        icon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginLeft: 8,
+            color: theme.intents.primary.primary,
+            variants: {
+                size: createIconSizeVariants(theme),
+                expanded: {
+                    true: {
+                        _web: {
+                            transform: 'rotate(180deg)',
+                        },
+                    },
+                    false: {
+                        _web: {
+                            transform: 'rotate(0deg)',
+                        },
+                    },
+                },
+            },
+            _web: {
+                transition: 'transform 0.2s ease',
+            },
+        },
+        content: {
+            overflow: 'hidden',
+            variants: {
+                expanded: {
+                    true: {
+                        maxHeight: 2000,
+                    },
+                    false: {
+                        maxHeight: 0,
+                    },
+                },
+            },
+            _web: {
+                transition: 'height 0.15s ease, padding 0.3s ease',
+            },
+        },
+        contentInner: {
+            color: theme.colors.text.secondary,
+            variants: {
+                size: createContentInnerSizeVariants(theme),
+            },
+        },
     };
 });

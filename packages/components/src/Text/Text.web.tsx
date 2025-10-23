@@ -8,7 +8,7 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
   children,
   size = 'md',
   weight = 'normal',
-  color,
+  color = 'primary',
   align = 'left',
   style,
   testID,
@@ -22,7 +22,7 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
 
   // Create the style array following the official documentation pattern
   const textStyleArray = [
-    textStyles.text,
+    textStyles.text({ color }),
     style,
   ];
 

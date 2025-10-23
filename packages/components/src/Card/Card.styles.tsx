@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Intent, } from '@idealyst/theme';
 
 type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
 type CardPadding = 'none' | 'sm' | 'md' | 'lg';

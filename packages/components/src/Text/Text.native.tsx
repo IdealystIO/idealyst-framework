@@ -23,7 +23,7 @@ const Text = forwardRef<RNText, TextProps>(({
     <RNText
       ref={ref}
       style={[
-        textStyles.text,
+        textStyles.text({ color }),
         style,
       ]}
       testID={testID}

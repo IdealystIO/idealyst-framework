@@ -66,15 +66,13 @@ function createColorVariants(theme: Theme) {
     return variants;
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const textStyles = StyleSheet.create((theme: Theme) => {
-  return {
-        text: {
-            color: theme.colors['gray.900'], // TODO: Add text colors to theme
+function createTextStyles(theme: Theme) {
+    return ({ color }: TextVariants) => {
+        const colorValue = theme.colors.text[color] || theme.colors.text.primary;
+        return {
             margin: 0,
             padding: 0,
+            color: colorValue,
             variants: {
                 size: createSizeVariants(theme),
                 weight: createWeightVariants(),
@@ -89,12 +87,20 @@ export const textStyles = StyleSheet.create((theme: Theme) => {
                         textAlign: 'right',
                     },
                 },
-                color: createColorVariants(theme),
             },
             _web: {
                 fontFamily: 'inherit',
                 lineHeight: 'inherit',
             },
-        }
+        };
+    }
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const textStyles = StyleSheet.create((theme: Theme) => {
+  return {
+        text: createTextStyles(theme),
     }
 });

@@ -234,6 +234,7 @@ export const dividerStyles = StyleSheet.create((theme: Theme) => {
     container: {
         alignItems: 'center',
         justifyContent: 'center',
+        display: 'flex',
         variants: {
             orientation: {
                 horizontal: {

@@ -24,6 +24,7 @@ export type AllComponentSizes = {
     tabBar: Record<Size, TabBarSizeValue>;
     table: Record<Size, TableSizeValue>;
     tooltip: Record<Size, TooltipSizeValue>;
+    view: Record<Size, ViewSizeValue>;
 }
 
 
@@ -173,4 +174,9 @@ export type TableSizeValue = {
 export type TooltipSizeValue = {
     fontSize: SizeValue;
     padding: SizeValue;
+}
+
+export type ViewSizeValue = {
+    padding: SizeValue;
+    spacing: SizeValue;
 }

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles} from '@idealyst/theme';
 import { Surface } from '@idealyst/theme/src/theme/surface';
+import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ViewSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type ViewMargin = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -25,29 +26,11 @@ export type ViewStylesheet = {
 /**
  * Create spacing variants for view
  */
-function createSpacingVariants() {
-    return {
-        none: { gap: 0 },
-        xs: { gap: 4 },
-        sm: { gap: 8 },
-        md: { gap: 16 },
-        lg: { gap: 24 },
-        xl: { gap: 32 },
-    };
-}
-
-/**
- * Create margin variants for view
- */
-function createMarginVariants() {
-    return {
-        none: { margin: 0 },
-        xs: { margin: 4 },
-        sm: { margin: 8 },
-        md: { margin: 16 },
-        lg: { margin: 24 },
-        xl: { margin: 32 },
-    };
+function createSpacingVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'view', (size) => ({
+        padding: size.padding,
+        gap: size.spacing,
+    }));
 }
 
 /**
@@ -113,8 +96,7 @@ export const viewStyles = StyleSheet.create((theme: Theme) => {
     view: {
         display: 'flex',
         variants: {
-            spacing: createSpacingVariants(),
-            margin: createMarginVariants(),
+            spacing: createSpacingVariants(theme),
             background: createBackgroundVariants(theme),
             radius: createRadiusVariants(),
             border: createBorderVariants(theme),

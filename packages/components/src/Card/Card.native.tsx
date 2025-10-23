@@ -5,7 +5,7 @@ import { cardStyles } from './Card.styles';
 
 const Card = forwardRef<View | Pressable, CardProps>(({
   children,
-  variant = 'default',
+  type = 'default',
   padding = 'md',
   radius = 'md',
   intent = 'neutral',
@@ -18,7 +18,7 @@ const Card = forwardRef<View | Pressable, CardProps>(({
 }, ref) => {
   // Apply variants
   cardStyles.useVariants({
-    variant: variant as any,
+    type,
     padding,
     radius,
     intent,
