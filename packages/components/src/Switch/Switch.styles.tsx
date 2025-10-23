@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { deepMerge } from '../utils/deepMerge';
 
 type SwitchSize = Size;
 type SwitchIntent = Intent;
@@ -87,23 +86,9 @@ function getThumbIconColor(theme: Theme, checked: boolean, intent: SwitchIntent)
     return theme.colors.border.secondary;
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedSwitchStyles>): ExpandedSwitchStyles {
-    return deepMerge({
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    }, expanded);
-}
-
-function createSwitchContainerStyles(theme: Theme, expanded: Partial<ExpandedSwitchStyles>): ExpandedSwitchStyles {
-    return deepMerge({
-        justifyContent: 'center',
-    }, expanded);
-}
-
-function createSwitchTrackStyles(theme: Theme, expanded: Partial<ExpandedSwitchTrackStyles>) {
+function createSwitchTrackStyles(theme: Theme) {
     return ({ checked, intent, disabled }: { checked: boolean, intent: SwitchIntent, disabled: boolean }) => {
-        return deepMerge({
+        return {
             borderRadius: 9999,
             position: 'relative',
             backgroundColor: getTrackBackgroundColor(theme, checked, intent),
@@ -133,13 +118,13 @@ function createSwitchTrackStyles(theme: Theme, expanded: Partial<ExpandedSwitchT
             _web: {
                 transition: 'background-color 0.2s ease',
             },
-        }, expanded);
+        };
     }
 }
 
-function createSwitchThumbStyles(theme: Theme, expanded: Partial<ExpandedSwitchThumbStyles>) {
+function createSwitchThumbStyles(theme: Theme) {
     return ({ size, checked }: { size: SwitchSize, checked: boolean }) => {
-        return deepMerge({
+        return {
             position: 'absolute',
             backgroundColor: theme.colors.surface.primary,
             borderRadius: 9999,
@@ -160,13 +145,13 @@ function createSwitchThumbStyles(theme: Theme, expanded: Partial<ExpandedSwitchT
                 transition: 'transform 0.2s ease',
                 transform: getThumbTransform(theme, size, checked),
             },
-        }, expanded);
+        };
     }
 }
 
-function createThumbIconStyles(theme: Theme, expanded: Partial<ExpandedThumbIconStyles>) {
+function createThumbIconStyles(theme: Theme) {
     return ({ checked, intent }: { checked: boolean, intent: SwitchIntent }) => {
-        return deepMerge({
+        return {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -174,12 +159,27 @@ function createThumbIconStyles(theme: Theme, expanded: Partial<ExpandedThumbIcon
             variants: {
                 size: createThumbIconSizeVariants(theme),
             },
-        }, expanded);
+        };
     }
 }
 
-function createLabelStyles(theme: Theme, expanded: Partial<ExpandedLabelStyles>): ExpandedLabelStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const switchStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    switchContainer: {
+        justifyContent: 'center',
+    },
+    switchTrack: createSwitchTrackStyles(theme),
+    switchThumb: createSwitchThumbStyles(theme),
+    thumbIcon: createThumbIconStyles(theme),
+    label: {
         fontSize: 14,
         color: theme.colors.text.primary,
         variants: {
@@ -200,19 +200,6 @@ function createLabelStyles(theme: Theme, expanded: Partial<ExpandedLabelStyles>)
                 },
             },
         },
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const switchStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme, {}),
-    switchContainer: createSwitchContainerStyles(theme, {}),
-    switchTrack: createSwitchTrackStyles(theme, {}),
-    switchThumb: createSwitchThumbStyles(theme, {}),
-    thumbIcon: createThumbIconStyles(theme, {}),
-    label: createLabelStyles(theme, {}),
+    },
   };
 });

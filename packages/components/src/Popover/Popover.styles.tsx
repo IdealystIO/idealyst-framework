@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 
 type PopoverPlacement = 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end' | 'right' | 'right-start' | 'right-end';
 
@@ -82,8 +81,12 @@ function createArrowPlacementVariants(theme: Theme) {
     };
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedPopoverStyles>): ExpandedPopoverStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const popoverStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    container: {
         backgroundColor: theme.colors.surface.primary,
         borderRadius: 8,
         borderWidth: 1,
@@ -100,17 +103,11 @@ function createContainerStyles(theme: Theme, expanded: Partial<ExpandedPopoverSt
             transition: 'opacity 150ms ease-out, transform 150ms ease-out',
             transformOrigin: 'center center',
         },
-    }, expanded);
-}
-
-function createContentStyles(theme: Theme, expanded: Partial<ExpandedPopoverStyles>): ExpandedPopoverStyles {
-    return deepMerge({
+    },
+    content: {
         padding: 16,
-    }, expanded);
-}
-
-function createArrowStyles(theme: Theme, expanded: Partial<ExpandedPopoverStyles>): ExpandedPopoverStyles {
-    return deepMerge({
+    },
+    arrow: {
         position: 'absolute',
         width: 12,
         height: 12,
@@ -122,24 +119,10 @@ function createArrowStyles(theme: Theme, expanded: Partial<ExpandedPopoverStyles
             transform: 'rotate(45deg)',
             boxShadow: '-2px 2px 4px rgba(0, 0, 0, 0.1)',
         },
-    }, expanded);
-}
-
-function createBackdropStyles(theme: Theme, expanded: Partial<ExpandedPopoverStyles>): ExpandedPopoverStyles {
-    return deepMerge({
+    },
+    backdrop: {
         flex: 1,
         backgroundColor: 'transparent',
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const popoverStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme, {}),
-    content: createContentStyles(theme, {}),
-    arrow: createArrowStyles(theme, {}),
-    backdrop: createBackdropStyles(theme, {}),
+    },
   };
 });

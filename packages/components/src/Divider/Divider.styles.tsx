@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Intent} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { CompoundVariants, StylesheetStyles } from '@idealyst/theme/src/styles';
 
 type DividerOrientation = 'horizontal' | 'vertical';
@@ -168,8 +167,12 @@ function createLineCompoundVariants(): CompoundVariants<keyof DividerVariants> {
     ];
 }
 
-function createDividerStyles(theme: Theme, expanded: Partial<ExpandedDividerStyles>): ExpandedDividerStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const dividerStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    divider: {
         backgroundColor: theme.colors.border.secondary,
         variants: {
             orientation: {
@@ -227,11 +230,8 @@ function createDividerStyles(theme: Theme, expanded: Partial<ExpandedDividerStyl
             },
         },
         compoundVariants: createDividerCompoundVariants(theme),
-    }, expanded);
-}
-
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedDividerStyles>): ExpandedDividerStyles {
-    return deepMerge({
+    },
+    container: {
         alignItems: 'center',
         justifyContent: 'center',
         variants: {
@@ -252,11 +252,8 @@ function createContainerStyles(theme: Theme, expanded: Partial<ExpandedDividerSt
                 lg: { gap: 24 },
             },
         },
-    }, expanded);
-}
-
-function createContentStyles(theme: Theme, expanded: Partial<ExpandedDividerStyles>): ExpandedDividerStyles {
-    return deepMerge({
+    },
+    content: {
         backgroundColor: theme.colors.surface.primary,
         color: theme.colors.text.secondary,
         fontSize: 14,
@@ -270,11 +267,8 @@ function createContentStyles(theme: Theme, expanded: Partial<ExpandedDividerStyl
                 },
             },
         },
-    }, expanded);
-}
-
-function createLineStyles(theme: Theme, expanded: Partial<ExpandedDividerStyles>): ExpandedDividerStyles {
-    return deepMerge({
+    },
+    line: {
         backgroundColor: theme.colors.border.secondary,
         flex: 1,
         variants: {
@@ -289,17 +283,6 @@ function createLineStyles(theme: Theme, expanded: Partial<ExpandedDividerStyles>
             },
         },
         compoundVariants: createLineCompoundVariants(),
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const dividerStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    divider: createDividerStyles(theme, {}),
-    container: createContainerStyles(theme, {}),
-    content: createContentStyles(theme, {}),
-    line: createLineStyles(theme, {}),
+    },
   };
 });

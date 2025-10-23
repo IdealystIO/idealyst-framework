@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Size } from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type TabBarSize = Size;
@@ -212,8 +211,8 @@ function createIndicatorCompoundVariants(theme: Theme): CompoundVariants<keyof T
     ];
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTabBarContainerStyles>): ExpandedTabBarContainerStyles => {
-    return deepMerge({
+const createContainerStyles = (theme: Theme): ExpandedTabBarContainerStyles => {
+    return {
         display: 'flex',
         flexDirection: 'row',
         gap: 0,
@@ -247,11 +246,11 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTabBarCon
             },
         },
         compoundVariants: createContainerCompoundVariants(theme),
-    }, expanded);
+    };
 }
 
-const createTabStyles = (theme: Theme, expanded: Partial<ExpandedTabBarTabStyles>): ExpandedTabBarTabStyles => {
-    return deepMerge({
+const createTabStyles = (theme: Theme): ExpandedTabBarTabStyles => {
+    return {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -305,11 +304,11 @@ const createTabStyles = (theme: Theme, expanded: Partial<ExpandedTabBarTabStyles
             outline: 'none',
             transition: 'color 0.2s ease',
         },
-    }, expanded);
+    };
 }
 
-const createTabLabelStyles = (theme: Theme, expanded: Partial<ExpandedTabBarLabelStyles>): ExpandedTabBarLabelStyles => {
-    return deepMerge({
+const createTabLabelStyles = (theme: Theme): ExpandedTabBarLabelStyles => {
+    return {
         position: 'relative',
         zIndex: 3,
         fontWeight: '500',
@@ -339,11 +338,11 @@ const createTabLabelStyles = (theme: Theme, expanded: Partial<ExpandedTabBarLabe
             },
         },
         compoundVariants: createLabelCompoundVariants(theme),
-    }, expanded);
+    };
 }
 
-const createIndicatorStyles = (theme: Theme, expanded: Partial<ExpandedTabBarIndicatorStyles>): ExpandedTabBarIndicatorStyles => {
-    return deepMerge({
+const createIndicatorStyles = (theme: Theme): ExpandedTabBarIndicatorStyles => {
+    return {
         position: 'absolute',
         pointerEvents: 'none',
         zIndex: 1,
@@ -375,15 +374,15 @@ const createIndicatorStyles = (theme: Theme, expanded: Partial<ExpandedTabBarInd
         _web: {
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         },
-    }, expanded);
+    };
 }
 
-export const createTabBarStylesheet = (theme: Theme, expanded?: Partial<TabBarStylesheet>): TabBarStylesheet => {
+export const createTabBarStylesheet = (theme: Theme): TabBarStylesheet => {
     return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        tab: createTabStyles(theme, expanded?.tab || {}),
-        tabLabel: createTabLabelStyles(theme, expanded?.tabLabel || {}),
-        indicator: createIndicatorStyles(theme, expanded?.indicator || {}),
+        container: createContainerStyles(theme),
+        tab: createTabStyles(theme),
+        tabLabel: createTabLabelStyles(theme),
+        indicator: createIndicatorStyles(theme),
     };
 }
 

@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size, Styles} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type SliderSize = Size;

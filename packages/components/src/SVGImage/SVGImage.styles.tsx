@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 
 type SVGImageIntent = Intent;
 
@@ -48,8 +47,12 @@ function createContainerNativeIntentVariants(theme: Theme) {
     return variants;
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedSVGImageStyles>): ExpandedSVGImageStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const svgImageStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    container: {
         alignItems: 'center',
         justifyContent: 'center',
         variants: {
@@ -63,11 +66,8 @@ function createContainerStyles(theme: Theme, expanded: Partial<ExpandedSVGImageS
                 intent: createContainerNativeIntentVariants(theme),
             },
         },
-    }, expanded);
-}
-
-function createImageStyles(theme: Theme, expanded: Partial<ExpandedSVGImageStyles>): ExpandedSVGImageStyles {
-    return deepMerge({
+    },
+    image: {
         _web: {
             display: 'block',
             maxWidth: '100%',
@@ -76,15 +76,6 @@ function createImageStyles(theme: Theme, expanded: Partial<ExpandedSVGImageStyle
         _native: {
             // Native image styles will be applied via Image component
         },
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const svgImageStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme, {}),
-    image: createImageStyles(theme, {}),
+    },
   };
 });

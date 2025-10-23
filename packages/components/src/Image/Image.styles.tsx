@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 
 type ImageVariants = {}
 
@@ -14,23 +13,21 @@ export type ImageStylesheet = {
     loadingIndicator: ExpandedImageStyles;
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedImageStyles>): ExpandedImageStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const imageStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    container: {
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: theme.colors['gray.200'],
-    }, expanded);
-}
-
-function createImageStyles(theme: Theme, expanded: Partial<ExpandedImageStyles>): ExpandedImageStyles {
-    return deepMerge({
+    },
+    image: {
         width: '100%',
         height: '100%',
-    }, expanded);
-}
-
-function createPlaceholderStyles(theme: Theme, expanded: Partial<ExpandedImageStyles>): ExpandedImageStyles {
-    return deepMerge({
+    },
+    placeholder: {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -40,11 +37,8 @@ function createPlaceholderStyles(theme: Theme, expanded: Partial<ExpandedImageSt
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: theme.colors['gray.200'],
-    }, expanded);
-}
-
-function createFallbackStyles(theme: Theme, expanded: Partial<ExpandedImageStyles>): ExpandedImageStyles {
-    return deepMerge({
+    },
+    fallback: {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -55,24 +49,9 @@ function createFallbackStyles(theme: Theme, expanded: Partial<ExpandedImageStyle
         justifyContent: 'center',
         backgroundColor: theme.colors['gray.300'],
         color: theme.colors['gray.600'],
-    }, expanded);
-}
-
-function createLoadingIndicatorStyles(theme: Theme, expanded: Partial<ExpandedImageStyles>): ExpandedImageStyles {
-    return deepMerge({
+    },
+    loadingIndicator: {
         color: theme.colors['gray.600'],
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const imageStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme, {}),
-    image: createImageStyles(theme, {}),
-    placeholder: createPlaceholderStyles(theme, {}),
-    fallback: createFallbackStyles(theme, {}),
-    loadingIndicator: createLoadingIndicatorStyles(theme, {}),
+    },
   };
 });

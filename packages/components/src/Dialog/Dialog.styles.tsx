@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
-
 type DialogSize = 'sm' | 'md' | 'lg' | 'fullscreen';
 type DialogType = 'default' | 'alert' | 'confirmation';
 
@@ -66,8 +64,8 @@ function createContainerTypeVariants(theme: Theme) {
     };
 }
 
-const createBackdropStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
-    return deepMerge({
+const createBackdropStyles = (theme: Theme): ExpandedDialogStyles => {
+    return {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -82,11 +80,11 @@ const createBackdropStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyl
             position: 'fixed',
             transition: 'opacity 150ms ease-out',
         },
-    }, expanded);
+    };
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
-    return deepMerge({
+const createContainerStyles = (theme: Theme): ExpandedDialogStyles => {
+    return {
         backgroundColor: theme.colors.surface.primary,
         borderRadius: 12,
         shadowColor: '#000',
@@ -108,11 +106,11 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedDialogSty
             transition: 'opacity 150ms ease-out, transform 150ms ease-out',
             transformOrigin: 'center center',
         },
-    }, expanded);
+    };
 }
 
-const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
-    return deepMerge({
+const createHeaderStyles = (theme: Theme): ExpandedDialogStyles => {
+    return {
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border.primary,
         display: 'flex',
@@ -122,11 +120,11 @@ const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles
         _web: {
             borderBottomStyle: 'solid',
         },
-    }, expanded);
+    };
 }
 
-const createTitleStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
-    return deepMerge({
+const createTitleStyles = (theme: Theme): ExpandedDialogStyles => {
+    return {
         marginLeft: 24,
         fontSize: 18,
         paddingVertical: 16,
@@ -136,11 +134,11 @@ const createTitleStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>
         _web: {
             paddingVertical: 4,
         },
-    }, expanded);
+    };
 }
 
-const createCloseButtonStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
-    return deepMerge({
+const createCloseButtonStyles = (theme: Theme): ExpandedDialogStyles => {
+    return {
         width: 32,
         height: 32,
         marginRight: 16,
@@ -156,45 +154,45 @@ const createCloseButtonStyles = (theme: Theme, expanded: Partial<ExpandedDialogS
                 backgroundColor: theme.colors.surface.secondary,
             },
         },
-    }, expanded);
+    };
 }
 
-const createCloseButtonTextStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
-    return deepMerge({
+const createCloseButtonTextStyles = (theme: Theme): ExpandedDialogStyles => {
+    return {
         fontSize: 18,
         color: theme.colors.text.secondary,
         fontWeight: '500',
-    }, expanded);
+    };
 }
 
-const createContentStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
-    return deepMerge({
+const createContentStyles = (theme: Theme): ExpandedDialogStyles => {
+    return {
         padding: 24,
         _web: {
             overflow: 'visible',
             maxHeight: 'none',
         },
-    }, expanded);
+    };
 }
 
-const createModalStyles = (theme: Theme, expanded: Partial<ExpandedDialogStyles>): ExpandedDialogStyles => {
-    return deepMerge({
+const createModalStyles = (theme: Theme): ExpandedDialogStyles => {
+    return {
         margin: 0,
         justifyContent: 'center',
         alignItems: 'center',
-    }, expanded);
+    };
 }
 
-export const createDialogStylesheet = (theme: Theme, expanded?: Partial<DialogStylesheet>): DialogStylesheet => {
+export const createDialogStylesheet = (theme: Theme): DialogStylesheet => {
     return {
-        backdrop: createBackdropStyles(theme, expanded?.backdrop || {}),
-        container: createContainerStyles(theme, expanded?.container || {}),
-        header: createHeaderStyles(theme, expanded?.header || {}),
-        title: createTitleStyles(theme, expanded?.title || {}),
-        closeButton: createCloseButtonStyles(theme, expanded?.closeButton || {}),
-        closeButtonText: createCloseButtonTextStyles(theme, expanded?.closeButtonText || {}),
-        content: createContentStyles(theme, expanded?.content || {}),
-        modal: createModalStyles(theme, expanded?.modal || {}),
+        backdrop: createBackdropStyles(theme),
+        container: createContainerStyles(theme),
+        header: createHeaderStyles(theme),
+        title: createTitleStyles(theme),
+        closeButton: createCloseButtonStyles(theme),
+        closeButtonText: createCloseButtonTextStyles(theme),
+        content: createContentStyles(theme),
+        modal: createModalStyles(theme),
     };
 }
 
@@ -202,13 +200,13 @@ export const createDialogStylesheet = (theme: Theme, expanded?: Partial<DialogSt
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const dialogStyles = StyleSheet.create((theme: Theme) => {
     return {
-        backdrop: createBackdropStyles(theme, {}),
-        container: createContainerStyles(theme, {}),
-        header: createHeaderStyles(theme, {}),
-        title: createTitleStyles(theme, {}),
-        closeButton: createCloseButtonStyles(theme, {}),
-        closeButtonText: createCloseButtonTextStyles(theme, {}),
-        content: createContentStyles(theme, {}),
-        modal: createModalStyles(theme, {}),
+        backdrop: createBackdropStyles(theme),
+        container: createContainerStyles(theme),
+        header: createHeaderStyles(theme),
+        title: createTitleStyles(theme),
+        closeButton: createCloseButtonStyles(theme),
+        closeButtonText: createCloseButtonTextStyles(theme),
+        content: createContentStyles(theme),
+        modal: createModalStyles(theme),
     };
 });

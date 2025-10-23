@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ActivityIndicatorSize = Size;
@@ -38,28 +37,10 @@ function getSpinnerColor(theme: Theme, intent: ActivityIndicatorIntent) {
     return theme.intents[intent].primary;
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedActivityIndicatorStyles>): ExpandedActivityIndicatorStyles {
-    return deepMerge({
-        alignItems: 'center',
-        justifyContent: 'center',
-        variants: {
-            size: createContainerSizeVariants(theme),
-            animating: {
-                true: {
-                    opacity: 1,
-                },
-                false: {
-                    opacity: 0,
-                },
-            },
-        },
-    }, expanded);
-}
-
-function createSpinnerStyles(theme: Theme, expanded: Partial<ExpandedActivityIndicatorStyles>) {
+function createSpinnerStyles(theme: Theme) {
     return ({ intent }: ActivityIndicatorVariants) => {
         const color = getSpinnerColor(theme, intent);
-        return deepMerge({
+        return {
             borderRadius: 9999,
             borderStyle: 'solid',
             color,
@@ -77,7 +58,7 @@ function createSpinnerStyles(theme: Theme, expanded: Partial<ExpandedActivityInd
                 animation: 'spin 1s linear infinite',
                 boxSizing: 'border-box',
             },
-        }, expanded);
+        };
     }
 }
 
@@ -86,7 +67,21 @@ function createSpinnerStyles(theme: Theme, expanded: Partial<ExpandedActivityInd
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const activityIndicatorStyles = StyleSheet.create((theme: Theme) => {
   return {
-    container: createContainerStyles(theme, {}),
-    spinner: createSpinnerStyles(theme, {}),
+    container: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        variants: {
+            size: createContainerSizeVariants(theme),
+            animating: {
+                true: {
+                    opacity: 1,
+                },
+                false: {
+                    opacity: 0,
+                },
+            },
+        },
+    },
+    spinner: createSpinnerStyles(theme),
   };
 });

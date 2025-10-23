@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Size } from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type TableType = 'default' | 'bordered' | 'striped';
@@ -198,27 +197,27 @@ function createCellTypeVariants(theme: Theme) {
     };
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTableContainerStyles>): ExpandedTableContainerStyles => {
-    return deepMerge({
+const createContainerStyles = (theme: Theme): ExpandedTableContainerStyles => {
+    return {
         width: '100%',
         overflow: 'auto',
         variants: {
             type: createContainerTypeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-const createTableStyles = (theme: Theme, expanded: Partial<ExpandedTableStyles>): ExpandedTableStyles => {
-    return deepMerge({
+const createTableStyles = (theme: Theme): ExpandedTableStyles => {
+    return {
         width: '100%',
         _web: {
             borderCollapse: 'collapse',
         },
-    }, expanded);
+    };
 }
 
-const createTheadStyles = (theme: Theme, expanded: Partial<ExpandedTableHeadStyles>): ExpandedTableHeadStyles => {
-    return deepMerge({
+const createTheadStyles = (theme: Theme): ExpandedTableHeadStyles => {
+    return {
         backgroundColor: theme.colors.surface.secondary,
         variants: {
             sticky: {
@@ -230,15 +229,15 @@ const createTheadStyles = (theme: Theme, expanded: Partial<ExpandedTableHeadStyl
                 false: {},
             },
         },
-    }, expanded);
+    };
 }
 
-const createTbodyStyles = (theme: Theme, expanded: Partial<ExpandedTableStyles>): ExpandedTableStyles => {
-    return deepMerge({}, expanded);
+const createTbodyStyles = (theme: Theme): ExpandedTableStyles => {
+    return {};
 }
 
-const createRowStyles = (theme: Theme, expanded: Partial<ExpandedTableRowStyles>): ExpandedTableRowStyles => {
-    return deepMerge({
+const createRowStyles = (theme: Theme): ExpandedTableRowStyles => {
+    return {
         variants: {
             type: createRowTypeVariants(theme),
             clickable: {
@@ -257,11 +256,11 @@ const createRowStyles = (theme: Theme, expanded: Partial<ExpandedTableRowStyles>
         _web: {
             transition: 'background-color 0.2s ease',
         },
-    }, expanded);
+    };
 }
 
-const createHeaderCellStyles = (theme: Theme, expanded: Partial<ExpandedTableHeaderCellStyles>): ExpandedTableHeaderCellStyles => {
-    return deepMerge({
+const createHeaderCellStyles = (theme: Theme): ExpandedTableHeaderCellStyles => {
+    return {
         textAlign: 'left',
         fontWeight: '600',
         color: theme.colors.text.primary,
@@ -286,11 +285,11 @@ const createHeaderCellStyles = (theme: Theme, expanded: Partial<ExpandedTableHea
             },
             type: createHeaderCellTypeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-const createCellStyles = (theme: Theme, expanded: Partial<ExpandedTableCellStyles>): ExpandedTableCellStyles => {
-    return deepMerge({
+const createCellStyles = (theme: Theme): ExpandedTableCellStyles => {
+    return {
         textAlign: 'left',
         color: theme.colors.text.primary,
         variants: {
@@ -308,18 +307,18 @@ const createCellStyles = (theme: Theme, expanded: Partial<ExpandedTableCellStyle
             },
             type: createCellTypeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-export const createTableStylesheet = (theme: Theme, expanded?: Partial<TableStylesheet>): TableStylesheet => {
+export const createTableStylesheet = (theme: Theme): TableStylesheet => {
     return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        table: createTableStyles(theme, expanded?.table || {}),
-        thead: createTheadStyles(theme, expanded?.thead || {}),
-        tbody: createTbodyStyles(theme, expanded?.tbody || {}),
-        row: createRowStyles(theme, expanded?.row || {}),
-        headerCell: createHeaderCellStyles(theme, expanded?.headerCell || {}),
-        cell: createCellStyles(theme, expanded?.cell || {}),
+        container: createContainerStyles(theme),
+        table: createTableStyles(theme),
+        thead: createTheadStyles(theme),
+        tbody: createTbodyStyles(theme),
+        row: createRowStyles(theme),
+        headerCell: createHeaderCellStyles(theme),
+        cell: createCellStyles(theme),
     };
 }
 
@@ -327,12 +326,12 @@ export const createTableStylesheet = (theme: Theme, expanded?: Partial<TableStyl
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const tableStyles = StyleSheet.create((theme: Theme) => {
     return {
-        container: createContainerStyles(theme, {}),
-        table: createTableStyles(theme, {}),
-        thead: createTheadStyles(theme, {}),
-        tbody: createTbodyStyles(theme, {}),
-        row: createRowStyles(theme, {}),
-        headerCell: createHeaderCellStyles(theme, {}),
-        cell: createCellStyles(theme, {}),
+        container: createContainerStyles(theme),
+        table: createTableStyles(theme),
+        thead: createTheadStyles(theme),
+        tbody: createTbodyStyles(theme),
+        row: createRowStyles(theme),
+        headerCell: createHeaderCellStyles(theme),
+        cell: createCellStyles(theme),
     };
 });

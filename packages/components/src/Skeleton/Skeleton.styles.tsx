@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 
 type SkeletonShape = 'rectangle' | 'rounded' | 'circle';
 type SkeletonAnimation = 'pulse' | 'wave' | 'none';
@@ -35,8 +34,12 @@ function createShapeVariants(theme: Theme) {
     };
 }
 
-function createSkeletonStyles(theme: Theme, expanded: Partial<ExpandedSkeletonStyles>): ExpandedSkeletonStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const skeletonStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    skeleton: {
         backgroundColor: theme.colors.surface.tertiary,
         overflow: 'hidden',
         variants: {
@@ -47,22 +50,10 @@ function createSkeletonStyles(theme: Theme, expanded: Partial<ExpandedSkeletonSt
                 none: {},
             },
         },
-    }, expanded);
-}
-
-function createGroupStyles(theme: Theme, expanded: Partial<ExpandedSkeletonGroupStyles>): ExpandedSkeletonGroupStyles {
-    return deepMerge({
+    },
+    group: {
         display: 'flex',
         flexDirection: 'column',
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const skeletonStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    skeleton: createSkeletonStyles(theme, {}),
-    group: createGroupStyles(theme, {}),
+    },
   };
 });

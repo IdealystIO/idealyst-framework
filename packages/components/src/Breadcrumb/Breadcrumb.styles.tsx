@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Size } from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type BreadcrumbSize = Size;
@@ -86,27 +85,27 @@ function getIconColor(theme: Theme, intent: BreadcrumbIntent) {
     return theme.colors.text.secondary;
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
+const createContainerStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+    return {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         flexWrap: 'wrap',
         gap: 8,
-    }, expanded);
+    };
 }
 
-const createItemStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
+const createItemStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+    return {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         gap: 4,
-    }, expanded);
+    };
 }
 
-const createItemTextStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
+const createItemTextStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+    return {
         variants: {
             size: createItemTextSizeVariants(theme),
             intent: { primary: {}, neutral: {} },
@@ -124,74 +123,74 @@ const createItemTextStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumb
             clickable: { true: {}, false: {} },
         },
         compoundVariants: createItemTextCompoundVariants(theme),
-    }, expanded);
+    };
 }
 
-const createIconStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
+const createIconStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+    return {
         variants: {
             size: createIconSizeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-const createSeparatorStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
+const createSeparatorStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+    return {
         color: theme.colors.text.tertiary,
         variants: {
             size: createItemTextSizeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-const createEllipsisStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
+const createEllipsisStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+    return {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-    }, expanded);
+    };
 }
 
-const createEllipsisIconStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>) => {
+const createEllipsisIconStyles = (theme: Theme) => {
     return ({ intent }: BreadcrumbVariants) => {
-        return deepMerge({
+        return {
             color: getIconColor(theme, intent),
             variants: {
                 size: createIconSizeVariants(theme),
             },
-        }, expanded);
+        };
     }
 }
 
-const createMenuButtonStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>): ExpandedBreadcrumbStyles => {
-    return deepMerge({
+const createMenuButtonStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+    return {
         paddingVertical: 4,
         paddingHorizontal: 8,
-    }, expanded);
+    };
 }
 
-const createMenuButtonIconStyles = (theme: Theme, expanded: Partial<ExpandedBreadcrumbStyles>) => {
+const createMenuButtonIconStyles = (theme: Theme) => {
     return ({ intent }: BreadcrumbVariants) => {
-        return deepMerge({
+        return {
             color: getIconColor(theme, intent),
             variants: {
                 size: createIconSizeVariants(theme),
             },
-        }, expanded);
+        };
     }
 }
 
-export const createBreadcrumbStylesheet = (theme: Theme, expanded?: Partial<BreadcrumbStylesheet>): BreadcrumbStylesheet => {
+export const createBreadcrumbStylesheet = (theme: Theme): BreadcrumbStylesheet => {
     return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        item: createItemStyles(theme, expanded?.item || {}),
-        itemText: createItemTextStyles(theme, expanded?.itemText || {}),
-        icon: createIconStyles(theme, expanded?.icon || {}),
-        separator: createSeparatorStyles(theme, expanded?.separator || {}),
-        ellipsis: createEllipsisStyles(theme, expanded?.ellipsis || {}),
-        ellipsisIcon: createEllipsisIconStyles(theme, expanded?.ellipsisIcon || {}),
-        menuButton: createMenuButtonStyles(theme, expanded?.menuButton || {}),
-        menuButtonIcon: createMenuButtonIconStyles(theme, expanded?.menuButtonIcon || {}),
+        container: createContainerStyles(theme),
+        item: createItemStyles(theme),
+        itemText: createItemTextStyles(theme),
+        icon: createIconStyles(theme),
+        separator: createSeparatorStyles(theme),
+        ellipsis: createEllipsisStyles(theme),
+        ellipsisIcon: createEllipsisIconStyles(theme),
+        menuButton: createMenuButtonStyles(theme),
+        menuButtonIcon: createMenuButtonIconStyles(theme),
     };
 }
 

@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, getColorFromString, Size, Color } from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type BadgeType = 'filled' | 'outlined' | 'dot';
@@ -67,9 +66,9 @@ function createTextTypeVariants(theme: Theme, color: Color){
 /**
  * Generate badge container styles
  */
-function createBadgeStyles(theme: Theme, expanded?: Partial<ExpandedBadgeStyles>) {
+function createBadgeStyles(theme: Theme) {
     return ({ color }: BadgeVariants) => {
-        return deepMerge({
+        return {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 9999,
@@ -89,46 +88,24 @@ function createBadgeStyles(theme: Theme, expanded?: Partial<ExpandedBadgeStyles>
                 fontWeight: '600',
                 lineHeight: 1,
             },
-        }, expanded);
+        };
     }
 }
 
 /**
  * Generate badge content container styles
  */
-function createContentStyles(theme: Theme, expanded?: Partial<ExpandedBadgeStyles>) {
-    return deepMerge({
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 4,
-    }, expanded);
-}
 
 /**
  * Generate badge icon styles
  */
-function createIconStyles(theme: Theme, expanded?: Partial<ExpandedBadgeStyles>) {
-    return deepMerge({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        variants: {
-            size: buildSizeVariants(theme, 'badge', (size) => ({
-                width: size.iconSize,
-                height: size.iconSize,
-            })),
-        },
-    }, expanded);
-}
 
 /**
  * Generate badge text styles
  */
-function createTextStyles(theme: Theme, expanded?: Partial<ExpandedBadgeStyles>) {
+function createTextStyles(theme: Theme) {
     return ({ color }: BadgeVariants) => {
-        return deepMerge({
+        return {
             fontWeight: '600',
             textAlign: 'center',
             variants: {
@@ -138,7 +115,7 @@ function createTextStyles(theme: Theme, expanded?: Partial<ExpandedBadgeStyles>)
                 })),
                 type: createTextTypeVariants(theme, color),
             },
-        }, expanded);
+        };
     };
 }
 
@@ -147,9 +124,25 @@ function createTextStyles(theme: Theme, expanded?: Partial<ExpandedBadgeStyles>)
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const badgeStyles = StyleSheet.create((theme: Theme) => {
   return {
-    badge: createBadgeStyles(theme, {}),
-    content: createContentStyles(theme, {}),
-    icon: createIconStyles(theme, {}),
-    text: createTextStyles(theme, {}),
+    badge: createBadgeStyles(theme),
+    content: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 4,
+    },
+    icon: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        variants: {
+            size: buildSizeVariants(theme, 'badge', (size) => ({
+                width: size.iconSize,
+                height: size.iconSize,
+            })),
+        },
+    },
+    text: createTextStyles(theme),
   };
 });

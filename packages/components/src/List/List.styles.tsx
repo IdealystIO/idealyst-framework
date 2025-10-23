@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ListSize = Size;
@@ -146,8 +145,8 @@ function createLabelSizeVariants(theme: Theme) {
     }));
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>): ExpandedListStyles => {
-    return deepMerge({
+const createContainerStyles = (theme: Theme): ExpandedListStyles => {
+    return {
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
@@ -163,11 +162,11 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedListStyle
                 false: {},
             },
         },
-    }, expanded);
+    };
 }
 
-const createItemStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>): ExpandedListStyles => {
-    return deepMerge({
+const createItemStyles = (theme: Theme): ExpandedListStyles => {
+    return {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -222,21 +221,21 @@ const createItemStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>): 
                 borderRadius: 4,
             },
         },
-    }, expanded);
+    };
 }
 
-const createItemContentStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createItemContentStyles = (theme: Theme) => {
+    return {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         flex: 1,
         gap: 8,
-    }, expanded);
+    };
 }
 
-const createLeadingStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createLeadingStyles = (theme: Theme) => {
+    return {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -245,19 +244,19 @@ const createLeadingStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>
         variants: {
             size: createIconSizeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-const createLabelContainerStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createLabelContainerStyles = (theme: Theme) => {
+    return {
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-    }, expanded);
+    };
 }
 
-const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createLabelStyles = (theme: Theme) => {
+    return {
         fontWeight: '500',
         color: theme.colors.text.primary,
         variants: {
@@ -276,40 +275,40 @@ const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) 
                 false: {},
             },
         },
-    }, expanded);
+    };
 }
 
-const createTrailingStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createTrailingStyles = (theme: Theme) => {
+    return {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 8,
         color: theme.colors.text.secondary,
         flexShrink: 0,
-    }, expanded);
+    };
 }
 
-const createTrailingIconStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createTrailingIconStyles = (theme: Theme) => {
+    return {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         variants: {
             size: createIconSizeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-const createSectionStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createSectionStyles = (theme: Theme) => {
+    return {
         display: 'flex',
         flexDirection: 'column',
-    }, expanded);
+    };
 }
 
-const createSectionTitleStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createSectionTitleStyles = (theme: Theme) => {
+    return {
         fontWeight: '600',
         fontSize: 12,
         lineHeight: 16,
@@ -318,29 +317,29 @@ const createSectionTitleStyles = (theme: Theme, expanded: Partial<ExpandedListSt
         color: theme.colors.text.secondary,
         padding: 8,
         paddingBottom: 4,
-    }, expanded);
+    };
 }
 
-const createSectionContentStyles = (theme: Theme, expanded: Partial<ExpandedListStyles>) => {
-    return deepMerge({
+const createSectionContentStyles = (theme: Theme) => {
+    return {
         display: 'flex',
         flexDirection: 'column',
-    }, expanded);
+    };
 }
 
-export const createListStylesheet = (theme: Theme, expanded?: Partial<ListStylesheet>) => {
+export const createListStylesheet = (theme: Theme) => {
     return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        item: createItemStyles(theme, expanded?.item || {}),
-        itemContent: createItemContentStyles(theme, expanded?.itemContent || {}),
-        leading: createLeadingStyles(theme, expanded?.leading || {}),
-        labelContainer: createLabelContainerStyles(theme, expanded?.labelContainer || {}),
-        label: createLabelStyles(theme, expanded?.label || {}),
-        trailing: createTrailingStyles(theme, expanded?.trailing || {}),
-        trailingIcon: createTrailingIconStyles(theme, expanded?.trailingIcon || {}),
-        section: createSectionStyles(theme, expanded?.section || {}),
-        sectionTitle: createSectionTitleStyles(theme, expanded?.sectionTitle || {}),
-        sectionContent: createSectionContentStyles(theme, expanded?.sectionContent || {}),
+        container: createContainerStyles(theme),
+        item: createItemStyles(theme),
+        itemContent: createItemContentStyles(theme),
+        leading: createLeadingStyles(theme),
+        labelContainer: createLabelContainerStyles(theme),
+        label: createLabelStyles(theme),
+        trailing: createTrailingStyles(theme),
+        trailingIcon: createTrailingIconStyles(theme),
+        section: createSectionStyles(theme),
+        sectionTitle: createSectionTitleStyles(theme),
+        sectionContent: createSectionContentStyles(theme),
     };
 }
 
@@ -348,16 +347,16 @@ export const createListStylesheet = (theme: Theme, expanded?: Partial<ListStyles
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const listStyles = StyleSheet.create((theme: Theme) => {
     return {
-        container: createContainerStyles(theme, {}),
-        item: createItemStyles(theme, {}),
-        itemContent: createItemContentStyles(theme, {}),
-        leading: createLeadingStyles(theme, {}),
-        labelContainer: createLabelContainerStyles(theme, {}),
-        label: createLabelStyles(theme, {}),
-        trailing: createTrailingStyles(theme, {}),
-        trailingIcon: createTrailingIconStyles(theme, {}),
-        section: createSectionStyles(theme, {}),
-        sectionTitle: createSectionTitleStyles(theme, {}),
-        sectionContent: createSectionContentStyles(theme, {}),
+        container: createContainerStyles(theme),
+        item: createItemStyles(theme),
+        itemContent: createItemContentStyles(theme),
+        leading: createLeadingStyles(theme),
+        labelContainer: createLabelContainerStyles(theme),
+        label: createLabelStyles(theme),
+        trailing: createTrailingStyles(theme),
+        trailingIcon: createTrailingIconStyles(theme),
+        section: createSectionStyles(theme),
+        sectionTitle: createSectionTitleStyles(theme),
+        sectionContent: createSectionContentStyles(theme),
     };
 });

@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { Surface } from '@idealyst/theme/src/theme/surface';
 
 type ViewSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -106,8 +105,12 @@ function createBorderVariants(theme: Theme) {
     };
 }
 
-function createViewStyles(theme: Theme, expanded: Partial<ExpandedViewStyles>): ExpandedViewStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const viewStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    view: {
         display: 'flex',
         variants: {
             spacing: createSpacingVariants(),
@@ -121,14 +124,6 @@ function createViewStyles(theme: Theme, expanded: Partial<ExpandedViewStyles>): 
             flexDirection: 'column',
             boxSizing: 'border-box',
         },
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const viewStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    view: createViewStyles(theme, {}),
+    },
   };
 });

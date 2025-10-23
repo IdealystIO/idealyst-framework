@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 
 export type ExpandedVideoStyles = StylesheetStyles<never>;
 
@@ -10,23 +9,21 @@ export type VideoStylesheet = {
     fallback: ExpandedVideoStyles;
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedVideoStyles>): ExpandedVideoStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const videoStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    container: {
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: theme.colors['black'],
-    }, expanded);
-}
-
-function createVideoStyles(theme: Theme, expanded: Partial<ExpandedVideoStyles>): ExpandedVideoStyles {
-    return deepMerge({
+    },
+    video: {
         width: '100%',
         height: '100%',
-    }, expanded);
-}
-
-function createFallbackStyles(theme: Theme, expanded: Partial<ExpandedVideoStyles>): ExpandedVideoStyles {
-    return deepMerge({
+    },
+    fallback: {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -37,16 +34,6 @@ function createFallbackStyles(theme: Theme, expanded: Partial<ExpandedVideoStyle
         justifyContent: 'center',
         backgroundColor: theme.colors['gray.300'],
         color: theme.colors['gray.600'],
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const videoStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme, {}),
-    video: createVideoStyles(theme, {}),
-    fallback: createFallbackStyles(theme, {}),
+    },
   };
 });

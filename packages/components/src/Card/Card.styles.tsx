@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 
 type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
 type CardPadding = 'none' | 'sm' | 'md' | 'lg';
@@ -83,9 +82,9 @@ function createCardRadiusVariants(theme: Theme) {
 /**
  * Generate card styles
  */
-function createCardStyles(theme: Theme, expanded: Partial<ExpandedCardStyles>)  {
+function createCardStyles(theme: Theme)  {
     return ({ intent }: CardVariants) => {
-        return deepMerge({
+        return {
             backgroundColor: theme.colors.surface.primary,
             position: 'relative',
             overflow: 'hidden',
@@ -127,7 +126,7 @@ function createCardStyles(theme: Theme, expanded: Partial<ExpandedCardStyles>)  
                 flexDirection: 'column',
                 boxSizing: 'border-box',
             },
-        }, expanded);
+        };
     }
 }
 
@@ -136,6 +135,6 @@ function createCardStyles(theme: Theme, expanded: Partial<ExpandedCardStyles>)  
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const cardStyles = StyleSheet.create((theme: Theme) => {
   return {
-    card: createCardStyles(theme, {}),
+    card: createCardStyles(theme),
   };
 });

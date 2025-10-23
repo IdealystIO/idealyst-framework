@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ProgressSize = Size;
@@ -59,30 +58,9 @@ function createCircularLabelSizeVariants(theme: Theme) {
     }));
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles {
-    return deepMerge({
-        gap: 4,
-    }, expanded);
-}
-
-function createLinearTrackStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles {
-    return deepMerge({
-        backgroundColor: theme.colors.border.secondary,
-        overflow: 'hidden',
-        position: 'relative',
-        variants: {
-            size: createLinearTrackSizeVariants(theme),
-            rounded: {
-                true: { borderRadius: 9999 },
-                false: { borderRadius: 0 },
-            },
-        },
-    }, expanded);
-}
-
-function createLinearBarStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>) {
+function createLinearBarStyles(theme: Theme) {
     return ({ intent }: { intent: ProgressIntent }) => {
-        return deepMerge({
+        return {
             height: '100%',
             backgroundColor: getLinearBarColor(theme, intent),
             variants: {
@@ -94,13 +72,13 @@ function createLinearBarStyles(theme: Theme, expanded: Partial<ExpandedProgressS
             _web: {
                 transition: 'width 0.3s ease',
             },
-        }, expanded);
+        };
     }
 }
 
-function createIndeterminateBarStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>) {
+function createIndeterminateBarStyles(theme: Theme) {
     return ({ intent }: { intent: ProgressIntent }) => {
-        return deepMerge({
+        return {
             position: 'absolute',
             height: '100%',
             width: '40%',
@@ -111,54 +89,16 @@ function createIndeterminateBarStyles(theme: Theme, expanded: Partial<ExpandedPr
                     false: { borderRadius: 0 },
                 },
             },
-        }, expanded);
+        };
     }
 }
 
-function createCircularContainerStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles {
-    return deepMerge({
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        variants: {
-            size: createCircularContainerSizeVariants(theme),
-        },
-    }, expanded);
-}
-
-function createCircularTrackStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles {
-    return deepMerge({
-        stroke: theme.colors.border.secondary,
-    }, expanded);
-}
-
-function createCircularBarStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>) {
+function createCircularBarStyles(theme: Theme) {
     return ({ intent }: { intent: ProgressIntent }) => {
-        return deepMerge({
+        return {
             stroke: getCircularBarColor(theme, intent),
-        }, expanded);
+        };
     }
-}
-
-function createLabelStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles {
-    return deepMerge({
-        color: theme.colors.text.primary,
-        textAlign: 'center',
-        variants: {
-            size: createLabelSizeVariants(theme),
-        },
-    }, expanded);
-}
-
-function createCircularLabelStyles(theme: Theme, expanded: Partial<ExpandedProgressStyles>): ExpandedProgressStyles {
-    return deepMerge({
-        position: 'absolute',
-        fontWeight: '600',
-        color: theme.colors.text.primary,
-        variants: {
-            size: createCircularLabelSizeVariants(theme),
-        },
-    }, expanded);
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
@@ -166,14 +106,49 @@ function createCircularLabelStyles(theme: Theme, expanded: Partial<ExpandedProgr
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const progressStyles = StyleSheet.create((theme: Theme) => {
   return {
-    container: createContainerStyles(theme, {}),
-    linearTrack: createLinearTrackStyles(theme, {}),
-    linearBar: createLinearBarStyles(theme, {}),
-    indeterminateBar: createIndeterminateBarStyles(theme, {}),
-    circularContainer: createCircularContainerStyles(theme, {}),
-    circularTrack: createCircularTrackStyles(theme, {}),
-    circularBar: createCircularBarStyles(theme, {}),
-    label: createLabelStyles(theme, {}),
-    circularLabel: createCircularLabelStyles(theme, {}),
+    container: {
+        gap: 4,
+    },
+    linearTrack: {
+        backgroundColor: theme.colors.border.secondary,
+        overflow: 'hidden',
+        position: 'relative',
+        variants: {
+            size: createLinearTrackSizeVariants(theme),
+            rounded: {
+                true: { borderRadius: 9999 },
+                false: { borderRadius: 0 },
+            },
+        },
+    },
+    linearBar: createLinearBarStyles(theme),
+    indeterminateBar: createIndeterminateBarStyles(theme),
+    circularContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        variants: {
+            size: createCircularContainerSizeVariants(theme),
+        },
+    },
+    circularTrack: {
+        stroke: theme.colors.border.secondary,
+    },
+    circularBar: createCircularBarStyles(theme),
+    label: {
+        color: theme.colors.text.primary,
+        textAlign: 'center',
+        variants: {
+            size: createLabelSizeVariants(theme),
+        },
+    },
+    circularLabel: {
+        position: 'absolute',
+        fontWeight: '600',
+        color: theme.colors.text.primary,
+        variants: {
+            size: createCircularLabelSizeVariants(theme),
+        },
+    },
   };
 });

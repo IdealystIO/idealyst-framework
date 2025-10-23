@@ -1,8 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { deepMerge } from '../utils/deepMerge';
-
 type TextAreaSize = Size;
 type TextAreaIntent = Intent;
 type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
@@ -83,16 +81,16 @@ function getTextareaIntentStyles(theme: Theme, intent: TextAreaIntent, disabled:
     return baseStyles;
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaStyles>): ExpandedTextAreaStyles => {
-    return deepMerge({
+const createContainerStyles = (theme: Theme): ExpandedTextAreaStyles => {
+    return {
         display: 'flex',
         flexDirection: 'column',
         gap: 4,
-    }, expanded);
+    };
 }
 
-const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaLabelStyles>): ExpandedTextAreaLabelStyles => {
-    return deepMerge({
+const createLabelStyles = (theme: Theme): ExpandedTextAreaLabelStyles => {
+    return {
         fontSize: 14,
         fontWeight: '500',
         color: theme.colors.text.primary,
@@ -104,20 +102,20 @@ const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaLabel
                 false: {},
             },
         },
-    }, expanded);
+    };
 }
 
-const createTextareaContainerStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaStyles>): ExpandedTextAreaStyles => {
-    return deepMerge({
+const createTextareaContainerStyles = (theme: Theme): ExpandedTextAreaStyles => {
+    return {
         position: 'relative',
-    }, expanded);
+    };
 }
 
-const createTextareaStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaTextareaStyles>) => {
+const createTextareaStyles = (theme: Theme) => {
     return ({ intent, disabled, hasError }: { intent: TextAreaIntent, disabled: boolean, hasError: boolean }) => {
         const intentStyles = getTextareaIntentStyles(theme, intent, disabled, hasError);
 
-        return deepMerge({
+        return {
             width: '100%',
             color: theme.colors.text.primary,
             backgroundColor: theme.colors.surface.primary,
@@ -175,12 +173,12 @@ const createTextareaStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaTe
                 boxSizing: 'border-box',
                 overflowY: 'hidden',
             },
-        }, expanded);
+        };
     }
 }
 
-const createHelperTextStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaHelperTextStyles>): ExpandedTextAreaHelperTextStyles => {
-    return deepMerge({
+const createHelperTextStyles = (theme: Theme): ExpandedTextAreaHelperTextStyles => {
+    return {
         fontSize: 12,
         color: theme.colors.text.secondary,
         variants: {
@@ -191,21 +189,21 @@ const createHelperTextStyles = (theme: Theme, expanded: Partial<ExpandedTextArea
                 false: {},
             },
         },
-    }, expanded);
+    };
 }
 
-const createFooterStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaStyles>): ExpandedTextAreaStyles => {
-    return deepMerge({
+const createFooterStyles = (theme: Theme): ExpandedTextAreaStyles => {
+    return {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         gap: 4,
-    }, expanded);
+    };
 }
 
-const createCharacterCountStyles = (theme: Theme, expanded: Partial<ExpandedTextAreaCharacterCountStyles>): ExpandedTextAreaCharacterCountStyles => {
-    return deepMerge({
+const createCharacterCountStyles = (theme: Theme): ExpandedTextAreaCharacterCountStyles => {
+    return {
         fontSize: 12,
         color: theme.colors.text.secondary,
         variants: {
@@ -222,18 +220,18 @@ const createCharacterCountStyles = (theme: Theme, expanded: Partial<ExpandedText
                 false: {},
             },
         },
-    }, expanded);
+    };
 }
 
-export const createTextAreaStylesheet = (theme: Theme, expanded?: Partial<TextAreaStylesheet>): TextAreaStylesheet => {
+export const createTextAreaStylesheet = (theme: Theme): TextAreaStylesheet => {
     return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        label: createLabelStyles(theme, expanded?.label || {}),
-        textareaContainer: createTextareaContainerStyles(theme, expanded?.textareaContainer || {}),
-        textarea: createTextareaStyles(theme, expanded?.textarea || {}),
-        helperText: createHelperTextStyles(theme, expanded?.helperText || {}),
-        footer: createFooterStyles(theme, expanded?.footer || {}),
-        characterCount: createCharacterCountStyles(theme, expanded?.characterCount || {}),
+        container: createContainerStyles(theme),
+        label: createLabelStyles(theme),
+        textareaContainer: createTextareaContainerStyles(theme),
+        textarea: createTextareaStyles(theme),
+        helperText: createHelperTextStyles(theme),
+        footer: createFooterStyles(theme),
+        characterCount: createCharacterCountStyles(theme),
     };
 }
 
@@ -241,12 +239,12 @@ export const createTextAreaStylesheet = (theme: Theme, expanded?: Partial<TextAr
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const textAreaStyles = StyleSheet.create((theme: Theme) => {
     return {
-        container: createContainerStyles(theme, {}),
-        label: createLabelStyles(theme, {}),
-        textareaContainer: createTextareaContainerStyles(theme, {}),
-        textarea: createTextareaStyles(theme, {}),
-        helperText: createHelperTextStyles(theme, {}),
-        footer: createFooterStyles(theme, {}),
-        characterCount: createCharacterCountStyles(theme, {}),
+        container: createContainerStyles(theme),
+        label: createLabelStyles(theme),
+        textareaContainer: createTextareaContainerStyles(theme),
+        textarea: createTextareaStyles(theme),
+        helperText: createHelperTextStyles(theme),
+        footer: createFooterStyles(theme),
+        characterCount: createCharacterCountStyles(theme),
     };
 });

@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -86,9 +85,9 @@ function createLabelVariants(theme: Theme, intent: Intent, selected: boolean) {
     };
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedChipStyles>): ExpandedChipStyles {
+function createContainerStyles(theme: Theme): ExpandedChipStyles {
     return ({ intent, selected }: ChipVariants) => {
-        return deepMerge({
+        return {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
@@ -102,13 +101,13 @@ function createContainerStyles(theme: Theme, expanded: Partial<ExpandedChipStyle
                     true: { opacity: 0.5 },
                 },
             },
-        }, expanded);
+        };
     }
 }
 
-function createLabelStyles(theme: Theme, expanded: Partial<ExpandedChipStyles>): ExpandedChipStyles {
+function createLabelStyles(theme: Theme): ExpandedChipStyles {
     return ({intent, selected}: ChipVariants) => {
-        return deepMerge({
+        return {
             fontFamily: 'inherit', // TODO: Add typography to theme
             fontWeight: 500,
             variants: {
@@ -122,13 +121,13 @@ function createLabelStyles(theme: Theme, expanded: Partial<ExpandedChipStyles>):
                 },
                 type: createLabelVariants(theme, intent, selected)
             },
-        }, expanded);
+        };
     }
 }
 
-function createIconStyles(theme: Theme, expanded: Partial<ExpandedChipStyles>): ExpandedChipStyles {
+function createIconStyles(theme: Theme): ExpandedChipStyles {
     return ({ intent, selected }: ChipVariants) => {
-        return deepMerge({
+        return {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -143,12 +142,33 @@ function createIconStyles(theme: Theme, expanded: Partial<ExpandedChipStyles>): 
                 },
                 type: createLabelVariants(theme, intent, selected)
             },
-        }, expanded);
+        };
     }
 }
 
-function createDeleteButtonStyles(theme: Theme, expanded: Partial<ExpandedChipStyles>): ExpandedChipStyles {
-    return deepMerge({
+function createDeleteIconStyles(theme: Theme) {
+    return ({ intent, selected }: ChipVariants) => {
+        return {
+            variants: {
+                size: buildSizeVariants(theme, 'chip', (size) => ({
+                    fontSize: size.iconSize,
+                })),
+                type: createLabelVariants(theme, intent, selected)
+            }
+
+        };
+    };
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const chipStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    container: createContainerStyles(theme),
+    label: createLabelStyles(theme),
+    icon: createIconStyles(theme),
+    deleteButton: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -161,32 +181,7 @@ function createDeleteButtonStyles(theme: Theme, expanded: Partial<ExpandedChipSt
                 height: size.iconSize,
             })),
         },
-    }, expanded);
-}
-
-function createDeleteIconStyles(theme: Theme, expanded: Partial<ExpandedChipStyles>) {
-    return ({ intent, selected }: ChipVariants) => {
-        return deepMerge({
-            variants: {
-                size: buildSizeVariants(theme, 'chip', (size) => ({
-                    fontSize: size.iconSize,
-                })),
-                type: createLabelVariants(theme, intent, selected)
-            }
-
-        }, expanded);
-    };
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const chipStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme, {}),
-    label: createLabelStyles(theme, {}),
-    icon: createIconStyles(theme, {}),
-    deleteButton: createDeleteButtonStyles(theme, {}),
-    deleteIcon: createDeleteIconStyles(theme, {}),
+    },
+    deleteIcon: createDeleteIconStyles(theme),
   };
 });

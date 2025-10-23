@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { deepMerge } from '../utils/deepMerge';
 
 // Type definitions
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -77,20 +76,20 @@ function createIntentVariants(theme: Theme, type: SelectType, intent: SelectInte
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const selectStyles = StyleSheet.create((theme: Theme) => {
     return {
-        container: deepMerge({
+        container: {
             position: 'relative',
             backgroundColor: theme.colors.surface.primary,
-        }, {}),
-        label: deepMerge({
+        },
+        label: {
             fontSize: 14,
             fontWeight: '500',
             color: theme.colors.text.primary,
             marginBottom: 4,
-        }, {}),
+        },
         trigger: ({ type, intent }: SelectTriggerVariants) => {
             const intentStyles = createIntentVariants(theme, type, intent);
 
-            return deepMerge({
+            return {
                 position: 'relative',
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -148,14 +147,14 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                         outline: 'none',
                     },
                 },
-            }, {});
+            };
         },
-        triggerContent: deepMerge({
+        triggerContent: {
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
-        }, {}),
-        triggerText: deepMerge({
+        },
+        triggerText: {
             color: theme.colors.text.primary,
             flex: 1,
             variants: {
@@ -163,20 +162,20 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                     fontSize: size.fontSize,
                 })),
             },
-        }, {}),
-        placeholder: deepMerge({
+        },
+        placeholder: {
             color: theme.colors.text.secondary,
             variants: {
                 size: buildSizeVariants(theme, 'select', (size: any) => ({
                     fontSize: size.fontSize,
                 })),
             },
-        }, {}),
-        icon: deepMerge({
+        },
+        icon: {
             marginLeft: 4,
             color: theme.colors.text.secondary,
-        }, {}),
-        chevron: deepMerge({
+        },
+        chevron: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -191,11 +190,11 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
             _web: {
                 transition: 'transform 0.2s ease',
             },
-        }, {}),
-        chevronOpen: deepMerge({
+        },
+        chevronOpen: {
             transform: 'rotate(180deg)',
-        }, {}),
-        dropdown: deepMerge({
+        },
+        dropdown: {
             position: 'absolute',
             top: '100%',
             left: 0,
@@ -219,8 +218,8 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                 boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06)',
                 overflowY: 'auto',
             },
-        }, {}),
-        searchContainer: deepMerge({
+        },
+        searchContainer: {
             padding: 8,
             borderBottomWidth: 1,
             borderBottomStyle: 'solid',
@@ -228,8 +227,8 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
             _web: {
                 borderBottom: `1px solid ${theme.colors.border.primary}`,
             },
-        }, {}),
-        searchInput: deepMerge({
+        },
+        searchInput: {
             padding: 4,
             borderRadius: 4,
             borderWidth: 1,
@@ -248,11 +247,11 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                     borderColor: theme.intents.primary.primary,
                 },
             },
-        }, {}),
-        optionsList: deepMerge({
+        },
+        optionsList: {
             paddingVertical: 4,
-        }, {}),
-        option: deepMerge({
+        },
+        option: {
             paddingHorizontal: 8,
             paddingVertical: 4,
             flexDirection: 'row',
@@ -288,16 +287,16 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
             _web: {
                 display: 'flex',
             },
-        }, {}),
-        optionContent: deepMerge({
+        },
+        optionContent: {
             flexDirection: 'row',
             alignItems: 'center',
             flex: 1,
-        }, {}),
-        optionIcon: deepMerge({
+        },
+        optionIcon: {
             marginRight: 4,
-        }, {}),
-        optionText: deepMerge({
+        },
+        optionText: {
             color: theme.colors.text.primary,
             flex: 1,
             variants: {
@@ -305,11 +304,11 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                     fontSize: size.fontSize,
                 })),
             },
-        }, {}),
-        optionTextDisabled: deepMerge({
+        },
+        optionTextDisabled: {
             color: theme.colors.text.secondary,
-        }, {}),
-        helperText: deepMerge({
+        },
+        helperText: {
             fontSize: 12,
             marginTop: 4,
             color: theme.colors.text.secondary,
@@ -321,8 +320,8 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                     false: {},
                 },
             },
-        }, {}),
-        overlay: deepMerge({
+        },
+        overlay: {
             position: 'absolute',
             top: 0,
             left: 0,
@@ -332,6 +331,6 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
             _web: {
                 position: 'fixed',
             },
-        }, {}),
+        },
     };
 });

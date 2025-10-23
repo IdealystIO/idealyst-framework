@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type RadioButtonSize = Size;
@@ -59,22 +58,9 @@ function createRadioDotIntentColor(theme: Theme, intent: RadioButtonIntent) {
     return theme.intents[intent].primary;
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>): ExpandedRadioButtonStyles {
-    return deepMerge({
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 4,
-        variants: {
-            size: buildSizeVariants(theme, 'radioButton', (size) => ({
-                gap: size.gap,
-            })),
-        },
-    }, expanded);
-}
-
-function createRadioStyles(theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>) {
+function createRadioStyles(theme: Theme) {
     return ({ intent }: RadioButtonVariants) => {
-        return deepMerge({
+        return {
             borderRadius: 9999,
             borderWidth: 1.5,
             borderStyle: 'solid',
@@ -110,24 +96,40 @@ function createRadioStyles(theme: Theme, expanded: Partial<ExpandedRadioButtonSt
             _web: {
                 transition: 'all 0.2s ease',
             },
-        }, expanded);
+        };
     }
 }
 
-function createRadioDotStyles(theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>) {
+function createRadioDotStyles(theme: Theme) {
     return ({ intent }: RadioButtonVariants) => {
-        return deepMerge({
+        return {
             borderRadius: 9999,
             backgroundColor: createRadioDotIntentColor(theme, intent),
             variants: {
                 size: createRadioDotSizeVariants(theme),
             },
-        }, expanded);
+        };
     }
 }
 
-function createLabelStyles(theme: Theme, expanded: Partial<ExpandedRadioButtonStyles>): ExpandedRadioButtonStyles {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 4,
+        variants: {
+            size: buildSizeVariants(theme, 'radioButton', (size) => ({
+                gap: size.gap,
+            })),
+        },
+    },
+    radio: createRadioStyles(theme),
+    radioDot: createRadioDotStyles(theme),
+    label: {
         color: theme.colors.text.primary,
         variants: {
             size: buildSizeVariants(theme, 'radioButton', (size) => ({
@@ -142,11 +144,8 @@ function createLabelStyles(theme: Theme, expanded: Partial<ExpandedRadioButtonSt
                 },
             },
         },
-    }, expanded);
-}
-
-function createGroupContainerStyles(theme: Theme, expanded: Partial<ExpandedRadioGroupStyles>): ExpandedRadioGroupStyles {
-    return deepMerge({
+    },
+    groupContainer: {
         gap: 4,
         variants: {
             orientation: {
@@ -160,18 +159,6 @@ function createGroupContainerStyles(theme: Theme, expanded: Partial<ExpandedRadi
                 },
             },
         },
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme, {}),
-    radio: createRadioStyles(theme, {}),
-    radioDot: createRadioDotStyles(theme, {}),
-    label: createLabelStyles(theme, {}),
-    groupContainer: createGroupContainerStyles(theme, {}),
+    },
   };
 });

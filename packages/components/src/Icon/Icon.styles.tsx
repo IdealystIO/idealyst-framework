@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Color, getColorFromString } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { deepMerge } from '../utils/deepMerge';
 
 type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
@@ -29,9 +28,9 @@ function getIconColor(theme: Theme, color?: Color, intent?: Intent): string {
     return theme.colors.text.primary;
 }
 
-function createIconStyles(theme: Theme, expanded: Partial<ExpandedIconStyles>): ExpandedIconStyles {
+function createIconStyles(theme: Theme): ExpandedIconStyles {
     return ({ color, intent }: IconVariants) => {
-        return deepMerge({
+        return {
             width: 24,
             height: 24,
             color: getIconColor(theme, color, intent),
@@ -48,7 +47,7 @@ function createIconStyles(theme: Theme, expanded: Partial<ExpandedIconStyles>): 
                 flexShrink: 0,
                 lineHeight: 0,
             },
-        }, expanded);
+        };
     }
 }
 
@@ -57,6 +56,6 @@ function createIconStyles(theme: Theme, expanded: Partial<ExpandedIconStyles>): 
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const iconStyles = StyleSheet.create((theme: Theme) => {
   return {
-    icon: createIconStyles(theme, {}),
+    icon: createIconStyles(theme),
   };
 });

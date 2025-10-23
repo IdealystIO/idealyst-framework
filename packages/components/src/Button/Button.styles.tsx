@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ButtonSize = Size;
@@ -53,9 +52,9 @@ function createButtonTypeVariants(theme: Theme, intent: Intent) {
 /**
  * Generate main button styles
  */
-const createButtonStyles = (theme: Theme, expanded: Partial<ExpandedButtonStyles>) => {
+const createButtonStyles = (theme: Theme) => {
     return ({ intent }: ButtonVariants) => {
-        return deepMerge({
+        return {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 8, // TODO - replace with theme value or composition function
@@ -83,7 +82,7 @@ const createButtonStyles = (theme: Theme, expanded: Partial<ExpandedButtonStyles
                     } },
                 },
             },
-        }, expanded);
+        };
     }
 }
 
@@ -109,9 +108,9 @@ function createIconColorVariants(theme: Theme, intent: Intent) {
 /**
  * Generate button icon styles
  */
-const createButtonIconStyles = (theme: Theme, expanded: Partial<ExpandedButtonStyles>) => {
+const createButtonIconStyles = (theme: Theme) => {
     return ({ intent }: ButtonVariants) => {
-        return deepMerge({
+        return {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -122,29 +121,16 @@ const createButtonIconStyles = (theme: Theme, expanded: Partial<ExpandedButtonSt
                 })),
                 type: createIconColorVariants(theme, intent),
             },
-        }, expanded);
+        };
     }
-}
-
-/**
- * Generate button icon container styles
- */
-const createButtonIconContainerStyles = (theme: Theme, expanded: Partial<ExpandedButtonStyles>) => {
-    return deepMerge({
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 4, // TODO - replace with theme value or composition function
-    }, expanded);
 }
 
 /**
  * Generate button text styles
  */
-const createButtonTextStyles = (theme: Theme, expanded: Partial<ExpandedButtonStyles>) => {
+const createButtonTextStyles = (theme: Theme) => {
     return ({ intent }: ButtonVariants) => {
-        return deepMerge({
+        return {
             fontWeight: '600',
             textAlign: 'center',
             variants: {
@@ -157,7 +143,7 @@ const createButtonTextStyles = (theme: Theme, expanded: Partial<ExpandedButtonSt
                     false: { opacity: 1 },
                 },
             },
-        }, expanded);
+        };
     }
 }
 
@@ -166,9 +152,15 @@ const createButtonTextStyles = (theme: Theme, expanded: Partial<ExpandedButtonSt
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const buttonStyles = StyleSheet.create((theme: Theme) => {
     return {
-        button: createButtonStyles(theme, {}),
-        icon: createButtonIconStyles(theme, {}),
-        iconContainer: createButtonIconContainerStyles(theme, {}),
-        text: createButtonTextStyles(theme, {}),
+        button: createButtonStyles(theme),
+        icon: createButtonIconStyles(theme),
+        iconContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 4, // TODO - replace with theme value or composition function
+        },
+        text: createButtonTextStyles(theme),
     };
 });

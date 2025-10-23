@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type AccordionSize = Size;
@@ -129,21 +128,21 @@ function createContentInnerSizeVariants(theme: Theme) {
 /**
  * Generate accordion container styles
  */
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>): ExpandedAccordionStyles => {
-    return deepMerge({
+const createContainerStyles = (theme: Theme): ExpandedAccordionStyles => {
+    return {
         display: 'flex',
         flexDirection: 'column',
         variants: {
             type: createContainerTypeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
 /**
  * Generate accordion item styles
  */
-const createItemStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>): ExpandedAccordionStyles => {
-    return deepMerge({
+const createItemStyles = (theme: Theme): ExpandedAccordionStyles => {
+    return {
         display: 'flex',
         flexDirection: 'column',
         variants: {
@@ -154,14 +153,14 @@ const createItemStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyle
             },
         },
         compoundVariants: createItemCompoundVariants(),
-    }, expanded);
+    };
 }
 
 /**
  * Generate accordion header styles
  */
-const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>): ExpandedAccordionStyles => {
-    return deepMerge({
+const createHeaderStyles = (theme: Theme): ExpandedAccordionStyles => {
+    return {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -202,23 +201,23 @@ const createHeaderStyles = (theme: Theme, expanded: Partial<ExpandedAccordionSty
             outline: 'none',
             transition: 'background-color 0.2s ease',
         },
-    }, expanded);
+    };
 }
 
 /**
  * Generate accordion title styles
  */
-const createTitleStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>): ExpandedAccordionStyles => {
-    return deepMerge({
+const createTitleStyles = (theme: Theme): ExpandedAccordionStyles => {
+    return {
         flex: 1,
-    }, expanded);
+    };
 }
 
 /**
  * Generate accordion icon styles
  */
-const createIconStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>) => {
-    return deepMerge({
+const createIconStyles = (theme: Theme) => {
+    return {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -242,14 +241,14 @@ const createIconStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyle
         _web: {
             transition: 'transform 0.2s ease',
         },
-    }, expanded);
+    };
 }
 
 /**
  * Generate accordion content styles
  */
-const createContentStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>): ExpandedAccordionStyles => {
-    return deepMerge({
+const createContentStyles = (theme: Theme): ExpandedAccordionStyles => {
+    return {
         overflow: 'hidden',
         variants: {
             expanded: {
@@ -264,33 +263,33 @@ const createContentStyles = (theme: Theme, expanded: Partial<ExpandedAccordionSt
         _web: {
             transition: 'height 0.15s ease, padding 0.3s ease',
         },
-    }, expanded);
+    };
 }
 
 /**
  * Generate accordion content inner styles
  */
-const createContentInnerStyles = (theme: Theme, expanded: Partial<ExpandedAccordionStyles>): ExpandedAccordionStyles => {
-    return deepMerge({
+const createContentInnerStyles = (theme: Theme): ExpandedAccordionStyles => {
+    return {
         color: theme.colors.text.secondary,
         variants: {
             size: createContentInnerSizeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
 /**
  * Generate accordion stylesheet
  */
-export const createAccordionStylesheet = (theme: Theme, expanded?: Partial<AccordionStylesheet>): AccordionStylesheet => {
+export const createAccordionStylesheet = (theme: Theme): AccordionStylesheet => {
     return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        item: createItemStyles(theme, expanded?.item || {}),
-        header: createHeaderStyles(theme, expanded?.header || {}),
-        title: createTitleStyles(theme, expanded?.title || {}),
-        icon: createIconStyles(theme, expanded?.icon || {}),
-        content: createContentStyles(theme, expanded?.content || {}),
-        contentInner: createContentInnerStyles(theme, expanded?.contentInner || {}),
+        container: createContainerStyles(theme),
+        item: createItemStyles(theme),
+        header: createHeaderStyles(theme),
+        title: createTitleStyles(theme),
+        icon: createIconStyles(theme),
+        content: createContentStyles(theme),
+        contentInner: createContentInnerStyles(theme),
     };
 }
 
@@ -298,12 +297,12 @@ export const createAccordionStylesheet = (theme: Theme, expanded?: Partial<Accor
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const accordionStyles = StyleSheet.create((theme: Theme) => {
     return {
-        container: createContainerStyles(theme, {}),
-        item: createItemStyles(theme, {}),
-        header: createHeaderStyles(theme, {}),
-        title: createTitleStyles(theme, {}),
-        icon: createIconStyles(theme, {}),
-        content: createContentStyles(theme, {}),
-        contentInner: createContentInnerStyles(theme, {}),
+        container: createContainerStyles(theme),
+        item: createItemStyles(theme),
+        header: createHeaderStyles(theme),
+        title: createTitleStyles(theme),
+        icon: createIconStyles(theme),
+        content: createContentStyles(theme),
+        contentInner: createContentInnerStyles(theme),
     };
 });

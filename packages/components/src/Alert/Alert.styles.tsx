@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 
 type AlertType = 'filled' | 'outlined' | 'soft';
 type AlertIntent = Intent | 'info'; // Alert includes 'info' which maps to primary
@@ -95,10 +94,10 @@ function getMessageColor(theme: Theme, type: AlertType, intent: AlertIntent) {
 /**
  * Generate alert container styles
  */
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyles>) => {
+const createContainerStyles = (theme: Theme) => {
     return ({ type, intent }: { type: AlertType, intent: AlertIntent }) => {
         const containerStyles = getContainerStyles(theme, type, intent);
-        return deepMerge({
+        return {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-start',
@@ -108,16 +107,16 @@ const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyl
             borderWidth: 1,
             borderStyle: 'solid',
             ...containerStyles,
-        }, expanded);
+        };
     }
 }
 
 /**
  * Generate alert icon container styles
  */
-const createIconContainerStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyles>) => {
+const createIconContainerStyles = (theme: Theme) => {
     return ({ type, intent }: { type: AlertType, intent: AlertIntent }) => {
-        return deepMerge({
+        return {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -125,110 +124,82 @@ const createIconContainerStyles = (theme: Theme, expanded: Partial<ExpandedAlert
             width: 24,
             height: 24,
             color: getIconColor(theme, type, intent),
-        }, expanded);
+        };
     }
-}
-
-/**
- * Generate alert content styles
- */
-const createContentStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyles>): ExpandedAlertStyles => {
-    return deepMerge({
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 4,
-    }, expanded);
 }
 
 /**
  * Generate alert title styles
  */
-const createTitleStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyles>) => {
+const createTitleStyles = (theme: Theme) => {
     return ({ type, intent }: { type: AlertType, intent: AlertIntent }) => {
-        return deepMerge({
+        return {
             fontSize: 16,
             lineHeight: 24,
             fontWeight: '600',
             color: getTitleColor(theme, type, intent),
-        }, expanded);
+        };
     }
 }
 
 /**
  * Generate alert message styles
  */
-const createMessageStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyles>) => {
+const createMessageStyles = (theme: Theme) => {
     return ({ type, intent }: { type: AlertType, intent: AlertIntent }) => {
-        return deepMerge({
+        return {
             fontSize: 14,
             lineHeight: 20,
             color: getMessageColor(theme, type, intent),
-        }, expanded);
+        };
     }
-}
-
-/**
- * Generate alert actions styles
- */
-const createActionsStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyles>): ExpandedAlertStyles => {
-    return deepMerge({
-        marginTop: 4,
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 8,
-    }, expanded);
-}
-
-/**
- * Generate alert close button styles
- */
-const createCloseButtonStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyles>): ExpandedAlertStyles => {
-    return deepMerge({
-        padding: 4,
-        backgroundColor: 'transparent',
-        borderRadius: 4,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-        _web: {
-            border: 'none',
-            cursor: 'pointer',
-            outline: 'none',
-            _hover: {
-                backgroundColor: 'rgba(0, 0, 0, 0.1)',
-            },
-        },
-    }, expanded);
-}
-
-/**
- * Generate alert close icon styles
- */
-const createCloseIconStyles = (theme: Theme, expanded: Partial<ExpandedAlertStyles>): ExpandedAlertStyles => {
-    return deepMerge({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 16,
-        height: 16,
-    }, expanded);
 }
 
 /**
  * Generate alert stylesheet
  */
-export const createAlertStylesheet = (theme: Theme, expanded?: Partial<AlertStylesheet>): AlertStylesheet => {
+export const createAlertStylesheet = (theme: Theme): AlertStylesheet => {
     return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        iconContainer: createIconContainerStyles(theme, expanded?.iconContainer || {}),
-        content: createContentStyles(theme, expanded?.content || {}),
-        title: createTitleStyles(theme, expanded?.title || {}),
-        message: createMessageStyles(theme, expanded?.message || {}),
-        actions: createActionsStyles(theme, expanded?.actions || {}),
-        closeButton: createCloseButtonStyles(theme, expanded?.closeButton || {}),
-        closeIcon: createCloseIconStyles(theme, expanded?.closeIcon || {}),
+        container: createContainerStyles(theme),
+        iconContainer: createIconContainerStyles(theme),
+        content: {
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 4,
+        },
+        title: createTitleStyles(theme),
+        message: createMessageStyles(theme),
+        actions: {
+            marginTop: 4,
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 8,
+        },
+        closeButton: {
+            padding: 4,
+            backgroundColor: 'transparent',
+            borderRadius: 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            _web: {
+                border: 'none',
+                cursor: 'pointer',
+                outline: 'none',
+                _hover: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                },
+            },
+        },
+        closeIcon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 16,
+            height: 16,
+        },
     };
 }
 

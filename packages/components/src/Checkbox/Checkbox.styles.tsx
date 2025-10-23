@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 
 type CheckboxSize = Size;
 type CheckboxIntent = Intent | 'info';
@@ -116,38 +115,9 @@ function createCheckmarkSizeVariants() {
     };
 }
 
-function createWrapperStyles(theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) {
-    return deepMerge({
-        flexDirection: 'column',
-        gap: 4,
-        _web: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            width: 'auto',
-        },
-    }, expanded);
-}
-
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) {
-    return deepMerge({
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        _web: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 8,
-            width: 'fit-content',
-            cursor: 'pointer',
-        },
-    }, expanded);
-}
-
-function createCheckboxStyles(theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) {
+function createCheckboxStyles(theme: Theme) {
     return ({ intent }: CheckboxVariants) => {
-        return deepMerge({
+        return {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 4,
@@ -189,12 +159,57 @@ function createCheckboxStyles(theme: Theme, expanded: Partial<ExpandedCheckboxSt
                     outlineOffset: '2px',
                 },
             },
-        }, expanded);
+        };
     }
 }
 
-function createLabelStyles(theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) {
-    return deepMerge({
+function createCheckmarkStyles(_theme: Theme) {
+    return {
+        position: 'absolute',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#ffffff',
+        variants: {
+            size: createCheckmarkSizeVariants(),
+            visible: {
+                true: { opacity: 1 },
+                false: { opacity: 0 },
+            },
+        },
+    };
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const checkboxStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    wrapper: {
+        flexDirection: 'column',
+        gap: 4,
+        _web: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            width: 'auto',
+        },
+    },
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        _web: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
+            width: 'fit-content',
+            cursor: 'pointer',
+        },
+    },
+    checkbox: createCheckboxStyles(theme),
+    label: {
         color: theme.colors.text.primary,
         variants: {
             size: createLabelSizeVariants(),
@@ -209,28 +224,9 @@ function createLabelStyles(theme: Theme, expanded: Partial<ExpandedCheckboxStyle
             margin: 0,
             padding: 0,
         },
-    }, expanded);
-}
-
-function createCheckmarkStyles(_theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) {
-    return deepMerge({
-        position: 'absolute',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#ffffff',
-        variants: {
-            size: createCheckmarkSizeVariants(),
-            visible: {
-                true: { opacity: 1 },
-                false: { opacity: 0 },
-            },
-        },
-    }, expanded);
-}
-
-function createHelperTextStyles(theme: Theme, expanded: Partial<ExpandedCheckboxStyles>) {
-    return deepMerge({
+    },
+    checkmark: createCheckmarkStyles(theme),
+    helperText: {
         fontSize: 14,
         color: theme.colors.text.secondary,
         marginTop: 2,
@@ -240,19 +236,6 @@ function createHelperTextStyles(theme: Theme, expanded: Partial<ExpandedCheckbox
                 false: { color: theme.colors.text.secondary },
             },
         },
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const checkboxStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    wrapper: createWrapperStyles(theme, {}),
-    container: createContainerStyles(theme, {}),
-    checkbox: createCheckboxStyles(theme, {}),
-    label: createLabelStyles(theme, {}),
-    checkmark: createCheckmarkStyles(theme, {}),
-    helperText: createHelperTextStyles(theme, {}),
+    },
   };
 });

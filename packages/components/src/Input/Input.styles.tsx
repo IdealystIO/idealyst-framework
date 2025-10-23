@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type InputSize = Size;
@@ -164,9 +163,9 @@ function createInputSizeVariants(theme: Theme) {
     }));
 }
 
-function createContainerStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>) {
+function createContainerStyles(theme: Theme) {
     return ({ type, hasError }: InputVariants) => {
-        return deepMerge({
+        return {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
@@ -207,12 +206,17 @@ function createContainerStyles(theme: Theme, expanded: Partial<ExpandedInputStyl
                 boxSizing: 'border-box',
                 transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
             },
-        }, expanded);
+        };
     }
 }
 
-function createLeftIconContainerStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>) {
-    return deepMerge({
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const inputStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    container: createContainerStyles(theme),
+    leftIconContainer: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -220,11 +224,8 @@ function createLeftIconContainerStyles(theme: Theme, expanded: Partial<ExpandedI
         variants: {
             size: createIconContainerSizeVariants(theme),
         },
-    }, expanded);
-}
-
-function createRightIconContainerStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>) {
-    return deepMerge({
+    },
+    rightIconContainer: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -234,20 +235,14 @@ function createRightIconContainerStyles(theme: Theme, expanded: Partial<Expanded
                 marginLeft: size.iconMargin,
             })),
         },
-    }, expanded);
-}
-
-function createLeftIconStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>) {
-    return deepMerge({
+    },
+    leftIcon: {
         color: theme.colors.text.secondary,
         variants: {
             size: createIconSizeVariants(theme),
         },
-    }, expanded);
-}
-
-function createRightIconStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>) {
-    return deepMerge({
+    },
+    rightIcon: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -256,11 +251,8 @@ function createRightIconStyles(theme: Theme, expanded: Partial<ExpandedInputStyl
         variants: {
             size: createIconSizeVariants(theme),
         },
-    }, expanded);
-}
-
-function createPasswordToggleStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>) {
-    return deepMerge({
+    },
+    passwordToggle: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -282,11 +274,8 @@ function createPasswordToggleStyles(theme: Theme, expanded: Partial<ExpandedInpu
                 opacity: 0.5,
             },
         },
-    }, expanded);
-}
-
-function createPasswordToggleIconStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>) {
-    return deepMerge({
+    },
+    passwordToggleIcon: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -295,11 +284,8 @@ function createPasswordToggleIconStyles(theme: Theme, expanded: Partial<Expanded
         variants: {
             size: createIconSizeVariants(theme),
         },
-    }, expanded);
-}
-
-function createInputStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>) {
-    return deepMerge({
+    },
+    input: {
         flex: 1,
         minWidth: 0,
         backgroundColor: 'transparent',
@@ -313,21 +299,6 @@ function createInputStyles(theme: Theme, expanded: Partial<ExpandedInputStyles>)
             outline: 'none',
             fontFamily: 'inherit',
         },
-    }, expanded);
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const inputStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme, {}),
-    leftIconContainer: createLeftIconContainerStyles(theme, {}),
-    rightIconContainer: createRightIconContainerStyles(theme, {}),
-    leftIcon: createLeftIconStyles(theme, {}),
-    rightIcon: createRightIconStyles(theme, {}),
-    passwordToggle: createPasswordToggleStyles(theme, {}),
-    passwordToggleIcon: createPasswordToggleIconStyles(theme, {}),
-    input: createInputStyles(theme, {}),
+    },
   };
 });

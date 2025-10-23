@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Intent, Size} from '@idealyst/theme';
-import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type MenuSize = Size;
@@ -89,8 +88,8 @@ function createLabelSizeVariants(theme: Theme) {
     }));
 }
 
-const createOverlayStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
-    return deepMerge({
+const createOverlayStyles = (theme: Theme): ExpandedMenuStyles => {
+    return {
         position: 'fixed',
         top: 0,
         left: 0,
@@ -98,11 +97,11 @@ const createOverlayStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>
         bottom: 0,
         zIndex: 999,
         backgroundColor: 'transparent',
-    }, expanded);
+    };
 }
 
-const createMenuStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
-    return deepMerge({
+const createMenuStyles = (theme: Theme): ExpandedMenuStyles => {
+    return {
         position: 'absolute',
         zIndex: 1000,
         backgroundColor: theme.colors.surface.primary,
@@ -120,22 +119,22 @@ const createMenuStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): 
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
             width: 'fit-content',
         },
-    }, expanded);
+    };
 }
 
-const createSeparatorStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
-    return deepMerge({
+const createSeparatorStyles = (theme: Theme): ExpandedMenuStyles => {
+    return {
         height: 1,
         backgroundColor: theme.colors.border.primary,
         marginTop: 4,
         marginBottom: 4,
-    }, expanded);
+    };
 }
 
-const createItemStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>) => {
+const createItemStyles = (theme: Theme) => {
     return ({ intent }: MenuVariants) => {
         const hoverStyles = getItemHoverStyles(theme, intent);
-        return deepMerge({
+        return {
             flexDirection: 'row',
             alignItems: 'center',
             backgroundColor: 'transparent',
@@ -165,12 +164,12 @@ const createItemStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>) =
                 },
             },
             ...hoverStyles,
-        }, expanded);
+        };
     }
 }
 
-const createIconStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
-    return deepMerge({
+const createIconStyles = (theme: Theme): ExpandedMenuStyles => {
+    return {
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
@@ -178,27 +177,27 @@ const createIconStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): 
         variants: {
             size: createIconSizeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-const createLabelStyles = (theme: Theme, expanded: Partial<ExpandedMenuStyles>): ExpandedMenuStyles => {
-    return deepMerge({
+const createLabelStyles = (theme: Theme): ExpandedMenuStyles => {
+    return {
         flex: 1,
         color: theme.colors.text.primary,
         variants: {
             size: createLabelSizeVariants(theme),
         },
-    }, expanded);
+    };
 }
 
-export const createMenuStylesheet = (theme: Theme, expanded?: Partial<MenuStylesheet>): MenuStylesheet => {
+export const createMenuStylesheet = (theme: Theme): MenuStylesheet => {
     return {
-        overlay: createOverlayStyles(theme, expanded?.overlay || {}),
-        menu: createMenuStyles(theme, expanded?.menu || {}),
-        separator: createSeparatorStyles(theme, expanded?.separator || {}),
-        item: createItemStyles(theme, expanded?.item || {}),
-        icon: createIconStyles(theme, expanded?.icon || {}),
-        label: createLabelStyles(theme, expanded?.label || {}),
+        overlay: createOverlayStyles(theme),
+        menu: createMenuStyles(theme),
+        separator: createSeparatorStyles(theme),
+        item: createItemStyles(theme),
+        icon: createIconStyles(theme),
+        label: createLabelStyles(theme),
     };
 }
 
@@ -206,11 +205,11 @@ export const createMenuStylesheet = (theme: Theme, expanded?: Partial<MenuStyles
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const menuStyles = StyleSheet.create((theme: Theme) => {
     return {
-        overlay: createOverlayStyles(theme, {}),
-        menu: createMenuStyles(theme, {}),
-        separator: createSeparatorStyles(theme, {}),
-        item: createItemStyles(theme, {}),
-        icon: createIconStyles(theme, {}),
-        label: createLabelStyles(theme, {}),
+        overlay: createOverlayStyles(theme),
+        menu: createMenuStyles(theme),
+        separator: createSeparatorStyles(theme),
+        item: createItemStyles(theme),
+        icon: createIconStyles(theme),
+        label: createLabelStyles(theme),
     };
 });
