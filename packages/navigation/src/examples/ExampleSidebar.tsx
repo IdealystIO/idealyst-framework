@@ -1,4 +1,4 @@
-import { ListItem, View, Text, Divider, Screen } from "@idealyst/components";
+import { ListItem, View, Text, Divider, Screen, List } from "@idealyst/components";
 import { useNavigator } from "../context";
 import type { DrawerSidebarProps } from "../routing/types";
 
@@ -101,37 +101,34 @@ export default function ExampleSidebar({ insets }: DrawerSidebarProps) {
     <Screen
             style={{
                 height: '100%',
-                overflowY: 'auto',
-                overflowX: 'hidden',
+                padding: 16,
             }}
             contentInset={insets}
         >
-            <View style={{ padding: 16 }}>
-                {componentGroups.map((group, groupIndex) => (
-                    <View key={group.title} style={{ marginBottom: 16 }}>
-                        <Text
-                            size="sm"
-                            weight="bold"
-                            color="secondary"
-                            style={{ marginBottom: 8, marginLeft: 8 }}
-                        >
-                            {group.title}
-                        </Text>
-                        {group.items.map((item) => (
-                            <ListItem
-                                key={item.path}
-                                label={item.label}
-                                leading={item.icon}
-                                size="sm"
-                                onPress={() => navigator.navigate({ path: item.path, vars: {} })}
-                            />
-                        ))}
-                        {groupIndex < componentGroups.length - 1 && (
-                            <Divider spacing="sm" style={{ marginTop: 8 }} />
-                        )}
-                    </View>
+        {componentGroups.map((group, groupIndex) => (
+            <List key={group.title}>
+                <Text
+                    size="sm"
+                    weight="bold"
+                    color="secondary"
+                    style={{ marginBottom: 8, marginLeft: 8 }}
+                >
+                    {group.title}
+                </Text>
+                {group.items.map((item) => (
+                    <ListItem
+                        key={item.path}
+                        label={item.label}
+                        leading={item.icon}
+                        size="sm"
+                        onPress={() => navigator.navigate({ path: item.path, vars: {} })}
+                    />
                 ))}
-            </View>
+                {groupIndex < componentGroups.length - 1 && (
+                    <Divider spacing="sm" style={{ marginTop: 8 }} />
+                )}
+            </List>
+        ))}
         </Screen>
     )
 }

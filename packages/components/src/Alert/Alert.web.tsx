@@ -1,14 +1,6 @@
 import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import {
-  alertContainerStyles,
-  alertIconStyles,
-  alertContentStyles,
-  alertTitleStyles,
-  alertMessageStyles,
-  alertActionsStyles,
-  alertCloseButtonStyles,
-} from './Alert.styles';
+import { alertStyles } from './Alert.styles';
 import type { AlertProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
@@ -38,19 +30,17 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   style,
   testID,
 }, ref) => {
-  // Apply variants to stylesheets that don't use dynamic styles
-  alertContentStyles.useVariants({});
-  alertActionsStyles.useVariants({});
-  alertCloseButtonStyles.useVariants({});
+  // Apply variants to stylesheet
+  alertStyles.useVariants({});
 
-  const containerProps = getWebProps([alertContainerStyles.container({ type: variant, intent }), style]);
-  const iconContainerProps = getWebProps([alertIconStyles.iconContainer({ type: variant, intent })]);
-  const contentProps = getWebProps([alertContentStyles.content]);
-  const titleProps = getWebProps([alertTitleStyles.title({ type: variant, intent })]);
-  const messageProps = getWebProps([alertMessageStyles.message({ type: variant, intent })]);
-  const actionsProps = getWebProps([alertActionsStyles.actions]);
-  const closeButtonProps = getWebProps([alertCloseButtonStyles.closeButton]);
-  const closeIconProps = getWebProps([alertCloseButtonStyles.closeIcon]);
+  const containerProps = getWebProps([alertStyles.container({ type: variant, intent }), style]);
+  const iconContainerProps = getWebProps([alertStyles.iconContainer({ type: variant, intent })]);
+  const contentProps = getWebProps([alertStyles.content]);
+  const titleProps = getWebProps([alertStyles.title({ type: variant, intent })]);
+  const messageProps = getWebProps([alertStyles.message({ type: variant, intent })]);
+  const actionsProps = getWebProps([alertStyles.actions]);
+  const closeButtonProps = getWebProps([alertStyles.closeButton]);
+  const closeIconProps = getWebProps([alertStyles.closeIcon]);
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
 

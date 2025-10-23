@@ -2,85 +2,6 @@ import { StyleSheet } from 'react-native-unistyles';
 import { Theme } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
-/**
- * Create size variants for menu item
- */
-function createItemSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'menu', (size) => ({
-        paddingVertical: size.paddingVertical,
-        paddingHorizontal: size.paddingHorizontal,
-    }));
-}
-
-/**
- * Create intent variants for hover states
- */
-function createIntentVariants(theme: Theme) {
-    return {
-        primary: {
-            _web: {
-                _hover: {
-                    backgroundColor: theme.intents.primary.light,
-                    color: theme.intents.primary.primary,
-                },
-            },
-        },
-        neutral: {},
-        success: {
-            _web: {
-                _hover: {
-                    backgroundColor: theme.intents.success.light,
-                    color: theme.intents.success.primary,
-                },
-            },
-        },
-        error: {
-            _web: {
-                _hover: {
-                    backgroundColor: theme.intents.error.light,
-                    color: theme.intents.error.primary,
-                },
-            },
-        },
-        warning: {
-            _web: {
-                _hover: {
-                    backgroundColor: theme.intents.warning.light,
-                    color: theme.intents.warning.primary,
-                },
-            },
-        },
-        info: {
-            _web: {
-                _hover: {
-                    backgroundColor: theme.intents.info.light,
-                    color: theme.intents.info.primary,
-                },
-            },
-        },
-    };
-}
-
-/**
- * Create size variants for icon
- */
-function createIconSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'menu', (size) => ({
-        width: size.iconSize,
-        height: size.iconSize,
-        fontSize: size.iconSize,
-    }));
-}
-
-/**
- * Create size variants for label
- */
-function createLabelSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'menu', (size) => ({
-        fontSize: size.labelFontSize,
-    }));
-}
-
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const menuItemStyles = StyleSheet.create((theme: Theme) => {
@@ -102,7 +23,10 @@ export const menuItemStyles = StyleSheet.create((theme: Theme) => {
                 },
             },
             variants: {
-                size: createItemSizeVariants(theme),
+                size: buildSizeVariants(theme, 'menu', (size) => ({
+                    paddingVertical: size.paddingVertical,
+                    paddingHorizontal: size.paddingHorizontal,
+                })),
                 disabled: {
                     true: {
                         opacity: 0.5,
@@ -112,7 +36,49 @@ export const menuItemStyles = StyleSheet.create((theme: Theme) => {
                     },
                     false: {},
                 },
-                intent: createIntentVariants(theme),
+                intent: {
+                    primary: {
+                        _web: {
+                            _hover: {
+                                backgroundColor: theme.intents.primary.light,
+                                color: theme.intents.primary.primary,
+                            },
+                        },
+                    },
+                    neutral: {},
+                    success: {
+                        _web: {
+                            _hover: {
+                                backgroundColor: theme.intents.success.light,
+                                color: theme.intents.success.primary,
+                            },
+                        },
+                    },
+                    error: {
+                        _web: {
+                            _hover: {
+                                backgroundColor: theme.intents.error.light,
+                                color: theme.intents.error.primary,
+                            },
+                        },
+                    },
+                    warning: {
+                        _web: {
+                            _hover: {
+                                backgroundColor: theme.intents.warning.light,
+                                color: theme.intents.warning.primary,
+                            },
+                        },
+                    },
+                    info: {
+                        _web: {
+                            _hover: {
+                                backgroundColor: theme.intents.info.light,
+                                color: theme.intents.info.primary,
+                            },
+                        },
+                    },
+                },
             },
             compoundVariants: [
                 {
@@ -133,14 +99,20 @@ export const menuItemStyles = StyleSheet.create((theme: Theme) => {
             flexShrink: 0,
             marginRight: 12,
             variants: {
-                size: createIconSizeVariants(theme),
+                size: buildSizeVariants(theme, 'menu', (size) => ({
+                    width: size.iconSize,
+                    height: size.iconSize,
+                    fontSize: size.iconSize,
+                }))
             },
         },
         label: {
             flex: 1,
             color: theme.colors.text.primary,
             variants: {
-                size: createLabelSizeVariants(theme),
+                size: buildSizeVariants(theme, 'menu', (size) => ({
+                    fontSize: size.labelFontSize,
+                })),
             },
         },
     };

@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState, forwardRef } from 'react';
 import { Modal, View, TouchableWithoutFeedback, BackHandler, Dimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PopoverProps } from './types';
 import { popoverStyles } from './Popover.styles';
+import { calculateSmartPosition, calculateAvailableHeight } from '../utils/positionUtils.native';
+import { BoundedModalContent } from '../internal/BoundedModalContent.native';
 
 const Popover = forwardRef<View, PopoverProps>(({
   open,
@@ -19,6 +22,7 @@ const Popover = forwardRef<View, PopoverProps>(({
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0, width: 0 });
   const [popoverSize, setPopoverSize] = useState({ width: 0, height: 0 });
   const anchorMeasurements = useRef({ x: 0, y: 0, width: 0, height: 0 });
+  const insets = useSafeAreaInsets();
 
   // Apply variants
   popoverStyles.useVariants({});
@@ -67,67 +71,33 @@ const Popover = forwardRef<View, PopoverProps>(({
   }, [popoverSize, open]);
 
   const calculatePopoverPosition = (x: number, y: number, width: number, height: number) => {
-    const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
     // Use measured size if available, otherwise use estimates
     const popoverWidth = popoverSize.width || 200;
-    const popoverHeight = popoverSize.height || 150;
-    const padding = 12; // Minimum padding from screen edges
+    const desiredMaxHeight = 500; // Maximum height we want for popovers
 
-    let top = 0;
-    let left = 0;
+    // For flip detection, use maxHeight so it properly detects when there's not enough space
+    // But if we have a measured size that's SMALLER than maxHeight, use that for final positioning
+    // to avoid unnecessary gaps (this happens when content naturally fits)
+    const heightForPositioning = popoverSize.height > 0 && popoverSize.height < desiredMaxHeight
+      ? popoverSize.height
+      : desiredMaxHeight;
 
-    // Calculate position based on placement
-    switch (placement) {
-      case 'bottom':
-      case 'bottom-start':
-        top = y + height + offset;
-        left = placement === 'bottom' ? x + width / 2 : x;
-        break;
-      case 'bottom-end':
-        top = y + height + offset;
-        left = x + width;
-        break;
-      case 'top':
-      case 'top-start':
-        top = y - offset;
-        left = placement === 'top' ? x + width / 2 : x;
-        break;
-      case 'top-end':
-        top = y - offset;
-        left = x + width;
-        break;
-      case 'left':
-      case 'left-start':
-      case 'left-end':
-        top = placement === 'left' ? y + height / 2 : placement === 'left-start' ? y : y + height;
-        left = x - offset;
-        break;
-      case 'right':
-      case 'right-start':
-      case 'right-end':
-        top = placement === 'right' ? y + height / 2 : placement === 'right-start' ? y : y + height;
-        left = x + width + offset;
-        break;
-      default:
-        top = y + height + offset;
-        left = x;
-    }
+    const desiredSize = {
+      width: popoverWidth,
+      height: heightForPositioning
+    };
 
-    // Keep popover within viewport bounds
-    if (left < padding) {
-      left = padding;
-    }
-    if (left + popoverWidth > screenWidth - padding) {
-      left = screenWidth - popoverWidth - padding;
-    }
-    if (top < padding) {
-      top = padding;
-    }
-    if (top + popoverHeight > screenHeight - padding) {
-      top = screenHeight - popoverHeight - padding;
-    }
+    // Use smart positioning with boundary detection and flipping
+    const position = calculateSmartPosition(
+      { x, y, width, height },
+      desiredSize,
+      placement,
+      offset,
+      false,
+      insets
+    );
 
-    setPopoverPosition({ top, left, width });
+    setPopoverPosition({ top: position.top, left: position.left, width });
   };
 
   const handleBackdropPress = () => {
@@ -147,18 +117,6 @@ const Popover = forwardRef<View, PopoverProps>(({
   const { width: screenWidth } = Dimensions.get('window');
   const maxPopoverWidth = screenWidth - 24; // 12px padding on each side
 
-  const popoverStyle = [
-    popoverStyles.container,
-    {
-      position: 'absolute',
-      top: popoverPosition.top,
-      left: popoverPosition.left,
-      minWidth: popoverPosition.width || 200,
-      maxWidth: maxPopoverWidth,
-    },
-    style,
-  ];
-
   if (!open || popoverPosition.top === 0) {
     return null;
   }
@@ -174,12 +132,19 @@ const Popover = forwardRef<View, PopoverProps>(({
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <View style={popoverStyles.backdrop}>
           <TouchableWithoutFeedback>
-            <View ref={ref} style={popoverStyle} onLayout={handlePopoverLayout}>
+            <BoundedModalContent
+              top={popoverPosition.top}
+              left={popoverPosition.left}
+              width={Math.min(popoverPosition.width || 200, maxPopoverWidth)}
+              maxHeight={500}
+              style={[popoverStyles.container, style]}
+              onLayout={handlePopoverLayout}
+            >
               {showArrow && <View style={popoverStyles.arrow} />}
               <View style={popoverStyles.content}>
                 {children}
               </View>
-            </View>
+            </BoundedModalContent>
           </TouchableWithoutFeedback>
         </View>
       </TouchableWithoutFeedback>

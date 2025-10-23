@@ -1,15 +1,18 @@
-import React, { useRef, useState, isValidElement, cloneElement, forwardRef } from 'react';
+import React, { useRef, useState, isValidElement, cloneElement, forwardRef, useEffect } from 'react';
 import {
   View,
   Modal,
   Pressable,
   ScrollView,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { menuStyles } from './Menu.styles';
 import type { MenuProps, MenuItem as MenuItemType } from './types';
 import { Divider } from '../Divider';
 import MenuItem from './MenuItem.native';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { calculateSmartPosition, calculateAvailableHeight } from '../utils/positionUtils.native';
+import { BoundedModalContent } from '../internal/BoundedModalContent.native';
 
 const Menu = forwardRef<View, MenuProps>(({
   children,
@@ -24,6 +27,17 @@ const Menu = forwardRef<View, MenuProps>(({
   const triggerRef = useRef<any>(null);
   const mergedTriggerRef = useMergeRefs(ref, triggerRef);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [menuSize, setMenuSize] = useState({ width: 200, height: 300 });
+  const anchorMeasurements = useRef<{ x: number; y: number; width: number; height: number } | null>(null);
+  const insets = useSafeAreaInsets();
+
+  // Recalculate position when menu size changes
+  useEffect(() => {
+    if (open && anchorMeasurements.current && menuSize.width > 0 && menuSize.height > 0) {
+      const { x, y, width, height } = anchorMeasurements.current;
+      calculateMenuPosition(x, y, width, height);
+    }
+  }, [menuSize, open]);
 
   const handleTriggerPress = () => {
     if (!onOpenChange) return;
@@ -31,6 +45,8 @@ const Menu = forwardRef<View, MenuProps>(({
     if (!open) {
       // Measure trigger position before opening
       triggerRef.current?.measureInWindow((x: number, y: number, width: number, height: number) => {
+        // Store anchor measurements for potential recalculation
+        anchorMeasurements.current = { x, y, width, height };
         calculateMenuPosition(x, y, width, height);
         onOpenChange(true);
       });
@@ -41,43 +57,39 @@ const Menu = forwardRef<View, MenuProps>(({
 
   const calculateMenuPosition = (x: number, y: number, width: number, height: number) => {
     const offset = 8;
-    let top = 0;
-    let left = 0;
+    const desiredMaxHeight = 300; // Maximum height we want for the menu
 
-    // Calculate position based on placement
-    switch (placement) {
-      case 'bottom':
-      case 'bottom-start':
-        top = y + height + offset;
-        left = x;
-        break;
-      case 'bottom-end':
-        top = y + height + offset;
-        left = x + width;
-        break;
-      case 'top':
-      case 'top-start':
-        top = y - offset;
-        left = x;
-        break;
-      case 'top-end':
-        top = y - offset;
-        left = x + width;
-        break;
-      case 'left':
-        top = y;
-        left = x - offset;
-        break;
-      case 'right':
-        top = y;
-        left = x + width + offset;
-        break;
-      default:
-        top = y + height + offset;
-        left = x;
+    // For flip detection, use maxHeight so it properly detects when there's not enough space
+    // But if we have a measured size that's SMALLER than maxHeight, use that for final positioning
+    // to avoid unnecessary gaps (this happens when content naturally fits)
+    const heightForPositioning = menuSize.height > 0 && menuSize.height < desiredMaxHeight
+      ? menuSize.height
+      : desiredMaxHeight;
+
+    const desiredSize = {
+      width: menuSize.width,
+      height: heightForPositioning
+    };
+
+    // Use smart positioning with boundary detection and flipping
+    const position = calculateSmartPosition(
+      { x, y, width, height },
+      desiredSize,
+      placement,
+      offset,
+      false,
+      insets
+    );
+
+    setMenuPosition({ top: position.top, left: position.left, width });
+  };
+
+  const handleMenuLayout = (event: any) => {
+    const { width, height } = event.nativeEvent.layout;
+    // Only update if size has changed significantly
+    if (Math.abs(width - menuSize.width) > 1 || Math.abs(height - menuSize.height) > 1) {
+      setMenuSize({ width, height });
     }
-
-    setMenuPosition({ top, left, width });
   };
 
   const handleItemPress = (item: MenuItemType) => {
@@ -105,21 +117,16 @@ const Menu = forwardRef<View, MenuProps>(({
           style={{ flex: 1 }}
           onPress={handleBackdropPress}
         >
-          <View
-            style={[
-              menuStyles.menu,
-              {
-                position: 'absolute',
-                top: menuPosition.top,
-                left: menuPosition.left,
-              },
-              style,
-            ]}
-            onStartShouldSetResponder={() => true}
+          <BoundedModalContent
+            top={menuPosition.top}
+            left={menuPosition.left}
+            width={menuPosition.width}
+            maxHeight={300}
+            style={[menuStyles.menu, style]}
+            onLayout={handleMenuLayout}
           >
             <ScrollView
               showsVerticalScrollIndicator={false}
-              style={{ maxHeight: 300 }}
             >
               {items.map((item, index) => {
 
@@ -134,7 +141,7 @@ const Menu = forwardRef<View, MenuProps>(({
                 );
               })}
             </ScrollView>
-          </View>
+          </BoundedModalContent>
         </Pressable>
       </Modal>
     );

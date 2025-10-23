@@ -1,15 +1,7 @@
 import React, { isValidElement, forwardRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  alertContainerStyles,
-  alertIconStyles,
-  alertContentStyles,
-  alertTitleStyles,
-  alertMessageStyles,
-  alertActionsStyles,
-  alertCloseButtonStyles,
-} from './Alert.styles';
+import { alertStyles } from './Alert.styles';
 import { isIconName } from '../Icon/icon-resolver';
 import type { AlertProps } from './types';
 
@@ -37,10 +29,8 @@ const Alert = forwardRef<View, AlertProps>(({
   style,
   testID,
 }, ref) => {
-  // Apply variants to stylesheets that don't use dynamic styles
-  alertContentStyles.useVariants({});
-  alertActionsStyles.useVariants({});
-  alertCloseButtonStyles.useVariants({});
+  // Apply variants to stylesheet
+  alertStyles.useVariants({});
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
 
@@ -49,7 +39,7 @@ const Alert = forwardRef<View, AlertProps>(({
     if (!displayIcon) return null;
 
     if (typeof displayIcon === 'string' && isIconName(displayIcon)) {
-      const iconColor = alertIconStyles.iconContainer({ type: variant, intent }).color || '#000';
+      const iconColor = alertStyles.iconContainer({ type: variant, intent }).color || '#000';
       return (
         <MaterialCommunityIcons
           name={displayIcon}
@@ -66,25 +56,25 @@ const Alert = forwardRef<View, AlertProps>(({
   return (
     <View
       ref={ref}
-      style={[alertContainerStyles.container({ type: variant, intent }), style]}
+      style={[alertStyles.container({ type: variant, intent }), style]}
       testID={testID}
       accessibilityRole="alert"
     >
       {displayIcon && (
-        <View style={alertIconStyles.iconContainer({ type: variant, intent })}>
+        <View style={alertStyles.iconContainer({ type: variant, intent })}>
           {renderIcon()}
         </View>
       )}
 
-      <View style={alertContentStyles.content}>
+      <View style={alertStyles.content}>
         {title && (
-          <Text style={alertTitleStyles.title({ type: variant, intent })}>
+          <Text style={alertStyles.title({ type: variant, intent })}>
             {title}
           </Text>
         )}
 
         {message && (
-          <Text style={alertMessageStyles.message({ type: variant, intent })}>
+          <Text style={alertStyles.message({ type: variant, intent })}>
             {message}
           </Text>
         )}
@@ -92,7 +82,7 @@ const Alert = forwardRef<View, AlertProps>(({
         {children}
 
         {actions && (
-          <View style={alertActionsStyles.actions}>
+          <View style={alertStyles.actions}>
             {actions}
           </View>
         )}
@@ -100,7 +90,7 @@ const Alert = forwardRef<View, AlertProps>(({
 
       {dismissible && onDismiss && (
         <TouchableOpacity
-          style={alertCloseButtonStyles.closeButton}
+          style={alertStyles.closeButton}
           onPress={onDismiss}
           accessibilityLabel="Dismiss alert"
           accessibilityRole="button"
@@ -108,7 +98,7 @@ const Alert = forwardRef<View, AlertProps>(({
           <MaterialCommunityIcons
             name="close"
             size={16}
-            color={alertCloseButtonStyles.closeButton.color || '#000'}
+            color={alertStyles.closeButton.color || '#000'}
           />
         </TouchableOpacity>
       )}
