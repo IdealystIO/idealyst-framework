@@ -34,7 +34,7 @@ const Slider = forwardRef<View, SliderProps>(({
   const scale = useSharedValue(1);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
-
+  
   sliderStyles.useVariants({
     size,
     intent,
@@ -170,7 +170,7 @@ const Slider = forwardRef<View, SliderProps>(({
       <View style={sliderStyles.sliderWrapper}>
         <GestureDetector gesture={composedGesture}>
           <View
-            style={[sliderStyles.track, { width: '100%' }]}
+            style={sliderStyles.track}
             onLayout={(e) => {
               const width = e.nativeEvent.layout.width;
               trackWidth.value = width;

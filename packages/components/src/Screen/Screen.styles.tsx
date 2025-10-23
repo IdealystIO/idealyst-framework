@@ -16,6 +16,7 @@ function generateBackgroundVariants(theme: Theme) {
 function generatePaddingVariants() {
   return {
     none: { padding: 0 },
+    xs: { padding: 4 },
     sm: { padding: 8 },
     md: { padding: 16 },
     lg: { padding: 24 },
@@ -34,6 +35,10 @@ export const screenStyles = StyleSheet.create((theme: Theme) => {
       variants: {
         background: generateBackgroundVariants(theme),
         padding: generatePaddingVariants(),
+        safeArea: {
+          true: {},
+          false: {},
+        }
       },
       _web: {
         overflow: 'auto',
@@ -41,6 +46,18 @@ export const screenStyles = StyleSheet.create((theme: Theme) => {
         flexDirection: 'column',
         minHeight: '100%',
         boxSizing: 'border-box',
+      },
+    },
+    // Content style for ScrollView - no flex: 1 so content can grow
+    screenContent: {
+      backgroundColor: theme.colors.surface.primary,
+      variants: {
+        background: generateBackgroundVariants(theme),
+        padding: generatePaddingVariants(),
+        safeArea: {
+          true: {},
+          false: {},
+        }
       },
     },
   };

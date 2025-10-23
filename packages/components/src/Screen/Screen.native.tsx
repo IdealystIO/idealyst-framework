@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { View as RNView, ScrollView as RNScrollView } from 'react-native';
+import { View as RNView, ScrollView as RNScrollView, SafeAreaView } from 'react-native';
 import { ScreenProps } from './types';
 import { screenStyles } from './Screen.styles';
 
@@ -7,12 +7,13 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   children,
   background = 'primary',
   padding = 'md',
-  safeArea = false,
+  safeArea = true,
   scrollable = true,
   contentInset,
   style,
   testID,
 }, ref) => {
+
   screenStyles.useVariants({
     background,
     padding,
@@ -20,36 +21,45 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   });
 
   if (scrollable) {
+    // For ScrollView, flex: 1 goes on the ScrollView style
+    // Background and padding go on contentContainerStyle (without flex: 1)
+    const scrollViewStyle = [{ flex: 1 }, style];
 
-    // For ScrollView, background and padding should be on contentContainerStyle
     const contentContainerStyleArray = [
-      screenStyles.screen,
+      screenStyles.screenContent,
       contentInset ? {
         paddingTop: contentInset.top,
         paddingBottom: contentInset.bottom,
         paddingLeft: contentInset.left,
         paddingRight: contentInset.right,
       } : undefined,
-      style,
     ];
 
-    return (
-      <RNScrollView
-        ref={ref as any}
-        style={{ flex: 1 }}
-        contentContainerStyle={contentContainerStyleArray}
-        testID={testID}
-      >
-        {children}
-      </RNScrollView>
+  return (
+    <RNScrollView
+      ref={ref as any}
+      style={scrollViewStyle}
+      contentContainerStyle={contentContainerStyleArray}
+      testID={testID}
+    >
+      {children}
+    </RNScrollView>
     );
   }
 
-  return (
-    <RNView ref={ref as any} style={[screenStyles.screen, style]} testID={testID}>
+  const containerStyle = [screenStyles.screen, style];
+
+  const view = (
+    <RNView ref={ref as any} style={containerStyle} testID={testID}>
       {children}
     </RNView>
   );
+
+  if (safeArea) {
+    return <SafeAreaView style={{ flex: 1 }}>{view}</SafeAreaView>;
+  }
+
+  return view;
 });
 
 Screen.displayName = 'Screen';

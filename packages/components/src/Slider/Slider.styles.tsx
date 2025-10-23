@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Intent, Size, Styles} from '@idealyst/theme';
 import { deepMerge } from '../utils/deepMerge';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
@@ -57,9 +57,14 @@ export type SliderStylesheet = {
  * Create size variants for track
  */
 function createTrackSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'slider', (size) => ({
-        height: size.trackHeight,
-    }));
+    const variants = {} as Record<Size, Styles>;
+    for (const sizeKey in theme.sizes.slider) {
+        const size = sizeKey as Size;
+        variants[size] = {
+            height: theme.sizes.slider[size].trackHeight,
+        };
+    }
+    return variants;
 }
 
 /**
@@ -116,61 +121,22 @@ function createMarkSizeVariants(theme: Theme) {
     }));
 }
 
-const createContainerStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
-    return deepMerge({
-        gap: 4,
-        paddingVertical: 8,
-    }, expanded);
-}
-
-const createSliderWrapperStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
-    return deepMerge({
-        position: 'relative',
-        paddingVertical: 4,
-    }, expanded);
-}
-
-const createTrackStyles = (theme: Theme, expanded: Partial<ExpandedSliderTrackStyles>): ExpandedSliderTrackStyles => {
-    return deepMerge({
-        backgroundColor: theme.colors.border.secondary,
-        borderRadius: 9999,
-        position: 'relative',
-        variants: {
-            size: createTrackSizeVariants(theme),
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                    _web: {
-                        cursor: 'not-allowed',
-                    },
-                },
-                false: {
-                    opacity: 1,
-                    _web: {
-                        cursor: 'pointer',
-                    },
-                },
-            },
-        },
-    }, expanded);
-}
-
-const createFilledTrackStyles = (theme: Theme, expanded: Partial<ExpandedSliderFilledTrackStyles>) => {
+const createFilledTrackStyles = (theme: Theme) => {
     return ({ intent }: SliderFilledTrackVariants) => {
-        return deepMerge({
+        return {
             position: 'absolute',
             height: '100%',
             borderRadius: 9999,
             top: 0,
             left: 0,
             backgroundColor: getFilledTrackColor(theme, intent),
-        }, expanded);
+        };
     }
 }
 
-const createThumbStyles = (theme: Theme, expanded: Partial<ExpandedSliderThumbStyles>) => {
+const createThumbStyles = (theme: Theme) => {
     return ({ intent, disabled }: { intent: SliderIntent, disabled: boolean }) => {
-        return deepMerge({
+        return {
             position: 'absolute',
             backgroundColor: theme.colors.surface.primary,
             borderRadius: 9999,
@@ -215,21 +181,13 @@ const createThumbStyles = (theme: Theme, expanded: Partial<ExpandedSliderThumbSt
                 transform: 'translate(-50%, -50%)',
                 transition: 'transform 0.15s ease, box-shadow 0.2s ease',
             },
-        }, expanded);
+        };
     }
 }
 
-const createThumbActiveStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
-    return deepMerge({
-        _web: {
-            transform: 'translate(-50%, -50%) scale(1.1)',
-        },
-    }, expanded);
-}
-
-const createThumbIconStyles = (theme: Theme, expanded: Partial<ExpandedSliderThumbIconStyles>) => {
+const createThumbIconStyles = (theme: Theme) => {
     return ({ intent }: SliderThumbIconVariants) => {
-        return deepMerge({
+        return {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -238,107 +196,96 @@ const createThumbIconStyles = (theme: Theme, expanded: Partial<ExpandedSliderThu
             variants: {
                 size: createThumbIconSizeVariants(theme),
             },
-        }, expanded);
+        };
     }
-}
-
-const createValueLabelStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
-    return deepMerge({
-        fontSize: 12,
-        fontWeight: '600',
-        color: theme.colors.text.primary,
-        textAlign: 'center',
-    }, expanded);
-}
-
-const createMinMaxLabelsStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
-    return deepMerge({
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 4,
-    }, expanded);
-}
-
-const createMinMaxLabelStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
-    return deepMerge({
-        fontSize: 12,
-        color: theme.colors.text.secondary,
-    }, expanded);
-}
-
-const createMarksStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
-    return deepMerge({
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0,
-    }, expanded);
-}
-
-const createMarkStyles = (theme: Theme, expanded: Partial<ExpandedSliderMarkStyles>): ExpandedSliderMarkStyles => {
-    return deepMerge({
-        position: 'absolute',
-        width: 2,
-        backgroundColor: theme.colors.border.secondary,
-        top: '50%',
-        variants: {
-            size: createMarkSizeVariants(theme),
-        },
-        _web: {
-            transform: 'translate(-50%, -50%)',
-        },
-    }, expanded);
-}
-
-const createMarkLabelStyles = (theme: Theme, expanded: Partial<ExpandedSliderStyles>): ExpandedSliderStyles => {
-    return deepMerge({
-        position: 'absolute',
-        fontSize: 10,
-        color: theme.colors.text.secondary,
-        top: '100%',
-        marginTop: 4,
-        _web: {
-            transform: 'translateX(-50%)',
-            whiteSpace: 'nowrap',
-        },
-    }, expanded);
-}
-
-export const createSliderStylesheet = (theme: Theme, expanded?: Partial<SliderStylesheet>): SliderStylesheet => {
-    return {
-        container: createContainerStyles(theme, expanded?.container || {}),
-        sliderWrapper: createSliderWrapperStyles(theme, expanded?.sliderWrapper || {}),
-        track: createTrackStyles(theme, expanded?.track || {}),
-        filledTrack: createFilledTrackStyles(theme, expanded?.filledTrack || {}),
-        thumb: createThumbStyles(theme, expanded?.thumb || {}),
-        thumbActive: createThumbActiveStyles(theme, expanded?.thumbActive || {}),
-        thumbIcon: createThumbIconStyles(theme, expanded?.thumbIcon || {}),
-        valueLabel: createValueLabelStyles(theme, expanded?.valueLabel || {}),
-        minMaxLabels: createMinMaxLabelsStyles(theme, expanded?.minMaxLabels || {}),
-        minMaxLabel: createMinMaxLabelStyles(theme, expanded?.minMaxLabel || {}),
-        marks: createMarksStyles(theme, expanded?.marks || {}),
-        mark: createMarkStyles(theme, expanded?.mark || {}),
-        markLabel: createMarkLabelStyles(theme, expanded?.markLabel || {}),
-    };
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const sliderStyles = StyleSheet.create((theme: Theme) => {
     return {
-        container: createContainerStyles(theme, {}),
-        sliderWrapper: createSliderWrapperStyles(theme, {}),
-        track: createTrackStyles(theme, {}),
-        filledTrack: createFilledTrackStyles(theme, {}),
-        thumb: createThumbStyles(theme, {}),
-        thumbActive: createThumbActiveStyles(theme, {}),
-        thumbIcon: createThumbIconStyles(theme, {}),
-        valueLabel: createValueLabelStyles(theme, {}),
-        minMaxLabels: createMinMaxLabelsStyles(theme, {}),
-        minMaxLabel: createMinMaxLabelStyles(theme, {}),
-        marks: createMarksStyles(theme, {}),
-        mark: createMarkStyles(theme, {}),
-        markLabel: createMarkLabelStyles(theme, {}),
+        container: {
+            gap: 4,
+            paddingVertical: 8,
+        },
+        sliderWrapper: {
+            position: 'relative',
+            paddingVertical: 4,
+        },
+        track: {
+        backgroundColor: theme.colors.surface.tertiary,
+        borderRadius: 9999,
+        position: 'relative',
+        variants: {
+            size: createTrackSizeVariants(theme),
+            disabled: {
+                true: {
+                    opacity: 0.5,
+                    _web: {
+                        cursor: 'not-allowed',
+                    },
+                },
+                false: {
+                    opacity: 1,
+                    _web: {
+                        cursor: 'pointer',
+                    },
+                },
+            },
+            },
+        },
+        filledTrack: createFilledTrackStyles(theme),
+        thumb: createThumbStyles(theme),
+        thumbActive: {
+            _web: {
+                transform: 'translate(-50%, -50%) scale(1.1)',
+            },
+        },
+        thumbIcon: createThumbIconStyles(theme),
+        valueLabel: {
+        fontSize: 12,
+        fontWeight: '600',
+        color: theme.colors.text.primary,
+        textAlign: 'center',
+    },
+        minMaxLabels: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 4,
+    },
+        minMaxLabel: {
+        fontSize: 12,
+        color: theme.colors.text.secondary,
+    },
+        mark: {
+            position: 'absolute',
+            width: 2,
+            backgroundColor: theme.colors.border.secondary,
+            top: '50%',
+            variants: {
+                size: createMarkSizeVariants(theme),
+            },
+            _web: {
+                transform: 'translate(-50%, -50%)',
+            },
+        },
+        marks: {
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            top: 0,
+            left: 0,
+        },
+        markLabel: {
+            position: 'absolute',
+            fontSize: 10,
+            color: theme.colors.text.secondary,
+            top: '100%',
+            marginTop: 4,
+            _web: {
+                transform: 'translateX(-50%)',
+                whiteSpace: 'nowrap',
+            },
+        },
     };
 });

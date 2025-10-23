@@ -1,4 +1,4 @@
-import { AllComponentSizes, Size, Theme, Styles } from '@idealyst/theme'
+import { AllComponentSizes, Size, Theme, Styles } from '@idealyst/theme';
 
 /**
  * Builds a generic size variant. Not really useful on its own tbh, just good to show how it can be used.
