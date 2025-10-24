@@ -7,7 +7,7 @@ export const Checkbox = {
 - \`disabled\`: boolean - Whether the checkbox is disabled
 - \`onCheckedChange\`: (checked: boolean) => void - Called when checkbox state changes
 - \`size\`: 'sm' | 'md' | 'lg' - Checkbox size
-- \`intent\`: IntentVariant - Color scheme
+- \`intent\`: Intent - Color scheme
 - \`variant\`: 'default' | 'outlined' - Visual style
 - \`label\`: string - Label text to display next to checkbox
 - \`children\`: ReactNode - Custom label content

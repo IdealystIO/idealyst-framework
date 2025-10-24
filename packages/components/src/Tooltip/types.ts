@@ -1,9 +1,9 @@
+import { Intent, Size } from '@idealyst/theme';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type TooltipIntentVariant = IntentVariant;
-export type TooltipSizeVariant = ButtonSize;
+export type TooltipIntentVariant = Intent;
+export type TooltipSizeVariant = Size;
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 export interface TooltipProps {

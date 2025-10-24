@@ -15,7 +15,7 @@ export const Select = {
 - \`helperText\`: string - Helper text below select
 - \`label\`: string - Label text above select
 - \`variant\`: 'outlined' | 'filled' - Visual style
-- \`intent\`: IntentVariant - Color scheme
+- \`intent\`:Intent - Color scheme
 - \`size\`: 'sm' | 'md' | 'lg' - Select size
 - \`searchable\`: boolean - Enable search/filter (web only)
 - \`filterOption\`: (option, searchTerm) => boolean - Custom filter function

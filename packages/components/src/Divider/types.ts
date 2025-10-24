@@ -1,14 +1,14 @@
+import { Intent, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type DividerIntentVariant = IntentVariant;
+export type DividerIntentVariant = Intent;
 export type DividerOrientationVariant = 'horizontal' | 'vertical';
 export type DividerVariant = 'solid' | 'dashed' | 'dotted';
 export type DividerThicknessVariant = 'thin' | 'md' | 'thick';
 export type DividerLengthVariant = 'full' | 'auto' | number;
-export type DividerSpacingVariant = 'none' | 'sm' | 'md' | 'lg';
+export type DividerSpacingVariant = 'none' | Size;
 
 export interface DividerProps {
   /**

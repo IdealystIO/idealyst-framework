@@ -1,10 +1,10 @@
+import { Intent, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type CheckboxIntentVariant = IntentVariant;
-export type CheckboxSizeVariant = ButtonSize;
+export type CheckboxIntentVariant = Intent;
+export type CheckboxSizeVariant = Size;
 export type CheckboxVariant = 'default' | 'outlined';
 
 export interface CheckboxProps {

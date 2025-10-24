@@ -1,10 +1,10 @@
+import { Intent } from '@idealyst/theme';
 import React from 'react';
 import { ViewProps } from 'react-native';
 import { SvgProps } from 'react-native-svg';
-import { IntentVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type SVGImageIntentVariant = IntentVariant;
+export type SVGImageIntentVariant = Intent;
 export type SVGImageResizeMode = 'contain' | 'cover' | 'stretch';
 
 export interface SVGImageProps extends Omit<ViewProps, 'children'> {

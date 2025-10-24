@@ -5,7 +5,7 @@ export const Divider = {
 - \`orientation\`: 'horizontal' | 'vertical' - The orientation of the divider
 - \`variant\`: 'solid' | 'dashed' | 'dotted' - The visual style
 - \`thickness\`: 'thin' | 'md' | 'thick' - The thickness of the divider
-- \`intent\`: IntentVariant - The color intent
+- \`intent\`:Intent - The color intent
 - \`length\`: 'full' | 'auto' | number - The length (percentage or fixed)
 - \`spacing\`: 'none' | 'sm' | 'md' | 'lg' - Spacing around divider
 - \`children\`: ReactNode - Content in center (horizontal dividers)

@@ -1,10 +1,10 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
-import type { IntentVariant, ButtonSize } from '@idealyst/theme';
+import { Intent, Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type RadioButtonIntentVariant = IntentVariant;
-export type RadioButtonSizeVariant = ButtonSize;
+export type RadioButtonIntentVariant = Intent;
+export type RadioButtonSizeVariant = Size;
 
 export interface RadioButtonProps {
   value: string;

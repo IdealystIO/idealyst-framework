@@ -1,10 +1,10 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
-import type { IntentVariant, ButtonSize } from '@idealyst/theme';
+import { Intent, Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type MenuIntentVariant = IntentVariant;
-export type MenuSizeVariant = ButtonSize;
+export type MenuIntentVariant = Intent;
+export type MenuSizeVariant = Size;
 export type MenuPlacement = 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right';
 
 export interface MenuItem {

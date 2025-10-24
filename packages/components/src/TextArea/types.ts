@@ -1,9 +1,9 @@
+import { Intent, Size } from '@idealyst/theme';
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type TextAreaIntentVariant = IntentVariant;
-export type TextAreaSizeVariant = ButtonSize;
+export type TextAreaIntentVariant = Intent;
+export type TextAreaSizeVariant = Size;
 export type TextAreaResizeVariant = 'none' | 'vertical' | 'horizontal' | 'both';
 
 export interface TextAreaProps {

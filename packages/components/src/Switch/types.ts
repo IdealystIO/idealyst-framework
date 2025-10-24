@@ -1,10 +1,10 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
-import type { IntentVariant, ButtonSize } from '@idealyst/theme';
+import { Intent, Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type SwitchIntentVariant = IntentVariant;
-export type SwitchSizeVariant = ButtonSize;
+export type SwitchIntentVariant = Intent;
+export type SwitchSizeVariant = Size;
 
 export interface SwitchProps {
   checked?: boolean;

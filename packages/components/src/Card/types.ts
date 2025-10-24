@@ -1,12 +1,12 @@
+import { Intent, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type CardIntentVariant = IntentVariant;
+export type CardIntentVariant = Intent;
 export type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
-export type CardPaddingVariant = 'none' | 'sm' | 'md' | 'lg';
-export type CardRadiusVariant = 'none' | 'sm' | 'md' | 'lg';
+export type CardPaddingVariant = 'none' | Size;
+export type CardRadiusVariant = 'none' | Size;
 
 export interface CardProps {
   /**

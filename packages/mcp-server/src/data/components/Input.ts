@@ -16,7 +16,7 @@ category: "form",
 - \`autoCapitalize\`: 'none' | 'sentences' | 'words' | 'characters' - Auto-capitalization behavior
 - \`size\`: 'sm' | 'md' | 'lg' - Input size
 - \`variant\`: 'default' | 'outlined' | 'filled' | 'bare' - Style variant
-- \`intent\`: IntentVariant - Color scheme (for focus states)
+- \`intent\`:Intent - Color scheme (for focus states)
 - \`hasError\`: boolean - Error state (deprecated: use intent="error")
 `,
     features: [
