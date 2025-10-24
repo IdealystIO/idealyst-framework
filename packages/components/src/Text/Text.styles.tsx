@@ -66,7 +66,7 @@ function createColorVariants(theme: Theme) {
     return variants;
 }
 
-function createTextStyles(theme: Theme) {
+function createTextStyles(theme: Theme): ExpandedTextStyles {
     return ({ color }: TextVariants) => {
         const colorValue = theme.colors.text[color] || theme.colors.text.primary;
         return {
@@ -98,8 +98,7 @@ function createTextStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const textStyles = StyleSheet.create((theme: Theme) => {
+export const textStyles = StyleSheet.create((theme: Theme): TextStylesheet => {
   return {
         text: createTextStyles(theme),
     }

@@ -146,7 +146,7 @@ function createIconStyles(theme: Theme): ExpandedChipStyles {
     }
 }
 
-function createDeleteIconStyles(theme: Theme) {
+function createDeleteIconStyles(theme: Theme): ExpandedChipStyles {
     return ({ intent, selected }: ChipVariants) => {
         return {
             variants: {
@@ -162,8 +162,7 @@ function createDeleteIconStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const chipStyles = StyleSheet.create((theme: Theme) => {
+export const chipStyles = StyleSheet.create((theme: Theme): ChipStylesheet => {
   return {
     container: createContainerStyles(theme),
     label: createLabelStyles(theme),

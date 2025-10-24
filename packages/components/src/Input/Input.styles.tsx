@@ -135,7 +135,7 @@ function createFocusedVariants(theme: Theme, type: InputType, hasError: boolean)
 }
 
 
-function createContainerStyles(theme: Theme) {
+function createContainerStyles(theme: Theme): ExpandedInputStyles {
     return ({ type, hasError }: InputVariants) => {
         return {
             display: 'flex',
@@ -184,8 +184,7 @@ function createContainerStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const inputStyles = StyleSheet.create((theme: Theme) => {
+export const inputStyles = StyleSheet.create((theme: Theme): InputStylesheet => {
   return {
     container: createContainerStyles(theme),
     leftIconContainer: {

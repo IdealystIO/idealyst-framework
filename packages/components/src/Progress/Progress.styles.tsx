@@ -58,7 +58,7 @@ function createCircularLabelSizeVariants(theme: Theme) {
     }));
 }
 
-function createLinearBarStyles(theme: Theme) {
+function createLinearBarStyles(theme: Theme): ExpandedProgressStyles {
     return ({ intent }: { intent: ProgressIntent }) => {
         return {
             height: '100%',
@@ -76,7 +76,7 @@ function createLinearBarStyles(theme: Theme) {
     }
 }
 
-function createIndeterminateBarStyles(theme: Theme) {
+function createIndeterminateBarStyles(theme: Theme): ExpandedProgressStyles {
     return ({ intent }: { intent: ProgressIntent }) => {
         return {
             position: 'absolute',
@@ -93,7 +93,7 @@ function createIndeterminateBarStyles(theme: Theme) {
     }
 }
 
-function createCircularBarStyles(theme: Theme) {
+function createCircularBarStyles(theme: Theme): ExpandedProgressStyles {
     return ({ intent }: { intent: ProgressIntent }) => {
         return {
             stroke: getCircularBarColor(theme, intent),
@@ -103,8 +103,7 @@ function createCircularBarStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const progressStyles = StyleSheet.create((theme: Theme) => {
+export const progressStyles = StyleSheet.create((theme: Theme): ProgressStylesheet => {
   return {
     container: {
         gap: 4,

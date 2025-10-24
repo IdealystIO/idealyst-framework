@@ -58,7 +58,7 @@ function createRadioDotIntentColor(theme: Theme, intent: RadioButtonIntent) {
     return theme.intents[intent].primary;
 }
 
-function createRadioStyles(theme: Theme) {
+function createRadioStyles(theme: Theme): ExpandedRadioButtonStyles {
     return ({ intent }: RadioButtonVariants) => {
         return {
             borderRadius: 9999,
@@ -100,7 +100,7 @@ function createRadioStyles(theme: Theme) {
     }
 }
 
-function createRadioDotStyles(theme: Theme) {
+function createRadioDotStyles(theme: Theme): ExpandedRadioButtonStyles {
     return ({ intent }: RadioButtonVariants) => {
         return {
             borderRadius: 9999,
@@ -114,8 +114,7 @@ function createRadioDotStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
+export const radioButtonStyles = StyleSheet.create((theme: Theme): RadioButtonStylesheet => {
   return {
     container: {
         flexDirection: 'row',

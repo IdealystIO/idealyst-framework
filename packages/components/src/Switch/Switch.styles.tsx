@@ -86,7 +86,7 @@ function getThumbIconColor(theme: Theme, checked: boolean, intent: SwitchIntent)
     return theme.colors.border.secondary;
 }
 
-function createSwitchTrackStyles(theme: Theme) {
+function createSwitchTrackStyles(theme: Theme): ExpandedSwitchTrackStyles {
     return ({ checked, intent, disabled }: { checked: boolean, intent: SwitchIntent, disabled: boolean }) => {
         return {
             borderRadius: 9999,
@@ -122,7 +122,7 @@ function createSwitchTrackStyles(theme: Theme) {
     }
 }
 
-function createSwitchThumbStyles(theme: Theme) {
+function createSwitchThumbStyles(theme: Theme): ExpandedSwitchThumbStyles {
     return ({ size, checked }: { size: SwitchSize, checked: boolean }) => {
         return {
             position: 'absolute',
@@ -149,7 +149,7 @@ function createSwitchThumbStyles(theme: Theme) {
     }
 }
 
-function createThumbIconStyles(theme: Theme) {
+function createThumbIconStyles(theme: Theme): ExpandedThumbIconStyles {
     return ({ checked, intent }: { checked: boolean, intent: SwitchIntent }) => {
         return {
             display: 'flex',
@@ -165,8 +165,7 @@ function createThumbIconStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const switchStyles = StyleSheet.create((theme: Theme) => {
+export const switchStyles = StyleSheet.create((theme: Theme): SwitchStylesheet => {
   return {
     container: {
         flexDirection: 'row',

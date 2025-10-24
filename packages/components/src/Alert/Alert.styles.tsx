@@ -94,7 +94,7 @@ function getMessageColor(theme: Theme, type: AlertType, intent: AlertIntent) {
 /**
  * Generate alert container styles
  */
-const createContainerStyles = (theme: Theme) => {
+const createContainerStyles = (theme: Theme): ExpandedAlertStyles => {
     return ({ type, intent }: { type: AlertType, intent: AlertIntent }) => {
         const containerStyles = getContainerStyles(theme, type, intent);
         return {
@@ -114,7 +114,7 @@ const createContainerStyles = (theme: Theme) => {
 /**
  * Generate alert icon container styles
  */
-const createIconContainerStyles = (theme: Theme) => {
+const createIconContainerStyles = (theme: Theme): ExpandedAlertStyles => {
     return ({ type, intent }: { type: AlertType, intent: AlertIntent }) => {
         return {
             display: 'flex',
@@ -131,7 +131,7 @@ const createIconContainerStyles = (theme: Theme) => {
 /**
  * Generate alert title styles
  */
-const createTitleStyles = (theme: Theme) => {
+const createTitleStyles = (theme: Theme): ExpandedAlertStyles => {
     return ({ type, intent }: { type: AlertType, intent: AlertIntent }) => {
         return {
             fontSize: 16,
@@ -145,7 +145,7 @@ const createTitleStyles = (theme: Theme) => {
 /**
  * Generate alert message styles
  */
-const createMessageStyles = (theme: Theme) => {
+const createMessageStyles = (theme: Theme): ExpandedAlertStyles => {
     return ({ type, intent }: { type: AlertType, intent: AlertIntent }) => {
         return {
             fontSize: 14,
@@ -156,8 +156,7 @@ const createMessageStyles = (theme: Theme) => {
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const alertStyles = StyleSheet.create((theme: Theme) => {
+export const alertStyles = StyleSheet.create((theme: Theme): AlertStylesheet => {
     return {
         container: createContainerStyles(theme),
         iconContainer: createIconContainerStyles(theme),

@@ -88,7 +88,7 @@ function createLabelSizeVariants(theme: Theme) {
     }));
 }
 
-const createItemStyles = (theme: Theme) => {
+const createItemStyles = (theme: Theme): ExpandedMenuStyles => {
     return ({ intent }: MenuVariants) => {
         const hoverStyles = getItemHoverStyles(theme, intent);
         return {
@@ -126,8 +126,7 @@ const createItemStyles = (theme: Theme) => {
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const menuStyles = StyleSheet.create((theme: Theme) => {
+export const menuStyles = StyleSheet.create((theme: Theme): MenuStylesheet => {
     return {
         overlay: {
             position: 'fixed',

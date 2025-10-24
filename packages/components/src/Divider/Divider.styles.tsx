@@ -169,8 +169,7 @@ function createLineCompoundVariants(): CompoundVariants<keyof DividerVariants> {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const dividerStyles = StyleSheet.create((theme: Theme) => {
+export const dividerStyles = StyleSheet.create((theme: Theme): DividerStylesheet => {
   return {
     divider: {
         backgroundColor: theme.colors.border.secondary,

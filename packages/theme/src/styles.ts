@@ -8,4 +8,7 @@ export type ExpandedStyles<V extends string> = Styles & {
     compoundVariants?: CompoundVariants<V>;
     variants?: Variants;
 }
-export type StylesheetStyles<V extends string> = ExpandedStyles<V> | ((dynamic: Partial<V>) => ExpandedStyles<V>);
+
+export type StaticStyles<V extends string> = ExpandedStyles<V>;
+export type DynamicStyles<V extends string> = (dynamic: Partial<Record<V, any>>) => ExpandedStyles<V>;
+export type StylesheetStyles<V extends string> = StaticStyles<V> | DynamicStyles<V>;

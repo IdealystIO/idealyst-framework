@@ -90,8 +90,7 @@ function createBorderVariants(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const viewStyles = StyleSheet.create((theme: Theme) => {
+export const viewStyles = StyleSheet.create((theme: Theme): ViewStylesheet => {
   return {
     view: {
         display: 'flex',

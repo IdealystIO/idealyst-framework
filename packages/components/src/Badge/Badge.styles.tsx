@@ -67,7 +67,7 @@ function createTextTypeVariants(theme: Theme, color: Color){
 /**
  * Generate badge container styles
  */
-function createBadgeStyles(theme: Theme) {
+function createBadgeStyles(theme: Theme): ExpandedBadgeStyles {
     return ({ color }: BadgeVariants) => {
         return {
             alignItems: 'center',
@@ -96,7 +96,7 @@ function createBadgeStyles(theme: Theme) {
 /**
  * Generate badge text styles
  */
-function createTextStyles(theme: Theme) {
+function createTextStyles(theme: Theme): ExpandedBadgeStyles {
     return ({ color }: BadgeVariants) => {
         return {
             fontWeight: '600',
@@ -114,8 +114,7 @@ function createTextStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const badgeStyles = StyleSheet.create((theme: Theme) => {
+export const badgeStyles = StyleSheet.create((theme: Theme): BadgeStylesheet => {
   return {
     badge: createBadgeStyles(theme),
     content: {

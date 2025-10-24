@@ -1,10 +1,10 @@
-import React, { isValidElement, forwardRef } from 'react';
+import React, { isValidElement, forwardRef, ComponentRef } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
 
-const Button = forwardRef<TouchableOpacity, ButtonProps>((props, ref) => {
+const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((props, ref) => {
   const {
     children,
     title,
@@ -46,7 +46,7 @@ const Button = forwardRef<TouchableOpacity, ButtonProps>((props, ref) => {
         <MaterialCommunityIcons
           name={icon}
           size={iconSize}
-          style={buttonStyles.icon({ intent })}
+          style={buttonStyles.icon}
         />
       );
     } else if (isValidElement(icon)) {
@@ -69,18 +69,18 @@ const Button = forwardRef<TouchableOpacity, ButtonProps>((props, ref) => {
       disabled={disabled}
       testID={testID}
       activeOpacity={0.7}
-      style={[buttonStyles.button({ intent }), style]}
+      style={[buttonStyles.button, style]}
     >
       {hasIcons ? (
         <View style={buttonStyles.iconContainer}>
           {leftIcon && renderIcon(leftIcon)}
-          <Text style={buttonStyles.text({ intent })}>
+          <Text style={buttonStyles.text}>
             {buttonContent}
           </Text>
           {rightIcon && renderIcon(rightIcon)}
         </View>
       ) : (
-        <Text style={buttonStyles.text({ intent })}>
+        <Text style={buttonStyles.text}>
           {buttonContent}
         </Text>
       )}

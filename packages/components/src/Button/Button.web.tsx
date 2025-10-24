@@ -43,10 +43,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     disabled,
   });
 
+
   // Create the style array following the official documentation pattern
   const buttonStyleArray = [
-    buttonStyles.button({ intent }),
-    buttonStyles.text({ intent }), // Include text styles for font sizing
+    buttonStyles.button,
+    buttonStyles.text, // Include text styles for font sizing
     style, // Include incoming style prop
   ];
 
@@ -57,7 +58,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   const iconContainerProps = getWebProps([buttonStyles.iconContainer]);
 
   // Icon styles with variants
-  const iconStyleArray = [buttonStyles.icon({ intent })];
+  const iconStyleArray = [buttonStyles.icon];
   const iconProps = getWebProps(iconStyleArray);
 
   // Helper to render icon

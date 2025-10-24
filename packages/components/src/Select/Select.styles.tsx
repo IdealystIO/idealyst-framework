@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme } from '@idealyst/theme';
+import { Theme, StylesheetStyles } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 // Type definitions
@@ -24,6 +24,32 @@ type SelectOptionVariants = {
 
 type SelectHelperTextVariants = {
     error: boolean;
+}
+
+export type ExpandedSelectTriggerStyles = StylesheetStyles<keyof SelectTriggerVariants>;
+export type ExpandedSelectStyles = StylesheetStyles<never>;
+
+export type SelectStylesheet = {
+    container: ExpandedSelectStyles;
+    label: ExpandedSelectStyles;
+    trigger: ExpandedSelectTriggerStyles;
+    triggerContent: ExpandedSelectStyles;
+    triggerText: any;
+    placeholder: any;
+    icon: ExpandedSelectStyles;
+    chevron: any;
+    chevronOpen: ExpandedSelectStyles;
+    dropdown: ExpandedSelectStyles;
+    searchContainer: ExpandedSelectStyles;
+    searchInput: any;
+    optionsList: ExpandedSelectStyles;
+    option: any;
+    optionContent: ExpandedSelectStyles;
+    optionIcon: ExpandedSelectStyles;
+    optionText: any;
+    optionTextDisabled: ExpandedSelectStyles;
+    helperText: any;
+    overlay: ExpandedSelectStyles;
 }
 
 function createTriggerTypeVariants(theme: Theme) {
@@ -73,8 +99,7 @@ function createIntentVariants(theme: Theme, type: SelectType, intent: SelectInte
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const selectStyles = StyleSheet.create((theme: Theme) => {
+export const selectStyles = StyleSheet.create((theme: Theme): SelectStylesheet => {
     return {
         container: {
             position: 'relative',

@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
+import { Intent, Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type ButtonType = 'contained' | 'outlined' | 'text';
-export type ButtonIntentVariant = IntentVariant;
-export type ButtonSizeVariant = ButtonSize;
+export type ButtonIntentVariant = Intent;
+export type ButtonSizeVariant = Size;
 
 export interface ButtonProps {
   /**

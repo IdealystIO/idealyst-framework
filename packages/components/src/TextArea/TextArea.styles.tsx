@@ -81,7 +81,7 @@ function getTextareaIntentStyles(theme: Theme, intent: TextAreaIntent, disabled:
     return baseStyles;
 }
 
-const createTextareaStyles = (theme: Theme) => {
+const createTextareaStyles = (theme: Theme): ExpandedTextAreaTextareaStyles => {
     return ({ intent, disabled, hasError }: { intent: TextAreaIntent, disabled: boolean, hasError: boolean }) => {
         const intentStyles = getTextareaIntentStyles(theme, intent, disabled, hasError);
 
@@ -148,8 +148,7 @@ const createTextareaStyles = (theme: Theme) => {
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const textAreaStyles = StyleSheet.create((theme: Theme) => {
+export const textAreaStyles = StyleSheet.create((theme: Theme): TextAreaStylesheet => {
     return {
         container: {
             display: 'flex',

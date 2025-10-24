@@ -126,8 +126,7 @@ function createContentInnerSizeVariants(theme: Theme) {
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const accordionStyles = StyleSheet.create((theme: Theme) => {
+export const accordionStyles = StyleSheet.create((theme: Theme): AccordionStylesheet => {
     return {
         container: {
             display: 'flex',

@@ -58,7 +58,7 @@ function createCardTypeVariants(theme: Theme, intent?: CardIntent) {
 /**
  * Generate card styles
  */
-function createCardStyles(theme: Theme)  {
+function createCardStyles(theme: Theme): ExpandedCardStyles {
     return ({ intent }: CardVariants) => {
         return {
             backgroundColor: theme.colors.surface.primary,
@@ -118,8 +118,7 @@ function createCardStyles(theme: Theme)  {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const cardStyles = StyleSheet.create((theme: Theme) => {
+export const cardStyles = StyleSheet.create((theme: Theme): CardStylesheet => {
   return {
     card: createCardStyles(theme),
   };
