@@ -3,6 +3,7 @@ import { View, Text } from '@idealyst/components';
 import { ScrollView } from '../primitives/ScrollView';
 import { Table, TableRow, TableCell, TableHeader, TableBody } from '../primitives/Table';
 import type { DataGridProps, Column } from './types';
+import { Theme } from '@idealyst/theme';
 
 export function DataGrid<T extends Record<string, any>>({
   data,
@@ -92,13 +93,13 @@ export function DataGrid<T extends Record<string, any>>({
   };
 
   // Helper function for consistent cell base styles  
-  const getCellBaseStyle = (theme: any) => ({
-    padding: theme.spacing.sm,
+  const getCellBaseStyle = (theme: Theme) => ({
+    padding: theme.sizes.view.md.spacing,
     borderRightWidth: 1,
   });
 
   // Helper function for platform-specific header styles
-  const getStickyHeaderStyle = (theme: any) => {
+  const getStickyHeaderStyle = (theme: Theme) => {
     if (!stickyHeader) return {};
     
     // Platform detection - check if we're on web or native
@@ -151,37 +152,30 @@ export function DataGrid<T extends Record<string, any>>({
   }, [selectedRows, onSelectionChange, multiSelect, onRowClick]);
 
   const renderHeader = () => (
-    <TableRow style={(theme) => ({
-      backgroundColor: stickyHeader ? '#ffffff' : theme.colors.neutral[50],
-      borderBottomWidth: 2,
-      borderBottomColor: theme.colors.neutral[200],
-      minHeight: headerHeight,
-      flexDirection: 'row',
-      ...getStickyHeaderStyle(theme),
-      ...headerStyle,
-    })}>
+    <TableRow style={{
+        backgroundColor: stickyHeader ? '#ffffff' : theme.colors.neutral[50],
+        borderBottomWidth: 2,
+        borderBottomColor: 'gray',
+        minHeight: headerHeight,
+        flexDirection: 'row',
+      }}>
       {columns.map((column) => (
         <TableCell
           key={column.key}
           width={column.width}
-          style={(theme) => ({
-            ...getCellBaseStyle(theme),
-            borderRightColor: theme.colors.neutral[200],
-            backgroundColor: stickyHeader ? '#ffffff' : theme.colors.neutral[50],
-            ...column.headerStyle,
-          })}
+          style={{
+            
+          }}
         >
-          <Text weight="bold" style={(theme) => ({
-            fontSize: 14,
-            color: theme.colors.neutral[700],
-          })}>
+          <Text weight="bold" style={{
+            cursor: column.sortable ? 'pointer' : 'default',
+            userSelect: 'none',
+            display: 'flex',
+            alignItems: 'center',
+          }}>
             {column.header}
             {column.sortable && (
-              <Text as="span" style={(theme) => ({
-                fontSize: 10,
-                marginLeft: theme.spacing.xs,
-                color: theme.colors.primary[500],
-              })}>
+              <Text style={{ marginLeft: 4 }}>
                 {sortColumn === column.key ? ` ${sortDirection === 'asc' ? '▲' : '▼'}` : ''}
               </Text>
             )}
@@ -241,18 +235,15 @@ export function DataGrid<T extends Record<string, any>>({
   const containerHeight = typeof height === 'number' ? height : undefined;
 
   return (
-    <View style={(theme) => ({
-      backgroundColor: theme.colors.background,
-      borderWidth: 1,
-      borderColor: theme.colors.neutral[200],
-      borderRadius: theme.radius.md,
-      overflow: 'hidden',
-      width,
-      height,
-      display: 'flex',
-      flexDirection: 'column',
+    <View style={{
+        borderWidth: 1,
+        overflow: 'hidden',
+        width,
+        height,
+        display: 'flex',
+        flexDirection: 'column',
       ...style,
-    })}>
+    }}>
       <ScrollView
         style={{ 
           flex: 1,

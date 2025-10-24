@@ -1,6 +1,7 @@
+import { Theme } from '@/theme';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const calendarGridStyles = StyleSheet.create((theme) => ({
+export const calendarGridStyles = StyleSheet.create((theme: Theme) => ({
   weekdayHeader: {
     display: 'grid',
     gridTemplateColumns: 'repeat(7, 1fr)',
@@ -26,7 +27,7 @@ export const calendarGridStyles = StyleSheet.create((theme) => ({
   weekdayText: {
     fontSize: 12,
     fontWeight: '500',
-    color: theme.colors?.text?.secondary || '#6b7280',
+    color: theme.colors.text.secondary,
   },
   calendarGrid: {
     gap: 2,
