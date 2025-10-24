@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant } from '../theme/variants';
+import type { IntentVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type CardIntentVariant = IntentVariant;

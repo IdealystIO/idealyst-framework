@@ -43,7 +43,7 @@ function createBadgeTypeVariants(theme: Theme, color: Color) {
             paddingVertical: 0,
             backgroundColor: colorValue,
         },
-    };
+    } as const;
 }
 
 /**
@@ -61,14 +61,14 @@ function createTextTypeVariants(theme: Theme, color: Color){
         dot: {
             display: 'none',
         },
-    }
+    } as const;
 }
 
 /**
  * Generate badge container styles
  */
-function createBadgeStyles(theme: Theme): ExpandedBadgeStyles {
-    return ({ color }: BadgeVariants) => {
+function createBadgeStyles(theme: Theme) {
+    return ({ color }: Partial<BadgeVariants>) => {
         return {
             alignItems: 'center',
             justifyContent: 'center',
@@ -89,15 +89,15 @@ function createBadgeStyles(theme: Theme): ExpandedBadgeStyles {
                 fontWeight: '600',
                 lineHeight: 1,
             },
-        };
+        } as const;
     }
 }
 
 /**
  * Generate badge text styles
  */
-function createTextStyles(theme: Theme): ExpandedBadgeStyles {
-    return ({ color }: BadgeVariants) => {
+function createTextStyles(theme: Theme) {
+    return ({ color }: Partial<BadgeVariants>) => {
         return {
             fontWeight: '600',
             textAlign: 'center',
@@ -108,13 +108,13 @@ function createTextStyles(theme: Theme): ExpandedBadgeStyles {
                 })),
                 type: createTextTypeVariants(theme, color),
             },
-        };
+        } as const;
     };
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const badgeStyles = StyleSheet.create((theme: Theme): BadgeStylesheet => {
+export const badgeStyles = StyleSheet.create((theme: Theme) => {
   return {
     badge: createBadgeStyles(theme),
     content: {

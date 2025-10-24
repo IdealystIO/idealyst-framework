@@ -1,28 +1,14 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import { Theme, Intent, Size, CompoundVariants, StaticStyles } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ProgressSize = Size;
 type ProgressIntent = Intent;
 
-type ProgressVariants = {
+export type ProgressVariants = {
     size: ProgressSize;
     intent: ProgressIntent;
     rounded: boolean;
-}
-
-export type ExpandedProgressStyles = StylesheetStyles<keyof ProgressVariants>;
-
-export type ProgressStylesheet = {
-    container: ExpandedProgressStyles;
-    linearTrack: ExpandedProgressStyles;
-    linearBar: ExpandedProgressStyles;
-    indeterminateBar: ExpandedProgressStyles;
-    circularContainer: ExpandedProgressStyles;
-    circularTrack: ExpandedProgressStyles;
-    circularBar: ExpandedProgressStyles;
-    label: ExpandedProgressStyles;
-    circularLabel: ExpandedProgressStyles;
 }
 
 function createLinearTrackSizeVariants(theme: Theme) {
@@ -31,19 +17,11 @@ function createLinearTrackSizeVariants(theme: Theme) {
     }));
 }
 
-function getLinearBarColor(theme: Theme, intent: ProgressIntent) {
-    return theme.intents[intent].primary;
-}
-
 function createCircularContainerSizeVariants(theme: Theme) {
     return buildSizeVariants(theme, 'progress', (size) => ({
         width: size.circularSize,
         height: size.circularSize,
     }));
-}
-
-function getCircularBarColor(theme: Theme, intent: ProgressIntent) {
-    return theme.intents[intent].primary;
 }
 
 function createLabelSizeVariants(theme: Theme) {
@@ -58,60 +36,61 @@ function createCircularLabelSizeVariants(theme: Theme) {
     }));
 }
 
-function createLinearBarStyles(theme: Theme): ExpandedProgressStyles {
-    return ({ intent }: { intent: ProgressIntent }) => {
-        return {
-            height: '100%',
-            backgroundColor: getLinearBarColor(theme, intent),
-            variants: {
-                rounded: {
-                    true: { borderRadius: 9999 },
-                    false: { borderRadius: 0 },
-                },
-            },
-            _web: {
-                transition: 'width 0.3s ease',
-            },
-        };
+function createIntentVariants(theme: Theme) {
+    const variants: any = {};
+    for (const intent in theme.intents) {
+        variants[intent] = {};
     }
+    return variants;
 }
 
-function createIndeterminateBarStyles(theme: Theme): ExpandedProgressStyles {
-    return ({ intent }: { intent: ProgressIntent }) => {
-        return {
-            position: 'absolute',
-            height: '100%',
-            width: '40%',
-            backgroundColor: getLinearBarColor(theme, intent),
-            variants: {
-                rounded: {
-                    true: { borderRadius: 9999 },
-                    false: { borderRadius: 0 },
-                },
+function createLinearBarCompoundVariants(theme: Theme) {
+    const compoundVariants: CompoundVariants<keyof ProgressVariants> = [];
+
+    for (const intent in theme.intents) {
+        const intentValue = theme.intents[intent as Intent];
+
+        compoundVariants.push({
+            intent,
+            styles: {
+                backgroundColor: intentValue.primary,
             },
-        };
+        });
     }
+
+    return compoundVariants;
 }
 
-function createCircularBarStyles(theme: Theme): ExpandedProgressStyles {
-    return ({ intent }: { intent: ProgressIntent }) => {
-        return {
-            stroke: getCircularBarColor(theme, intent),
-        };
+function createCircularBarCompoundVariants(theme: Theme) {
+    const compoundVariants: CompoundVariants<keyof ProgressVariants> = [];
+
+    for (const intent in theme.intents) {
+        const intentValue = theme.intents[intent as Intent];
+
+        compoundVariants.push({
+            intent,
+            styles: {
+                _web: {
+                    stroke: intentValue.primary,
+                },
+            },
+        });
     }
+
+    return compoundVariants;
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const progressStyles = StyleSheet.create((theme: Theme): ProgressStylesheet => {
+export const progressStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: {
-        gap: 4,
+        gap: 4 as const,
     },
     linearTrack: {
         backgroundColor: theme.colors.border.secondary,
-        overflow: 'hidden',
-        position: 'relative',
+        overflow: 'hidden' as const,
+        position: 'relative' as const,
         variants: {
             size: createLinearTrackSizeVariants(theme),
             rounded: {
@@ -120,30 +99,62 @@ export const progressStyles = StyleSheet.create((theme: Theme): ProgressStyleshe
             },
         },
     },
-    linearBar: createLinearBarStyles(theme),
-    indeterminateBar: createIndeterminateBarStyles(theme),
+    linearBar: {
+        height: '100%' as const,
+        variants: {
+            intent: createIntentVariants(theme),
+            rounded: {
+                true: { borderRadius: 9999 },
+                false: { borderRadius: 0 },
+            },
+        },
+        compoundVariants: createLinearBarCompoundVariants(theme),
+        _web: {
+            transition: 'width 0.3s ease' as const,
+        },
+    },
+    indeterminateBar: {
+        position: 'absolute' as const,
+        height: '100%' as const,
+        width: '40%' as const,
+        variants: {
+            intent: createIntentVariants(theme),
+            rounded: {
+                true: { borderRadius: 9999 },
+                false: { borderRadius: 0 },
+            },
+        },
+        compoundVariants: createLinearBarCompoundVariants(theme),
+    },
     circularContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        position: 'relative' as const,
         variants: {
             size: createCircularContainerSizeVariants(theme),
         },
     },
     circularTrack: {
-        stroke: theme.colors.border.secondary,
+        _web: {
+            stroke: theme.colors.border.secondary,
+        }
     },
-    circularBar: createCircularBarStyles(theme),
+    circularBar: {
+        variants: {
+            intent: createIntentVariants(theme),
+        },
+        compoundVariants: createCircularBarCompoundVariants(theme),
+    },
     label: {
         color: theme.colors.text.primary,
-        textAlign: 'center',
+        textAlign: 'center' as const,
         variants: {
             size: createLabelSizeVariants(theme),
         },
     },
     circularLabel: {
-        position: 'absolute',
-        fontWeight: '600',
+        position: 'absolute' as const,
+        fontWeight: '600' as const,
         color: theme.colors.text.primary,
         variants: {
             size: createCircularLabelSizeVariants(theme),

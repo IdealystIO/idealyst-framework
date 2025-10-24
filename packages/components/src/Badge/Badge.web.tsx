@@ -25,13 +25,16 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
   badgeStyles.useVariants({
     size,
     type,
-    color,
   });
-
-  const badgeProps = getWebProps(badgeStyles.badge({ color }));
-  const contentProps = getWebProps(badgeStyles.content);
-  const textProps = getWebProps(badgeStyles.text({ color }));
-  const iconProps = getWebProps([badgeStyles.icon, badgeStyles.text({ color })]);
+  
+  const badgeStyle = badgeStyles.badge({ color });
+  const contentStyle = badgeStyles.content;
+  const textStyle = badgeStyles.text({ color });
+  
+  const badgeProps = getWebProps(badgeStyle);
+  const contentProps = getWebProps(contentStyle);
+  const textProps = getWebProps(textStyle);
+  const iconProps = getWebProps([badgeStyles.icon, textStyle]);
 
   // Helper to render icon
   const renderIcon = (iconProp: typeof icon, path?: string) => {
@@ -58,7 +61,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
     return (
       <span
         {...badgeProps}
-        style={style}
+        style={style as React.CSSProperties}
         ref={mergedRef}
         data-testid={testID}
         role="status"
@@ -72,7 +75,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
   return (
     <span
       {...badgeProps}
-      style={style}
+      style={style as React.CSSProperties}
       ref={mergedRef}
       data-testid={testID}
       role="status"

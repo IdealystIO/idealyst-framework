@@ -17,7 +17,6 @@ const Badge = forwardRef<View, BadgeProps>(({
   badgeStyles.useVariants({
     size,
     type,
-    color,
   });
 
   // Call dynamic styles with color variant

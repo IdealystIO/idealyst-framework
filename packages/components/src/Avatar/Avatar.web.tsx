@@ -37,7 +37,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
     <div {...avatarProps} ref={mergedRef} data-testid={testID}>
       {src && !hasError ? (
         <img
-          src={src}
+          src={src as any}
           alt={alt}
           onError={handleImageError}
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}

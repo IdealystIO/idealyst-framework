@@ -1,9 +1,9 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '../theme';
+import type { Intent, Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type ProgressIntentVariant = IntentVariant;
-export type ProgressSizeVariant = ButtonSize;
+export type ProgressIntentVariant = Intent;
+export type ProgressSizeVariant = Size;
 export type ProgressVariant = 'linear' | 'circular';
 
 export interface ProgressProps {

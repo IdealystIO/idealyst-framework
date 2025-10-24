@@ -86,7 +86,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   });
 
   // Get web props for all styled elements
-  const containerProps = getWebProps([inputStyles.container({ type, hasError }), style]);
+  const containerProps = getWebProps([inputStyles.container, style]);
   const leftIconContainerProps = getWebProps([inputStyles.leftIconContainer]);
   const rightIconContainerProps = getWebProps([inputStyles.rightIconContainer]);
   const leftIconProps = getWebProps([inputStyles.leftIcon]);

@@ -73,8 +73,7 @@ const Tooltip: React.FC<TooltipProps> = ({
         zIndex={1000}
       >
         <div
-          className={tooltipContentProps.className}
-          style={tooltipContentProps.style}
+          {...tooltipContentProps}
           role="tooltip"
           data-testid={`${testID}-tooltip`}
         >

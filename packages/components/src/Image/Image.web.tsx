@@ -24,11 +24,6 @@ const Image: React.FC<ImageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  const containerProps = getWebProps([imageStyles.container, style]);
-  const imageProps = getWebProps([imageStyles.image]);
-  const placeholderProps = getWebProps([imageStyles.placeholder]);
-  const fallbackProps = getWebProps([imageStyles.fallback]);
-
   const handleLoad = () => {
     setIsLoading(false);
     onLoad?.();
@@ -42,50 +37,51 @@ const Image: React.FC<ImageProps> = ({
 
   const imageSource = typeof source === 'string' ? source : (source as any)?.uri || '';
 
-  const containerStyle: React.CSSProperties = {
-    ...containerProps.style,
-    width: width || '100%',
-    height: height || 'auto',
-    aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
-    borderRadius: borderRadius ? `${borderRadius}px` : undefined,
-  };
+  const containerProps = getWebProps([
+    imageStyles.container,
+    style,
+    {
+      width: width || '100%',
+      height: height || 'auto',
+      aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
+      borderRadius: borderRadius ? `${borderRadius}px` : undefined,
+    }
+  ]);
 
-  const imgStyle: React.CSSProperties = {
-    ...imageProps.style,
-    objectFit: objectFit,
-    borderRadius: borderRadius ? `${borderRadius}px` : undefined,
-  };
+  const imageProps = getWebProps([
+    imageStyles.image,
+    {
+      objectFit: objectFit,
+      borderRadius: borderRadius ? `${borderRadius}px` : undefined,
+    }
+  ]);
+
+  const placeholderProps = getWebProps([imageStyles.placeholder]);
+  const fallbackProps = getWebProps([imageStyles.fallback]);
 
   return (
     <div
-      className={containerProps.className}
-      style={containerStyle}
+      {...containerProps}
       data-testid={testID}
     >
       <img
+        {...imageProps}
         src={imageSource}
         alt={alt}
         loading={loading}
         onLoad={handleLoad}
         onError={handleError}
-        style={imgStyle}
         aria-label={accessibilityLabel || alt}
       />
 
       {isLoading && !hasError && (
-        <div
-          className={placeholderProps.className}
-          style={placeholderProps.style}
-        >
+        <div {...placeholderProps}>
           {placeholder || <ActivityIndicator size="md" />}
         </div>
       )}
 
       {hasError && (
-        <div
-          className={fallbackProps.className}
-          style={fallbackProps.style}
-        >
+        <div {...fallbackProps}>
           {fallback || <span>Failed to load image</span>}
         </div>
       )}

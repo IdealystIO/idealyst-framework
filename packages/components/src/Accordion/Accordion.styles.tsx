@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Size} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { AccordionType } from './types';
 
 type AccordionSize = Size;
-type AccordionType = 'default' | 'separated' | 'bordered';
 
 type AccordionVariants = {
     size: AccordionSize;
@@ -15,22 +15,12 @@ type AccordionVariants = {
 
 export type ExpandedAccordionStyles = StylesheetStyles<keyof AccordionVariants>;
 
-export type AccordionStylesheet = {
-    container: ExpandedAccordionStyles;
-    item: ExpandedAccordionStyles;
-    header: ExpandedAccordionStyles;
-    title: ExpandedAccordionStyles;
-    icon: ExpandedAccordionStyles;
-    content: ExpandedAccordionStyles;
-    contentInner: ExpandedAccordionStyles;
-}
-
 /**
  * Create type variants for container
  */
 function createContainerTypeVariants(theme: Theme) {
     return {
-        default: {
+        standard: {
             gap: 0,
         },
         separated: {
@@ -39,12 +29,12 @@ function createContainerTypeVariants(theme: Theme) {
         bordered: {
             gap: 0,
             borderWidth: 1,
-            borderStyle: 'solid',
+            borderStyle: 'solid' as const,
             borderColor: theme.colors.border.primary,
             borderRadius: 8,
-            overflow: 'hidden',
+            overflow: 'hidden' as const,
         },
-    };
+    } as const;
 }
 
 /**
@@ -52,24 +42,24 @@ function createContainerTypeVariants(theme: Theme) {
  */
 function createItemTypeVariants(theme: Theme) {
     return {
-        default: {
+        standard: {
             borderBottomWidth: 1,
-            borderBottomStyle: 'solid',
+            borderBottomStyle: 'solid' as const,
             borderBottomColor: theme.colors.border.primary,
         },
         separated: {
             borderWidth: 1,
-            borderStyle: 'solid',
+            borderStyle: 'solid' as const,
             borderColor: theme.colors.border.primary,
             borderRadius: 8,
-            overflow: 'hidden',
+            overflow: 'hidden' as const,
         },
         bordered: {
             borderBottomWidth: 1,
-            borderBottomStyle: 'solid',
+            borderBottomStyle: 'solid' as const,
             borderBottomColor: theme.colors.border.primary,
         },
-    };
+    } as const;
 }
 
 /**
@@ -78,7 +68,7 @@ function createItemTypeVariants(theme: Theme) {
 function createItemCompoundVariants(): CompoundVariants<keyof AccordionVariants> {
     return [
         {
-            type: 'default',
+            type: 'standard',
             isLast: true,
             styles: {
                 borderBottomWidth: 0,
@@ -126,20 +116,27 @@ function createContentInnerSizeVariants(theme: Theme) {
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const accordionStyles = StyleSheet.create((theme: Theme): AccordionStylesheet => {
+export const accordionStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: {
-            display: 'flex',
-            flexDirection: 'column',
+            display: 'flex' as const,
+            flexDirection: 'column' as const,
             variants: {
+                size: { xs: {}, sm: {}, md: {}, lg: {}, xl: {} },
                 type: createContainerTypeVariants(theme),
+                expanded: { true: {}, false: {} },
+                disabled: { true: {}, false: {} },
+                isLast: { true: {}, false: {} },
             },
         },
         item: {
-            display: 'flex',
-            flexDirection: 'column',
+            display: 'flex' as const,
+            flexDirection: 'column' as const,
             variants: {
+                size: { xs: {}, sm: {}, md: {}, lg: {}, xl: {} },
                 type: createItemTypeVariants(theme),
+                expanded: { true: {}, false: {} },
+                disabled: { true: {}, false: {} },
                 isLast: {
                     true: {},
                     false: {},
@@ -148,78 +145,92 @@ export const accordionStyles = StyleSheet.create((theme: Theme): AccordionStyles
             compoundVariants: createItemCompoundVariants(),
         },
         header: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        backgroundColor: 'transparent',
-        color: theme.colors.text.primary,
-        textAlign: 'left',
-        variants: {
-            size: createHeaderSizeVariants(theme),
+            display: 'flex' as const,
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'space-between' as const,
+            width: '100%' as const,
+            backgroundColor: 'transparent' as const,
+            color: theme.colors.text.primary,
+            textAlign: 'left' as const,
+            variants: {
+                size: createHeaderSizeVariants(theme),
+                type: { standard: {}, separated: {}, bordered: {} },
                 expanded: {
                     true: {
-                        fontWeight: '600',
+                        fontWeight: '600' as const,
                     },
                     false: {
-                        fontWeight: '500',
+                        fontWeight: '500' as const,
                     },
                 },
                 disabled: {
                     true: {
                         opacity: 0.5,
                         _web: {
-                            cursor: 'not-allowed',
+                            cursor: 'not-allowed' as const,
                         },
                     },
                     false: {
                         _web: {
-                            cursor: 'pointer',
+                            cursor: 'pointer' as const,
                             _hover: {
                                 backgroundColor: theme.colors.surface.secondary,
                             },
                         },
                     },
                 },
+                isLast: { true: {}, false: {} },
             },
             _web: {
-                border: 'none',
-                outline: 'none',
-                transition: 'background-color 0.2s ease',
+                border: 'none' as const,
+                outline: 'none' as const,
+                transition: 'background-color 0.2s ease' as const,
             },
         },
         title: {
             flex: 1,
+            variants: {
+                size: { xs: {}, sm: {}, md: {}, lg: {}, xl: {} },
+                type: { standard: {}, separated: {}, bordered: {} },
+                expanded: { true: {}, false: {} },
+                disabled: { true: {}, false: {} },
+                isLast: { true: {}, false: {} },
+            },
         },
         icon: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: 'flex' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
             marginLeft: 8,
             color: theme.intents.primary.primary,
             variants: {
                 size: createIconSizeVariants(theme),
+                type: { standard: {}, separated: {}, bordered: {} },
                 expanded: {
                     true: {
                         _web: {
-                            transform: 'rotate(180deg)',
+                            transform: 'rotate(180deg)' as const,
                         },
                     },
                     false: {
                         _web: {
-                            transform: 'rotate(0deg)',
+                            transform: 'rotate(0deg)' as const,
                         },
                     },
                 },
+                disabled: { true: {}, false: {} },
+                isLast: { true: {}, false: {} },
             },
             _web: {
-                transition: 'transform 0.2s ease',
+                transition: 'transform 0.2s ease' as const,
             },
         },
         content: {
-            overflow: 'hidden',
+            overflow: 'hidden' as const,
             variants: {
+                size: { xs: {}, sm: {}, md: {}, lg: {}, xl: {} },
+                type: { standard: {}, separated: {}, bordered: {} },
                 expanded: {
                     true: {
                         maxHeight: 2000,
@@ -228,15 +239,21 @@ export const accordionStyles = StyleSheet.create((theme: Theme): AccordionStyles
                         maxHeight: 0,
                     },
                 },
+                disabled: { true: {}, false: {} },
+                isLast: { true: {}, false: {} },
             },
             _web: {
-                transition: 'height 0.15s ease, padding 0.3s ease',
+                transition: 'height 0.15s ease, padding 0.3s ease' as const,
             },
         },
         contentInner: {
             color: theme.colors.text.secondary,
             variants: {
                 size: createContentInnerSizeVariants(theme),
+                type: { standard: {}, separated: {}, bordered: {} },
+                expanded: { true: {}, false: {} },
+                disabled: { true: {}, false: {} },
+                isLast: { true: {}, false: {} },
             },
         },
     };

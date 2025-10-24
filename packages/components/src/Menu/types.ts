@@ -1,6 +1,6 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
-import type { IntentVariant, ButtonSize } from '../theme';
+import type { IntentVariant, ButtonSize } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type MenuIntentVariant = IntentVariant;

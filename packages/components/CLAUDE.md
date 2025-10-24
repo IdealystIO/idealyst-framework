@@ -136,6 +136,8 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
 - ❌ Don't import from sibling component directories
 - ❌ Don't import component types into style files (creates circular deps)
 - ✅ Only import from: `@idealyst/theme`, `react-native-unistyles`, local utils
+- ✅ Safe: Import from `./types` IF types.ts only imports from external packages (no circular dep)
+  - Example: Input.styles.tsx imports from ./types.ts (which only imports from react-native, @idealyst/theme)
 
 ### 2. Border Style Values
 - ❌ `borderStyle: 'none'` is INVALID (causes Unistyles errors)

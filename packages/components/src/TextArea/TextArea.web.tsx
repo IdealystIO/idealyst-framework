@@ -46,7 +46,6 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   const containerProps = getWebProps([textAreaStyles.container, style]);
   const labelProps = getWebProps([textAreaStyles.label]);
   const textareaContainerProps = getWebProps([textAreaStyles.textareaContainer]);
-  const textareaProps = getWebProps([textAreaStyles.textarea({ intent, disabled, hasError })]);
   const footerProps = getWebProps([textAreaStyles.footer]);
   const helperTextProps = getWebProps([textAreaStyles.helperText]);
   const characterCountProps = getWebProps([textAreaStyles.characterCount]);
@@ -94,15 +93,16 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   const isNearLimit = maxLength ? value.length >= maxLength * 0.9 : false;
   const isAtLimit = maxLength ? value.length >= maxLength : false;
 
-  const computedTextareaStyle = {
-    ...textareaProps.style,
-    ...textareaStyle,
-    ...(minHeight && { minHeight: `${minHeight}px` }),
-    ...(maxHeight && { maxHeight: `${maxHeight}px` }),
-    ...(autoGrow && maxHeight && textareaRef.current && textareaRef.current.scrollHeight > maxHeight && { overflowY: 'auto' }),
-  };
+  const computedTextareaProps = getWebProps([
+    textAreaStyles.textarea({ intent, disabled, hasError }),
+    textareaStyle,
+    minHeight && { minHeight: `${minHeight}px` },
+    maxHeight && { maxHeight: `${maxHeight}px` },
+    autoGrow && maxHeight && textareaRef.current && textareaRef.current.scrollHeight > maxHeight && { overflowY: 'auto' as const },
+  ]);
 
   const mergedRef = useMergeRefs(ref, containerProps.ref);
+  const mergedTextareaRef = useMergeRefs(textareaRef, computedTextareaProps.ref);
 
   return (
     <div {...containerProps} ref={mergedRef} data-testid={testID}>
@@ -112,9 +112,8 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
 
       <div {...textareaContainerProps}>
         <textarea
-          ref={textareaRef}
-          className={textareaProps.className}
-          style={computedTextareaStyle}
+          {...computedTextareaProps}
+          ref={mergedTextareaRef}
           value={value}
           onChange={handleChange}
           placeholder={placeholder}
@@ -142,17 +141,7 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
           </div>
 
           {showCharacterCount && maxLength && (
-            <span
-              className={characterCountProps.className}
-              style={{
-                ...characterCountProps.style,
-                color: isAtLimit
-                  ? characterCountProps.style?.color
-                  : isNearLimit
-                  ? characterCountProps.style?.color
-                  : undefined,
-              }}
-            >
+            <span {...characterCountProps}>
               {value.length}/{maxLength}
             </span>
           )}

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { BackgroundVariant, SpacingVariant, RadiusVariant } from '../theme';
+import type { BackgroundVariant, SpacingVariant, RadiusVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type ViewBackgroundVariant = BackgroundVariant;

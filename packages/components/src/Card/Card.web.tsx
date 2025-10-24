@@ -33,9 +33,8 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
     disabled,
   });
 
-
   // Generate web props
-  const webProps = getWebProps(cardStyles.card({ intent }));
+  const webProps = getWebProps([cardStyles.card, style]);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
 
@@ -45,7 +44,6 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   return (
     <Component
       {...webProps}
-      style={style}
       ref={mergedRef as any}
       onClick={clickable ? handleClick : undefined}
       disabled={clickable && disabled}

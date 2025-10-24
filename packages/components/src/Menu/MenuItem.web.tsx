@@ -46,19 +46,18 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, size = 'md', testID 
 
   return (
     <button
-      className={itemProps.className}
-      style={itemProps.style}
+      {...itemProps}
       onClick={() => onPress(item)}
       disabled={item.disabled}
       role="menuitem"
       data-testid={testID}
     >
       {item.icon && (
-        <span className={iconProps.className} style={iconProps.style}>
+        <span {...iconProps}>
           {renderIcon()}
         </span>
       )}
-      <span className={labelProps.className} style={labelProps.style}>
+      <span {...labelProps}>
         {item.label}
       </span>
     </button>

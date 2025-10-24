@@ -34,8 +34,6 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
     position: labelPosition as 'left' | 'right',
   });
 
-  const containerProps = getWebProps([switchStyles.container, style]);
-  const switchContainerProps = getWebProps([switchStyles.switchContainer]);
   const trackProps = getWebProps([switchStyles.switchTrack({ checked, intent, disabled })]);
   const thumbProps = getWebProps([switchStyles.switchThumb({ size, checked })]);
   const thumbIconProps = getWebProps([switchStyles.thumbIcon({ checked, intent })]);
@@ -62,11 +60,35 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
     return null;
   };
 
-  const mergedButtonRef = useMergeRefs(ref as React.Ref<HTMLButtonElement>, switchContainerProps.ref);
-  const mergedContainerRef = useMergeRefs(ref as React.Ref<HTMLDivElement>, containerProps.ref);
+  // Computed button props with dynamic styles
+  const computedButtonProps = getWebProps([
+    switchStyles.switchContainer,
+    {
+      background: 'none',
+      border: 'none',
+      padding: 0,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      display: 'inline-flex',
+    }
+  ]);
+
+  // Computed container props with dynamic styles (for when label exists)
+  const computedContainerProps = getWebProps([
+    switchStyles.container,
+    style,
+    {
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      display: 'inline-flex',
+      alignItems: 'center',
+    }
+  ]);
+
+  const mergedButtonRef = useMergeRefs(ref as React.Ref<HTMLButtonElement>, computedButtonProps.ref);
+  const mergedContainerRef = useMergeRefs(ref as React.Ref<HTMLDivElement>, computedContainerProps.ref);
 
   const switchElement = (
     <button
+      {...computedButtonProps}
       ref={mergedButtonRef}
       onClick={handleClick}
       disabled={disabled}
@@ -74,18 +96,9 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
       role="switch"
       aria-checked={checked}
       aria-disabled={disabled}
-      style={{
-        ...switchContainerProps.style,
-        background: 'none',
-        border: 'none',
-        padding: 0,
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        display: 'inline-flex',
-      }}
-      className={switchContainerProps.className}
     >
-      <div className={trackProps.className} style={trackProps.style}>
-        <div className={thumbProps.className} style={thumbProps.style}>
+      <div {...trackProps}>
+        <div {...thumbProps}>
           {renderIcon()}
         </div>
       </div>
@@ -95,14 +108,8 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   if (label) {
     return (
       <div
-        {...containerProps}
+        {...computedContainerProps}
         ref={mergedContainerRef}
-        style={{
-          ...containerProps.style,
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          display: 'inline-flex',
-          alignItems: 'center',
-        }}
       >
         {labelPosition === 'left' && (
           <span {...labelProps}>{label}</span>

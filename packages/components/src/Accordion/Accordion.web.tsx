@@ -26,15 +26,21 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
   accordionStyles.useVariants({
     size,
+    expanded: isExpanded,
+    disabled: Boolean(item.disabled),
   });
 
-  // Note: Variants are applied globally in parent Accordion component
-  // We use inline styles for per-item dynamic values (expanded, disabled)
   const itemProps = getWebProps([accordionStyles.item]);
   const headerProps = getWebProps([accordionStyles.header]);
   const titleProps = getWebProps([accordionStyles.title]);
   const iconProps = getWebProps([accordionStyles.icon]);
-  const contentProps = getWebProps([accordionStyles.content]);
+  const contentProps = getWebProps([
+    accordionStyles.content,
+    {
+      height: isExpanded ? contentHeight : 0,
+      overflow: 'hidden' as const,
+    }
+  ]);
   const contentInnerProps = getWebProps([accordionStyles.contentInner]);
 
   useEffect(() => {
@@ -52,12 +58,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     >
       <button
         {...headerProps}
-        style={{
-          ...headerProps.style,
-          fontWeight: isExpanded ? 600 : 500,
-          opacity: item.disabled ? 0.5 : 1,
-          cursor: item.disabled ? 'not-allowed' : 'pointer',
-        }}
         onClick={onToggle}
         disabled={item.disabled}
         aria-expanded={isExpanded}
@@ -66,17 +66,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         <span {...titleProps}>
           {item.title}
         </span>
-        <span
-          {...iconProps}
-          style={{
-            ...iconProps.style,
-            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-            transition: 'transform 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <span {...iconProps}>
           <IconSvg
             style={{ width: 12, height: 12 }}
             path={chevronIconPath}
@@ -87,11 +77,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
       <div
         {...contentProps}
-        style={{
-          ...contentProps.style,
-          height: isExpanded ? contentHeight : 0,
-          overflow: 'hidden',
-        }}
         aria-hidden={!isExpanded}
       >
         <div ref={contentInnerRef}>
@@ -108,7 +93,7 @@ const Accordion: React.FC<AccordionProps> = ({
   items,
   allowMultiple = false,
   defaultExpanded = [],
-  variant = 'default',
+  type = 'standard',
   size = 'md',
   style,
   testID,
@@ -117,7 +102,7 @@ const Accordion: React.FC<AccordionProps> = ({
 
   // Apply variants
   accordionStyles.useVariants({
-    variant,
+    type,
     size,
   });
 

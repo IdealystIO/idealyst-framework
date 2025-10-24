@@ -1,10 +1,10 @@
+import { Intent, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '../theme/variants';
 
 // Component-specific type aliases for future extensibility
-export type SelectIntentVariant = IntentVariant;
-export type SelectSizeVariant = ButtonSize;
+export type SelectIntentVariant = Intent;
+export type SelectSizeVariant = Size;
 export type SelectVariant = 'outlined' | 'filled';
 
 export interface SelectOption {

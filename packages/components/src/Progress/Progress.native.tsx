@@ -8,6 +8,7 @@ import Animated, {
   withRepeat,
   Easing,
 } from 'react-native-reanimated';
+import { useUnistyles } from 'react-native-unistyles';
 import Svg, { Circle } from 'react-native-svg';
 import Text from '../Text';
 import { progressStyles } from './Progress.styles';
@@ -29,6 +30,7 @@ const Progress = forwardRef<View, ProgressProps>(({
   testID,
 }, ref) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
+  const { theme } = useUnistyles();
 
   // Apply variants
   progressStyles.useVariants({
@@ -76,9 +78,9 @@ const Progress = forwardRef<View, ProgressProps>(({
     const radius = (circularSize - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
 
-    // Get colors from stylesheet after applying variants
-    const trackColor = progressStyles.circularTrack.stroke;
-    const barColor = progressStyles.circularBar({ intent }).stroke;
+    // Get colors from theme
+    const trackColor = theme.colors.border.secondary;
+    const barColor = theme.intents[intent].primary;
 
     const circularAnimatedProps = useAnimatedProps(() => {
       const offset = indeterminate
@@ -157,9 +159,9 @@ const Progress = forwardRef<View, ProgressProps>(({
     <View ref={ref} style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
       <View style={progressStyles.linearTrack}>
         {indeterminate ? (
-          <Animated.View style={[progressStyles.indeterminateBar({ intent }), indeterminateAnimatedStyle]} />
+          <Animated.View style={[progressStyles.indeterminateBar, indeterminateAnimatedStyle]} />
         ) : (
-          <Animated.View style={[progressStyles.linearBar({ intent }), barAnimatedStyle]} />
+          <Animated.View style={[progressStyles.linearBar, barAnimatedStyle]} />
         )}
       </View>
       {showLabel && (

@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { DisplayColorVariant, BadgeSize, ColorVariant } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
+import { Color, Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type BadgeColorVariant = DisplayColorVariant;
-export type BadgeSizeVariant = BadgeSize;
+export type BadgeColorVariant = Color;
+export type BadgeSizeVariant = Size;
 export type BadgeType = 'filled' | 'outlined' | 'dot';
 
 export interface BadgeProps {
@@ -27,7 +27,7 @@ export interface BadgeProps {
   /**
    * The color scheme of the badge
    */
-  color?: ColorVariant;
+  color?: BadgeColorVariant;
 
   /**
    * Icon to display. Can be an icon name or custom component (ReactNode)
@@ -37,7 +37,7 @@ export interface BadgeProps {
   /**
    * Additional styles
    */
-  style?: StyleProp<ViewStyle>;
+  style?: CSSProperties | StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

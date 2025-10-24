@@ -21,7 +21,6 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
 
   activityIndicatorStyles.useVariants({
     size: sizeVariant,
-    intent,
     animating,
   });
 

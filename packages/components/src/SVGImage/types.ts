@@ -1,7 +1,7 @@
 import React from 'react';
 import { ViewProps } from 'react-native';
 import { SvgProps } from 'react-native-svg';
-import { IntentVariant } from '../theme';
+import { IntentVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type SVGImageIntentVariant = IntentVariant;

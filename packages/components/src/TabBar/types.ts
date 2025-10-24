@@ -1,5 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { ButtonSize } from '../theme';
+import type { ButtonSize } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type TabBarSizeVariant = ButtonSize;

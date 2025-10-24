@@ -49,7 +49,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   selectStyles.useVariants({
     type: variant,
     size,
-    intent,
     disabled,
     error,
     focused: isOpen,
@@ -126,12 +125,11 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
   const containerWebProps = getWebProps([
     selectStyles.container,
-    style
+    style as any
   ]);
 
   const triggerWebProps = getWebProps([
     selectStyles.trigger({ type: variant, intent }),
-    isOpen && selectStyles.triggerOpen
   ]);
 
   const handleClose = () => {
@@ -197,7 +195,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
         <div
           {...getWebProps([selectStyles.dropdown])}
           style={{
-            ...getWebProps([selectStyles.dropdown]).style,
             maxHeight: maxHeight,
             // Override positioning since PositionedPortal handles it
             position: 'relative',
@@ -265,7 +262,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
         <div
           {...getWebProps([
             selectStyles.helperText,
-            { error }
           ])}
         >
           {helperText}

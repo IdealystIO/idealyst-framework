@@ -31,13 +31,15 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   testID,
 }, ref) => {
   // Apply variants to stylesheet
-  alertStyles.useVariants({});
+  alertStyles.useVariants({
+    type: variant,
+  });
 
-  const containerProps = getWebProps([alertStyles.container({ type: variant, intent }), style]);
-  const iconContainerProps = getWebProps([alertStyles.iconContainer({ type: variant, intent })]);
+  const containerProps = getWebProps([alertStyles.container, style]);
+  const iconContainerProps = getWebProps([alertStyles.iconContainer]);
   const contentProps = getWebProps([alertStyles.content]);
-  const titleProps = getWebProps([alertStyles.title({ type: variant, intent })]);
-  const messageProps = getWebProps([alertStyles.message({ type: variant, intent })]);
+  const titleProps = getWebProps([alertStyles.title]);
+  const messageProps = getWebProps([alertStyles.message]);
   const actionsProps = getWebProps([alertStyles.actions]);
   const closeButtonProps = getWebProps([alertStyles.closeButton]);
   const closeIconProps = getWebProps([alertStyles.closeIcon]);
@@ -68,23 +70,22 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
 
   return (
     <div
-      className={containerProps.className}
+      {...containerProps}
       ref={mergedRef}
-      style={containerProps.style}
       data-testid={testID}
       role="alert"
     >
       {displayIcon && renderIcon(displayIcon)}
 
-      <div className={contentProps.className} style={contentProps.style}>
+      <div {...contentProps}>
         {title && (
-          <div className={titleProps.className} style={titleProps.style}>
+          <div {...titleProps}>
             {title}
           </div>
         )}
 
         {message && (
-          <div className={messageProps.className} style={messageProps.style}>
+          <div {...messageProps}>
             {message}
           </div>
         )}
@@ -92,7 +93,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
         {children}
 
         {actions && (
-          <div className={actionsProps.className} style={actionsProps.style}>
+          <div {...actionsProps}>
             {actions}
           </div>
         )}
@@ -100,8 +101,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
 
       {dismissible && onDismiss && (
         <button
-          className={closeButtonProps.className}
-          style={closeButtonProps.style}
+          {...closeButtonProps}
           onClick={onDismiss}
           aria-label="Dismiss alert"
           type="button"

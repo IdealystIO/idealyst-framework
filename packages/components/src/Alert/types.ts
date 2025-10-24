@@ -1,5 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant } from '../theme';
+import type { IntentVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type AlertIntentVariant = IntentVariant;

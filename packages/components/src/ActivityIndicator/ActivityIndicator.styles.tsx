@@ -38,7 +38,7 @@ function getSpinnerColor(theme: Theme, intent: ActivityIndicatorIntent) {
 }
 
 function createSpinnerStyles(theme: Theme) {
-    return ({ intent }: ActivityIndicatorVariants) => {
+    return ({ intent }: Partial<ActivityIndicatorVariants>) => {
         const color = getSpinnerColor(theme, intent);
         return {
             borderRadius: 9999,
@@ -58,7 +58,7 @@ function createSpinnerStyles(theme: Theme) {
                 animation: 'spin 1s linear infinite',
                 boxSizing: 'border-box',
             },
-        };
+        } as const;
     }
 }
 

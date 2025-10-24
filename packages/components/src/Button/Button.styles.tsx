@@ -34,7 +34,7 @@ function createTypeVariants(theme: Theme) {
         },
         outlined: {
             borderWidth: 2,
-            borderStyle: 'solid' as const,
+            borderStyle: 'solid' ,
             backgroundColor: 'transparent',
         },
         text: {
@@ -137,7 +137,7 @@ function createIconColorVariants(theme: Theme, intent: Intent) {
         text: {
             color: intentValue.primary,
         },
-    } as const;
+    };
 }
 
 /**
@@ -231,11 +231,11 @@ export const buttonStyles = StyleSheet.create((theme: Theme) => {
             compoundVariants: createIconCompoundVariants(theme),
         },
         iconContainer: {
-            display: 'flex' as const,
-            flexDirection: 'row' as const,
-            alignItems: 'center' as const,
-            justifyContent: 'center' as const,
-            gap: 4 as const,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 4,
         },
         text: {
             fontWeight: '600',

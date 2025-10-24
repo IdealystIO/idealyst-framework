@@ -25,6 +25,13 @@ const Progress: React.FC<ProgressProps> = ({
     rounded,
   });
 
+    // Linear progress
+  const containerProps = getWebProps([progressStyles.container, style as any]);
+  const trackProps = getWebProps([progressStyles.linearTrack]);
+  const barProps = getWebProps([progressStyles.linearBar, { width: `${percentage}%` }]);
+  const indeterminateProps = getWebProps([progressStyles.indeterminateBar]);
+  const labelProps = getWebProps([progressStyles.label]);
+
   const getCircularSize = () => {
     if (size === 'sm') return 32;
     if (size === 'lg') return 64;
@@ -38,17 +45,18 @@ const Progress: React.FC<ProgressProps> = ({
     const circumference = radius * 2 * Math.PI;
     const strokeDashoffset = indeterminate ? circumference * 0.25 : circumference - (percentage / 100) * circumference;
 
-    const containerProps = getWebProps([progressStyles.circularContainer, style]);
+    const computedContainerProps = getWebProps([
+      progressStyles.circularContainer,
+      style,
+      { display: 'inline-flex' }
+    ]);
     const labelProps = getWebProps([progressStyles.circularLabel]);
-    const barProps = getWebProps([progressStyles.circularBar({ intent })]);
-
-    // Get track color directly from styles
-    const trackColor = progressStyles.circularTrack.stroke;
+    const trackColorProps = getWebProps([progressStyles.circularTrack]);
+    const barColorProps = getWebProps([progressStyles.circularBar]);
+    console.log(trackColorProps)
 
     return (
-      <div {...containerProps} data-testid={testID} style={{ ...containerProps.style, display: 'inline-flex' }}>
-        {/* Hidden element to extract the computed stroke color */}
-        <div {...barProps} style={{ ...barProps.style, position: 'absolute', visibility: 'hidden', pointerEvents: 'none' }} />
+      <div {...computedContainerProps} data-testid={testID}>
         <svg
           width={circularSize}
           height={circularSize}
@@ -62,7 +70,7 @@ const Progress: React.FC<ProgressProps> = ({
             r={radius}
             strokeWidth={strokeWidth}
             fill="none"
-            stroke={trackColor}
+            className={trackColorProps.className}
           />
           {/* Progress circle (foreground) - apply the className to get intent color */}
           <circle
@@ -71,7 +79,7 @@ const Progress: React.FC<ProgressProps> = ({
             r={radius}
             strokeWidth={strokeWidth}
             fill="none"
-            className={barProps.className}
+            className={barColorProps.className}
             strokeDasharray={`${circumference} ${circumference}`}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
@@ -96,13 +104,6 @@ const Progress: React.FC<ProgressProps> = ({
     );
   }
 
-  // Linear progress
-  const containerProps = getWebProps([progressStyles.container, style]);
-  const trackProps = getWebProps([progressStyles.linearTrack]);
-  const barProps = getWebProps([progressStyles.linearBar({ intent })]);
-  const indeterminateProps = getWebProps([progressStyles.indeterminateBar({ intent })]);
-  const labelProps = getWebProps([progressStyles.label]);
-
   return (
     <>
       <div {...containerProps} data-testid={testID}>
@@ -114,9 +115,9 @@ const Progress: React.FC<ProgressProps> = ({
           aria-valuemax={max}
         >
           {indeterminate ? (
-            <div className={`${indeterminateProps.className} progress-linear-indeterminate`} style={indeterminateProps.style} />
+            <div {...indeterminateProps} className={`${indeterminateProps.className} progress-linear-indeterminate`} />
           ) : (
-            <div className={barProps.className} style={{ ...barProps.style, width: `${percentage}%` }} />
+            <div {...barProps} />
           )}
         </div>
         {showLabel && (

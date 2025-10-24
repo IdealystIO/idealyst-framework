@@ -20,7 +20,6 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   // Apply variants using the correct Unistyles 3.0 pattern
   activityIndicatorStyles.useVariants({
     size: sizeVariant,
-    intent,
     animating,
   });
 
@@ -40,16 +39,18 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   ];
 
   const spinnerStyleArray = [
-    activityIndicatorStyles.spinner,
-    customSize && {
+    activityIndicatorStyles.spinner({
+      intent,
+    }),
+    customSize ? {
       width: customSize,
       height: customSize,
       borderWidth: Math.max(2, customSize / 10),
-    },
-    color && { borderTopColor: color, borderRightColor: color },
+    } : {},
+    color ? { borderTopColor: color, borderRightColor: color } : {},
     // Add inline CSS animation
-    animating && {
-      animation: 'spin 1s linear infinite',
+    {
+      animation: animating ? 'spin 1s linear infinite' : undefined,
     },
   ];
 

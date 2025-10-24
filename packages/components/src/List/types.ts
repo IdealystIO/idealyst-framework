@@ -1,7 +1,7 @@
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { IconName } from '../Icon/icon-types';
-import type { ButtonSize } from '../theme';
+import type { ButtonSize } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type ListSizeVariant = ButtonSize;

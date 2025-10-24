@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, TextStyle } from 'react-native';
-import type { DisplayColorVariant } from '../theme/variants';
+import type { DisplayColorVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type TextColorVariant = DisplayColorVariant;

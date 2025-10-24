@@ -1,56 +1,24 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles } from '@idealyst/theme';
+import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { SelectIntentVariant } from './types';
 
 // Type definitions
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type SelectSize = Size;
 type SelectType = 'outlined' | 'filled';
-type SelectIntent = 'primary' | 'success' | 'error' | 'warning' | 'neutral' | 'info';
 
 type SelectTriggerVariants = {
     type: SelectType;
     size: SelectSize;
-    intent: SelectIntent;
+    intent: SelectIntentVariant;
     disabled: boolean;
     error: boolean;
     focused: boolean;
 }
 
-type SelectOptionVariants = {
-    selected: boolean;
-    disabled: boolean;
-}
-
-type SelectHelperTextVariants = {
-    error: boolean;
-}
 
 export type ExpandedSelectTriggerStyles = StylesheetStyles<keyof SelectTriggerVariants>;
 export type ExpandedSelectStyles = StylesheetStyles<never>;
-
-export type SelectStylesheet = {
-    container: ExpandedSelectStyles;
-    label: ExpandedSelectStyles;
-    trigger: ExpandedSelectTriggerStyles;
-    triggerContent: ExpandedSelectStyles;
-    triggerText: any;
-    placeholder: any;
-    icon: ExpandedSelectStyles;
-    chevron: any;
-    chevronOpen: ExpandedSelectStyles;
-    dropdown: ExpandedSelectStyles;
-    searchContainer: ExpandedSelectStyles;
-    searchInput: any;
-    optionsList: ExpandedSelectStyles;
-    option: any;
-    optionContent: ExpandedSelectStyles;
-    optionIcon: ExpandedSelectStyles;
-    optionText: any;
-    optionTextDisabled: ExpandedSelectStyles;
-    helperText: any;
-    overlay: ExpandedSelectStyles;
-}
 
 function createTriggerTypeVariants(theme: Theme) {
     return {
@@ -78,7 +46,7 @@ function createTriggerSizeVariants(theme: Theme) {
     }));
 }
 
-function createIntentVariants(theme: Theme, type: SelectType, intent: SelectIntent) {
+function createIntentVariants(theme: Theme, type: SelectType, intent: SelectIntentVariant) {
     if (intent === 'neutral') {
         return {};
     }
@@ -97,9 +65,75 @@ function createIntentVariants(theme: Theme, type: SelectType, intent: SelectInte
     return {};
 }
 
+function buildDynamicTriggerStyles(theme: Theme) {
+    return ({ type, intent }: Partial<SelectTriggerVariants>) => {
+        const intentStyles = createIntentVariants(theme, type, intent);
+
+        return {
+            position: 'relative',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderRadius: 8,
+            borderWidth: 1,
+            borderStyle: 'solid',
+            ...intentStyles,
+            variants: {
+                type: createTriggerTypeVariants(theme),
+                size: createTriggerSizeVariants(theme),
+                disabled: {
+                    true: {
+                        opacity: 0.6,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
+                    },
+                    false: {
+                        _web: {
+                            cursor: 'pointer',
+                            _hover: {
+                                opacity: 0.9,
+                            },
+                            _active: {
+                                opacity: 0.8,
+                            },
+                        },
+                    },
+                },
+                error: {
+                    true: {
+                        borderColor: theme.intents.error.primary,
+                        _web: {
+                            border: `1px solid ${theme.intents.error.primary}`,
+                        },
+                    },
+                    false: {},
+                },
+                focused: {
+                    true: {
+                        borderColor: theme.intents.primary.primary,
+                        _web: {
+                            border: `2px solid ${theme.intents.primary.primary}`,
+                            outline: 'none',
+                        },
+                    },
+                    false: {},
+                },
+            },
+            _web: {
+                display: 'flex',
+                boxSizing: 'border-box',
+                _focus: {
+                    outline: 'none',
+                },
+            },
+        } as const;
+    }
+}
+
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const selectStyles = StyleSheet.create((theme: Theme): SelectStylesheet => {
+export const selectStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: {
             position: 'relative',
@@ -111,69 +145,7 @@ export const selectStyles = StyleSheet.create((theme: Theme): SelectStylesheet =
             color: theme.colors.text.primary,
             marginBottom: 4,
         },
-        trigger: ({ type, intent }: SelectTriggerVariants) => {
-            const intentStyles = createIntentVariants(theme, type, intent);
-
-            return {
-                position: 'relative',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                borderRadius: 8,
-                borderWidth: 1,
-                borderStyle: 'solid',
-                ...intentStyles,
-                variants: {
-                    type: createTriggerTypeVariants(theme),
-                    size: createTriggerSizeVariants(theme),
-                    disabled: {
-                        true: {
-                            opacity: 0.6,
-                            _web: {
-                                cursor: 'not-allowed',
-                            },
-                        },
-                        false: {
-                            _web: {
-                                cursor: 'pointer',
-                                _hover: {
-                                    opacity: 0.9,
-                                },
-                                _active: {
-                                    opacity: 0.8,
-                                },
-                            },
-                        },
-                    },
-                    error: {
-                        true: {
-                            borderColor: theme.intents.error.primary,
-                            _web: {
-                                border: `1px solid ${theme.intents.error.primary}`,
-                            },
-                        },
-                        false: {},
-                    },
-                    focused: {
-                        true: {
-                            borderColor: theme.intents.primary.primary,
-                            _web: {
-                                border: `2px solid ${theme.intents.primary.primary}`,
-                                outline: 'none',
-                            },
-                        },
-                        false: {},
-                    },
-                },
-                _web: {
-                    display: 'flex',
-                    boxSizing: 'border-box',
-                    _focus: {
-                        outline: 'none',
-                    },
-                },
-            };
-        },
+        trigger: buildDynamicTriggerStyles(theme),
         triggerContent: {
             flex: 1,
             flexDirection: 'row',
@@ -217,7 +189,9 @@ export const selectStyles = StyleSheet.create((theme: Theme): SelectStylesheet =
             },
         },
         chevronOpen: {
-            transform: 'rotate(180deg)',
+            _web: {
+                transform: 'rotate(180deg)',
+            }
         },
         dropdown: {
             position: 'absolute',

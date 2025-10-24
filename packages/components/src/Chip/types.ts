@@ -1,6 +1,6 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
-import type { ButtonSize, IntentVariant } from '../theme';
+import type { ButtonSize, IntentVariant } from '@idealyst/theme';
 
 /**
  * @deprecated Use ButtonSize from theme instead (chips use same sizes as buttons)

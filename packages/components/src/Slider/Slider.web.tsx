@@ -42,16 +42,11 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   const containerProps = getWebProps([sliderStyles.container, style]);
   const wrapperProps = getWebProps([sliderStyles.sliderWrapper]);
   const trackProps = getWebProps([sliderStyles.track]);
-  const filledTrackProps = getWebProps([sliderStyles.filledTrack({ intent })]);
-  const thumbProps = getWebProps([sliderStyles.thumb({ intent, disabled })]);
-  const thumbActiveProps = getWebProps([sliderStyles.thumbActive]);
   const thumbIconProps = getWebProps([sliderStyles.thumbIcon({ intent })]);
   const valueLabelProps = getWebProps([sliderStyles.valueLabel]);
   const minMaxLabelsProps = getWebProps([sliderStyles.minMaxLabels]);
   const minMaxLabelProps = getWebProps([sliderStyles.minMaxLabel]);
   const marksProps = getWebProps([sliderStyles.marks]);
-  const markProps = getWebProps([sliderStyles.mark]);
-  const markLabelProps = getWebProps([sliderStyles.markLabel]);
 
   const clampValue = useCallback((val: number) => {
     const clampedValue = Math.min(Math.max(val, min), max);
@@ -131,6 +126,14 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
 
   const percentage = ((value - min) / (max - min)) * 100;
 
+  // Dynamic styles with percentage
+  const filledTrackProps = getWebProps([sliderStyles.filledTrack({ intent }), { width: `${percentage}%` }]);
+  const thumbProps = getWebProps([
+    sliderStyles.thumb({ intent, disabled }),
+    isDragging && sliderStyles.thumbActive,
+    { left: `${percentage}%` }
+  ]);
+
   // Helper to render icon
   const renderIcon = () => {
     if (!icon) return null;
@@ -147,7 +150,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
       );
     } else if (isValidElement(icon)) {
       // Render custom component as-is
-      return <span className={thumbIconProps.className} style={thumbIconProps.style}>{icon}</span>;
+      return <span {...thumbIconProps}>{icon}</span>;
     }
 
     return null;
@@ -165,9 +168,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
 
       <div {...wrapperProps}>
         <div
+          {...trackProps}
           ref={trackRef}
-          className={trackProps.className}
-          style={trackProps.style}
           onMouseDown={handleMouseDown}
           role="slider"
           aria-valuenow={value}
@@ -177,33 +179,20 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
           tabIndex={disabled ? -1 : 0}
         >
           {/* Filled track */}
-          <div
-            className={filledTrackProps.className}
-            style={{ ...filledTrackProps.style, width: `${percentage}%` }}
-          />
+          <div {...filledTrackProps} />
 
           {/* Marks */}
           {marks.length > 0 && (
             <div {...marksProps}>
               {marks.map((mark) => {
                 const markPercentage = ((mark.value - min) / (max - min)) * 100;
+                const markProps = getWebProps([sliderStyles.mark, { left: `${markPercentage}%` }]);
+                const markLabelProps = getWebProps([sliderStyles.markLabel, { left: `${markPercentage}%` }]);
                 return (
                   <div key={mark.value}>
-                    <div
-                      className={markProps.className}
-                      style={{
-                        ...markProps.style,
-                        left: `${markPercentage}%`,
-                      }}
-                    />
+                    <div {...markProps} />
                     {mark.label && (
-                      <div
-                        {...markLabelProps}
-                        style={{
-                          ...markLabelProps.style,
-                          left: `${markPercentage}%`,
-                        }}
-                      >
+                      <div {...markLabelProps}>
                         {mark.label}
                       </div>
                     )}
@@ -216,12 +205,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
           {/* Thumb */}
           <div
             ref={thumbRef}
-            className={`${thumbProps.className} ${isDragging ? thumbActiveProps.className : ''}`}
-            style={{
-              ...thumbProps.style,
-              ...(isDragging ? thumbActiveProps.style : {}),
-              left: `${percentage}%`,
-            }}
+            {...thumbProps}
           >
             {renderIcon()}
           </div>

@@ -9,18 +9,6 @@ export type AlertVariants = {
     intent: AlertIntent;
 }
 
-/**
- * Create intent variants (placeholder, colors handled by compound variants)
- */
-function createIntentVariants(theme: Theme) {
-    const variants: any = {
-        info: {},
-    };
-    for (const intent in theme.intents) {
-        variants[intent] = {};
-    }
-    return variants;
-}
 
 /**
  * Create type variants (structure only, colors handled by compound variants)
@@ -255,7 +243,6 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             borderWidth: 1,
             borderStyle: 'solid' as const,
             variants: {
-                intent: createIntentVariants(theme),
                 type: createTypeVariants(),
             },
             compoundVariants: createContainerCompoundVariants(theme),
@@ -268,7 +255,6 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             width: 24,
             height: 24,
             variants: {
-                intent: createIntentVariants(theme),
                 type: createTypeVariants(),
             },
             compoundVariants: createIconTitleCompoundVariants(theme),
@@ -284,7 +270,6 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             lineHeight: 24,
             fontWeight: '600',
             variants: {
-                intent: createIntentVariants(theme),
                 type: createTypeVariants(),
             },
             compoundVariants: createIconTitleCompoundVariants(theme),
@@ -293,7 +278,6 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             fontSize: 14,
             lineHeight: 20,
             variants: {
-                intent: createIntentVariants(theme),
                 type: createTypeVariants(),
             },
             compoundVariants: createMessageCompoundVariants(theme),

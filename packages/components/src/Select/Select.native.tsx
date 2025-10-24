@@ -73,7 +73,6 @@ const Select = forwardRef<View, SelectProps>(({
   selectStyles.useVariants({
     type: variant,
     size,
-    intent,
     disabled,
     error,
     focused: isOpen,
@@ -150,13 +149,11 @@ const Select = forwardRef<View, SelectProps>(({
   };
 
   const renderChevron = () => {
-    const chevronStyle = selectStyles.chevron;
     return (
-      <View style={chevronStyle}>
+      <View style={selectStyles.chevron}>
         <MaterialCommunityIcons
           name="chevron-down"
-          size={chevronStyle.width || 20}
-          color={chevronStyle.color}
+          style={selectStyles.chevron}
         />
       </View>
     );
@@ -171,9 +168,8 @@ const Select = forwardRef<View, SelectProps>(({
       return (
         <View style={iconStyle}>
           <MaterialCommunityIcons
+            style={iconStyle}
             name={icon}
-            size={iconStyle.width || 20}
-            color={selectStyles.triggerText.color}
           />
         </View>
       );
@@ -192,9 +188,8 @@ const Select = forwardRef<View, SelectProps>(({
       return (
         <View style={iconStyle}>
           <MaterialCommunityIcons
+            style={iconStyle}
             name={icon}
-            size={iconStyle.width || 20}
-            color={selectStyles.optionText.color}
           />
         </View>
       );

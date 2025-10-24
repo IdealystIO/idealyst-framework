@@ -62,9 +62,8 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
         zIndex={1000}
       >
         <div
+          {...menuProps}
           ref={mergedMenuRef}
-          className={menuProps.className}
-          style={menuProps.style}
           role="menu"
           data-testid={testID}
         >
@@ -73,8 +72,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
               return (
                 <div
                   key={`separator-${index}`}
-                  className={separatorProps.className}
-                  style={separatorProps.style}
+                  {...separatorProps}
                   role="separator"
                 />
               );

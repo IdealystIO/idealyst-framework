@@ -11,8 +11,7 @@ interface AccordionItemProps {
   isExpanded: boolean;
   onToggle: () => void;
   size: AccordionProps['size'];
-  variant: AccordionProps['variant'];
-  intent: AccordionProps['intent'];
+  type: AccordionProps['type'];
   isLast: boolean;
   testID?: string;
 }
@@ -22,8 +21,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   isExpanded,
   onToggle,
   size,
-  variant,
-  intent,
+  type,
   isLast,
   testID,
 }) => {
@@ -33,15 +31,12 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
   // Apply item-specific variants
   accordionStyles.useVariants({
-    variant,
+    type,
     isLast,
     size,
     expanded: isExpanded,
     disabled: Boolean(item.disabled),
   });
-
-  const iconStyle = accordionStyles.icon;
-  const headerTextColor = accordionStyles.header.color || '#000';
 
   // Animate height and icon rotation when expanded state changes
   useEffect(() => {
@@ -86,15 +81,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         activeOpacity={0.7}
       >
         <View style={accordionStyles.title}>
-          <Text style={{ color: headerTextColor }}>
+          <Text style={accordionStyles.header}>
             {item.title}
           </Text>
         </View>
         <Animated.View style={[accordionStyles.icon, animatedIconStyle]}>
           <MaterialCommunityIcons
             name="chevron-down"
-            size={iconStyle.width || 20}
-            color={iconStyle.color || headerTextColor}
+            size={20}
+            style={accordionStyles.icon}
           />
         </Animated.View>
       </TouchableOpacity>
@@ -104,19 +99,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         style={{ position: 'absolute', opacity: 0, zIndex: -1 }}
         onLayout={handleContentLayout}
       >
-        <View
-          style={{
-            padding: accordionStyles.contentInner.padding,
-            paddingTop: accordionStyles.contentInner.paddingTop,
-          }}
-        >
+        <View style={accordionStyles.contentInner}>
           {typeof item.content === 'string' ? (
-            <Text
-              style={{
-                color: accordionStyles.contentInner.color,
-                fontSize: accordionStyles.contentInner.fontSize,
-              }}
-            >
+            <Text style={accordionStyles.contentInner}>
               {item.content}
             </Text>
           ) : (
@@ -127,19 +112,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
       {/* Animated visible content */}
       <Animated.View style={animatedContentStyle}>
-        <View
-          style={{
-            padding: accordionStyles.contentInner.padding,
-            paddingTop: accordionStyles.contentInner.paddingTop,
-          }}
-        >
+        <View style={accordionStyles.contentInner}>
           {typeof item.content === 'string' ? (
-            <Text
-              style={{
-                color: accordionStyles.contentInner.color,
-                fontSize: accordionStyles.contentInner.fontSize,
-              }}
-            >
+            <Text style={accordionStyles.contentInner}>
               {item.content}
             </Text>
           ) : (
@@ -155,8 +130,7 @@ const Accordion = forwardRef<View, AccordionProps>(({
   items,
   allowMultiple = false,
   defaultExpanded = [],
-  variant = 'default',
-  intent = 'primary',
+  type = 'standard',
   size = 'md',
   style,
   testID,
@@ -165,8 +139,7 @@ const Accordion = forwardRef<View, AccordionProps>(({
 
   // Apply variants
   accordionStyles.useVariants({
-    variant,
-    intent,
+    type,
     size,
   });
 
@@ -195,8 +168,7 @@ const Accordion = forwardRef<View, AccordionProps>(({
           isExpanded={expandedItems.includes(item.id)}
           onToggle={() => toggleItem(item.id, item.disabled)}
           size={size}
-          variant={variant}
-          intent={intent}
+          type={type}
           isLast={index === items.length - 1}
           testID={`${testID}-item-${item.id}`}
         />

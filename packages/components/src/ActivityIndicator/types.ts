@@ -1,9 +1,9 @@
+import { Intent, Size } from '@idealyst/theme';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, SizeVariant } from '../theme';
 
 // Component-specific type aliases for future extensibility
-export type ActivityIndicatorIntentVariant = IntentVariant;
-export type ActivityIndicatorSizeVariant = SizeVariant | number;
+export type ActivityIndicatorIntentVariant = Intent;
+export type ActivityIndicatorSizeVariant = Size;
 
 export interface ActivityIndicatorProps {
   /**
