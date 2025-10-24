@@ -47,6 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   const buttonStyleArray = [
     buttonStyles.button({ intent }),
     buttonStyles.text({ intent }), // Include text styles for font sizing
+    style, // Include incoming style prop
   ];
 
   // Use getWebProps to generate className and ref for web
@@ -90,7 +91,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   return (
     <button
       {...webProps}
-      style={style}
       ref={mergedRef}
       onClick={handleClick}
       disabled={disabled}

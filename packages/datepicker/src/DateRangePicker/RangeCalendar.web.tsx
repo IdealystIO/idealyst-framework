@@ -244,19 +244,19 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
     <div {...containerProps} data-testid={testID} ref={containerRef}>
       {/* Header */}
       <div {...headerProps}>
-        <Button 
-          variant="text" 
-          size="sm" 
-          onPress={goToPreviousMonth} 
+        <Button
+          type="text"
+          size="sm"
+          onPress={goToPreviousMonth}
           disabled={disabled}
           style={getWebProps([rangeCalendarStyles.headerButton]).style}
         >
           ←
         </Button>
-        
+
         <div {...headerTitleProps} style={{ display: 'flex', gap: '8px' }}>
           <Button
-            variant="text"
+            type="text"
             size="sm"
             onPress={() => setOverlayMode('month')}
             disabled={disabled}
@@ -265,7 +265,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
             <Text weight="semibold">{currentMonth.toLocaleDateString('en-US', { month: 'long' })}</Text>
           </Button>
           <Button
-            variant="text"
+            type="text"
             size="sm"
             onPress={() => setOverlayMode('year')}
             disabled={disabled}
@@ -274,11 +274,11 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
             <Text weight="semibold">{currentMonth.getFullYear()}</Text>
           </Button>
         </div>
-        
-        <Button 
-          variant="text" 
-          size="sm" 
-          onPress={goToNextMonth} 
+
+        <Button
+          type="text"
+          size="sm"
+          onPress={goToNextMonth}
           disabled={disabled}
           style={getWebProps([rangeCalendarStyles.headerButton]).style}
         >
@@ -303,7 +303,7 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
           <div key={index} {...getWebProps([rangeCalendarStyles.dayCell])}>
             {dayInfo && (
               <Button
-                variant="text"
+                type="text"
                 disabled={isDateDisabled(dayInfo.date)}
                 onPress={() => handleDateClick(dayInfo.date)}
                 size="sm"

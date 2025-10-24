@@ -19,8 +19,6 @@ export const timePickerStyles = StyleSheet.create((theme) => ({
     }
   },
   clockSvg: {
-    cursor: 'pointer',
-    
     _web: {
       cursor: 'pointer',
     }
@@ -48,7 +46,7 @@ export const timePickerStyles = StyleSheet.create((theme) => ({
     backgroundColor: 'transparent',
     paddingHorizontal: 0,
     paddingVertical: 0,
-    
+
     _web: {
       border: 'none',
       borderBottom: 'none',
@@ -95,8 +93,7 @@ export const timePickerStyles = StyleSheet.create((theme) => ({
     fontWeight: '500',
     borderRadius: 4,
     borderWidth: 0,
-    cursor: 'pointer',
-    
+
     _web: {
       border: 'none',
       cursor: 'pointer',

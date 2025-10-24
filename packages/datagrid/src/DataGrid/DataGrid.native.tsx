@@ -71,6 +71,7 @@ export function DataGrid<T extends Record<string, any>>({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
+        minHeight: 300,
       },
       headerStyle
     ]}>

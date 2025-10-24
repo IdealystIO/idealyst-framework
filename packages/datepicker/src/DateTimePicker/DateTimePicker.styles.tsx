@@ -74,4 +74,31 @@ export const dateTimePickerStyles = StyleSheet.create((theme) => ({
     color: theme.colors?.text?.secondary || '#6b7280',
     marginTop: theme.spacing?.xs || 4,
   },
+
+  sideBySideLayout: {
+    flexDirection: 'row',
+    gap: theme.spacing?.md || 16,
+    alignItems: 'flex-start',
+    _web: {
+      display: 'flex',
+    },
+  },
+
+  stepNavigation: {
+    flexDirection: 'row',
+    gap: theme.spacing?.xs || 8,
+    marginBottom: theme.spacing?.xs || 8,
+    _web: {
+      display: 'flex',
+    },
+  },
+
+  stepButton: {
+    flex: 1,
+  },
+
+  backButtonContainer: {
+    marginTop: theme.spacing?.sm || 12,
+    alignItems: 'flex-start',
+  },
 }));

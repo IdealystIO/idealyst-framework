@@ -130,17 +130,7 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
     return (
       <View style={[dateTimeRangePickerStyles.container, style]} testID={testID} data-testid={testID}>
         {/* Side by side layout */}
-        <View style={{ 
-          flexDirection: 'row', 
-          gap: 24, 
-          alignItems: 'flex-start',
-          _web: {
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 24,
-            alignItems: 'flex-start',
-          }
-        }}>
+        <View style={dateTimeRangePickerStyles.sideBySideLayout}>
           {renderRangeCalendar({
             value: value || {},
             onChange: handleDateRangeChange,
@@ -153,10 +143,10 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
             showTimes: true,
             timeMode,
           })}
-          
+
           {/* Time Selection Panel */}
           {(value?.startDate || value?.endDate) && (
-            <View style={{ minWidth: 220, flexShrink: 0 }}>
+            <View style={dateTimeRangePickerStyles.timeSelectionPanel}>
               {/* Time Selection Tabs */}
               <View style={timePickerStyles.tabBar}>
                 <Button
@@ -276,9 +266,9 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
             mode: timeMode,
             step: timeStep,
           })}
-          
+
           {/* Navigation */}
-          <View style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={dateTimeRangePickerStyles.navigationContainer}>
             <Button
               variant="text"
               size="sm"
@@ -310,9 +300,9 @@ export const DateTimeRangePickerBase: React.FC<DateTimeRangePickerBaseProps> = (
             mode: timeMode,
             step: timeStep,
           })}
-          
+
           {/* Navigation */}
-          <View style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={dateTimeRangePickerStyles.navigationContainer}>
             <Button
               variant="text"
               size="sm"

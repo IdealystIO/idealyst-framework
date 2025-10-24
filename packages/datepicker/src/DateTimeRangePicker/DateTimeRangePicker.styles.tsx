@@ -95,4 +95,24 @@ export const dateTimeRangePickerStyles = StyleSheet.create((theme) => ({
     color: theme.colors?.text?.secondary || '#6b7280',
     marginTop: theme.spacing?.xs || 4,
   },
+
+  sideBySideLayout: {
+    flexDirection: 'row',
+    gap: theme.spacing?.lg || 24,
+    alignItems: 'flex-start',
+    _web: {
+      display: 'flex',
+    },
+  },
+
+  timeSelectionPanel: {
+    minWidth: 220,
+    flexShrink: 0,
+  },
+
+  navigationContainer: {
+    marginTop: theme.spacing?.sm || 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 }));

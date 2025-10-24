@@ -1,5 +1,9 @@
 import { StyleSheet } from 'react-native-unistyles';
 
+type CalendarOverlayVariants = {
+  isSelected: boolean;
+};
+
 export const calendarOverlayStyles = StyleSheet.create((theme) => ({
   container: {
     position: 'absolute',
@@ -72,10 +76,11 @@ export const calendarOverlayStyles = StyleSheet.create((theme) => ({
     fontWeight: '500',
     color: theme.colors?.text?.primary || '#374151',
   },
-  gridButton: {
+  gridButton: ({ isSelected }: CalendarOverlayVariants) => ({
     minHeight: 28,
     paddingHorizontal: 8,
     paddingVertical: 4,
     fontSize: 12,
-  },
+    color: isSelected ? undefined : theme.colors.text.primary,
+  }),
 }));

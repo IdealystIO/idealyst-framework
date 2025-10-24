@@ -25,28 +25,28 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 
   return (
     <View style={calendarHeaderStyles.container}>
-      <Button 
-        variant="text" 
-        size="sm" 
-        onPress={onPreviousMonth} 
+      <Button
+        type="text"
+        size="sm"
+        onPress={onPreviousMonth}
         disabled={disabled}
         style={calendarHeaderStyles.navButton}
       >
         ←
       </Button>
-      
+
       <View style={calendarHeaderStyles.centerSection}>
-        <Button 
-          variant="text" 
+        <Button
+          type="text"
           onPress={onMonthClick}
           disabled={disabled}
           style={calendarHeaderStyles.titleButton}
         >
           <Text weight="semibold">{monthName}</Text>
         </Button>
-        
-        <Button 
-          variant="text" 
+
+        <Button
+          type="text"
           onPress={onYearClick}
           disabled={disabled}
           style={calendarHeaderStyles.titleButton}
@@ -54,11 +54,11 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           <Text weight="semibold">{year}</Text>
         </Button>
       </View>
-      
-      <Button 
-        variant="text" 
-        size="sm" 
-        onPress={onNextMonth} 
+
+      <Button
+        type="text"
+        size="sm"
+        onPress={onNextMonth}
         disabled={disabled}
         style={calendarHeaderStyles.navButton}
       >

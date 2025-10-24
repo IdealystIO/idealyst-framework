@@ -96,7 +96,10 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   return (
     <>
       {/* Weekday headers */}
-      <View style={calendarGridStyles.weekdayHeader}>
+      <View style={[
+        calendarGridStyles.weekdayHeader,
+        { display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }
+      ]}>
         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
           <View key={day} style={calendarGridStyles.weekdayCell}>
             <Text style={calendarGridStyles.weekdayText}>
@@ -107,25 +110,30 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
       </View>
 
       {/* Calendar grid */}
-      <View 
-        style={[calendarGridStyles.calendarGrid, { gridTemplateRows: `repeat(${weekCount}, 1fr)` }]}
+      <View
+        style={[
+          calendarGridStyles.calendarGrid,
+          {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(7, 1fr)',
+            gridTemplateRows: `repeat(${weekCount}, 1fr)`,
+            gap: 2
+          }
+        ]}
       >
         {calendarDays.map((dayData, index) => {
           const { date, isCurrentMonth } = dayData;
-          const buttonStyle = [
-            calendarGridStyles.dayButton,
-            { opacity: isCurrentMonth ? 1 : 0.4 }
-          ];
+          const isSelected = isDateSelected(date);
 
           return (
             <View key={index} style={calendarGridStyles.dayCell}>
               <Button
-                variant={isDateSelected(date) ? 'contained' : 'text'}
-                intent={isDateSelected(date) ? 'primary' : 'neutral'}
+                type={isSelected ? 'contained' : 'text'}
+                intent={isSelected ? 'primary' : undefined}
                 disabled={isDateDisabled(date)}
                 onPress={() => handleDateSelect(date)}
                 size="sm"
-                style={buttonStyle}
+                style={calendarGridStyles.dayButton({ isCurrentMonth, isSelected })}
               >
                 {date.getDate()}
               </Button>

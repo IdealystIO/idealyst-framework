@@ -193,4 +193,8 @@ export const rangeCalendarStyles = StyleSheet.create((theme) => ({
   clearButton: {
     width: '100%',
   },
+
+  compactButton: {
+    padding: 4,
+  },
 }));

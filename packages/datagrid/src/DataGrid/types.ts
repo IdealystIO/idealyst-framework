@@ -8,6 +8,7 @@ export interface Column<T = any> {
   maxWidth?: number;
   resizable?: boolean;
   sortable?: boolean;
+  align?: 'left' | 'center' | 'right';
   accessor?: (row: T) => any;
   render?: (value: any, row: T, index: number) => React.ReactNode;
   headerStyle?: ViewStyle;

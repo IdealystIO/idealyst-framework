@@ -69,11 +69,13 @@ interface TableCellProps {
   style?: any;
   width?: number | string;
   colSpan?: number;
+  onPress?: () => void;
 }
 
-export const TableCell: React.FC<TableCellProps> = ({ children, style, width, colSpan }) => {
+export const TableCell: React.FC<TableCellProps> = ({ children, style, width, colSpan, onPress }) => {
   const flexValue = colSpan ? colSpan : 1;
-  
+  const Wrapper = onPress ? TouchableOpacity : View;
+
   let resolvedStyle = {};
   if (typeof style === 'function') {
     try {
@@ -84,16 +86,16 @@ export const TableCell: React.FC<TableCellProps> = ({ children, style, width, co
   } else if (style) {
     resolvedStyle = style;
   }
-  
+
   const combinedStyle = [
     { justifyContent: 'center' },
     width ? { width, flex: 0 } : { flex: flexValue },
     resolvedStyle
   ];
-  
+
   return (
-    <View style={combinedStyle}>
+    <Wrapper style={combinedStyle} onPress={onPress}>
       {children}
-    </View>
+    </Wrapper>
   );
 };

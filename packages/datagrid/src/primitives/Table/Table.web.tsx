@@ -74,9 +74,10 @@ interface TableCellProps {
   style?: any;
   width?: number | string;
   colSpan?: number;
+  onPress?: () => void;
 }
 
-export const TableCell: React.FC<TableCellProps> = ({ children, style, width, colSpan }) => {
+export const TableCell: React.FC<TableCellProps> = ({ children, style, width, colSpan, onPress }) => {
   let resolvedStyle = {};
   if (typeof style === 'function') {
     try {
@@ -87,15 +88,27 @@ export const TableCell: React.FC<TableCellProps> = ({ children, style, width, co
   } else if (style) {
     resolvedStyle = style;
   }
-  
+
   const combinedStyle = {
     verticalAlign: 'middle',
     ...(width && { width }),
     ...resolvedStyle,
   };
-  
+
   return (
-    <td style={combinedStyle} colSpan={colSpan}>
+    <td
+      style={combinedStyle}
+      colSpan={colSpan}
+      onClick={onPress}
+      role={onPress ? 'button' : undefined}
+      tabIndex={onPress ? 0 : undefined}
+      onKeyDown={onPress ? (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onPress();
+        }
+      } : undefined}
+    >
       {children}
     </td>
   );

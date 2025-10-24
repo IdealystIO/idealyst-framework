@@ -3,7 +3,8 @@ module.exports = {
   plugins: [
     ['react-native-unistyles/plugin', {
       root: 'src',
-      autoProcessPaths: ['@idealyst/components', '@idealyst/navigation', '@idealyst/theme'],
+      debug: true,
+      autoProcessPaths: ['@idealyst/components', '@idealyst/navigation', '@idealyst/theme', '@idealyst/datagrid', '@idealyst/datepicker'],
     }],
     'react-native-reanimated/plugin',
     ['module-resolver', {
@@ -17,6 +18,8 @@ module.exports = {
           // Ensure we use the source code of our packages for live development
           '@idealyst/components': '../../../../packages/components/src',
           '@idealyst/navigation': '../../../../packages/navigation/src',
+          '@idealyst/datepicker': '../../../../packages/datepicker/src',
+          '@idealyst/datagrid': '../../../../packages/datagrid/src',
           '@idealyst/theme': '../../../../packages/theme/src',
         },
     }]

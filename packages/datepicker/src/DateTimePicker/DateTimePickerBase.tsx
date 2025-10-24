@@ -95,17 +95,7 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
     return (
       <View style={[dateTimePickerStyles.container, style]} testID={testID} data-testid={testID}>
         {/* Side by side layout */}
-        <View style={{ 
-          flexDirection: 'row', 
-          gap: 16, 
-          alignItems: 'flex-start',
-          _web: {
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 16,
-            alignItems: 'flex-start',
-          }
-        }}>
+        <View style={dateTimePickerStyles.sideBySideLayout}>
           {renderCalendar({
             value,
             onChange: handleDateChange,
@@ -113,7 +103,7 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
             maxDate,
             disabled,
           })}
-          
+
           {renderTimePicker({
             value: value || new Date(),
             onChange: handleTimeChange,
@@ -133,22 +123,13 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
   return (
     <View style={[dateTimePickerStyles.container, style]} testID={testID} data-testid={testID}>
       {/* Step Navigation */}
-      <View style={{
-        flexDirection: 'row',
-        gap: 8,
-        marginBottom: 8,
-        _web: {
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 8,
-        }
-      }}>
+      <View style={dateTimePickerStyles.stepNavigation}>
         <Button
           variant={isDateStep ? 'primary' : 'outlined'}
           size="sm"
           onPress={() => setViewMode('date')}
           disabled={disabled}
-          style={{ flex: 1 }}
+          style={dateTimePickerStyles.stepButton}
         >
           1. Date
         </Button>
@@ -157,7 +138,7 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
           size="sm"
           onPress={() => setViewMode('time')}
           disabled={disabled || !value}
-          style={{ flex: 1 }}
+          style={dateTimePickerStyles.stepButton}
         >
           2. Time
         </Button>
@@ -185,9 +166,9 @@ export const DateTimePickerBase: React.FC<DateTimePickerBaseProps> = ({
             mode: timeMode,
             step: timeStep,
           })}
-          
+
           {/* Back to Date button */}
-          <View style={{ marginTop: 12, alignItems: 'flex-start' }}>
+          <View style={dateTimePickerStyles.backButtonContainer}>
             <Button
               variant="text"
               size="sm"

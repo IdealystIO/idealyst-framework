@@ -222,39 +222,39 @@ export const RangeCalendar: React.FC<RangeCalendarProps> = ({
     <View style={[rangeCalendarStyles.container, style]} testID={testID}>
       {/* Header */}
       <View style={rangeCalendarStyles.header}>
-        <Button 
-          variant="text" 
-          size="sm" 
-          onPress={goToPreviousMonth} 
+        <Button
+          type="text"
+          size="sm"
+          onPress={goToPreviousMonth}
           disabled={disabled}
           style={rangeCalendarStyles.headerButton}
         >
           ←
         </Button>
-        <View style={{ flexDirection: 'row', gap: 8 }}>
+        <View style={rangeCalendarStyles.headerTitle}>
           <Button
-            variant="text"
+            type="text"
             size="sm"
             onPress={() => setOverlayMode('month')}
             disabled={disabled}
-            style={{ padding: 4 }}
+            style={rangeCalendarStyles.compactButton}
           >
             <Text weight="semibold">{currentMonth.toLocaleDateString('en-US', { month: 'long' })}</Text>
           </Button>
           <Button
-            variant="text"
+            type="text"
             size="sm"
             onPress={() => setOverlayMode('year')}
             disabled={disabled}
-            style={{ padding: 4 }}
+            style={rangeCalendarStyles.compactButton}
           >
             <Text weight="semibold">{currentMonth.getFullYear()}</Text>
           </Button>
         </View>
-        <Button 
-          variant="text" 
-          size="sm" 
-          onPress={goToNextMonth} 
+        <Button
+          type="text"
+          size="sm"
+          onPress={goToNextMonth}
           disabled={disabled}
           style={rangeCalendarStyles.headerButton}
         >

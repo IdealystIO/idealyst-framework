@@ -58,7 +58,7 @@ export const CalendarOverlay: React.FC<CalendarOverlayProps> = ({
           Select {mode === 'month' ? 'Month' : 'Year'}
         </Text>
         <Button
-          variant="text"
+          type="text"
           size="sm"
           onPress={onClose}
           style={calendarOverlayStyles.closeButton}
@@ -69,25 +69,28 @@ export const CalendarOverlay: React.FC<CalendarOverlayProps> = ({
 
       {mode === 'month' ? (
         <View style={calendarOverlayStyles.monthGrid}>
-          {months.map((month, index) => (
-            <Button
-              key={month}
-              variant={index === currentMonth ? 'contained' : 'outlined'}
-              intent={index === currentMonth ? 'primary' : 'neutral'}
-              size="sm"
-              onPress={() => handleMonthSelect(index)}
-              disabled={disabled}
-              style={calendarOverlayStyles.gridButton}
-            >
-              {month.slice(0, 3)}
-            </Button>
-          ))}
+          {months.map((month, index) => {
+            const isSelected = index === currentMonth;
+            return (
+              <Button
+                key={month}
+                type={isSelected ? 'contained' : 'text'}
+                intent={isSelected ? 'primary' : undefined}
+                size="sm"
+                onPress={() => handleMonthSelect(index)}
+                disabled={disabled}
+                style={calendarOverlayStyles.gridButton({ isSelected })}
+              >
+                {month.slice(0, 3)}
+              </Button>
+            );
+          })}
         </View>
       ) : (
         <View style={calendarOverlayStyles.yearContainer}>
           <View style={calendarOverlayStyles.yearNavigation}>
             <Button
-              variant="text"
+              type="text"
               size="sm"
               onPress={goToPreviousYearRange}
               disabled={disabled}
@@ -99,7 +102,7 @@ export const CalendarOverlay: React.FC<CalendarOverlayProps> = ({
               {yearRangeStart} - {yearRangeStart + 19}
             </Text>
             <Button
-              variant="text"
+              type="text"
               size="sm"
               onPress={goToNextYearRange}
               disabled={disabled}
@@ -109,19 +112,22 @@ export const CalendarOverlay: React.FC<CalendarOverlayProps> = ({
             </Button>
           </View>
           <View style={calendarOverlayStyles.yearGrid}>
-            {years.map((year) => (
-              <Button
-                key={year}
-                variant={year === currentYear ? 'contained' : 'outlined'}
-                intent={year === currentYear ? 'primary' : 'neutral'}
-                size="sm"
-                onPress={() => handleYearSelect(year)}
-                disabled={disabled}
-                style={calendarOverlayStyles.gridButton}
-              >
-                {year}
-              </Button>
-            ))}
+            {years.map((year) => {
+              const isSelected = year === currentYear;
+              return (
+                <Button
+                  key={year}
+                  type={isSelected ? 'contained' : 'text'}
+                  intent={isSelected ? 'primary' : undefined}
+                  size="sm"
+                  onPress={() => handleYearSelect(year)}
+                  disabled={disabled}
+                  style={calendarOverlayStyles.gridButton({ isSelected })}
+                >
+                  {year}
+                </Button>
+              );
+            })}
           </View>
         </View>
       )}
