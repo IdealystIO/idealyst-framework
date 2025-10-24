@@ -20,7 +20,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   showPasswordToggle,
   autoCapitalize = 'sentences',
   size = 'md',
-  variant = 'default',
+  type = 'outlined',
   hasError = false,
   style,
   testID,
@@ -79,14 +79,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   // Apply variants for container
   inputStyles.useVariants({
     size,
-    type: variant,
+    type,
     focused: isFocused,
     hasError,
     disabled,
   });
 
   // Get web props for all styled elements
-  const containerProps = getWebProps([inputStyles.container({ type: variant, hasError }), style]);
+  const containerProps = getWebProps([inputStyles.container({ type, hasError }), style]);
   const leftIconContainerProps = getWebProps([inputStyles.leftIconContainer]);
   const rightIconContainerProps = getWebProps([inputStyles.rightIconContainer]);
   const leftIconProps = getWebProps([inputStyles.leftIcon]);
@@ -114,7 +114,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
         />
       );
     } else if (isValidElement(leftIcon)) {
-      return <span className={leftIconProps.className} style={leftIconProps.style}>{leftIcon}</span>;
+      return <span {...leftIconProps}>{leftIcon}</span>;
     }
 
     return null;
@@ -134,7 +134,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
         />
       );
     } else if (isValidElement(rightIcon)) {
-      return <span className={rightIconProps.className} style={rightIconProps.style}>{rightIcon}</span>;
+      return <span {...rightIconProps}>{rightIcon}</span>;
     }
 
     return null;

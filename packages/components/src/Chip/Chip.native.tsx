@@ -1,11 +1,11 @@
-import React, { isValidElement, forwardRef } from 'react';
+import React, { isValidElement, forwardRef, ComponentRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { chipStyles } from './Chip.styles';
 import { isIconName } from '../Icon/icon-resolver';
 import type { ChipProps } from './types';
 
-const Chip = forwardRef<Pressable, ChipProps>(({
+const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
   label,
   type = 'filled',
   intent = 'primary',
@@ -26,11 +26,8 @@ const Chip = forwardRef<Pressable, ChipProps>(({
     intent,
     selected: selectable ? selected : false,
     disabled,
+    selectable,
   });
-
-  // Call dynamic styles with intent and selected variants
-  const iconStyle = chipStyles.icon({ intent, selected });
-  const labelStyle = chipStyles.label({ intent, selected });
 
   const handlePress = () => {
     if (disabled) return;
@@ -55,13 +52,14 @@ const Chip = forwardRef<Pressable, ChipProps>(({
     if (!icon) return null;
 
     if (typeof icon === 'string' && isIconName(icon)) {
-      const iconColor = iconStyle.color || '#000';
       return (
-        <MaterialCommunityIcons
-          name={icon}
-          size={iconSize}
-          color={iconColor}
-        />
+        <View style={chipStyles.icon}>
+          <MaterialCommunityIcons
+            name={icon}
+            size={iconSize}
+            style={chipStyles.icon}
+          />
+        </View>
       );
     } else if (isValidElement(icon)) {
       return icon;
@@ -73,9 +71,9 @@ const Chip = forwardRef<Pressable, ChipProps>(({
 
   const innerContent = (
     <>
-      {icon && <View style={iconStyle}>{renderIcon()}</View>}
+      {icon && renderIcon()}
 
-      <Text style={labelStyle}>{label}</Text>
+      <Text style={chipStyles.label}>{label}</Text>
 
       {deletable && onDelete && (
         <Pressable
@@ -89,7 +87,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
           <MaterialCommunityIcons
             name="close"
             size={deleteIconSize}
-            color={labelStyle.color || '#000'}
+            style={chipStyles.deleteIcon}
           />
         </Pressable>
       )}
@@ -108,7 +106,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
           selected: selectable ? selected : undefined,
         }}
       >
-        <View style={[chipStyles.container({ intent, selected }), style]} testID={testID}>
+        <View style={[chipStyles.container, style]} testID={testID}>
           {innerContent}
         </View>
       </Pressable>
@@ -116,7 +114,7 @@ const Chip = forwardRef<Pressable, ChipProps>(({
   }
 
   return (
-    <View ref={ref as any} style={[chipStyles.container({ intent, selected }), style]} testID={testID}>
+    <View ref={ref} style={[chipStyles.container, style]} testID={testID}>
       {innerContent}
     </View>
   );

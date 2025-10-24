@@ -1,9 +1,9 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, ComponentRef } from 'react';
 import { View, Pressable } from 'react-native';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
 
-const Card = forwardRef<View | Pressable, CardProps>(({
+const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, CardProps>(({
   children,
   type = 'default',
   padding = 'md',
@@ -30,8 +30,8 @@ const Card = forwardRef<View | Pressable, CardProps>(({
   const Component = clickable ? Pressable : View;
 
   const componentProps = {
-    ref: ref as any,
-    style: [cardStyles.card({ intent }), style],
+    ref,
+    style: [cardStyles.card, style],
     testID,
     accessibilityLabel,
     // Only use button role for clickable cards in React Native

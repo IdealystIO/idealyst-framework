@@ -1,12 +1,12 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { IntentVariant, ButtonSize } from '../theme/variants';
 import type { IconName } from '../Icon/icon-types';
+import { Intent, Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type InputIntentVariant = IntentVariant;
-export type InputSizeVariant = ButtonSize;
-export type InputVariant = 'default' | 'outlined' | 'filled' | 'bare';
-export type InputTypeVariant = 'text' | 'email' | 'password' | 'number';
+export type InputIntent = Intent;
+export type InputSize = Size;
+export type InputType = 'outlined' | 'filled' | 'bare';
+export type InputInputType = 'text' | 'email' | 'password' | 'number';
 
 export interface InputProps {
   /**
@@ -42,7 +42,7 @@ export interface InputProps {
   /**
    * The type of input (affects keyboard type on mobile)
    */
-  inputType?: InputTypeVariant;
+  inputType?: InputInputType;
 
   /**
    * Whether to show the password
@@ -72,17 +72,17 @@ export interface InputProps {
   /**
    * Size variant of the input
    */
-  size?: InputSizeVariant;
+  size?: InputSize;
 
   /**
    * Style variant of the input
    */
-  variant?: InputVariant;
+  type: InputType;
 
   /**
    * The intent/color scheme of the input (for focus states, validation, etc.)
    */
-  intent?: InputIntentVariant;
+  intent?: InputIntent;
 
   /**
    * Whether the input has an error state

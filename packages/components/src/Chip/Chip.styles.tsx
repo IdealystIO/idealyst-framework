@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent} from '@idealyst/theme';
+import { Theme, Intent} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type ChipType = 'filled' | 'outlined' | 'soft';
 type ChipIntent = Intent;
 
-type ChipVariants = {
+export type ChipVariants = {
     size: ChipSize;
     type: ChipType;
     intent: ChipIntent;
@@ -15,158 +15,241 @@ type ChipVariants = {
     selectable: boolean;
 }
 
-export type ExpandedChipStyles = StylesheetStyles<keyof ChipVariants>;
-
-export type ChipStylesheet = {
-    container: ExpandedChipStyles;
-    label: ExpandedChipStyles;
-    icon: ExpandedChipStyles;
-    deleteButton: ExpandedChipStyles;
-    deleteIcon: ExpandedChipStyles;
+/**
+ * Create intent variants (placeholder, colors handled by compound variants)
+ */
+function createIntentVariants(theme: Theme) {
+    const variants: any = {};
+    for (const intent in theme.intents) {
+        variants[intent] = {};
+    }
+    return variants;
 }
 
 /**
- * Create size variants for container
+ * Create type variants (structure only, colors handled by compound variants)
  */
-function createContainerSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'chip', (size) => ({
-        paddingHorizontal: size.paddingHorizontal,
-        paddingVertical: size.paddingVertical,
-        minHeight: size.minHeight,
-        borderRadius: size.borderRadius,
-    }));
-}
-
-/**
- * Create compound variants for container (type + intent + selected)
- */
-function createContainerVariants(theme: Theme, intent: Intent, selected: boolean)  {
-
-    const intentValue = theme.intents[intent];
-    const primaryColor = selected ? intentValue.contrast : intentValue.primary;
-    const secondaryColor = selected ? intentValue.primary : 'transparent';
-
+function createTypeVariants() {
     return {
         filled: {
-            backgroundColor: primaryColor,
-            borderColor: secondaryColor,
             borderWidth: 1,
-            borderStyle: 'solid',
+            borderStyle: 'solid' as const,
         },
         outlined: {
-            backgroundColor: secondaryColor,
-            borderColor: primaryColor,
             borderWidth: 1,
-            borderStyle: 'solid',
+            borderStyle: 'solid' as const,
+            backgroundColor: 'transparent',
         },
         soft: {
-            backgroundColor: !selected ? intentValue.light : intentValue.primary,
-        },
-    };
-}
-
-/**
- * Create compound variants for label
- */
-function createLabelVariants(theme: Theme, intent: Intent, selected: boolean) {
-    const intentValue = theme.intents[intent];
-    const primaryColor = selected ? intentValue.primary : intentValue.contrast;
-    const secondaryColor = selected ?  theme.colors.text.inverse : intentValue.primary;
-    return {
-        filled: {
-            color: primaryColor,
-        },
-        outlined: {
-            color: secondaryColor,
-        },
-        soft: {
-            color: !selected ? intentValue.dark : theme.colors.text.inverse,
-        },
-    };
-}
-
-function createContainerStyles(theme: Theme): ExpandedChipStyles {
-    return ({ intent, selected }: ChipVariants) => {
-        return {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
             borderWidth: 0,
-            gap: 4,
-            variants: {
-                size: createContainerSizeVariants(theme),
-                type: createContainerVariants(theme, intent, selected),
-                disabled: {
-                    true: { opacity: 0.5 },
-                },
-            },
-        };
-    }
+        },
+    } as const;
 }
 
-function createLabelStyles(theme: Theme): ExpandedChipStyles {
-    return ({intent, selected}: ChipVariants) => {
-        return {
-            fontFamily: 'inherit', // TODO: Add typography to theme
-            fontWeight: 500,
-            variants: {
-                size: buildSizeVariants(theme, 'chip', (size) => ({
-                    fontSize: size.fontSize,
-                    lineHeight: size.lineHeight,
-                })),
-                selected: {
-                    true: {},
-                    false: {},
-                },
-                type: createLabelVariants(theme, intent, selected)
+/**
+ * Create compound variants for container (type + intent + selected combinations)
+ */
+function createContainerCompoundVariants(theme: Theme) {
+    const compoundVariants: any[] = [];
+
+    for (const intent in theme.intents) {
+        const intentValue = theme.intents[intent as Intent];
+
+        // Filled + intent + selected combinations
+        compoundVariants.push({
+            intent,
+            type: 'filled',
+            selected: true,
+            styles: {
+                backgroundColor: intentValue.contrast,
+                borderColor: intentValue.primary,
             },
-        };
+        });
+        compoundVariants.push({
+            intent,
+            type: 'filled',
+            selected: false,
+            styles: {
+                backgroundColor: intentValue.primary,
+                borderColor: 'transparent',
+            },
+        });
+
+        // Outlined + intent + selected combinations
+        compoundVariants.push({
+            intent,
+            type: 'outlined',
+            selected: true,
+            styles: {
+                backgroundColor: intentValue.primary,
+                borderColor: intentValue.primary,
+            },
+        });
+        compoundVariants.push({
+            intent,
+            type: 'outlined',
+            selected: false,
+            styles: {
+                backgroundColor: 'transparent',
+                borderColor: intentValue.primary,
+            },
+        });
+
+        // Soft + intent + selected combinations
+        compoundVariants.push({
+            intent,
+            type: 'soft',
+            selected: true,
+            styles: {
+                backgroundColor: intentValue.primary,
+            },
+        });
+        compoundVariants.push({
+            intent,
+            type: 'soft',
+            selected: false,
+            styles: {
+                backgroundColor: intentValue.light,
+            },
+        });
     }
+
+    return compoundVariants;
 }
 
-function createIconStyles(theme: Theme): ExpandedChipStyles {
-    return ({ intent, selected }: ChipVariants) => {
-        return {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            variants: {
-                size: buildSizeVariants(theme, 'chip', (size) => ({
-                    width: size.iconSize,
-                    height: size.iconSize,
-                })),
-                selected: {
-                    true: {},
-                    false: {},
-                },
-                type: createLabelVariants(theme, intent, selected)
+/**
+ * Create compound variants for label/icon colors (type + intent + selected combinations)
+ */
+function createColorCompoundVariants(theme: Theme) {
+    const compoundVariants: any[] = [];
+
+    for (const intent in theme.intents) {
+        const intentValue = theme.intents[intent as Intent];
+
+        // Filled + intent + selected combinations
+        compoundVariants.push({
+            intent,
+            type: 'filled',
+            selected: true,
+            styles: {
+                color: intentValue.primary,
             },
-        };
+        });
+        compoundVariants.push({
+            intent,
+            type: 'filled',
+            selected: false,
+            styles: {
+                color: intentValue.contrast,
+            },
+        });
+
+        // Outlined + intent + selected combinations
+        compoundVariants.push({
+            intent,
+            type: 'outlined',
+            selected: true,
+            styles: {
+                color: theme.colors.text.inverse,
+            },
+        });
+        compoundVariants.push({
+            intent,
+            type: 'outlined',
+            selected: false,
+            styles: {
+                color: intentValue.primary,
+            },
+        });
+
+        // Soft + intent + selected combinations
+        compoundVariants.push({
+            intent,
+            type: 'soft',
+            selected: true,
+            styles: {
+                color: theme.colors.text.inverse,
+            },
+        });
+        compoundVariants.push({
+            intent,
+            type: 'soft',
+            selected: false,
+            styles: {
+                color: intentValue.dark,
+            },
+        });
     }
-}
 
-function createDeleteIconStyles(theme: Theme): ExpandedChipStyles {
-    return ({ intent, selected }: ChipVariants) => {
-        return {
-            variants: {
-                size: buildSizeVariants(theme, 'chip', (size) => ({
-                    fontSize: size.iconSize,
-                })),
-                type: createLabelVariants(theme, intent, selected)
-            }
-
-        };
-    };
+    return compoundVariants;
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const chipStyles = StyleSheet.create((theme: Theme): ChipStylesheet => {
+export const chipStyles = StyleSheet.create((theme: Theme) => {
   return {
-    container: createContainerStyles(theme),
-    label: createLabelStyles(theme),
-    icon: createIconStyles(theme),
+    container: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 0,
+        gap: 4,
+        variants: {
+            size: buildSizeVariants(theme, 'chip', (size) => ({
+                paddingHorizontal: size.paddingHorizontal,
+                paddingVertical: size.paddingVertical,
+                minHeight: size.minHeight,
+                borderRadius: size.borderRadius,
+            })),
+            intent: createIntentVariants(theme),
+            type: createTypeVariants(),
+            selected: {
+                true: {},
+                false: {},
+            },
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
+        },
+        compoundVariants: createContainerCompoundVariants(theme),
+    },
+    label: {
+        fontFamily: 'inherit', // TODO: Add typography to theme
+        fontWeight: '500',
+        variants: {
+            size: buildSizeVariants(theme, 'chip', (size) => ({
+                fontSize: size.fontSize,
+                lineHeight: size.lineHeight,
+            })),
+            intent: createIntentVariants(theme),
+            type: createTypeVariants(),
+            selected: {
+                true: {},
+                false: {},
+            },
+        },
+        compoundVariants: createColorCompoundVariants(theme),
+    },
+    icon: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        variants: {
+            size: buildSizeVariants(theme, 'chip', (size) => ({
+                width: size.iconSize,
+                height: size.iconSize,
+            })),
+            intent: createIntentVariants(theme),
+            type: createTypeVariants(),
+            selected: {
+                true: {},
+                false: {},
+            },
+        },
+        compoundVariants: createColorCompoundVariants(theme),
+    },
     deleteButton: {
         display: 'flex',
         alignItems: 'center',
@@ -181,6 +264,19 @@ export const chipStyles = StyleSheet.create((theme: Theme): ChipStylesheet => {
             })),
         },
     },
-    deleteIcon: createDeleteIconStyles(theme),
+    deleteIcon: {
+        variants: {
+            size: buildSizeVariants(theme, 'chip', (size) => ({
+                fontSize: size.iconSize,
+            })),
+            intent: createIntentVariants(theme),
+            type: createTypeVariants(),
+            selected: {
+                true: {},
+                false: {},
+            },
+        },
+        compoundVariants: createColorCompoundVariants(theme),
+    },
   };
 });

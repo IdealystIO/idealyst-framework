@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent, Size} from '@idealyst/theme';
+import { Theme, Intent, Size, CompoundVariants} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ButtonSize = Size;
@@ -91,7 +91,7 @@ function createButtonCompoundVariants(theme: Theme) {
  * Create icon compound variants for intent+type combinations
  */
 function createIconCompoundVariants(theme: Theme) {
-    const compoundVariants: any[] = [];
+    const compoundVariants: CompoundVariants<keyof ButtonVariants> = [];
 
     for (const intent in theme.intents) {
         const intentValue = theme.intents[intent as Intent];
