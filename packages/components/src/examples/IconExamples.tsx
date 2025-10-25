@@ -75,7 +75,7 @@ export const IconExamples = () => {
   const [userStatus, setUserStatus] = useState<'online' | 'offline' | 'away'>('online');
 
   // Test function that returns an icon name
-  const getStatusIcon = (status: string): string => {
+  const getStatusIcon = (status: string): IconName => {
     switch (status) {
       case 'online': return 'check-circle';
       case 'offline': return 'close-circle';
@@ -464,13 +464,13 @@ export const IconExamples = () => {
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <Icon name={getStatusIcon(userStatus)} size="md" />
               <View style={{ flexDirection: 'row', gap: 8 }}>
-                <Button onPress={() => setUserStatus('online')} variant={userStatus === 'online' ? 'contained' : 'outlined'}>
+                <Button onPress={() => setUserStatus('online')} type={userStatus === 'online' ? 'contained' : 'outlined'}>
                   Online
                 </Button>
-                <Button onPress={() => setUserStatus('offline')} variant={userStatus === 'offline' ? 'contained' : 'outlined'}>
+                <Button onPress={() => setUserStatus('offline')} type={userStatus === 'offline' ? 'contained' : 'outlined'}>
                   Offline
                 </Button>
-                <Button onPress={() => setUserStatus('away')} variant={userStatus === 'away' ? 'contained' : 'outlined'}>
+                <Button onPress={() => setUserStatus('away')} type={userStatus === 'away' ? 'contained' : 'outlined'}>
                   Away
                 </Button>
               </View>
@@ -498,8 +498,8 @@ export const IconExamples = () => {
             <Text size="md" weight="semibold">Test 6: Logical Expression</Text>
             <Text size="sm" color="secondary">Using && and || operators</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-              <Icon name={userStatus === 'online' && "wifi"} size="md" />
-              <Icon name={userStatus === 'offline' || "wifi-off"} size="md" />
+              <Icon name={userStatus === 'online' ? "wifi" : undefined} size="md" />
+              <Icon name={userStatus === 'offline' ? undefined : "wifi-off"} size="md" />
             </View>
             <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
               &lt;Icon name={'{condition && "wifi"}'} /&gt;

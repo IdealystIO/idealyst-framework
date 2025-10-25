@@ -17,7 +17,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
     animation,
   });
 
-  const skeletonProps = getWebProps([skeletonStyles.skeleton, style]);
+  const skeletonProps = getWebProps([skeletonStyles.skeleton, style as any]);
 
   // Apply custom border radius if provided and shape is 'rounded'
   const customStyles: React.CSSProperties = {
@@ -55,9 +55,8 @@ const Skeleton: React.FC<SkeletonProps> = ({
         `}</style>
       )}
       <div
-        className={skeletonProps.className}
+        {...skeletonProps}
         style={{
-          ...skeletonProps.style,
           ...customStyles,
           ...animationStyles,
         }}
@@ -89,13 +88,12 @@ export const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
   testID,
 }) => {
   skeletonStyles.useVariants({});
-  const groupProps = getWebProps([skeletonStyles.group, style]);
+  const groupProps = getWebProps([skeletonStyles.group, style as any]);
 
   return (
     <div
-      className={groupProps.className}
+      {...groupProps}
       style={{
-        ...groupProps.style,
         gap: `${spacing}px`,
       }}
       data-testid={testID}

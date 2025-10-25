@@ -5,7 +5,7 @@ import { dividerStyles } from './Divider.styles';
 
 const Divider = forwardRef<View, DividerProps>(({
   orientation = 'horizontal',
-  variant = 'solid',
+  type = 'solid',
   thickness = 'thin',
   intent = 'neutral',
   length = 'full',
@@ -19,7 +19,7 @@ const Divider = forwardRef<View, DividerProps>(({
   dividerStyles.useVariants({
     orientation,
     thickness,
-    variant: variant as any,
+    type: type as any,
     intent,
     length: typeof length === 'number' ? 'auto' : length,
     spacing,
@@ -40,12 +40,12 @@ const Divider = forwardRef<View, DividerProps>(({
 
   // For dashed/dotted variants, use border instead of background
   const getDashedStyle = () => {
-    if (variant === 'dashed' || variant === 'dotted') {
+    if (type === 'dashed' || type === 'dotted') {
       const actualThickness = getThickness();
       
       return {
         backgroundColor: 'transparent',
-        borderStyle: variant,
+        borderStyle: type,
         borderColor: dividerStyle.backgroundColor,
         ...(orientation === 'horizontal' ? {
           borderTopWidth: actualThickness,
@@ -69,7 +69,7 @@ const Divider = forwardRef<View, DividerProps>(({
 
   // If no children, render simple divider
   if (!children) {
-    if (variant === 'dashed' || variant === 'dotted') {
+    if (type === 'dashed' || type === 'dotted') {
       return (
         <View
           ref={ref}
@@ -96,7 +96,7 @@ const Divider = forwardRef<View, DividerProps>(({
 
   // For lines with content, create a simple dashed line
   const renderLineSegment = () => {
-    if (variant === 'dashed' || variant === 'dotted') {
+    if (type === 'dashed' || type === 'dotted') {
       const actualThickness = getThickness();
       
       return (
@@ -105,7 +105,7 @@ const Divider = forwardRef<View, DividerProps>(({
             dividerStyles.line,
             {
               backgroundColor: 'transparent',
-              borderStyle: variant,
+              borderStyle: type,
               borderColor: dividerStyles.line.backgroundColor,
               ...(orientation === 'horizontal' ? {
                 borderTopWidth: actualThickness,

@@ -246,7 +246,7 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
                 type: createTypeVariants(),
             },
             compoundVariants: createContainerCompoundVariants(theme),
-        },
+        } as const,
         iconContainer: {
             display: 'flex',
             alignItems: 'center',

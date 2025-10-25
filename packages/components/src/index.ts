@@ -129,7 +129,7 @@ export type { TableProps, TableColumn } from './Table/types';
 export type { MenuProps, MenuItem } from './Menu/types';
 export type { ImageProps } from './Image/types';
 export type { VideoProps, VideoSource } from './Video/types';
-export type { AlertProps, AlertVariant } from './Alert/types';
+export type { AlertProps } from './Alert/types';
 export type { SkeletonProps, SkeletonGroupProps, SkeletonShape, SkeletonAnimation } from './Skeleton/types';
 export type { ChipProps, ChipSize, ChipIntent } from './Chip/types';
 export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';

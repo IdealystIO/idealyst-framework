@@ -1,23 +1,20 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from "./icon-types";
-import type { DisplayColorVariant, IconSize } from '@idealyst/theme';
-import { Color, Intent, IntentValue } from '@idealyst/theme';
+import type { Size } from '@idealyst/theme';
+import { Color, Intent } from '@idealyst/theme';
 
-/**
- * @deprecated Use IconSize from theme instead
- */
-export type IconSizeVariant = IconSize;
+export type IconSizeVariant = Size | number;
 
 export interface IconProps {
   /**
    * The name of the icon to display
    */
-  name: IconName;
+  name: IconName | `mdi:${IconName}`;
 
   /**
    * The size variant of the icon
    */
-  size?: IconSize | number;
+  size?: IconSizeVariant;
 
   /**
    * Predefined color variant based on theme
@@ -31,7 +28,7 @@ export interface IconProps {
   /**
    * Additional styles (platform-specific)
    */
-  style?: StyleProp<ViewStyle>;
+  style?: React.CSSProperties | StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

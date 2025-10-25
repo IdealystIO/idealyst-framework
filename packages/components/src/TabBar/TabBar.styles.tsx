@@ -1,48 +1,33 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-
-type TabBarSize = Size;
-type TabBarType = 'default' | 'pills' | 'underline';
-type PillMode = 'light' | 'dark';
+import { TabBarPillMode, TabBarSizeVariant, TabBarType } from './types';
 
 type TabBarContainerVariants = {
     type: TabBarType;
-    size: TabBarSize;
-    pillMode: PillMode;
+    size: TabBarSizeVariant;
+    pillMode: TabBarPillMode;
 }
 
 type TabBarTabVariants = {
-    size: TabBarSize;
+    size: TabBarSizeVariant;
     type: TabBarType;
     active: boolean;
     disabled: boolean;
-    pillMode: PillMode;
+    pillMode: TabBarPillMode;
 }
 
 type TabBarLabelVariants = {
-    size: TabBarSize;
+    size: TabBarSizeVariant;
     type: TabBarType;
     active: boolean;
     disabled: boolean;
-    pillMode: PillMode;
+    pillMode: TabBarPillMode;
 }
 
 type TabBarIndicatorVariants = {
     type: TabBarType;
-    pillMode: PillMode;
-}
-
-export type ExpandedTabBarContainerStyles = StylesheetStyles<keyof TabBarContainerVariants>;
-export type ExpandedTabBarTabStyles = StylesheetStyles<keyof TabBarTabVariants>;
-export type ExpandedTabBarLabelStyles = StylesheetStyles<keyof TabBarLabelVariants>;
-export type ExpandedTabBarIndicatorStyles = StylesheetStyles<keyof TabBarIndicatorVariants>;
-
-export type TabBarStylesheet = {
-    container: ExpandedTabBarContainerStyles;
-    tab: ExpandedTabBarTabStyles;
-    tabLabel: ExpandedTabBarLabelStyles;
-    indicator: ExpandedTabBarIndicatorStyles;
+    pillMode: TabBarPillMode;
 }
 
 /**
@@ -140,7 +125,7 @@ function createTabCompoundVariants(theme: Theme): CompoundVariants<keyof TabBarT
                 color: theme.intents.primary.primary,
             },
         },
-    ];
+    ] as const;
 }
 
 /**
@@ -184,7 +169,7 @@ function createLabelCompoundVariants(theme: Theme): CompoundVariants<keyof TabBa
                 color: theme.intents.primary.primary,
             },
         },
-    ];
+    ] as const;
 }
 
 /**
@@ -208,10 +193,10 @@ function createIndicatorCompoundVariants(theme: Theme): CompoundVariants<keyof T
                 backgroundColor: theme.colors.surface.secondary,
             },
         },
-    ];
+    ] as const;
 }
 
-const createContainerStyles = (theme: Theme): ExpandedTabBarContainerStyles => {
+const createContainerStyles = (theme: Theme) => {
     return {
         display: 'flex',
         flexDirection: 'row',
@@ -222,7 +207,7 @@ const createContainerStyles = (theme: Theme): ExpandedTabBarContainerStyles => {
         borderBottomColor: theme.colors.border.primary,
         variants: {
             type: {
-                default: {},
+                standard: {},
                 pills: {
                     borderBottomWidth: 0,
                     padding: 4,
@@ -244,12 +229,12 @@ const createContainerStyles = (theme: Theme): ExpandedTabBarContainerStyles => {
                 light: {},
                 dark: {},
             },
-        },
+        } as const,
         compoundVariants: createContainerCompoundVariants(theme),
-    };
+    } as const;
 }
 
-const createTabStyles = (theme: Theme): ExpandedTabBarTabStyles => {
+const createTabStyles = (theme: Theme) => {
     return {
         display: 'flex',
         flexDirection: 'row',
@@ -263,7 +248,7 @@ const createTabStyles = (theme: Theme): ExpandedTabBarTabStyles => {
         variants: {
             size: createTabSizeVariants(theme),
             type: {
-                default: {},
+                standard: {},
                 pills: {
                     borderRadius: 9999,
                     marginRight: 0,
@@ -296,7 +281,7 @@ const createTabStyles = (theme: Theme): ExpandedTabBarTabStyles => {
                 light: {},
                 dark: {},
             },
-        },
+        } as const,
         compoundVariants: createTabCompoundVariants(theme),
         _web: {
             border: 'none',
@@ -304,10 +289,10 @@ const createTabStyles = (theme: Theme): ExpandedTabBarTabStyles => {
             outline: 'none',
             transition: 'color 0.2s ease',
         },
-    };
+    } as const;
 }
 
-const createTabLabelStyles = (theme: Theme): ExpandedTabBarLabelStyles => {
+const createTabLabelStyles = (theme: Theme) => {
     return {
         position: 'relative',
         zIndex: 3,
@@ -316,7 +301,7 @@ const createTabLabelStyles = (theme: Theme): ExpandedTabBarLabelStyles => {
         variants: {
             size: createLabelSizeVariants(theme),
             type: {
-                default: {},
+                standard: {},
                 pills: {},
                 underline: {},
             },
@@ -338,17 +323,17 @@ const createTabLabelStyles = (theme: Theme): ExpandedTabBarLabelStyles => {
             },
         },
         compoundVariants: createLabelCompoundVariants(theme),
-    };
+    } as const;
 }
 
-const createIndicatorStyles = (theme: Theme): ExpandedTabBarIndicatorStyles => {
+const createIndicatorStyles = (theme: Theme) => {
     return {
         position: 'absolute',
         pointerEvents: 'none',
         zIndex: 1,
         variants: {
             type: {
-                default: {
+                standard: {
                     bottom: -1,
                     height: 2,
                     backgroundColor: theme.intents.primary.primary,
@@ -374,7 +359,7 @@ const createIndicatorStyles = (theme: Theme): ExpandedTabBarIndicatorStyles => {
         _web: {
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         },
-    };
+    } as const;
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
@@ -392,23 +377,23 @@ export const tabBarStyles = StyleSheet.create((theme: Theme) => {
 export const tabBarContainerStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme),
-    };
+    } as const;
 });
 
 export const tabBarTabStyles = StyleSheet.create((theme: Theme) => {
     return {
         tab: createTabStyles(theme),
-    };
+    } as const;
 });
 
 export const tabBarLabelStyles = StyleSheet.create((theme: Theme) => {
     return {
         tabLabel: createTabLabelStyles(theme),
-    };
+    } as const;
 });
 
 export const tabBarIndicatorStyles = StyleSheet.create((theme: Theme) => {
     return {
         indicator: createIndicatorStyles(theme),
-    };
+    } as const;
 });

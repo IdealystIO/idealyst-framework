@@ -3,14 +3,14 @@ import type { Intent } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type AlertIntentVariant = Intent;
-export type AlertVariant = 'filled' | 'outlined' | 'soft';
+export type AlertType= 'filled' | 'outlined' | 'soft';
 
 export interface AlertProps {
   title?: string;
   message?: string;
   children?: React.ReactNode;
   intent?: AlertIntentVariant;
-  variant?: AlertVariant;
+  type?: AlertType;
   icon?: React.ReactNode;
   showIcon?: boolean;
   dismissible?: boolean;

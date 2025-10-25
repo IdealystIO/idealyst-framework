@@ -1,13 +1,13 @@
 import { createContext, useContext } from 'react';
-import type { ListSizeVariant, ListVariant } from './types';
+import type { ListSizeVariant, ListType } from './types';
 
 interface ListContextValue {
-  variant?: ListVariant;
+  type?: ListType;
   size?: ListSizeVariant;
 }
 
 const ListContext = createContext<ListContextValue>({
-  variant: 'default',
+  type: 'default',
   size: 'md',
 });
 

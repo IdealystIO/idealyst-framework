@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { videoStyles } from './Video.styles';
 import type { VideoProps, VideoSource } from './types';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 const Video: React.FC<VideoProps> = ({
   source,
@@ -27,7 +28,7 @@ const Video: React.FC<VideoProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const containerProps = getWebProps([videoStyles.container, style]);
+  const containerProps = getWebProps([videoStyles.container, style as any]);
   const videoProps = getWebProps([videoStyles.video]);
 
   const videoSource = typeof source === 'string'
@@ -68,7 +69,6 @@ const Video: React.FC<VideoProps> = ({
   };
 
   const containerStyle: React.CSSProperties = {
-    ...containerProps.style,
     width: width || '100%',
     height: height || 'auto',
     aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
@@ -76,18 +76,19 @@ const Video: React.FC<VideoProps> = ({
   };
 
   const vidStyle: React.CSSProperties = {
-    ...videoProps.style,
     borderRadius: borderRadius ? `${borderRadius}px` : undefined,
   };
 
+  const mergedVideoRef = useMergeRefs(videoRef, videoProps.ref);
+
   return (
     <div
-      className={containerProps.className}
+      {...containerProps}
       style={containerStyle}
       data-testid={testID}
     >
       <video
-        ref={videoRef}
+        ref={mergedVideoRef}
         className={videoProps.className}
         style={vidStyle}
         poster={poster}

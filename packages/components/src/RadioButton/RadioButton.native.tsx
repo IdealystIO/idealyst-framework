@@ -1,11 +1,11 @@
-import React, { forwardRef } from 'react';
+import React, { ComponentRef, forwardRef } from 'react';
 import { View, Pressable, Animated } from 'react-native';
 import Text from '../Text';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioButtonProps } from './types';
 import { useRadioGroup } from './RadioGroup.native';
 
-const RadioButton = forwardRef<Pressable, RadioButtonProps>(({
+const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>(({
   value,
   checked: checkedProp,
   onPress,
@@ -47,7 +47,6 @@ const RadioButton = forwardRef<Pressable, RadioButtonProps>(({
     size,
     checked,
     disabled,
-    intent,
   });
 
   const dotScale = animatedValue.interpolate({

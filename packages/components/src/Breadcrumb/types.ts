@@ -1,10 +1,10 @@
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
-import type { ButtonSize } from '@idealyst/theme';
+import { Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
 export type BreadcrumbIntentVariant = 'primary' | 'neutral';
-export type BreadcrumbSizeVariant = ButtonSize;
+export type BreadcrumbSizeVariant = Size;
 
 export interface BreadcrumbItem {
   /** Label text for the breadcrumb item */

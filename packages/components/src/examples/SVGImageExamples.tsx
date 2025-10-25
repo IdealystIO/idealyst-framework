@@ -1,4 +1,6 @@
 import { Screen, View, SVGImage, Text } from '../index';
+
+/** @ts-ignore this is a real file */
 import testLogo from './test-logo.svg';
 
 export const SVGImageExamples = () => {

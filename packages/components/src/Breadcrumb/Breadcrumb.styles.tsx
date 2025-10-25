@@ -85,7 +85,7 @@ function getIconColor(theme: Theme, intent: BreadcrumbIntent) {
     return theme.colors.text.secondary;
 }
 
-const createItemTextStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+const createItemTextStyles = (theme: Theme) => {
     return {
         variants: {
             size: createItemTextSizeVariants(theme),
@@ -104,45 +104,45 @@ const createItemTextStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
             clickable: { true: {}, false: {} },
         },
         compoundVariants: createItemTextCompoundVariants(theme),
-    };
+    } as const;
 }
 
-const createIconStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+const createIconStyles = (theme: Theme) => {
     return {
         variants: {
             size: createIconSizeVariants(theme),
         },
-    };
+    } as const;
 }
 
-const createSeparatorStyles = (theme: Theme): ExpandedBreadcrumbStyles => {
+const createSeparatorStyles = (theme: Theme) => {
     return {
         color: theme.colors.text.tertiary,
         variants: {
             size: createItemTextSizeVariants(theme),
         },
-    };
+    } as const;
 }
 
 const createEllipsisIconStyles = (theme: Theme) => {
-    return ({ intent }: BreadcrumbVariants) => {
+    return ({ intent }: Partial<BreadcrumbVariants>) => {
         return {
             color: getIconColor(theme, intent),
             variants: {
                 size: createIconSizeVariants(theme),
             },
-        };
+        } as const;
     }
 }
 
 const createMenuButtonIconStyles = (theme: Theme) => {
-    return ({ intent }: BreadcrumbVariants) => {
+    return ({ intent }: Partial<BreadcrumbVariants>) => {
         return {
             color: getIconColor(theme, intent),
             variants: {
                 size: createIconSizeVariants(theme),
             },
-        };
+        } as const;
     }
 }
 
@@ -203,13 +203,13 @@ export const breadcrumbItemStyles = StyleSheet.create((theme: Theme) => {
         },
         itemText: createItemTextStyles(theme),
         icon: createIconStyles(theme),
-    };
+    } as const;
 });
 
 export const breadcrumbSeparatorStyles = StyleSheet.create((theme: Theme) => {
     return {
         separator: createSeparatorStyles(theme),
-    };
+    } as const;
 });
 
 export const breadcrumbEllipsisStyles = StyleSheet.create((theme: Theme) => {
@@ -220,7 +220,7 @@ export const breadcrumbEllipsisStyles = StyleSheet.create((theme: Theme) => {
             justifyContent: 'center',
         },
         icon: createEllipsisIconStyles(theme),
-    };
+    } as const;
 });
 
 export const breadcrumbMenuButtonStyles = StyleSheet.create((theme: Theme) => {
@@ -230,5 +230,5 @@ export const breadcrumbMenuButtonStyles = StyleSheet.create((theme: Theme) => {
             paddingHorizontal: 8,
         },
         icon: createMenuButtonIconStyles(theme),
-    };
+    } as const;
 });

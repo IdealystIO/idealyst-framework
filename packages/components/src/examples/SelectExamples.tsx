@@ -121,7 +121,7 @@ export const SelectExamples = () => {
             Select Component Examples
           </Text>
           <Button
-            variant="outlined"
+            type="outlined"
             intent="neutral"
             size="sm"
             onPress={resetAllSelections}
@@ -131,7 +131,7 @@ export const SelectExamples = () => {
         </View>
 
         {/* Basic Usage */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Basic Usage</Text>
             <Select
@@ -147,7 +147,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* With Icons */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">With Icons</Text>
             <Select
@@ -164,7 +164,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Custom Icons */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Custom Icon Components</Text>
             <Select
@@ -181,7 +181,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Disabled Options */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Disabled Options</Text>
             <Select
@@ -199,7 +199,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Searchable */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Searchable Select</Text>
             <Select
@@ -218,7 +218,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Sizes */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Sizes</Text>
             <View spacing="sm">
@@ -257,7 +257,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Variants */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Variants</Text>
             <View spacing="sm">
@@ -268,7 +268,7 @@ export const SelectExamples = () => {
                   value={outlinedSelect}
                   onValueChange={setOutlinedSelect}
                   placeholder="Outlined variant"
-                  variant="outlined"
+                  type="outlined"
                 />
               </View>
               <View>
@@ -278,7 +278,7 @@ export const SelectExamples = () => {
                   value={filledSelect}
                   onValueChange={setFilledSelect}
                   placeholder="Filled variant"
-                  variant="filled"
+                  type="filled"
                 />
               </View>
             </View>
@@ -286,7 +286,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Intents */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Intent Colors</Text>
             <View spacing="sm">
@@ -298,7 +298,7 @@ export const SelectExamples = () => {
                   onValueChange={setPrimarySelect}
                   placeholder="Primary intent"
                   intent="primary"
-                  variant="outlined"
+                  type="outlined"
                 />
               </View>
               <View>
@@ -309,7 +309,7 @@ export const SelectExamples = () => {
                   onValueChange={setSuccessSelect}
                   placeholder="Success intent"
                   intent="success"
-                  variant="outlined"
+                  type="outlined"
                 />
               </View>
               <View>
@@ -320,7 +320,7 @@ export const SelectExamples = () => {
                   onValueChange={setWarningSelect}
                   placeholder="Warning intent"
                   intent="warning"
-                  variant="outlined"
+                  type="outlined"
                 />
               </View>
               <View>
@@ -331,7 +331,7 @@ export const SelectExamples = () => {
                   onValueChange={setErrorSelect}
                   placeholder="Error intent"
                   intent="error"
-                  variant="outlined"
+                  type="outlined"
                 />
               </View>
             </View>
@@ -339,7 +339,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Form Example */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Form Integration</Text>
             <Select
@@ -355,11 +355,11 @@ export const SelectExamples = () => {
               label="Country *"
               error={!!formErrors.formSelect}
               helperText={formErrors.formSelect || "Required field"}
-              variant="outlined"
+              type="outlined"
               intent="primary"
             />
             <Button
-              variant="contained"
+              type="contained"
               intent="primary"
               onPress={handleFormSubmit}
             >
@@ -369,7 +369,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Disabled State */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Disabled State</Text>
             <Select
@@ -385,7 +385,7 @@ export const SelectExamples = () => {
         </Card>
 
         {/* Platform-specific Features */}
-        <Card variant="outlined" padding="md">
+        <Card type="outlined" padding="md">
           <View spacing="md">
             <Text size="md" weight="semibold">Platform Features</Text>
             <Text size="sm" color="secondary">
@@ -406,7 +406,7 @@ export const SelectExamples = () => {
         <Divider spacing="lg" />
 
         {/* Summary */}
-        <Card variant="filled" padding="md">
+        <Card type="filled" padding="md">
           <View spacing="sm">
             <Text size="md" weight="semibold">Current Selections Summary</Text>
             <Text size="sm">Basic: {basicSelect || 'None'}</Text>

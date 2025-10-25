@@ -43,7 +43,7 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
     isAtLimit: maxLength ? value.length >= maxLength : false,
   });
 
-  const containerProps = getWebProps([textAreaStyles.container, style]);
+  const containerProps = getWebProps([textAreaStyles.container, style as any]);
   const labelProps = getWebProps([textAreaStyles.label]);
   const textareaContainerProps = getWebProps([textAreaStyles.textareaContainer]);
   const footerProps = getWebProps([textAreaStyles.footer]);

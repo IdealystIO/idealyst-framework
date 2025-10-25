@@ -214,7 +214,7 @@ export const chipStyles = StyleSheet.create((theme: Theme) => {
             },
         },
         compoundVariants: createContainerCompoundVariants(theme),
-    },
+    } as const,
     label: {
         fontFamily: 'inherit', // TODO: Add typography to theme
         fontWeight: '500',

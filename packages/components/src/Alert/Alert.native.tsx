@@ -20,7 +20,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
   message,
   children,
   intent = 'neutral',
-  variant = 'soft',
+  type = 'soft',
   icon,
   showIcon = true,
   dismissible = false,
@@ -31,7 +31,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
 }, ref) => {
   // Apply variants to stylesheet
   alertStyles.useVariants({
-    type: variant,
+    type
   });
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);

@@ -22,8 +22,6 @@ const Tooltip = forwardRef<View, TooltipProps>(({
   tooltipStyles.useVariants({
     size,
     intent,
-    placement,
-    visible,
   });
 
   useEffect(() => {

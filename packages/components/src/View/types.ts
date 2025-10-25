@@ -1,11 +1,11 @@
+import { Size, Surface } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { BackgroundVariant, SpacingVariant, RadiusVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type ViewBackgroundVariant = BackgroundVariant;
-export type ViewSpacingVariant = SpacingVariant;
-export type ViewRadiusVariant = RadiusVariant;
+export type ViewBackgroundVariant = Surface | 'transparent';
+export type ViewSpacingVariant = Size | 'none';
+export type ViewRadiusVariant = Size | 'none';
 export type ViewBorderVariant = 'none' | 'thin' | 'thick';
 
 export interface ViewProps {
@@ -72,7 +72,7 @@ export interface ViewProps {
   /**
    * Additional styles (platform-specific)
    */
-  style?: StyleProp<ViewStyle>;
+  style?: React.CSSProperties | StyleProp<ViewStyle>;
 
   /**
    * Test ID for testing

@@ -6,7 +6,7 @@ import useMergeRefs from '../hooks/useMergeRefs';
 
 const Divider = forwardRef<HTMLDivElement, DividerProps>(({
   orientation = 'horizontal',
-  variant = 'solid',
+  type = 'solid',
   thickness = 'thin',
   intent = 'neutral',
   length = 'full',
@@ -20,24 +20,23 @@ const Divider = forwardRef<HTMLDivElement, DividerProps>(({
   dividerStyles.useVariants({
     orientation,
     thickness,
-    variant: variant as any,
+    type,
     intent,
     length: typeof length === 'number' ? 'auto' : length,
     spacing,
   });
 
   // Create style arrays
-  const dividerStyleArray = [
-    dividerStyles.divider,
-    style,
-  ].filter(Boolean);
 
   const containerStyleArray = [dividerStyles.container];
   const contentStyleArray = [dividerStyles.content];
   const lineStyleArray = [dividerStyles.line];
 
   // Generate web props
-  const dividerProps = getWebProps(dividerStyleArray);
+  const dividerProps = getWebProps([
+    dividerStyles.divider,
+    style as any,
+  ]);
   const containerProps = getWebProps(containerStyleArray);
   const contentProps = getWebProps(contentStyleArray);
   const lineProps = getWebProps(lineStyleArray);

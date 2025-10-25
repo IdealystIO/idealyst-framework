@@ -35,7 +35,6 @@ const RadioButton: React.FC<RadioButtonProps> = ({
     size,
     checked,
     disabled,
-    intent,
   });
 
   const containerProps = getWebProps([radioButtonStyles.container, style]);
@@ -45,6 +44,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
 
   return (
     <button
+      {...containerProps}
       onClick={handleClick}
       disabled={disabled}
       data-testid={testID}
@@ -52,7 +52,6 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       aria-checked={checked}
       aria-disabled={disabled}
       style={{
-        ...containerProps.style,
         background: 'none',
         border: 'none',
         padding: 0,
@@ -63,7 +62,6 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       {...containerProps}
     >
       <div {...radioProps} style={{
-        ...radioProps.style,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -72,7 +70,6 @@ const RadioButton: React.FC<RadioButtonProps> = ({
         backfaceVisibility: 'hidden',
       }}>
         {checked && <div {...dotProps} style={{
-          ...dotProps.style,
           WebkitFontSmoothing: 'antialiased',
           MozOsxFontSmoothing: 'grayscale',
           backfaceVisibility: 'hidden',

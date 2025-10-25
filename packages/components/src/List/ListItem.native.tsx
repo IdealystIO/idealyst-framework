@@ -1,11 +1,11 @@
-import React, { isValidElement, forwardRef } from 'react';
+import React, { isValidElement, forwardRef, ComponentRef } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 import { useListContext } from './ListContext';
 
-const ListItem = forwardRef<View | TouchableOpacity, ListItemProps>(({
+const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof TouchableOpacity>, ListItemProps>(({
   id,
   label,
   children,
@@ -25,12 +25,11 @@ const ListItem = forwardRef<View | TouchableOpacity, ListItemProps>(({
 
   // Use explicit size prop, fallback to context size, then default
   const effectiveSize = size ?? listContext.size ?? 'md';
-  const effectiveVariant = listContext.variant ?? 'default';
+  const effectiveVariant = listContext.type ?? 'default';
 
-  // Apply variants
+  // Apply types
   listStyles.useVariants({
     size: effectiveSize,
-    variant: effectiveVariant,
     active,
     selected,
     disabled,

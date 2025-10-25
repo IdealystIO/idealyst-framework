@@ -71,8 +71,6 @@ const Skeleton = forwardRef<View, SkeletonProps>(({
   });
 
   const customStyles = {
-    width: typeof width === 'number' ? width : width,
-    height: typeof height === 'number' ? height : height,
     ...(shape === 'rounded' && borderRadius ? { borderRadius } : {}),
     ...(shape === 'circle' ? { aspectRatio: 1 } : {}),
   };

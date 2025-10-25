@@ -19,7 +19,7 @@ const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
   // Apply variants using Unistyles 3.0 pattern
   if (intent) {
     svgImageStyles.useVariants({
-      intent: intent as 'primary' | 'success' | 'error' | 'warning' | 'neutral',
+      intent,
     });
   }
 
@@ -30,10 +30,10 @@ const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
   // Handle React components (imported SVG components)
   if (typeof source === 'function') {
     const SvgComponent = source;
-    const componentContainerProps = getWebProps([svgImageStyles.container, style]);
+    const componentContainerProps = getWebProps([svgImageStyles.container, style as any]);
     const mergedRefForComponent = useMergeRefs(ref, componentContainerProps.ref);
     return (
-      <div {...componentContainerProps} ref={mergedRefForComponent} {...props} data-testid={testID}>
+      <div {...componentContainerProps} ref={mergedRefForComponent} {...(props as any)} data-testid={testID}>
         <SvgComponent
           width={finalWidth || 24}
           height={finalHeight || 24}
@@ -50,16 +50,12 @@ const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
   // Create the style array
   const containerStyleArray = [
     svgImageStyles.container,
-    style,
-  ];
-
-  const imageStyleArray = [
-    svgImageStyles.image,
+    style as any,
   ];
 
   // Use getWebProps to generate className and ref for web
   const containerWebProps = getWebProps(containerStyleArray);
-  const imageWebProps = getWebProps(imageStyleArray);
+  const imageWebProps = getWebProps(svgImageStyles.image);
 
   // Apply custom color if provided
   // Convert React Native resize modes to CSS object-fit values
@@ -84,7 +80,7 @@ const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
   const mergedRef = useMergeRefs(ref, containerWebProps.ref);
 
   return (
-    <div {...containerWebProps} ref={mergedRef} {...props} data-testid={testID}>
+    <div {...containerWebProps} ref={mergedRef} {...(props as any)} data-testid={testID}>
       <img
         {...imageWebProps}
         src={sourceUrl}

@@ -6,7 +6,7 @@ import type { TableProps, TableColumn } from './types';
 function TableInner<T = any>({
   columns,
   data,
-  variant = 'default',
+  type = 'standard',
   size = 'md',
   stickyHeader = false,
   onRowPress,
@@ -15,7 +15,7 @@ function TableInner<T = any>({
 }: TableProps<T>, ref: React.Ref<ScrollView>) {
   // Apply variants
   tableStyles.useVariants({
-    variant,
+    type,
     size,
   });
 
@@ -46,7 +46,7 @@ function TableInner<T = any>({
               tableStyles.useVariants({
                 size,
                 align: column.align || 'left',
-                variant,
+                type,
               });
 
               return (
@@ -70,7 +70,7 @@ function TableInner<T = any>({
         <View style={tableStyles.tbody}>
           {data.map((row, rowIndex) => {
             tableStyles.useVariants({
-              variant,
+              type,
               clickable: isClickable,
             });
 
@@ -88,7 +88,7 @@ function TableInner<T = any>({
                     tableStyles.useVariants({
                       size,
                       align: column.align || 'left',
-                      variant,
+                      type,
                     });
 
                     return (

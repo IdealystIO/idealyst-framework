@@ -60,8 +60,8 @@ export const TableExamples: React.FC = () => {
       width: '100px',
       render: (status: string) => (
         <Badge
-          variant="filled"
-          color={status === 'active' ? 'success' : 'neutral'}
+          type="filled"
+          color={status === 'active' ? 'green' : 'gray'}
         >
           {status}
         </Badge>
@@ -97,8 +97,8 @@ export const TableExamples: React.FC = () => {
       align: 'center',
       render: (stock: number) => (
         <Badge
-          variant="filled"
-          color={stock > 50 ? 'success' : stock > 20 ? 'warning' : 'error'}
+          type="filled"
+          color={stock > 50 ? 'green' : stock > 20 ? 'yellow' : 'red'}
         >
           {stock}
         </Badge>
@@ -123,10 +123,10 @@ export const TableExamples: React.FC = () => {
       width: '200px',
       render: (_, user) => (
         <View style={{ flexDirection: 'row', gap: 8 }}>
-          <Button size="sm" variant="outlined" onPress={() => console.log('Edit', user.id)}>
+          <Button size="sm" type="outlined" onPress={() => console.log('Edit', user.id)}>
             Edit
           </Button>
-          <Button size="sm" variant="outlined" intent="error" onPress={() => console.log('Delete', user.id)}>
+          <Button size="sm" type="outlined" intent="error" onPress={() => console.log('Delete', user.id)}>
             Delete
           </Button>
         </View>
@@ -152,7 +152,7 @@ export const TableExamples: React.FC = () => {
             <Table
               columns={userColumns}
               data={users}
-              variant="default"
+              type="standard"
             />
           </View>
           <View spacing="xs">
@@ -160,7 +160,7 @@ export const TableExamples: React.FC = () => {
             <Table
               columns={userColumns}
               data={users}
-              variant="bordered"
+              type="bordered"
             />
           </View>
           <View spacing="xs">
@@ -168,7 +168,7 @@ export const TableExamples: React.FC = () => {
             <Table
               columns={userColumns}
               data={users}
-              variant="striped"
+              type="striped"
             />
           </View>
         </View>
@@ -183,7 +183,7 @@ export const TableExamples: React.FC = () => {
               columns={userColumns}
               data={users.slice(0, 2)}
               size="sm"
-              variant="bordered"
+              type="bordered"
             />
           </View>
           <View spacing="xs">
@@ -192,7 +192,7 @@ export const TableExamples: React.FC = () => {
               columns={userColumns}
               data={users.slice(0, 2)}
               size="md"
-              variant="bordered"
+              type="bordered"
             />
           </View>
           <View spacing="xs">
@@ -201,7 +201,7 @@ export const TableExamples: React.FC = () => {
               columns={userColumns}
               data={users.slice(0, 2)}
               size="lg"
-              variant="bordered"
+              type="bordered"
             />
           </View>
         </View>
@@ -209,7 +209,7 @@ export const TableExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Custom Rendering</Text>
-        <Table columns={productColumns} data={products} variant="striped" />
+        <Table columns={productColumns} data={products} type="striped" />
       </View>
 
       <View spacing="md">
@@ -217,7 +217,7 @@ export const TableExamples: React.FC = () => {
         <Table
           columns={userColumns}
           data={users}
-          variant="bordered"
+          type="bordered"
           onRowPress={(user) => console.log('Clicked user:', user)}
         />
         <Text size="sm" color="secondary">
@@ -230,7 +230,7 @@ export const TableExamples: React.FC = () => {
         <Table
           columns={actionColumns}
           data={users}
-          variant="bordered"
+          type="bordered"
         />
       </View>
 
@@ -243,7 +243,7 @@ export const TableExamples: React.FC = () => {
             { key: 'price', title: 'Price', dataIndex: 'price', align: 'right', width: '120px', render: (price: number) => `$${price.toFixed(2)}` },
           ]}
           data={products.slice(0, 3)}
-          variant="bordered"
+          type="bordered"
         />
       </View>
 
@@ -257,7 +257,7 @@ export const TableExamples: React.FC = () => {
             { key: 'role', title: 'Role', dataIndex: 'role', width: '120px' },
           ]}
           data={users}
-          variant="bordered"
+          type="bordered"
         />
       </View>
 
@@ -266,7 +266,7 @@ export const TableExamples: React.FC = () => {
         <Table
           columns={userColumns}
           data={[]}
-          variant="bordered"
+          type="bordered"
         />
         <Text size="sm" color="secondary">
           No data to display

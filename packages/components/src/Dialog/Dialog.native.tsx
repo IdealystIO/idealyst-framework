@@ -10,7 +10,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   title,
   children,
   size = 'md',
-  variant = 'default',
+  type = 'standard',
   showCloseButton = true,
   closeOnBackdropClick = true,
   animationType = 'fade',
@@ -78,7 +78,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   // Apply variants
   dialogStyles.useVariants({
     size,
-    variant,
+    type,
   });
 
   const backdropAnimatedStyle = useAnimatedStyle(() => {

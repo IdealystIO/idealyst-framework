@@ -40,7 +40,6 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   // Apply variants
   checkboxStyles.useVariants({
     size,
-    intent,
     type: variant as any,
     checked: internalChecked,
     disabled,
@@ -49,7 +48,7 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   });
 
   // Create style arrays
-  const wrapperStyleArray = [checkboxStyles.wrapper, style];
+  const wrapperStyleArray = [checkboxStyles.wrapper, style as any];
   const containerStyleArray = [checkboxStyles.container];
   const checkboxStyleArray = [checkboxStyles.checkbox({ intent })];
   const labelStyleArray = [checkboxStyles.label];

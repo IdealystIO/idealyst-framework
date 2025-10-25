@@ -1,9 +1,9 @@
+import { Text } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, TextStyle } from 'react-native';
-import type { DisplayColorVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type TextColorVariant = DisplayColorVariant;
+export type TextColorVariant = Text;
 export type TextSizeVariant = 'sm' | 'md' | 'lg' | 'xl';  // Using sm/md/lg/xl for consistency
 export type TextWeightVariant = 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
 export type TextAlignVariant = 'left' | 'center' | 'right';

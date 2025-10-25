@@ -122,23 +122,18 @@ export const InputExamples = () => {
         <View spacing="sm" style={{ gap: 10 }}>
           <Input
             leftIcon="magnify"
-            placeholder="Default variant"
-            variant="default"
-          />
-          <Input
-            leftIcon="magnify"
             placeholder="Outlined variant"
-            variant="outlined"
+            type="outlined"
           />
           <Input
             leftIcon="magnify"
             placeholder="Filled variant"
-            variant="filled"
+            type="filled"
           />
           <Input
             leftIcon="magnify"
             placeholder="Bare variant"
-            variant="bare"
+            type="bare"
           />
         </View>
       </View>

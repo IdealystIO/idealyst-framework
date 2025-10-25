@@ -47,12 +47,12 @@ export const TabBarExamples: React.FC = () => {
         <Text size="lg" weight="semibold">Variants</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="sm" weight="medium">Default</Text>
+            <Text size="sm" weight="medium">Standard</Text>
             <TabBar
               items={variantTabs}
               value={variantTab}
               onChange={setVariantTab}
-              variant="default"
+              type="standard"
             />
           </View>
           <View spacing="xs">
@@ -61,7 +61,7 @@ export const TabBarExamples: React.FC = () => {
               items={variantTabs}
               value={variantTab}
               onChange={setVariantTab}
-              variant="pills"
+              type="pills"
               pillMode="light"
             />
           </View>
@@ -71,7 +71,7 @@ export const TabBarExamples: React.FC = () => {
               items={variantTabs}
               value={variantTab}
               onChange={setVariantTab}
-              variant="underline"
+              type="underline"
             />
           </View>
         </View>
@@ -110,7 +110,7 @@ export const TabBarExamples: React.FC = () => {
               items={basicTabs}
               value={pillTab}
               onChange={setPillTab}
-              variant="pills"
+              type="pills"
               pillMode="light"
             />
           </View>
@@ -120,7 +120,7 @@ export const TabBarExamples: React.FC = () => {
               items={basicTabs}
               value={pillTab}
               onChange={setPillTab}
-              variant="pills"
+              type="pills"
               pillMode="dark"
             />
           </View>

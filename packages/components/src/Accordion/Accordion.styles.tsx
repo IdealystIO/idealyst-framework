@@ -181,7 +181,7 @@ export const accordionStyles = StyleSheet.create((theme: Theme) => {
                     },
                 },
                 isLast: { true: {}, false: {} },
-            },
+            } as const,
             _web: {
                 border: 'none' as const,
                 outline: 'none' as const,

@@ -33,7 +33,7 @@ function createAvatarShapeVariants(theme: Theme) {
         square: {
             borderRadius: 8,
         },
-    };
+    } as const;
 }
 
 function createFallbackSizeVariants(theme: Theme) {

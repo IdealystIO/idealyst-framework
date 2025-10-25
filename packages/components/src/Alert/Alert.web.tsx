@@ -21,7 +21,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   message,
   children,
   intent = 'neutral',
-  variant = 'soft',
+  type = 'soft',
   icon,
   showIcon = true,
   dismissible = false,
@@ -32,7 +32,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
 }, ref) => {
   // Apply variants to stylesheet
   alertStyles.useVariants({
-    type: variant,
+    type,
   });
 
   const containerProps = getWebProps([alertStyles.container, style]);

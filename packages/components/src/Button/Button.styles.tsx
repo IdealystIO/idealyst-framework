@@ -213,7 +213,7 @@ export const buttonStyles = StyleSheet.create((theme: Theme) => {
                         },
                     } },
                 },
-            },
+            } as const,
             compoundVariants: createButtonCompoundVariants(theme),
         },
         icon: {
@@ -252,6 +252,6 @@ export const buttonStyles = StyleSheet.create((theme: Theme) => {
                 },
             },
             compoundVariants: createIconCompoundVariants(theme), // Text uses same colors as icons
-        },
+        } as const,
     };
 });

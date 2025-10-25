@@ -40,7 +40,6 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
   }, [disabled, onPress]);
 
   const webStyle = {
-    ...style,
     cursor: disabled ? 'default' : 'pointer',
     outline: 'none',
     userSelect: 'none' as const,
@@ -54,7 +53,7 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
       ref={ref}
       role={accessibilityRole}
       tabIndex={disabled ? -1 : 0}
-      style={webStyle}
+      style={[webStyle, style] as any}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp} // Handle mouse leave as press out

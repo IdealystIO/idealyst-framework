@@ -4,7 +4,6 @@ import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type TooltipSize = Size;
 type TooltipIntent = Intent;
-type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 type TooltipTooltipVariants = {
     size: TooltipSize;
@@ -50,7 +49,7 @@ export const tooltipStyles = StyleSheet.create((theme: Theme) => {
             display: 'inline-flex',
             width: 'fit-content',
         },
-    },
+    } as const,
     tooltip: {
         borderRadius: 8,
         maxWidth: 300,
@@ -69,6 +68,6 @@ export const tooltipStyles = StyleSheet.create((theme: Theme) => {
             width: 'max-content',
             wordWrap: 'break-word',
         },
-    },
-  };
+    } as const,
+  } as const;
 });

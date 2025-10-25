@@ -26,7 +26,6 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
     intent,
     selected: selectable ? selected : false,
     disabled,
-    selectable,
   });
 
   const handlePress = () => {

@@ -21,7 +21,6 @@ const View = forwardRef<RNView, ViewProps>(({
 }, ref) => {
   viewStyles.useVariants({
     spacing,
-    margin: marginVariant,
     background,
     radius,
     border,

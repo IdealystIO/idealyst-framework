@@ -57,12 +57,12 @@ export const PopoverExamples = () => {
             {placements.map((placement) => (
               <View key={placement.id}>
                 <View
-                  ref={(ref) => (placementButtonRefs.current[placement.id] = ref)}
+                  ref={(ref) => (placementButtonRefs.current[placement.id] = ref) as any}
                   style={{ display: 'inline-block' }}
                 >
                   <Button
                     size="sm"
-                    variant="outlined"
+                    type="outlined"
                     onPress={() => setPlacementOpen(placement.id)}
                   >
                     {placement.label}
@@ -96,7 +96,7 @@ export const PopoverExamples = () => {
           <Text size="md" weight="semibold">With Arrow</Text>
           <Button
             ref={arrowButtonRef}
-            variant="contained"
+            type="contained"
             intent="success"
             onPress={() => setArrowOpen(true)}
           >

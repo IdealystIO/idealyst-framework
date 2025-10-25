@@ -106,7 +106,7 @@ const Accordion: React.FC<AccordionProps> = ({
     size,
   });
 
-  const containerProps = getWebProps([accordionStyles.container, style]);
+  const containerProps = getWebProps([accordionStyles.container, style as any]);
 
   const toggleItem = (itemId: string, disabled?: boolean) => {
     if (disabled) return;

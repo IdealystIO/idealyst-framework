@@ -10,7 +10,7 @@ const ListSection: React.FC<ListSectionProps> = ({
   style,
   testID,
 }) => {
-  const sectionProps = getWebProps([listStyles.section, style]);
+  const sectionProps = getWebProps([listStyles.section, style as any]);
   const titleProps = getWebProps([listStyles.sectionTitle]);
   const contentProps = getWebProps([listStyles.sectionContent]);
 

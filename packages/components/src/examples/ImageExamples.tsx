@@ -151,7 +151,7 @@ export const ImageExamples: React.FC = () => {
           height={300}
           fallback={
             <View style={{ padding: 20 }}>
-              <Text color="error">❌ Failed to load image</Text>
+              <Text color="primary">❌ Failed to load image</Text>
             </View>
           }
         />

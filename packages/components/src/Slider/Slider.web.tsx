@@ -35,11 +35,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   // Apply variants
   sliderStyles.useVariants({
     size,
-    intent,
     disabled,
   });
 
-  const containerProps = getWebProps([sliderStyles.container, style]);
+  const containerProps = getWebProps([sliderStyles.container, style as any]);
   const wrapperProps = getWebProps([sliderStyles.sliderWrapper]);
   const trackProps = getWebProps([sliderStyles.track]);
   const thumbIconProps = getWebProps([sliderStyles.thumbIcon({ intent })]);

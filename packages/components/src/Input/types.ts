@@ -77,7 +77,7 @@ export interface InputProps {
   /**
    * Style variant of the input
    */
-  type: InputType;
+  type?: InputType;
 
   /**
    * The intent/color scheme of the input (for focus states, validation, etc.)

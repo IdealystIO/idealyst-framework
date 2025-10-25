@@ -49,12 +49,6 @@ export const ViewExamples = () => {
           <View background="tertiary" spacing="sm" radius="sm">
             <Text size="sm" color="tertiary">Tertiary</Text>
           </View>
-          <View background="elevated" spacing="sm" radius="sm" border="thin">
-            <Text size="sm" color="primary">Elevated</Text>
-          </View>
-          <View background="overlay" spacing="sm" radius="sm">
-            <Text size="sm" color="inverse">Overlay</Text>
-          </View>
           <View background="inverse" spacing="sm" radius="sm">
             <Text size="sm" color="inverse">Inverse (of primary)</Text>
           </View>

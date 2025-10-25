@@ -39,9 +39,9 @@ export const ThemeExtensionExamples = () => {
            </View>
            
            <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
-             <Button intent={"accent" as any} variant="outlined">Accent Outlined</Button>
-             <Button intent={"feature" as any} variant="outlined">Feature Outlined</Button>
-             <Button intent={"highlight" as any} variant="outlined">Highlight Outlined</Button>
+             <Button intent={"accent" as any} type="outlined">Accent Outlined</Button>
+             <Button intent={"feature" as any} type="outlined">Feature Outlined</Button>
+             <Button intent={"highlight" as any} type="outlined">Highlight Outlined</Button>
            </View>
          </View>
 

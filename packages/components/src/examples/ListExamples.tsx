@@ -13,7 +13,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Basic List</Text>
-        <List variant="divided">
+        <List type="divided">
           <ListItem label="Item 1" />
           <ListItem label="Item 2" />
           <ListItem label="Item 3" />
@@ -25,7 +25,7 @@ export const ListExamples: React.FC = () => {
         <View spacing="sm">
           <View spacing="xs">
             <Text size="sm" weight="medium">Default</Text>
-            <List variant="default">
+            <List type="default">
               <ListItem label="Item 1" />
               <ListItem label="Item 2" />
               <ListItem label="Item 3" />
@@ -33,7 +33,7 @@ export const ListExamples: React.FC = () => {
           </View>
           <View spacing="xs">
             <Text size="sm" weight="medium">Bordered</Text>
-            <List variant="bordered">
+            <List type="bordered">
               <ListItem label="Item 1" />
               <ListItem label="Item 2" />
               <ListItem label="Item 3" />
@@ -41,7 +41,7 @@ export const ListExamples: React.FC = () => {
           </View>
           <View spacing="xs">
             <Text size="sm" weight="medium">Divided</Text>
-            <List variant="divided">
+            <List type="divided">
               <ListItem label="Item 1" />
               <ListItem label="Item 2" />
               <ListItem label="Item 3" />
@@ -53,15 +53,15 @@ export const ListExamples: React.FC = () => {
       <View spacing="md">
         <Text size="lg" weight="semibold">Sizes</Text>
         <View spacing="sm">
-          <List variant="bordered" size="sm">
+          <List type="bordered" size="sm">
             <ListItem label="Small Item" />
             <ListItem label="Small Item" />
           </List>
-          <List variant="bordered" size="md">
+          <List type="bordered" size="md">
             <ListItem label="Medium Item" />
             <ListItem label="Medium Item" />
           </List>
-          <List variant="bordered" size="lg">
+          <List type="bordered" size="lg">
             <ListItem label="Large Item" />
             <ListItem label="Large Item" />
           </List>
@@ -70,7 +70,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Clickable List</Text>
-        <List variant="bordered">
+        <List type="bordered">
           <ListItem
             label="Home"
             selected={selectedItem === 'home'}
@@ -94,7 +94,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">With Leading Elements</Text>
-        <List variant="divided">
+        <List type="divided">
           <ListItem
             label="Dashboard"
             leading="home"
@@ -115,16 +115,16 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">With Trailing Elements</Text>
-        <List variant="bordered">
+        <List type="bordered">
           <ListItem
             label="Notifications"
             leading="bell"
-            trailing={<Badge variant="filled" color="red">3</Badge>}
+            trailing={<Badge type="filled" color="red">3</Badge>}
           />
           <ListItem
             label="Messages"
             leading="email"
-            trailing={<Badge variant="filled" color="blue">12</Badge>}
+            trailing={<Badge type="filled" color="blue">12</Badge>}
           />
           <ListItem
             label="Updates"
@@ -136,7 +136,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Navigation Sidebar</Text>
-        <List variant="bordered">
+        <List type="bordered">
           <ListItem
             label="Dashboard"
             leading="view-dashboard"
@@ -166,7 +166,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">With Sections</Text>
-        <List variant="divided">
+        <List type="divided">
           <ListSection title="Main">
             <ListItem
               label="Dashboard"
@@ -208,7 +208,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Indented Items</Text>
-        <List variant="bordered">
+        <List type="bordered">
           <ListItem label="Parent Item 1" />
           <ListItem label="Child Item 1.1" indent={1} />
           <ListItem label="Child Item 1.2" indent={1} />
@@ -220,7 +220,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Disabled Items</Text>
-        <List variant="bordered">
+        <List type="bordered">
           <ListItem
             label="Enabled Item"
             onPress={() => console.log('Clicked')}
@@ -239,7 +239,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Rich Content</Text>
-        <List variant="bordered">
+        <List type="bordered">
           <ListItem
             leading="account-circle"
             trailing={<Text size="sm" color="secondary">Admin</Text>}
@@ -263,7 +263,7 @@ export const ListExamples: React.FC = () => {
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Active States</Text>
-        <List variant="bordered">
+        <List type="bordered">
           <ListItem
             label="Normal Item"
             onPress={() => console.log('Normal')}

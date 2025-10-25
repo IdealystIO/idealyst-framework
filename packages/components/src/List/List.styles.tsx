@@ -1,35 +1,17 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, CompoundVariants, Size} from '@idealyst/theme';
+import { Theme, CompoundVariants } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-
-type ListSize = Size;
-type ListType = 'default' | 'bordered' | 'divided';
+import { ListSizeVariant, ListType } from './types';
 
 type ListVariants = {
-    size: ListSize;
     type: ListType;
+    size: ListSizeVariant;
     scrollable: boolean;
     active: boolean;
     selected: boolean;
     disabled: boolean;
     clickable: boolean;
-}
-
-export type ExpandedListStyles = StylesheetStyles<keyof ListVariants>;
-
-export type ListStylesheet = {
-    container: ExpandedListStyles;
-    item: ExpandedListStyles;
-    itemContent: ExpandedListStyles;
-    leading: ExpandedListStyles;
-    labelContainer: ExpandedListStyles;
-    label: ExpandedListStyles;
-    trailing: ExpandedListStyles;
-    trailingIcon: ExpandedListStyles;
-    section: ExpandedListStyles;
-    sectionTitle: ExpandedListStyles;
-    sectionContent: ExpandedListStyles;
-}
+};
 
 /**
  * Create type variants for container
@@ -42,11 +24,10 @@ function createContainerTypeVariants(theme: Theme) {
         bordered: {
             backgroundColor: theme.colors.surface.primary,
             borderWidth: 1,
-            borderStyle: 'solid',
             borderColor: theme.colors.border.primary,
             borderRadius: 8,
-            overflow: 'hidden',
             _web: {
+                overflow: 'hidden',
                 border: `1px solid ${theme.colors.border.primary}`,
             },
         },
@@ -98,8 +79,6 @@ function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof ListVa
 }
 
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const listStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: {
@@ -110,9 +89,8 @@ export const listStyles = StyleSheet.create((theme: Theme) => {
                 type: createContainerTypeVariants(theme),
                 scrollable: {
                     true: {
-                        overflow: 'auto',
                         _web: {
-                            overflowY: 'auto',
+                            overflow: 'auto',
                         },
                     },
                     false: {},
@@ -177,7 +155,7 @@ export const listStyles = StyleSheet.create((theme: Theme) => {
                         },
                     },
                 },
-            },
+            } as const,
             compoundVariants: createItemCompoundVariants(theme),
             _web: {
                 border: 'none',
@@ -189,7 +167,7 @@ export const listStyles = StyleSheet.create((theme: Theme) => {
                     borderRadius: 4,
                 },
             },
-        },
+        } as const,
         itemContent: {
             display: 'flex',
             flexDirection: 'row',
@@ -208,25 +186,25 @@ export const listStyles = StyleSheet.create((theme: Theme) => {
                     width: size.iconSize,
                     height: size.iconSize,
                 })),
-            },
-        },
+            } as const,
+        } as const,
         labelContainer: {
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
         },
         label: {
-        fontWeight: '500',
-        color: theme.colors.text.primary,
-        variants: {
-            size: buildSizeVariants(theme, 'list', (size) => ({
-                fontSize: size.labelFontSize,
-                lineHeight: size.labelLineHeight,
-            })),
-            disabled: {
-                true: {
-                    color: theme.colors.text.secondary,
-                },
+            fontWeight: '500',
+            color: theme.colors.text.primary,
+            variants: {
+                size: buildSizeVariants(theme, 'list', (size) => ({
+                    fontSize: size.labelFontSize,
+                    lineHeight: size.labelLineHeight,
+                })),
+                disabled: {
+                    true: {
+                        color: theme.colors.text.secondary,
+                    },
                 false: {},
             },
             selected: {
@@ -237,7 +215,7 @@ export const listStyles = StyleSheet.create((theme: Theme) => {
                 false: {},
             },
         },
-    },
+        },
         trailing: {
             display: 'flex',
             alignItems: 'center',

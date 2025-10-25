@@ -21,7 +21,6 @@ const Pressable = forwardRef<View, PressableProps>(({
       disabled={disabled}
       testID={testID}
       accessibilityLabel={accessibilityLabel}
-      accessibilityRole={accessibilityRole}
     >
       <View ref={ref} style={style}>
         {children}

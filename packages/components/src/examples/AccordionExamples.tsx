@@ -77,16 +77,16 @@ export const AccordionExamples: React.FC = () => {
         <Text size="lg" weight="semibold">Variants</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="sm" weight="medium">Default</Text>
-            <Accordion items={basicItems} variant="default" />
+            <Text size="sm" weight="medium">Standard</Text>
+            <Accordion items={basicItems} type="standard" />
           </View>
           <View spacing="xs">
             <Text size="sm" weight="medium">Separated</Text>
-            <Accordion items={basicItems} variant="separated" />
+            <Accordion items={basicItems} type="separated" />
           </View>
           <View spacing="xs">
             <Text size="sm" weight="medium">Bordered</Text>
-            <Accordion items={basicItems} variant="bordered" />
+            <Accordion items={basicItems} type="bordered" />
           </View>
         </View>
       </View>
@@ -96,27 +96,27 @@ export const AccordionExamples: React.FC = () => {
         <View spacing="sm">
           <View spacing="xs">
             <Text size="sm" weight="medium">Small</Text>
-            <Accordion items={basicItems} size="sm" variant="separated" />
+            <Accordion items={basicItems} size="sm" type="separated" />
           </View>
           <View spacing="xs">
             <Text size="sm" weight="medium">Medium (default)</Text>
-            <Accordion items={basicItems} size="md" variant="separated" />
+            <Accordion items={basicItems} size="md" type="separated" />
           </View>
           <View spacing="xs">
             <Text size="sm" weight="medium">Large</Text>
-            <Accordion items={basicItems} size="lg" variant="separated" />
+            <Accordion items={basicItems} size="lg" type="separated" />
           </View>
         </View>
       </View>
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Rich Content</Text>
-        <Accordion items={richContentItems} variant="bordered" />
+        <Accordion items={richContentItems} type="bordered" />
       </View>
 
       <View spacing="md">
         <Text size="lg" weight="semibold">Disabled Items</Text>
-        <Accordion items={disabledItems} variant="separated" />
+        <Accordion items={disabledItems} type="separated" />
       </View>
     </View>
     </Screen>

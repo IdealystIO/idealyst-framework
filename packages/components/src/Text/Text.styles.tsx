@@ -1,16 +1,13 @@
 import { StyleSheet } from "react-native-unistyles";
-import { Theme, StylesheetStyles, Size, Color } from '@idealyst/theme';
+import { Theme, StylesheetStyles } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-
-type TextSize = Size;
-type TextWeight = 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
-type TextAlign = 'left' | 'center' | 'right';
+import { TextAlignVariant, TextColorVariant, TextSizeVariant, TextWeightVariant } from "./types";
 
 type TextVariants = {
-    size: TextSize;
-    weight: TextWeight;
-    align: TextAlign;
-    color: Color;
+    size: TextSizeVariant;
+    weight: TextWeightVariant;
+    align: TextAlignVariant;
+    color: TextColorVariant;
 }
 
 export type ExpandedTextStyles = StylesheetStyles<keyof TextVariants>;
@@ -50,24 +47,11 @@ function createWeightVariants() {
         bold: {
             fontWeight: '700',
         },
-    };
+    } as const;
 }
 
-/**
- * Create color variants for text
- */
-function createColorVariants(theme: Theme) {
-    const variants: Record<Color, any> = {} as any;
-    for (const color in theme.colors) {
-        variants[color as Color] = {
-            color: theme.colors[color as Color],
-        };
-    }
-    return variants;
-}
-
-function createTextStyles(theme: Theme): ExpandedTextStyles {
-    return ({ color }: TextVariants) => {
+function createTextStyles(theme: Theme) {
+    return ({ color }: Partial<TextVariants>) => {
         const colorValue = theme.colors.text[color] || theme.colors.text.primary;
         return {
             margin: 0,
@@ -87,19 +71,19 @@ function createTextStyles(theme: Theme): ExpandedTextStyles {
                         textAlign: 'right',
                     },
                 },
-            },
+            } as const,
             _web: {
                 fontFamily: 'inherit',
                 lineHeight: 'inherit',
             },
-        };
+        } as const;
     }
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const textStyles = StyleSheet.create((theme: Theme): TextStylesheet => {
+export const textStyles = StyleSheet.create((theme: Theme) => {
   return {
         text: createTextStyles(theme),
-    }
+    } as const
 });

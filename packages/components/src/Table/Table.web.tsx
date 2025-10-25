@@ -6,7 +6,7 @@ import type { TableProps, TableColumn } from './types';
 function Table<T = any>({
   columns,
   data,
-  variant = 'default',
+  type = 'standard',
   size = 'md',
   stickyHeader = false,
   onRowPress,
@@ -15,11 +15,11 @@ function Table<T = any>({
 }: TableProps<T>) {
   // Apply variants
   tableStyles.useVariants({
-    variant,
+    type,
     size,
   });
 
-  const containerProps = getWebProps([tableStyles.container, style]);
+  const containerProps = getWebProps([tableStyles.container, style as any]);
   const tableProps = getWebProps([tableStyles.table]);
 
   // Helper to get cell value
@@ -42,7 +42,7 @@ function Table<T = any>({
               tableStyles.useVariants({
                 size,
                 align: column.align || 'left',
-                variant,
+                type,
               });
 
               const headerCellProps = getWebProps([tableStyles.headerCell]);
@@ -52,7 +52,6 @@ function Table<T = any>({
                   key={column.key}
                   {...headerCellProps}
                   style={{
-                    ...headerCellProps.style,
                     width: column.width,
                   }}
                 >
@@ -65,7 +64,9 @@ function Table<T = any>({
         <tbody {...getWebProps([tableStyles.tbody])}>
           {data.map((row, rowIndex) => {
             tableStyles.useVariants({
-              variant,
+              size,
+              align: 'left',
+              type,
               clickable: isClickable,
             });
 
@@ -82,7 +83,7 @@ function Table<T = any>({
                   tableStyles.useVariants({
                     size,
                     align: column.align || 'left',
-                    variant,
+                    type,
                   });
 
                   const cellProps = getWebProps([tableStyles.cell]);
@@ -92,7 +93,6 @@ function Table<T = any>({
                       key={column.key}
                       {...cellProps}
                       style={{
-                        ...cellProps.style,
                         width: column.width,
                       }}
                     >

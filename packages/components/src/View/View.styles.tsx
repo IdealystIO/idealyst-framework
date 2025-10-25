@@ -1,20 +1,13 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles} from '@idealyst/theme';
-import { Surface } from '@idealyst/theme/src/theme/surface';
+import { Theme, StylesheetStyles, Surface, ViewSizeValue} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-
-type ViewSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type ViewMargin = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type ViewBackground = Surface | 'transparent';
-type ViewRadius = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type ViewBorder = 'none' | 'thin' | 'thick';
+import { ViewBackgroundVariant, ViewBorderVariant, ViewRadiusVariant, ViewSpacingVariant } from './types';
 
 type ViewVariants = {
-    spacing: ViewSpacing;
-    margin: ViewMargin;
-    background: ViewBackground;
-    radius: ViewRadius;
-    border: ViewBorder;
+    spacing: ViewSpacingVariant;
+    background: ViewBackgroundVariant;
+    radius: ViewRadiusVariant;
+    border: ViewBorderVariant;
 }
 
 export type ExpandedViewStyles = StylesheetStyles<keyof ViewVariants>;
@@ -27,10 +20,17 @@ export type ViewStylesheet = {
  * Create spacing variants for view
  */
 function createSpacingVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'view', (size) => ({
+    const spacingVariants = buildSizeVariants(theme, 'view', (size) => ({
         padding: size.padding,
         gap: size.spacing,
     }));
+
+    spacingVariants['none'] = {
+        padding: 0,
+        gap: 0,
+    };
+
+    return spacingVariants as Record<ViewSpacingVariant, Partial<ExpandedViewStyles>>;
 }
 
 /**
@@ -64,7 +64,7 @@ function createRadiusVariants() {
         md: { borderRadius: 8 },
         lg: { borderRadius: 12 },
         xl: { borderRadius: 16 },
-    };
+    } as const;
 }
 
 /**
@@ -85,12 +85,12 @@ function createBorderVariants(theme: Theme) {
             borderStyle: 'solid',
             borderColor: theme.colors['gray.300'],
         },
-    };
+    } as const;
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const viewStyles = StyleSheet.create((theme: Theme): ViewStylesheet => {
+export const viewStyles = StyleSheet.create((theme: Theme) => {
   return {
     view: {
         display: 'flex',

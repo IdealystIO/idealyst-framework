@@ -17,7 +17,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   error = false,
   helperText,
   label,
-  variant = 'outlined',
+  type = 'outlined',
   intent = 'neutral',
   size = 'md',
   searchable = false,
@@ -47,7 +47,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
   // Apply styles with variants
   selectStyles.useVariants({
-    type: variant,
+    type,
     size,
     disabled,
     error,
@@ -129,7 +129,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   ]);
 
   const triggerWebProps = getWebProps([
-    selectStyles.trigger({ type: variant, intent }),
+    selectStyles.trigger({ type, intent }),
   ]);
 
   const handleClose = () => {

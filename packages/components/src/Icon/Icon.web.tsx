@@ -22,11 +22,9 @@ const Icon = forwardRef<HTMLDivElement, IconProps>((props: InternalIconProps, re
     ...restProps
   } = props;
 
-
   // Check if we have a path prop (from Babel plugin transformation)
   const { path } = restProps as { path?: string };
-  // @ts-expect-error - Dynamic style function, TS doesn't narrow union type correctly
-  const iconProps = getWebProps(iconStyles.icon({ intent, color}));
+  const iconProps = getWebProps(iconStyles.icon({ intent, color, size }));
 
   const mergedRef = useMergeRefs(ref, iconProps.ref);
 

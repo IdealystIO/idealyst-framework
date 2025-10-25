@@ -24,8 +24,8 @@ const Tooltip: React.FC<TooltipProps> = ({
     intent,
   });
 
-  const containerProps = getWebProps([tooltipStyles.container, style]);
-  const tooltipContentProps = getWebProps([tooltipStyles.tooltip]);
+  const containerProps = getWebProps([tooltipStyles.container, style as any]);
+  const tooltipContentProps = getWebProps(tooltipStyles.tooltip);
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) {

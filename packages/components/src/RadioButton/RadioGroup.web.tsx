@@ -27,7 +27,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
 
   const groupProps = getWebProps([
     radioButtonStyles.groupContainer,
-    style,
+    style as any,
   ]);
 
   return (
@@ -37,7 +37,6 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
         role="radiogroup"
         data-testid={testID}
         style={{
-          ...groupProps.style,
           display: 'flex',
         }}
       >

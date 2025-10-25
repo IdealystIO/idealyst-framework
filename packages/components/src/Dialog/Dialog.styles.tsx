@@ -44,7 +44,7 @@ function createContainerSizeVariants() {
             borderRadius: 0,
             maxHeight: '100%',
         },
-    };
+    } as const;
 }
 
 /**
@@ -52,7 +52,7 @@ function createContainerSizeVariants() {
  */
 function createContainerTypeVariants(theme: Theme) {
     return {
-        default: {},
+        standard: {},
         alert: {
             borderTopWidth: 4,
             borderTopColor: theme.colors.border.primary,
@@ -61,11 +61,11 @@ function createContainerTypeVariants(theme: Theme) {
             borderTopWidth: 4,
             borderTopColor: theme.colors.border.primary,
         },
-    };
+    } as const;
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const dialogStyles = StyleSheet.create((theme: Theme): DialogStylesheet => {
+export const dialogStyles = StyleSheet.create((theme: Theme) => {
     return {
         backdrop: {
             position: 'absolute',

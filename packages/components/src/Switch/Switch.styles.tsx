@@ -1,48 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-
-type SwitchSize = Size;
-type SwitchIntent = Intent;
-type LabelPosition = 'left' | 'right';
-
-type SwitchTrackVariants = {
-    size: SwitchSize;
-    checked: boolean;
-    intent: SwitchIntent;
-    disabled: boolean;
-}
-
-type SwitchThumbVariants = {
-    size: SwitchSize;
-    checked: boolean;
-}
-
-type ThumbIconVariants = {
-    size: SwitchSize;
-    checked: boolean;
-    intent: SwitchIntent;
-}
-
-type LabelVariants = {
-    disabled: boolean;
-    position: LabelPosition;
-}
-
-export type ExpandedSwitchTrackStyles = StylesheetStyles<keyof SwitchTrackVariants>;
-export type ExpandedSwitchThumbStyles = StylesheetStyles<keyof SwitchThumbVariants>;
-export type ExpandedThumbIconStyles = StylesheetStyles<keyof ThumbIconVariants>;
-export type ExpandedLabelStyles = StylesheetStyles<keyof LabelVariants>;
-export type ExpandedSwitchStyles = StylesheetStyles<never>;
-
-export type SwitchStylesheet = {
-    container: ExpandedSwitchStyles;
-    switchContainer: ExpandedSwitchStyles;
-    switchTrack: ExpandedSwitchTrackStyles;
-    switchThumb: ExpandedSwitchThumbStyles;
-    thumbIcon: ExpandedThumbIconStyles;
-    label: ExpandedLabelStyles;
-}
+import { SwitchIntentVariant, SwitchSizeVariant } from './types';
 
 function createTrackSizeVariants(theme: Theme) {
     return buildSizeVariants(theme, 'switch', (size) => ({
@@ -51,7 +10,7 @@ function createTrackSizeVariants(theme: Theme) {
     }));
 }
 
-function getTrackBackgroundColor(theme: Theme, checked: boolean, intent: SwitchIntent) {
+function getTrackBackgroundColor(theme: Theme, checked: boolean, intent: SwitchIntentVariant) {
     if (checked) {
         return theme.intents[intent].primary;
     }
@@ -66,7 +25,7 @@ function createThumbSizeVariants(theme: Theme) {
     }));
 }
 
-function getThumbTransform(theme: Theme, size: SwitchSize, checked: boolean) {
+function getThumbTransform(theme: Theme, size: SwitchSizeVariant, checked: boolean) {
     const sizeValue = theme.sizes.switch[size];
     const translateX = checked ? sizeValue.translateX : 0;
     return `translateY(-50%) translateX(${translateX}px)`;
@@ -79,15 +38,15 @@ function createThumbIconSizeVariants(theme: Theme) {
     }));
 }
 
-function getThumbIconColor(theme: Theme, checked: boolean, intent: SwitchIntent) {
+function getThumbIconColor(theme: Theme, checked: boolean, intent: SwitchIntentVariant) {
     if (checked) {
         return theme.intents[intent].primary;
     }
     return theme.colors.border.secondary;
 }
 
-function createSwitchTrackStyles(theme: Theme): ExpandedSwitchTrackStyles {
-    return ({ checked, intent, disabled }: { checked: boolean, intent: SwitchIntent, disabled: boolean }) => {
+function createSwitchTrackStyles(theme: Theme) {
+    return ({ checked, intent }: { checked: boolean, intent: SwitchIntentVariant }) => {
         return {
             borderRadius: 9999,
             position: 'relative',
@@ -114,16 +73,16 @@ function createSwitchTrackStyles(theme: Theme): ExpandedSwitchTrackStyles {
                         },
                     },
                 },
-            },
+            } as const,
             _web: {
                 transition: 'background-color 0.2s ease',
             },
-        };
+        } as const;
     }
 }
 
-function createSwitchThumbStyles(theme: Theme): ExpandedSwitchThumbStyles {
-    return ({ size, checked }: { size: SwitchSize, checked: boolean }) => {
+function createSwitchThumbStyles(theme: Theme) {
+    return ({ size, checked }: { size: SwitchSizeVariant, checked: boolean }) => {
         return {
             position: 'absolute',
             backgroundColor: theme.colors.surface.primary,
@@ -145,12 +104,12 @@ function createSwitchThumbStyles(theme: Theme): ExpandedSwitchThumbStyles {
                 transition: 'transform 0.2s ease',
                 transform: getThumbTransform(theme, size, checked),
             },
-        };
+        } as const;
     }
 }
 
-function createThumbIconStyles(theme: Theme): ExpandedThumbIconStyles {
-    return ({ checked, intent }: { checked: boolean, intent: SwitchIntent }) => {
+function createThumbIconStyles(theme: Theme) {
+    return ({ checked, intent }: { checked: boolean, intent: SwitchIntentVariant }) => {
         return {
             display: 'flex',
             alignItems: 'center',
@@ -159,13 +118,13 @@ function createThumbIconStyles(theme: Theme): ExpandedThumbIconStyles {
             variants: {
                 size: createThumbIconSizeVariants(theme),
             },
-        };
+        } as const;
     }
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const switchStyles = StyleSheet.create((theme: Theme): SwitchStylesheet => {
+export const switchStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: {
         flexDirection: 'row',
@@ -198,7 +157,7 @@ export const switchStyles = StyleSheet.create((theme: Theme): SwitchStylesheet =
                     marginLeft: 8,
                 },
             },
-        },
-    },
+        } as const,
+    } as const,
   };
 });

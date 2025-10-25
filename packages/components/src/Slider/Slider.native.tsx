@@ -1,5 +1,5 @@
 import React, { useState, useCallback, forwardRef } from 'react';
-import { View, Pressable } from 'react-native';
+import { View } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, runOnJS, withSpring } from 'react-native-reanimated';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -37,7 +37,6 @@ const Slider = forwardRef<View, SliderProps>(({
   
   sliderStyles.useVariants({
     size,
-    intent,
     disabled,
   });
 
@@ -131,7 +130,7 @@ const Slider = forwardRef<View, SliderProps>(({
         { translateX: translateX.value - thumbSize / 2 },
         { scale: scale.value },
       ],
-    };
+    } as any;
   });
 
   const filledTrackAnimatedStyle = useAnimatedStyle(() => {
@@ -162,7 +161,7 @@ const Slider = forwardRef<View, SliderProps>(({
   return (
     <View ref={ref} style={[sliderStyles.container, style]} testID={testID}>
       {showValue && (
-        <View style={sliderStyles.valueLabel}>
+        <View style={sliderStyles.valueLabel as any}>
           <Text>{value}</Text>
         </View>
       )}

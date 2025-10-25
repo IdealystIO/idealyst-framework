@@ -65,7 +65,7 @@ export const MenuExamples: React.FC = () => {
           open={basicMenuOpen}
           onOpenChange={setBasicMenuOpen}
         >
-          <Button variant="outlined">
+          <Button type="outlined">
             Open Menu
           </Button>
         </Menu>
@@ -79,7 +79,7 @@ export const MenuExamples: React.FC = () => {
           onOpenChange={setPlacementMenuOpen}
           placement="bottom-start"
         >
-          <Button variant="outlined">
+          <Button type="outlined">
             Bottom Start (default)
           </Button>
         </Menu>
@@ -92,7 +92,7 @@ export const MenuExamples: React.FC = () => {
           open={iconNameMenuOpen}
           onOpenChange={setIconNameMenuOpen}
         >
-          <Button variant="outlined">
+          <Button type="outlined">
             Menu with Icons
           </Button>
         </Menu>
@@ -105,7 +105,7 @@ export const MenuExamples: React.FC = () => {
           open={intentMenuOpen}
           onOpenChange={setIntentMenuOpen}
         >
-          <Button variant="outlined">
+          <Button type="outlined">
             Intent Menu
           </Button>
         </Menu>
@@ -118,7 +118,7 @@ export const MenuExamples: React.FC = () => {
           open={separatorMenuOpen}
           onOpenChange={setSeparatorMenuOpen}
         >
-          <Button variant="outlined">
+          <Button type="outlined">
             File Menu
           </Button>
         </Menu>
@@ -131,7 +131,7 @@ export const MenuExamples: React.FC = () => {
           open={disabledMenuOpen}
           onOpenChange={setDisabledMenuOpen}
         >
-          <Button variant="outlined">
+          <Button type="outlined">
             Menu with Disabled
           </Button>
         </Menu>

@@ -1,8 +1,8 @@
+import { Color } from '@idealyst/theme';
 import type { StyleProp, ViewStyle, ImageSourcePropType } from 'react-native';
-import type { ColorVariant } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type AvatarColorVariant = ColorVariant;
+export type AvatarColorVariant = Color;
 export type AvatarSizeVariant = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarShapeVariant = 'circle' | 'square';
 

@@ -11,7 +11,7 @@ export interface ChipProps {
   label: string;
 
   /** Visual style variant */
-  type: ChipType;
+  type?: ChipType;
 
   /** Color intent/semantic meaning */
   intent?: ChipIntent;

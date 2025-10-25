@@ -33,12 +33,10 @@ const Video = React.forwardRef<View, VideoProps>(({
   style,
   testID,
 }, ref) => {
-  // Apply variants
-  videoStyles.useVariants({});
 
   if (!RNVideo) {
     return (
-      <View ref={ref} style={[videoStyles.container, { width, height, aspectRatio, borderRadius }, style]} testID={testID}>
+      <View ref={ref} style={[videoStyles.container, { aspectRatio, borderRadius }, style]} testID={testID}>
         <View style={videoStyles.fallback}>
           {/* Fallback when react-native-video is not installed */}
         </View>
@@ -53,8 +51,6 @@ const Video = React.forwardRef<View, VideoProps>(({
   const containerStyle = [
     videoStyles.container,
     {
-      width: width || '100%',
-      height: height || undefined,
       aspectRatio: aspectRatio || undefined,
       borderRadius: borderRadius || undefined,
     },

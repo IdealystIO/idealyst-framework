@@ -66,7 +66,6 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
         <span
           {...iconProps}
           style={{
-            ...iconProps.style,
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -160,7 +159,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   minVisibleItems = 3,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const containerProps = getWebProps([breadcrumbContainerStyles.container, style]);
+  const containerProps = getWebProps([breadcrumbContainerStyles.container, style as any]);
   const menuIconPath = resolveIconPath('dots-horizontal');
 
   // Apply variants for menu button
@@ -228,7 +227,6 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
                   <button
                     className={menuButtonProps.className}
                     style={{
-                      ...menuButtonProps.style,
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',

@@ -1,11 +1,11 @@
-import React, { forwardRef } from 'react';
+import React, { ComponentRef, forwardRef } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { switchStyles } from './Switch.styles';
 import Text from '../Text';
 import type { SwitchProps } from './types';
 
-const Switch = forwardRef<Pressable, SwitchProps>(({
+const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
   checked = false,
   onCheckedChange,
   disabled = false,
@@ -18,8 +18,6 @@ const Switch = forwardRef<Pressable, SwitchProps>(({
 }, ref) => {
   switchStyles.useVariants({
     size,
-    checked,
-    intent,
     disabled,
     position: labelPosition,
   });
@@ -83,7 +81,7 @@ const Switch = forwardRef<Pressable, SwitchProps>(({
       accessibilityRole="switch"
       accessibilityState={{ checked, disabled }}
     >
-      <Animated.View style={switchStyles.switchTrack({ checked, intent, disabled })}>
+      <Animated.View style={switchStyles.switchTrack({ checked, intent })}>
         <Animated.View
           style={[
             {

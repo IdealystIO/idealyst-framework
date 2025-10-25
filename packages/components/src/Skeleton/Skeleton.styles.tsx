@@ -31,7 +31,7 @@ function createShapeVariants(theme: Theme) {
         circle: {
             borderRadius: 9999,
         },
-    };
+    } as const;
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel

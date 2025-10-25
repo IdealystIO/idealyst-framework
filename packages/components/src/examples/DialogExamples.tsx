@@ -28,7 +28,7 @@ export const DialogExamples = () => {
             <Text>This is a basic dialog with a title and some content.</Text>
             <View spacing="md" style={{ marginTop: 16 }}>
               <Button 
-                variant="contained" 
+                type="contained" 
                 intent="primary"
                 onPress={() => setBasicOpen(false)}
               >
@@ -55,12 +55,12 @@ export const DialogExamples = () => {
             open={alertOpen}
             onOpenChange={setAlertOpen}
             title="Important Alert"
-            variant="alert"
+            type="alert"
           >
             <Text>This is an alert dialog. It has a top border to indicate importance.</Text>
             <View spacing="md" style={{ marginTop: 16 }}>
               <Button 
-                variant="contained" 
+                type="contained" 
                 intent="primary"
                 onPress={() => setAlertOpen(false)}
               >
@@ -74,20 +74,20 @@ export const DialogExamples = () => {
             open={confirmationOpen}
             onOpenChange={setConfirmationOpen}
             title="Confirm Action"
-            variant="confirmation"
+            type="confirmation"
             closeOnBackdropClick={false}
           >
             <Text>Are you sure you want to delete this item? This action cannot be undone.</Text>
             <View style={{ flexDirection: 'row', gap: 12, marginTop: 16 }}>
               <Button 
-                variant="outlined" 
+                type="outlined" 
                 intent="neutral"
                 onPress={() => setConfirmationOpen(false)}
               >
                 Cancel
               </Button>
               <Button 
-                variant="contained" 
+                type="contained" 
                 intent="error"
                 onPress={() => setConfirmationOpen(false)}
               >
@@ -123,7 +123,7 @@ export const DialogExamples = () => {
               </Text>
               <View spacing="md" style={{ marginTop: 16 }}>
                 <Button 
-                  variant="contained" 
+                  type="contained" 
                   intent="primary"
                   onPress={() => setSizesOpen(null)}
                 >

@@ -1,10 +1,10 @@
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
-import type { ButtonSize } from '@idealyst/theme';
+import { Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type TableSizeVariant = ButtonSize;
-export type TableVariant = 'default' | 'bordered' | 'striped';
+export type TableSizeVariant = Size;
+export type TableType = 'standard' | 'bordered' | 'striped';
 export type TableAlignVariant = 'left' | 'center' | 'right';
 
 export interface TableColumn<T = any> {
@@ -19,7 +19,7 @@ export interface TableColumn<T = any> {
 export interface TableProps<T = any> {
   columns: TableColumn<T>[];
   data: T[];
-  variant?: TableVariant;
+  type?: TableType;
   size?: TableSizeVariant;
   stickyHeader?: boolean;
   onRowPress?: (row: T, index: number) => void;

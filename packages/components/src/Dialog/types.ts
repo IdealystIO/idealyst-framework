@@ -3,7 +3,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 
 // Component-specific type aliases for future extensibility
 export type DialogSizeVariant = 'sm' | 'md' | 'lg' | 'fullscreen';
-export type DialogVariant = 'default' | 'alert' | 'confirmation';
+export type DialogType = 'standard' | 'alert' | 'confirmation';
 export type DialogAnimationType = 'slide' | 'fade' | 'none';
 
 export interface DialogProps {
@@ -35,7 +35,7 @@ export interface DialogProps {
   /**
    * The visual style variant of the dialog
    */
-  variant?: DialogVariant;
+  type?: DialogType,
 
   /**
    * Whether to show the close button in the header

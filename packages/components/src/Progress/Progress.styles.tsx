@@ -132,8 +132,8 @@ export const progressStyles = StyleSheet.create((theme: Theme) => {
         position: 'relative' as const,
         variants: {
             size: createCircularContainerSizeVariants(theme),
-        },
-    },
+        } as const,
+    } as const,
     circularTrack: {
         _web: {
             stroke: theme.colors.border.secondary,

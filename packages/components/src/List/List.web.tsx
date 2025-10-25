@@ -6,16 +6,15 @@ import { ListProvider } from './ListContext';
 
 const List: React.FC<ListProps> = ({
   children,
-  variant = 'default',
+  type = 'default',
   size = 'md',
   style,
   testID,
   scrollable = false,
   maxHeight,
 }) => {
-  // Apply variants
+  // Apply types
   listStyles.useVariants({
-    variant,
     size,
     scrollable,
   });
@@ -23,13 +22,13 @@ const List: React.FC<ListProps> = ({
   const containerStyle = [
     listStyles.container,
     maxHeight ? { maxHeight } : undefined,
-    style,
+    style as any,
   ];
 
   const containerProps = getWebProps(containerStyle);
 
   return (
-    <ListProvider value={{ variant, size }}>
+    <ListProvider value={{ type, size }}>
       <div
         {...containerProps}
         role="list"

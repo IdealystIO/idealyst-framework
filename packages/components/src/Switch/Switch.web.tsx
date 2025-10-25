@@ -28,13 +28,11 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   // Apply variants using the correct Unistyles v3 pattern
   switchStyles.useVariants({
     size: size as 'sm' | 'md' | 'lg',
-    checked: checked as boolean,
-    intent: intent as 'primary' | 'success' | 'error' | 'warning' | 'neutral',
     disabled: disabled as boolean,
     position: labelPosition as 'left' | 'right',
   });
 
-  const trackProps = getWebProps([switchStyles.switchTrack({ checked, intent, disabled })]);
+  const trackProps = getWebProps([switchStyles.switchTrack({ checked, intent })]);
   const thumbProps = getWebProps([switchStyles.switchThumb({ size, checked })]);
   const thumbIconProps = getWebProps([switchStyles.thumbIcon({ checked, intent })]);
   const labelProps = getWebProps([switchStyles.label]);
@@ -61,21 +59,14 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   };
 
   // Computed button props with dynamic styles
-  const computedButtonProps = getWebProps([
-    switchStyles.switchContainer,
-    {
-      background: 'none',
-      border: 'none',
-      padding: 0,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      display: 'inline-flex',
-    }
-  ]);
+  const computedButtonProps = getWebProps(
+    switchStyles.switchContainer
+  );
 
   // Computed container props with dynamic styles (for when label exists)
   const computedContainerProps = getWebProps([
     switchStyles.container,
-    style,
+    style as any,
     {
       cursor: disabled ? 'not-allowed' : 'pointer',
       display: 'inline-flex',

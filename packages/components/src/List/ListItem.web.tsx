@@ -26,12 +26,11 @@ const ListItem: React.FC<ListItemProps> = ({
 
   // Use explicit size prop, fallback to context size, then default
   const effectiveSize = size ?? listContext.size ?? 'md';
-  const effectiveVariant = listContext.variant ?? 'default';
+  const effectiveVariant = listContext.type ?? 'default';
 
-  // Apply variants
+  // Apply types
   listStyles.useVariants({
     size: effectiveSize,
-    variant: effectiveVariant,
     active,
     selected,
     disabled,
@@ -96,7 +95,7 @@ const ListItem: React.FC<ListItemProps> = ({
   return (
     <div
       {...itemProps}
-      style={{ ...itemProps.style, ...indentStyle }}
+      style={{ ...indentStyle }}
       onClick={isClickable ? handleClick : undefined}
       role="listitem"
       aria-selected={selected}

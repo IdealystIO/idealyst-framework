@@ -5,7 +5,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 // Component-specific type aliases for future extensibility
 export type SelectIntentVariant = Intent;
 export type SelectSizeVariant = Size;
-export type SelectVariant = 'outlined' | 'filled';
+export type SelectType = 'outlined' | 'filled';
 
 export interface SelectOption {
   /**
@@ -71,9 +71,9 @@ export interface SelectProps {
   label?: string;
 
   /**
-   * The visual variant of the select
+   * The visual type of the select
    */
-  variant?: SelectVariant;
+  type?: SelectType,
 
   /**
    * The intent/color scheme of the select

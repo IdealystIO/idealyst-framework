@@ -14,7 +14,7 @@ interface TabProps {
   isActive: boolean;
   onClick: () => void;
   size: TabBarProps['size'];
-  variant: TabBarProps['variant'];
+  type: TabBarProps['type'];
   pillMode: TabBarProps['pillMode'];
   testID?: string;
   tabRef: (el: HTMLButtonElement | null) => void;
@@ -25,22 +25,22 @@ const Tab: React.FC<TabProps> = ({
   isActive,
   onClick,
   size,
-  variant,
+  type,
   pillMode,
   testID,
   tabRef,
 }) => {
-  // Apply tab and label variants for this specific tab
+  // Apply tab and label types for this specific tab
   tabBarTabStyles.useVariants({
     size,
-    variant,
+    type,
     active: isActive,
     disabled: Boolean(item.disabled),
     pillMode,
   });
   tabBarLabelStyles.useVariants({
     size,
-    variant,
+    type,
     pillMode,
     active: isActive,
     disabled: Boolean(item.disabled),
@@ -76,7 +76,7 @@ const TabBar: React.FC<TabBarProps> = ({
   value: controlledValue,
   defaultValue,
   onChange,
-  variant = 'default',
+  type = 'standard',
   size = 'md',
   pillMode = 'light',
   style,
@@ -138,11 +138,11 @@ const TabBar: React.FC<TabBarProps> = ({
     onChange?.(itemValue);
   };
 
-  // Apply container and indicator variants
-  tabBarContainerStyles.useVariants({ variant, size, pillMode });
-  const containerProps = getWebProps([tabBarContainerStyles.container, style]);
+  // Apply container and indicator types
+  tabBarContainerStyles.useVariants({ type, size, pillMode });
+  const containerProps = getWebProps([tabBarContainerStyles.container, style as any]);
 
-  tabBarIndicatorStyles.useVariants({ variant, pillMode });
+  tabBarIndicatorStyles.useVariants({ type, pillMode });
   const indicatorProps = getWebProps([tabBarIndicatorStyles.indicator]);
 
   // Merge container ref with getWebProps ref
@@ -151,15 +151,14 @@ const TabBar: React.FC<TabBarProps> = ({
     containerRef
   );
 
-  // For pills variant, calculate height from parent
+  // For pills type, calculate height from parent
   const indicatorInlineStyle: React.CSSProperties = {
-    ...indicatorProps.style,
     left: `${indicatorStyle.left}px`,
     width: `${indicatorStyle.width}px`,
   };
 
-  // For pills variant, use calc() to set height based on top/bottom
-  if (variant === 'pills') {
+  // For pills type, use calc() to set height based on top/bottom
+  if (type === 'pills') {
     indicatorInlineStyle.height = 'calc(100% - 8px)'; // 100% minus top(4px) + bottom(4px)
   }
 
@@ -186,7 +185,7 @@ const TabBar: React.FC<TabBarProps> = ({
             isActive={isActive}
             onClick={() => handleTabClick(item.value, item.disabled)}
             size={size}
-            variant={variant}
+            type={type}
             pillMode={pillMode}
             testID={testID}
             tabRef={(el) => {

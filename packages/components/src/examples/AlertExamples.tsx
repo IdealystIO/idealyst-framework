@@ -57,7 +57,7 @@ export const AlertExamples = () => {
           <View spacing="sm">
             <Text size="md" weight="semibold">Filled</Text>
             <Alert
-              variant="filled"
+              type="filled"
               intent="primary"
               title="Filled Alert"
               message="This is a filled alert with solid background."
@@ -67,7 +67,7 @@ export const AlertExamples = () => {
           <View spacing="sm">
             <Text size="md" weight="semibold">Outlined</Text>
             <Alert
-              variant="outlined"
+              type="outlined"
               intent="primary"
               title="Outlined Alert"
               message="This is an outlined alert with border."
@@ -77,7 +77,7 @@ export const AlertExamples = () => {
           <View spacing="sm">
             <Text size="md" weight="semibold">Soft (Default)</Text>
             <Alert
-              variant="soft"
+              type="soft"
               intent="primary"
               title="Soft Alert"
               message="This is a soft alert with subtle background."
@@ -138,7 +138,7 @@ export const AlertExamples = () => {
 
             {errorVisible && (
               <Alert
-                variant="outlined"
+                type="outlined"
                 intent="error"
                 title="Dismissible Error"
                 message="This outlined alert can also be dismissed."
@@ -165,10 +165,10 @@ export const AlertExamples = () => {
               message="You have unsaved changes. Do you want to save them?"
               actions={
                 <View style={{ flexDirection: 'row', gap: 8 }}>
-                  <Button variant="contained" intent="primary" size="sm">
+                  <Button type="contained" intent="primary" size="sm">
                     Save
                   </Button>
-                  <Button variant="outlined" intent="neutral" size="sm">
+                  <Button type="outlined" intent="neutral" size="sm">
                     Discard
                   </Button>
                 </View>
@@ -176,12 +176,12 @@ export const AlertExamples = () => {
             />
 
             <Alert
-              variant="outlined"
+              type="outlined"
               intent="info"
               title="New Feature Available"
               message="Check out our new collaboration features."
               actions={
-                <Button variant="text" intent="primary" size="sm">
+                <Button type="text" intent="primary" size="sm">
                   Learn More
                 </Button>
               }
@@ -211,7 +211,7 @@ export const AlertExamples = () => {
           <Text size="lg" weight="semibold">Complex Example</Text>
 
           <Alert
-            variant="filled"
+            type="filled"
             intent="success"
             title="Payment Successful"
             message="Your order has been confirmed and will be shipped soon."
@@ -219,10 +219,10 @@ export const AlertExamples = () => {
             onDismiss={() => console.log('Dismissed')}
             actions={
               <View style={{ flexDirection: 'row', gap: 8 }}>
-                <Button variant="outlined" size="sm" onPress={() => console.log('View order')}>
+                <Button type="outlined" size="sm" onPress={() => console.log('View order')}>
                   View Order
                 </Button>
-                <Button variant="outlined" size="sm" onPress={() => console.log('Track')}>
+                <Button type="outlined" size="sm" onPress={() => console.log('Track')}>
                   Track Shipment
                 </Button>
               </View>
@@ -237,7 +237,7 @@ export const AlertExamples = () => {
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}
-                variant="soft"
+                type="soft"
                 intent={intent}
                 message={`${intent.charAt(0).toUpperCase() + intent.slice(1)} alert message`}
               />
@@ -252,7 +252,7 @@ export const AlertExamples = () => {
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}
-                variant="outlined"
+                type="outlined"
                 intent={intent}
                 message={`${intent.charAt(0).toUpperCase() + intent.slice(1)} alert message`}
               />
@@ -267,7 +267,7 @@ export const AlertExamples = () => {
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}
-                variant="filled"
+                type="filled"
                 intent={intent}
                 message={`${intent.charAt(0).toUpperCase() + intent.slice(1)} alert message`}
               />

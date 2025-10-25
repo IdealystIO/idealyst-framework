@@ -25,16 +25,12 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
 
   // Apply variants
   cardStyles.useVariants({
-    padding,
-    type,
-    radius,
-    intent,
     clickable,
     disabled,
   });
 
   // Generate web props
-  const webProps = getWebProps([cardStyles.card, style]);
+  const webProps = getWebProps([cardStyles.card, style as any]);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
 

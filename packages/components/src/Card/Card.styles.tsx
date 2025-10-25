@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent } from '@idealyst/theme';
+import { Theme, Intent, CompoundVariants } from '@idealyst/theme';
 
 type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
 type CardPadding = 'none' | 'sm' | 'md' | 'lg';
@@ -13,20 +13,6 @@ export type CardVariants = {
     intent: CardIntent;
     clickable: boolean;
     disabled: boolean;
-}
-
-/**
- * Create intent variants (placeholder, colors handled by compound variants)
- */
-function createIntentVariants(theme: Theme) {
-    const variants: any = {
-        info: {},
-        neutral: {},
-    };
-    for (const intent in theme.intents) {
-        variants[intent] = {};
-    }
-    return variants;
 }
 
 /**
@@ -60,7 +46,7 @@ function createTypeVariants(theme: Theme) {
  * Create compound variants for type + intent combinations
  */
 function createCardCompoundVariants(theme: Theme) {
-    const compoundVariants: any[] = [];
+    const compoundVariants: CompoundVariants<keyof CardVariants> = [];
 
     // Add intent-based border colors for default and outlined types
     for (const intent in theme.intents) {
@@ -127,7 +113,6 @@ export const cardStyles = StyleSheet.create((theme: Theme) => {
         position: 'relative',
         overflow: 'hidden',
         variants: {
-            intent: createIntentVariants(theme),
             type: createTypeVariants(theme),
             padding: {
                 none: { padding: 0 },
@@ -176,6 +161,6 @@ export const cardStyles = StyleSheet.create((theme: Theme) => {
             flexDirection: 'column',
             boxSizing: 'border-box',
         },
-    },
+    } as const,
   };
 });

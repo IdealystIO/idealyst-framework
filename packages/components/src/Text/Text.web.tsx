@@ -17,7 +17,6 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
     size,
     weight,
     align,
-    color: color
   });
 
   // Create the style array following the official documentation pattern

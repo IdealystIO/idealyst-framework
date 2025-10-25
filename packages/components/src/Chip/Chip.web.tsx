@@ -27,7 +27,6 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
     type,
     intent,
     selected,
-    selectable,
     disabled,
   });
 
@@ -96,10 +95,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
 
   return (
     <div
-      className={containerProps.className}
+      {...containerProps}
       ref={mergedRef}
       style={{
-        ...containerProps.style,
         cursor: isClickable ? 'pointer' : 'default',
         userSelect: 'none',
       }}
@@ -111,9 +109,8 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
     >
       {icon && (
         <span
-          className={iconProps.className}
+          {...iconProps}
           style={{
-            ...iconProps.style,
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -124,9 +121,8 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
       )}
 
       <span
-        className={labelProps.className}
+        {...labelProps}
         style={{
-          ...labelProps.style,
           display: 'inline-flex',
           alignItems: 'center',
         }}
@@ -136,9 +132,8 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
 
       {deletable && onDelete && (
         <button
-          className={deleteButtonProps.className}
+          {...deleteButtonProps}
           style={{
-            ...deleteButtonProps.style,
             background: 'transparent',
             border: 'none',
             cursor: disabled ? 'default' : 'pointer',

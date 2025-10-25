@@ -6,16 +6,15 @@ import { ListProvider } from './ListContext';
 
 const List = forwardRef<View, ListProps>(({
   children,
-  variant = 'default',
+  type = 'default',
   size = 'md',
   style,
   testID,
   scrollable = false,
   maxHeight,
 }, ref) => {
-  // Apply variants
+  // Apply types
   listStyles.useVariants({
-    variant,
     size,
     scrollable,
   });
@@ -27,7 +26,7 @@ const List = forwardRef<View, ListProps>(({
   ];
 
   const content = (
-    <ListProvider value={{ variant, size }}>
+    <ListProvider value={{ type, size }}>
       {children}
     </ListProvider>
   );
@@ -36,7 +35,7 @@ const List = forwardRef<View, ListProps>(({
     return (
       <ScrollView
         ref={ref as any}
-        style={containerStyle}
+        style={containerStyle as any}
         testID={testID}
         showsVerticalScrollIndicator={true}
       >
@@ -46,7 +45,7 @@ const List = forwardRef<View, ListProps>(({
   }
 
   return (
-    <View ref={ref} style={containerStyle} testID={testID}>
+    <View ref={ref} style={containerStyle as any} testID={testID}>
       {content}
     </View>
   );

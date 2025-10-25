@@ -1,46 +1,8 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-type TextAreaSize = Size;
-type TextAreaIntent = Intent;
-type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
+import { TextAreaIntentVariant } from './types';
 
-type TextAreaLabelVariants = {
-    disabled: boolean;
-}
-
-type TextAreaTextareaVariants = {
-    size: TextAreaSize;
-    intent: TextAreaIntent;
-    disabled: boolean;
-    hasError: boolean;
-    resize: TextAreaResize;
-}
-
-type TextAreaHelperTextVariants = {
-    hasError: boolean;
-}
-
-type TextAreaCharacterCountVariants = {
-    isNearLimit: boolean;
-    isAtLimit: boolean;
-}
-
-export type ExpandedTextAreaLabelStyles = StylesheetStyles<keyof TextAreaLabelVariants>;
-export type ExpandedTextAreaTextareaStyles = StylesheetStyles<keyof TextAreaTextareaVariants>;
-export type ExpandedTextAreaHelperTextStyles = StylesheetStyles<keyof TextAreaHelperTextVariants>;
-export type ExpandedTextAreaCharacterCountStyles = StylesheetStyles<keyof TextAreaCharacterCountVariants>;
-export type ExpandedTextAreaStyles = StylesheetStyles<never>;
-
-export type TextAreaStylesheet = {
-    container: ExpandedTextAreaStyles;
-    label: ExpandedTextAreaLabelStyles;
-    textareaContainer: ExpandedTextAreaStyles;
-    textarea: ExpandedTextAreaTextareaStyles;
-    helperText: ExpandedTextAreaHelperTextStyles;
-    footer: ExpandedTextAreaStyles;
-    characterCount: ExpandedTextAreaCharacterCountStyles;
-}
 
 /**
  * Create size variants for textarea
@@ -57,9 +19,9 @@ function createTextareaSizeVariants(theme: Theme) {
 /**
  * Get textarea styles based on intent, disabled, and hasError state
  */
-function getTextareaIntentStyles(theme: Theme, intent: TextAreaIntent, disabled: boolean, hasError: boolean) {
+function getTextareaIntentStyles(theme: Theme, intent: TextAreaIntentVariant, disabled: boolean, hasError: boolean) {
     if (disabled || hasError) {
-        return {};
+        return {} as const;
     }
 
     const intentValue = theme.intents[intent];
@@ -81,8 +43,8 @@ function getTextareaIntentStyles(theme: Theme, intent: TextAreaIntent, disabled:
     return baseStyles;
 }
 
-const createTextareaStyles = (theme: Theme): ExpandedTextAreaTextareaStyles => {
-    return ({ intent, disabled, hasError }: { intent: TextAreaIntent, disabled: boolean, hasError: boolean }) => {
+const createTextareaStyles = (theme: Theme) => {
+    return ({ intent, disabled, hasError }: { intent: TextAreaIntentVariant, disabled: boolean, hasError: boolean }) => {
         const intentStyles = getTextareaIntentStyles(theme, intent, disabled, hasError);
 
         return {
@@ -143,12 +105,12 @@ const createTextareaStyles = (theme: Theme): ExpandedTextAreaTextareaStyles => {
                 boxSizing: 'border-box',
                 overflowY: 'hidden',
             },
-        };
+        } as const;
     }
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const textAreaStyles = StyleSheet.create((theme: Theme): TextAreaStylesheet => {
+export const textAreaStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: {
             display: 'flex',

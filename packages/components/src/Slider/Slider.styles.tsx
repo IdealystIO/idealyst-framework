@@ -1,56 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size, Styles} from '@idealyst/theme';
+import { Theme, Size, Styles} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-
-type SliderSize = Size;
-type SliderIntent = Intent;
-
-type SliderTrackVariants = {
-    size: SliderSize;
-    disabled: boolean;
-}
-
-type SliderFilledTrackVariants = {
-    intent: SliderIntent;
-}
-
-type SliderThumbVariants = {
-    size: SliderSize;
-    intent: SliderIntent;
-    disabled: boolean;
-}
-
-type SliderThumbIconVariants = {
-    size: SliderSize;
-    intent: SliderIntent;
-}
-
-type SliderMarkVariants = {
-    size: SliderSize;
-}
-
-export type ExpandedSliderTrackStyles = StylesheetStyles<keyof SliderTrackVariants>;
-export type ExpandedSliderFilledTrackStyles = StylesheetStyles<keyof SliderFilledTrackVariants>;
-export type ExpandedSliderThumbStyles = StylesheetStyles<keyof SliderThumbVariants>;
-export type ExpandedSliderThumbIconStyles = StylesheetStyles<keyof SliderThumbIconVariants>;
-export type ExpandedSliderMarkStyles = StylesheetStyles<keyof SliderMarkVariants>;
-export type ExpandedSliderStyles = StylesheetStyles<never>;
-
-export type SliderStylesheet = {
-    container: ExpandedSliderStyles;
-    sliderWrapper: ExpandedSliderStyles;
-    track: ExpandedSliderTrackStyles;
-    filledTrack: ExpandedSliderFilledTrackStyles;
-    thumb: ExpandedSliderThumbStyles;
-    thumbActive: ExpandedSliderStyles;
-    thumbIcon: ExpandedSliderThumbIconStyles;
-    valueLabel: ExpandedSliderStyles;
-    minMaxLabels: ExpandedSliderStyles;
-    minMaxLabel: ExpandedSliderStyles;
-    marks: ExpandedSliderStyles;
-    mark: ExpandedSliderMarkStyles;
-    markLabel: ExpandedSliderStyles;
-}
+import { SliderIntentVariant } from './types';
 
 /**
  * Create size variants for track
@@ -69,7 +20,7 @@ function createTrackSizeVariants(theme: Theme) {
 /**
  * Get filled track color based on intent
  */
-function getFilledTrackColor(theme: Theme, intent: SliderIntent) {
+function getFilledTrackColor(theme: Theme, intent: SliderIntentVariant) {
     return theme.intents[intent].primary;
 }
 
@@ -86,7 +37,7 @@ function createThumbSizeVariants(theme: Theme) {
 /**
  * Get thumb border color based on intent
  */
-function getThumbBorderColor(theme: Theme, intent: SliderIntent) {
+function getThumbBorderColor(theme: Theme, intent: SliderIntentVariant) {
     return theme.intents[intent].primary;
 }
 
@@ -107,7 +58,7 @@ function createThumbIconSizeVariants(theme: Theme) {
 /**
  * Get thumb icon color based on intent
  */
-function getThumbIconColor(theme: Theme, intent: SliderIntent) {
+function getThumbIconColor(theme: Theme, intent: SliderIntentVariant){
     return theme.intents[intent].primary;
 }
 
@@ -121,7 +72,7 @@ function createMarkSizeVariants(theme: Theme) {
 }
 
 const createFilledTrackStyles = (theme: Theme) => {
-    return ({ intent }: SliderFilledTrackVariants) => {
+    return ({ intent }: { intent: SliderIntentVariant }) => {
         return {
             position: 'absolute',
             height: '100%',
@@ -129,12 +80,12 @@ const createFilledTrackStyles = (theme: Theme) => {
             top: 0,
             left: 0,
             backgroundColor: getFilledTrackColor(theme, intent),
-        };
+        } as const;
     }
 }
 
 const createThumbStyles = (theme: Theme) => {
-    return ({ intent, disabled }: { intent: SliderIntent, disabled: boolean }) => {
+    return ({ intent, disabled }: { intent: SliderIntentVariant, disabled: boolean }) => {
         return {
             position: 'absolute',
             backgroundColor: theme.colors.surface.primary,
@@ -180,12 +131,12 @@ const createThumbStyles = (theme: Theme) => {
                 transform: 'translate(-50%, -50%)',
                 transition: 'transform 0.15s ease, box-shadow 0.2s ease',
             },
-        };
+        } as const;
     }
 }
 
 const createThumbIconStyles = (theme: Theme) => {
-    return ({ intent }: SliderThumbIconVariants) => {
+    return ({ intent }: { intent: SliderIntentVariant }) => {
         return {
             display: 'flex',
             alignItems: 'center',
@@ -195,7 +146,7 @@ const createThumbIconStyles = (theme: Theme) => {
             variants: {
                 size: createThumbIconSizeVariants(theme),
             },
-        };
+        } as const;
     }
 }
 
@@ -212,27 +163,27 @@ export const sliderStyles = StyleSheet.create((theme: Theme) => {
             paddingVertical: 4,
         },
         track: {
-        backgroundColor: theme.colors.surface.tertiary,
-        borderRadius: 9999,
-        position: 'relative',
-        variants: {
-            size: createTrackSizeVariants(theme),
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                    _web: {
-                        cursor: 'not-allowed',
+            backgroundColor: theme.colors.surface.tertiary,
+            borderRadius: 9999,
+            position: 'relative',
+            variants: {
+                size: createTrackSizeVariants(theme),
+                disabled: {
+                    true: {
+                        opacity: 0.5,
+                        _web: {
+                            cursor: 'not-allowed',
+                        },
+                    },
+                    false: {
+                        opacity: 1,
+                        _web: {
+                            cursor: 'pointer',
+                        },
                     },
                 },
-                false: {
-                    opacity: 1,
-                    _web: {
-                        cursor: 'pointer',
-                    },
-                },
-            },
-            },
-        },
+            } as const,
+        } as const,
         filledTrack: createFilledTrackStyles(theme),
         thumb: createThumbStyles(theme),
         thumbActive: {

@@ -73,9 +73,6 @@ export const svgImageStyles = StyleSheet.create((theme: Theme) => {
             maxWidth: '100%',
             height: 'auto',
         },
-        _native: {
-            // Native image styles will be applied via Image component
-        },
     },
   };
 });

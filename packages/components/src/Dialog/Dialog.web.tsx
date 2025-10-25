@@ -12,7 +12,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   title,
   children,
   size = 'md',
-  variant = 'default',
+  type = 'standard',
   showCloseButton = true,
   closeOnBackdropClick = true,
   closeOnEscapeKey = true,
@@ -104,7 +104,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   // Apply variants
   dialogStyles.useVariants({
     size,
-    variant,
+    type,
   });
 
   const backdropProps = getWebProps([
@@ -113,7 +113,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   ]);
   const containerProps = getWebProps([
     dialogStyles.container,
-    style,
+    style as any,
     isVisible
       ? { opacity: 1, transform: 'scale(1) translateY(0px)' }
       : { opacity: 0, transform: 'scale(0.96) translateY(-4px)' }

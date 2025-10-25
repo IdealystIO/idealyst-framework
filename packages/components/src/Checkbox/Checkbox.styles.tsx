@@ -44,7 +44,7 @@ function createCheckboxSizeVariants() {
         md: { width: 20, height: 20 },
         lg: { width: 24, height: 24 },
         xl: { width: 28, height: 28 },
-    };
+    } as const;
 }
 
 /**
@@ -66,7 +66,7 @@ function createCheckboxTypeVariants(theme: Theme) {
                 border: `2px solid ${theme.colors.border.primary}`,
             },
         },
-    };
+    } as const;
 }
 
 /**
@@ -86,7 +86,7 @@ function createCheckedVariants(theme: Theme, intent: CheckboxIntent) {
         false: {
             backgroundColor: 'transparent',
         },
-    };
+    } as const;
 }
 
 /**
@@ -99,7 +99,7 @@ function createLabelSizeVariants() {
         md: { fontSize: 16 },
         lg: { fontSize: 18 },
         xl: { fontSize: 20 },
-    };
+    } as const;
 }
 
 /**
@@ -112,11 +112,11 @@ function createCheckmarkSizeVariants() {
         md: { width: 14, height: 14 },
         lg: { width: 16, height: 16 },
         xl: { width: 20, height: 20 },
-    };
+    } as const;
 }
 
-function createCheckboxStyles(theme: Theme): ExpandedCheckboxStyles {
-    return ({ intent }: CheckboxVariants) => {
+function createCheckboxStyles(theme: Theme) {
+    return ({ intent }: Partial<CheckboxVariants>) => {
         return {
             alignItems: 'center',
             justifyContent: 'center',
@@ -159,7 +159,7 @@ function createCheckboxStyles(theme: Theme): ExpandedCheckboxStyles {
                     outlineOffset: '2px',
                 },
             },
-        };
+        } as const;
     }
 }
 
@@ -177,12 +177,12 @@ function createCheckmarkStyles(_theme: Theme) {
                 false: { opacity: 0 },
             },
         },
-    };
+    } as const;
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const checkboxStyles = StyleSheet.create((theme: Theme): CheckboxStylesheet => {
+export const checkboxStyles = StyleSheet.create((theme: Theme) => {
   return {
     wrapper: {
         flexDirection: 'column',

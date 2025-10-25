@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent} from '@idealyst/theme';
-import { CompoundVariants, StylesheetStyles } from '@idealyst/theme/src/styles';
+import { Theme, Intent, CompoundVariants} from '@idealyst/theme';
 
 type DividerOrientation = 'horizontal' | 'vertical';
 type DividerThickness = 'thin' | 'md' | 'thick';
@@ -18,15 +17,6 @@ type DividerVariants = {
     spacing: DividerSpacing;
 }
 
-export type ExpandedDividerStyles = StylesheetStyles<keyof DividerVariants>;
-
-export type DividerStylesheet = {
-    divider: ExpandedDividerStyles;
-    container: ExpandedDividerStyles;
-    content: ExpandedDividerStyles;
-    line: ExpandedDividerStyles;
-}
-
 function getIntentColor(theme: Theme, intent: DividerIntent): string {
     if (intent === 'secondary') return theme.colors.border.primary;
     if (intent === 'neutral') return theme.colors.border.secondary;
@@ -34,7 +24,7 @@ function getIntentColor(theme: Theme, intent: DividerIntent): string {
     return theme.intents[intent as Intent].primary;
 }
 
-function createDividerCompoundVariants(theme: Theme): CompoundVariants<keyof DividerVariants> {
+function createDividerCompoundVariants(theme: Theme) {
     const variants: CompoundVariants<keyof DividerVariants> = [];
 
     variants.push(
@@ -164,12 +154,12 @@ function createLineCompoundVariants(): CompoundVariants<keyof DividerVariants> {
         { orientation: 'vertical', thickness: 'thin', styles: { width: 1 } },
         { orientation: 'vertical', thickness: 'md', styles: { width: 2 } },
         { orientation: 'vertical', thickness: 'thick', styles: { width: 4 } },
-    ];
+    ] as const;
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const dividerStyles = StyleSheet.create((theme: Theme): DividerStylesheet => {
+export const dividerStyles = StyleSheet.create((theme: Theme) => {
   return {
     divider: {
         backgroundColor: theme.colors.border.secondary,
@@ -229,7 +219,7 @@ export const dividerStyles = StyleSheet.create((theme: Theme): DividerStylesheet
             },
         },
         compoundVariants: createDividerCompoundVariants(theme),
-    },
+    } as const,
     container: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -247,9 +237,11 @@ export const dividerStyles = StyleSheet.create((theme: Theme): DividerStylesheet
             },
             spacing: {
                 none: { gap: 0 },
+                xs: { gap: 4 },
                 sm: { gap: 8 },
                 md: { gap: 16 },
                 lg: { gap: 24 },
+                xl: { gap: 32 },
             },
         },
     },

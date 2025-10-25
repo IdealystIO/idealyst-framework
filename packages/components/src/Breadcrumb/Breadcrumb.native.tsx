@@ -165,7 +165,6 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
       ref={ref}
       style={[breadcrumbContainerStyles.container, style]}
       testID={testID}
-      accessibilityRole="navigation"
       accessibilityLabel="Breadcrumb"
     >
       {displayItems.map((item, index) => {

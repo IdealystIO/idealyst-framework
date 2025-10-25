@@ -1,4 +1,4 @@
-import BreadcrumbComponent from './Breadcrumb';
+import BreadcrumbComponent from './Breadcrumb.web';
 
 export default BreadcrumbComponent;
 export { BreadcrumbComponent as Breadcrumb };

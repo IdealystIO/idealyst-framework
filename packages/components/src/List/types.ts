@@ -1,11 +1,11 @@
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { IconName } from '../Icon/icon-types';
-import type { ButtonSize } from '@idealyst/theme';
+import { Size } from '@idealyst/theme';
 
 // Component-specific type aliases for future extensibility
-export type ListSizeVariant = ButtonSize;
-export type ListVariant = 'default' | 'bordered' | 'divided';
+export type ListSizeVariant = Size;
+export type ListType = 'default' | 'bordered' | 'divided';
 
 export interface ListItemProps {
   id?: string;
@@ -25,7 +25,7 @@ export interface ListItemProps {
 
 export interface ListProps {
   children: ReactNode;
-  variant?: ListVariant;
+  type?: ListType;
   size?: ListSizeVariant;
   style?: StyleProp<ViewStyle>;
   testID?: string;

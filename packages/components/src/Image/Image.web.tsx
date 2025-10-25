@@ -45,7 +45,7 @@ const Image: React.FC<ImageProps> = ({
       height: height || 'auto',
       aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
       borderRadius: borderRadius ? `${borderRadius}px` : undefined,
-    }
+    } as any,
   ]);
 
   const imageProps = getWebProps([

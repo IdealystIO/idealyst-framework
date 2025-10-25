@@ -14,7 +14,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
   value: controlledValue,
   defaultValue,
   onChange,
-  variant = 'default',
+  type = 'default',
   size = 'md',
   pillMode = 'light',
   style,
@@ -32,8 +32,8 @@ const TabBar = forwardRef<View, TabBarProps>(({
   const updateIndicatorPosition = (itemValue: string) => {
     const layout = tabLayouts.current[itemValue];
     if (layout) {
-      // For pills variant, account for container padding
-      const containerPadding = variant === 'pills' ? 4 : 0;
+      // For pills type, account for container padding
+      const containerPadding = type === 'pills' ? 4 : 0;
 
       indicatorPosition.value = withSpring(layout.x + containerPadding, {
         damping: 30,
@@ -76,9 +76,9 @@ const TabBar = forwardRef<View, TabBarProps>(({
     };
   });
 
-  // Apply container and indicator variants right before rendering
-  tabBarContainerStyles.useVariants({ variant, size, pillMode });
-  tabBarIndicatorStyles.useVariants({ variant, pillMode });
+  // Apply container and indicator types right before rendering
+  tabBarContainerStyles.useVariants({ size, pillMode });
+  tabBarIndicatorStyles.useVariants({ pillMode });
 
   return (
     <ScrollView
@@ -100,17 +100,15 @@ const TabBar = forwardRef<View, TabBarProps>(({
           {items.map((item) => {
             const isActive = value === item.value;
 
-            // Apply tab and label variants for this specific tab
+            // Apply tab and label types for this specific tab
             tabBarTabStyles.useVariants({
               size,
-              variant,
               active: isActive,
               disabled: Boolean(item.disabled),
               pillMode,
             });
             tabBarLabelStyles.useVariants({
               size,
-              variant,
               pillMode,
               active: isActive,
               disabled: Boolean(item.disabled),

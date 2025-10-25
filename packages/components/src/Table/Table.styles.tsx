@@ -3,57 +3,17 @@ import { Theme, StylesheetStyles, CompoundVariants, Size } from '@idealyst/theme
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type TableType = 'default' | 'bordered' | 'striped';
-type TableSize = Size;
-type TableAlign = 'left' | 'center' | 'right';
-
-type TableContainerVariants = {
-    type: TableType;
-}
-
-type TableHeadVariants = {
-    sticky: boolean;
-}
 
 type TableRowVariants = {
     type: TableType;
     clickable: boolean;
 }
-
-type TableHeaderCellVariants = {
-    size: TableSize;
-    align: TableAlign;
-    type: TableType;
-}
-
-type TableCellVariants = {
-    size: TableSize;
-    align: TableAlign;
-    type: TableType;
-}
-
-export type ExpandedTableContainerStyles = StylesheetStyles<keyof TableContainerVariants>;
-export type ExpandedTableHeadStyles = StylesheetStyles<keyof TableHeadVariants>;
-export type ExpandedTableRowStyles = StylesheetStyles<keyof TableRowVariants>;
-export type ExpandedTableHeaderCellStyles = StylesheetStyles<keyof TableHeaderCellVariants>;
-export type ExpandedTableCellStyles = StylesheetStyles<keyof TableCellVariants>;
-export type ExpandedTableStyles = StylesheetStyles<never>;
-
-export type TableStylesheet = {
-    container: ExpandedTableContainerStyles;
-    table: ExpandedTableStyles;
-    thead: ExpandedTableHeadStyles;
-    tbody: ExpandedTableStyles;
-    row: ExpandedTableRowStyles;
-    headerCell: ExpandedTableHeaderCellStyles;
-    cell: ExpandedTableCellStyles;
-}
-
 /**
  * Create type variants for container
  */
 function createContainerTypeVariants(theme: Theme) {
     return {
-        default: {
+        standard: {
             borderWidth: 1,
             borderStyle: 'solid',
             borderColor: theme.colors.border.primary,
@@ -83,7 +43,7 @@ function createContainerTypeVariants(theme: Theme) {
                 border: `1px solid ${theme.colors.border.primary}`,
             },
         },
-    };
+    } as const;
 }
 
 /**
@@ -91,7 +51,7 @@ function createContainerTypeVariants(theme: Theme) {
  */
 function createRowTypeVariants(theme: Theme) {
     return {
-        default: {},
+        standard: {},
         bordered: {
             borderBottomWidth: 1,
             borderBottomStyle: 'solid',
@@ -111,7 +71,7 @@ function createRowTypeVariants(theme: Theme) {
                 },
             },
         },
-    };
+    } as const;
 }
 
 /**
@@ -130,7 +90,7 @@ function createRowCompoundVariants(theme: Theme): CompoundVariants<keyof TableRo
                 },
             },
         },
-    ];
+    ] as const;
 }
 
 /**
@@ -149,7 +109,7 @@ function createHeaderCellSizeVariants(theme: Theme) {
  */
 function createHeaderCellTypeVariants(theme: Theme) {
     return {
-        default: {},
+        standard: {},
         bordered: {
             borderRightWidth: 1,
             borderRightStyle: 'solid',
@@ -162,7 +122,7 @@ function createHeaderCellTypeVariants(theme: Theme) {
             },
         },
         striped: {},
-    };
+    } as const;
 }
 
 /**
@@ -181,7 +141,7 @@ function createCellSizeVariants(theme: Theme) {
  */
 function createCellTypeVariants(theme: Theme) {
     return {
-        default: {},
+        standard: {},
         bordered: {
             borderRightWidth: 1,
             borderRightStyle: 'solid',
@@ -194,45 +154,49 @@ function createCellTypeVariants(theme: Theme) {
             },
         },
         striped: {},
-    };
+    } as const;
 }
 
-const createContainerStyles = (theme: Theme): ExpandedTableContainerStyles => {
+const createContainerStyles = (theme: Theme) => {
     return {
         width: '100%',
-        overflow: 'auto',
+        _web: {
+            overflow: 'auto',
+        },
         variants: {
             type: createContainerTypeVariants(theme),
         },
-    };
+    } as const;
 }
 
-const createTableStyles = (theme: Theme): ExpandedTableStyles => {
+const createTableStyles = (theme: Theme) => {
     return {
         width: '100%',
         _web: {
             borderCollapse: 'collapse',
         },
-    };
+    } as const;
 }
 
-const createTheadStyles = (theme: Theme): ExpandedTableHeadStyles => {
+const createTheadStyles = (theme: Theme) => {
     return {
         backgroundColor: theme.colors.surface.secondary,
         variants: {
             sticky: {
                 true: {
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 10,
+                    _web: {
+                            position: 'sticky',
+                            top: 0,
+                            zIndex: 10,
+                    }
                 },
                 false: {},
             },
         },
-    };
+    } as const;
 }
 
-const createRowStyles = (theme: Theme): ExpandedTableRowStyles => {
+const createRowStyles = (theme: Theme) => {
     return {
         variants: {
             type: createRowTypeVariants(theme),
@@ -252,10 +216,10 @@ const createRowStyles = (theme: Theme): ExpandedTableRowStyles => {
         _web: {
             transition: 'background-color 0.2s ease',
         },
-    };
+    } as const;
 }
 
-const createHeaderCellStyles = (theme: Theme): ExpandedTableHeaderCellStyles => {
+const createHeaderCellStyles = (theme: Theme) => {
     return {
         textAlign: 'left',
         fontWeight: '600',
@@ -281,10 +245,10 @@ const createHeaderCellStyles = (theme: Theme): ExpandedTableHeaderCellStyles => 
             },
             type: createHeaderCellTypeVariants(theme),
         },
-    };
+    } as const;
 }
 
-const createCellStyles = (theme: Theme): ExpandedTableCellStyles => {
+const createCellStyles = (theme: Theme) => {
     return {
         textAlign: 'left',
         color: theme.colors.text.primary,
@@ -303,11 +267,9 @@ const createCellStyles = (theme: Theme): ExpandedTableCellStyles => {
             },
             type: createCellTypeVariants(theme),
         },
-    };
+    } as const;
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const tableStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: createContainerStyles(theme),
@@ -317,5 +279,5 @@ export const tableStyles = StyleSheet.create((theme: Theme) => {
         row: createRowStyles(theme),
         headerCell: createHeaderCellStyles(theme),
         cell: createCellStyles(theme),
-    };
+    } as const;
 });

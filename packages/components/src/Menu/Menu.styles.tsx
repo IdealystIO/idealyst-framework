@@ -47,7 +47,7 @@ function getItemHoverStyles(theme: Theme, intent: MenuIntent) {
                 color: intentValue.primary,
             },
         },
-    };
+    } as const;
 }
 
 /**
@@ -65,7 +65,7 @@ function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof MenuVa
                 },
             },
         },
-    ];
+    ] as const;
 }
 
 /**
@@ -88,7 +88,7 @@ function createLabelSizeVariants(theme: Theme) {
     }));
 }
 
-const createItemStyles = (theme: Theme): ExpandedMenuStyles => {
+const createItemStyles = (theme: Theme) => {
     return ({ intent }: MenuVariants) => {
         const hoverStyles = getItemHoverStyles(theme, intent);
         return {
@@ -121,22 +121,24 @@ const createItemStyles = (theme: Theme): ExpandedMenuStyles => {
                 },
             },
             ...hoverStyles,
-        };
+        } as const;
     }
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const menuStyles = StyleSheet.create((theme: Theme): MenuStylesheet => {
+export const menuStyles = StyleSheet.create((theme: Theme) => {
     return {
         overlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 999,
             backgroundColor: 'transparent',
-        },
+            _web: {
+                position: 'fixed' as const,
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 999,
+            }
+        } as const,
         menu: {
             position: 'absolute',
             zIndex: 1000,
@@ -155,7 +157,7 @@ export const menuStyles = StyleSheet.create((theme: Theme): MenuStylesheet => {
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                 width: 'fit-content',
             },
-        },
+        } as const,
         separator: {
             height: 1,
             backgroundColor: theme.colors.border.primary,
@@ -170,14 +172,14 @@ export const menuStyles = StyleSheet.create((theme: Theme): MenuStylesheet => {
             marginRight: 8,
             variants: {
                 size: createIconSizeVariants(theme),
-            },
-        },
+            } as const,
+        } as const,
         label: {
             flex: 1,
             color: theme.colors.text.primary,
             variants: {
                 size: createLabelSizeVariants(theme),
-            },
-        },
-    };
+            } as const,
+        } as const,
+    } as const;
 });

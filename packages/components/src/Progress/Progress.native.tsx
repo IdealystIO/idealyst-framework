@@ -13,6 +13,7 @@ import Svg, { Circle } from 'react-native-svg';
 import Text from '../Text';
 import { progressStyles } from './Progress.styles';
 import type { ProgressProps } from './types';
+import { Theme } from '@idealyst/theme';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -30,7 +31,7 @@ const Progress = forwardRef<View, ProgressProps>(({
   testID,
 }, ref) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
-  const { theme } = useUnistyles();
+  const { theme }: { theme: Theme } = useUnistyles();
 
   // Apply variants
   progressStyles.useVariants({

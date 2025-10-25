@@ -26,7 +26,7 @@ const Select = forwardRef<View, SelectProps>(({
   error = false,
   helperText,
   label,
-  variant = 'outlined',
+  type = 'outlined',
   intent = 'neutral',
   size = 'md',
   searchable = false,
@@ -71,7 +71,7 @@ const Select = forwardRef<View, SelectProps>(({
 
   // Apply styles with variants
   selectStyles.useVariants({
-    type: variant,
+    type,
     size,
     disabled,
     error,
@@ -300,7 +300,7 @@ const Select = forwardRef<View, SelectProps>(({
 
       <Pressable
         ref={mergedTriggerRef}
-        style={selectStyles.trigger({ type: variant, intent })}
+        style={selectStyles.trigger({ type, intent })}
         onPress={handleTriggerPress}
         disabled={disabled}
         accessibilityLabel={accessibilityLabel || label}
@@ -333,7 +333,6 @@ const Select = forwardRef<View, SelectProps>(({
         <Text
           style={[
             selectStyles.helperText,
-            error && selectStyles.helperText.variants?.error?.true,
           ]}
         >
           {helperText}

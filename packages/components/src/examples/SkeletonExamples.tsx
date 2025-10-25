@@ -64,7 +64,7 @@ export const SkeletonExamples = () => {
         <Divider spacing="md" />
         <Text size="lg" weight="semibold">Profile Card Loading</Text>
 
-        <Card variant="outlined">
+        <Card type="outlined">
           <View spacing="md">
             <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
               <Skeleton width={64} height={64} shape="circle" />
@@ -80,7 +80,7 @@ export const SkeletonExamples = () => {
         <Divider spacing="md" />
         <Text size="lg" weight="semibold">Article Card Loading</Text>
 
-        <Card variant="outlined">
+        <Card type="outlined">
           <View spacing="md">
             <Skeleton width="100%" height={200} shape="rounded" />
             <Skeleton width="80%" height={28} shape="rounded" />
@@ -99,7 +99,7 @@ export const SkeletonExamples = () => {
         <Divider spacing="md" />
         <Text size="lg" weight="semibold">List Item Loading</Text>
 
-        <Card variant="outlined">
+        <Card type="outlined">
           <View spacing="md">
             {[1, 2, 3].map((item) => (
               <View key={item} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
@@ -116,7 +116,7 @@ export const SkeletonExamples = () => {
         <Divider spacing="md" />
         <Text size="lg" weight="semibold">Table Loading</Text>
 
-        <Card variant="outlined">
+        <Card type="outlined">
           <View spacing="sm">
             {/* Header */}
             <View style={{ flexDirection: 'row', gap: 12 }}>
@@ -143,7 +143,7 @@ export const SkeletonExamples = () => {
 
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           {[1, 2, 3, 4].map((card) => (
-            <Card key={card} variant="outlined" style={{ flex: 1, minWidth: 180 }}>
+            <Card key={card} type="outlined" style={{ flex: 1, minWidth: 180 }}>
               <View spacing="sm">
                 <Skeleton width="60%" height={16} shape="rounded" />
                 <Skeleton width="80%" height={32} shape="rounded" />
@@ -156,7 +156,7 @@ export const SkeletonExamples = () => {
         <Divider spacing="md" />
         <Text size="lg" weight="semibold">Comment Thread Loading</Text>
 
-        <Card variant="outlined">
+        <Card type="outlined">
           <View spacing="md">
             {[1, 2, 3].map((comment) => (
               <View key={comment} style={{ paddingLeft: comment > 1 ? 32 : 0 }}>

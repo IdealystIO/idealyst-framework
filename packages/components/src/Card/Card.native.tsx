@@ -18,10 +18,6 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
 }, ref) => {
   // Apply variants
   cardStyles.useVariants({
-    type,
-    padding,
-    radius,
-    intent,
     clickable,
     disabled,
   });

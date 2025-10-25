@@ -27,8 +27,7 @@ const RadioGroup = forwardRef<View, RadioGroupProps>(({
         ref={ref}
         style={[
           radioButtonStyles.groupContainer,
-          orientation === 'horizontal' ? radioButtonStyles.groupHorizontal : radioButtonStyles.groupVertical,
-          style,
+          style as any,
         ]}
         accessibilityRole="radiogroup"
         testID={testID}

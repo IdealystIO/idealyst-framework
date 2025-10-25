@@ -36,7 +36,7 @@ function createTriggerTypeVariants(theme: Theme) {
                 border: '1px solid transparent',
             },
         },
-    };
+    } as const;
 }
 
 function createTriggerSizeVariants(theme: Theme) {
@@ -59,10 +59,10 @@ function createIntentVariants(theme: Theme, type: SelectType, intent: SelectInte
             _web: {
                 border: `1px solid ${intentValue.primary}`,
             },
-        };
+        } as const;
     }
 
-    return {};
+    return {} as const;
 }
 
 function buildDynamicTriggerStyles(theme: Theme) {
@@ -331,5 +331,5 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                 position: 'fixed',
             },
         },
-    };
+    } as const;
 });

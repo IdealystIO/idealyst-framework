@@ -5,7 +5,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 // Component-specific type aliases for future extensibility
 export type DividerIntentVariant = Intent;
 export type DividerOrientationVariant = 'horizontal' | 'vertical';
-export type DividerVariant = 'solid' | 'dashed' | 'dotted';
+export type DividerType = 'solid' | 'dashed' | 'dotted';
 export type DividerThicknessVariant = 'thin' | 'md' | 'thick';
 export type DividerLengthVariant = 'full' | 'auto' | number;
 export type DividerSpacingVariant = 'none' | Size;
@@ -17,9 +17,9 @@ export interface DividerProps {
   orientation?: DividerOrientationVariant;
 
   /**
-   * The visual style variant of the divider
+   * The visual style type of the divider
    */
-  variant?: DividerVariant;
+  type?: DividerType;
 
   /**
    * The thickness of the divider

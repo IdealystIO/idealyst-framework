@@ -16,7 +16,6 @@ const Text = forwardRef<RNText, TextProps>(({
     size,
     weight,
     align,
-    color: color
   });
 
   return (

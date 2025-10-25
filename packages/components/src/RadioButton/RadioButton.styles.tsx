@@ -44,7 +44,7 @@ function createCheckedVariants(theme: Theme, intent: RadioButtonIntent) {
         false: {
             borderColor: theme.colors.border.primary,
         },
-    };
+    } as const;
 }
 
 function createRadioDotSizeVariants(theme: Theme) {
@@ -58,8 +58,8 @@ function createRadioDotIntentColor(theme: Theme, intent: RadioButtonIntent) {
     return theme.intents[intent].primary;
 }
 
-function createRadioStyles(theme: Theme): ExpandedRadioButtonStyles {
-    return ({ intent }: RadioButtonVariants) => {
+function createRadioStyles(theme: Theme) {
+    return ({ intent }: Partial<RadioButtonVariants>) => {
         return {
             borderRadius: 9999,
             borderWidth: 1.5,
@@ -96,25 +96,25 @@ function createRadioStyles(theme: Theme): ExpandedRadioButtonStyles {
             _web: {
                 transition: 'all 0.2s ease',
             },
-        };
+        } as const;
     }
 }
 
-function createRadioDotStyles(theme: Theme): ExpandedRadioButtonStyles {
-    return ({ intent }: RadioButtonVariants) => {
+function createRadioDotStyles(theme: Theme) {
+    return ({ intent }: Partial<RadioButtonVariants>) => {
         return {
             borderRadius: 9999,
             backgroundColor: createRadioDotIntentColor(theme, intent),
             variants: {
                 size: createRadioDotSizeVariants(theme),
             },
-        };
+        } as const;
     }
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
-export const radioButtonStyles = StyleSheet.create((theme: Theme): RadioButtonStylesheet => {
+export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
   return {
     container: {
         flexDirection: 'row',
@@ -124,7 +124,7 @@ export const radioButtonStyles = StyleSheet.create((theme: Theme): RadioButtonSt
             size: buildSizeVariants(theme, 'radioButton', (size) => ({
                 gap: size.gap,
             })),
-        },
+        } as const,
     },
     radio: createRadioStyles(theme),
     radioDot: createRadioDotStyles(theme),

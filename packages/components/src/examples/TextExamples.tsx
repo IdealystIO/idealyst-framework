@@ -1,4 +1,3 @@
-import React from 'react';
 import { Screen, View, Text } from '../index';
 
 export const TextExamples = () => {
@@ -58,40 +57,6 @@ export const TextExamples = () => {
         </View>
       </View>
 
-      {/* Utility Text Colors */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Utility Text Colors</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
-          <Text color="disabled">Disabled text</Text>
-          <Text color="muted">Muted text</Text>
-          <Text color="placeholder">Placeholder text</Text>
-        </View>
-      </View>
-
-      {/* Palette Text Colors */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Palette Colors</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
-          <Text color="blue">Blue color text</Text>
-          <Text color="green">Green color text</Text>
-          <Text color="red">Red color text</Text>
-          <Text color="orange">Orange color text</Text>
-        </View>
-      </View>
-
-      {/* Text Color Shades */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Color Shades</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
-          <Text color="blue.300">Blue 300 text</Text>
-          <Text color="blue.500">Blue 500 text</Text>
-          <Text color="blue.700">Blue 700 text</Text>
-          <Text color="red.200">Red 200 text</Text>
-          <Text color="red.600">Red 600 text</Text>
-          <Text color="red.900">Red 900 text</Text>
-        </View>
-      </View>
-
       {/* Text Alignment */}
       <View spacing="md">
         <Text size="md" weight="semibold">Alignment</Text>
@@ -111,9 +76,6 @@ export const TextExamples = () => {
           </Text>
           <Text size="sm" weight="light" color="secondary" align="right">
             Small Light Secondary Right
-          </Text>
-          <Text size="md" weight="semibold" color="green">
-            Medium Semibold Green
           </Text>
         </View>
       </View>

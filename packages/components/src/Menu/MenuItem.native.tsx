@@ -1,4 +1,4 @@
-import React, { isValidElement, forwardRef } from 'react';
+import React, { isValidElement, forwardRef, ComponentRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { Icon } from '../Icon';
 import { menuItemStyles } from './MenuItem.styles';
@@ -12,7 +12,7 @@ interface MenuItemProps {
   testID?: string;
 }
 
-const MenuItem = forwardRef<Pressable, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
+const MenuItem = forwardRef<ComponentRef<typeof Pressable>, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
   // Initialize styles with useVariants
   menuItemStyles.useVariants({
     size,
