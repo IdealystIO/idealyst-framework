@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native-unistyles";
-import { Theme, StylesheetStyles } from '@idealyst/theme';
+import { Theme, StylesheetStyles, Styles, DynamicStyles } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import { TextAlignVariant, TextColorVariant, TextSizeVariant, TextWeightVariant } from "./types";
 
@@ -10,44 +10,18 @@ type TextVariants = {
     color: TextColorVariant;
 }
 
-export type ExpandedTextStyles = StylesheetStyles<keyof TextVariants>;
-
 export type TextStylesheet = {
-    text: ExpandedTextStyles;
+    text: DynamicStyles<keyof TextVariants>;
 }
 
 /**
  * Create size variants for text
  */
-function createSizeVariants(theme: Theme) {
+function createSizeVariants(theme: Theme): any {
     return buildSizeVariants(theme, 'text', (size) => ({
         fontSize: size.fontSize,
         lineHeight: size.lineHeight,
     }));
-}
-
-/**
- * Create weight variants for text
- */
-function createWeightVariants() {
-    // TODO: Add typography to theme
-    return {
-        light: {
-            fontWeight: '300',
-        },
-        normal: {
-            fontWeight: '400',
-        },
-        medium: {
-            fontWeight: '500',
-        },
-        semibold: {
-            fontWeight: '600',
-        },
-        bold: {
-            fontWeight: '700',
-        },
-    } as const;
 }
 
 function createTextStyles(theme: Theme) {
@@ -58,8 +32,24 @@ function createTextStyles(theme: Theme) {
             padding: 0,
             color: colorValue,
             variants: {
-                size: createSizeVariants(theme),
-                weight: createWeightVariants(),
+                size: createSizeVariants(theme) as any,
+                weight: {
+                    light: {
+                        fontWeight: '300',
+                    },
+                    normal: {
+                        fontWeight: '400',
+                    },
+                    medium: {
+                        fontWeight: '500',
+                    },
+                    semibold: {
+                        fontWeight: '600',
+                    },
+                    bold: {
+                        fontWeight: '700',
+                    },
+                } as const,
                 align: {
                     left: {
                         textAlign: 'left',
@@ -70,7 +60,7 @@ function createTextStyles(theme: Theme) {
                     right: {
                         textAlign: 'right',
                     },
-                },
+                } as const,
             } as const,
             _web: {
                 fontFamily: 'inherit',
@@ -85,5 +75,5 @@ function createTextStyles(theme: Theme) {
 export const textStyles = StyleSheet.create((theme: Theme) => {
   return {
         text: createTextStyles(theme),
-    } as const
+    } as TextStylesheet;
 });

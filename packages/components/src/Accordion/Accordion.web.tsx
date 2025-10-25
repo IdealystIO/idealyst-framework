@@ -7,6 +7,7 @@ import { resolveIconPath } from '../Icon/icon-resolver';
 
 interface AccordionItemProps {
   item: AccordionItemType;
+  type: AccordionProps['type'];
   isExpanded: boolean;
   onToggle: () => void;
   size: AccordionProps['size'];
@@ -17,6 +18,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   item,
   isExpanded,
   onToggle,
+  type,
   size,
   testID,
 }) => {
@@ -26,6 +28,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
   accordionStyles.useVariants({
     size,
+    type,
     expanded: isExpanded,
     disabled: Boolean(item.disabled),
   });
@@ -130,6 +133,7 @@ const Accordion: React.FC<AccordionProps> = ({
         <AccordionItem
           key={item.id}
           item={item}
+          type={type}
           isExpanded={expandedItems.includes(item.id)}
           onToggle={() => toggleItem(item.id, item.disabled)}
           size={size}

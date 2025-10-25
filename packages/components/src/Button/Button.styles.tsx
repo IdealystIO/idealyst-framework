@@ -47,11 +47,10 @@ function createTypeVariants(theme: Theme) {
 /**
  * Create compound variants for intent+type combinations
  */
-function createButtonCompoundVariants(theme: Theme) {
-    const compoundVariants: any[] = [];
-    const intents: Intent[] = ['primary', 'success', 'error', 'warning'];
+function createButtonCompoundVariants(theme: Theme): CompoundVariants<keyof ButtonVariants> {
+    const compoundVariants: CompoundVariants<keyof ButtonVariants> = [];
 
-    intents.forEach(intent => {
+    for (const intent in theme.intents) {
         const intentValue = theme.intents[intent];
 
         // Contained + intent
@@ -82,7 +81,7 @@ function createButtonCompoundVariants(theme: Theme) {
                 color: intentValue.primary,
             },
         });
-    });
+    };
 
     return compoundVariants;
 }
@@ -90,7 +89,7 @@ function createButtonCompoundVariants(theme: Theme) {
 /**
  * Create icon compound variants for intent+type combinations
  */
-function createIconCompoundVariants(theme: Theme) {
+function createIconCompoundVariants(theme: Theme): CompoundVariants<keyof ButtonVariants> {
     const compoundVariants: CompoundVariants<keyof ButtonVariants> = [];
 
     for (const intent in theme.intents) {
@@ -137,7 +136,7 @@ function createIconColorVariants(theme: Theme, intent: Intent) {
         text: {
             color: intentValue.primary,
         },
-    };
+    } as const;
 }
 
 /**
@@ -192,8 +191,10 @@ export const buttonStyles = StyleSheet.create((theme: Theme) => {
             borderRadius: 8,
             fontWeight: '600',
             textAlign: 'center',
-            transition: 'all 0.1s ease',
-
+            _web: {
+                display: 'flex',
+                transition: 'all 0.1s ease',
+            },
             variants: {
                 size: buildSizeVariants(theme, 'button', size => ({
                     paddingVertical: size.paddingVertical,
@@ -212,10 +213,10 @@ export const buttonStyles = StyleSheet.create((theme: Theme) => {
                             opacity: 0.75,
                         },
                     } },
-                },
+                } as const,
             } as const,
             compoundVariants: createButtonCompoundVariants(theme),
-        },
+        } as const,
         icon: {
             display: 'flex',
             alignItems: 'center',
@@ -227,16 +228,16 @@ export const buttonStyles = StyleSheet.create((theme: Theme) => {
                 })),
                 intent: createIntentVariants(theme),
                 type: createTypeVariants(theme),
-            },
+            } as const,
             compoundVariants: createIconCompoundVariants(theme),
-        },
+        } as const,
         iconContainer: {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
             gap: 4,
-        },
+        } as const,
         text: {
             fontWeight: '600',
             textAlign: 'center',

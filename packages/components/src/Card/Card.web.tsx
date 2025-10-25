@@ -26,6 +26,10 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   // Apply variants
   cardStyles.useVariants({
     clickable,
+    radius,
+    type,
+    padding,
+    intent,
     disabled,
   });
 

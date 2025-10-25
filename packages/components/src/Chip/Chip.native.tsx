@@ -20,14 +20,6 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
   style,
   testID,
 }, ref) => {
-  chipStyles.useVariants({
-    size,
-    type,
-    intent,
-    selected: selectable ? selected : false,
-    disabled,
-  });
-
   const handlePress = () => {
     if (disabled) return;
     if (onPress) {
@@ -42,6 +34,16 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
     }
   };
 
+  // Compute actual selected state
+  const isSelected = selectable ? selected : false;
+
+  // Compute dynamic styles
+  const containerStyle = chipStyles.container(size, intent, type, isSelected, disabled);
+  const labelStyle = chipStyles.label(size, intent, type, isSelected);
+  const iconStyle = chipStyles.icon(size, intent, type, isSelected);
+  const deleteButtonStyle = chipStyles.deleteButton(size);
+  const deleteIconStyle = chipStyles.deleteIcon(size, intent, type, isSelected);
+
   // Map chip size to icon size
   const iconSize = size === 'sm' ? 12 : size === 'md' ? 14 : 16;
   const deleteIconSize = size === 'sm' ? 10 : size === 'md' ? 11 : 12;
@@ -52,11 +54,11 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
 
     if (typeof icon === 'string' && isIconName(icon)) {
       return (
-        <View style={chipStyles.icon}>
+        <View style={iconStyle}>
           <MaterialCommunityIcons
             name={icon}
             size={iconSize}
-            style={chipStyles.icon}
+            style={iconStyle}
           />
         </View>
       );
@@ -72,11 +74,11 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
     <>
       {icon && renderIcon()}
 
-      <Text style={chipStyles.label}>{label}</Text>
+      <Text style={labelStyle}>{label}</Text>
 
       {deletable && onDelete && (
         <Pressable
-          style={chipStyles.deleteButton}
+          style={deleteButtonStyle}
           onPress={handleDelete}
           disabled={disabled}
           hitSlop={8}
@@ -86,7 +88,7 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
           <MaterialCommunityIcons
             name="close"
             size={deleteIconSize}
-            style={chipStyles.deleteIcon}
+            style={deleteIconStyle}
           />
         </Pressable>
       )}
@@ -105,7 +107,7 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
           selected: selectable ? selected : undefined,
         }}
       >
-        <View style={[chipStyles.container, style]} testID={testID}>
+        <View style={[containerStyle, style]} testID={testID}>
           {innerContent}
         </View>
       </Pressable>
@@ -113,7 +115,7 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
   }
 
   return (
-    <View ref={ref} style={[chipStyles.container, style]} testID={testID}>
+    <View ref={ref} style={[containerStyle, style]} testID={testID}>
       {innerContent}
     </View>
   );

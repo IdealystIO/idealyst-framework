@@ -19,9 +19,13 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
   // Apply variants
   cardStyles.useVariants({
     clickable,
+    radius,
+    type,
+    padding,
+    intent,
     disabled,
   });
-
+  
   // Use appropriate component based on clickable state
   const Component = clickable ? Pressable : View;
 

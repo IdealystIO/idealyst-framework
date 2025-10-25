@@ -22,19 +22,15 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
   style,
   testID,
 }, ref) => {
-  chipStyles.useVariants({
-    size,
-    type,
-    intent,
-    selected,
-    disabled,
-  });
+  // Compute actual selected state
+  const isSelected = selectable ? selected : false;
 
-  const containerProps = getWebProps([chipStyles.container, style]);
-  const labelProps = getWebProps([chipStyles.label]);
-  const iconProps = getWebProps([chipStyles.icon]);
-  const deleteButtonProps = getWebProps([chipStyles.deleteButton]);
-  const deleteIconProps = getWebProps([chipStyles.deleteIcon]);
+  // Compute dynamic styles
+  const containerProps = getWebProps([chipStyles.container(size, intent, type, isSelected, disabled), style as any]);
+  const labelProps = getWebProps([chipStyles.label(size, intent, type, isSelected)]);
+  const iconProps = getWebProps([chipStyles.icon(size, intent, type, isSelected)]);
+  const deleteButtonProps = getWebProps([chipStyles.deleteButton(size)]);
+  const deleteIconProps = getWebProps([chipStyles.deleteIcon(size, intent, type, isSelected)]);
 
   const handleClick = () => {
     if (disabled) return;

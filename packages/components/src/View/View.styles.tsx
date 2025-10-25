@@ -1,5 +1,6 @@
+
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Surface, ViewSizeValue} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Surface} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import { ViewBackgroundVariant, ViewBorderVariant, ViewRadiusVariant, ViewSpacingVariant } from './types';
 

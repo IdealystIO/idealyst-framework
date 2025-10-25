@@ -77,7 +77,7 @@ export const AccordionExamples: React.FC = () => {
         <Text size="lg" weight="semibold">Variants</Text>
         <View spacing="sm">
           <View spacing="xs">
-            <Text size="sm" weight="medium">Standard</Text>
+            <Text size="sm" weight="medium">Default</Text>
             <Accordion items={basicItems} type="standard" />
           </View>
           <View spacing="xs">

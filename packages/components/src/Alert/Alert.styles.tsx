@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent} from '@idealyst/theme';
+import { Theme, Intent, CompoundVariants} from '@idealyst/theme';
 
 type AlertType = 'filled' | 'outlined' | 'soft';
 type AlertIntent = Intent | 'info'; // Alert includes 'info' which maps to primary
@@ -13,29 +13,27 @@ export type AlertVariants = {
 /**
  * Create type variants (structure only, colors handled by compound variants)
  */
-function createTypeVariants() {
-    return {
-        filled: {
-            borderWidth: 1,
-            borderStyle: 'solid' as const,
-        },
-        outlined: {
-            backgroundColor: 'transparent',
-            borderWidth: 1,
-            borderStyle: 'solid' as const,
-        },
-        soft: {
-            borderWidth: 1,
-            borderStyle: 'solid' as const,
-        },
-    } as const;
-}
+const TypeVariants = {
+    filled: {
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+    },
+    outlined: {
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+    },
+    soft: {
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+    }
+} as const;
 
 /**
  * Create compound variants for container (type + intent combinations)
  */
 function createContainerCompoundVariants(theme: Theme) {
-    const compoundVariants: any[] = [];
+    const compoundVariants: CompoundVariants<keyof AlertVariants> = [];
 
     // Process standard intents from theme
     for (const intent in theme.intents) {
@@ -104,7 +102,7 @@ function createContainerCompoundVariants(theme: Theme) {
  * Create compound variants for icon/title colors (type + intent combinations)
  */
 function createIconTitleCompoundVariants(theme: Theme) {
-    const compoundVariants: any[] = [];
+    const compoundVariants: CompoundVariants<keyof AlertVariants> = [];
 
     // Process standard intents from theme
     for (const intent in theme.intents) {
@@ -168,8 +166,8 @@ function createIconTitleCompoundVariants(theme: Theme) {
 /**
  * Create compound variants for message colors (type + intent combinations)
  */
-function createMessageCompoundVariants(theme: Theme) {
-    const compoundVariants: any[] = [];
+function createMessageCompoundVariants(theme: Theme): CompoundVariants<keyof AlertVariants> {
+    const compoundVariants: CompoundVariants<keyof AlertVariants> = [];
 
     // Process standard intents from theme
     for (const intent in theme.intents) {
@@ -230,7 +228,6 @@ function createMessageCompoundVariants(theme: Theme) {
     return compoundVariants;
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const alertStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: {
@@ -243,8 +240,8 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             borderWidth: 1,
             borderStyle: 'solid' as const,
             variants: {
-                type: createTypeVariants(),
-            },
+                type: TypeVariants,
+            } as const,
             compoundVariants: createContainerCompoundVariants(theme),
         } as const,
         iconContainer: {
@@ -254,11 +251,8 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             flexShrink: 0,
             width: 24,
             height: 24,
-            variants: {
-                type: createTypeVariants(),
-            },
             compoundVariants: createIconTitleCompoundVariants(theme),
-        },
+        } as const,
         content: {
             flex: 1,
             display: 'flex',
@@ -269,17 +263,11 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             fontSize: 16,
             lineHeight: 24,
             fontWeight: '600',
-            variants: {
-                type: createTypeVariants(),
-            },
             compoundVariants: createIconTitleCompoundVariants(theme),
         },
         message: {
             fontSize: 14,
             lineHeight: 20,
-            variants: {
-                type: createTypeVariants(),
-            },
             compoundVariants: createMessageCompoundVariants(theme),
         },
         actions: {
@@ -312,5 +300,5 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             width: 16,
             height: 16,
         },
-    };
+    } as const;
 });

@@ -793,6 +793,28 @@ export const darkTheme: Theme = {
         fontSize: 18,
         padding: 12,
       }
+    },
+    view: {
+      xs: {
+        padding: 4,
+        spacing: 4,
+      },
+      sm: {
+        padding: 8,
+        spacing: 8,
+      },
+      md: {
+        padding: 16,
+        spacing: 16,
+      },
+      lg: {
+        padding: 24,
+        spacing: 24,
+      },
+      xl: {
+        padding: 32,
+        spacing: 32,
+      }
     }
   },
 } as Theme

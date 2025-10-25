@@ -24,6 +24,7 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
     background,
     radius,
     border,
+    spacing,
   });
 
   // Create dynamic styles based on custom props (overrides variants)
@@ -36,11 +37,8 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
   if (borderWidth !== undefined) dynamicStyles.borderWidth = borderWidth;
   if (borderColor) dynamicStyles.borderColor = borderColor;
 
-  // Separate Unistyles objects from plain CSS objects
-  const unistylesArray: any[] = [viewStyles.view];
-
-  // Use getWebProps to generate className and ref for web (only for Unistyles objects)
-  const webProps = getWebProps(unistylesArray);
+  /** @ts-ignore */
+  const webProps = getWebProps(viewStyles.view);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
 

@@ -31,7 +31,8 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
 }, ref) => {
   // Apply variants to stylesheet
   alertStyles.useVariants({
-    type
+    type,
+    intent,
   });
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);

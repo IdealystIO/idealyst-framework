@@ -33,9 +33,10 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   // Apply variants to stylesheet
   alertStyles.useVariants({
     type,
+    intent,
   });
 
-  const containerProps = getWebProps([alertStyles.container, style]);
+  const containerProps = getWebProps([alertStyles.container, style as any]);
   const iconContainerProps = getWebProps([alertStyles.iconContainer]);
   const contentProps = getWebProps([alertStyles.content]);
   const titleProps = getWebProps([alertStyles.title]);

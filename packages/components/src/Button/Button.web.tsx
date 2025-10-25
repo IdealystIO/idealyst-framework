@@ -1,4 +1,4 @@
-import React, { isValidElement, forwardRef, useEffect, useRef, useImperativeHandle } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
@@ -29,26 +29,24 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     testID,
   } = props;
 
+  buttonStyles.useVariants({
+    type,
+    intent,
+    size,
+    disabled
+  });
+
   const handleClick = () => {
     if (!disabled && onPress) {
       onPress();
     }
   };
 
-  // Apply variants using the correct Unistyles 3.0 pattern
-  buttonStyles.useVariants({
-    size,
-    intent,
-    type,
-    disabled,
-  });
-
-
-  // Create the style array following the official documentation pattern
+  // Compute dynamic styles
   const buttonStyleArray = [
     buttonStyles.button,
-    buttonStyles.text, // Include text styles for font sizing
-    style, // Include incoming style prop
+    buttonStyles.text,
+    style as any,
   ];
 
   // Use getWebProps to generate className and ref for web
@@ -57,7 +55,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   // Icon container styles
   const iconContainerProps = getWebProps([buttonStyles.iconContainer]);
 
-  // Icon styles with variants
+  // Icon styles with dynamic function
   const iconStyleArray = [buttonStyles.icon];
   const iconProps = getWebProps(iconStyleArray);
 

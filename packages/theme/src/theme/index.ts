@@ -6,7 +6,7 @@ import { AllShadowTypes } from "./shadow";
 export type Theme = {
     intents: Record<Intent, IntentValue>;
     colors: AllColorTypes;
-    sizes: AllComponentSizes
+    sizes: AllComponentSizes;
     shadows: AllShadowTypes;
 };
 

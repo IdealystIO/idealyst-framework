@@ -19,13 +19,10 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     testID,
   } = props;
 
-  // Apply button variants
-  buttonStyles.useVariants({
-    size,
-    intent,
-    type,
-    disabled,
-  });
+  // Compute dynamic styles
+  const buttonStyle = buttonStyles.button(size, intent, type, disabled);
+  const textStyle = buttonStyles.text(size, intent, type, disabled);
+  const iconStyle = buttonStyles.icon(size, intent, type);
 
   // Map button size to icon size
   const iconSizeMap = {
@@ -41,12 +38,12 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   const renderIcon = (icon: string | React.ReactNode) => {
     if (typeof icon === 'string') {
       // Render MaterialCommunityIcons with explicit size prop
-      // The icon styles provide the correct color based on variants
+      // The icon styles provide the correct color based on dynamic styles
       return (
         <MaterialCommunityIcons
           name={icon}
           size={iconSize}
-          style={buttonStyles.icon}
+          style={iconStyle}
         />
       );
     } else if (isValidElement(icon)) {
@@ -69,18 +66,18 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
       disabled={disabled}
       testID={testID}
       activeOpacity={0.7}
-      style={[buttonStyles.button, style]}
+      style={[buttonStyle, style]}
     >
       {hasIcons ? (
         <View style={buttonStyles.iconContainer}>
           {leftIcon && renderIcon(leftIcon)}
-          <Text style={buttonStyles.text}>
+          <Text style={textStyle}>
             {buttonContent}
           </Text>
           {rightIcon && renderIcon(rightIcon)}
         </View>
       ) : (
-        <Text style={buttonStyles.text}>
+        <Text style={textStyle}>
           {buttonContent}
         </Text>
       )}

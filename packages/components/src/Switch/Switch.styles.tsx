@@ -133,6 +133,12 @@ export const switchStyles = StyleSheet.create((theme: Theme) => {
     },
     switchContainer: {
         justifyContent: 'center',
+        _web: {
+            border: 'none',
+            padding: 0,
+            backgroundColor: 'transparent',
+            width: 'fit-content',
+        }
     },
     switchTrack: createSwitchTrackStyles(theme),
     switchThumb: createSwitchThumbStyles(theme),
