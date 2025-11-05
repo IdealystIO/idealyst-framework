@@ -210,3 +210,4 @@ yarn-error.log*
 /packages/example-ssr/.react-router
 /.cursor
 /.playwright-mcp
+/examples/app/packages/database/generated
