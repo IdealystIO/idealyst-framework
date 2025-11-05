@@ -9,8 +9,10 @@ export default defineConfig({
     babel({
       filter: (id) =>
         id.includes("node_modules/@idealyst/") ||
-        (id.includes("/packages/") && /\.(tsx?|jsx?)$/.test(id)),      babelConfig: {
+        (id.includes("/packages/") && /\.(tsx?|jsx?)$/.test(id)),
+      babelConfig: {
         presets: [
+          ['@babel/preset-react', { runtime: 'automatic' }],
           ['@babel/preset-typescript', {
             isTSX: true,
             allExtensions: true,
