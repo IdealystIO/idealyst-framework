@@ -37,8 +37,9 @@ const packagePaths = [
   'packages/datepicker/package.json',
   'packages/oauth-client/package.json',
   'packages/storage/package.json',
+  'packages/mcp-server/package.json',
   'examples/example-native/package.json',
-  'examples/example-web/package.json'
+  'examples/example-web/package.json',
 ];
 
 // Function to update version in package.json
