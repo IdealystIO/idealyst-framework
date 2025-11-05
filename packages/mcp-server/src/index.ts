@@ -18,7 +18,7 @@ import iconsData from "./data/icons.json" with { type: "json" };
 const server = new Server(
   {
     name: "@idealyst/mcp-server",
-    version: "1.0.85",
+    version: "1.0.87",
   },
   {
     capabilities: {

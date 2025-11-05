@@ -35,7 +35,6 @@ services:
       - "19006:19006"
     volumes:
       - ..:/workspace
-      - /workspace/node_modules
     depends_on:
       - postgres
       - redis
