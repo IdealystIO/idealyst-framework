@@ -1,6 +1,6 @@
 FROM node:20-bullseye
 
-# Install additional tools
+# Install additional tools including gosu for proper user switching
 RUN apt-get update && apt-get install -y \
     git \
     postgresql-client \
@@ -18,6 +18,9 @@ RUN git config --global init.defaultBranch main
 # Create workspace directory
 RUN mkdir -p /workspace
 WORKDIR /workspace
+RUN chown -R node:node /workspace
 
-# Keep container running
-CMD ["sleep", "infinity"]
+# Note: We don't switch to node user here anymore - entrypoint.sh will do it
+# This allows the entrypoint to fix permissions as root first
+
+USER node
