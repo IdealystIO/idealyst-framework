@@ -1,18 +1,16 @@
 export const Progress = {
   category: "feedback",
   description: "Progress indicator showing completion status of tasks or operations",
-  props: `
-- \`value\`: number - Current progress value (0-max)
-- \`max\`: number - Maximum value (default: 100)
-- \`variant\`: 'linear' | 'circular' - Progress bar style
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'sm' | 'md' | 'lg' - Size of progress indicator
-- \`indeterminate\`: boolean - Show indeterminate/loading state
-- \`showLabel\`: boolean - Show percentage label
-- \`label\`: string - Custom label text
-- \`rounded\`: boolean - Rounded ends (linear variant)
-- \`style\`: ViewStyle - Additional custom styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`value\`: number - The current progress value (0 to max)
+- \`max\`: number - The maximum value representing 100% completion
+- \`variant\`: ProgressVariant - The visual variant (linear or circular)
+- \`intent\`: ProgressIntentVariant - The intent/color scheme of the progress bar
+- \`size\`: ProgressSizeVariant - The size variant of the progress indicator
+- \`indeterminate\`: boolean - Whether to show indeterminate/loading animation
+- \`showLabel\`: boolean - Whether to display the percentage label
+- \`label\`: string - Custom label text (overrides percentage)
+- \`rounded\`: boolean - Whether to use rounded ends for linear progress
 `,
   features: [
     "Linear and circular variants",
@@ -35,7 +33,7 @@ import { Progress } from '@idealyst/components';
 
 <Progress
   value={65}
-  variant="linear"
+  type="linear"
   intent="primary"
   showLabel
 />
@@ -48,9 +46,9 @@ import { Progress } from '@idealyst/components';
     variants: `import { Progress, View } from '@idealyst/components';
 
 <View spacing="md">
-  <Progress value={30} variant="linear" intent="primary" />
-  <Progress value={60} variant="linear" intent="success" />
-  <Progress value={value} variant="circular" size="lg" showLabel />
+  <Progress value={30} type="linear" intent="primary" />
+  <Progress value={60} type="linear" intent="success" />
+  <Progress value={value} type="circular" size="lg" showLabel />
 </View>`,
 
     "with-icons": `import { Progress, View, Text } from '@idealyst/components';

@@ -1,23 +1,23 @@
 export const Input = {
 category: "form",
     description: "Text input field with icons, password visibility toggle, and various input types",
-    props: `
-- \`value\`: string - Current input value
-- \`onChangeText\`: (text: string) => void - Text change handler
-- \`onFocus\`: () => void - Focus handler
-- \`onBlur\`: () => void - Blur handler
+        props: `
+- \`value\`: string - The current value of the input
+- \`onChangeText\`: function - Called when the text changes
+- \`onFocus\`: function - Called when the input receives focus
+- \`onBlur\`: function - Called when the input loses focus
 - \`placeholder\`: string - Placeholder text
-- \`disabled\`: boolean - Disable input
-- \`inputType\`: 'text' | 'email' | 'password' | 'number' - Input type (affects keyboard on mobile)
-- \`secureTextEntry\`: boolean - Hide input (for passwords)
-- \`leftIcon\`: IconName | ReactNode - Icon to display on the left side
-- \`rightIcon\`: IconName | ReactNode - Icon to display on the right side
+- \`disabled\`: boolean - Whether the input is disabled
+- \`inputType\`: InputInputType - The type of input (affects keyboard type on mobile)
+- \`secureTextEntry\`: boolean - Whether to show the password
+- \`leftIcon\`: IconName | React.ReactNode - Icon to display on the left side of the input
+- \`rightIcon\`: IconName | React.ReactNode - Icon to display on the right side of the input
 - \`showPasswordToggle\`: boolean - Show password visibility toggle for password inputs (defaults to true for password type)
 - \`autoCapitalize\`: 'none' | 'sentences' | 'words' | 'characters' - Auto-capitalization behavior
-- \`size\`: 'sm' | 'md' | 'lg' - Input size
-- \`variant\`: 'default' | 'outlined' | 'filled' | 'bare' - Style variant
-- \`intent\`:Intent - Color scheme (for focus states)
-- \`hasError\`: boolean - Error state (deprecated: use intent="error")
+- \`size\`: InputSize - Size variant of the input
+- \`type\`: InputType - Style variant of the input
+- \`intent\`: InputIntent - The intent/color scheme of the input (for focus states, validation, etc.)
+- \`hasError\`: boolean - Whether the input has an error state
 `,
     features: [
       "Left and right icon support with MDI icons",
@@ -72,13 +72,13 @@ function Example() {
 <Input size="lg" placeholder="Large input" />
 
 // Outlined variant
-<Input variant="outlined" placeholder="Outlined" />
+<Input type="outlined" placeholder="Outlined" />
 
 // Filled variant
-<Input variant="filled" placeholder="Filled" />
+<Input type="filled" placeholder="Filled" />
 
 // Bare variant
-<Input variant="bare" placeholder="Bare" />`,
+<Input type="bare" placeholder="Bare" />`,
       "with-icons": `import { Input } from '@idealyst/components';
 
 // Left icon

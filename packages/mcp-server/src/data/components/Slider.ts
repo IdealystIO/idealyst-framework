@@ -1,25 +1,21 @@
 export const Slider = {
   category: "form",
   description: "Input slider for selecting numeric values from a range",
-  props: `
-- \`value\`: number - Current slider value
-- \`defaultValue\`: number - Default value (uncontrolled)
-- \`min\`: number - Minimum value (default: 0)
-- \`max\`: number - Maximum value (default: 100)
-- \`step\`: number - Step increment (default: 1)
-- \`disabled\`: boolean - Whether slider is disabled
-- \`showValue\`: boolean - Show current value label
-- \`showMinMax\`: boolean - Show min/max labels
-- \`marks\`: SliderMark[] - Custom marks on slider
-  - \`value\`: number - Mark position
-  - \`label\`: string - Mark label (optional)
-- \`intent\`: 'primary' | 'success' | 'error' | 'warning' | 'neutral' - Color scheme
-- \`size\`: 'sm' | 'md' | 'lg' - Slider size
-- \`icon\`: IconName | React.ReactNode - Icon displayed in thumb
-- \`onValueChange\`: (value: number) => void - Called during drag
-- \`onValueCommit\`: (value: number) => void - Called when drag ends
-- \`style\`: ViewStyle - Additional styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`value\`: number - The current value of the slider (controlled)
+- \`defaultValue\`: number - The default value for uncontrolled usage
+- \`min\`: number - The minimum value of the slider range
+- \`max\`: number - The maximum value of the slider range
+- \`step\`: number - The increment step when moving the slider
+- \`disabled\`: boolean - Whether the slider is disabled
+- \`showValue\`: boolean - Whether to display the current value
+- \`showMinMax\`: boolean - Whether to show min and max labels
+- \`marks\`: SliderMark[] - Array of marks to display on the slider track
+- \`intent\`: SliderIntentVariant - The intent/color scheme of the slider
+- \`size\`: SliderSizeVariant - The size variant of the slider
+- \`icon\`: IconName | React.ReactNode - Icon to display in the slider thumb
+- \`onValueChange\`: function - Called when the slider value changes during dragging
+- \`onValueCommit\`: function - Called when the user finishes changing the value (on release)
 `,
   features: [
     "Controlled and uncontrolled modes",

@@ -1,19 +1,14 @@
 export const TabBar = {
   category: "navigation",
   description: "Tab bar navigation component for switching between views or sections",
-  props: `
-- \`items\`: TabBarItem[] - Array of tab items
-  - \`value\`: string - Unique tab value
-  - \`label\`: string - Tab label text
-  - \`disabled\`: boolean - Whether tab is disabled
-- \`value\`: string - Currently active tab value
-- \`defaultValue\`: string - Default tab (uncontrolled)
-- \`onChange\`: (value: string) => void - Tab change handler
-- \`variant\`: 'default' | 'pills' | 'underline' - Visual style
-- \`size\`: 'sm' | 'md' | 'lg' - Tab size
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`style\`: ViewStyle - Additional styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`items\`: TabBarItem[] - Array of tab items to display
+- \`value\`: string - The currently selected tab value (controlled)
+- \`defaultValue\`: string - The default selected tab for uncontrolled usage
+- \`onChange\`: function - Called when the selected tab changes
+- \`type\`: TabBarType - The visual style variant (default, underlined, pills)
+- \`size\`: TabBarSizeVariant - The size variant of the tabs
+- \`pillMode\`: TabBarPillMode - Mode for pills variant: 'light' for light backgrounds (dark pill), 'dark' for dark backgrounds (light pill)
 `,
   features: [
     "Three visual variants",
@@ -49,7 +44,7 @@ function Example() {
       items={items}
       value={activeTab}
       onChange={setActiveTab}
-      variant="underline"
+      type="underline"
     />
   );
 }
@@ -72,9 +67,9 @@ const items = [
 ];
 
 <View spacing="md">
-  <TabBar items={items} variant="default" />
-  <TabBar items={items} variant="pills" />
-  <TabBar items={items} variant="underline" />
+  <TabBar items={items} type="default" />
+  <TabBar items={items} type="pills" />
+  <TabBar items={items} type="underline" />
 </View>`,
 
     "with-icons": `import { TabBar, View, Text } from '@idealyst/components';
@@ -95,7 +90,7 @@ function Example() {
         items={items}
         value={tab}
         onChange={setTab}
-        variant="underline"
+        type="underline"
         intent="primary"
       />
       <Text>{tab} content here</Text>
@@ -135,9 +130,9 @@ function Example() {
         items={items}
         value={activeTab}
         onChange={setActiveTab}
-        variant="pills"
+        type="pills"
       />
-      <Card variant="outlined" padding="md">
+      <Card type="outlined" padding="md">
         {renderContent()}
       </Card>
     </View>

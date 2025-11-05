@@ -1,13 +1,11 @@
 export const Icon = {
   category: "display",
   description: "Material Design icon display component with size and color variants",
-  props: `
-- \`name\`: IconName - The name of the Material Design icon
-- \`size\`: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number - Icon size variant or custom number
-- \`color\`: DisplayColorVariant - Predefined theme color variant
-- \`style\`: any - Additional custom styles
-- \`testID\`: string - Test identifier
-- \`accessibilityLabel\`: string - Accessibility label for screen readers
+      props: `
+- \`name\`: IconName | `mdi:${IconName}` - The name of the icon to display
+- \`size\`: IconSizeVariant - The size variant of the icon
+- \`color\`: Color - Predefined color variant based on theme
+- \`intent\`: Intent - Intent variant for the icon
 `,
   features: [
     "Material Design Icons library",
@@ -61,7 +59,7 @@ function Example() {
     <Button
       icon={favorited ? 'heart' : 'heart-outline'}
       intent={favorited ? 'error' : 'neutral'}
-      variant="text"
+      type="text"
       onPress={() => setFavorited(!favorited)}
     >
       {favorited ? 'Favorited' : 'Favorite'}

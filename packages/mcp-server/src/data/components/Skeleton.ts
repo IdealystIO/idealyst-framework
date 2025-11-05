@@ -1,22 +1,12 @@
 export const Skeleton = {
   category: "feedback",
   description: "Loading placeholder that mimics content structure while data loads",
-  props: `
-Skeleton Props:
-- \`width\`: number | string - Width of skeleton (default: '100%')
-- \`height\`: number | string - Height of skeleton (default: 20)
-- \`shape\`: 'rectangle' | 'circle' | 'rounded' - Shape of skeleton (default: 'rectangle')
-- \`borderRadius\`: number - Border radius for 'rounded' shape (default: 8)
-- \`animation\`: 'pulse' | 'wave' | 'none' - Animation type (default: 'pulse')
-- \`style\`: ViewStyle - Additional custom styles
-- \`testID\`: string - Test identifier
-
-SkeletonGroup Props:
-- \`count\`: number - Number of skeleton items (default: 3)
-- \`spacing\`: number - Spacing between items in pixels (default: 12)
-- \`skeletonProps\`: Omit<SkeletonProps, 'testID'> - Props for each skeleton
-- \`style\`: ViewStyle - Container styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`width\`: number | string - Width of the skeleton (number in pixels or string with units)
+- \`height\`: number | string - Height of the skeleton (number in pixels or string with units)
+- \`shape\`: SkeletonShape - Shape of the skeleton
+- \`borderRadius\`: number - Border radius for 'rounded' shape (in pixels)
+- \`animation\`: SkeletonAnimation - Animation type
 `,
   features: [
     "Three shapes: rectangle, circle, rounded",

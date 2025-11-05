@@ -1,23 +1,14 @@
 export const Menu = {
   category: "overlay",
   description: "Contextual menu with list of actions, typically triggered by a button or other element",
-  props: `
-- \`items\`: MenuItem[] - Array of menu items
-  - \`id\`: string - Unique identifier
-  - \`label\`: string - Menu item label
-  - \`onClick\`: () => void - Click handler
-  - \`disabled\`: boolean - Whether item is disabled
-  - \`icon\`: IconName | ReactNode - Icon (string name or custom element)
-  - \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-  - \`separator\`: boolean - Show separator after this item
-- \`open\`: boolean - Whether menu is open
-- \`onOpenChange\`: (open: boolean) => void - Open state change handler
-- \`anchor\`: React.RefObject<HTMLElement> - Anchor element to position menu
-- \`placement\`: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'right' - Menu placement
-- \`closeOnSelection\`: boolean - Close menu when item selected (default: true)
-- \`size\`: 'sm' | 'md' | 'lg' - Menu item size
-- \`style\`: ViewStyle - Additional custom styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`children\`: React.ReactNode - The trigger element that opens the menu
+- \`items\`: MenuItem[] - Array of menu items to display
+- \`open\`: boolean - Whether the menu is currently open (controlled)
+- \`onOpenChange\`: function - Called when the menu open state changes
+- \`placement\`: MenuPlacement - The placement of the menu relative to the trigger
+- \`closeOnSelection\`: boolean - Whether to close the menu when an item is selected
+- \`size\`: MenuSizeVariant - The size variant of the menu
 `,
   features: [
     "Icon support for menu items",

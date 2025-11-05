@@ -1,16 +1,16 @@
 export const Dialog = {
 category: "overlay",
     description: "Modal overlay for focused user interactions and important information",
-    props: `
-- \`open\`: boolean - Control dialog visibility
-- \`onOpenChange\`: (open: boolean) => void - Open state change handler
-- \`title\`: string - Dialog title
-- \`size\`: 'sm' | 'md' | 'lg' | 'fullscreen' - Dialog size
-- \`variant\`: 'default' | 'alert' - Visual style
-- \`showCloseButton\`: boolean - Show close button
-- \`closeOnBackdropClick\`: boolean - Close when clicking backdrop
-- \`closeOnEscapeKey\`: boolean - Close on Escape key
-- \`children\`: ReactNode - Dialog content
+        props: `
+- \`open\`: boolean - Whether the dialog is open/visible
+- \`onOpenChange\`: function - Called when the dialog should be opened or closed
+- \`title\`: string - Optional title for the dialog
+- \`children\`: React.ReactNode - The content to display inside the dialog
+- \`size\`: DialogSizeVariant - The size of the dialog
+- \`showCloseButton\`: boolean - The visual style variant of the dialog Whether to show the close button in the header
+- \`closeOnBackdropClick\`: boolean - Whether clicking the backdrop should close the dialog
+- \`closeOnEscapeKey\`: boolean - Whether pressing escape key should close the dialog (web only)
+- \`animationType\`: DialogAnimationType - Animation type for the dialog (native only)
 `,
     features: [
       "Controlled open state",
@@ -49,7 +49,7 @@ function Example() {
         <View spacing="md">
           <Text>Are you sure you want to proceed?</Text>
           <View style={{ flexDirection: 'row', gap: 8 }}>
-            <Button variant="outlined" onPress={() => setOpen(false)}>
+            <Button type="outlined" onPress={() => setOpen(false)}>
               Cancel
             </Button>
             <Button onPress={() => { handleConfirm(); setOpen(false); }}>
@@ -76,7 +76,7 @@ function Example() {
 </Dialog>
 
 // Alert dialog
-<Dialog open={open} onOpenChange={setOpen} title="Warning" variant="alert">
+<Dialog open={open} onOpenChange={setOpen} title="Warning" type="alert">
   <Text>This action cannot be undone</Text>
 </Dialog>`,
       "with-icons": `import { Dialog, View, Icon, Text, Button } from '@idealyst/components';
@@ -120,7 +120,7 @@ function Example() {
         <View spacing="md">
           <Text>Proceed with this action?</Text>
           <View style={{ flexDirection: 'row', gap: 8 }}>
-            <Button variant="outlined" onPress={() => setOpen(false)}>
+            <Button type="outlined" onPress={() => setOpen(false)}>
               Cancel
             </Button>
             <Button intent="primary" onPress={handleConfirm}>

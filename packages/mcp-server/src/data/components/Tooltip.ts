@@ -1,15 +1,13 @@
 export const Tooltip = {
   category: "overlay",
   description: "Contextual tooltip that displays information on hover or focus",
-  props: `
-- \`content\`: string | ReactNode - Tooltip content to display
-- \`children\`: ReactNode - Element that triggers the tooltip
-- \`placement\`: 'top' | 'bottom' | 'left' | 'right' - Tooltip placement
-- \`delay\`: number - Delay before showing tooltip (milliseconds)
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'sm' | 'md' | 'lg' - Tooltip size
-- \`style\`: ViewStyle - Additional styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`content\`: string | React.ReactNode - The tooltip content to display
+- \`children\`: React.ReactNode - The element that triggers the tooltip on hover/focus
+- \`placement\`: TooltipPlacement - The placement of the tooltip relative to the trigger
+- \`delay\`: number - Delay in milliseconds before showing the tooltip
+- \`intent\`: TooltipIntentVariant - The intent/color scheme of the tooltip
+- \`size\`: TooltipSizeVariant - The size variant of the tooltip
 `,
   features: [
     "Hover and focus triggers",
@@ -79,19 +77,19 @@ function ActionButtons() {
     <View spacing="sm">
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <Tooltip content="Save your work" placement="top" delay={500}>
-          <Button icon="content-save" variant="contained" intent="primary">
+          <Button icon="content-save" type="contained" intent="primary">
             Save
           </Button>
         </Tooltip>
 
         <Tooltip content="Undo last action" placement="top" delay={500}>
-          <Button icon="undo" variant="outlined">
+          <Button icon="undo" type="outlined">
             Undo
           </Button>
         </Tooltip>
 
         <Tooltip content="Delete selected items" placement="top" intent="error" delay={500}>
-          <Button icon="delete" variant="outlined" intent="error">
+          <Button icon="delete" type="outlined" intent="error">
             Delete
           </Button>
         </Tooltip>

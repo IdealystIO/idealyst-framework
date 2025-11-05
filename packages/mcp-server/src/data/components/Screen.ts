@@ -1,14 +1,16 @@
 export const Screen = {
   category: "layout",
   description: "Full-screen container component with background variants, padding, and safe area support",
-  props: `
-- \`children\`: ReactNode - Content to display inside the screen
-- \`background\`: 'primary' | 'secondary' | 'tertiary' | 'inverse' - Background color variant
-- \`padding\`: 'none' | 'sm' | 'md' | 'lg' | 'xl' - Screen padding variant
-- \`safeArea\`: boolean - Apply safe area padding for mobile devices
-- \`style\`: any - Additional custom styles
-- \`testID\`: string - Test identifier
-- \`scrollable\`: boolean - Make content scrollable
+      props: `
+- \`children\`: React.ReactNode - The content to display inside the screen
+- \`background\`: Surface | 'transparent' - Background variant - controls the background color
+- \`padding\`: Size | 'none' - Screen padding variant
+- \`safeArea\`: boolean - Safe area padding for mobile devices
+- \`top\`: number - Content inset padding for scrollable content (mobile only) Adds padding to the scroll view's content container Useful for adding safe area insets or additional spacing
+- \`bottom\`: number - Bottom content inset padding for scrollable content
+- \`left\`: number - Left content inset padding for scrollable content
+- \`right\`: number - Right content inset padding for scrollable content
+- \`scrollable\`: boolean - Whether the screen content is scrollable
 `,
   features: [
     "Four background color variants",
@@ -86,7 +88,7 @@ function Example() {
         </Text>
         <Button
           onPress={() => setDarkMode(!darkMode)}
-          variant="outlined"
+          type="outlined"
         >
           Toggle {darkMode ? 'Light' : 'Dark'} Mode
         </Button>

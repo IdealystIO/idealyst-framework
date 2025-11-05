@@ -1,18 +1,16 @@
 export const Popover = {
   category: "overlay",
   description: "Floating overlay that displays content anchored to an element, useful for tooltips, menus, and contextual information",
-  props: `
+      props: `
 - \`open\`: boolean - Whether the popover is open/visible
-- \`onOpenChange\`: (open: boolean) => void - Called when popover should open/close
-- \`anchor\`: ReactNode | React.RefObject<Element> - Anchor element to position relative to
-- \`children\`: ReactNode - Content to display inside popover
-- \`placement\`: PopoverPlacement - Preferred placement (top, bottom, left, right with -start, -end modifiers)
-- \`offset\`: number - Distance from anchor element in pixels
-- \`closeOnClickOutside\`: boolean - Close when clicking outside (default: true)
-- \`closeOnEscapeKey\`: boolean - Close on Escape key press (web only, default: true)
-- \`showArrow\`: boolean - Show arrow pointing to anchor
-- \`style\`: any - Additional custom styles
-- \`testID\`: string - Test identifier
+- \`onOpenChange\`: function - Called when the popover should be opened or closed
+- \`anchor\`: React.ReactNode | React.RefObject<Element> - The anchor element to position the popover relative to Can be a React element or a ref to a DOM element
+- \`children\`: React.ReactNode - The content to display inside the popover
+- \`placement\`: PopoverPlacement - Preferred placement of the popover relative to anchor
+- \`offset\`: number - Distance from the anchor element in pixels
+- \`closeOnClickOutside\`: boolean - Whether clicking outside should close the popover
+- \`closeOnEscapeKey\`: boolean - Whether pressing escape key should close the popover (web only)
+- \`showArrow\`: boolean - Whether to show an arrow pointing to the anchor
 `,
   features: [
     "12 placement options with smart positioning",
@@ -94,7 +92,7 @@ const buttonRef = useRef(null);
 const [open, setOpen] = useState(false);
 
 <div ref={buttonRef}>
-  <Button icon="help-circle" variant="text" onPress={() => setOpen(true)} />
+  <Button icon="help-circle" type="text" onPress={() => setOpen(true)} />
 </div>
 <Popover open={open} onOpenChange={setOpen} anchor={buttonRef} showArrow>
   <View spacing="sm" style={{ padding: 12, maxWidth: 250 }}>
@@ -136,7 +134,7 @@ function Example() {
           />
           <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'flex-end' }}>
             <Button
-              variant="outlined"
+              type="outlined"
               size="sm"
               onPress={() => setOpen(false)}
             >

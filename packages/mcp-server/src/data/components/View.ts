@@ -1,21 +1,19 @@
 export const View = {
   category: "layout",
   description: "Container component with spacing, padding, and background variants",
-  props: `
-- \`children\`: ReactNode - Content to display inside the view
-- \`spacing\`: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' - Gap between children
-- \`marginVariant\`: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' - Margin variant
-- \`background\`: 'transparent' | 'surface' | 'primary' | 'secondary' - Background variant
-- \`radius\`: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' - Border radius variant
-- \`border\`: 'none' | 'thin' | 'thick' - Border variant
-- \`backgroundColor\`: string - Custom background color (overrides variant)
-- \`padding\`: number - Custom padding (overrides spacing)
+      props: `
+- \`children\`: React.ReactNode - The content to display inside the view
+- \`spacing\`: ViewSpacingVariant - Padding/spacing variant
+- \`marginVariant\`: ViewSpacingVariant - Margin variant
+- \`background\`: ViewBackgroundVariant - Background variant
+- \`radius\`: ViewRadiusVariant - Border radius variant
+- \`border\`: ViewBorderVariant - Border variant
+- \`backgroundColor\`: string - Custom background color (overrides background variant)
+- \`padding\`: number - Custom padding (overrides spacing variant)
 - \`margin\`: number - Custom margin (overrides marginVariant)
-- \`borderRadius\`: number - Custom border radius (overrides radius)
-- \`borderWidth\`: number - Custom border width (overrides border)
+- \`borderRadius\`: number - Custom border radius (overrides radius variant)
+- \`borderWidth\`: number - Custom border width (overrides border variant)
 - \`borderColor\`: string - Custom border color
-- \`style\`: any - Additional custom styles
-- \`testID\`: string - Test identifier
 `,
   features: [
     "Automatic gap spacing between children",
@@ -101,7 +99,7 @@ function Example() {
 
   return (
     <View spacing="lg" style={{ padding: 16 }}>
-      <Card variant="outlined" padding="md">
+      <Card type="outlined" padding="md">
         <View spacing="md">
           <Text weight="bold">Dynamic List</Text>
           <View spacing="sm">
@@ -116,7 +114,7 @@ function Example() {
               </View>
             ))}
           </View>
-          <Button onPress={addItem} variant="outlined">
+          <Button onPress={addItem} type="outlined">
             Add Item
           </Button>
         </View>

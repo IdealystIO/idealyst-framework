@@ -1,27 +1,25 @@
 export const TextArea = {
   category: "form",
   description: "Multi-line text input field for longer text content",
-  props: `
-- \`value\`: string - Current text value
-- \`defaultValue\`: string - Default value (uncontrolled)
-- \`onChange\`: (value: string) => void - Text change handler
-- \`placeholder\`: string - Placeholder text
-- \`disabled\`: boolean - Whether textarea is disabled
-- \`rows\`: number - Initial number of rows
+      props: `
+- \`value\`: string - The current value of the textarea (controlled)
+- \`defaultValue\`: string - The default value for uncontrolled usage
+- \`onChange\`: function - Called when the text content changes
+- \`placeholder\`: string - Placeholder text shown when empty
+- \`disabled\`: boolean - Whether the textarea is disabled
+- \`rows\`: number - Initial number of visible text rows
 - \`minHeight\`: number - Minimum height in pixels
 - \`maxHeight\`: number - Maximum height in pixels
-- \`autoGrow\`: boolean - Automatically grow to fit content
-- \`maxLength\`: number - Maximum character length
-- \`label\`: string - Label text above textarea
+- \`autoGrow\`: boolean - Whether to automatically grow height to fit content
+- \`maxLength\`: number - Maximum number of characters allowed
+- \`label\`: string - Label text displayed above the textarea
 - \`error\`: string - Error message to display
-- \`helperText\`: string - Helper text below textarea
-- \`resize\`: 'none' | 'vertical' | 'horizontal' | 'both' - Resize behavior (web)
-- \`showCharacterCount\`: boolean - Show character count
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'sm' | 'md' | 'lg' - TextArea size
-- \`style\`: ViewStyle - Additional styles
-- \`textareaStyle\`: TextStyle - Textarea-specific styles
-- \`testID\`: string - Test identifier
+- \`helperText\`: string - Helper text displayed below the textarea
+- \`resize\`: TextAreaResizeVariant - How the textarea can be resized (none, vertical, horizontal, both)
+- \`showCharacterCount\`: boolean - Whether to show the character count
+- \`intent\`: TextAreaIntentVariant - The intent/color scheme (for validation states)
+- \`size\`: TextAreaSizeVariant - The size variant of the textarea
+- \`textareaStyle\`: StyleProp<TextStyle> - Additional custom styles for the textarea element
 `,
   features: [
     "Multi-line text input",

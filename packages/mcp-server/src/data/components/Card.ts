@@ -1,14 +1,15 @@
 export const Card = {
 category: "display",
     description: "Container component for grouping related content with various visual styles",
-    props: `
-- \`variant\`: 'default' | 'outlined' | 'elevated' | 'filled' - Visual style
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`padding\`: 'none' | 'sm' | 'md' | 'lg' - Internal padding
-- \`radius\`: 'none' | 'sm' | 'md' | 'lg' - Border radius
-- \`clickable\`: boolean - Make card interactive
-- \`onPress\`: () => void - Press handler (when clickable)
-- \`children\`: ReactNode - Card content
+        props: `
+- \`children\`: React.ReactNode - The content to display inside the card
+- \`type\`: CardType - The visual style variant of the card
+- \`padding\`: CardPaddingVariant - The padding size inside the card
+- \`radius\`: CardRadiusVariant - The border radius of the card
+- \`intent\`: CardIntentVariant - The intent/color scheme of the card
+- \`clickable\`: boolean - Whether the card is clickable
+- \`onPress\`: function - Called when the card is pressed (if clickable)
+- \`disabled\`: boolean - Whether the card is disabled
 `,
     features: [
       "Four visual variants",
@@ -26,7 +27,7 @@ category: "display",
     usage: `
 import { Card, Text, View } from '@idealyst/components';
 
-<Card variant="elevated" padding="md">
+<Card type="elevated" padding="md">
   <View spacing="sm">
     <Text weight="bold">Card Title</Text>
     <Text size="sm">Card content goes here</Text>
@@ -41,13 +42,13 @@ import { Card, Text, View } from '@idealyst/components';
 </Card>`,
       variants: `import { Card, Text } from '@idealyst/components';
 
-<Card variant="default"><Text>Default</Text></Card>
-<Card variant="outlined"><Text>Outlined</Text></Card>
-<Card variant="elevated"><Text>Elevated</Text></Card>
-<Card variant="filled"><Text>Filled</Text></Card>`,
+<Card type="default"><Text>Default</Text></Card>
+<Card type="outlined"><Text>Outlined</Text></Card>
+<Card type="elevated"><Text>Elevated</Text></Card>
+<Card type="filled"><Text>Filled</Text></Card>`,
       "with-icons": `import { Card, View, Text, Icon } from '@idealyst/components';
 
-<Card variant="outlined">
+<Card type="outlined">
   <View spacing="sm">
     <Icon name="information" size="lg" />
     <Text>Card with icon header</Text>
@@ -58,7 +59,7 @@ import { Card, Text, View } from '@idealyst/components';
 <Card
   clickable
   onPress={() => console.log('Card clicked')}
-  variant="outlined"
+  type="outlined"
 >
   <Text>Click this card</Text>
 </Card>`,

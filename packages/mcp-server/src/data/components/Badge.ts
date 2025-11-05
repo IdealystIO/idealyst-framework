@@ -1,12 +1,12 @@
 export const Badge = {
 category: "display",
     description: "Small status indicator with various styles and colors",
-    props: `
-- \`variant\`: 'filled' | 'outlined' | 'dot' - Visual style
-- \`color\`: string - Badge color from theme palette
-- \`size\`: 'sm' | 'md' | 'lg' - Badge size
-- \`icon\`: string | ReactNode - Icon to display
-- \`children\`: ReactNode - Badge content (text/number)
+        props: `
+- \`children\`: React.ReactNode - The content to display inside the badge
+- \`size\`: BadgeSizeVariant - The size of the badge
+- \`type\`: BadgeType - The visual style variant of the badge
+- \`color\`: BadgeColorVariant - The color scheme of the badge
+- \`icon\`: IconName | React.ReactNode - Icon to display. Can be an icon name or custom component (ReactNode)
 `,
     features: [
       "Three visual variants",
@@ -24,7 +24,7 @@ category: "display",
     usage: `
 import { Badge } from '@idealyst/components';
 
-<Badge variant="filled" color="red">
+<Badge type="filled" color="red">
   3
 </Badge>
 `,
@@ -34,9 +34,9 @@ import { Badge } from '@idealyst/components';
 <Badge>New</Badge>`,
       variants: `import { Badge } from '@idealyst/components';
 
-<Badge variant="filled" color="blue">5</Badge>
-<Badge variant="outlined" color="green">Active</Badge>
-<Badge variant="dot" color="red" />`,
+<Badge type="filled" color="blue">5</Badge>
+<Badge type="outlined" color="green">Active</Badge>
+<Badge type="dot" color="red" />`,
       "with-icons": `import { Badge } from '@idealyst/components';
 
 <Badge icon="star" color="yellow">
@@ -50,7 +50,7 @@ function Example() {
 
   return (
     <View spacing="sm">
-      <Badge variant="filled" color="red">
+      <Badge type="filled" color="red">
         {count}
       </Badge>
       <Button onPress={() => setCount(count + 1)}>

@@ -1,19 +1,16 @@
 export const Checkbox = {
   category: "form",
   description: "Form checkbox for boolean selection with label and validation support",
-  props: `
+      props: `
 - \`checked\`: boolean - Whether the checkbox is checked
 - \`indeterminate\`: boolean - Whether the checkbox is in an indeterminate state
 - \`disabled\`: boolean - Whether the checkbox is disabled
-- \`onCheckedChange\`: (checked: boolean) => void - Called when checkbox state changes
-- \`size\`: 'sm' | 'md' | 'lg' - Checkbox size
-- \`intent\`: Intent - Color scheme
-- \`variant\`: 'default' | 'outlined' - Visual style
-- \`label\`: string - Label text to display next to checkbox
-- \`children\`: ReactNode - Custom label content
-- \`style\`: any - Additional custom styles
-- \`testID\`: string - Test identifier
-- \`accessibilityLabel\`: string - Accessibility label
+- \`onCheckedChange\`: function - Called when the checkbox state changes
+- \`size\`: CheckboxSizeVariant - The size of the checkbox
+- \`intent\`: CheckboxIntentVariant - The intent/color scheme of the checkbox
+- \`variant\`: CheckboxVariant - The visual style variant of the checkbox
+- \`label\`: string - Label text to display next to the checkbox
+- \`children\`: React.ReactNode - Custom label content (ReactNode)
 - \`required\`: boolean - Whether the checkbox is required
 - \`error\`: string - Error message to display
 - \`helperText\`: string - Helper text to display

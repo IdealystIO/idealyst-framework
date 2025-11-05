@@ -1,14 +1,12 @@
 export const ActivityIndicator = {
   category: "feedback",
   description: "Loading spinner/indicator for showing ongoing processes or loading states",
-  props: `
-- \`animating\`: boolean - Whether the indicator is animating/visible (default: true)
-- \`size\`: 'sm' | 'md' | 'lg' | number - Size of the indicator (default: md)
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme (default: primary)
-- \`color\`: string - Custom color override (overrides intent)
-- \`style\`: ViewStyle - Additional custom styles
-- \`testID\`: string - Test identifier
-- \`hidesWhenStopped\`: boolean - Hide indicator when not animating (default: true)
+      props: `
+- \`animating\`: boolean - Whether the indicator is animating (visible)
+- \`size\`: ActivityIndicatorSizeVariant - The size of the indicator
+- \`intent\`: ActivityIndicatorIntentVariant - The color/intent of the indicator
+- \`color\`: string - Custom color to override intent
+- \`hidesWhenStopped\`: boolean - Whether to hide the indicator when not animating
 `,
   features: [
     "Animated loading spinner",

@@ -1,15 +1,13 @@
 export const Avatar = {
   category: "display",
   description: "Profile picture or user avatar with fallback text support",
-  props: `
-- \`src\`: string | any - Image source (URL or require())
+      props: `
+- \`src\`: string | ImageSourcePropType - Image source (URL or require())
 - \`alt\`: string - Alt text for the image
-- \`fallback\`: string - Fallback text displayed when no image (usually initials)
-- \`size\`: 'sm' | 'md' | 'lg' | 'xl' - Avatar size
-- \`shape\`: 'circle' | 'square' - Avatar shape
-- \`color\`: ColorVariant - Background color for fallback (from theme palette)
-- \`style\`: any - Additional custom styles
-- \`testID\`: string - Test identifier
+- \`fallback\`: string - Fallback text (usually initials)
+- \`size\`: AvatarSizeVariant - Size of the avatar
+- \`shape\`: AvatarShapeVariant - Shape of the avatar
+- \`color\`: AvatarColorVariant - The color scheme of the avatar (for background when no image)
 `,
   features: [
     "Image display with automatic fallback",

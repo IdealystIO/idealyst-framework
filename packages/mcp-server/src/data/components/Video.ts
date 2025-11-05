@@ -1,27 +1,25 @@
 export const Video = {
   category: "media",
   description: "Video player component with playback controls and event handlers",
-  props: `
-- \`source\`: VideoSource | string - Video source ({ uri, type } or string URL)
-- \`poster\`: string - Poster image URL (shown before playback)
-- \`width\`: number | string - Video width
-- \`height\`: number | string - Video height
-- \`aspectRatio\`: number - Aspect ratio (width/height)
-- \`controls\`: boolean - Show playback controls (default: true)
-- \`autoPlay\`: boolean - Start playing automatically
-- \`loop\`: boolean - Loop playback
-- \`muted\`: boolean - Mute audio
-- \`playsInline\`: boolean - Play inline (not fullscreen on mobile)
-- \`preload\`: 'auto' | 'metadata' | 'none' - Preload strategy (web)
-- \`onLoad\`: () => void - Called when video loads
-- \`onError\`: (error: any) => void - Called on load error
-- \`onPlay\`: () => void - Called when playback starts
-- \`onPause\`: () => void - Called when playback pauses
-- \`onEnd\`: () => void - Called when playback ends
-- \`onProgress\`: (progress) => void - Called during playback with current time
-- \`borderRadius\`: number - Border radius in pixels
-- \`style\`: ViewStyle - Additional styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`source\`: VideoSource | string - The video source URL or source object with uri and type
+- \`poster\`: string - URL of the poster image to display before playback
+- \`width\`: number | string - The width of the video player
+- \`height\`: number | string - The height of the video player
+- \`aspectRatio\`: number - The aspect ratio of the video (e.g., 16/9, 4/3)
+- \`controls\`: boolean - Whether to show native playback controls
+- \`autoPlay\`: boolean - Whether to automatically start playing when loaded
+- \`loop\`: boolean - Whether to loop the video playback
+- \`muted\`: boolean - Whether to mute the audio
+- \`playsInline\`: boolean - Whether to play inline on mobile devices (prevents fullscreen)
+- \`preload\`: 'auto' | 'metadata' | 'none' - How much of the video to preload
+- \`onLoad\`: function - Called when the video has loaded
+- \`onError\`: function - Called when an error occurs during playback
+- \`onPlay\`: function - Called when the video starts playing
+- \`onPause\`: function - Called when the video is paused
+- \`onEnd\`: function - Called when the video playback ends
+- \`onProgress\`: function - Called periodically during playback with progress information
+- \`borderRadius\`: number - The border radius of the video player
 `,
   features: [
     "Remote and local video sources",
@@ -92,7 +90,7 @@ import { Video } from '@idealyst/components';
 
     "with-icons": `import { Video, Card, View, Text } from '@idealyst/components';
 
-<Card variant="elevated" padding="none">
+<Card type="elevated" padding="none">
   <Video
     source="https://example.com/video.mp4"
     poster="https://example.com/poster.jpg"
@@ -149,14 +147,14 @@ function Example() {
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <Button
             size="sm"
-            variant="outlined"
+            type="outlined"
             onPress={() => videoRef.current?.play()}
           >
             Play
           </Button>
           <Button
             size="sm"
-            variant="outlined"
+            type="outlined"
             onPress={() => videoRef.current?.pause()}
           >
             Pause

@@ -1,14 +1,12 @@
 export const Text = {
   category: "typography",
   description: "Styled text component with size, weight, and color variants",
-  props: `
-- \`children\`: ReactNode - The text content to display
-- \`size\`: 'sm' | 'md' | 'lg' | 'xl' - Text size variant
-- \`weight\`: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' - Font weight
-- \`color\`: DisplayColorVariant - Text color from theme
-- \`align\`: 'left' | 'center' | 'right' - Text alignment
-- \`style\`: any - Additional custom styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`children\`: React.ReactNode - The text content to display
+- \`size\`: TextSizeVariant - The size variant of the text
+- \`weight\`: TextWeightVariant - The weight of the text
+- \`color\`: TextColorVariant - The color of the text
+- \`align\`: TextAlignVariant - Text alignment
 `,
   features: [
     "Four size variants",

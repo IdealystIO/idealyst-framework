@@ -1,22 +1,19 @@
 export const Image = {
   category: "media",
   description: "Image component with loading states, fallback support, and various object-fit modes",
-  props: `
-- \`source\`: ImageSourcePropType | string - Image source (URL, require(), or URI object)
-- \`alt\`: string - Alt text for accessibility
-- \`width\`: number | string - Image width
-- \`height\`: number | string - Image height
-- \`aspectRatio\`: number - Aspect ratio (width/height)
-- \`objectFit\`: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' - How image fits container
-- \`loading\`: 'lazy' | 'eager' - Loading strategy (web)
-- \`placeholder\`: ReactNode - Content shown while loading
-- \`fallback\`: ReactNode - Content shown on error
-- \`onLoad\`: () => void - Called when image loads successfully
-- \`onError\`: (error: any) => void - Called on image load error
-- \`borderRadius\`: number - Border radius in pixels
-- \`style\`: ImageStyle - Additional custom styles
-- \`testID\`: string - Test identifier
-- \`accessibilityLabel\`: string - Accessibility label
+      props: `
+- \`source\`: ImageSourcePropType | string - The image source URL or source object
+- \`alt\`: string - Alternative text for accessibility
+- \`width\`: number | string - The width of the image
+- \`height\`: number | string - The height of the image
+- \`aspectRatio\`: number - The aspect ratio of the image
+- \`objectFit\`: ImageObjectFit - How the image should be fitted (cover, contain, fill, none, scale-down)
+- \`loading\`: 'lazy' | 'eager' - When to load the image (lazy for below the fold, eager for above)
+- \`placeholder\`: React.ReactNode - Content to show while the image is loading
+- \`fallback\`: React.ReactNode - Content to show if the image fails to load
+- \`onLoad\`: function - Called when the image successfully loads
+- \`onError\`: function - Called when the image fails to load
+- \`borderRadius\`: number - The border radius of the image
 `,
   features: [
     "Remote and local image sources",
@@ -81,7 +78,7 @@ import { Image, ActivityIndicator } from '@idealyst/components';
 
     "with-icons": `import { Image, Card, View, Text } from '@idealyst/components';
 
-<Card variant="outlined">
+<Card type="outlined">
   <Image
     source="https://picsum.photos/400/250"
     alt="Card image"

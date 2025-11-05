@@ -1,19 +1,17 @@
 export const Alert = {
   category: "feedback",
   description: "Message banner for displaying important information, warnings, errors, and success messages",
-  props: `
-- \`title\`: string - Alert title/heading
-- \`message\`: string - Alert message text
-- \`children\`: ReactNode - Custom content (alternative to message)
-- \`intent\`: 'success' | 'error' | 'warning' | 'info' | 'neutral' - Alert type/severity
-- \`variant\`: 'filled' | 'outlined' | 'soft' - Visual style
-- \`icon\`: ReactNode - Custom icon to display
-- \`showIcon\`: boolean - Whether to show the default intent icon (default: true)
-- \`dismissible\`: boolean - Whether the alert can be dismissed
-- \`onDismiss\`: () => void - Dismiss handler callback
-- \`actions\`: ReactNode - Action buttons or custom elements
-- \`style\`: ViewStyle - Additional custom styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`title\`: string - The title text of the alert
+- \`message\`: string - The message text of the alert
+- \`children\`: React.ReactNode - Custom content to display (overrides title and message)
+- \`intent\`: AlertIntentVariant - The intent/color scheme (success, error, warning, info, neutral)
+- \`type\`: AlertType - The visual style variant (filled, outlined, subtle)
+- \`icon\`: React.ReactNode - Custom icon to display (overrides default intent icon)
+- \`showIcon\`: boolean - Whether to show the icon (defaults to true)
+- \`dismissible\`: boolean - Whether the alert can be dismissed with a close button
+- \`onDismiss\`: function - Called when the alert is dismissed
+- \`actions\`: React.ReactNode - Action buttons to display in the alert
 `,
   features: [
     "Five intent types with semantic meaning",
@@ -56,17 +54,17 @@ import { Alert } from '@idealyst/components';
 <View spacing="md">
   <Alert
     intent="success"
-    variant="filled"
+    type="filled"
     message="Success message"
   />
   <Alert
     intent="warning"
-    variant="outlined"
+    type="outlined"
     message="Warning message"
   />
   <Alert
     intent="error"
-    variant="soft"
+    type="soft"
     message="Error message"
   />
 </View>`,

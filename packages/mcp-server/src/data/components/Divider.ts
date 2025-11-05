@@ -1,17 +1,14 @@
 export const Divider = {
   category: "layout",
   description: "Visual separator for content sections with horizontal or vertical orientation",
-  props: `
-- \`orientation\`: 'horizontal' | 'vertical' - The orientation of the divider
-- \`variant\`: 'solid' | 'dashed' | 'dotted' - The visual style
-- \`thickness\`: 'thin' | 'md' | 'thick' - The thickness of the divider
-- \`intent\`:Intent - The color intent
-- \`length\`: 'full' | 'auto' | number - The length (percentage or fixed)
-- \`spacing\`: 'none' | 'sm' | 'md' | 'lg' - Spacing around divider
-- \`children\`: ReactNode - Content in center (horizontal dividers)
-- \`style\`: any - Additional custom styles
-- \`testID\`: string - Test identifier
-- \`accessibilityLabel\`: string - Accessibility label
+      props: `
+- \`orientation\`: DividerOrientationVariant - The orientation of the divider
+- \`type\`: DividerType - The visual style type of the divider
+- \`thickness\`: DividerThicknessVariant - The thickness of the divider
+- \`intent\`: DividerIntentVariant - The color intent of the divider
+- \`length\`: DividerLengthVariant - The length of the divider (percentage or fixed)
+- \`spacing\`: DividerSpacingVariant - Spacing around the divider
+- \`children\`: React.ReactNode - Content to display in the center of the divider (for horizontal dividers)
 `,
   features: [
     "Horizontal and vertical orientations",
@@ -45,9 +42,9 @@ import { Divider, View, Text } from '@idealyst/components';
     variants: `import { Divider, View } from '@idealyst/components';
 
 <View spacing="md">
-  <Divider variant="solid" />
-  <Divider variant="dashed" />
-  <Divider variant="dotted" />
+  <Divider type="solid" />
+  <Divider type="dashed" />
+  <Divider type="dotted" />
 </View>`,
 
     "with-icons": `import { Divider, View, Text } from '@idealyst/components';

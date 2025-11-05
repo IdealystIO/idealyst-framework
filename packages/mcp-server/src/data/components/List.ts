@@ -1,21 +1,12 @@
 export const List = {
 category: "display",
     description: "Vertical list container with support for sections, icons, and interactive items",
-    props: `
-List Props:
-- \`variant\`: 'default' | 'bordered' | 'divided' - Visual style
-- \`size\`: 'sm' | 'md' | 'lg' - Item size
-- \`children\`: ListItem | ListSection - List content
-
-ListItem Props:
-- \`label\`: string - Item label text
-- \`leading\`: string | ReactNode - Leading icon or element
-- \`trailing\`: string | ReactNode - Trailing icon or element
-- \`selected\`: boolean - Selected state
-- \`active\`: boolean - Active state
-- \`disabled\`: boolean - Disabled state
-- \`indent\`: number - Indentation level
-- \`onPress\`: () => void - Press handler
+        props: `
+- \`children\`: React.ReactNode - List items and sections to display
+- \`type\`: ListType - The visual style variant of the list
+- \`size\`: ListSizeVariant - The size variant of list items
+- \`scrollable\`: boolean - Whether the list is scrollable
+- \`maxHeight\`: number | string - Maximum height of the scrollable list
 `,
     features: [
       "Three visual variants",
@@ -35,7 +26,7 @@ ListItem Props:
     usage: `
 import { List, ListItem, ListSection } from '@idealyst/components';
 
-<List variant="bordered">
+<List type="bordered">
   <ListSection title="Main">
     <ListItem
       label="Dashboard"
@@ -53,27 +44,27 @@ import { List, ListItem, ListSection } from '@idealyst/components';
     examples: {
       basic: `import { List, ListItem } from '@idealyst/components';
 
-<List variant="divided">
+<List type="divided">
   <ListItem label="Item 1" />
   <ListItem label="Item 2" />
   <ListItem label="Item 3" />
 </List>`,
       variants: `import { List, ListItem } from '@idealyst/components';
 
-<List variant="default">
+<List type="default">
   <ListItem label="Default" />
 </List>
 
-<List variant="bordered">
+<List type="bordered">
   <ListItem label="Bordered" />
 </List>
 
-<List variant="divided">
+<List type="divided">
   <ListItem label="Divided" />
 </List>`,
       "with-icons": `import { List, ListItem, Badge } from '@idealyst/components';
 
-<List variant="bordered">
+<List type="bordered">
   <ListItem
     label="Notifications"
     leading="bell"
@@ -92,7 +83,7 @@ function Example() {
   const [selected, setSelected] = useState('home');
 
   return (
-    <List variant="bordered">
+    <List type="bordered">
       <ListItem
         label="Home"
         leading="home"

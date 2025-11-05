@@ -1,29 +1,21 @@
 export const Select = {
   category: "form",
   description: "Dropdown select component for choosing from a list of options",
-  props: `
-- \`options\`: SelectOption[] - Array of select options
-  - \`value\`: string - Unique value
-  - \`label\`: string - Display label
-  - \`disabled\`: boolean - Whether disabled
-  - \`icon\`: ReactNode - Optional icon
-- \`value\`: string - Currently selected value
-- \`onValueChange\`: (value: string) => void - Selection change handler
-- \`placeholder\`: string - Placeholder text when no value
+      props: `
+- \`options\`: SelectOption[] - Array of options to display in the select
+- \`value\`: string - The currently selected value
+- \`onValueChange\`: function - Called when the selected value changes
+- \`placeholder\`: string - Placeholder text when no value is selected
 - \`disabled\`: boolean - Whether the select is disabled
-- \`error\`: boolean - Whether to show error state
-- \`helperText\`: string - Helper text below select
-- \`label\`: string - Label text above select
-- \`variant\`: 'outlined' | 'filled' - Visual style
-- \`intent\`:Intent - Color scheme
-- \`size\`: 'sm' | 'md' | 'lg' - Select size
-- \`searchable\`: boolean - Enable search/filter (web only)
-- \`filterOption\`: (option, searchTerm) => boolean - Custom filter function
-- \`presentationMode\`: 'dropdown' | 'actionSheet' - iOS presentation (native only)
-- \`maxHeight\`: number - Maximum height for dropdown
-- \`style\`: any - Additional styles
-- \`testID\`: string - Test identifier
-- \`accessibilityLabel\`: string - Accessibility label
+- \`error\`: boolean - Whether the select shows an error state
+- \`helperText\`: string - Helper text to display below the select
+- \`label\`: string - Label text to display above the select
+- \`intent\`: SelectIntentVariant - The visual type of the select The intent/color scheme of the select
+- \`size\`: SelectSizeVariant - The size of the select
+- \`searchable\`: boolean - Whether to show a search/filter input (web only)
+- \`filterOption\`: (option: SelectOption, searchTerm: string) => boolean - Custom search filter function (used with searchable)
+- \`presentationMode\`: 'dropdown' | 'actionSheet' - Native iOS presentation mode (native only) 'dropdown' uses a standard dropdown overlay 'actionSheet' uses iOS ActionSheet for selection
+- \`maxHeight\`: number - Maximum height for the dropdown content
 `,
   features: [
     "Single selection from options",
@@ -83,9 +75,9 @@ const options = [
 const options = [{ value: '1', label: 'Option' }];
 
 <View spacing="md">
-  <Select options={options} variant="outlined" size="sm" />
-  <Select options={options} variant="filled" size="md" />
-  <Select options={options} variant="outlined" size="lg" />
+  <Select options={options} type="outlined" size="sm" />
+  <Select options={options} type="filled" size="md" />
+  <Select options={options} type="outlined" size="lg" />
 </View>`,
 
     "with-icons": `import { Select } from '@idealyst/components';

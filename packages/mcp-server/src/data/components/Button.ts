@@ -1,16 +1,16 @@
 export const Button = {
 category: "form",
     description: "Interactive button component with multiple variants, sizes, and icon support",
-    props: `
-- \`variant\`: 'contained' | 'outlined' | 'text' - Visual style variant
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'sm' | 'md' | 'lg' - Button size
-- \`icon\`: string | ReactNode - Icon name (MDI) or custom React element
-- \`iconPosition\`: 'left' | 'right' - Position of icon relative to label
-- \`disabled\`: boolean - Disable button interaction
-- \`loading\`: boolean - Show loading state
-- \`fullWidth\`: boolean - Expand button to full container width
-- \`onPress\`: () => void - Press handler
+        props: `
+- \`children\`: React.ReactNode - The text or content to display inside the button
+- \`title\`: string - The text title to display inside the button (for web)
+- \`onPress\`: function - Called when the button is pressed
+- \`disabled\`: boolean - Whether the button is disabled
+- \`type\`: ButtonType - The visual style type of the button
+- \`intent\`: ButtonIntentVariant - The intent/color scheme of the button
+- \`size\`: ButtonSizeVariant - The size of the button
+- \`leftIcon\`: IconName | React.ReactNode - Icon to display on the left side. Can be an icon name or custom component (ReactNode)
+- \`rightIcon\`: IconName | React.ReactNode - Icon to display on the right side. Can be an icon name or custom component (ReactNode)
 `,
     features: [
       "Three variants: contained, outlined, text",
@@ -31,7 +31,7 @@ category: "form",
 import { Button } from '@idealyst/components';
 
 <Button
-  variant="contained"
+  type="contained"
   intent="primary"
   icon="check"
   onPress={() => console.log('Pressed')}
@@ -49,9 +49,9 @@ import { Button } from '@idealyst/components';
       variants: `import { Button } from '@idealyst/components';
 
 // Different variants
-<Button variant="contained" intent="primary">Contained</Button>
-<Button variant="outlined" intent="primary">Outlined</Button>
-<Button variant="text" intent="primary">Text</Button>`,
+<Button type="contained" intent="primary">Contained</Button>
+<Button type="outlined" intent="primary">Outlined</Button>
+<Button type="text" intent="primary">Text</Button>`,
       "with-icons": `import { Button } from '@idealyst/components';
 
 // Button with icon

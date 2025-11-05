@@ -1,18 +1,16 @@
 export const Switch = {
   category: "form",
   description: "Toggle switch for binary on/off states",
-  props: `
-- \`checked\`: boolean - Whether the switch is checked/on
-- \`onCheckedChange\`: (checked: boolean) => void - Called when switch toggles
+      props: `
+- \`checked\`: boolean - Whether the switch is in the on/checked state
+- \`onCheckedChange\`: function - Called when the switch state changes
 - \`disabled\`: boolean - Whether the switch is disabled
-- \`label\`: string - Label text next to switch
-- \`labelPosition\`: 'left' | 'right' - Position of label relative to switch
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'sm' | 'md' | 'lg' - Switch size
-- \`enabledIcon\`: IconName | ReactNode - Icon shown when enabled
-- \`disabledIcon\`: IconName | ReactNode - Icon shown when disabled
-- \`style\`: ViewStyle - Additional styles
-- \`testID\`: string - Test identifier
+- \`label\`: string - Label text to display next to the switch
+- \`labelPosition\`: 'left' | 'right' - Position of the label relative to the switch
+- \`intent\`: SwitchIntentVariant - The intent/color scheme of the switch
+- \`size\`: SwitchSizeVariant - The size variant of the switch
+- \`enabledIcon\`: IconName | React.ReactNode - Icon to display when switch is on
+- \`disabledIcon\`: IconName | React.ReactNode - Icon to display when switch is off
 `,
   features: [
     "Binary on/off toggle",
@@ -94,7 +92,7 @@ function SettingsPanel() {
   };
 
   return (
-    <Card variant="outlined" padding="md">
+    <Card type="outlined" padding="md">
       <View spacing="md">
         <Text weight="bold">Privacy Settings</Text>
 

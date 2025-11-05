@@ -1,19 +1,19 @@
 export const Chip = {
 category: "display",
     description: "Compact element for tags, filters, and selections with optional delete action",
-    props: `
-- \`label\`: string - Chip text
-- \`variant\`: 'filled' | 'outlined' | 'soft' - Visual style
-- \`intent\`: 'primary' | 'neutral' | 'success' | 'error' | 'warning' - Color scheme
-- \`size\`: 'sm' | 'md' | 'lg' - Chip size
-- \`icon\`: IconName | ReactNode - Leading icon
-- \`deletable\`: boolean - Show delete button
-- \`onDelete\`: () => void - Delete handler
-- \`deleteIcon\`: IconName | ReactNode - Custom delete icon (defaults to 'close')
-- \`selectable\`: boolean - Enable selection
-- \`selected\`: boolean - Selected state
-- \`onPress\`: () => void - Press handler
-- \`disabled\`: boolean - Disabled state
+        props: `
+- \`label\`: string - The text content of the chip
+- \`type\`: ChipType - Visual style variant
+- \`intent\`: ChipIntent - Color intent/semantic meaning
+- \`size\`: ChipSize - Size of the chip
+- \`icon\`: IconName | React.ReactNode - Icon to display before the label. Can be an icon name (string) or a custom React element
+- \`deletable\`: boolean - Whether the chip can be deleted
+- \`onDelete\`: function - Callback when delete button is pressed
+- \`deleteIcon\`: IconName | React.ReactNode - Icon to display in the delete button. Defaults to 'close'
+- \`selectable\`: boolean - Whether the chip is selectable
+- \`selected\`: boolean - Whether the chip is selected (when selectable)
+- \`onPress\`: function - Callback when chip is pressed
+- \`disabled\`: boolean - Whether the chip is disabled
 `,
     features: [
       "Three variants: filled, outlined, soft",
@@ -47,9 +47,9 @@ import { Chip } from '@idealyst/components';
 <Chip label="Tag" />`,
       variants: `import { Chip } from '@idealyst/components';
 
-<Chip label="Filled" variant="filled" intent="primary" />
-<Chip label="Outlined" variant="outlined" intent="success" />
-<Chip label="Soft" variant="soft" intent="warning" />`,
+<Chip label="Filled" type="filled" intent="primary" />
+<Chip label="Outlined" type="outlined" intent="success" />
+<Chip label="Soft" type="soft" intent="warning" />`,
       "with-icons": `import { Chip } from '@idealyst/components';
 
 <Chip label="Star" icon="star" />

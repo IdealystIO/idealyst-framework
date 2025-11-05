@@ -1,16 +1,12 @@
 export const Pressable = {
   category: "utility",
   description: "Wrapper component that detects various press interactions on children",
-  props: `
-- \`children\`: ReactNode - Content to render inside pressable area
-- \`onPress\`: () => void - Called when press gesture is activated
-- \`onPressIn\`: () => void - Called when press gesture starts
-- \`onPressOut\`: () => void - Called when press gesture ends
+      props: `
+- \`children\`: React.ReactNode - Content to render inside the pressable area
+- \`onPress\`: function - Called when the press gesture is activated
+- \`onPressIn\`: function - Called when the press gesture starts
+- \`onPressOut\`: function - Called when the press gesture ends
 - \`disabled\`: boolean - Whether the pressable is disabled
-- \`style\`: any - Additional styles to apply
-- \`testID\`: string - Test identifier
-- \`accessibilityLabel\`: string - Accessibility label for screen readers
-- \`accessibilityRole\`: string - Accessibility role (web)
 `,
   features: [
     "Press, press-in, press-out callbacks",

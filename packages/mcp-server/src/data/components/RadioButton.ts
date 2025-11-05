@@ -1,26 +1,14 @@
 export const RadioButton = {
   category: "form",
   description: "Radio button for single-choice selection within a group",
-  props: `
-RadioButton Props:
-- \`value\`: string - The value of this radio button
-- \`checked\`: boolean - Whether the radio is checked
-- \`onPress\`: () => void - Press handler
-- \`disabled\`: boolean - Whether disabled
-- \`label\`: string - Label text
-- \`size\`: 'sm' | 'md' | 'lg' - Radio size
-- \`intent\`: 'primary' | 'success' | 'error' | 'warning' | 'neutral' - Color scheme
-- \`style\`: ViewStyle - Additional styles
-- \`testID\`: string - Test identifier
-
-RadioGroup Props:
-- \`value\`: string - Currently selected value
-- \`onValueChange\`: (value: string) => void - Selection change handler
-- \`disabled\`: boolean - Disable all radio buttons
-- \`orientation\`: 'horizontal' | 'vertical' - Layout orientation
-- \`children\`: ReactNode - Radio button children
-- \`style\`: ViewStyle - Additional styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`value\`: string - The value of this radio button option
+- \`checked\`: boolean - Whether this radio button is selected
+- \`onPress\`: function - Called when the radio button is pressed
+- \`disabled\`: boolean - Whether the radio button is disabled
+- \`label\`: string - Label text to display next to the radio button
+- \`size\`: RadioButtonSizeVariant - The size variant of the radio button
+- \`intent\`: RadioButtonIntentVariant - The intent/color scheme of the radio button
 `,
   features: [
     "Single selection within group",

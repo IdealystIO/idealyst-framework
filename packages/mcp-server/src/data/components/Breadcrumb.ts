@@ -1,20 +1,16 @@
 export const Breadcrumb = {
   category: "navigation",
   description: "Navigation aid showing the current location within a hierarchy",
-  props: `
+      props: `
 - \`items\`: BreadcrumbItem[] - Array of breadcrumb items
-  - \`label\`: string - Label text for the breadcrumb item
-  - \`icon\`: IconName | ReactNode - Optional icon (icon name string or custom component)
-  - \`onPress\`: () => void - Click handler for the breadcrumb item
-  - \`disabled\`: boolean - Whether this item is disabled
-- \`separator\`: ReactNode - Custom separator between items (default: '/')
-- \`maxItems\`: number - Maximum number of items before truncating
-- \`intent\`: 'primary' | 'neutral' - Intent color for links
-- \`size\`: 'sm' | 'md' | 'lg' - Size of breadcrumb text
-- \`style\`: StyleProp<ViewStyle> - Custom container style
+- \`separator\`: React.ReactNode - Custom separator between items (default: '/')
+- \`maxItems\`: number - Maximum number of items to show before truncating
+- \`intent\`: BreadcrumbIntentVariant - Intent color for links
+- \`size\`: BreadcrumbSizeVariant - Size of the breadcrumb text
 - \`itemStyle\`: StyleProp<ViewStyle> - Custom item style
 - \`separatorStyle\`: StyleProp<TextStyle> - Custom separator style
-- \`testID\`: string - Test identifier
+- \`responsive\`: boolean - Enable responsive collapsing on narrow screens
+- \`minVisibleItems\`: number - Minimum number of items to show before collapsing (default: 3)
 `,
   features: [
     "Icon support with string names or custom components",

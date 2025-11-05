@@ -1,18 +1,12 @@
 export const Accordion = {
   category: "display",
   description: "Expandable/collapsible content sections with support for single or multiple open items",
-  props: `
-- \`items\`: AccordionItem[] - Array of accordion items
-  - \`id\`: string - Unique identifier for the item
-  - \`title\`: string - Title text displayed in the header
-  - \`content\`: ReactNode - Content displayed when expanded
-  - \`disabled\`: boolean - Whether the item is disabled
-- \`allowMultiple\`: boolean - Allow multiple items to be expanded simultaneously (default: false)
-- \`defaultExpanded\`: string[] - Array of item IDs to expand by default
-- \`variant\`: 'default' | 'separated' | 'bordered' - Visual style variant
-- \`size\`: 'sm' | 'md' | 'lg' - Size of accordion items
-- \`style\`: ViewStyle - Additional custom styles
-- \`testID\`: string - Test identifier
+      props: `
+- \`items\`: AccordionItem[] - Array of accordion items with title and content
+- \`allowMultiple\`: boolean - Whether multiple items can be expanded at once
+- \`defaultExpanded\`: string[] - Array of item IDs that should be expanded by default
+- \`type\`: AccordionType - The visual style variant of the accordion
+- \`size\`: AccordionSizeVariant - The size variant of accordion items
 `,
   features: [
     "Single or multiple item expansion modes",
@@ -47,7 +41,7 @@ const items = [
 
 <Accordion
   items={items}
-  variant="bordered"
+  type="bordered"
   defaultExpanded={['1']}
 />
 `,
@@ -68,9 +62,9 @@ const items = [
 ];
 
 // Different variants
-<Accordion items={items} variant="default" />
-<Accordion items={items} variant="separated" />
-<Accordion items={items} variant="bordered" />`,
+<Accordion items={items} type="default" />
+<Accordion items={items} type="separated" />
+<Accordion items={items} type="bordered" />`,
 
     "with-icons": `import { Accordion, View, Icon, Text } from '@idealyst/components';
 
@@ -104,7 +98,7 @@ function Example() {
       items={items}
       allowMultiple
       defaultExpanded={['1']}
-      variant="bordered"
+      type="bordered"
     />
   );
 }`,
