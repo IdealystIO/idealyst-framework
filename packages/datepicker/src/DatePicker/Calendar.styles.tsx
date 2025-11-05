@@ -1,9 +1,12 @@
+import { AppTheme } from '@idealyst/theme';
 import { StyleSheet } from 'react-native-unistyles';
 
-export const calendarStyles = StyleSheet.create((theme) => ({
+export const calendarStyles = StyleSheet.create((theme: AppTheme) => ({
   container: {
     width: 256,
-    position: 'relative',
+    _web: {
+      position: 'relative',
+    }
   },
 
   header: {
@@ -11,33 +14,33 @@ export const calendarStyles = StyleSheet.create((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.spacing?.md || 16,
+    marginBottom: 16,
   },
 
   headerButton: {
     minWidth: 32,
     minHeight: 32,
-    paddingHorizontal: theme.spacing?.xs || 8,
-    paddingVertical: theme.spacing?.xs || 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
 
   headerTitle: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing?.xs || 8,
+    gap: 8,
   },
 
   monthYearButton: {
-    paddingHorizontal: theme.spacing?.sm || 8,
-    paddingVertical: theme.spacing?.xs || 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
 
   pickerContainer: {
-    marginBottom: theme.spacing?.md || 16,
-    padding: theme.spacing?.sm || 12,
+    marginBottom: 16,
+    padding: 12,
     backgroundColor: theme.colors?.surface?.secondary || '#f9fafb',
-    borderRadius: theme.borderRadius?.md || 8,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: theme.colors?.border?.primary || '#e5e7eb',
     
@@ -78,9 +81,9 @@ export const calendarStyles = StyleSheet.create((theme) => ({
   },
 
   pickerButton: {
-    fontSize: theme.typography?.fontSize?.sm || 12,
-    paddingHorizontal: theme.spacing?.xs || 6,
-    paddingVertical: theme.spacing?.xs || 4,
+    fontSize: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
     minHeight: 32,
     justifyContent: 'center',
     alignItems: 'center',
@@ -119,7 +122,7 @@ export const calendarStyles = StyleSheet.create((theme) => ({
 
   weekdayHeader: {
     flexDirection: 'row',
-    marginBottom: theme.spacing?.xs || 8,
+    marginBottom: 8,
     
     // Web specific styles
     _web: {
@@ -134,7 +137,7 @@ export const calendarStyles = StyleSheet.create((theme) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: theme.spacing?.xs || 4,
+    paddingVertical: 4,
     
     // Web specific styles
     _web: {
@@ -144,7 +147,7 @@ export const calendarStyles = StyleSheet.create((theme) => ({
   },
 
   weekdayText: {
-    fontSize: theme.typography?.fontSize?.sm || 12,
+    fontSize: 12,
     fontWeight: '500',
     color: theme.colors?.text?.secondary || '#6b7280',
   },
@@ -152,7 +155,7 @@ export const calendarStyles = StyleSheet.create((theme) => ({
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: theme.spacing?.xs || 8,
+    marginBottom: 8,
     
     // Web specific styles
     _web: {
@@ -184,8 +187,8 @@ export const calendarStyles = StyleSheet.create((theme) => ({
     minWidth: 28,
     minHeight: 28,
     padding: 0,
-    borderRadius: theme.borderRadius?.sm || 6,
-    fontSize: theme.typography?.fontSize?.sm || 13,
+    borderRadius: 6,
+    fontSize: 13,
     alignItems: 'center',
     justifyContent: 'center',
     
@@ -211,7 +214,7 @@ export const calendarStyles = StyleSheet.create((theme) => ({
   },
 
   todaySection: {
-    paddingTop: theme.spacing?.sm || 12,
+    paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: theme.colors?.border?.secondary || '#f3f4f6',
     

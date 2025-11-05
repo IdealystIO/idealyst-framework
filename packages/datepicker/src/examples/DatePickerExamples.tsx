@@ -119,15 +119,15 @@ export const DatePickerExamples = () => {
         {/* Actions */}
         <View spacing="md">
           <Text size="md" weight="semibold">Actions</Text>
-          <View direction="row" gap="xs">
+          <View>
             <Button
-              variant="outlined"
+              type='outlined'
               onPress={() => setBasicDate(new Date())}
             >
               Set Today
             </Button>
             <Button
-              variant="outlined"
+              type="outlined"
               onPress={() => {
                 setBasicDate(null);
                 setRangeDate(null);

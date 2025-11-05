@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View } from '@idealyst/components';
+import { View, useMergeRefs } from '@idealyst/components';
 import { CalendarProps } from './types';
 import { CalendarHeader } from '../primitives/CalendarHeader';
 import { CalendarGrid } from '../primitives/CalendarGrid';
 import { CalendarOverlay } from '../primitives/CalendarOverlay';
 import { calendarStyles } from './Calendar.styles';
+import { getWebProps } from 'react-native-unistyles/web';
 
 
 export const Calendar: React.FC<CalendarProps> = ({
@@ -22,7 +23,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     controlledCurrentMonth || value || new Date()
   );
   const [overlayMode, setOverlayMode] = useState<'month' | 'year' | null>(null);
-  const containerRef = useRef<View>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const currentMonth = controlledCurrentMonth || internalCurrentMonth;
 
@@ -116,8 +117,12 @@ export const Calendar: React.FC<CalendarProps> = ({
     }
   };
 
+  const { ref: styleRef, ...containerProps } = getWebProps(calendarStyles.container);
+
+  const mergedRef = useMergeRefs(containerRef, styleRef);
+
   return (
-    <View ref={containerRef} style={[calendarStyles.container, style]} data-testid={testID}>
+    <div ref={mergedRef as any} {...containerProps} data-testid={testID}>
       <CalendarHeader
         currentMonth={currentMonth}
         onPreviousMonth={goToPreviousMonth}
@@ -149,6 +154,6 @@ export const Calendar: React.FC<CalendarProps> = ({
           disabled={disabled}
         />
       )}
-    </View>
+    </div>
   );
 };

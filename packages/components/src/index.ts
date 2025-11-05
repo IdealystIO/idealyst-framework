@@ -1,3 +1,5 @@
+import useMergeRefs from './hooks/useMergeRefs';
+
 export { default as Button } from './Button';
 export * from './Button/types';
 
@@ -133,5 +135,7 @@ export type { AlertProps } from './Alert/types';
 export type { SkeletonProps, SkeletonGroupProps, SkeletonShape, SkeletonAnimation } from './Skeleton/types';
 export type { ChipProps, ChipSize, ChipIntent } from './Chip/types';
 export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
+
+export { useMergeRefs };
 
 export type { AppTheme } from '@idealyst/theme';
