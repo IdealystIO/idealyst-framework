@@ -2,7 +2,7 @@ export const Icon = {
   category: "display",
   description: "Material Design icon display component with size and color variants",
       props: `
-- \`name\`: IconName | `mdi:${IconName}` - The name of the icon to display
+- \`name\`: IconName | 'mdi:\${IconName}' - The name of the icon to display
 - \`size\`: IconSizeVariant - The size variant of the icon
 - \`color\`: Color - Predefined color variant based on theme
 - \`intent\`: Intent - Intent variant for the icon

@@ -8,7 +8,11 @@
   },
   "type": "module",
   "scripts": {
-    "build": "tsc && chmod +x dist/index.js",
+    "extract-types": "tsx scripts/extract-types.ts",
+    "validate-examples": "tsx scripts/validate-examples.ts",
+    "test": "tsx scripts/test-examples.ts",
+    "prebuild": "yarn extract-types && yarn validate-examples",
+    "build": "tsc && chmod +x dist/index.js && mkdir -p dist/generated && cp -r src/generated/* dist/generated/",
     "dev": "tsc --watch",
     "start": "node dist/index.js"
   },
@@ -25,10 +29,19 @@
   "author": "Idealyst",
   "license": "MIT",
   "dependencies": {
+    "@idealyst/components": "^1.0.87",
+    "@idealyst/navigation": "^1.0.87",
+    "@idealyst/theme": "^1.0.87",
     "@modelcontextprotocol/sdk": "^1.0.4"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "@types/react": "^19.1.0",
+    "chalk": "^5.3.0",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "ts-morph": "^21.0.1",
+    "tsx": "^4.7.0",
     "typescript": "^5.0.0"
   }
 }

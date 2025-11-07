@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "idealyst": {
+      "command": "node",
+      "args": [
+        "/home/nicho/Development/idealyst-framework/packages/mcp-server/dist/index.js"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    },
+    "mobile-mcp": {
+      "command": "npx",
+      "args": ["-y", "@mobilenext/mobile-mcp"]
+    }
+  }
+}

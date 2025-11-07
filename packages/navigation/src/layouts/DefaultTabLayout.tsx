@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, Button, Icon } from '@idealyst/components'
 import { TabLayoutProps } from '../routing/types'
-import { Outlet } from '../router'
 import { useNavigator } from '../context'
+import { Outlet } from 'react-router'
 
 export interface DefaultTabLayoutProps extends TabLayoutProps {}
 
@@ -65,7 +65,7 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                         return (
                             <Button
                                 key={route.path}
-                                variant={isActive ? 'contained' : 'outlined'}
+                                type={isActive ? 'contained' : 'outlined'}
                                 intent={isActive ? 'primary' : undefined}
                                 size="sm"
                                 onPress={() => navigator.navigate({
@@ -81,12 +81,12 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                                     <Icon 
                                         name={icon as any} 
                                         size="sm" 
-                                        color={isActive ? 'white' : 'primary'} 
+                                        color='blue'
                                     />
                                 )}
                                 <Text 
                                     size="sm" 
-                                    color={isActive ? 'white' : 'primary'}
+                                    color={'primary'}
                                     weight={isActive ? 'semibold' : 'medium'}
                                 >
                                     {label}

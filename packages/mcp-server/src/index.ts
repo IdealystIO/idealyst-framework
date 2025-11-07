@@ -14,6 +14,13 @@ import { frameworkGuides } from "./data/framework-guides.js";
 import { navigationGuides } from "./data/navigation-guides.js";
 import { iconGuide } from "./data/icon-guide.js";
 import iconsData from "./data/icons.json" with { type: "json" };
+import {
+  getComponentTypes,
+  getThemeTypes,
+  getNavigationTypes,
+  getAvailableComponents,
+  getComponentExamples,
+} from "./tools/get-types.js";
 
 const server = new Server(
   {
@@ -120,6 +127,67 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ["query"],
+        },
+      },
+      {
+        name: "get_component_types",
+        description: "Get TypeScript type definitions for a specific component directly from the source. Returns the actual TypeScript interface and/or JSON schema.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            component: {
+              type: "string",
+              description: "The name of the component (e.g., 'Button', 'Card', 'Input')",
+            },
+            format: {
+              type: "string",
+              description: "Output format: 'typescript' for raw TypeScript definitions, 'json' for parsed schema, 'both' for combined output (default: 'both')",
+              enum: ["typescript", "json", "both"],
+            },
+          },
+          required: ["component"],
+        },
+      },
+      {
+        name: "get_theme_types",
+        description: "Get TypeScript type definitions for theme types (Size, Intent, Color, etc.) directly from @idealyst/theme",
+        inputSchema: {
+          type: "object",
+          properties: {
+            format: {
+              type: "string",
+              description: "Output format: 'typescript', 'json', or 'both' (default: 'both')",
+              enum: ["typescript", "json", "both"],
+            },
+          },
+        },
+      },
+      {
+        name: "get_navigation_types",
+        description: "Get TypeScript type definitions for navigation types directly from @idealyst/navigation",
+        inputSchema: {
+          type: "object",
+          properties: {
+            format: {
+              type: "string",
+              description: "Output format: 'typescript', 'json', or 'both' (default: 'both')",
+              enum: ["typescript", "json", "both"],
+            },
+          },
+        },
+      },
+      {
+        name: "get_component_examples_ts",
+        description: "Get validated TypeScript example code for a component. These examples are type-checked and guaranteed to compile.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            component: {
+              type: "string",
+              description: "The name of the component (e.g., 'Button', 'Card')",
+            },
+          },
+          required: ["component"],
         },
       },
     ],
@@ -351,6 +419,118 @@ ${command.examples.map((ex: string) => `\`\`\`bash\n${ex}\n\`\`\``).join("\n\n")
           },
         ],
       };
+    }
+
+    case "get_component_types": {
+      const componentName = args?.component as string;
+      const format = (args?.format as 'typescript' | 'json' | 'both') || 'both';
+
+      try {
+        const result = getComponentTypes(componentName, format);
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            },
+          ],
+        };
+      }
+    }
+
+    case "get_theme_types": {
+      const format = (args?.format as 'typescript' | 'json' | 'both') || 'both';
+
+      try {
+        const result = getThemeTypes(format);
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            },
+          ],
+        };
+      }
+    }
+
+    case "get_navigation_types": {
+      const format = (args?.format as 'typescript' | 'json' | 'both') || 'both';
+
+      try {
+        const result = getNavigationTypes(format);
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            },
+          ],
+        };
+      }
+    }
+
+    case "get_component_examples_ts": {
+      const componentName = args?.component as string;
+
+      try {
+        const examples = getComponentExamples(componentName);
+        if (!examples) {
+          return {
+            content: [
+              {
+                type: "text",
+                text: `No TypeScript examples found for component "${componentName}". Available components with examples: ${getAvailableComponents().join(', ')}`,
+              },
+            ],
+          };
+        }
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: examples,
+            },
+          ],
+        };
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            },
+          ],
+        };
+      }
     }
 
     default:
