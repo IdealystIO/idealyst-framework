@@ -79,7 +79,7 @@ export const HelloWorld = ({
           {platformText}
         </Text>
         {/* Framework Branding Card */}
-        <Card variant="elevated" padding="lg" intent="primary">
+        <Card type="elevated" padding="lg" intent="primary">
           <View style={{ alignItems: "center" }}>
             <Text style={{ fontSize: 32, marginBottom: 16 }}>🚀</Text>
             <Text
@@ -89,10 +89,7 @@ export const HelloWorld = ({
             >
               Idealyst Framework
             </Text>
-            <Text
-              size="md"
-              style={{ marginBottom: 16, textAlign: "center" }}
-            >
+            <Text size="md" style={{ marginBottom: 16, textAlign: "center" }}>
               Hello, {name}! Welcome to your cross-platform workspace.
             </Text>
 
@@ -106,7 +103,7 @@ export const HelloWorld = ({
               }}
             >
               <Card
-                variant="filled"
+                type="filled"
                 padding="sm"
                 style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
               >
@@ -115,7 +112,7 @@ export const HelloWorld = ({
                 </Text>
               </Card>
               <Card
-                variant="filled"
+                type="filled"
                 padding="sm"
                 style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
               >
@@ -124,7 +121,7 @@ export const HelloWorld = ({
                 </Text>
               </Card>
               <Card
-                variant="filled"
+                type="filled"
                 padding="sm"
                 style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }}
               >
@@ -137,7 +134,7 @@ export const HelloWorld = ({
         </Card>
 
         {/* Quick Start Guide Card */}
-        <Card variant="outlined" padding="lg" style={{ marginTop: 16 }}>
+        <Card type="outlined" padding="lg" style={{ marginTop: 16 }}>
           <Text size="lg" weight="bold" style={{ marginBottom: 16 }}>
             🎯 Quick Start Guide
           </Text>
@@ -182,7 +179,7 @@ export const HelloWorld = ({
             </Text>
           </View>
 
-          <Card variant="filled" intent="success" padding="md">
+          <Card type="filled" intent="success" padding="md">
             <Text size="sm" weight="semibold" style={{ marginBottom: 4 }}>
               ✨ Framework Features:
             </Text>
@@ -194,7 +191,7 @@ export const HelloWorld = ({
         </Card>
 
         {/* API Testing Section */}
-        <Card variant="outlined" padding="lg" style={{ marginTop: 16 }}>
+        <Card type="outlined" padding="lg" style={{ marginTop: 16 }}>
           <Text size="lg" weight="bold" style={{ marginBottom: 16 }}>
             🚀 API Demo - Database Integration
           </Text>
@@ -205,7 +202,7 @@ export const HelloWorld = ({
 
           {/* Create New Test Form */}
           <Card
-            variant="filled"
+            type="filled"
             padding="md"
             style={{ marginBottom: 16, backgroundColor: "#f8fafc" }}
           >
@@ -229,11 +226,11 @@ export const HelloWorld = ({
                 disabled={
                   !newTestName ||
                   !newTestMessage ||
-                  createTestMutation.isLoading
+                  createTestMutation.isPending
                 }
                 style={{ alignSelf: "flex-start" }}
               >
-                {createTestMutation.isLoading ? "Creating..." : "Create Test"}
+                {createTestMutation.isPending ? "Creating..." : "Create Test"}
               </Button>
             </View>
           </Card>
@@ -244,14 +241,14 @@ export const HelloWorld = ({
               Database Records ({tests.data?.length || 0})
             </Text>
 
-            {tests.isLoading ? (
-              <Card variant="outlined" padding="md">
+            {tests.isPending ? (
+              <Card type="outlined" padding="md">
                 <Text size="sm" style={{ color: "#64748b" }}>
                   Loading tests...
                 </Text>
               </Card>
             ) : tests.data?.length === 0 ? (
-              <Card variant="outlined" padding="md">
+              <Card type="outlined" padding="md">
                 <Text size="sm" style={{ color: "#64748b" }}>
                   No tests found. Create one above!
                 </Text>
@@ -259,7 +256,7 @@ export const HelloWorld = ({
             ) : (
               <View style={{ gap: 8 }}>
                 {tests.data?.map((test: any) => (
-                  <Card key={test.id} variant="outlined" padding="md">
+                  <Card key={test.id} type="outlined" padding="md">
                     <View
                       style={{
                         flexDirection: "row",
@@ -287,10 +284,10 @@ export const HelloWorld = ({
                         </Text>
                       </View>
                       <Button
-                        variant="destructive"
+                        intent="error"
                         size="sm"
                         onPress={() => handleDeleteTest(test.id)}
-                        disabled={deleteTestMutation.isLoading}
+                        disabled={deleteTestMutation.isPending}
                       >
                         Delete
                       </Button>
