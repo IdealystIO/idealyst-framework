@@ -23,6 +23,15 @@
     "node_modules",
     "dist",
     "templates",
-    "__tests__"
+    "templates.old",
+    "template",
+    "__tests__",
+    "src/generators/api.ts",
+    "src/generators/database.ts",
+    "src/generators/fullstack.ts",
+    "src/generators/native.ts",
+    "src/generators/shared.ts",
+    "src/generators/web.ts",
+    "src/generators/workspace.ts"
   ]
 } 

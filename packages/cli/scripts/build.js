@@ -114,10 +114,10 @@ async function build() {
   const ignorePatterns = loadIgnorePatterns();
   console.log(`   Found ${ignorePatterns.length} ignore patterns`);
   
-  console.log('📁 Copying fresh templates (with filtering)...');
-  
-  const templatesSource = path.join(__dirname, '..', 'templates');
-  const templatesTarget = path.join(__dirname, '..', 'dist', 'templates');
+  console.log('📁 Copying fresh template (with filtering)...');
+
+  const templatesSource = path.join(__dirname, '..', 'template');
+  const templatesTarget = path.join(__dirname, '..', 'dist', 'template');
   
   // Copy docs directory if it exists
   const docsSource = path.join(__dirname, '..', 'docs');
@@ -141,18 +141,20 @@ async function build() {
   }
   
   console.log('🔍 Verifying template structure...');
-  
+
   try {
-    const templateDirs = await fs.readdir(templatesTarget);
-    console.log('✅ Templates copied successfully:');
-    templateDirs.sort().forEach(dir => {
-      console.log(`   📂 ${dir}`);
+    const packagesDir = path.join(templatesTarget, 'packages');
+    const packageDirs = await fs.readdir(packagesDir);
+    console.log('✅ Template copied successfully:');
+    console.log('   Template includes packages:');
+    packageDirs.sort().forEach(dir => {
+      console.log(`   - ${dir}`);
     });
-    
+
     // Count total files copied
     const totalFiles = await countFiles(templatesTarget);
     console.log(`   📄 Total files: ${totalFiles}`);
-    
+
   } catch (error) {
     console.error('❌ Template verification failed!');
     process.exit(1);

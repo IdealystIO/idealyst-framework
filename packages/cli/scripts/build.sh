@@ -11,16 +11,17 @@ rm -rf dist
 echo "🏗️  Building TypeScript..."
 npx tsc
 
-echo "🗑️  Cleaning any existing templates in dist..."
-rm -rf dist/templates
+echo "🗑️  Cleaning any existing template in dist..."
+rm -rf dist/template
 
-echo "📁 Copying fresh templates..."
-cp -r templates dist/
+echo "📁 Copying fresh template..."
+cp -r template dist/
 
 echo "🔍 Verifying template structure..."
-if [ -d "dist/templates" ]; then
-    echo "✅ Templates copied successfully:"
-    find dist/templates -type d -maxdepth 1 | grep -v "^dist/templates$" | sort
+if [ -d "dist/template" ]; then
+    echo "✅ Template copied successfully"
+    echo "   Template includes packages:"
+    ls dist/template/packages/ | sed 's/^/   - /'
 else
     echo "❌ Template copy failed!"
     exit 1

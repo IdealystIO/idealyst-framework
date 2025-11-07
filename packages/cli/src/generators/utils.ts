@@ -443,7 +443,7 @@ export async function mergePackageJsonDependencies(templatePath: string, project
     const projectPackageJson = await fs.readJSON(projectPackageJsonPath);
     
     // Merge dependencies with current version
-    const idealystDependencies = {
+    const idealystDependencies: Record<string, string> = {
       [`@idealyst/components`]: `^${data.idealystVersion}`,
       [`@idealyst/navigation`]: `^${data.idealystVersion}`,
       [`@idealyst/theme`]: `^${data.idealystVersion}`,
@@ -467,6 +467,12 @@ export async function mergePackageJsonDependencies(templatePath: string, project
       'react-native-unistyles': '^3.0.4',
       'react-native-vector-icons': '^10.2.0'
     };
+
+    // Add workspace dependencies if workspaceScope is available
+    if (data.workspaceScope) {
+      idealystDependencies[`@${data.workspaceScope}/shared`] = 'workspace:*';
+      idealystDependencies[`@${data.workspaceScope}/database`] = 'workspace:*';
+    }
     
     // Merge the dependencies
     projectPackageJson.dependencies = {

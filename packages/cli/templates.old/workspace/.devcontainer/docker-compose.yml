@@ -1,0 +1,59 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: idealyst_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # Development Service (for devcontainer)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/idealyst_db
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3000:3000"
+      - "5173:5173"
+      - "8081:8081"
+      - "19006:19006"
+    volumes:
+      - ..:/workspace
+    depends_on:
+      - postgres
+      - redis
+    command: sleep infinity
+
+  # Figma MCP Server
+  figma-mcp:
+    image: node:18-alpine
+    working_dir: /app
+    environment:
+      - FIGMA_ACCESS_TOKEN=${FIGMA_ACCESS_TOKEN:-}
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./figma-mcp.sh:/app/figma-mcp.sh:ro
+      - figma_mcp_data:/app/node_modules
+    command: ["sh", "/app/figma-mcp.sh"]
+
+volumes:
+  postgres_data:
+  redis_data:
+  figma_mcp_data:

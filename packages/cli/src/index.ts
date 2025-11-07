@@ -5,8 +5,7 @@ import chalk from 'chalk';
 import * as fs from 'fs';
 import * as path from 'path';
 import { generateProject } from './generators/index';
-import { ProjectType } from './types';
-import { promptForProjectName, promptForProjectType, promptForAppName, promptForTrpcIntegration } from './generators/utils';
+import { promptForProjectName } from './generators/utils';
 
 const program = new Command();
 
@@ -43,169 +42,13 @@ program
 
       await generateProject({
         name: projectName,
-        type: 'fullstack',
         directory: options.directory,
         skipInstall: options.skipInstall || false,
         figmaToken: options.figmaToken
       });
-      
-      console.log('');
-      console.log(chalk.green(`🎉 Full-stack workspace created successfully!`));
-      console.log(chalk.blue(`📁 Project created in: ${options.directory}/${projectName}`));
-      console.log('');
-      console.log(chalk.yellow('🚀 Next steps:'));
-      console.log(chalk.white(`  cd ${projectName}`));
-      console.log(chalk.white('  yarn dev        # Start all development servers'));
-      console.log(chalk.white('  yarn web:dev    # Start web app only'));
-      console.log(chalk.white('  yarn mobile:start # Start mobile app'));
-      console.log('');
     } catch (error) {
       console.error(chalk.red('❌ Failed to create project:'));
       console.error(chalk.red(error instanceof Error ? error.message : String(error)));
-      process.exit(1);
-    }
-  });
-
-program
-  .command('create [project-name]')
-  .description('Create a new individual Idealyst project (for existing workspaces)')
-  .option('-t, --type <type>', 'Project type: native, web, shared, api, or database')
-  .option('-d, --directory <directory>', 'Output directory', '.')
-  .option('-a, --app-name <app-name>', 'Display name for native apps (e.g., "My Awesome App")')
-  .option('--with-trpc', 'Include tRPC boilerplate and setup (for web/native projects)')
-  .option('--skip-install', 'Skip installing dependencies')
-  .action(async (projectName: string | undefined, options: {
-    type?: string;
-    directory: string;
-    appName?: string;
-    withTrpc?: boolean;
-    skipInstall?: boolean;
-  }) => {
-    try {
-      // Prompt for project name if not provided
-      if (!projectName) {
-        projectName = await promptForProjectName();
-      } else {
-        // Validate provided project name
-        const { validateProjectName } = await import('./generators/utils');
-        if (!validateProjectName(projectName.toLowerCase())) {
-          console.error(chalk.red(`Invalid project name: ${projectName}`));
-          console.error(chalk.yellow('Project name must be a valid npm package name (lowercase, no spaces)'));
-          process.exit(1);
-        }
-        projectName = projectName.toLowerCase();
-      }
-
-      // Prompt for project type if not provided
-      let projectType = options.type;
-      if (!projectType) {
-        projectType = await promptForProjectType();
-      }
-
-      const validTypes = ['native', 'web', 'shared', 'api', 'database'];
-      if (!validTypes.includes(projectType)) {
-        console.error(chalk.red(`Invalid project type: ${projectType}`));
-        console.error(chalk.yellow(`Valid types are: ${validTypes.join(', ')}`));
-        process.exit(1);
-      }
-
-      // Prompt for app name if it's a native project and app name not provided
-      let appName = options.appName;
-      if (projectType === 'native' && !appName) {
-        appName = await promptForAppName(projectName);
-      }
-
-      // Prompt for tRPC integration if it's a web/native project and flag not provided
-      let withTrpc = options.withTrpc;
-      if ((projectType === 'web' || projectType === 'native') && withTrpc === undefined) {
-        withTrpc = await promptForTrpcIntegration();
-      }
-
-      await generateProject({
-        name: projectName,
-        type: projectType as ProjectType,
-        directory: options.directory,
-        skipInstall: options.skipInstall || false,
-        appName,
-        withTrpc: withTrpc || false
-      });
-      
-      console.log(chalk.green(`✨ Successfully created ${projectName}!`));
-      console.log(chalk.blue(`📁 Project created in: ${options.directory}/packages/${projectName}`));
-      
-      if (projectType === 'native') {
-        console.log(chalk.yellow('\n📱 Next steps for React Native:'));
-        console.log(chalk.white('  cd packages/' + projectName));
-        console.log(chalk.white('  yarn android  # or yarn ios'));
-      } else if (projectType === 'web') {
-        console.log(chalk.yellow('\n🌐 Next steps for React Web:'));
-        console.log(chalk.white('  cd packages/' + projectName));
-        console.log(chalk.white('  yarn dev'));
-      } else if (projectType === 'api') {
-        console.log(chalk.yellow('\n🚀 Next steps for API Server:'));
-        console.log(chalk.white('  cd packages/' + projectName));
-        console.log(chalk.white('  yarn dev        # Start development server'));
-        console.log(chalk.white('  yarn build      # Build for production'));
-      } else if (projectType === 'database') {
-        console.log(chalk.yellow('\n🗄️ Next steps for Database:'));
-        console.log(chalk.white('  cd packages/' + projectName));
-        console.log(chalk.white('  yarn db:generate # Generate Prisma client'));
-        console.log(chalk.white('  yarn db:push    # Push database schema'));
-        console.log(chalk.white('  yarn db:studio  # Open Prisma Studio'));
-        console.log(chalk.white('  yarn build      # Build for export to other packages'));
-      } else {
-        console.log(chalk.yellow('\n📦 Next steps for Shared Library:'));
-        console.log(chalk.white('  cd packages/' + projectName));
-        console.log(chalk.white('  yarn build'));
-      }
-    } catch (error) {
-      console.error(chalk.red('❌ Error creating project:'), error);
-      process.exit(1);
-    }
-  });
-
-program
-  .command('init [project-name]')
-  .description('Initialize a new Idealyst monorepo workspace')
-  .option('-d, --directory <directory>', 'Output directory', '.')
-  .option('--skip-install', 'Skip installing dependencies')
-  .option('--figma-token <token>', 'Figma personal access token (enables figma-developer-mcp server)')
-  .action(async (projectName: string | undefined, options: {
-    directory: string;
-    skipInstall?: boolean;
-    figmaToken?: string;
-  }) => {
-    try {
-      // Prompt for project name if not provided
-      if (!projectName) {
-        projectName = await promptForProjectName();
-      } else {
-        // Validate provided project name
-        const { validateProjectName } = await import('./generators/utils');
-        if (!validateProjectName(projectName.toLowerCase())) {
-          console.error(chalk.red(`Invalid project name: ${projectName}`));
-          console.error(chalk.yellow('Project name must be a valid npm package name (lowercase, no spaces)'));
-          process.exit(1);
-        }
-        projectName = projectName.toLowerCase();
-      }
-
-      await generateProject({
-        name: projectName,
-        type: 'workspace',
-        directory: options.directory,
-        skipInstall: options.skipInstall || false,
-        figmaToken: options.figmaToken
-      });
-      
-      console.log(chalk.green('✨ Successfully initialized Idealyst workspace!'));
-      console.log(chalk.blue(`📁 Workspace created in: ${options.directory}/${projectName}`));
-      console.log(chalk.yellow('\n🚀 Next steps:'));
-      console.log(chalk.white(`  cd ${projectName}`));
-      console.log(chalk.white('  idealyst create my-app --type native'));
-      console.log(chalk.white('  idealyst create my-web-app --type web'));
-    } catch (error) {
-      console.error(chalk.red('❌ Error initializing workspace:'), error);
       process.exit(1);
     }
   });
@@ -214,78 +57,38 @@ program
 function getLLMReference() {
   return {
     overview: {
-      description: "The Idealyst Framework CLI is a powerful tool for generating TypeScript monorepo projects with React Native, React Web, API servers, database layers, and shared libraries.",
-      warning: "⚠️ CRITICAL: Always provide ALL required arguments to avoid interactive prompts that can hang automated processes!"
+      description: "The Idealyst Framework CLI generates complete full-stack TypeScript monorepo projects with React Native, React Web, API server, database layer, and shared libraries.",
+      warning: "⚠️ CRITICAL: Always provide the project name to avoid interactive prompts!"
     },
     safeCommands: {
-      workspace: {
-        command: "idealyst init <workspace-name>",
-        description: "Create a new monorepo workspace",
-        example: "idealyst init my-awesome-project"
-      },
-      database: {
-        command: "idealyst create <name> --type database",
-        description: "Create standalone database package with Prisma + Zod",
-        example: "idealyst create user-db --type database"
-      },
-      api: {
-        command: "idealyst create <name> --type api",
-        description: "Create API server with Express + tRPC (no database)",
-        example: "idealyst create user-api --type api"
-      },
-      shared: {
-        command: "idealyst create <name> --type shared",
-        description: "Create shared utilities and types package",
-        example: "idealyst create common-utils --type shared"
-      },
-      web: {
-        command: "idealyst create <name> --type web --with-trpc|--no-trpc",
-        description: "Create React web app with Vite",
-        examples: [
-          "idealyst create web-app --type web --with-trpc",
-          "idealyst create web-app --type web --no-trpc"
-        ]
-      },
-      native: {
-        command: "idealyst create <name> --type native --app-name \"Name\" --with-trpc|--no-trpc",
-        description: "Create React Native app",
-        examples: [
-          "idealyst create mobile-app --type native --app-name \"My App\" --with-trpc",
-          "idealyst create mobile-app --type native --app-name \"My App\" --no-trpc"
+      init: {
+        command: "idealyst init <project-name>",
+        description: "Create a new full-stack workspace with all packages pre-integrated",
+        example: "idealyst init my-awesome-project",
+        options: [
+          "--figma-token <token> - Optional Figma personal access token for MCP integration",
+          "--skip-install - Skip installing dependencies"
         ]
       }
     },
     dangerousCommands: [
       {
         command: "idealyst init",
-        issue: "Missing workspace name - will prompt interactively"
-      },
-      {
-        command: "idealyst create my-app",
-        issue: "Missing --type parameter - will prompt interactively"
-      },
-      {
-        command: "idealyst create my-app --type web",
-        issue: "Missing tRPC choice - will prompt interactively"
-      },
-      {
-        command: "idealyst create my-app --type native",
-        issue: "Missing --app-name and tRPC choice - will prompt interactively"
+        issue: "Missing project name - will prompt interactively"
       }
     ],
-    projectTypes: {
-      workspace: "Monorepo setup with Yarn workspaces",
-      database: "Prisma + Zod schemas (standalone, no API)",
-      api: "Express + tRPC server (no database included)",
-      shared: "Shared utilities and types",
-      web: "React web app with Vite",
-      native: "React Native app"
+    includes: {
+      mobile: "React Native app with Idealyst components (packages/mobile)",
+      web: "React web app with Vite and Idealyst components (packages/web)",
+      api: "Express + tRPC API server (packages/api)",
+      database: "Prisma database layer with PostgreSQL (packages/database)",
+      shared: "Cross-platform shared components and utilities (packages/shared)"
     },
     architecture: {
-      database: "Export: { db, schemas, PrismaClient, types }",
-      api: "Consume database packages as dependencies",
-      typescript: "All projects use strict TypeScript",
-      monorepo: "Yarn workspaces for dependency management"
+      integration: "All packages are pre-integrated with proper dependencies",
+      typescript: "Full end-to-end type safety from database to frontend",
+      monorepo: "Yarn workspaces for dependency management",
+      commands: "Unified dev commands (yarn dev starts all servers)"
     }
   };
 }
