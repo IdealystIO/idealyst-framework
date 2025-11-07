@@ -37,7 +37,7 @@ async function main() {
 
   // Create output structure
   const output = {
-    version: '1.0.89',
+    version: '1.0.90',
     extractedAt: new Date().toISOString(),
     components,
     theme: themeTypes,

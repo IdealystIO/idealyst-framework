@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@idealyst/components": "^1.0.82",
-    "@idealyst/datagrid": "^1.0.89",
-    "@idealyst/datepicker": "^1.0.89",
-    "@idealyst/navigation": "^1.0.89",
+    "@idealyst/datagrid": "^1.0.90",
+    "@idealyst/datepicker": "^1.0.90",
+    "@idealyst/navigation": "^1.0.90",
     "@idealyst/theme": "^1.0.82",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
