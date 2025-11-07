@@ -53,9 +53,9 @@ export function AvatarWithFallback() {
   return (
     <View spacing="md">
       <Avatar fallback="JD" size="md" />
-      <Avatar fallback="AB" size="md" color="blue.500" />
-      <Avatar fallback="CD" size="md" color="green.500" />
-      <Avatar fallback="EF" size="md" color="purple.500" />
+      <Avatar fallback="AB" size="md"  />
+      <Avatar fallback="CD" size="md"  />
+      <Avatar fallback="EF" size="md"  />
     </View>
   );
 }
@@ -64,11 +64,11 @@ export function AvatarWithFallback() {
 export function AvatarColors() {
   return (
     <View spacing="md">
-      <Avatar fallback="AA" color="red.500" size="lg" />
-      <Avatar fallback="BB" color="blue.500" size="lg" />
-      <Avatar fallback="CC" color="green.500" size="lg" />
-      <Avatar fallback="DD" color="yellow.500" size="lg" />
-      <Avatar fallback="EE" color="purple.500" size="lg" />
+      <Avatar fallback="AA"  size="lg" />
+      <Avatar fallback="BB"  size="lg" />
+      <Avatar fallback="CC"  size="lg" />
+      <Avatar fallback="DD"  size="lg" />
+      <Avatar fallback="EE"  size="lg" />
     </View>
   );
 }
@@ -81,7 +81,7 @@ export function UserProfileList() {
         <Avatar src="https://i.pravatar.cc/150?img=8" size="md" />
         <View spacing="xs">
           <Text weight="semibold">John Doe</Text>
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             john.doe@example.com
           </Text>
         </View>
@@ -90,16 +90,16 @@ export function UserProfileList() {
         <Avatar src="https://i.pravatar.cc/150?img=9" size="md" />
         <View spacing="xs">
           <Text weight="semibold">Jane Smith</Text>
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             jane.smith@example.com
           </Text>
         </View>
       </View>
       <View spacing="sm">
-        <Avatar fallback="AB" color="blue.500" size="md" />
+        <Avatar fallback="AB"  size="md" />
         <View spacing="xs">
           <Text weight="semibold">Alex Brown</Text>
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             alex.brown@example.com
           </Text>
         </View>
@@ -112,14 +112,14 @@ export function UserProfileList() {
 export function AvatarGroup() {
   return (
     <View spacing="md">
-      <Text weight="semibold" size="sm" color="gray.700">
+      <Text weight="semibold" size="sm" >
         Team Members
       </Text>
       <View spacing="sm">
         <Avatar src="https://i.pravatar.cc/150?img=10" size="sm" />
         <Avatar src="https://i.pravatar.cc/150?img=11" size="sm" />
         <Avatar src="https://i.pravatar.cc/150?img=12" size="sm" />
-        <Avatar fallback="+3" size="sm" color="gray.500" />
+        <Avatar fallback="+3" size="sm"  />
       </View>
     </View>
   );
@@ -138,7 +138,7 @@ export function LargeProfileAvatar() {
         <Text size="xl" weight="bold">
           Sarah Johnson
         </Text>
-        <Text size="md" color="gray.600">
+        <Text size="md" >
           Product Designer
         </Text>
       </View>
@@ -156,7 +156,7 @@ export function AvatarWithFallbackOnError() {
         alt="Broken image"
         size="lg"
       />
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         Fallback shown when image fails to load
       </Text>
     </View>
@@ -176,11 +176,11 @@ export function MixedAvatars() {
         <Text weight="medium">Square with Image</Text>
       </View>
       <View spacing="sm">
-        <Avatar fallback="JD" size="md" shape="circle" color="purple.500" />
+        <Avatar fallback="JD" size="md" shape="circle"  />
         <Text weight="medium">Circle with Initials</Text>
       </View>
       <View spacing="sm">
-        <Avatar fallback="JD" size="md" shape="square" color="blue.500" />
+        <Avatar fallback="JD" size="md" shape="square"  />
         <Text weight="medium">Square with Initials</Text>
       </View>
     </View>

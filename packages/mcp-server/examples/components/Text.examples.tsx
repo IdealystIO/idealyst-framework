@@ -53,11 +53,11 @@ export function TextAlignment() {
 export function TextWithColor() {
   return (
     <View spacing="md">
-      <Text color="blue.500">Blue text</Text>
-      <Text color="green.600">Green text</Text>
-      <Text color="red.500">Red text</Text>
-      <Text color="gray.700">Gray text</Text>
-      <Text color="purple.500">Purple text</Text>
+      <Text >Blue text</Text>
+      <Text >Green text</Text>
+      <Text >Red text</Text>
+      <Text >Gray text</Text>
+      <Text >Purple text</Text>
     </View>
   );
 }
@@ -66,16 +66,16 @@ export function TextWithColor() {
 export function CombinedTextStyles() {
   return (
     <View spacing="md">
-      <Text size="xl" weight="bold" color="blue.600">
+      <Text size="xl" weight="bold" >
         Heading 1
       </Text>
-      <Text size="lg" weight="semibold" color="gray.800">
+      <Text size="lg" weight="semibold" >
         Heading 2
       </Text>
-      <Text size="md" weight="medium" color="gray.700">
+      <Text size="md" weight="medium" >
         Subheading
       </Text>
-      <Text size="sm" weight="normal" color="gray.600">
+      <Text size="sm" weight="normal" >
         Body text
       </Text>
     </View>
@@ -86,14 +86,14 @@ export function CombinedTextStyles() {
 export function ParagraphText() {
   return (
     <View spacing="md">
-      <Text size="lg" weight="bold" color="gray.900">
+      <Text size="lg" weight="bold" >
         Article Title
       </Text>
-      <Text size="md" color="gray.700">
+      <Text size="md" >
         This is a paragraph of text that demonstrates how the Text component can be used for
         longer content. It maintains good readability with appropriate sizing and spacing.
       </Text>
-      <Text size="md" color="gray.700">
+      <Text size="md" >
         You can create multiple paragraphs by using multiple Text components, each with their own
         styling and configuration.
       </Text>
@@ -106,26 +106,26 @@ export function LabelsAndDescriptions() {
   return (
     <View spacing="lg">
       <View spacing="xs">
-        <Text size="sm" weight="semibold" color="gray.700">
+        <Text size="sm" weight="semibold" >
           Username
         </Text>
-        <Text size="md" color="gray.900">
+        <Text size="md" >
           johndoe
         </Text>
       </View>
       <View spacing="xs">
-        <Text size="sm" weight="semibold" color="gray.700">
+        <Text size="sm" weight="semibold" >
           Email
         </Text>
-        <Text size="md" color="gray.900">
+        <Text size="md" >
           john.doe@example.com
         </Text>
       </View>
       <View spacing="xs">
-        <Text size="sm" weight="semibold" color="gray.700">
+        <Text size="sm" weight="semibold" >
           Status
         </Text>
-        <Text size="md" color="green.600" weight="medium">
+        <Text size="md"  weight="medium">
           Active
         </Text>
       </View>
@@ -137,16 +137,16 @@ export function LabelsAndDescriptions() {
 export function StatusMessages() {
   return (
     <View spacing="md">
-      <Text size="sm" color="green.600" weight="medium">
+      <Text size="sm"  weight="medium">
         ✓ Form submitted successfully
       </Text>
-      <Text size="sm" color="red.600" weight="medium">
+      <Text size="sm"  weight="medium">
         ✗ Please fill out all required fields
       </Text>
-      <Text size="sm" color="blue.600" weight="medium">
+      <Text size="sm"  weight="medium">
         ℹ Your changes have been saved
       </Text>
-      <Text size="sm" color="orange.600" weight="medium">
+      <Text size="sm"  weight="medium">
         ⚠ This action cannot be undone
       </Text>
     </View>
@@ -157,19 +157,19 @@ export function StatusMessages() {
 export function TypographyHierarchy() {
   return (
     <View spacing="lg">
-      <Text size="xl" weight="bold" color="gray.900">
+      <Text size="xl" weight="bold" >
         Page Title
       </Text>
-      <Text size="lg" weight="semibold" color="gray.800">
+      <Text size="lg" weight="semibold" >
         Section Heading
       </Text>
-      <Text size="md" weight="medium" color="gray.700">
+      <Text size="md" weight="medium" >
         Subsection Title
       </Text>
-      <Text size="md" color="gray.600">
+      <Text size="md" >
         Body text content goes here with regular weight and medium size for optimal readability.
       </Text>
-      <Text size="sm" color="gray.500">
+      <Text size="sm" >
         Small print or supplementary information can use smaller text size.
       </Text>
     </View>

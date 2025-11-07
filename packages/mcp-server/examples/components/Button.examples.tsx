@@ -81,16 +81,16 @@ export function DisabledButton() {
   );
 }
 
-// Example 7: Full Width Button
-export function FullWidthButton() {
+// Example 7: Button with Custom Style
+export function ButtonWithCustomStyle() {
   return (
-    <Button fullWidth type="contained" intent="primary">
-      Full Width Button
+    <Button type="contained" intent="primary" style={{ width: '100%' }}>
+      Full Width Button (via style)
     </Button>
   );
 }
 
-// Example 8: Interactive Example with Loading State
+// Example 8: Interactive Example with State
 export function InteractiveButton() {
   const [loading, setLoading] = React.useState(false);
 
@@ -102,7 +102,7 @@ export function InteractiveButton() {
 
   return (
     <Button
-      loading={loading}
+      disabled={loading}
       onPress={handlePress}
       type="contained"
       intent="primary"

@@ -20,7 +20,7 @@ export function BasicScreen() {
 // Example 2: Screen with Backgrounds
 export function ScreenWithBackgrounds() {
   return (
-    <Screen background="surface.primary">
+    <Screen background="primary">
       <View spacing="md">
         <Text size="lg" weight="bold">
           Primary Surface Screen
@@ -72,12 +72,12 @@ export function ScrollableScreen() {
         {Array.from({ length: 20 }, (_, i) => (
           <View
             key={i}
-            background="surface.primary"
+            background="primary"
             spacing="md"
             radius="md"
           >
             <Text weight="semibold">Item {i + 1}</Text>
-            <Text size="sm" color="gray.600">
+            <Text size="sm" >
               This is a scrollable item. Add enough items to see scrolling behavior.
             </Text>
           </View>
@@ -104,7 +104,7 @@ export function ScreenWithContentInset() {
         {Array.from({ length: 10 }, (_, i) => (
           <View
             key={i}
-            background="surface.primary"
+            background="primary"
             spacing="md"
             radius="md"
           >
@@ -119,35 +119,35 @@ export function ScreenWithContentInset() {
 // Example 7: Profile Screen
 export function ProfileScreen() {
   return (
-    <Screen background="surface.secondary" padding="md" safeArea>
+    <Screen background="secondary" padding="md" safeArea>
       <View spacing="lg">
         <View spacing="md">
           <Text size="xl" weight="bold">
             John Doe
           </Text>
-          <Text size="md" color="gray.600">
+          <Text size="md" >
             john.doe@example.com
           </Text>
         </View>
 
         <View
-          background="surface.primary"
+          background="primary"
           spacing="md"
           radius="lg"
         >
           <Text weight="semibold">Account Information</Text>
           <View spacing="sm">
-            <Text size="sm" color="gray.600">
+            <Text size="sm" >
               Member since: January 2024
             </Text>
-            <Text size="sm" color="gray.600">
+            <Text size="sm" >
               Status: Active
             </Text>
           </View>
         </View>
 
         <View
-          background="surface.primary"
+          background="primary"
           spacing="md"
           radius="lg"
         >
@@ -166,7 +166,7 @@ export function ProfileScreen() {
 // Example 8: Dashboard Screen
 export function DashboardScreen() {
   return (
-    <Screen background="surface.secondary" padding="lg" safeArea scrollable>
+    <Screen background="secondary" padding="lg" safeArea scrollable>
       <View spacing="lg">
         <Text size="xl" weight="bold">
           Dashboard
@@ -174,7 +174,7 @@ export function DashboardScreen() {
 
         <View spacing="md">
           <View
-            background="surface.primary"
+            background="primary"
             spacing="lg"
             radius="lg"
           >
@@ -183,7 +183,7 @@ export function DashboardScreen() {
             </Text>
             <View spacing="md">
               <View spacing="xs">
-                <Text size="sm" color="gray.600">
+                <Text size="sm" >
                   Total Users
                 </Text>
                 <Text size="xl" weight="bold">
@@ -191,7 +191,7 @@ export function DashboardScreen() {
                 </Text>
               </View>
               <View spacing="xs">
-                <Text size="sm" color="gray.600">
+                <Text size="sm" >
                   Revenue
                 </Text>
                 <Text size="xl" weight="bold">
@@ -202,7 +202,7 @@ export function DashboardScreen() {
           </View>
 
           <View
-            background="surface.primary"
+            background="primary"
             spacing="lg"
             radius="lg"
           >
@@ -224,13 +224,13 @@ export function DashboardScreen() {
 // Example 9: Form Screen
 export function FormScreen() {
   return (
-    <Screen background="surface.secondary" padding="md" safeArea scrollable>
+    <Screen background="secondary" padding="md" safeArea scrollable>
       <View spacing="lg">
         <View spacing="sm">
           <Text size="xl" weight="bold">
             Create Account
           </Text>
-          <Text size="md" color="gray.600">
+          <Text size="md" >
             Fill in your information below
           </Text>
         </View>
@@ -241,12 +241,12 @@ export function FormScreen() {
               Full Name
             </Text>
             <View
-              background="surface.primary"
+              background="primary"
               spacing="md"
               radius="md"
               border="thin"
             >
-              <Text size="sm" color="gray.500">
+              <Text size="sm" >
                 Enter your full name
               </Text>
             </View>
@@ -257,12 +257,12 @@ export function FormScreen() {
               Email
             </Text>
             <View
-              background="surface.primary"
+              background="primary"
               spacing="md"
               radius="md"
               border="thin"
             >
-              <Text size="sm" color="gray.500">
+              <Text size="sm" >
                 Enter your email
               </Text>
             </View>
@@ -273,12 +273,12 @@ export function FormScreen() {
               Password
             </Text>
             <View
-              background="surface.primary"
+              background="primary"
               spacing="md"
               radius="md"
               border="thin"
             >
-              <Text size="sm" color="gray.500">
+              <Text size="sm" >
                 Enter your password
               </Text>
             </View>
@@ -294,18 +294,18 @@ export function FormScreen() {
 // Example 10: Settings Screen
 export function SettingsScreen() {
   return (
-    <Screen background="surface.secondary" padding="none" safeArea scrollable>
+    <Screen background="secondary" padding="none" safeArea scrollable>
       <View spacing="lg" marginVariant="md">
         <Text size="xl" weight="bold">
           Settings
         </Text>
 
         <View spacing="xs">
-          <Text size="sm" weight="semibold" color="gray.600">
+          <Text size="sm" weight="semibold" >
             ACCOUNT
           </Text>
           <View
-            background="surface.primary"
+            background="primary"
             spacing="none"
             radius="md"
           >
@@ -322,11 +322,11 @@ export function SettingsScreen() {
         </View>
 
         <View spacing="xs">
-          <Text size="sm" weight="semibold" color="gray.600">
+          <Text size="sm" weight="semibold" >
             PREFERENCES
           </Text>
           <View
-            background="surface.primary"
+            background="primary"
             spacing="none"
             radius="md"
           >

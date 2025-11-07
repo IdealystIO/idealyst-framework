@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Alert, View, Button, Icon } from '@idealyst/components';
+import { Alert, View, Text, Button, Icon } from '@idealyst/components';
 
 // Example 1: Basic Alert
 export function BasicAlert() {
@@ -219,7 +219,7 @@ export function AlertWithChildren() {
           <Text weight="bold" size="md">
             Important Notice
           </Text>
-          <Text size="sm" color="gray.700">
+          <Text size="sm" >
             Please read the following information carefully:
           </Text>
         </View>
@@ -285,13 +285,13 @@ export function FormValidationAlerts() {
         showIcon
       >
         <View spacing="xs">
-          <Text size="sm" color="red.600">
+          <Text size="sm" >
             • Email address is required
           </Text>
-          <Text size="sm" color="red.600">
+          <Text size="sm" >
             • Password must be at least 8 characters
           </Text>
-          <Text size="sm" color="red.600">
+          <Text size="sm" >
             • Terms and conditions must be accepted
           </Text>
         </View>

@@ -118,28 +118,30 @@ export function SingleExpandAccordion() {
   return <Accordion items={items} allowMultiple={false} />;
 }
 
-// Example 6: Controlled Accordion
-export function ControlledAccordion() {
-  const [expanded, setExpanded] = React.useState<string[]>(['1']);
-
+// Example 6: Accordion with Default Expanded
+export function AccordionWithDefaultExpanded() {
   const items: AccordionItem[] = [
     {
       id: '1',
-      title: 'Controlled Item 1',
-      content: 'This accordion is controlled.',
+      title: 'Default Expanded Item',
+      content: 'This item starts expanded by default.',
     },
     {
       id: '2',
-      title: 'Controlled Item 2',
-      content: 'The parent manages the expanded state.',
+      title: 'Collapsed Item',
+      content: 'This item starts collapsed.',
+    },
+    {
+      id: '3',
+      title: 'Another Item',
+      content: 'This item also starts collapsed.',
     },
   ];
 
   return (
     <Accordion
       items={items}
-      expanded={expanded}
-      onExpandedChange={setExpanded}
+      defaultExpanded={['1']}
     />
   );
 }

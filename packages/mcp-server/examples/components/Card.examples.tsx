@@ -124,7 +124,7 @@ export function ComplexCard() {
       <View spacing="md">
         <Text size="lg" weight="bold">Card Title</Text>
         <Text size="md">This is some card content with multiple elements.</Text>
-        <Text size="sm" color="gray.600">Additional information</Text>
+        <Text size="sm" >Additional information</Text>
       </View>
     </Card>
   );

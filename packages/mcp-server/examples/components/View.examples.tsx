@@ -45,13 +45,13 @@ export function ViewWithSpacing() {
 export function ViewWithBackground() {
   return (
     <View spacing="md">
-      <View background="surface.primary" spacing="md">
+      <View background="primary" spacing="md">
         <Text>Primary surface</Text>
       </View>
-      <View background="surface.secondary" spacing="md">
+      <View background="secondary" spacing="md">
         <Text>Secondary surface</Text>
       </View>
-      <View background="surface.tertiary" spacing="md">
+      <View background="tertiary" spacing="md">
         <Text>Tertiary surface</Text>
       </View>
       <View background="transparent" spacing="md">
@@ -65,22 +65,22 @@ export function ViewWithBackground() {
 export function ViewWithRadius() {
   return (
     <View spacing="md">
-      <View background="surface.primary" radius="none" spacing="md">
+      <View background="primary" radius="none" spacing="md">
         <Text>No radius</Text>
       </View>
-      <View background="surface.primary" radius="xs" spacing="md">
+      <View background="primary" radius="xs" spacing="md">
         <Text>XS radius</Text>
       </View>
-      <View background="surface.primary" radius="sm" spacing="md">
+      <View background="primary" radius="sm" spacing="md">
         <Text>Small radius</Text>
       </View>
-      <View background="surface.primary" radius="md" spacing="md">
+      <View background="primary" radius="md" spacing="md">
         <Text>Medium radius</Text>
       </View>
-      <View background="surface.primary" radius="lg" spacing="md">
+      <View background="primary" radius="lg" spacing="md">
         <Text>Large radius</Text>
       </View>
-      <View background="surface.primary" radius="xl" spacing="md">
+      <View background="primary" radius="xl" spacing="md">
         <Text>XL radius</Text>
       </View>
     </View>
@@ -109,13 +109,13 @@ export function ViewWithCustomColors() {
   return (
     <View spacing="md">
       <View backgroundColor="blue" spacing="md" radius="md">
-        <Text color="white">Blue background</Text>
+        <Text >Blue background</Text>
       </View>
       <View backgroundColor="green" spacing="md" radius="md">
-        <Text color="white">Green background</Text>
+        <Text >Green background</Text>
       </View>
       <View backgroundColor="red" spacing="md" radius="md">
-        <Text color="white">Red background</Text>
+        <Text >Red background</Text>
       </View>
       <View
         border="thin"
@@ -149,13 +149,13 @@ export function ViewWithCustomSizes() {
 // Example 8: Nested Views
 export function NestedViews() {
   return (
-    <View spacing="lg" background="surface.primary" radius="lg">
+    <View spacing="lg" background="primary" radius="lg">
       <Text weight="bold" size="lg">
         Outer View
       </Text>
-      <View spacing="md" background="surface.secondary" radius="md">
+      <View spacing="md" background="secondary" radius="md">
         <Text weight="semibold">Middle View</Text>
-        <View spacing="sm" background="surface.tertiary" radius="sm">
+        <View spacing="sm" background="tertiary" radius="sm">
           <Text>Inner View</Text>
         </View>
       </View>
@@ -168,7 +168,7 @@ export function CardLayout() {
   return (
     <View spacing="md">
       <View
-        background="surface.primary"
+        background="primary"
         spacing="lg"
         radius="lg"
         border="thin"
@@ -176,7 +176,7 @@ export function CardLayout() {
         <Text size="lg" weight="bold">
           Card Title
         </Text>
-        <Text size="md" color="gray.600">
+        <Text size="md" >
           This is a card-like layout created using the View component with background, spacing,
           radius, and border properties.
         </Text>
@@ -190,28 +190,28 @@ export function ViewWithMargin() {
   return (
     <View spacing="md">
       <View
-        background="surface.primary"
+        background="primary"
         spacing="md"
         marginVariant="none"
       >
         <Text>No margin</Text>
       </View>
       <View
-        background="surface.primary"
+        background="primary"
         spacing="md"
         marginVariant="sm"
       >
         <Text>Small margin</Text>
       </View>
       <View
-        background="surface.primary"
+        background="primary"
         spacing="md"
         marginVariant="md"
       >
         <Text>Medium margin</Text>
       </View>
       <View
-        background="surface.primary"
+        background="primary"
         spacing="md"
         marginVariant="lg"
       >
@@ -225,7 +225,7 @@ export function ViewWithMargin() {
 export function ProfileCard() {
   return (
     <View
-      background="surface.primary"
+      background="primary"
       spacing="lg"
       radius="lg"
       border="thin"
@@ -234,15 +234,15 @@ export function ProfileCard() {
         <Text size="xl" weight="bold">
           John Doe
         </Text>
-        <Text size="md" color="gray.600">
+        <Text size="md" >
           Software Engineer
         </Text>
       </View>
       <View spacing="sm">
-        <Text size="sm" color="gray.700">
+        <Text size="sm" >
           Email: john.doe@example.com
         </Text>
-        <Text size="sm" color="gray.700">
+        <Text size="sm" >
           Location: San Francisco, CA
         </Text>
       </View>
@@ -256,48 +256,48 @@ export function DashboardGrid() {
     <View spacing="md">
       <View spacing="md">
         <View
-          background="surface.primary"
+          background="primary"
           spacing="md"
           radius="md"
           border="thin"
         >
           <Text weight="semibold">Card 1</Text>
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             Content goes here
           </Text>
         </View>
         <View
-          background="surface.primary"
+          background="primary"
           spacing="md"
           radius="md"
           border="thin"
         >
           <Text weight="semibold">Card 2</Text>
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             Content goes here
           </Text>
         </View>
       </View>
       <View spacing="md">
         <View
-          background="surface.primary"
+          background="primary"
           spacing="md"
           radius="md"
           border="thin"
         >
           <Text weight="semibold">Card 3</Text>
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             Content goes here
           </Text>
         </View>
         <View
-          background="surface.primary"
+          background="primary"
           spacing="md"
           radius="md"
           border="thin"
         >
           <Text weight="semibold">Card 4</Text>
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             Content goes here
           </Text>
         </View>

@@ -95,7 +95,7 @@ export function DividerWithText() {
       <Divider>OR</Divider>
       <Text>Section 2 content</Text>
       <Divider>
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           Continue Reading
         </Text>
       </Divider>
@@ -209,7 +209,7 @@ export function FormSectionDividers() {
       </View>
 
       <Divider spacing="lg">
-        <Text size="sm" weight="semibold" color="gray.600">
+        <Text size="sm" weight="semibold" >
           CONTACT DETAILS
         </Text>
       </Divider>
@@ -222,7 +222,7 @@ export function FormSectionDividers() {
       </View>
 
       <Divider spacing="lg">
-        <Text size="sm" weight="semibold" color="gray.600">
+        <Text size="sm" weight="semibold" >
           PREFERENCES
         </Text>
       </Divider>

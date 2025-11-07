@@ -219,7 +219,7 @@ export function FormDialog() {
             <Text size="sm" weight="semibold">
               Name
             </Text>
-            <Text size="sm" color="gray.500">
+            <Text size="sm" >
               Placeholder for input
             </Text>
           </View>
@@ -227,7 +227,7 @@ export function FormDialog() {
             <Text size="sm" weight="semibold">
               Email
             </Text>
-            <Text size="sm" color="gray.500">
+            <Text size="sm" >
               Placeholder for input
             </Text>
           </View>

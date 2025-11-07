@@ -125,7 +125,7 @@ export function CheckboxWithCustomContent() {
     <Checkbox checked={checked} onCheckedChange={setChecked}>
       <View spacing="xs">
         <Text weight="bold">Marketing emails</Text>
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           Receive updates about new features and special offers
         </Text>
       </View>

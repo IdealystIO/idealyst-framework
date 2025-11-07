@@ -169,7 +169,7 @@ export function BreadcrumbWithDisabledItems() {
   return (
     <View spacing="md">
       <Breadcrumb items={items} />
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         The "Restricted" item is disabled
       </Text>
     </View>
@@ -192,7 +192,7 @@ export function ResponsiveBreadcrumb() {
         <Text weight="semibold">Responsive (collapses on narrow screens)</Text>
         <Breadcrumb items={items} responsive minVisibleItems={3} />
       </View>
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         Try resizing the window to see the breadcrumb collapse
       </Text>
     </View>
@@ -222,7 +222,7 @@ export function FileSystemBreadcrumb() {
   return (
     <View spacing="md">
       <Breadcrumb items={items} separator="/" />
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         Current path: /{path.join('/')}
       </Text>
     </View>

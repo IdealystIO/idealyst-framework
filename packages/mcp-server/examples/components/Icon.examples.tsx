@@ -43,11 +43,11 @@ export function IconCustomSize() {
 export function IconWithColors() {
   return (
     <View spacing="md">
-      <Icon name="circle" color="blue.500" />
-      <Icon name="circle" color="green.500" />
-      <Icon name="circle" color="red.500" />
-      <Icon name="circle" color="yellow.500" />
-      <Icon name="circle" color="purple.500" />
+      <Icon name="circle"  />
+      <Icon name="circle"  />
+      <Icon name="circle"  />
+      <Icon name="circle"  />
+      <Icon name="circle"  />
     </View>
   );
 }
@@ -97,12 +97,12 @@ export function CommonUIIcons() {
 export function ActionIcons() {
   return (
     <View spacing="md">
-      <Icon name="plus" size="lg" color="green.600" />
-      <Icon name="pencil" size="lg" color="blue.600" />
-      <Icon name="delete" size="lg" color="red.600" />
-      <Icon name="check" size="lg" color="green.600" />
-      <Icon name="close" size="lg" color="gray.600" />
-      <Icon name="refresh" size="lg" color="blue.600" />
+      <Icon name="plus" size="lg"  />
+      <Icon name="pencil" size="lg"  />
+      <Icon name="delete" size="lg"  />
+      <Icon name="check" size="lg"  />
+      <Icon name="close" size="lg"  />
+      <Icon name="refresh" size="lg"  />
     </View>
   );
 }
@@ -127,25 +127,25 @@ export function StatusIconsWithText() {
     <View spacing="md">
       <View spacing="sm">
         <Icon name="check-circle" intent="success" size="md" />
-        <Text color="green.600" size="sm">
+        <Text  size="sm">
           Success
         </Text>
       </View>
       <View spacing="sm">
         <Icon name="alert-circle" intent="error" size="md" />
-        <Text color="red.600" size="sm">
+        <Text  size="sm">
           Error
         </Text>
       </View>
       <View spacing="sm">
         <Icon name="alert" intent="warning" size="md" />
-        <Text color="orange.600" size="sm">
+        <Text  size="sm">
           Warning
         </Text>
       </View>
       <View spacing="sm">
         <Icon name="information" intent="info" size="md" />
-        <Text color="blue.600" size="sm">
+        <Text  size="sm">
           Info
         </Text>
       </View>
@@ -157,12 +157,12 @@ export function StatusIconsWithText() {
 export function SocialMediaIcons() {
   return (
     <View spacing="md">
-      <Icon name="facebook" size="lg" color="blue.600" />
-      <Icon name="twitter" size="lg" color="blue.400" />
-      <Icon name="instagram" size="lg" color="pink.500" />
-      <Icon name="linkedin" size="lg" color="blue.700" />
-      <Icon name="youtube" size="lg" color="red.600" />
-      <Icon name="github" size="lg" color="gray.900" />
+      <Icon name="facebook" size="lg"  />
+      <Icon name="twitter" size="lg"  />
+      <Icon name="instagram" size="lg"  />
+      <Icon name="linkedin" size="lg"  />
+      <Icon name="youtube" size="lg"  />
+      <Icon name="github" size="lg"  />
     </View>
   );
 }
@@ -172,7 +172,7 @@ export function IconWithMDIPrefix() {
   return (
     <View spacing="md">
       <Icon name="mdi:home" size="lg" />
-      <Icon name="mdi:account" size="lg" color="blue.500" />
+      <Icon name="mdi:account" size="lg"  />
       <Icon name="mdi:heart" size="lg" intent="error" />
     </View>
   );

@@ -103,7 +103,7 @@ export function AvatarSkeleton() {
 // Example 7: Card Skeleton
 export function CardSkeleton() {
   return (
-    <View background="surface.primary" spacing="md" radius="lg">
+    <View background="primary" spacing="md" radius="lg">
       <Skeleton width="100%" height={200} shape="rounded" />
       <View spacing="sm">
         <Skeleton width="80%" height={24} shape="rounded" />
@@ -121,7 +121,7 @@ export function ListSkeleton() {
   return (
     <View spacing="md">
       {Array.from({ length: 5 }, (_, index) => (
-        <View key={index} spacing="sm" background="surface.primary" radius="md">
+        <View key={index} spacing="sm" background="primary" radius="md">
           <View spacing="sm">
             <Skeleton width={50} height={50} shape="circle" />
             <View spacing="xs">
@@ -184,7 +184,7 @@ export function LoadingStateToggle() {
       <Button onPress={() => setLoading(!loading)}>
         {loading ? 'Show Content' : 'Show Loading'}
       </Button>
-      <View background="surface.primary" spacing="md" radius="lg">
+      <View background="primary" spacing="md" radius="lg">
         {loading ? (
           <View spacing="md">
             <Skeleton width={60} height={60} shape="circle" />
@@ -249,27 +249,27 @@ export function DashboardSkeleton() {
       </View>
       <View spacing="md">
         <View spacing="md">
-          <View background="surface.primary" spacing="md" radius="lg">
+          <View background="primary" spacing="md" radius="lg">
             <Skeleton width={100} height={20} shape="rounded" />
             <Skeleton width={150} height={48} shape="rounded" />
           </View>
-          <View background="surface.primary" spacing="md" radius="lg">
+          <View background="primary" spacing="md" radius="lg">
             <Skeleton width={100} height={20} shape="rounded" />
             <Skeleton width={150} height={48} shape="rounded" />
           </View>
         </View>
         <View spacing="md">
-          <View background="surface.primary" spacing="md" radius="lg">
+          <View background="primary" spacing="md" radius="lg">
             <Skeleton width={100} height={20} shape="rounded" />
             <Skeleton width={150} height={48} shape="rounded" />
           </View>
-          <View background="surface.primary" spacing="md" radius="lg">
+          <View background="primary" spacing="md" radius="lg">
             <Skeleton width={100} height={20} shape="rounded" />
             <Skeleton width={150} height={48} shape="rounded" />
           </View>
         </View>
       </View>
-      <View background="surface.primary" spacing="md" radius="lg">
+      <View background="primary" spacing="md" radius="lg">
         <Skeleton width={150} height={24} shape="rounded" />
         <Skeleton width="100%" height={200} shape="rounded" />
       </View>

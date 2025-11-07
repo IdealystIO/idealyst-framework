@@ -13,7 +13,7 @@ export function BasicActivityIndicator() {
   return (
     <View spacing="md">
       <ActivityIndicator />
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         Loading...
       </Text>
     </View>
@@ -134,8 +134,8 @@ export function LoadingButtonState() {
       <Button onPress={handleClick} disabled={loading}>
         {loading ? (
           <View spacing="sm">
-            <ActivityIndicator size="sm" color="white" />
-            <Text color="white">Loading...</Text>
+            <ActivityIndicator size="sm"  />
+            <Text >Loading...</Text>
           </View>
         ) : (
           'Submit'
@@ -158,7 +158,7 @@ export function LoadingCard() {
   }, []);
 
   return (
-    <View background="surface.primary" spacing="lg" radius="lg">
+    <View background="primary" spacing="lg" radius="lg">
       {loading ? (
         <View spacing="md">
           <ActivityIndicator size="lg" />
@@ -196,7 +196,7 @@ export function FullScreenLoading() {
             alignItems: 'center',
           }}
         >
-          <View spacing="md" background="surface.primary" radius="lg">
+          <View spacing="md" background="primary" radius="lg">
             <ActivityIndicator size="xl" intent="primary" />
             <Text weight="semibold">Loading...</Text>
             <Button size="sm" onPress={() => setLoading(false)}>
@@ -263,13 +263,13 @@ export function FetchingDataExample() {
       ) : data.length > 0 ? (
         <View spacing="sm">
           {data.map((item, index) => (
-            <View key={index} background="surface.primary" spacing="md" radius="md">
+            <View key={index} background="primary" spacing="md" radius="md">
               <Text>{item}</Text>
             </View>
           ))}
         </View>
       ) : (
-        <Text size="sm" color="gray.600" align="center">
+        <Text size="sm"  align="center">
           Click the button to fetch data
         </Text>
       )}
@@ -300,13 +300,13 @@ export function UploadingFilesExample() {
       {uploading && (
         <View spacing="sm">
           <ActivityIndicator size="md" intent="primary" />
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             Uploading files...
           </Text>
         </View>
       )}
       {success && !uploading && (
-        <Text size="sm" color="green.600">
+        <Text size="sm" >
           Files uploaded successfully!
         </Text>
       )}
@@ -332,7 +332,7 @@ export function RefreshControl() {
     <View spacing="md">
       <View spacing="sm">
         <Text weight="semibold">Content Area</Text>
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           Last updated: {lastUpdated.toLocaleTimeString()}
         </Text>
       </View>

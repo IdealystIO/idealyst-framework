@@ -135,7 +135,7 @@ export function TooltipOnText() {
       <Text>
         This is a paragraph with a{' '}
         <Tooltip content="This is additional information">
-          <Text style={{ textDecoration: 'underline', cursor: 'pointer' }}>
+          <Text weight="semibold">
             tooltipped word
           </Text>
         </Tooltip>{' '}
@@ -149,13 +149,13 @@ export function TooltipOnText() {
 export function TooltipWithRichContent() {
   const richContent = (
     <View spacing="xs">
-      <Text weight="bold" size="sm" color="white">
+      <Text weight="bold" size="sm" >
         User Information
       </Text>
-      <Text size="sm" color="white">
+      <Text size="sm" >
         John Doe
       </Text>
-      <Text size="sm" color="white">
+      <Text size="sm" >
         john@example.com
       </Text>
     </View>
@@ -189,10 +189,10 @@ export function HelpTooltips() {
         <View spacing="xs">
           <Text weight="semibold">Username</Text>
           <Tooltip content="Your username must be unique and at least 3 characters long">
-            <Icon name="help-circle" size="sm" color="gray.500" style={{ cursor: 'pointer' }} />
+            <Icon name="help-circle" size="sm"  style={{ cursor: 'pointer' }} />
           </Tooltip>
         </View>
-        <Text size="sm" color="gray.500">
+        <Text size="sm" >
           Placeholder for input
         </Text>
       </View>
@@ -201,10 +201,10 @@ export function HelpTooltips() {
         <View spacing="xs">
           <Text weight="semibold">Email</Text>
           <Tooltip content="We'll use this email for account recovery and notifications">
-            <Icon name="help-circle" size="sm" color="gray.500" style={{ cursor: 'pointer' }} />
+            <Icon name="help-circle" size="sm"  style={{ cursor: 'pointer' }} />
           </Tooltip>
         </View>
-        <Text size="sm" color="gray.500">
+        <Text size="sm" >
           Placeholder for input
         </Text>
       </View>
@@ -213,10 +213,10 @@ export function HelpTooltips() {
         <View spacing="xs">
           <Text weight="semibold">Password</Text>
           <Tooltip content="Password must be at least 8 characters with uppercase, lowercase, and numbers">
-            <Icon name="help-circle" size="sm" color="gray.500" style={{ cursor: 'pointer' }} />
+            <Icon name="help-circle" size="sm"  style={{ cursor: 'pointer' }} />
           </Tooltip>
         </View>
-        <Text size="sm" color="gray.500">
+        <Text size="sm" >
           Placeholder for input
         </Text>
       </View>
@@ -257,19 +257,19 @@ export function StatusTooltips() {
   return (
     <View spacing="md">
       <View spacing="sm">
-        <Icon name="circle" color="green.500" size="sm" />
+        <Icon name="circle"  size="sm" />
         <Tooltip content="System is operational">
           <Text style={{ cursor: 'pointer' }}>All Systems Online</Text>
         </Tooltip>
       </View>
       <View spacing="sm">
-        <Icon name="circle" color="yellow.500" size="sm" />
+        <Icon name="circle"  size="sm" />
         <Tooltip content="Some services are experiencing issues">
           <Text style={{ cursor: 'pointer' }}>Partial Outage</Text>
         </Tooltip>
       </View>
       <View spacing="sm">
-        <Icon name="circle" color="red.500" size="sm" />
+        <Icon name="circle"  size="sm" />
         <Tooltip content="System is currently offline for maintenance">
           <Text style={{ cursor: 'pointer' }}>System Down</Text>
         </Tooltip>
@@ -282,10 +282,10 @@ export function StatusTooltips() {
 export function KeyboardShortcutTooltips() {
   const shortcutContent = (name: string, shortcut: string) => (
     <View spacing="xs">
-      <Text size="sm" color="white">
+      <Text size="sm" >
         {name}
       </Text>
-      <Text size="sm" color="gray.300">
+      <Text size="sm" >
         {shortcut}
       </Text>
     </View>

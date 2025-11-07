@@ -237,7 +237,7 @@ export function MenuWithCloseOnSelection() {
         <Button onPress={() => setOpen(true)}>Select Option</Button>
       </Menu>
       {selected && (
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           Selected: {selected}
         </Text>
       )}
@@ -262,7 +262,7 @@ export function ContextMenu() {
   return (
     <Menu items={items} open={open} onOpenChange={setOpen} placement="bottom-start">
       <View
-        background="surface.primary"
+        background="primary"
         spacing="lg"
         radius="md"
         border="thin"

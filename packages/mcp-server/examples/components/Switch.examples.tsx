@@ -62,7 +62,7 @@ export function SwitchWithLabel() {
   const [checked, setChecked] = React.useState(false);
 
   return (
-    <View direction="row" spacing="sm" align="center">
+    <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center' }}>
       <Switch checked={checked} onCheckedChange={setChecked} />
       <Text>Enable notifications</Text>
     </View>
@@ -77,15 +77,15 @@ export function FormWithSwitches() {
 
   return (
     <View spacing="md">
-      <View direction="row" spacing="sm" align="center" justify="space-between">
+      <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text>Push Notifications</Text>
         <Switch checked={notifications} onCheckedChange={setNotifications} />
       </View>
-      <View direction="row" spacing="sm" align="center" justify="space-between">
+      <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text>Email Updates</Text>
         <Switch checked={emailUpdates} onCheckedChange={setEmailUpdates} />
       </View>
-      <View direction="row" spacing="sm" align="center" justify="space-between">
+      <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text>Dark Mode</Text>
         <Switch checked={darkMode} onCheckedChange={setDarkMode} />
       </View>

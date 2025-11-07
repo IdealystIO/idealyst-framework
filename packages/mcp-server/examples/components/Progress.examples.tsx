@@ -13,7 +13,7 @@ export function BasicLinearProgress() {
   return (
     <View spacing="md">
       <Progress value={50} max={100} variant="linear" />
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         50% complete
       </Text>
     </View>
@@ -25,7 +25,7 @@ export function BasicCircularProgress() {
   return (
     <View spacing="md">
       <Progress value={75} max={100} variant="circular" />
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         75% complete
       </Text>
     </View>
@@ -190,7 +190,7 @@ export function FileUploadProgress() {
         </View>
       )}
       {progress === 100 && !uploading && (
-        <Text size="sm" color="green.600">
+        <Text size="sm" >
           Upload complete!
         </Text>
       )}
@@ -263,7 +263,7 @@ export function DownloadProgress() {
       {downloading && (
         <View spacing="md">
           <Progress value={progress} variant="linear" intent="success" />
-          <Text size="sm" color="gray.600">
+          <Text size="sm" >
             {progress}% downloaded
           </Text>
         </View>
@@ -288,7 +288,7 @@ export function StorageUsageProgress() {
     <View spacing="md">
       <View spacing="xs">
         <Text weight="semibold">Storage Usage</Text>
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           {usedStorage} GB of {totalStorage} GB used
         </Text>
       </View>
@@ -317,7 +317,7 @@ export function BatteryLevelProgress() {
     <View spacing="md">
       <View spacing="xs">
         <Text weight="semibold">Battery Level</Text>
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           {batteryLevel}% remaining
         </Text>
       </View>

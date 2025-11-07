@@ -6,20 +6,20 @@
  */
 
 import React from 'react';
-import { Popover, View, Text, Button, Icon } from '@idealyst/components';
+import { Popover, View, Text, Button, Icon, Pressable } from '@idealyst/components';
 
 // Example 1: Basic Popover
 export function BasicPopover() {
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   return (
     <View spacing="md">
       <Button ref={anchorRef} onPress={() => setOpen(true)}>
         Open Popover
       </Button>
-      <Popover open={open} onOpenChange={setOpen} anchor={anchorRef}>
-        <View spacing="md" background="surface.primary" radius="md">
+      <Popover open={open} onOpenChange={setOpen} anchor={anchorRef as React.RefObject<Element>}>
+        <View spacing="md" background="primary" radius="md">
           <Text>This is a basic popover content</Text>
         </View>
       </Popover>
@@ -44,7 +44,7 @@ export function PopoverPlacements() {
     | 'right-end'
   >('bottom');
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   return (
     <View spacing="lg">
@@ -63,8 +63,8 @@ export function PopoverPlacements() {
         </Button>
       </View>
       <Button ref={anchorRef}>Anchor Element</Button>
-      <Popover open={open} onOpenChange={setOpen} anchor={anchorRef} placement={placement}>
-        <View spacing="md" background="surface.primary" radius="md">
+      <Popover open={open} onOpenChange={setOpen} anchor={anchorRef as React.RefObject<Element>} placement={placement}>
+        <View spacing="md" background="primary" radius="md">
           <Text>Popover at {placement}</Text>
         </View>
       </Popover>
@@ -75,15 +75,15 @@ export function PopoverPlacements() {
 // Example 3: Popover with Arrow
 export function PopoverWithArrow() {
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   return (
     <View spacing="md">
       <Button ref={anchorRef} onPress={() => setOpen(true)}>
         Open Popover with Arrow
       </Button>
-      <Popover open={open} onOpenChange={setOpen} anchor={anchorRef} showArrow>
-        <View spacing="md" background="surface.primary" radius="md">
+      <Popover open={open} onOpenChange={setOpen} anchor={anchorRef as React.RefObject<Element>} showArrow>
+        <View spacing="md" background="primary" radius="md">
           <Text>This popover has an arrow pointing to the anchor</Text>
         </View>
       </Popover>
@@ -94,15 +94,15 @@ export function PopoverWithArrow() {
 // Example 4: Popover with Offset
 export function PopoverWithOffset() {
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   return (
     <View spacing="md">
       <Button ref={anchorRef} onPress={() => setOpen(true)}>
         Open Popover
       </Button>
-      <Popover open={open} onOpenChange={setOpen} anchor={anchorRef} offset={20} showArrow>
-        <View spacing="md" background="surface.primary" radius="md">
+      <Popover open={open} onOpenChange={setOpen} anchor={anchorRef as React.RefObject<Element>} offset={20} showArrow>
+        <View spacing="md" background="primary" radius="md">
           <Text>This popover has 20px offset from anchor</Text>
         </View>
       </Popover>
@@ -114,8 +114,8 @@ export function PopoverWithOffset() {
 export function PopoverWithCloseBehaviors() {
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
-  const anchor1Ref = React.useRef(null);
-  const anchor2Ref = React.useRef(null);
+  const anchor1Ref = React.useRef<Element>(null);
+  const anchor2Ref = React.useRef<Element>(null);
 
   return (
     <View spacing="lg">
@@ -127,10 +127,10 @@ export function PopoverWithCloseBehaviors() {
         <Popover
           open={open1}
           onOpenChange={setOpen1}
-          anchor={anchor1Ref}
+          anchor={anchor1Ref as React.RefObject<Element>}
           closeOnClickOutside
         >
-          <View spacing="md" background="surface.primary" radius="md">
+          <View spacing="md" background="primary" radius="md">
             <Text>Click outside to close</Text>
           </View>
         </Popover>
@@ -144,10 +144,10 @@ export function PopoverWithCloseBehaviors() {
         <Popover
           open={open2}
           onOpenChange={setOpen2}
-          anchor={anchor2Ref}
+          anchor={anchor2Ref as React.RefObject<Element>}
           closeOnClickOutside={false}
         >
-          <View spacing="md" background="surface.primary" radius="md">
+          <View spacing="md" background="primary" radius="md">
             <Text>Use close button</Text>
             <Button size="sm" onPress={() => setOpen2(false)}>
               Close
@@ -164,7 +164,7 @@ export function PopoverWithForm() {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   const handleSubmit = () => {
     console.log('Submitted:', { name, email });
@@ -179,11 +179,11 @@ export function PopoverWithForm() {
       <Popover
         open={open}
         onOpenChange={setOpen}
-        anchor={anchorRef}
+        anchor={anchorRef as React.RefObject<Element>}
         placement="bottom-start"
         closeOnClickOutside={false}
       >
-        <View spacing="lg" background="surface.primary" radius="md">
+        <View spacing="lg" background="primary" radius="md">
           <Text weight="bold">Add New User</Text>
           <View spacing="sm">
             <Text size="sm">Name (placeholder for input)</Text>
@@ -206,7 +206,7 @@ export function PopoverWithForm() {
 // Example 7: Popover with Rich Content
 export function PopoverWithRichContent() {
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   return (
     <View spacing="md">
@@ -216,22 +216,22 @@ export function PopoverWithRichContent() {
       <Popover
         open={open}
         onOpenChange={setOpen}
-        anchor={anchorRef}
+        anchor={anchorRef as React.RefObject<Element>}
         placement="bottom-start"
         showArrow
       >
-        <View spacing="md" background="surface.primary" radius="lg">
+        <View spacing="md" background="primary" radius="lg">
           <View spacing="sm">
             <Text size="lg" weight="bold">
               John Doe
             </Text>
-            <Text size="sm" color="gray.600">
+            <Text size="sm" >
               @johndoe
             </Text>
           </View>
           <View spacing="xs">
             <Text size="sm">Software Engineer at Tech Corp</Text>
-            <Text size="sm" color="gray.600">
+            <Text size="sm" >
               San Francisco, CA
             </Text>
           </View>
@@ -253,13 +253,13 @@ export function PopoverWithRichContent() {
 // Example 8: Popover Menu
 export function PopoverMenu() {
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   const menuItems = [
-    { icon: 'pencil', label: 'Edit', onClick: () => console.log('Edit') },
-    { icon: 'content-copy', label: 'Duplicate', onClick: () => console.log('Duplicate') },
-    { icon: 'share', label: 'Share', onClick: () => console.log('Share') },
-    { icon: 'delete', label: 'Delete', onClick: () => console.log('Delete') },
+    { icon: 'pencil' as const, label: 'Edit', onClick: () => console.log('Edit') },
+    { icon: 'content-copy' as const, label: 'Duplicate', onClick: () => console.log('Duplicate') },
+    { icon: 'share' as const, label: 'Share', onClick: () => console.log('Share') },
+    { icon: 'delete' as const, label: 'Delete', onClick: () => console.log('Delete') },
   ];
 
   return (
@@ -270,16 +270,15 @@ export function PopoverMenu() {
       <Popover
         open={open}
         onOpenChange={setOpen}
-        anchor={anchorRef}
+        anchor={anchorRef as React.RefObject<Element>}
         placement="bottom-end"
         closeOnClickOutside
       >
-        <View spacing="none" background="surface.primary" radius="md">
+        <View spacing="none" background="primary" radius="md">
           {menuItems.map((item, index) => (
-            <View
+            <Pressable
               key={index}
-              spacing="sm"
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', padding: 8, flexDirection: 'row', alignItems: 'center', gap: 8 }}
               onPress={() => {
                 item.onClick();
                 setOpen(false);
@@ -287,7 +286,7 @@ export function PopoverMenu() {
             >
               <Icon name={item.icon} size="sm" />
               <Text size="sm">{item.label}</Text>
-            </View>
+            </Pressable>
           ))}
         </View>
       </Popover>
@@ -299,7 +298,7 @@ export function PopoverMenu() {
 export function ColorPickerPopover() {
   const [open, setOpen] = React.useState(false);
   const [selectedColor, setSelectedColor] = React.useState('#3b82f6');
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   const colors = [
     '#ef4444',
@@ -324,15 +323,15 @@ export function ColorPickerPopover() {
       <Popover
         open={open}
         onOpenChange={setOpen}
-        anchor={anchorRef}
+        anchor={anchorRef as React.RefObject<Element>}
         placement="bottom"
         closeOnClickOutside
       >
-        <View spacing="md" background="surface.primary" radius="md">
+        <View spacing="md" background="primary" radius="md">
           <Text weight="semibold">Choose a color</Text>
-          <View spacing="sm">
+          <View spacing="sm" style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
             {colors.map((color) => (
-              <View
+              <Pressable
                 key={color}
                 style={{
                   width: 40,
@@ -340,7 +339,8 @@ export function ColorPickerPopover() {
                   backgroundColor: color,
                   borderRadius: 8,
                   cursor: 'pointer',
-                  border: selectedColor === color ? '2px solid black' : 'none',
+                  borderWidth: selectedColor === color ? 2 : 0,
+                  borderColor: selectedColor === color ? 'black' : 'transparent',
                 }}
                 onPress={() => {
                   setSelectedColor(color);
@@ -358,30 +358,29 @@ export function ColorPickerPopover() {
 // Example 10: Info Popover
 export function InfoPopover() {
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   return (
     <View spacing="md">
-      <View spacing="sm">
+      <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text>Account Status</Text>
-        <Icon
+        <Pressable
           ref={anchorRef}
-          name="information"
-          size="sm"
-          color="blue.500"
           style={{ cursor: 'pointer' }}
           onPress={() => setOpen(true)}
-        />
+        >
+          <Icon name="information" size="sm" />
+        </Pressable>
       </View>
       <Popover
         open={open}
         onOpenChange={setOpen}
-        anchor={anchorRef}
+        anchor={anchorRef as React.RefObject<Element>}
         placement="right"
         showArrow
         offset={8}
       >
-        <View spacing="sm" background="surface.primary" radius="md">
+        <View spacing="sm" background="primary" radius="md">
           <Text weight="semibold" size="sm">
             What does this mean?
           </Text>
@@ -398,7 +397,7 @@ export function InfoPopover() {
 // Example 11: Share Popover
 export function SharePopover() {
   const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const anchorRef = React.useRef<Element>(null);
 
   return (
     <View spacing="md">
@@ -409,11 +408,11 @@ export function SharePopover() {
       <Popover
         open={open}
         onOpenChange={setOpen}
-        anchor={anchorRef}
+        anchor={anchorRef as React.RefObject<Element>}
         placement="bottom"
         showArrow
       >
-        <View spacing="md" background="surface.primary" radius="md">
+        <View spacing="md" background="primary" radius="md">
           <Text weight="bold">Share this content</Text>
           <View spacing="sm">
             <Button size="sm" type="outlined">

@@ -90,7 +90,7 @@ export function TabBarWithDisabledItems() {
   return (
     <View spacing="md">
       <TabBar items={items} value={value} onChange={setValue} />
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         Explore and Settings tabs are disabled
       </Text>
     </View>
@@ -120,7 +120,7 @@ export function TabBarPillModes() {
         />
       </View>
       <View spacing="md" backgroundColor="gray.800" radius="md">
-        <Text weight="semibold" color="white">
+        <Text weight="semibold" >
           Dark Mode (for dark backgrounds)
         </Text>
         <TabBar
@@ -148,7 +148,7 @@ export function TabBarWithContent() {
   return (
     <View spacing="md">
       <TabBar items={items} value={value} onChange={setValue} />
-      <View background="surface.primary" spacing="lg" radius="md">
+      <View background="primary" spacing="lg" radius="md">
         {value === 'overview' && (
           <View spacing="sm">
             <Text size="lg" weight="bold">
@@ -189,7 +189,7 @@ export function TabBarWithDefaultValue() {
   return (
     <View spacing="md">
       <TabBar items={items} defaultValue="messages" />
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         Default value is set to "messages"
       </Text>
     </View>
@@ -216,9 +216,9 @@ export function NavigationTabBar() {
         value={activeTab}
         onChange={setActiveTab}
       />
-      <View background="surface.primary" spacing="md" radius="md">
+      <View background="primary" spacing="md" radius="md">
         <Text weight="bold">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Screen</Text>
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           Content for {activeTab} goes here
         </Text>
       </View>
@@ -243,7 +243,7 @@ export function SettingsTabBar() {
         <Text size="xl" weight="bold">
           Settings
         </Text>
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           Manage your account settings
         </Text>
       </View>
@@ -288,7 +288,7 @@ export function DashboardTabBar() {
           onChange={setPeriod}
         />
       </View>
-      <View background="surface.primary" spacing="lg" radius="lg">
+      <View background="primary" spacing="lg" radius="lg">
         <Text size="lg" weight="semibold">
           Statistics for: {period.charAt(0).toUpperCase() + period.slice(1)}
         </Text>
@@ -319,7 +319,7 @@ export function ProductDetailsTabBar() {
         <Text size="xl" weight="bold">
           Product Name
         </Text>
-        <Text size="lg" color="gray.700">
+        <Text size="lg" >
           $99.99
         </Text>
       </View>

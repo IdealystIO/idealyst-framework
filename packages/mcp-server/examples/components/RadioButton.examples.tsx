@@ -168,7 +168,7 @@ export function RadioButtonGroup() {
           label="Do not contact me"
         />
       </View>
-      <Text size="sm" color="gray.600">
+      <Text size="sm" >
         Selected: {preference}
       </Text>
     </View>
@@ -224,7 +224,7 @@ export function ShippingMethodSelection() {
         {shippingOptions.map((option) => (
           <View
             key={option.value}
-            background="surface.primary"
+            background="primary"
             spacing="md"
             radius="md"
             border="thin"
@@ -239,7 +239,7 @@ export function ShippingMethodSelection() {
               label={option.label}
             />
             <View spacing="xs">
-              <Text size="sm" color="gray.600">
+              <Text size="sm" >
                 {option.price} • {option.duration}
               </Text>
             </View>
@@ -308,7 +308,7 @@ export function SubscriptionPlanSelection() {
         {plans.map((planOption) => (
           <View
             key={planOption.value}
-            background="surface.primary"
+            background="primary"
             spacing="lg"
             radius="lg"
             border="thin"
@@ -327,7 +327,7 @@ export function SubscriptionPlanSelection() {
               <Text weight="bold" size="lg">
                 {planOption.price}
               </Text>
-              <Text size="sm" color="gray.600">
+              <Text size="sm" >
                 {planOption.features}
               </Text>
             </View>
@@ -348,7 +348,7 @@ export function SurveyQuestion() {
         <Text weight="bold" size="md">
           How satisfied are you with our service?
         </Text>
-        <Text size="sm" color="gray.600">
+        <Text size="sm" >
           Please select one option
         </Text>
       </View>
@@ -407,7 +407,7 @@ export function NotificationFrequency() {
           onPress={() => setFrequency('realtime')}
           label="Real-time"
         />
-        <Text size="sm" color="gray.600" style={{ marginLeft: 32 }}>
+        <Text size="sm"  style={{ marginLeft: 32 }}>
           Get notified immediately when something happens
         </Text>
         <RadioButton
@@ -416,7 +416,7 @@ export function NotificationFrequency() {
           onPress={() => setFrequency('daily')}
           label="Daily Digest"
         />
-        <Text size="sm" color="gray.600" style={{ marginLeft: 32 }}>
+        <Text size="sm"  style={{ marginLeft: 32 }}>
           Receive a summary once per day
         </Text>
         <RadioButton
@@ -425,7 +425,7 @@ export function NotificationFrequency() {
           onPress={() => setFrequency('weekly')}
           label="Weekly Digest"
         />
-        <Text size="sm" color="gray.600" style={{ marginLeft: 32 }}>
+        <Text size="sm"  style={{ marginLeft: 32 }}>
           Receive a summary once per week
         </Text>
         <RadioButton
@@ -434,7 +434,7 @@ export function NotificationFrequency() {
           onPress={() => setFrequency('never')}
           label="Never"
         />
-        <Text size="sm" color="gray.600" style={{ marginLeft: 32 }}>
+        <Text size="sm"  style={{ marginLeft: 32 }}>
           Don't send me any notifications
         </Text>
       </View>

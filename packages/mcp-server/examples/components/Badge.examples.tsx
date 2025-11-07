@@ -41,12 +41,12 @@ export function BadgeTypes() {
 export function BadgeColors() {
   return (
     <View spacing="md">
-      <Badge color="blue.500">Blue</Badge>
-      <Badge color="green.500">Green</Badge>
-      <Badge color="red.500">Red</Badge>
-      <Badge color="yellow.500">Yellow</Badge>
-      <Badge color="purple.500">Purple</Badge>
-      <Badge color="gray.500">Gray</Badge>
+      <Badge >Blue</Badge>
+      <Badge >Green</Badge>
+      <Badge >Red</Badge>
+      <Badge >Yellow</Badge>
+      <Badge >Purple</Badge>
+      <Badge >Gray</Badge>
     </View>
   );
 }
@@ -69,10 +69,10 @@ export function BadgeWithIconComponent() {
   return (
     <View spacing="md">
       <Badge icon={<Icon name="check" size="xs" />}>Verified</Badge>
-      <Badge icon={<Icon name="star" size="xs" />} color="yellow.500">
+      <Badge icon={<Icon name="star" size="xs" />} >
         Premium
       </Badge>
-      <Badge icon={<Icon name="fire" size="xs" />} color="red.500">
+      <Badge icon={<Icon name="fire" size="xs" />} >
         Hot
       </Badge>
     </View>
@@ -83,16 +83,16 @@ export function BadgeWithIconComponent() {
 export function StatusBadges() {
   return (
     <View spacing="md">
-      <Badge type="filled" color="green.500" icon="check-circle">
+      <Badge type="filled"  icon="check-circle">
         Active
       </Badge>
-      <Badge type="filled" color="gray.500" icon="pause-circle">
+      <Badge type="filled"  icon="pause-circle">
         Paused
       </Badge>
-      <Badge type="filled" color="red.500" icon="close-circle">
+      <Badge type="filled"  icon="close-circle">
         Inactive
       </Badge>
-      <Badge type="filled" color="blue.500" icon="clock">
+      <Badge type="filled"  icon="clock">
         Pending
       </Badge>
     </View>
@@ -103,16 +103,16 @@ export function StatusBadges() {
 export function OutlinedBadges() {
   return (
     <View spacing="md">
-      <Badge type="outlined" color="blue.500">
+      <Badge type="outlined" >
         Info
       </Badge>
-      <Badge type="outlined" color="green.500">
+      <Badge type="outlined" >
         Success
       </Badge>
-      <Badge type="outlined" color="red.500">
+      <Badge type="outlined" >
         Error
       </Badge>
-      <Badge type="outlined" color="yellow.500">
+      <Badge type="outlined" >
         Warning
       </Badge>
     </View>
@@ -124,19 +124,19 @@ export function DotBadges() {
   return (
     <View spacing="md">
       <View spacing="sm">
-        <Badge type="dot" color="green.500" />
+        <Badge type="dot"  />
         <Text>Online</Text>
       </View>
       <View spacing="sm">
-        <Badge type="dot" color="red.500" />
+        <Badge type="dot"  />
         <Text>Offline</Text>
       </View>
       <View spacing="sm">
-        <Badge type="dot" color="yellow.500" />
+        <Badge type="dot"  />
         <Text>Away</Text>
       </View>
       <View spacing="sm">
-        <Badge type="dot" color="gray.500" />
+        <Badge type="dot"  />
         <Text>Busy</Text>
       </View>
     </View>
@@ -149,19 +149,19 @@ export function NotificationBadges() {
     <View spacing="md">
       <View spacing="sm">
         <Icon name="bell" size="lg" />
-        <Badge type="filled" color="red.500" size="xs">
+        <Badge type="filled"  size="xs">
           5
         </Badge>
       </View>
       <View spacing="sm">
         <Icon name="email" size="lg" />
-        <Badge type="filled" color="blue.500" size="xs">
+        <Badge type="filled"  size="xs">
           12
         </Badge>
       </View>
       <View spacing="sm">
         <Icon name="message" size="lg" />
-        <Badge type="filled" color="green.500" size="xs">
+        <Badge type="filled"  size="xs">
           3
         </Badge>
       </View>
@@ -173,19 +173,19 @@ export function NotificationBadges() {
 export function ProductBadges() {
   return (
     <View spacing="md">
-      <Badge type="filled" color="red.500" icon="fire">
+      <Badge type="filled"  icon="fire">
         Sale
       </Badge>
-      <Badge type="filled" color="blue.500" icon="new-box">
+      <Badge type="filled"  icon="new-box">
         New Arrival
       </Badge>
-      <Badge type="filled" color="green.500" icon="star">
+      <Badge type="filled"  icon="star">
         Best Seller
       </Badge>
-      <Badge type="filled" color="purple.500" icon="crown">
+      <Badge type="filled"  icon="crown">
         Premium
       </Badge>
-      <Badge type="outlined" color="orange.500" icon="percent">
+      <Badge type="outlined"  icon="percent">
         20% Off
       </Badge>
     </View>
@@ -196,19 +196,19 @@ export function ProductBadges() {
 export function CategoryBadges() {
   return (
     <View spacing="md">
-      <Badge type="outlined" size="sm" color="blue.500">
+      <Badge type="outlined" size="sm" >
         Technology
       </Badge>
-      <Badge type="outlined" size="sm" color="green.500">
+      <Badge type="outlined" size="sm" >
         Design
       </Badge>
-      <Badge type="outlined" size="sm" color="purple.500">
+      <Badge type="outlined" size="sm" >
         Business
       </Badge>
-      <Badge type="outlined" size="sm" color="red.500">
+      <Badge type="outlined" size="sm" >
         Marketing
       </Badge>
-      <Badge type="outlined" size="sm" color="orange.500">
+      <Badge type="outlined" size="sm" >
         Finance
       </Badge>
     </View>
@@ -221,19 +221,19 @@ export function UserRoleBadges() {
     <View spacing="md">
       <View spacing="sm">
         <Text weight="semibold">John Doe</Text>
-        <Badge type="filled" color="purple.500" size="sm" icon="crown">
+        <Badge type="filled"  size="sm" icon="crown">
           Admin
         </Badge>
       </View>
       <View spacing="sm">
         <Text weight="semibold">Jane Smith</Text>
-        <Badge type="filled" color="blue.500" size="sm" icon="shield">
+        <Badge type="filled"  size="sm" icon="shield">
           Moderator
         </Badge>
       </View>
       <View spacing="sm">
         <Text weight="semibold">Bob Johnson</Text>
-        <Badge type="outlined" color="gray.500" size="sm" icon="account">
+        <Badge type="outlined"  size="sm" icon="account">
           Member
         </Badge>
       </View>
