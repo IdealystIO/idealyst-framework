@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/oauth-client",
-  "version": "1.0.88",
+  "version": "1.0.89",
   "description": "Universal OAuth2 client for web and React Native",
   "main": "src/index.ts",
   "module": "src/index.ts",

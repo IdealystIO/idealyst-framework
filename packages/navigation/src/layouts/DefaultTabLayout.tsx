@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, Button, Icon } from '@idealyst/components'
 import { TabLayoutProps } from '../routing/types'
+import { Outlet } from '../router'
 import { useNavigator } from '../context'
-import { Outlet } from 'react-router'
 
 export interface DefaultTabLayoutProps extends TabLayoutProps {}
 

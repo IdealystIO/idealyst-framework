@@ -3,4 +3,37 @@
 
 // Re-export everything from react-router-dom
 // This includes all react-router exports plus the DOM-specific ones
-export * from 'react-router-dom';
+import {
+    BrowserRouter,
+    HashRouter,
+    MemoryRouter,
+    Router,
+    useNavigate,
+    useLocation,
+    useParams,
+    useSearchParams,
+    Navigate,
+    Outlet,
+    Route,
+    Routes,
+    Link,
+    NavLink
+} from 'react-router-dom'
+
+
+export {   
+    BrowserRouter,
+    HashRouter,
+    MemoryRouter,
+    Router,
+    useNavigate,
+    useLocation,
+    useParams,
+    useSearchParams,
+    Navigate,
+    Outlet,
+    Route,
+    Routes,
+    Link,
+    NavLink
+};

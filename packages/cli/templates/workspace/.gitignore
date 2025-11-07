@@ -53,3 +53,4 @@ Thumbs.db
 # Yarn
 .yarn/cache
 .mcp.json
+.yarnrc.yml
