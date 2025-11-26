@@ -404,13 +404,8 @@ export async function overlayIdealystFiles(templatePath: string, projectPath: st
       overwrite: true,
       filter: (src) => {
         const relativePath = path.relative(templatePath, src);
-        // Skip package.json as we'll merge it separately
-        // Skip App-with-trpc.tsx and App-with-trpc-and-shared.tsx as they're only copied when tRPC is enabled
-        return !relativePath.includes('node_modules') && 
-               !relativePath.includes('.git') && 
-               !relativePath.endsWith('package.json') &&
-               !relativePath.endsWith('App-with-trpc.tsx') &&
-               !relativePath.endsWith('App-with-trpc-and-shared.tsx');
+        return !relativePath.includes('node_modules') &&
+               !relativePath.includes('.git');
       }
     });
     
@@ -422,10 +417,11 @@ export async function overlayIdealystFiles(templatePath: string, projectPath: st
     
     // Process template files
     await processTemplateFiles(projectPath, data);
-    
+
     // Merge package.json dependencies
-    await mergePackageJsonDependencies(templatePath, projectPath, data);
-    
+    // DISABLED: Template package.json is now the source of truth
+    // await mergePackageJsonDependencies(templatePath, projectPath, data);
+
     spinner.succeed('Idealyst Framework files applied successfully');
   } catch (error) {
     spinner.fail('Failed to apply Idealyst Framework files');

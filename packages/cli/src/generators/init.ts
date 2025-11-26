@@ -108,7 +108,15 @@ async function copyTemplateWithReplacements(
 
   for (const file of files) {
     const srcPath = path.join(srcDir, file);
-    const destPath = path.join(destDir, file);
+
+    // Handle .template files (renamed dotfiles from build process)
+    let destFile = file;
+    if (file.endsWith('.template')) {
+      // Rename back to dotfile (e.g., gitignore.template -> .gitignore)
+      destFile = '.' + file.replace('.template', '');
+    }
+
+    const destPath = path.join(destDir, destFile);
 
     // Skip excluded files
     if (shouldExcludeFile(file)) {
@@ -141,20 +149,7 @@ async function copyTemplateWithReplacements(
 function shouldExcludeFile(filename: string): boolean {
   const baseName = path.basename(filename);
 
-  // Exclude template variant files (we already copied the correct one)
-  if (baseName.includes('App-with-trpc') && !baseName.includes('App-with-trpc-and-shared')) {
-    return true;
-  }
-
-  // Exclude App-with-trpc-and-shared ONLY if it's not being used as App.tsx
-  // (The overlay process already handles this correctly)
-  if (baseName === 'App-with-trpc-and-shared.tsx') {
-    return true;
-  }
-
-  if (baseName === 'App-with-trpc.tsx') {
-    return true;
-  }
+  // No more template variants - App.tsx is the only version now
 
   // Exclude development artifacts
   if (baseName.endsWith('.bak') || baseName.endsWith('~')) {

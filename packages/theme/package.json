@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/theme",
-  "version": "1.0.90",
+  "version": "1.0.92",
   "description": "Theming system for Idealyst Framework",
   "readme": "README.md",
   "main": "src/index.ts",

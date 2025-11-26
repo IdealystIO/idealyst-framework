@@ -129,7 +129,12 @@ async function build() {
   
   try {
     await copyTemplatesWithFilter(templatesSource, templatesTarget, ignorePatterns);
-    
+
+    // Rename dotfiles to prevent npm from ignoring them
+    // npm strips dotfiles during pack, so we rename them with a .template suffix
+    console.log('   🔄 Renaming dotfiles to prevent npm filtering...');
+    await renameDotfiles(templatesTarget);
+
     // Copy docs if they exist
     if (await fs.pathExists(docsSource)) {
       await fs.copy(docsSource, docsTarget);
@@ -166,19 +171,37 @@ async function build() {
 async function countFiles(dir) {
   let count = 0;
   const items = await fs.readdir(dir);
-  
+
   for (const item of items) {
     const itemPath = path.join(dir, item);
     const stat = await fs.stat(itemPath);
-    
+
     if (stat.isDirectory()) {
       count += await countFiles(itemPath);
     } else {
       count++;
     }
   }
-  
+
   return count;
+}
+
+async function renameDotfiles(dir) {
+  const items = await fs.readdir(dir, { withFileTypes: true });
+
+  for (const item of items) {
+    const itemPath = path.join(dir, item.name);
+
+    if (item.isDirectory()) {
+      await renameDotfiles(itemPath);
+    } else if (item.name.startsWith('.') && !item.name.startsWith('..')) {
+      // Rename dotfiles to .template format (e.g., .gitignore -> gitignore.template)
+      const newName = item.name.substring(1) + '.template';
+      const newPath = path.join(dir, newName);
+      await fs.rename(itemPath, newPath);
+      console.log(`      Renamed: ${item.name} -> ${newName}`);
+    }
+  }
 }
 
 build().catch(error => {
