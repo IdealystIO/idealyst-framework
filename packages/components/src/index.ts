@@ -12,6 +12,9 @@ export * from './View/types';
 export { default as Pressable } from './Pressable';
 export * from './Pressable/types';
 
+export { default as Link } from './Link';
+export * from './Link/types';
+
 export { default as Input } from './Input';
 export * from './Input/types';
 
@@ -106,6 +109,7 @@ export * from './Breadcrumb/types';
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
+export type { LinkProps } from './Link/types';
 export type { InputProps } from './Input/types';
 export type { CheckboxProps } from './Checkbox/types';
 export type { CardProps } from './Card/types';

@@ -27,18 +27,30 @@ function getIconColor(theme: Theme, color?: Color, intent?: Intent): string {
     return theme.colors.text.primary;
 }
 
-function buildIconSize(theme: Theme, size: IconSizeVariant) {
-    const iconSize = theme.sizes.icon[size];
+function buildIconSize(theme: Theme, size?: IconSizeVariant) {
+    // Handle direct numeric sizes
+    if (typeof size === 'number') {
+        return {
+            width: size,
+            height: size,
+        };
+    }
+
+    // Default to 'md' if size is undefined
+    const sizeKey = size || 'md';
+    const iconSize = theme.sizes.icon[sizeKey];
+
     if (typeof iconSize === 'number') {
         return {
             width: iconSize,
             height: iconSize,
         };
     }
+
     return buildSizeVariants(theme, 'icon', (size) => ({
         width: size.width,
         height: size.height,
-    }))[size];
+    }))[sizeKey];
 }
 
 function createIconStyles(theme: Theme) {

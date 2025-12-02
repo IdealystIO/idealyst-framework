@@ -89,28 +89,56 @@ export async function updateWorkspacePackageJson(workspacePath: string, director
 
 export async function copyTemplate(templatePath: string, destPath: string, data: TemplateData): Promise<void> {
   const spinner = ora(`Copying template files...`).start();
-  
+
   try {
     await fs.ensureDir(destPath);
-    await fs.copy(templatePath, destPath, {
-      filter: (src) => {
-        const relativePath = path.relative(templatePath, src);
-        // Skip special App files that are only used in fullstack generation
-        // Skip .git directories but allow .gitignore files
-        return !relativePath.includes('node_modules') && 
-               !relativePath.includes('.git' + path.sep) &&
-               !relativePath.endsWith('App-with-trpc.tsx') &&
-               !relativePath.endsWith('App-with-trpc-and-shared.tsx');
-      }
-    });
-    
+
+    // Copy files with custom handling for .template files
+    await copyTemplateDirectory(templatePath, destPath);
+
     // Process template files
     await processTemplateFiles(destPath, data);
-    
+
     spinner.succeed('Template files copied successfully');
   } catch (error) {
     spinner.fail('Failed to copy template files');
     throw error;
+  }
+}
+
+/**
+ * Recursively copy template directory, handling .template file renaming
+ */
+async function copyTemplateDirectory(srcDir: string, destDir: string): Promise<void> {
+  await fs.ensureDir(destDir);
+  const files = await fs.readdir(srcDir);
+
+  for (const file of files) {
+    const srcPath = path.join(srcDir, file);
+
+    // Skip files that shouldn't be copied
+    if (file === 'node_modules' ||
+        file === '.git' ||
+        file === 'App-with-trpc.tsx' ||
+        file === 'App-with-trpc-and-shared.tsx') {
+      continue;
+    }
+
+    // Handle .template files (renamed dotfiles from build process)
+    let destFile = file;
+    if (file.endsWith('.template')) {
+      // Rename back to dotfile (e.g., gitignore.template -> .gitignore)
+      destFile = '.' + file.replace('.template', '');
+    }
+
+    const destPath = path.join(destDir, destFile);
+    const stat = await fs.stat(srcPath);
+
+    if (stat.isDirectory()) {
+      await copyTemplateDirectory(srcPath, destPath);
+    } else {
+      await fs.copy(srcPath, destPath);
+    }
   }
 }
 
@@ -397,24 +425,17 @@ export async function initializeReactNativeProject(projectName: string, director
 
 export async function overlayIdealystFiles(templatePath: string, projectPath: string, data: TemplateData): Promise<void> {
   const spinner = ora('Applying Idealyst Framework files...').start();
-  
+
   try {
-    // Copy Idealyst-specific files over the React Native project
-    await fs.copy(templatePath, projectPath, {
-      overwrite: true,
-      filter: (src) => {
-        const relativePath = path.relative(templatePath, src);
-        return !relativePath.includes('node_modules') &&
-               !relativePath.includes('.git');
-      }
-    });
-    
+    // Copy Idealyst-specific files over the React Native project with .template handling
+    await overlayTemplateDirectory(templatePath, projectPath);
+
     // Remove the root App.tsx created by React Native CLI since we use src/App.tsx
     const rootAppPath = path.join(projectPath, 'App.tsx');
     if (await fs.pathExists(rootAppPath)) {
       await fs.remove(rootAppPath);
     }
-    
+
     // Process template files
     await processTemplateFiles(projectPath, data);
 
@@ -426,6 +447,39 @@ export async function overlayIdealystFiles(templatePath: string, projectPath: st
   } catch (error) {
     spinner.fail('Failed to apply Idealyst Framework files');
     throw error;
+  }
+}
+
+/**
+ * Recursively overlay template directory onto existing directory, handling .template file renaming
+ */
+async function overlayTemplateDirectory(srcDir: string, destDir: string): Promise<void> {
+  await fs.ensureDir(destDir);
+  const files = await fs.readdir(srcDir);
+
+  for (const file of files) {
+    const srcPath = path.join(srcDir, file);
+
+    // Skip files that shouldn't be copied
+    if (file === 'node_modules' || file === '.git') {
+      continue;
+    }
+
+    // Handle .template files (renamed dotfiles from build process)
+    let destFile = file;
+    if (file.endsWith('.template')) {
+      // Rename back to dotfile (e.g., gitignore.template -> .gitignore)
+      destFile = '.' + file.replace('.template', '');
+    }
+
+    const destPath = path.join(destDir, destFile);
+    const stat = await fs.stat(srcPath);
+
+    if (stat.isDirectory()) {
+      await overlayTemplateDirectory(srcPath, destPath);
+    } else {
+      await fs.copy(srcPath, destPath, { overwrite: true });
+    }
   }
 }
 

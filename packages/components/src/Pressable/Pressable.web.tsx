@@ -39,21 +39,26 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
     }
   }, [disabled, onPress]);
 
-  const webStyle = {
+  const baseStyle: React.CSSProperties = {
     cursor: disabled ? 'default' : 'pointer',
     outline: 'none',
-    userSelect: 'none' as const,
-    WebkitUserSelect: 'none' as const,
+    userSelect: 'none',
+    WebkitUserSelect: 'none',
     WebkitTapHighlightColor: 'transparent',
     opacity: disabled ? 0.5 : 1,
   };
+
+  // Merge base styles with custom styles for web compatibility
+  const mergedStyle: React.CSSProperties = style
+    ? { ...baseStyle, ...(style as React.CSSProperties) }
+    : baseStyle;
 
   return (
     <div
       ref={ref}
       role={accessibilityRole}
       tabIndex={disabled ? -1 : 0}
-      style={[webStyle, style] as any}
+      style={mergedStyle}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp} // Handle mouse leave as press out

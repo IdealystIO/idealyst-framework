@@ -52,6 +52,7 @@ const componentGroups: ComponentGroup[] = [
         title: 'Navigation',
         items: [
             { label: 'Breadcrumb', path: '/breadcrumb', icon: 'chevron-right' },
+            { label: 'Link', path: '/link', icon: 'link' },
             { label: 'TabBar', path: '/tabbar', icon: 'tab' },
         ],
     },

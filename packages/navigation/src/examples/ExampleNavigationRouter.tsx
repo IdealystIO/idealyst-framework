@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, LinkExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
 import { DataGridShowcase } from '@idealyst/datagrid/examples';
 import { DatePickerExamples } from '@idealyst/datepicker/examples';
 import { Text, View, Card, Screen } from '@idealyst/components';
@@ -77,6 +77,7 @@ const ExampleNavigationRouter: NavigatorParam = {
         { path: "checkbox", type: 'screen', component: CheckboxExamples, options: { title: "Checkbox" } },
         { path: "divider", type: 'screen', component: DividerExamples, options: { title: "Divider" } },
         { path: "input", type: 'screen', component: InputExamples, options: { title: "Input" } },
+        { path: "link", type: 'screen', component: LinkExamples, options: { title: "Link" } },
         { path: "text", type: 'screen', component: TextExamples, options: { title: "Text" } },
         { path: "view", type: 'screen', component: ViewExamples, options: { title: "View" } },
         { path: "screen", type: 'screen', component: ScreenExamples, options: { title: "Screen" } },
