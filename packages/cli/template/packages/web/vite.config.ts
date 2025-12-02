@@ -48,7 +48,7 @@ export default defineConfig({
       "react-native": path.resolve(__dirname, "node_modules/react-native-web"),
       "@react-native/normalize-colors": path.resolve(
         __dirname,
-        "../../node_modules/@react-native/normalize-colors"
+        "node_modules/@react-native/normalize-colors"
       ),
     },
     // Platform-specific file resolution
@@ -87,7 +87,7 @@ export default defineConfig({
       },
       alias: {
         "react-native": path.resolve(__dirname, "node_modules/react-native-web"),
-        "@react-native/normalize-colors": path.resolve(__dirname, "../../node_modules/@react-native/normalize-colors"),
+        "@react-native/normalize-colors": path.resolve(__dirname, "node_modules/@react-native/normalize-colors"),
       },
     },
   },

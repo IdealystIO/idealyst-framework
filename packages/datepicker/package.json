@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/datepicker",
-  "version": "1.0.92",
+  "version": "1.0.93",
   "description": "Cross-platform date and time picker components for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/datepicker#readme",
   "readme": "README.md",
@@ -36,8 +36,8 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.0.92",
-    "@idealyst/theme": "^1.0.92",
+    "@idealyst/components": "^1.0.93",
+    "@idealyst/theme": "^1.0.93",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-svg": ">=13.0.0",
@@ -61,8 +61,8 @@
     }
   },
   "devDependencies": {
-    "@idealyst/components": "^1.0.92",
-    "@idealyst/theme": "^1.0.92",
+    "@idealyst/components": "^1.0.93",
+    "@idealyst/theme": "^1.0.93",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",
     "react-native": "^0.80.1",

@@ -1,11 +1,13 @@
 import { NavigatorProvider } from "@idealyst/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
+import { createGraphQLClient } from "../graphql/client";
 import AppRouter from "../navigation/AppRouter";
 import { createTRPCClient, trpc } from "../trpc/client";
 
 interface AppProps {
   apiUrl?: string;
+  graphqlUrl?: string;
   queryClient?: QueryClient;
   headers?: () => Record<string, string>;
 }
@@ -20,11 +22,12 @@ const defaultQueryClient = new QueryClient({
 });
 
 /**
- * Unified App component that sets up tRPC, React Query providers, and Navigation
+ * Unified App component that sets up tRPC, GraphQL, React Query providers, and Navigation
  * This component can be used by both web and mobile platforms
  */
 export const App: React.FC<AppProps> = ({
   apiUrl = "http://localhost:3000/trpc",
+  graphqlUrl = "http://localhost:3000/graphql",
   queryClient = defaultQueryClient,
   headers,
 }) => {
@@ -33,6 +36,14 @@ export const App: React.FC<AppProps> = ({
     apiUrl,
     headers,
   });
+
+  // Initialize GraphQL client
+  useEffect(() => {
+    createGraphQLClient({
+      apiUrl: graphqlUrl,
+      headers,
+    });
+  }, [graphqlUrl, headers]);
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

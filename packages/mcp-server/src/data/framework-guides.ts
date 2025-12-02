@@ -590,4 +590,307 @@ workspace/
 7. **Git**: Use conventional commits
 8. **Dependencies**: Share dependencies across packages when possible
 `,
+
+  "idealyst://framework/api-overview": `# API Architecture Overview
+
+Idealyst provides a dual API architecture with both tRPC and GraphQL, giving you flexibility for different use cases.
+
+## When to Use Each
+
+### tRPC (Type-Safe RPC)
+- **Best for**: Internal clients, same-team consumption
+- **Benefits**: End-to-end type safety, no code generation, fast development
+- **Use when**: Your frontend and backend are TypeScript
+
+### GraphQL
+- **Best for**: Public APIs, third-party integrations, mobile apps
+- **Benefits**: Flexible queries, schema documentation, wide ecosystem
+- **Use when**: You need schema introspection or have non-TypeScript clients
+
+## Architecture
+
+Both APIs run on the same Express server:
+
+\`\`\`
+Server (port 3000)
+├── /trpc/*    → tRPC handlers
+├── /graphql   → GraphQL Yoga endpoint
+└── Shared context (database, auth)
+\`\`\`
+
+## File Structure
+
+\`\`\`
+packages/api/src/
+├── routers/           # tRPC routers
+│   ├── index.ts       # Root router
+│   └── test.ts        # Example router
+├── graphql/           # GraphQL setup
+│   ├── builder.ts     # Pothos schema builder
+│   ├── index.ts       # Yoga server setup
+│   └── types/         # GraphQL type definitions
+│       └── test.ts    # Example types
+├── context.ts         # Shared context
+├── server.ts          # Express server
+└── index.ts           # Entry point
+\`\`\`
+
+## Shared Context
+
+Both APIs share the same context:
+
+\`\`\`typescript
+// context.ts
+export interface Context {
+  db: PrismaClient;
+  // Add auth, session, etc.
+}
+
+export async function createContext(): Promise<Context> {
+  return {
+    db: prisma,
+  };
+}
+\`\`\`
+
+## Client Setup
+
+The shared package provides clients for both:
+
+\`\`\`typescript
+// In your App component
+import { createTRPCClient, createGraphQLClient } from '@your-app/shared';
+
+// tRPC - automatic type inference
+const trpcClient = createTRPCClient({ apiUrl: 'http://localhost:3000/trpc' });
+
+// GraphQL - manual queries with graphql-request
+createGraphQLClient({ apiUrl: 'http://localhost:3000/graphql' });
+\`\`\`
+
+## Migration Path
+
+Start with tRPC for rapid development, add GraphQL when you need:
+- Public API documentation
+- Third-party integrations
+- Schema-first development
+- Non-TypeScript clients
+`,
+
+  "idealyst://framework/graphql-setup": `# GraphQL Setup Guide
+
+Idealyst uses Pothos (code-first schema) with GraphQL Yoga server, integrated with Prisma.
+
+## Server Setup
+
+### 1. Schema Builder (builder.ts)
+
+\`\`\`typescript
+import SchemaBuilder from '@pothos/core';
+import PrismaPlugin from '@pothos/plugin-prisma';
+import type PrismaTypes from './generated';
+import { prisma } from '@your-app/database';
+
+export const builder = new SchemaBuilder<{
+  PrismaTypes: PrismaTypes;
+  Context: { db: typeof prisma };
+}>({
+  plugins: [PrismaPlugin],
+  prisma: {
+    client: prisma,
+  },
+});
+
+// Initialize Query and Mutation types
+builder.queryType({});
+builder.mutationType({});
+\`\`\`
+
+### 2. Generate Prisma Types
+
+\`\`\`bash
+# In packages/api
+npx prisma generate --generator pothos
+\`\`\`
+
+Add to your prisma schema:
+
+\`\`\`prisma
+generator pothos {
+  provider = "prisma-pothos-types"
+  output   = "../src/graphql/generated.ts"
+}
+\`\`\`
+
+### 3. Define Types (types/example.ts)
+
+\`\`\`typescript
+import { builder } from '../builder';
+
+// Object type from Prisma model
+builder.prismaObject('Test', {
+  fields: (t) => ({
+    id: t.exposeID('id'),
+    name: t.exposeString('name'),
+    message: t.exposeString('message'),
+    status: t.exposeString('status'),
+    createdAt: t.expose('createdAt', { type: 'DateTime' }),
+  }),
+});
+
+// Input type for mutations
+const CreateTestInput = builder.inputType('CreateTestInput', {
+  fields: (t) => ({
+    name: t.string({ required: true }),
+    message: t.string({ required: true }),
+    status: t.string({ required: true }),
+  }),
+});
+
+// Query
+builder.queryField('tests', (t) =>
+  t.prismaField({
+    type: ['Test'],
+    args: {
+      take: t.arg.int(),
+      skip: t.arg.int(),
+    },
+    resolve: async (query, _root, args, ctx) =>
+      ctx.db.test.findMany({
+        ...query,
+        take: args.take ?? 10,
+        skip: args.skip ?? 0,
+        orderBy: { createdAt: 'desc' },
+      }),
+  })
+);
+
+// Mutation
+builder.mutationField('createTest', (t) =>
+  t.prismaField({
+    type: 'Test',
+    args: {
+      input: t.arg({ type: CreateTestInput, required: true }),
+    },
+    resolve: async (query, _root, args, ctx) =>
+      ctx.db.test.create({
+        ...query,
+        data: args.input,
+      }),
+  })
+);
+\`\`\`
+
+### 4. Yoga Server (index.ts)
+
+\`\`\`typescript
+import { createYoga } from 'graphql-yoga';
+import { builder } from './builder';
+import './types/test'; // Import all type definitions
+
+export const yoga = createYoga({
+  schema: builder.toSchema(),
+  graphqlEndpoint: '/graphql',
+});
+\`\`\`
+
+### 5. Mount in Express (server.ts)
+
+\`\`\`typescript
+import express from 'express';
+import { yoga } from './graphql';
+
+const app = express();
+
+// GraphQL endpoint
+app.use('/graphql', yoga);
+
+// tRPC endpoint
+app.use('/trpc', trpcMiddleware);
+\`\`\`
+
+## Client Setup
+
+### 1. GraphQL Client (shared/src/graphql/client.ts)
+
+\`\`\`typescript
+import { GraphQLClient } from 'graphql-request';
+
+let client: GraphQLClient | null = null;
+
+export function createGraphQLClient(config: { apiUrl: string }) {
+  client = new GraphQLClient(config.apiUrl);
+  return client;
+}
+
+export function getGraphQLClient(): GraphQLClient {
+  if (!client) throw new Error('GraphQL client not initialized');
+  return client;
+}
+
+export { gql } from 'graphql-request';
+\`\`\`
+
+### 2. Using with React Query
+
+\`\`\`typescript
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getGraphQLClient, gql } from '../graphql/client';
+
+const TESTS_QUERY = gql\`
+  query GetTests($take: Int) {
+    tests(take: $take) {
+      id
+      name
+      message
+    }
+  }
+\`;
+
+const CREATE_TEST = gql\`
+  mutation CreateTest($input: CreateTestInput!) {
+    createTest(input: $input) {
+      id
+      name
+    }
+  }
+\`;
+
+// Query hook
+const { data, isLoading } = useQuery({
+  queryKey: ['graphql', 'tests'],
+  queryFn: () => getGraphQLClient().request(TESTS_QUERY, { take: 10 }),
+});
+
+// Mutation hook
+const queryClient = useQueryClient();
+const mutation = useMutation({
+  mutationFn: (input) => getGraphQLClient().request(CREATE_TEST, { input }),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['graphql', 'tests'] });
+  },
+});
+\`\`\`
+
+## GraphQL Playground
+
+Access the GraphQL playground at:
+\`\`\`
+http://localhost:3000/graphql
+\`\`\`
+
+Features:
+- Schema explorer
+- Query autocompletion
+- Documentation browser
+- Query history
+
+## Best Practices
+
+1. **Use Input Types**: Always use input types for mutations
+2. **Pagination**: Implement cursor-based pagination for lists
+3. **Error Handling**: Use Pothos error types
+4. **Authorization**: Add auth checks in resolvers
+5. **N+1 Prevention**: Use Prisma's query optimization
+`,
 };

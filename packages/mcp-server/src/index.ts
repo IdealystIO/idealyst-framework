@@ -25,7 +25,7 @@ import {
 const server = new Server(
   {
     name: "@idealyst/mcp-server",
-    version: "1.0.92",
+    version: "1.0.93",
   },
   {
     capabilities: {

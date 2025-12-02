@@ -35,6 +35,12 @@
       "optional": true
     }
   },
+  "dependencies": {
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
+    "graphql": "^16.9.0",
+    "graphql-request": "^7.1.2"
+  },
   "devDependencies": {
     "@idealyst/components": "^{{idealystVersion}}",
     "@idealyst/navigation": "^{{idealystVersion}}",
