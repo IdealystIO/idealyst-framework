@@ -1,12 +1,17 @@
 {
   "name": "@idealyst/mcp-server",
-  "version": "1.0.93",
+  "version": "1.0.94",
   "description": "MCP server providing documentation and examples for the Idealyst framework",
   "main": "dist/index.js",
   "bin": {
     "idealyst-mcp": "./dist/index.js"
   },
   "type": "module",
+  "files": [
+    "dist/**/*",
+    "examples/**/*",
+    "README.md"
+  ],
   "scripts": {
     "extract-types": "tsx scripts/extract-types.ts",
     "validate-examples": "tsx scripts/validate-examples.ts",
