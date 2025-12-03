@@ -34,9 +34,9 @@
   "author": "Idealyst",
   "license": "MIT",
   "dependencies": {
-    "@idealyst/components": "^1.0.93",
-    "@idealyst/navigation": "^1.0.93",
-    "@idealyst/theme": "^1.0.93",
+    "@idealyst/components": "^1.0.94",
+    "@idealyst/navigation": "^1.0.94",
+    "@idealyst/theme": "^1.0.94",
     "@modelcontextprotocol/sdk": "^1.0.4"
   },
   "devDependencies": {
