@@ -2,7 +2,16 @@ import { ButtonSizeValue, ColorValue, Pallet, Shade, Size } from "./theme";
 import { Theme } from "./theme/index";
 
 export const lightTheme: Theme = {
-       shadows: {
+      interaction: {
+        focusedBackground: 'rgba(59, 130, 246, 0.08)',
+        focusBorder: 'rgba(59, 130, 246, 0.3)',
+        opacity: {
+          hover: 0.9,
+          active: 0.75,
+          disabled: 0.5,
+        },
+      },
+      shadows: {
         none: {},
         sm: {
           elevation: 1,

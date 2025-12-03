@@ -9,6 +9,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   onChangeText,
   onFocus,
   onBlur,
+  onPress,
   placeholder,
   disabled = false,
   inputType = 'text',
@@ -49,6 +50,12 @@ const Input = React.forwardRef<TextInput, InputProps>(({
       onFocus();
     }
   };
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+    }
+  }
 
   const handleBlur = () => {
     setIsFocused(false);
@@ -121,6 +128,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
 
       {/* Input */}
       <TextInput
+        onPress={handlePress}
         ref={ref}
         value={value}
         onChangeText={onChangeText}

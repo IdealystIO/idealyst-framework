@@ -142,4 +142,7 @@ export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
 
 export { useMergeRefs };
 
+// Event utilities
+export * from './utils/events';
+
 export type { AppTheme } from '@idealyst/theme';

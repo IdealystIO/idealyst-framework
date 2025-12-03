@@ -134,4 +134,7 @@ export type { SkeletonProps, SkeletonGroupProps, SkeletonShape, SkeletonAnimatio
 export type { ChipProps, ChipSize, ChipIntent } from './Chip/types';
 export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
 
+// Event utilities
+export * from './utils/events';
+
 export type { AppTheme } from '@idealyst/theme'; 

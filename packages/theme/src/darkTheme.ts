@@ -2,6 +2,15 @@ import { ButtonSizeValue, ColorValue, Pallet, Shade, Size } from "./theme";
 import { Theme } from "./theme/index";
 
 export const darkTheme: Theme = {
+  interaction: {
+    focusedBackground: 'rgba(96, 165, 250, 0.15)',
+    focusBorder: 'rgba(96, 165, 250, 0.4)',
+    opacity: {
+      hover: 0.85,
+      active: 0.7,
+      disabled: 0.4,
+    },
+  },
   shadows: {
     none: {},
     sm: {

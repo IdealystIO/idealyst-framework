@@ -113,7 +113,8 @@ function buildDynamicTriggerStyles(theme: Theme) {
                     true: {
                         borderColor: theme.intents.primary.primary,
                         _web: {
-                            border: `2px solid ${theme.intents.primary.primary}`,
+                            border: `1px solid ${theme.intents.primary.primary}`,
+                            boxShadow: `0 0 0 2px ${theme.intents.primary.primary}20`,
                             outline: 'none',
                         },
                     },
@@ -137,7 +138,6 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: {
             position: 'relative',
-            backgroundColor: theme.colors.surface.primary,
         },
         label: {
             fontSize: 14,
@@ -256,35 +256,28 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
             flexDirection: 'row',
             alignItems: 'center',
             minHeight: 36,
-            variants: {
-                selected: {
-                    true: {
-                        backgroundColor: theme.intents.primary.light,
-                    },
-                    false: {},
-                },
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                        _web: {
-                            cursor: 'not-allowed',
-                        },
-                    },
-                    false: {
-                        _web: {
-                            cursor: 'pointer',
-                            _hover: {
-                                backgroundColor: theme.colors.surface.secondary,
-                            },
-                            _active: {
-                                opacity: 0.8,
-                            },
-                        },
-                    },
-                },
-            },
             _web: {
                 display: 'flex',
+                cursor: 'pointer',
+                _hover: {
+                    backgroundColor: theme.colors.surface.secondary,
+                },
+                _active: {
+                    opacity: 0.8,
+                },
+            },
+        },
+        optionFocused: {
+            backgroundColor: theme.interaction.focusedBackground,
+            _web: {
+                outline: `1px solid ${theme.interaction.focusBorder}`,
+                outlineOffset: -1,
+            },
+        },
+        optionDisabled: {
+            opacity: theme.interaction.opacity.disabled,
+            _web: {
+                cursor: 'not-allowed',
             },
         },
         optionContent: {

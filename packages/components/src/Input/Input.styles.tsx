@@ -86,7 +86,8 @@ function createFocusedCompoundVariants(theme: Theme) {
         styles: {
             borderColor: focusColor,
             _web: {
-                border: `2px solid ${focusColor}`,
+                border: `1px solid ${focusColor}`,
+                boxShadow: `0 0 0 2px ${focusColor}20`,
             },
         },
     });

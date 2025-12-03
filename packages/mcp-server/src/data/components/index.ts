@@ -14,6 +14,7 @@ export { Divider } from './Divider.js';
 export { Icon } from './Icon.js';
 export { Image } from './Image.js';
 export { Input } from './Input.js';
+export { Link } from './Link.js';
 export { List } from './List.js';
 export { Menu } from './Menu.js';
 export { Popover } from './Popover.js';
@@ -51,6 +52,7 @@ import { Divider } from './Divider.js';
 import { Icon } from './Icon.js';
 import { Image } from './Image.js';
 import { Input } from './Input.js';
+import { Link } from './Link.js';
 import { List } from './List.js';
 import { Menu } from './Menu.js';
 import { Popover } from './Popover.js';
@@ -88,6 +90,7 @@ export const components: Record<string, any> = {
   Icon,
   Image,
   Input,
+  Link,
   List,
   Menu,
   Popover,

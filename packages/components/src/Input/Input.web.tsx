@@ -1,16 +1,17 @@
-import React, { useState, isValidElement, useRef } from 'react';
+import React, { isValidElement, useState } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import { InputProps } from './types';
-import { inputStyles } from './Input.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { isIconName, resolveIconPath } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { inputStyles } from './Input.styles';
+import { InputProps } from './types';
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   value,
   onChangeText,
   onFocus,
   onBlur,
+  onPress,
   placeholder,
   disabled = false,
   inputType = 'text',
@@ -58,7 +59,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     }
   };
 
-  const handleFocus = () => {
+  const handlePress = (e: React.MouseEvent<HTMLDivElement>) => {
+    // For web compatibility, we can trigger onFocus when pressed
+    e.preventDefault();
+    e.stopPropagation();
+    if (onPress) {
+      onPress();
+    }
+  }
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsFocused(true);
     if (onFocus) {
       onFocus();
@@ -96,6 +108,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
 
   // Get input props
   const inputWebProps = getWebProps([inputStyles.input]);
+
+  const handleContainerPress = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    inputWebProps.ref?.current?.focus();
+  }
 
   // Merge the forwarded ref with unistyles ref for the input
   const mergedInputRef = useMergeRefs(ref, inputWebProps.ref);
@@ -154,7 +172,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   };
 
   return (
-    <div {...containerProps} data-testid={testID}>
+    <div onClick={handleContainerPress} {...containerProps} data-testid={testID}>
       {/* Left Icon */}
       {leftIcon && (
         <span {...leftIconContainerProps}>
@@ -168,6 +186,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
         ref={mergedInputRef}
         type={getInputType()}
         value={value}
+        onClick={handlePress}
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}

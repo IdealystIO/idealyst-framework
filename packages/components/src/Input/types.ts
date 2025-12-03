@@ -30,6 +30,12 @@ export interface InputProps {
   onBlur?: () => void;
 
   /**
+   * Called when the input is pressed (for web compatibility)
+   * @returns 
+   */
+  onPress?: () => void;
+
+  /**
    * Placeholder text
    */
   placeholder?: string;

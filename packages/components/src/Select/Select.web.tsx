@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 // @ts-ignore - web-specific import
 import { getWebProps } from 'react-native-unistyles/web';
-import { SelectProps, SelectOption } from './types';
-import { selectStyles } from './Select.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
-import { PositionedPortal } from '../internal/PositionedPortal';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { PositionedPortal } from '../internal/PositionedPortal';
+import { selectStyles } from './Select.styles';
+import { SelectOption, SelectProps } from './types';
 
 const Select = forwardRef<HTMLDivElement, SelectProps>(({
   options,
@@ -45,6 +45,13 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
       })
     : options;
 
+  // Get the index of the currently selected option
+  const getSelectedIndex = () => {
+    if (!value) return 0;
+    const index = filteredOptions.findIndex(option => option.value === value);
+    return index >= 0 ? index : 0;
+  };
+
   // Apply styles with variants
   selectStyles.useVariants({
     type,
@@ -54,10 +61,17 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
     focused: isOpen,
   });
 
-
-  // Handle keyboard navigation
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (!isOpen) return;
+  // Handle keyboard navigation on the trigger button
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    // Handle opening with arrow keys when closed
+    if (!isOpen) {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        setIsOpen(true);
+        setFocusedIndex(getSelectedIndex());
+      }
+      return;
+    }
 
     switch (event.key) {
       case 'ArrowDown':
@@ -72,7 +86,34 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
           prev > 0 ? prev - 1 : filteredOptions.length - 1
         );
         break;
+      case 'Tab':
+        if (event.shiftKey) {
+          // Shift+Tab: go to previous option or exit
+          if (focusedIndex <= 0) {
+            setIsOpen(false);
+          } else {
+            event.preventDefault();
+            setFocusedIndex(prev => prev - 1);
+          }
+        } else {
+          // Tab: go to next option or exit
+          if (focusedIndex >= filteredOptions.length - 1) {
+            setIsOpen(false);
+          } else {
+            event.preventDefault();
+            setFocusedIndex(prev => prev < 0 ? 0 : prev + 1);
+          }
+        }
+        break;
       case 'Enter':
+        event.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
+          const option = filteredOptions[focusedIndex];
+          if (!option.disabled) {
+            handleOptionSelect(option);
+          }
+        }
+        break;
       case ' ':
         event.preventDefault();
         if (focusedIndex >= 0 && focusedIndex < filteredOptions.length) {
@@ -82,36 +123,39 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
           }
         }
         break;
+      case 'Escape':
+        event.preventDefault();
+        setIsOpen(false);
+        break;
     }
   };
-
-  useEffect(() => {
-    if (!isOpen) return;
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, focusedIndex, filteredOptions]);
 
   // Focus search input when dropdown opens
   useEffect(() => {
     if (isOpen && searchable && searchInputRef.current) {
-      // Delay to ensure dropdown is positioned
       setTimeout(() => {
         searchInputRef.current?.focus();
       }, 50);
     }
   }, [isOpen, searchable]);
 
-  const handleTriggerClick = () => {
-    if (!disabled) {
-      setIsOpen(!isOpen);
+  const handleTriggerClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleTriggerFocus = () => {
+    if (!disabled && !isOpen) {
+      setIsOpen(true);
       setSearchTerm('');
-      setFocusedIndex(-1);
+      // Focus on selected option, or first option if none selected
+      setFocusedIndex(getSelectedIndex());
     }
   };
 
   const handleOptionSelect = (option: SelectOption) => {
     if (!option.disabled) {
-      onValueChange(option.value);
+      onValueChange?.(option.value);
       setIsOpen(false);
       setSearchTerm('');
       triggerRef.current?.focus();
@@ -151,6 +195,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
         <button
           {...triggerWebProps}
           onClick={handleTriggerClick}
+          onFocus={handleTriggerFocus}
+          onKeyDown={handleKeyDown}
           disabled={disabled}
           aria-label={accessibilityLabel || label}
           aria-expanded={isOpen}
@@ -196,7 +242,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
           {...getWebProps([selectStyles.dropdown])}
           style={{
             maxHeight: maxHeight,
-            // Override positioning since PositionedPortal handles it
             position: 'relative',
             top: 'auto',
             left: 'auto',
@@ -219,16 +264,20 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
             <div {...getWebProps([selectStyles.optionsList])}>
               {filteredOptions.map((option, index) => {
-                const isSelected = option.value === value;
+                const isFocused = index === focusedIndex;
 
                 return (
                   <div
                     key={option.value}
                     onClick={() => handleOptionSelect(option)}
                     role="option"
-                    aria-selected={isSelected}
+                    aria-selected={option.value === value}
                     onMouseEnter={() => setFocusedIndex(index)}
-                    {...getWebProps([selectStyles.option])}
+                    {...getWebProps([
+                      selectStyles.option,
+                      isFocused && selectStyles.optionFocused,
+                      option.disabled && selectStyles.optionDisabled,
+                    ])}
                   >
                     <div {...getWebProps([selectStyles.optionContent])}>
                       {option.icon && (
