@@ -118,7 +118,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   };
 
   return (
-    <View style={[inputStyles.container({ type, hasError }), style]} testID={testID}>
+    <View style={[inputStyles.container, style]} testID={testID}>
       {/* Left Icon */}
       {leftIcon && (
         <View style={inputStyles.leftIconContainer}>

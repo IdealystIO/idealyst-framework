@@ -1,8 +1,8 @@
-import React, { isValidElement, forwardRef, ComponentRef } from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import React, { ComponentRef, forwardRef, isValidElement } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
+import { ButtonProps } from './types';
 
 const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((props, ref) => {
   const {
@@ -20,9 +20,9 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   } = props;
 
   // Compute dynamic styles
-  const buttonStyle = buttonStyles.button(size, intent, type, disabled);
-  const textStyle = buttonStyles.text(size, intent, type, disabled);
-  const iconStyle = buttonStyles.icon(size, intent, type);
+  const buttonStyle = buttonStyles.button;
+  const textStyle = buttonStyles.text;
+  const iconStyle = buttonStyles.icon;
 
   // Map button size to icon size
   const iconSizeMap = {
