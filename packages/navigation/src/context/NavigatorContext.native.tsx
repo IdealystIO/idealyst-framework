@@ -4,15 +4,9 @@ import { useNavigation, useNavigationState, DarkTheme, DefaultTheme, NavigationC
 import { buildNavigator } from '../routing';
 import { useUnistyles } from 'react-native-unistyles';
 
-const NavigatorContext = createContext<NavigatorContextValue>({
-    route: undefined,
-    navigate: () => {},
-});
+const NavigatorContext = createContext<NavigatorContextValue>(null!);
 
-const DrawerNavigatorContext = createContext<NavigatorContextValue>({
-    route: undefined,
-    navigate: () => {},
-});
+const DrawerNavigatorContext = createContext<NavigatorContextValue>(null!);
 
 // Utility function to parse path with parameters and find matching route
 const parseParameterizedPath = (path: string, rootRoute: any): { routeName: string, params: Record<string, string> } | null => {
