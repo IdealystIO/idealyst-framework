@@ -1,4 +1,5 @@
 import React from "react";
+import type { NavigateParams } from "../context/types";
 
 /**
  * Tab bar specific screen options
@@ -64,10 +65,37 @@ export type ScreenOptions = {
 } & NavigatorOptions;
 
 
+/**
+ * Props passed to the notFoundComponent when an invalid route is accessed
+ */
+export type NotFoundComponentProps = {
+    /** The full path that was attempted */
+    path: string
+    /** Any route parameters that were parsed from the path */
+    params?: Record<string, string>
+}
+
 export type BaseNavigatorParam = {
     path: string
     type: 'navigator'
     options?: NavigatorOptions
+    /**
+     * Handler called when an invalid route is accessed.
+     * - Return NavigateParams to redirect to a different route
+     * - Return undefined to show the notFoundComponent (if set)
+     * If not defined, bubbles up to parent navigator.
+     *
+     * @param invalidPath - The path that was attempted but not found
+     * @returns NavigateParams to redirect, or undefined to use notFoundComponent
+     */
+    onInvalidRoute?: (invalidPath: string) => NavigateParams | undefined
+    /**
+     * Component to render/navigate to when route is invalid and onInvalidRoute returns undefined.
+     * - Web: Renders at the current URL via catch-all route
+     * - Native: Navigated to as a screen
+     * - Optional: If not set and nothing handles the route, a warning is logged
+     */
+    notFoundComponent?: React.ComponentType<NotFoundComponentProps>
 }
 
 export type TabNavigatorParam = {

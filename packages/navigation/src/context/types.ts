@@ -6,6 +6,11 @@ import { NavigatorParam } from "../routing";
 export type NavigateParams = {
     path: string;
     vars?: Record<string, string>;
+    /**
+     * If true, replaces the current history entry instead of pushing a new one.
+     * On web, this uses history.replace(). On native, this resets the navigation state.
+     */
+    replace?: boolean;
 };
 
 export type NavigatorProviderProps = {

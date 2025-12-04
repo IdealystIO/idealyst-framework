@@ -1,4 +1,4 @@
-import { NavigatorParam, RouteParam, ScreenOptions } from './types'
+import { NavigatorParam, RouteParam, ScreenOptions, NotFoundComponentProps } from './types'
 
 import { TypedNavigator } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -76,6 +76,24 @@ const createThemeAwareComponent = (OriginalComponent: React.ComponentType<any>) 
 };
 
 /**
+ * Internal screen name for 404 pages
+ */
+export const NOT_FOUND_SCREEN_NAME = '__notFound__';
+
+/**
+ * Creates a NotFound screen component that receives path and params from route params
+ */
+const createNotFoundScreen = (NotFoundComponent: React.ComponentType<NotFoundComponentProps>) => {
+    return React.memo((props: any) => {
+        const { route } = props;
+        const path = route?.params?.path ?? '';
+        const params = route?.params?.params;
+
+        return <NotFoundComponent path={path} params={params} />;
+    });
+};
+
+/**
  * Build the Mobile navigator using React Navigation
  * @param params
  * @param parentPath
@@ -104,6 +122,26 @@ export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
         }
         : params.options;
 
+    // Build screens including optional 404 screen
+    const buildScreens = () => {
+        const screens = params.routes.map((child, index) => buildScreen(child, NavigatorType, parentPath, index));
+
+        // Add 404 screen if notFoundComponent is configured
+        if (params.notFoundComponent) {
+            const NotFoundScreen = createNotFoundScreen(params.notFoundComponent);
+            screens.push(
+                <NavigatorType.Screen
+                    key={NOT_FOUND_SCREEN_NAME}
+                    name={NOT_FOUND_SCREEN_NAME}
+                    component={NotFoundScreen}
+                    options={{ headerShown: false }}
+                />
+            );
+        }
+
+        return screens;
+    };
+
     // Special handling for drawer navigator with custom sidebar
     if (params.layout === 'drawer' && params.sidebarComponent) {
         return () => (
@@ -117,14 +155,14 @@ export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
                     />
                 )}
             >
-                {params.routes.map((child, index) => buildScreen(child, NavigatorType, parentPath, index))}
+                {buildScreens()}
             </NavigatorType.Navigator>
         );
     }
 
     return () => (
         <NavigatorType.Navigator screenOptions={screenOptions}>
-            {params.routes.map((child, index) => buildScreen(child, NavigatorType, parentPath, index))}
+            {buildScreens()}
         </NavigatorType.Navigator>
     )
 }

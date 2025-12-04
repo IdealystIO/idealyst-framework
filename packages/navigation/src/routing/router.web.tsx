@@ -1,8 +1,49 @@
-import React from 'react'
-import { Routes, Route } from '../router'
+import React, { useEffect, useState } from 'react'
+import { Routes, Route, useLocation, useParams, useNavigate } from '../router'
 import { DefaultStackLayout } from '../layouts/DefaultStackLayout'
 import { DefaultTabLayout } from '../layouts/DefaultTabLayout'
-import { NavigatorParam, RouteParam } from './types'
+import { NavigatorParam, RouteParam, NotFoundComponentProps } from './types'
+import { NavigateParams } from '../context/types'
+
+/**
+ * Wrapper component for notFoundComponent that:
+ * 1. Checks onInvalidRoute handler first
+ * 2. If handler returns NavigateParams, redirects
+ * 3. If handler returns undefined or no handler, renders notFoundComponent
+ */
+const NotFoundWrapper = ({
+    component: Component,
+    onInvalidRoute
+}: {
+    component: React.ComponentType<NotFoundComponentProps>
+    onInvalidRoute?: (path: string) => NavigateParams | undefined
+}) => {
+    const location = useLocation()
+    const params = useParams()
+    const navigate = useNavigate()
+    const [shouldRender, setShouldRender] = useState(false)
+
+    useEffect(() => {
+        // Check if handler wants to redirect
+        if (onInvalidRoute) {
+            const redirectParams = onInvalidRoute(location.pathname)
+            if (redirectParams) {
+                // Handler returned NavigateParams - redirect
+                navigate(redirectParams.path, { replace: redirectParams.replace ?? true })
+                return
+            }
+        }
+        // No redirect - show the 404 component
+        setShouldRender(true)
+    }, [location.pathname, onInvalidRoute, navigate])
+
+    // Don't render until we've checked the handler
+    if (!shouldRender) {
+        return null
+    }
+
+    return <Component path={location.pathname} params={params as Record<string, string>} />
+}
 
 /**
  * Build the Web navigator using React Router v7 nested routes
@@ -46,18 +87,37 @@ const buildRoute = (params: RouteParam, index: number, isNested = false) => {
         );
     } else if (params.type === 'navigator') {
         // Get the layout component directly
-        const LayoutComponent = params.layoutComponent || 
+        const LayoutComponent = params.layoutComponent ||
             (params.layout === 'tab' ? DefaultTabLayout : DefaultStackLayout);
-        
+
         // Transform routes to include full paths for layout component
         const routesWithFullPaths = params.routes.map(route => ({
             ...route,
             fullPath: route.path
         }));
-        
+
+        // Build child routes including catch-all for 404
+        const childRoutes = params.routes.map((child, childIndex) => buildRoute(child, childIndex, true));
+
+        // Add catch-all route for notFoundComponent if configured
+        if (params.notFoundComponent) {
+            childRoutes.push(
+                <Route
+                    key="__notFound__"
+                    path="*"
+                    element={
+                        <NotFoundWrapper
+                            component={params.notFoundComponent}
+                            onInvalidRoute={params.onInvalidRoute}
+                        />
+                    }
+                />
+            );
+        }
+
         return (
-            <Route 
-                key={`${params.path}-${index}`} 
+            <Route
+                key={`${params.path}-${index}`}
                 path={routePath}
                 element={
                     <LayoutComponent
@@ -67,7 +127,7 @@ const buildRoute = (params: RouteParam, index: number, isNested = false) => {
                     />
                 }
             >
-                {params.routes.map((child, childIndex) => buildRoute(child, childIndex, true))}
+                {childRoutes}
             </Route>
         );
     }

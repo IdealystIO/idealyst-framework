@@ -2,11 +2,151 @@ import React from 'react';
 import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, LinkExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
 import { DataGridShowcase } from '@idealyst/datagrid/examples';
 import { DatePickerExamples } from '@idealyst/datepicker/examples';
-import { Text, View, Card, Screen } from '@idealyst/components';
-import { NavigatorParam, RouteParam } from '../routing';
+import { Text, View, Card, Screen, Icon, Button } from '@idealyst/components';
+import { NavigatorParam, RouteParam, NotFoundComponentProps } from '../routing';
 import { ExampleWebLayout } from './ExampleWebLayout';
 import ExampleSidebar from './ExampleSidebar';
 import HeaderRight from './HeaderRight';
+import { useNavigator } from '../context';
+
+/**
+ * Global 404 Not Found screen - shown for invalid routes at the root level
+ */
+const NotFoundScreen = ({ path, params }: NotFoundComponentProps) => {
+    const { navigate } = useNavigator();
+
+    return (
+        <Screen>
+            <View spacing='lg' padding={12} style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                <Icon name="alert-circle-outline" size={64} color="red" />
+                <Text size="xl" weight="bold">
+                    Page Not Found
+                </Text>
+                <Text size="md" color="secondary">
+                    The page you're looking for doesn't exist.
+                </Text>
+                <Card style={{ marginTop: 16, padding: 16 }}>
+                    <View spacing="sm">
+                        <Text size="sm" weight="semibold">Attempted path:</Text>
+                        <Text size="sm" color="secondary">{path}</Text>
+                        {params && Object.keys(params).length > 0 && (
+                            <>
+                                <Text size="sm" weight="semibold" style={{ marginTop: 8 }}>Params:</Text>
+                                <Text size="sm" color="secondary">{JSON.stringify(params, null, 2)}</Text>
+                            </>
+                        )}
+                    </View>
+                </Card>
+                <Button
+                    style={{ marginTop: 24 }}
+                    onPress={() => navigate({ path: '/', replace: true })}
+                >
+                    Go Home
+                </Button>
+            </View>
+        </Screen>
+    );
+};
+
+/**
+ * Settings-specific 404 screen - a simpler, more minimal style
+ */
+const SettingsNotFoundScreen = ({ path, params }: NotFoundComponentProps) => {
+    const { navigate } = useNavigator();
+
+    return (
+        <Screen>
+            <View spacing='md' padding={12} style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: '#f5f5f5' }}>
+                <Icon name="cog-off-outline" size={48} color="orange" />
+                <Text size="lg" weight="semibold">
+                    Settings Page Not Found
+                </Text>
+                <Text size="sm" color="secondary" style={{ textAlign: 'center', maxWidth: 300 }}>
+                    The settings page "{path}" doesn't exist. You've been redirected here.
+                </Text>
+                <View direction="row" spacing="md" style={{ marginTop: 16 }}>
+                    <Button
+                        type="outlined"
+                        size="sm"
+                        onPress={() => navigate({ path: '/settings', replace: true })}
+                    >
+                        Settings Home
+                    </Button>
+                    <Button
+                        size="sm"
+                        onPress={() => navigate({ path: '/', replace: true })}
+                    >
+                        Go Home
+                    </Button>
+                </View>
+            </View>
+        </Screen>
+    );
+};
+
+// Settings section screens
+const SettingsHomeScreen = () => (
+    <Screen>
+        <View spacing='lg' padding={12}>
+            <Text size="xl" weight="bold">Settings</Text>
+            <Text size="md" color="secondary">Manage your application settings</Text>
+            <Card style={{ marginTop: 16, padding: 16 }}>
+                <View spacing="sm">
+                    <Text size="sm">Navigate to:</Text>
+                    <Text size="sm" color="secondary">• /settings/general - General settings</Text>
+                    <Text size="sm" color="secondary">• /settings/account - Account settings</Text>
+                    <Text size="sm" color="secondary">• /settings/invalid - Test 404 (will show SettingsNotFoundScreen)</Text>
+                    <Text size="sm" color="secondary">• /settings/redirect-me - Test redirect handler</Text>
+                </View>
+            </Card>
+        </View>
+    </Screen>
+);
+
+const GeneralSettingsScreen = () => (
+    <Screen>
+        <View spacing='lg' padding={12}>
+            <Text size="xl" weight="bold">General Settings</Text>
+            <Text size="md" color="secondary">Configure general app preferences</Text>
+        </View>
+    </Screen>
+);
+
+const AccountSettingsScreen = () => (
+    <Screen>
+        <View spacing='lg' padding={12}>
+            <Text size="xl" weight="bold">Account Settings</Text>
+            <Text size="md" color="secondary">Manage your account</Text>
+        </View>
+    </Screen>
+);
+
+/**
+ * Nested Settings Navigator with its own error handling:
+ * - onInvalidRoute: Redirects /settings/redirect-* to /settings/general
+ * - notFoundComponent: Shows SettingsNotFoundScreen for other invalid routes
+ */
+const SettingsNavigator: NavigatorParam = {
+    path: "settings",
+    type: 'navigator',
+    layout: 'stack',
+    notFoundComponent: SettingsNotFoundScreen,
+    onInvalidRoute: (invalidPath) => {
+        // Example: Redirect old/deprecated paths to the general settings
+        if (invalidPath.includes('redirect')) {
+            console.log(`[Settings] Redirecting "${invalidPath}" to /settings/general`);
+            return { path: '/settings/general', replace: true };
+        }
+        // Return undefined to show the notFoundComponent instead
+        console.log(`[Settings] Showing 404 for "${invalidPath}"`);
+        return undefined;
+    },
+    routes: [
+        { path: "", type: 'screen', component: SettingsHomeScreen, options: { title: "Settings" } },
+        { path: "general", type: 'screen', component: GeneralSettingsScreen, options: { title: "General" } },
+        { path: "account", type: 'screen', component: AccountSettingsScreen, options: { title: "Account" } },
+    ],
+};
 
 const HomeScreen = () => {
     return (
@@ -65,11 +205,14 @@ const ExampleNavigationRouter: NavigatorParam = {
     layout: 'drawer',
     sidebarComponent: ExampleSidebar,
     layoutComponent: ExampleWebLayout,
+    notFoundComponent: NotFoundScreen,
     options: {
         headerRight: HeaderRight,
     },
     routes: [
         { path: "/", type: 'screen', component: HomeScreen, options: { title: "Home" } },
+        // Nested settings navigator with its own 404 handling
+        SettingsNavigator,
         { path: "avatar", type: 'screen', component: AvatarExamples, options: { title: "Avatar" } },
         { path: "badge", type: 'screen', component: BadgeExamples, options: { title: "Badge" } },
         { path: "button", type: 'screen', component: ButtonExamples, options: { title: "Button" } },
