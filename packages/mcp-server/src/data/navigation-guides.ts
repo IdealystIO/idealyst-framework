@@ -246,6 +246,38 @@ Example:
 }
 \`\`\`
 
+## Invalid Route Handling
+
+Navigators can specify how to handle invalid routes:
+
+\`\`\`tsx
+import { NavigatorParam, NotFoundComponentProps } from '@idealyst/navigation';
+
+const NotFoundPage = ({ path, params }: NotFoundComponentProps) => (
+  <View>
+    <Text>Page not found: {path}</Text>
+  </View>
+);
+
+const routes: NavigatorParam = {
+  path: "/",
+  type: 'navigator',
+  layout: 'stack',
+  // Component to show when route is invalid
+  notFoundComponent: NotFoundPage,
+  // Handler to redirect or show 404
+  onInvalidRoute: (path) => {
+    if (path.startsWith('/old-')) {
+      return { path: '/new-section', replace: true };
+    }
+    return undefined;  // Show notFoundComponent
+  },
+  routes: [...]
+};
+\`\`\`
+
+See the **Invalid Route Handling** guide for complete documentation.
+
 ## Nested Routes
 
 Create hierarchical navigation:
@@ -847,14 +879,15 @@ Navigate to a route:
 \`\`\`tsx
 navigator.navigate({
   path: string;
-  vars: Record<string, string>;
+  vars?: Record<string, string>;
+  replace?: boolean;  // Replace history entry instead of push
 });
 \`\`\`
 
 Examples:
 \`\`\`tsx
 // Simple navigation
-navigator.navigate({ path: '/home', vars: {} });
+navigator.navigate({ path: '/home' });
 
 // With path parameters
 navigator.navigate({
@@ -867,7 +900,31 @@ navigator.navigate({
   path: '/search',
   vars: { q: 'react', category: 'tutorial' }
 });
+
+// Replace current history entry (no back navigation to current page)
+navigator.navigate({
+  path: '/dashboard',
+  replace: true
+});
 \`\`\`
+
+### Replace vs Push Navigation
+
+By default, navigation pushes a new entry onto the history stack. Use \`replace: true\` when you want to replace the current entry instead:
+
+\`\`\`tsx
+// After login, replace login page in history
+navigator.navigate({ path: '/dashboard', replace: true });
+
+// Redirect without adding to history
+navigator.navigate({ path: '/new-location', replace: true });
+\`\`\`
+
+**Use cases for replace:**
+- Post-login redirects (user shouldn't go back to login)
+- After form submission redirects
+- URL canonicalization/normalization
+- Redirect from deprecated routes
 
 ### navigator.vars
 
@@ -1194,6 +1251,359 @@ const tabs = ['feed', 'search', 'profile'];
 <Button onPress={() => navigator.goBack()}>
   Close
 </Button>
+\`\`\`
+`,
+
+  "idealyst://navigation/invalid-route-handling": `# Invalid Route Handling
+
+Handle 404 pages and invalid routes with customizable redirect logic and fallback components.
+
+## Overview
+
+The navigation system provides two mechanisms for handling invalid routes:
+
+1. **\`onInvalidRoute\`** - A handler function that can redirect to a different route
+2. **\`notFoundComponent\`** - A fallback component to render when no redirect is specified
+
+These can be configured at each navigator level and support bubbling up to parent navigators.
+
+## Basic Setup
+
+### Adding a 404 Page
+
+\`\`\`tsx
+import { NavigatorParam, NotFoundComponentProps } from '@idealyst/navigation';
+
+// 404 Component receives path and params
+const NotFoundPage = ({ path, params }: NotFoundComponentProps) => (
+  <Screen>
+    <View style={{ alignItems: 'center', padding: 24 }}>
+      <Icon name="alert-circle" size={64} color="red" />
+      <Text size="xl">Page Not Found</Text>
+      <Text color="secondary">The path "{path}" doesn't exist.</Text>
+      {params && Object.keys(params).length > 0 && (
+        <Text size="sm">Params: {JSON.stringify(params)}</Text>
+      )}
+    </View>
+  </Screen>
+);
+
+const routes: NavigatorParam = {
+  path: "/",
+  type: 'navigator',
+  layout: 'stack',
+  notFoundComponent: NotFoundPage,
+  routes: [
+    { path: "", type: 'screen', component: HomeScreen },
+    { path: "about", type: 'screen', component: AboutScreen },
+  ]
+};
+\`\`\`
+
+## NotFoundComponentProps
+
+The 404 component receives information about the attempted route:
+
+\`\`\`tsx
+type NotFoundComponentProps = {
+  /** The full path that was attempted */
+  path: string;
+  /** Any route parameters that were parsed from the path */
+  params?: Record<string, string>;
+};
+\`\`\`
+
+Example usage:
+\`\`\`tsx
+const NotFoundPage = ({ path, params }: NotFoundComponentProps) => {
+  const { navigate } = useNavigator();
+
+  return (
+    <Screen>
+      <View spacing="lg" padding={16}>
+        <Text size="xl">404 - Page Not Found</Text>
+        <Text>Attempted: {path}</Text>
+        {params?.id && <Text>User ID: {params.id}</Text>}
+        <Button onPress={() => navigate({ path: '/', replace: true })}>
+          Go Home
+        </Button>
+      </View>
+    </Screen>
+  );
+};
+\`\`\`
+
+## Redirect Handler
+
+Use \`onInvalidRoute\` to redirect certain invalid paths:
+
+\`\`\`tsx
+const routes: NavigatorParam = {
+  path: "/",
+  type: 'navigator',
+  layout: 'stack',
+  notFoundComponent: NotFoundPage,
+  onInvalidRoute: (invalidPath) => {
+    // Redirect old URLs to new locations
+    if (invalidPath.startsWith('/old-blog')) {
+      return { path: '/blog', replace: true };
+    }
+
+    // Redirect legacy paths
+    if (invalidPath === '/legacy-dashboard') {
+      return { path: '/dashboard', replace: true };
+    }
+
+    // Return undefined to show notFoundComponent
+    return undefined;
+  },
+  routes: [...]
+};
+\`\`\`
+
+### Handler Return Values
+
+The \`onInvalidRoute\` handler can return:
+
+- **\`NavigateParams\`** - Redirect to a different route
+- **\`undefined\`** - Show the \`notFoundComponent\` (or bubble up)
+
+\`\`\`tsx
+type NavigateParams = {
+  path: string;
+  vars?: Record<string, string>;
+  replace?: boolean;  // Recommended: true for redirects
+};
+
+onInvalidRoute: (path: string) => NavigateParams | undefined
+\`\`\`
+
+## Scoped Handlers (Nested Navigators)
+
+Each navigator can have its own 404 handling:
+
+\`\`\`tsx
+// Settings-specific 404 page
+const SettingsNotFound = ({ path }: NotFoundComponentProps) => (
+  <Screen>
+    <View style={{ alignItems: 'center' }}>
+      <Icon name="cog-off" size={48} color="orange" />
+      <Text>Settings page not found: {path}</Text>
+    </View>
+  </Screen>
+);
+
+// Nested settings navigator with its own handler
+const SettingsNavigator: NavigatorParam = {
+  path: "settings",
+  type: 'navigator',
+  layout: 'stack',
+  notFoundComponent: SettingsNotFound,
+  onInvalidRoute: (path) => {
+    // Redirect deprecated settings paths
+    if (path.includes('legacy-setting')) {
+      return { path: '/settings/general', replace: true };
+    }
+    return undefined;  // Show SettingsNotFound
+  },
+  routes: [
+    { path: "", type: 'screen', component: SettingsHome },
+    { path: "general", type: 'screen', component: GeneralSettings },
+    { path: "account", type: 'screen', component: AccountSettings },
+  ]
+};
+
+// Root navigator with global 404
+const AppRouter: NavigatorParam = {
+  path: "/",
+  type: 'navigator',
+  layout: 'stack',
+  notFoundComponent: GlobalNotFound,  // Fallback for non-settings routes
+  routes: [
+    { path: "", type: 'screen', component: HomeScreen },
+    SettingsNavigator,  // Has its own 404 handling
+    { path: "about", type: 'screen', component: AboutScreen },
+  ]
+};
+\`\`\`
+
+## Handler Bubbling
+
+Invalid routes bubble up through the navigator hierarchy:
+
+\`\`\`
+Invalid route detected: /settings/invalid-page
+        ↓
+Check /settings navigator's onInvalidRoute
+        ↓
+┌─────────────────────────────────────────┐
+│ Returns NavigateParams?                 │
+│   YES → Redirect to that route          │
+│   NO (undefined) → Check notFoundComponent │
+└─────────────────────────────────────────┘
+        ↓
+Has notFoundComponent?
+   YES → Render it with { path, params }
+   NO  → Bubble up to parent navigator
+        ↓
+No parent handles it?
+   → console.warn("No handler for invalid route")
+\`\`\`
+
+## Platform Behavior
+
+### Web
+
+- Invalid routes trigger the catch-all route at each navigator level
+- The \`onInvalidRoute\` handler is called when the 404 route is rendered
+- If handler returns \`NavigateParams\`, navigation uses \`replace: true\` by default
+- URL stays at the invalid path when showing \`notFoundComponent\`
+
+### Mobile (React Native)
+
+- Invalid routes trigger navigation to a hidden 404 screen
+- The handler is called during the \`navigate()\` function
+- If handler returns \`NavigateParams\`, redirects to that route
+- If no handler/component, logs a warning
+
+## Complete Example
+
+\`\`\`tsx
+import { NavigatorParam, NotFoundComponentProps } from '@idealyst/navigation';
+import { Screen, View, Text, Button, Icon, Card } from '@idealyst/components';
+
+// Global 404 - detailed error page
+const GlobalNotFound = ({ path, params }: NotFoundComponentProps) => {
+  const { navigate } = useNavigator();
+
+  return (
+    <Screen>
+      <View spacing="lg" padding={24} style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+        <Icon name="alert-circle-outline" size={64} color="red" />
+        <Text size="xl" weight="bold">Page Not Found</Text>
+        <Text color="secondary">The page you're looking for doesn't exist.</Text>
+
+        <Card style={{ marginTop: 16, padding: 16 }}>
+          <Text size="sm" weight="semibold">Attempted path:</Text>
+          <Text size="sm" color="secondary">{path}</Text>
+          {params && Object.keys(params).length > 0 && (
+            <>
+              <Text size="sm" weight="semibold" style={{ marginTop: 8 }}>Params:</Text>
+              <Text size="sm" color="secondary">{JSON.stringify(params)}</Text>
+            </>
+          )}
+        </Card>
+
+        <Button style={{ marginTop: 24 }} onPress={() => navigate({ path: '/', replace: true })}>
+          Go Home
+        </Button>
+      </View>
+    </Screen>
+  );
+};
+
+// Admin section 404 - simpler style
+const AdminNotFound = ({ path }: NotFoundComponentProps) => {
+  const { navigate } = useNavigator();
+
+  return (
+    <Screen>
+      <View padding={16} style={{ alignItems: 'center' }}>
+        <Icon name="shield-off" size={48} color="orange" />
+        <Text size="lg">Admin page not found</Text>
+        <Button
+          type="outlined"
+          size="sm"
+          onPress={() => navigate({ path: '/admin', replace: true })}
+        >
+          Back to Admin
+        </Button>
+      </View>
+    </Screen>
+  );
+};
+
+// Admin navigator with redirect logic
+const AdminNavigator: NavigatorParam = {
+  path: "admin",
+  type: 'navigator',
+  layout: 'stack',
+  notFoundComponent: AdminNotFound,
+  onInvalidRoute: (path) => {
+    // Redirect old admin paths
+    if (path.includes('old-users')) {
+      return { path: '/admin/users', replace: true };
+    }
+    if (path.includes('deprecated')) {
+      return { path: '/admin', replace: true };
+    }
+    return undefined;  // Show AdminNotFound
+  },
+  routes: [
+    { path: "", type: 'screen', component: AdminDashboard },
+    { path: "users", type: 'screen', component: AdminUsers },
+    { path: "settings", type: 'screen', component: AdminSettings },
+  ]
+};
+
+// Root app router
+const AppRouter: NavigatorParam = {
+  path: "/",
+  type: 'navigator',
+  layout: 'drawer',
+  notFoundComponent: GlobalNotFound,
+  onInvalidRoute: (path) => {
+    // Global redirects
+    if (path === '/home') {
+      return { path: '/', replace: true };
+    }
+    return undefined;
+  },
+  routes: [
+    { path: "", type: 'screen', component: HomeScreen },
+    AdminNavigator,
+    { path: "about", type: 'screen', component: AboutScreen },
+    { path: "contact", type: 'screen', component: ContactScreen },
+  ]
+};
+
+export default AppRouter;
+\`\`\`
+
+## Best Practices
+
+1. **Always provide a root notFoundComponent** - Ensures all invalid routes are handled
+2. **Use scoped handlers for sections** - Different 404 styles for different app areas
+3. **Redirect deprecated URLs** - Use \`onInvalidRoute\` to maintain URL compatibility
+4. **Include helpful information** - Show the attempted path and suggest alternatives
+5. **Provide navigation options** - Add buttons to go home or back
+6. **Use \`replace: true\` for redirects** - Prevents invalid routes in browser history
+7. **Log unhandled routes** - Monitor for missing pages in production
+
+## TypeScript Types
+
+\`\`\`tsx
+import {
+  NavigatorParam,
+  NotFoundComponentProps,
+  NavigateParams
+} from '@idealyst/navigation';
+
+// NotFoundComponentProps
+type NotFoundComponentProps = {
+  path: string;
+  params?: Record<string, string>;
+};
+
+// Handler signature
+type InvalidRouteHandler = (invalidPath: string) => NavigateParams | undefined;
+
+// NavigateParams (used by handler return and navigate function)
+type NavigateParams = {
+  path: string;
+  vars?: Record<string, string>;
+  replace?: boolean;
+};
 \`\`\`
 `,
 };
