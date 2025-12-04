@@ -36,7 +36,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     disabled
   });
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!disabled && onPress) {
       onPress();
     }

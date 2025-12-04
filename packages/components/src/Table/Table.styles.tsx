@@ -221,6 +221,8 @@ const createRowStyles = (theme: Theme) => {
 
 const createHeaderCellStyles = (theme: Theme) => {
     return {
+        flexDirection: 'row',
+        alignItems: 'center',
         textAlign: 'left',
         fontWeight: '600',
         color: theme.colors.text.primary,
@@ -235,12 +237,15 @@ const createHeaderCellStyles = (theme: Theme) => {
             align: {
                 left: {
                     textAlign: 'left',
+                    justifyContent: 'flex-start',
                 },
                 center: {
                     textAlign: 'center',
+                    justifyContent: 'center',
                 },
                 right: {
                     textAlign: 'right',
+                    justifyContent: 'flex-end',
                 },
             },
             type: createHeaderCellTypeVariants(theme),
@@ -250,6 +255,8 @@ const createHeaderCellStyles = (theme: Theme) => {
 
 const createCellStyles = (theme: Theme) => {
     return {
+        flexDirection: 'row',
+        alignItems: 'center',
         textAlign: 'left',
         color: theme.colors.text.primary,
         variants: {
@@ -257,12 +264,15 @@ const createCellStyles = (theme: Theme) => {
             align: {
                 left: {
                     textAlign: 'left',
+                    justifyContent: 'flex-start',
                 },
                 center: {
                     textAlign: 'center',
+                    justifyContent: 'center',
                 },
                 right: {
                     textAlign: 'right',
+                    justifyContent: 'flex-end',
                 },
             },
             type: createCellTypeVariants(theme),
