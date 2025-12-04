@@ -17,6 +17,15 @@ const config = {
     ],
     // Important for Idealyst to use .native extensions for React Native (eg: @idealyst/components/src/Button/Button.native.tsx)
     sourceExts: ['native.tsx', 'native.ts', 'tsx', 'ts', 'native.jsx', 'native.js', 'jsx', 'js', 'json', 'cjs'],
+    extraNodeModules: {
+      // Redirect react and react-native imports to the local node_modules
+      react: path.resolve(__dirname, 'node_modules/react'),
+      'react-native': path.resolve(__dirname, 'node_modules/react-native'),
+      // Ensure Idealyst packages use mobile's node_modules
+      '@idealyst/components': path.resolve(__dirname, 'node_modules/@idealyst/components'),
+      '@idealyst/navigation': path.resolve(__dirname, 'node_modules/@idealyst/navigation'),
+      '@idealyst/theme': path.resolve(__dirname, 'node_modules/@idealyst/theme'),
+    },
   },
   watcher: {
     // When configuring custom components with .native extensions, make sure the watcher looks for them
