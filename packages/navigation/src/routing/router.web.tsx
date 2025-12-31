@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Routes, Route, useLocation, useParams } from '../router'
 import { DefaultStackLayout } from '../layouts/DefaultStackLayout'
 import { DefaultTabLayout } from '../layouts/DefaultTabLayout'
-import { NavigatorParam, RouteParam, NotFoundComponentProps } from './types'
+import { NavigatorParam, RouteParam, ScreenParam, NotFoundComponentProps } from './types'
 import { NavigateParams } from '../context/types'
 
 /**
@@ -98,30 +98,55 @@ const NotFoundWrapper = ({
 export const buildNavigator = (params: NavigatorParam, parentPath = '') => {
     return () => (
         <Routes>
-            {buildRoute(params, 0, false)}
+            {buildRoute(params, 0, false, parentPath)}
         </Routes>
     )
 }
 
 
 /**
+ * Helper to compute full path by joining parent and child paths
+ */
+const joinPaths = (parentPath: string, childPath: string): string => {
+    // Remove trailing slash from parent
+    const normalizedParent = parentPath.endsWith('/') ? parentPath.slice(0, -1) : parentPath;
+    // Remove leading slash from child
+    const normalizedChild = childPath.startsWith('/') ? childPath.slice(1) : childPath;
+
+    if (!normalizedParent || normalizedParent === '') {
+        return normalizedChild ? `/${normalizedChild}` : '/';
+    }
+    if (!normalizedChild || normalizedChild === '') {
+        return normalizedParent;
+    }
+    return `${normalizedParent}/${normalizedChild}`;
+};
+
+/**
+ * Check if a screen has fullScreen option enabled
+ */
+const isFullScreenRoute = (route: RouteParam): route is ScreenParam => {
+    return route.type === 'screen' && route.options?.fullScreen === true;
+};
+
+/**
  * Build Route - handles both screens and nested navigators
  * @param params Route configuration
  * @param index Route index for key generation
  * @param isNested Whether this is a nested route (should strip leading slash)
- * @returns React Router Route element
+ * @param parentPath Full parent path for computing fullScreen route paths
+ * @returns React Router Route element or array of elements
  */
-const buildRoute = (params: RouteParam, index: number, isNested = false) => {
+const buildRoute = (params: RouteParam, index: number, isNested = false, parentPath = ''): React.ReactNode => {
     // For nested routes, strip leading slash to make path relative
-    const routePath = isNested && params.path.startsWith('/') 
-        ? params.path.slice(1) 
+    const routePath = isNested && params.path.startsWith('/')
+        ? params.path.slice(1)
         : params.path;
-    
+
     if (params.type === 'screen') {
-        
         // If the route path is empty (root route in navigator), make it an index route
         const routeProps = routePath === '' ? { index: true } : { path: routePath };
-        
+
         return (
             <Route
                 key={`${params.path}-${index}`}
@@ -134,19 +159,28 @@ const buildRoute = (params: RouteParam, index: number, isNested = false) => {
         const LayoutComponent = params.layoutComponent ||
             (params.layout === 'tab' ? DefaultTabLayout : DefaultStackLayout);
 
-        // Transform routes to include full paths for layout component
-        const routesWithFullPaths = params.routes.map(route => ({
+        // Compute the full path for this navigator
+        const navigatorFullPath = joinPaths(parentPath, params.path);
+
+        // Separate fullScreen routes from regular routes
+        const regularRoutes = params.routes.filter(route => !isFullScreenRoute(route));
+        const fullScreenRoutes = params.routes.filter(isFullScreenRoute);
+
+        // Transform routes to include full paths for layout component (only non-fullScreen)
+        const routesWithFullPaths = regularRoutes.map(route => ({
             ...route,
             fullPath: route.path
         }));
 
-        // Build child routes including catch-all for 404
-        const childRoutes = params.routes.map((child, childIndex) => buildRoute(child, childIndex, true));
+        // Build child routes for regular (non-fullScreen) screens
+        const childRoutes = regularRoutes.map((child, childIndex) =>
+            buildRoute(child, childIndex, true, navigatorFullPath)
+        );
 
         // Add catch-all and index routes if notFoundComponent or onInvalidRoute is configured
         if (params.notFoundComponent || params.onInvalidRoute) {
             // Check if any route handles the index (empty path or "/" for this navigator)
-            const hasIndexRoute = params.routes.some(route => {
+            const hasIndexRoute = regularRoutes.some(route => {
                 const childPath = route.path.startsWith('/') ? route.path.slice(1) : route.path;
                 return childPath === '' || childPath === '/';
             });
@@ -183,7 +217,8 @@ const buildRoute = (params: RouteParam, index: number, isNested = false) => {
             );
         }
 
-        return (
+        // Build the main navigator route with layout
+        const navigatorRoute = (
             <Route
                 key={`${params.path}-${index}`}
                 path={routePath}
@@ -198,8 +233,36 @@ const buildRoute = (params: RouteParam, index: number, isNested = false) => {
                 {childRoutes}
             </Route>
         );
+
+        // If there are fullScreen routes, return them as siblings to the navigator route
+        if (fullScreenRoutes.length > 0) {
+            const fullScreenElements = fullScreenRoutes.map((route, fsIndex) => {
+                // Compute full absolute path for the fullScreen route
+                const fullPath = joinPaths(navigatorFullPath, route.path);
+                // Remove leading slash for React Router path (it will be relative to root)
+                const routerPath = fullPath.startsWith('/') ? fullPath.slice(1) : fullPath;
+
+                return (
+                    <Route
+                        key={`fullscreen-${route.path}-${fsIndex}`}
+                        path={routerPath || '/'}
+                        element={React.createElement(route.component)}
+                    />
+                );
+            });
+
+            // Return array of routes: navigator + fullScreen siblings
+            return (
+                <React.Fragment key={`navigator-group-${index}`}>
+                    {navigatorRoute}
+                    {fullScreenElements}
+                </React.Fragment>
+            );
+        }
+
+        return navigatorRoute;
     }
-    
+
     return null;
 }
 

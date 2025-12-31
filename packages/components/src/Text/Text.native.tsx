@@ -5,6 +5,7 @@ import { textStyles } from './Text.styles';
 
 const Text = forwardRef<RNText, TextProps>(({
   children,
+  typography,
   size = 'md',
   weight = 'normal',
   color,
@@ -12,9 +13,10 @@ const Text = forwardRef<RNText, TextProps>(({
   style,
   testID,
 }, ref) => {
+  // When typography is set, it overrides size and weight (handled in styles)
   textStyles.useVariants({
-    size,
-    weight,
+    size: typography ? 'md' : size, // Use default when typography is set (will be overridden)
+    weight: typography ? 'normal' : weight, // Use default when typography is set (will be overridden)
     align,
   });
 
@@ -22,7 +24,7 @@ const Text = forwardRef<RNText, TextProps>(({
     <RNText
       ref={ref}
       style={[
-        textStyles.text({ color }),
+        textStyles.text({ color, typography }),
         style,
       ]}
       testID={testID}

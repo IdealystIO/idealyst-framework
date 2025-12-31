@@ -78,23 +78,13 @@ interface TableCellProps {
 }
 
 export const TableCell: React.FC<TableCellProps> = ({ children, style, width, colSpan, onPress }) => {
-  let resolvedStyle = {};
-  if (typeof style === 'function') {
-    try {
-      resolvedStyle = style(UnistylesRuntime.theme);
-    } catch (error) {
-      resolvedStyle = {};
-    }
-  } else if (style) {
-    resolvedStyle = style;
-  }
 
   const combinedStyle = {
     verticalAlign: 'middle',
     ...(width && { width }),
-    ...resolvedStyle,
+    ...style,
   };
-
+  
   return (
     <td
       style={combinedStyle}

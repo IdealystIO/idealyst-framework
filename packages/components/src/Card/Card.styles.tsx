@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Intent, CompoundVariants } from '@idealyst/theme';
 
-type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
+type CardType = 'outlined' | 'elevated' | 'filled';
 type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 type CardRadius = 'none' | 'sm' | 'md' | 'lg';
 type CardIntent = Intent | 'info' | 'neutral';
@@ -20,11 +20,6 @@ export type CardVariants = {
  */
 function createTypeVariants(theme: Theme) {
     return {
-        default: {
-            backgroundColor: theme.colors.surface.primary,
-            borderWidth: 1,
-            borderStyle: 'solid' as const,
-        },
         outlined: {
             backgroundColor: 'transparent',
             borderWidth: 1,
@@ -48,20 +43,10 @@ function createTypeVariants(theme: Theme) {
 function createCardCompoundVariants(theme: Theme) {
     const compoundVariants: CompoundVariants<keyof CardVariants> = [];
 
-    // Add intent-based border colors for default and outlined types
+    // Add intent-based border colors for outlined type
     for (const intent in theme.intents) {
         const intentValue = theme.intents[intent as Intent];
 
-        // Default + intent
-        compoundVariants.push({
-            intent,
-            type: 'default',
-            styles: {
-                borderColor: intentValue.primary,
-            },
-        });
-
-        // Outlined + intent
         compoundVariants.push({
             intent,
             type: 'outlined',
@@ -71,24 +56,10 @@ function createCardCompoundVariants(theme: Theme) {
         });
     }
 
-    // Add special intents (info, neutral)
-    compoundVariants.push({
-        intent: 'info',
-        type: 'default',
-        styles: {
-            borderColor: theme.colors.border.secondary,
-        },
-    });
+    // Add special intents (info, neutral) for outlined type
     compoundVariants.push({
         intent: 'info',
         type: 'outlined',
-        styles: {
-            borderColor: theme.colors.border.secondary,
-        },
-    });
-    compoundVariants.push({
-        intent: 'neutral',
-        type: 'default',
         styles: {
             borderColor: theme.colors.border.secondary,
         },

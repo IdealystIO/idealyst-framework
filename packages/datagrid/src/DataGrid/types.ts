@@ -11,6 +11,8 @@ export interface Column<T = any> {
   align?: 'left' | 'center' | 'right';
   accessor?: (row: T) => any;
   render?: (value: any, row: T, index: number) => React.ReactNode;
+  /** Custom header renderer - if provided, renders instead of header string */
+  renderHeader?: () => React.ReactNode;
   headerStyle?: ViewStyle;
   cellStyle?: ViewStyle | ((value: any, row: T) => ViewStyle);
 }
@@ -27,6 +29,7 @@ export interface DataGridProps<T = any> {
   width?: number | string;
   style?: ViewStyle;
   headerStyle?: ViewStyle;
+  cellStyle?: ViewStyle;
   rowStyle?: ViewStyle | ((row: T, index: number) => ViewStyle);
   selectedRows?: number[];
   onSelectionChange?: (selectedRows: number[]) => void;

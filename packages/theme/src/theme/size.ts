@@ -1,6 +1,31 @@
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 export type SizeValue = number | string
 
+/**
+ * Typography variants for semantic text styling
+ */
+export type Typography =
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'subtitle1'
+    | 'subtitle2'
+    | 'body1'
+    | 'body2'
+    | 'caption'
+
+/**
+ * Typography style values
+ */
+export type TypographyValue = {
+    fontSize: SizeValue;
+    lineHeight: SizeValue;
+    fontWeight: '300' | '400' | '500' | '600' | '700';
+}
+
 // Size alone is not very useful, as sizes are contextual based on the component
 export type AllComponentSizes = {
     button: Record<Size, ButtonSizeValue>;
@@ -25,6 +50,7 @@ export type AllComponentSizes = {
     table: Record<Size, TableSizeValue>;
     tooltip: Record<Size, TooltipSizeValue>;
     view: Record<Size, ViewSizeValue>;
+    typography: Record<Typography, TypographyValue>;
 }
 
 

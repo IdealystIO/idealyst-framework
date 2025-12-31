@@ -22,6 +22,7 @@ export type DataGridStylesheet = {
   headerRow: ExpandedDataGridStyles;
   headerCell: ExpandedDataGridStyles;
   headerText: ExpandedDataGridStyles;
+  stickyHeaderWrapper: ExpandedDataGridStyles;
   row: ExpandedDataGridStyles;
   cell: ExpandedDataGridStyles;
   spacerRow: ExpandedDataGridStyles;
@@ -125,6 +126,29 @@ export const dataGridStyles = StyleSheet.create((theme: Theme) => {
               cursor: 'default',
             },
           },
+        },
+      },
+    }),
+
+    stickyHeaderWrapper: ({ stickyHeader }: DataGridVariants) => ({
+      backgroundColor: theme.colors.surface.primary,
+      variants: {
+        stickyHeader: {
+          true: {
+            _web: {
+              position: 'sticky',
+              top: 0,
+              zIndex: 100,
+              backgroundColor: theme.colors.surface.primary,
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            },
+            _native: {
+              // Native doesn't support sticky positioning in the same way
+              // We'd need a different implementation for RN
+              zIndex: 100,
+            },
+          },
+          false: {},
         },
       },
     }),

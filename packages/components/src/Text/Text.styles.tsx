@@ -1,21 +1,17 @@
 import { StyleSheet } from "react-native-unistyles";
-import { Theme, StylesheetStyles, Styles, DynamicStyles } from '@idealyst/theme';
+import { Theme } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { TextAlignVariant, TextColorVariant, TextSizeVariant, TextWeightVariant } from "./types";
+import { TextAlignVariant, TextColorVariant, TextSizeVariant, TextWeightVariant, TextTypographyVariant } from "./types";
 
 type TextVariants = {
     size: TextSizeVariant;
     weight: TextWeightVariant;
     align: TextAlignVariant;
-    color: TextColorVariant;
-}
-
-export type TextStylesheet = {
-    text: DynamicStyles<keyof TextVariants>;
 }
 
 /**
- * Create size variants for text
+ * Create size variants for text (legacy)
+ * @deprecated Use typography prop instead
  */
 function createSizeVariants(theme: Theme): any {
     return buildSizeVariants(theme, 'text', (size) => ({
@@ -24,10 +20,17 @@ function createSizeVariants(theme: Theme): any {
     }));
 }
 
+type TextStyleParams = {
+    color?: TextColorVariant;
+    typography?: TextTypographyVariant;
+}
+
 function createTextStyles(theme: Theme) {
-    return ({ color }: Partial<TextVariants>) => {
+    return ({ color, typography }: TextStyleParams) => {
         const colorValue = theme.colors.text[color] || theme.colors.text.primary;
-        return {
+
+        // Base styles
+        const baseStyles: any = {
             margin: 0,
             padding: 0,
             color: colorValue,
@@ -66,7 +69,17 @@ function createTextStyles(theme: Theme) {
                 fontFamily: 'inherit',
                 lineHeight: 'inherit',
             },
-        } as const;
+        };
+
+        // If typography is set, apply typography styles (overrides size/weight variants)
+        if (typography && theme.sizes.typography[typography]) {
+            const typo = theme.sizes.typography[typography];
+            baseStyles.fontSize = typo.fontSize;
+            baseStyles.lineHeight = typo.lineHeight;
+            baseStyles.fontWeight = typo.fontWeight;
+        }
+
+        return baseStyles;
     }
 }
 
@@ -75,5 +88,5 @@ function createTextStyles(theme: Theme) {
 export const textStyles = StyleSheet.create((theme: Theme) => {
   return {
         text: createTextStyles(theme),
-    } as TextStylesheet;
+    };
 });

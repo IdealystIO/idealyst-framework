@@ -84,6 +84,66 @@ const SettingsNotFoundScreen = ({ path, params }: NotFoundComponentProps) => {
     );
 };
 
+/**
+ * FullScreen Example - demonstrates a screen that renders without parent layout
+ * This screen will NOT have the sidebar, header, or any parent navigator chrome
+ */
+const FullScreenExample = () => {
+    const { navigate } = useNavigator();
+
+    return (
+        <Screen>
+            <View
+                spacing="lg"
+                padding={12}
+                style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#1a1a2e',
+                }}
+            >
+                <Icon name="fullscreen" size={80} color="white" />
+                <Text size="xxl" weight="bold" style={{ color: 'white', marginTop: 24 }}>
+                    Full Screen Mode
+                </Text>
+                <Text size="md" style={{ color: '#aaa', textAlign: 'center', maxWidth: 400, marginTop: 8 }}>
+                    This screen renders outside of the parent layout. Notice there's no sidebar,
+                    header, or any navigation chrome from the parent navigator.
+                </Text>
+                <Card style={{ marginTop: 32, padding: 24, maxWidth: 500 }}>
+                    <View spacing="md">
+                        <Text size="lg" weight="semibold">How it works</Text>
+                        <Text size="sm" color="secondary">
+                            Add <Text weight="semibold">fullScreen: true</Text> to the screen's options:
+                        </Text>
+                        <View style={{ backgroundColor: '#f5f5f5', padding: 12, borderRadius: 8, marginTop: 8 }}>
+                            <Text size="sm" style={{ fontFamily: 'monospace' }}>
+                                {`{
+  path: "fullscreen-demo",
+  type: 'screen',
+  component: FullScreenExample,
+  options: { fullScreen: true }
+}`}
+                            </Text>
+                        </View>
+                        <Text size="sm" color="secondary" style={{ marginTop: 8 }}>
+                            Use cases: Onboarding flows, media viewers, immersive experiences, modal-like screens.
+                        </Text>
+                    </View>
+                </Card>
+                <Button
+                    style={{ marginTop: 32 }}
+                    intent="primary"
+                    onPress={() => navigate({ path: '/', replace: false })}
+                >
+                    Back to Home
+                </Button>
+            </View>
+        </Screen>
+    );
+};
+
 // Settings section screens
 const SettingsHomeScreen = () => (
     <Screen>
@@ -149,6 +209,8 @@ const SettingsNavigator: NavigatorParam = {
 };
 
 const HomeScreen = () => {
+    const { navigate } = useNavigator();
+
     return (
         <Screen>
             <View spacing='lg' padding={12}>
@@ -194,6 +256,25 @@ const HomeScreen = () => {
                         </Text>
                     </View>
                 </Card>
+
+                <Card>
+                    <View spacing="md" style={{ padding: 16 }}>
+                        <Text size="lg" weight="semibold">
+                            Full Screen Mode
+                        </Text>
+                        <Text>
+                            Screens can opt-out of parent layout inheritance using the fullScreen option.
+                            This is useful for onboarding flows, media viewers, or immersive experiences.
+                        </Text>
+                        <Button
+                            style={{ marginTop: 12 }}
+                            type="outlined"
+                            onPress={() => navigate({ path: '/fullscreen-demo' })}
+                        >
+                            Try Full Screen Demo
+                        </Button>
+                    </View>
+                </Card>
             </View>
         </Screen>
     )
@@ -211,6 +292,8 @@ const ExampleNavigationRouter: NavigatorParam = {
     },
     routes: [
         { path: "/", type: 'screen', component: HomeScreen, options: { title: "Home" } },
+        // FullScreen demo - renders without parent layout (no sidebar/header)
+        { path: "fullscreen-demo", type: 'screen', component: FullScreenExample, options: { title: "Full Screen Demo", fullScreen: true } },
         // Nested settings navigator with its own 404 handling
         SettingsNavigator,
         { path: "avatar", type: 'screen', component: AvatarExamples, options: { title: "Avatar" } },

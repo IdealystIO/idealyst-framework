@@ -61,6 +61,15 @@ export type ScreenOptions = {
      */
     title?: string;
     headerShown?: boolean;
+    /**
+     * When true, renders the screen outside of parent layout wrappers.
+     * Useful for fullscreen modals, onboarding flows, or any screen that
+     * should not inherit the parent navigator's layout (header, sidebar, tabs, etc.)
+     *
+     * Web: Screen renders as a sibling route without the parent LayoutComponent
+     * Native: Screen uses fullScreenModal presentation
+     */
+    fullScreen?: boolean;
 
 } & NavigatorOptions;
 

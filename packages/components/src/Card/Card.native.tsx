@@ -5,7 +5,7 @@ import { cardStyles } from './Card.styles';
 
 const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, CardProps>(({
   children,
-  type = 'default',
+  type = 'elevated',
   padding = 'md',
   radius = 'md',
   intent = 'neutral',

@@ -213,12 +213,24 @@ const buildScreen = (params: RouteParam, Navigator: TypedNavigator, parentPath =
         component = buildNavigator(params, fullPath);
     }
 
+    // Build screen options, adding fullScreen presentation if specified
+    let screenOptions = params.options;
+    if (params.type === 'screen' && params.options?.fullScreen) {
+        screenOptions = {
+            ...params.options,
+            // Use fullScreenModal presentation to bypass parent navigator chrome
+            presentation: 'fullScreenModal',
+            // Hide header for true fullScreen experience
+            headerShown: params.options.headerShown ?? false,
+        } as ScreenOptions;
+    }
+
     return (
         <Navigator.Screen
             key={`${fullPath}-${index}`}
             name={fullPath}
             component={component}
-            options={params.options}
+            options={screenOptions}
         />
     )
 }
