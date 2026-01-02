@@ -1,11 +1,13 @@
 import React, { createContext, memo, useContext, useMemo } from 'react';
-import { useNavigate, useParams } from '../router';
+import { useNavigate, useParams, useLocation } from '../router';
 import { NavigateParams, NavigatorProviderProps, NavigatorContextValue } from './types';
 import { buildNavigator, NavigatorParam } from '../routing';
 
 const NavigatorContext = createContext<NavigatorContextValue>({
     navigate: () => {},
     route: undefined,
+    canGoBack: () => false,
+    goBack: () => {},
 });
 
 /**
@@ -171,10 +173,37 @@ function findInvalidRouteHandler(
     return handlers.length > 0 ? handlers[handlers.length - 1] : undefined;
 }
 
+/**
+ * Get the parent path from a given path.
+ * e.g., "/users/123/edit" -> "/users/123"
+ *       "/users" -> "/"
+ *       "/" -> null (no parent)
+ */
+function getParentPath(path: string): string | null {
+    const normalizedPath = path === '' ? '/' : path;
+
+    if (normalizedPath === '/') {
+        return null;
+    }
+
+    const segments = normalizedPath.split('/').filter(Boolean);
+
+    if (segments.length === 0) {
+        return null;
+    }
+
+    if (segments.length === 1) {
+        return '/';
+    }
+
+    return '/' + segments.slice(0, -1).join('/');
+}
+
 export const NavigatorProvider = ({
     route,
 }: NavigatorProviderProps) => {
     const reactRouterNavigate = useNavigate();
+    const location = useLocation();
 
     // Memoize the list of valid route patterns
     const validPatterns = useMemo(() => buildValidPatterns(route), [route]);
@@ -219,10 +248,27 @@ export const NavigatorProvider = ({
         return memo(buildNavigator(route));
     }, [route]);
 
+    const canGoBack = () => {
+        const parentPath = getParentPath(location.pathname);
+        if (!parentPath) {
+            return false;
+        }
+        return isValidRoute(parentPath, validPatterns);
+    };
+
+    const goBack = () => {
+        const parentPath = getParentPath(location.pathname);
+        if (parentPath && isValidRoute(parentPath, validPatterns)) {
+            reactRouterNavigate(parentPath);
+        }
+    };
+
     return (
         <NavigatorContext.Provider value={{
             route,
             navigate: navigateFunction,
+            canGoBack,
+            goBack,
         }}>
             <RouteComponent />
         </NavigatorContext.Provider>

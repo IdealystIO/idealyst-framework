@@ -1,5 +1,6 @@
 import { Size } from '@idealyst/theme';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { ContainerStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type TabBarSizeVariant = Size;
@@ -12,7 +13,7 @@ export interface TabBarItem {
   disabled?: boolean;
 }
 
-export interface TabBarProps {
+export interface TabBarProps extends ContainerStyleProps {
   items: TabBarItem[];
   value?: string;
   defaultValue?: string;

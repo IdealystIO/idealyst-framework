@@ -1,5 +1,6 @@
 import { Size } from '@idealyst/theme';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { ContainerStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type AccordionType = 'standard' | 'separated' | 'bordered';
@@ -12,7 +13,7 @@ export interface AccordionItem {
   disabled?: boolean;
 }
 
-export interface AccordionProps {
+export interface AccordionProps extends ContainerStyleProps {
   items: AccordionItem[];
   allowMultiple?: boolean;
   defaultExpanded?: string[];

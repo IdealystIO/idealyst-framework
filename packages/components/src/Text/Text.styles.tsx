@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native-unistyles";
 import { Theme } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import {
+  buildGapVariants,
+  buildPaddingVariants,
+  buildPaddingVerticalVariants,
+  buildPaddingHorizontalVariants,
+} from '../utils/buildViewStyleVariants';
 import { TextAlignVariant, TextColorVariant, TextSizeVariant, TextWeightVariant, TextTypographyVariant } from "./types";
 
 type TextVariants = {
@@ -64,6 +70,11 @@ function createTextStyles(theme: Theme) {
                         textAlign: 'right',
                     },
                 } as const,
+                // Spacing variants from TextSpacingStyleProps
+                gap: buildGapVariants(theme),
+                padding: buildPaddingVariants(theme),
+                paddingVertical: buildPaddingVerticalVariants(theme),
+                paddingHorizontal: buildPaddingHorizontalVariants(theme),
             } as const,
             _web: {
                 fontFamily: 'inherit',

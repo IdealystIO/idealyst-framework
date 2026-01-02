@@ -1,6 +1,7 @@
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import { Size } from '@idealyst/theme';
+import { ContainerStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type TableSizeVariant = Size;
@@ -16,7 +17,7 @@ export interface TableColumn<T = any> {
   align?: TableAlignVariant;
 }
 
-export interface TableProps<T = any> {
+export interface TableProps<T = any> extends ContainerStyleProps {
   columns: TableColumn<T>[];
   data: T[];
   type?: TableType;

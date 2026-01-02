@@ -1,6 +1,11 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Size, Styles} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import {
+  buildMarginVariants,
+  buildMarginVerticalVariants,
+  buildMarginHorizontalVariants,
+} from '../utils/buildViewStyleVariants';
 import { SliderIntentVariant } from './types';
 
 /**
@@ -157,6 +162,12 @@ export const sliderStyles = StyleSheet.create((theme: Theme) => {
         container: {
             gap: 4,
             paddingVertical: 8,
+            variants: {
+                // Spacing variants from FormInputStyleProps
+                margin: buildMarginVariants(theme),
+                marginVertical: buildMarginVerticalVariants(theme),
+                marginHorizontal: buildMarginHorizontalVariants(theme),
+            },
         },
         sliderWrapper: {
             position: 'relative',

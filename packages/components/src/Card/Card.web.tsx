@@ -7,12 +7,19 @@ import useMergeRefs from '../hooks/useMergeRefs';
 const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   children,
   type = 'elevated',
-  padding = 'md',
   radius = 'md',
   intent,
   clickable = false,
   onPress,
   disabled = false,
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
   accessibilityLabel,
@@ -28,9 +35,15 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
     clickable,
     radius,
     type,
-    padding,
     intent,
     disabled,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   // Generate web props
@@ -58,4 +71,4 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
 
 Card.displayName = 'Card';
 
-export default Card; 
+export default Card;

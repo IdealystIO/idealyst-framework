@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { PressableSpacingStyleProps } from '../utils/viewStyleProps';
 
-export interface PressableProps {
+export interface PressableProps extends PressableSpacingStyleProps {
   /**
    * Content to render inside the pressable area
    */

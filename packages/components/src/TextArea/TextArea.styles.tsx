@@ -1,6 +1,11 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import {
+  buildMarginVariants,
+  buildMarginVerticalVariants,
+  buildMarginHorizontalVariants,
+} from '../utils/buildViewStyleVariants';
 import { TextAreaIntentVariant } from './types';
 
 
@@ -116,6 +121,12 @@ export const textAreaStyles = StyleSheet.create((theme: Theme) => {
             display: 'flex',
             flexDirection: 'column',
             gap: 4,
+            variants: {
+                // Spacing variants from FormInputStyleProps
+                margin: buildMarginVariants(theme),
+                marginVertical: buildMarginVerticalVariants(theme),
+                marginHorizontal: buildMarginHorizontalVariants(theme),
+            },
         },
         label: {
             fontSize: 14,

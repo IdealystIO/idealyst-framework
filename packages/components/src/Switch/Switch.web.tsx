@@ -16,6 +16,10 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   size = 'md',
   enabledIcon,
   disabledIcon,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }, ref) => {
@@ -30,6 +34,9 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
     size: size as 'sm' | 'md' | 'lg',
     disabled: disabled as boolean,
     position: labelPosition as 'left' | 'right',
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const trackProps = getWebProps([switchStyles.switchTrack({ checked, intent })]);

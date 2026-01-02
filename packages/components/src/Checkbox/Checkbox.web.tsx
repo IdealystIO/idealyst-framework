@@ -16,6 +16,10 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   variant = 'default',
   label,
   children,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
   accessibilityLabel,
@@ -45,6 +49,9 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
     disabled,
     visible: internalChecked || indeterminate,
     error: Boolean(error),
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   // Create style arrays

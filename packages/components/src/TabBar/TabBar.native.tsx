@@ -17,6 +17,14 @@ const TabBar = forwardRef<View, TabBarProps>(({
   type = 'default',
   size = 'md',
   pillMode = 'light',
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }, ref) => {
@@ -77,7 +85,17 @@ const TabBar = forwardRef<View, TabBarProps>(({
   });
 
   // Apply container and indicator types right before rendering
-  tabBarContainerStyles.useVariants({ size, pillMode });
+  tabBarContainerStyles.useVariants({
+    size,
+    pillMode,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
+  });
   tabBarIndicatorStyles.useVariants({ pillMode });
 
   return (

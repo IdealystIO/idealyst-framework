@@ -1,5 +1,10 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import {
+  buildMarginVariants,
+  buildMarginVerticalVariants,
+  buildMarginHorizontalVariants,
+} from '../utils/buildViewStyleVariants';
 
 type CheckboxSize = Size;
 type CheckboxIntent = Intent | 'info';
@@ -187,6 +192,12 @@ export const checkboxStyles = StyleSheet.create((theme: Theme) => {
     wrapper: {
         flexDirection: 'column',
         gap: 4,
+        variants: {
+            // Spacing variants from FormInputStyleProps
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
+        },
         _web: {
             display: 'flex',
             flexDirection: 'column',

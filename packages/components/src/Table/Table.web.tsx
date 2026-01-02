@@ -10,6 +10,14 @@ function Table<T = any>({
   size = 'md',
   stickyHeader = false,
   onRowPress,
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }: TableProps<T>) {
@@ -17,6 +25,13 @@ function Table<T = any>({
   tableStyles.useVariants({
     type,
     size,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const containerProps = getWebProps([tableStyles.container, style as any]);

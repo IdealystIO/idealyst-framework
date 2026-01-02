@@ -1,6 +1,15 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, CompoundVariants, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import {
+  buildGapVariants,
+  buildPaddingVariants,
+  buildPaddingVerticalVariants,
+  buildPaddingHorizontalVariants,
+  buildMarginVariants,
+  buildMarginVerticalVariants,
+  buildMarginHorizontalVariants,
+} from '../utils/buildViewStyleVariants';
 
 type TableType = 'default' | 'bordered' | 'striped';
 
@@ -165,6 +174,14 @@ const createContainerStyles = (theme: Theme) => {
         },
         variants: {
             type: createContainerTypeVariants(theme),
+            // Spacing variants from ContainerStyleProps
+            gap: buildGapVariants(theme),
+            padding: buildPaddingVariants(theme),
+            paddingVertical: buildPaddingVerticalVariants(theme),
+            paddingHorizontal: buildPaddingHorizontalVariants(theme),
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
         },
     } as const;
 }

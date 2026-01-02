@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { Size, Surface } from '@idealyst/theme';
+import { Surface } from '@idealyst/theme';
+import { ContainerStyleProps } from '../utils/viewStyleProps';
 
-export interface ScreenProps {
+export interface ScreenProps extends ContainerStyleProps {
   /**
    * The content to display inside the screen
    */
@@ -12,11 +13,6 @@ export interface ScreenProps {
    * Background variant - controls the background color
    */
   background?: Surface | 'transparent';
-
-  /**
-   * Screen padding variant
-   */
-  padding?: Size | 'none';
 
   /**
    * Safe area padding for mobile devices
@@ -49,4 +45,4 @@ export interface ScreenProps {
    * Scrollable content
    */
   scrollable?: boolean;
-} 
+}

@@ -1,6 +1,7 @@
 import { Intent, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { FormInputStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type SelectIntentVariant = Intent;
@@ -29,7 +30,7 @@ export interface SelectOption {
   icon?: ReactNode;
 }
 
-export interface SelectProps {
+export interface SelectProps extends FormInputStyleProps {
   /**
    * Array of options to display in the select
    */

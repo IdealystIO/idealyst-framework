@@ -132,6 +132,14 @@ const Accordion = forwardRef<View, AccordionProps>(({
   defaultExpanded = [],
   type = 'standard',
   size = 'md',
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }, ref) => {
@@ -141,6 +149,13 @@ const Accordion = forwardRef<View, AccordionProps>(({
   accordionStyles.useVariants({
     type,
     size,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const toggleItem = (itemId: string, disabled?: boolean) => {

@@ -7,15 +7,28 @@ import useMergeRefs from '../hooks/useMergeRefs';
 const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
   children,
   background = 'primary',
-  padding = 'md',
   safeArea = false,
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }, ref) => {
   screenStyles.useVariants({
     background,
-    padding,
     safeArea,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   // Use getWebProps to generate className and ref for web
@@ -36,4 +49,4 @@ const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
 
 Screen.displayName = 'Screen';
 
-export default Screen; 
+export default Screen;

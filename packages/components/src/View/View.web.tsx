@@ -6,17 +6,23 @@ import useMergeRefs from '../hooks/useMergeRefs';
 
 const View = forwardRef<HTMLDivElement, ViewProps>(({
   children,
-  spacing = 'none',
-  marginVariant = 'none',
   background = 'transparent',
   radius = 'none',
   border = 'none',
-  backgroundColor,
+  // Spacing variants from ContainerStyleProps
+  gap,
   padding,
+  paddingVertical,
+  paddingHorizontal,
   margin,
+  marginVertical,
+  marginHorizontal,
+  // Override props
+  backgroundColor,
   borderRadius,
   borderWidth,
   borderColor,
+  scrollable, // accepted but no-op on web - layout handles scrolling
   style,
   testID,
 }, ref) => {
@@ -24,28 +30,31 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
     background,
     radius,
     border,
-    spacing,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   // Create dynamic styles based on custom props (overrides variants)
   const dynamicStyles: any = {};
 
   if (backgroundColor) dynamicStyles.backgroundColor = backgroundColor;
-  if (padding !== undefined) dynamicStyles.padding = padding;
-  if (margin !== undefined) dynamicStyles.margin = margin;
   if (borderRadius !== undefined) dynamicStyles.borderRadius = borderRadius;
   if (borderWidth !== undefined) dynamicStyles.borderWidth = borderWidth;
   if (borderColor) dynamicStyles.borderColor = borderColor;
 
   /** @ts-ignore */
-  const webProps = getWebProps(viewStyles.view);
+  const webProps = getWebProps([viewStyles.view, dynamicStyles, style as any]);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
 
   return (
     <div
       {...webProps}
-      style={style as any}
       ref={mergedRef}
       data-testid={testID}
     >
@@ -56,4 +65,4 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
 
 View.displayName = 'View';
 
-export default View; 
+export default View;

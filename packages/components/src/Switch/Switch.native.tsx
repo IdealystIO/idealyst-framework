@@ -13,6 +13,10 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
   labelPosition = 'right',
   intent = 'primary',
   size = 'md',
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }, ref) => {
@@ -20,6 +24,9 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
     size,
     disabled,
     position: labelPosition,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const progress = useSharedValue(checked ? 1 : 0);

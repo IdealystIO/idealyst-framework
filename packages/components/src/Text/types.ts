@@ -1,6 +1,7 @@
 import { Text, Typography } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, TextStyle } from 'react-native';
+import { TextSpacingStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type TextColorVariant = Text;
@@ -9,7 +10,7 @@ export type TextWeightVariant = 'light' | 'normal' | 'medium' | 'semibold' | 'bo
 export type TextAlignVariant = 'left' | 'center' | 'right';
 export type TextTypographyVariant = Typography;
 
-export interface TextProps {
+export interface TextProps extends TextSpacingStyleProps {
   /**
    * The text content to display
    */
@@ -53,4 +54,4 @@ export interface TextProps {
    * Test ID for testing
    */
   testID?: string;
-} 
+}

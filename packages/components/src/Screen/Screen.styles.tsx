@@ -1,5 +1,14 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme } from '@idealyst/theme';
+import {
+  buildGapVariants,
+  buildPaddingVariants,
+  buildPaddingVerticalVariants,
+  buildPaddingHorizontalVariants,
+  buildMarginVariants,
+  buildMarginVerticalVariants,
+  buildMarginHorizontalVariants,
+} from '../utils/buildViewStyleVariants';
 
 function generateBackgroundVariants(theme: Theme) {
   return {
@@ -10,18 +19,7 @@ function generateBackgroundVariants(theme: Theme) {
     'inverse-secondary': { backgroundColor: theme.colors.surface['inverse-secondary'] },
     'inverse-tertiary': { backgroundColor: theme.colors.surface['inverse-tertiary'] },
     transparent: { backgroundColor: 'transparent' },
-  }
-}
-
-function generatePaddingVariants() {
-  return {
-    none: { padding: 0 },
-    xs: { padding: 4 },
-    sm: { padding: 8 },
-    md: { padding: 16 },
-    lg: { padding: 24 },
-    xl: { padding: 32 },
-  }
+  };
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
@@ -34,11 +32,18 @@ export const screenStyles = StyleSheet.create((theme: Theme) => {
       backgroundColor: theme.colors.surface.primary,
       variants: {
         background: generateBackgroundVariants(theme),
-        padding: generatePaddingVariants(),
         safeArea: {
           true: {},
           false: {},
-        }
+        },
+        // Spacing variants from ContainerStyleProps
+        gap: buildGapVariants(theme),
+        padding: buildPaddingVariants(theme),
+        paddingVertical: buildPaddingVerticalVariants(theme),
+        paddingHorizontal: buildPaddingHorizontalVariants(theme),
+        margin: buildMarginVariants(theme),
+        marginVertical: buildMarginVerticalVariants(theme),
+        marginHorizontal: buildMarginHorizontalVariants(theme),
       },
       _web: {
         overflow: 'auto',
@@ -53,11 +58,18 @@ export const screenStyles = StyleSheet.create((theme: Theme) => {
       backgroundColor: theme.colors.surface.primary,
       variants: {
         background: generateBackgroundVariants(theme),
-        padding: generatePaddingVariants(),
         safeArea: {
           true: {},
           false: {},
-        }
+        },
+        // Spacing variants from ContainerStyleProps
+        gap: buildGapVariants(theme),
+        padding: buildPaddingVariants(theme),
+        paddingVertical: buildPaddingVerticalVariants(theme),
+        paddingHorizontal: buildPaddingHorizontalVariants(theme),
+        margin: buildMarginVariants(theme),
+        marginVertical: buildMarginVerticalVariants(theme),
+        marginHorizontal: buildMarginHorizontalVariants(theme),
       },
     },
   };

@@ -1,6 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import { Intent, Size } from '@idealyst/theme';
+import { FormInputStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type InputIntent = Intent;
@@ -8,7 +9,7 @@ export type InputSize = Size;
 export type InputType = 'outlined' | 'filled' | 'bare';
 export type InputInputType = 'text' | 'email' | 'password' | 'number';
 
-export interface InputProps {
+export interface InputProps extends FormInputStyleProps {
   /**
    * The current value of the input
    */

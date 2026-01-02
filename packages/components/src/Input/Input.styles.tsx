@@ -1,6 +1,11 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Size, CompoundVariants} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import {
+  buildMarginVariants,
+  buildMarginVerticalVariants,
+  buildMarginHorizontalVariants,
+} from '../utils/buildViewStyleVariants';
 import { InputSize, InputType } from './types';
 
 
@@ -153,6 +158,10 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
                     },
                 },
             },
+            // Spacing variants from FormInputStyleProps
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
         },
         compoundVariants: createFocusedCompoundVariants(theme),
         _web: {

@@ -21,6 +21,10 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   size = 'md',
   type = 'outlined',
   hasError = false,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }, ref) => {
@@ -75,6 +79,9 @@ const Input = React.forwardRef<TextInput, InputProps>(({
     focused: isFocused,
     hasError,
     disabled,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   // Helper to render left icon

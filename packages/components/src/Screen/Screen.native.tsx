@@ -6,18 +6,31 @@ import { screenStyles } from './Screen.styles';
 const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   children,
   background = 'primary',
-  padding = 'md',
   safeArea = true,
   scrollable = true,
   contentInset,
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }, ref) => {
 
   screenStyles.useVariants({
     background,
-    padding,
     safeArea,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   if (scrollable) {
@@ -35,15 +48,15 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
       } : undefined,
     ];
 
-  return (
-    <RNScrollView
-      ref={ref as any}
-      style={scrollViewStyle}
-      contentContainerStyle={contentContainerStyleArray}
-      testID={testID}
-    >
-      {children}
-    </RNScrollView>
+    return (
+      <RNScrollView
+        ref={ref as any}
+        style={scrollViewStyle}
+        contentContainerStyle={contentContainerStyleArray}
+        testID={testID}
+      >
+        {children}
+      </RNScrollView>
     );
   }
 
@@ -64,4 +77,4 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
 
 Screen.displayName = 'Screen';
 
-export default Screen; 
+export default Screen;

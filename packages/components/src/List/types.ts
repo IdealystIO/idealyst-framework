@@ -2,6 +2,7 @@ import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { IconName } from '../Icon/icon-types';
 import { Size } from '@idealyst/theme';
+import { ContainerStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type ListSizeVariant = Size;
@@ -23,7 +24,7 @@ export interface ListItemProps {
   testID?: string;
 }
 
-export interface ListProps {
+export interface ListProps extends ContainerStyleProps {
   children: ReactNode;
   type?: ListType;
   size?: ListSizeVariant;

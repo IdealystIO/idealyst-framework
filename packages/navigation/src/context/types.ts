@@ -24,4 +24,16 @@ export type NavigatorProviderProps = {
 export type NavigatorContextValue = {
     route: NavigatorParam | undefined;
     navigate: (params: NavigateParams) => void;
+    /**
+     * Returns true if there is a parent route in the route hierarchy to navigate back to.
+     * On web, this checks for parent routes (not browser history).
+     * On native, this uses react-navigation's canGoBack().
+     */
+    canGoBack: () => boolean;
+    /**
+     * Navigate back to the parent route in the route hierarchy.
+     * On web, this navigates to the parent path (e.g., /users/123 -> /users).
+     * On native, this uses react-navigation's goBack().
+     */
+    goBack: () => void;
 };

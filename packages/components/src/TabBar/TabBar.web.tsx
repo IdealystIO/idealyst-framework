@@ -79,6 +79,14 @@ const TabBar: React.FC<TabBarProps> = ({
   type = 'standard',
   size = 'md',
   pillMode = 'light',
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }) => {
@@ -139,7 +147,18 @@ const TabBar: React.FC<TabBarProps> = ({
   };
 
   // Apply container and indicator types
-  tabBarContainerStyles.useVariants({ type, size, pillMode });
+  tabBarContainerStyles.useVariants({
+    type,
+    size,
+    pillMode,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
+  });
   const containerProps = getWebProps([tabBarContainerStyles.container, style as any]);
 
   tabBarIndicatorStyles.useVariants({ type, pillMode });

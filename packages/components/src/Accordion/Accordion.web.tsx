@@ -98,6 +98,14 @@ const Accordion: React.FC<AccordionProps> = ({
   defaultExpanded = [],
   type = 'standard',
   size = 'md',
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }) => {
@@ -107,6 +115,13 @@ const Accordion: React.FC<AccordionProps> = ({
   accordionStyles.useVariants({
     type,
     size,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const containerProps = getWebProps([accordionStyles.container, style as any]);

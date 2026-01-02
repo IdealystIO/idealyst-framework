@@ -23,6 +23,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   size = 'md',
   type = 'outlined',
   hasError = false,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }, ref) => {
@@ -95,6 +99,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     focused: isFocused,
     hasError,
     disabled,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   // Get web props for all styled elements

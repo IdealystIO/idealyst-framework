@@ -21,6 +21,10 @@ const Slider = forwardRef<View, SliderProps>(({
   intent = 'primary',
   size = 'md',
   icon,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   onValueChange,
   onValueCommit,
   style,
@@ -38,6 +42,9 @@ const Slider = forwardRef<View, SliderProps>(({
   sliderStyles.useVariants({
     size,
     disabled,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const clampValue = (val: number) => {

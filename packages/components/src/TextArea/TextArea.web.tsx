@@ -22,6 +22,10 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   showCharacterCount = false,
   intent = 'primary',
   size = 'md',
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   textareaStyle,
   testID,
@@ -41,6 +45,9 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
     resize,
     isNearLimit: maxLength ? value.length >= maxLength * 0.9 : false,
     isAtLimit: maxLength ? value.length >= maxLength : false,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const containerProps = getWebProps([textAreaStyles.container, style as any]);

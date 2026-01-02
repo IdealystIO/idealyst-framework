@@ -14,6 +14,10 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   variant = 'default',
   label,
   children,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
   accessibilityLabel,
@@ -43,6 +47,9 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
     disabled,
     visible: internalChecked || indeterminate,
     error: !!error,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const labelContent = children || label;

@@ -19,6 +19,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   intent = 'primary',
   size = 'md',
   icon,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   onValueChange,
   onValueCommit,
   style,
@@ -36,6 +40,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   sliderStyles.useVariants({
     size,
     disabled,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const containerProps = getWebProps([sliderStyles.container, style as any]);

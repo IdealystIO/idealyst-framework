@@ -947,9 +947,25 @@ const path = navigator.currentPath;
 console.log(path); // "/user/123"
 \`\`\`
 
+### navigator.canGoBack()
+
+Check if back navigation is available:
+
+\`\`\`tsx
+const navigator = useNavigator();
+
+if (navigator.canGoBack()) {
+  // Show back button
+}
+\`\`\`
+
+**Platform behavior:**
+- **Web**: Returns \`true\` if there's a valid parent route in the route hierarchy (e.g., \`/users/123\` can go back to \`/users\`)
+- **Native**: Uses React Navigation's \`canGoBack()\` to check navigation stack
+
 ### navigator.goBack()
 
-Navigate to previous screen (mobile only):
+Navigate back in the route hierarchy:
 
 \`\`\`tsx
 <Button onPress={() => navigator.goBack()}>
@@ -957,7 +973,11 @@ Navigate to previous screen (mobile only):
 </Button>
 \`\`\`
 
-**Note**: On web, use browser back button or navigator.navigate() to specific routes.
+**Platform behavior:**
+- **Web**: Navigates to the parent route (e.g., \`/users/123/edit\` → \`/users/123\` → \`/users\` → \`/\`). Does NOT use browser history - navigates up the route tree.
+- **Native**: Uses React Navigation's \`goBack()\` to pop the navigation stack
+
+**Important**: On web, this is NOT browser history back. It navigates to the parent path in the route hierarchy. Use this for "up" navigation within your app structure.
 
 ## Path Parameters
 
@@ -1183,15 +1203,17 @@ navigator.navigate({
 ## Platform Differences
 
 ### React Native
+- \`canGoBack()\` checks React Navigation stack
 - \`goBack()\` uses native navigation stack
 - Hardware back button supported
 - Gesture-based navigation
 
 ### Web
-- Browser back/forward buttons work
+- \`canGoBack()\` checks for valid parent route in hierarchy
+- \`goBack()\` navigates to parent route (NOT browser history)
+- Browser back/forward buttons still work for browser history
 - URL updates automatically
 - Bookmarkable URLs
-- \`goBack()\` uses browser history
 
 ## Best Practices
 
@@ -1209,12 +1231,17 @@ navigator.navigate({
 ### Back Navigation
 
 \`\`\`tsx
-<Button
-  icon="arrow-left"
-  onPress={() => navigator.goBack()}
->
-  Back
-</Button>
+// Conditionally show back button
+const { canGoBack, goBack } = useNavigator();
+
+{canGoBack() && (
+  <Button
+    icon="arrow-left"
+    onPress={goBack}
+  >
+    Back
+  </Button>
+)}
 \`\`\`
 
 ### Tab Navigation
@@ -1320,7 +1347,7 @@ const NotFoundPage = ({ path, params }: NotFoundComponentProps) => {
 
   return (
     <Screen>
-      <View spacing="lg" padding={16}>
+      <View style={{ padding: 16, gap: 24 }}>
         <Text size="xl">404 - Page Not Found</Text>
         <Text>Attempted: {path}</Text>
         {params?.id && <Text>User ID: {params.id}</Text>}
@@ -1478,7 +1505,7 @@ const GlobalNotFound = ({ path, params }: NotFoundComponentProps) => {
 
   return (
     <Screen>
-      <View spacing="lg" padding={24} style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+      <View style={{ padding: 24, gap: 24, alignItems: 'center', flex: 1, justifyContent: 'center' }}>
         <Icon name="alert-circle-outline" size={64} color="red" />
         <Text size="xl" weight="bold">Page Not Found</Text>
         <Text color="secondary">The page you're looking for doesn't exist.</Text>

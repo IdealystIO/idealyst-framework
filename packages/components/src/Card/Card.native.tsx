@@ -6,12 +6,19 @@ import { cardStyles } from './Card.styles';
 const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, CardProps>(({
   children,
   type = 'elevated',
-  padding = 'md',
   radius = 'md',
   intent = 'neutral',
   clickable = false,
   onPress,
   disabled = false,
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
   accessibilityLabel,
@@ -21,11 +28,17 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
     clickable,
     radius,
     type,
-    padding,
     intent,
     disabled,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
-  
+
   // Use appropriate component based on clickable state
   const Component = clickable ? Pressable : View;
 
@@ -52,4 +65,4 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
 
 Card.displayName = 'Card';
 
-export default Card; 
+export default Card;

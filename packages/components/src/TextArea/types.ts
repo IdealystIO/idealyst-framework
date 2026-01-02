@@ -1,12 +1,13 @@
 import { Intent, Size } from '@idealyst/theme';
 import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { FormInputStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type TextAreaIntentVariant = Intent;
 export type TextAreaSizeVariant = Size;
 export type TextAreaResizeVariant = 'none' | 'vertical' | 'horizontal' | 'both';
 
-export interface TextAreaProps {
+export interface TextAreaProps extends FormInputStyleProps {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;

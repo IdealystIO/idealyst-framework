@@ -1,5 +1,8 @@
 import React, { useCallback, useState, forwardRef } from 'react';
+import { getWebProps } from 'react-native-unistyles/web';
 import { PressableProps } from './types';
+import { pressableStyles } from './Pressable.styles';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
   children,
@@ -7,6 +10,10 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
   onPressIn,
   onPressOut,
   disabled = false,
+  // Spacing variants from PressableSpacingStyleProps
+  padding,
+  paddingVertical,
+  paddingHorizontal,
   style,
   testID,
   accessibilityLabel,
@@ -39,6 +46,15 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
     }
   }, [disabled, onPress]);
 
+  // Apply spacing variants
+  pressableStyles.useVariants({
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+  });
+
+  const webProps = getWebProps([pressableStyles.pressable, style as any]);
+
   const baseStyle: React.CSSProperties = {
     cursor: disabled ? 'default' : 'pointer',
     outline: 'none',
@@ -48,17 +64,19 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
     opacity: disabled ? 0.5 : 1,
   };
 
-  // Merge base styles with custom styles for web compatibility
-  const mergedStyle: React.CSSProperties = style
-    ? { ...baseStyle, ...(style as React.CSSProperties) }
-    : baseStyle;
+  // Merge ref from getWebProps with forwarded ref
+  const mergedRef = useMergeRefs<HTMLDivElement>(
+    ref,
+    webProps.ref as React.Ref<HTMLDivElement>
+  );
 
   return (
     <div
-      ref={ref}
+      {...webProps}
+      ref={mergedRef}
       role={accessibilityRole}
       tabIndex={disabled ? -1 : 0}
-      style={mergedStyle}
+      style={{ ...baseStyle, ...webProps.style }}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp} // Handle mouse leave as press out

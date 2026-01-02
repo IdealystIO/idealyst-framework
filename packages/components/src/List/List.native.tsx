@@ -8,6 +8,14 @@ const List = forwardRef<View, ListProps>(({
   children,
   type = 'default',
   size = 'md',
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
   scrollable = false,
@@ -17,6 +25,13 @@ const List = forwardRef<View, ListProps>(({
   listStyles.useVariants({
     size,
     scrollable,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const containerStyle = [

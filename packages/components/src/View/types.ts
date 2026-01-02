@@ -1,28 +1,18 @@
 import { Size, Surface } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { ContainerStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type ViewBackgroundVariant = Surface | 'transparent';
-export type ViewSpacingVariant = Size | 'none';
 export type ViewRadiusVariant = Size | 'none';
 export type ViewBorderVariant = 'none' | 'thin' | 'thick';
 
-export interface ViewProps {
+export interface ViewProps extends ContainerStyleProps {
   /**
    * The content to display inside the view
    */
   children?: ReactNode;
-
-  /**
-   * Padding/spacing variant
-   */
-  spacing?: ViewSpacingVariant;
-
-  /**
-   * Margin variant
-   */
-  marginVariant?: ViewSpacingVariant;
 
   /**
    * Background variant
@@ -45,16 +35,6 @@ export interface ViewProps {
   backgroundColor?: string;
 
   /**
-   * Custom padding (overrides spacing variant)
-   */
-  padding?: number;
-
-  /**
-   * Custom margin (overrides marginVariant)
-   */
-  margin?: number;
-
-  /**
    * Custom border radius (overrides radius variant)
    */
   borderRadius?: number;
@@ -75,7 +55,12 @@ export interface ViewProps {
   style?: React.CSSProperties | StyleProp<ViewStyle>;
 
   /**
+   * Enable scrollable content (uses ScrollView on native, overflow:auto on web)
+   */
+  scrollable?: boolean;
+
+  /**
    * Test ID for testing
    */
   testID?: string;
-} 
+}

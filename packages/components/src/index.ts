@@ -145,4 +145,8 @@ export { useMergeRefs };
 // Event utilities
 export * from './utils/events';
 
+// View style utilities for custom components
+export * from './utils/viewStyleProps';
+export * from './utils/buildViewStyleVariants';
+
 export type { AppTheme } from '@idealyst/theme';

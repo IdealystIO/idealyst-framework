@@ -11,6 +11,11 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
   weight = 'normal',
   color = 'primary',
   align = 'left',
+  // Spacing variants from TextSpacingStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
   style,
   testID,
 }, ref) => {
@@ -19,6 +24,10 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
     size: typography ? 'md' : size, // Use default when typography is set (will be overridden)
     weight: typography ? 'normal' : weight, // Use default when typography is set (will be overridden)
     align,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
   });
 
   // Create the style array - pass typography to dynamic style function

@@ -1,14 +1,14 @@
 import { Intent, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { ContainerStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type CardIntentVariant = Intent;
 export type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
-export type CardPaddingVariant = 'none' | Size;
 export type CardRadiusVariant = 'none' | Size;
 
-export interface CardProps {
+export interface CardProps extends ContainerStyleProps {
   /**
    * The content to display inside the card
    */
@@ -18,11 +18,6 @@ export interface CardProps {
    * The visual style variant of the card
    */
   type?: CardType;
-
-  /**
-   * The padding size inside the card
-   */
-  padding?: CardPaddingVariant;
 
   /**
    * The border radius of the card
@@ -63,4 +58,4 @@ export interface CardProps {
    * Accessibility label
    */
   accessibilityLabel?: string;
-} 
+}

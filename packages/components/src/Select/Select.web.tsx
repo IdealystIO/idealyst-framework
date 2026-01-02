@@ -23,6 +23,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   searchable = false,
   filterOption,
   maxHeight = 240,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
   accessibilityLabel,
@@ -59,6 +63,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
     disabled,
     error,
     focused: isOpen,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   // Handle keyboard navigation on the trigger button

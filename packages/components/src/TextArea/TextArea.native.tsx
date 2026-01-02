@@ -21,6 +21,10 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
   showCharacterCount = false,
   intent = 'primary',
   size = 'md',
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   textareaStyle,
   testID,
@@ -40,6 +44,9 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
     resize: 'none',
     isNearLimit: maxLength ? value.length >= maxLength * 0.9 : false,
     isAtLimit: maxLength ? value.length >= maxLength : false,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const handleChange = (newValue: string) => {

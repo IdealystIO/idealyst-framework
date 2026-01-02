@@ -1,6 +1,11 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import {
+  buildMarginVariants,
+  buildMarginVerticalVariants,
+  buildMarginHorizontalVariants,
+} from '../utils/buildViewStyleVariants';
 import { SelectIntentVariant } from './types';
 
 // Type definitions
@@ -138,6 +143,12 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
     return {
         container: {
             position: 'relative',
+            variants: {
+                // Spacing variants from FormInputStyleProps
+                margin: buildMarginVariants(theme),
+                marginVertical: buildMarginVerticalVariants(theme),
+                marginHorizontal: buildMarginHorizontalVariants(theme),
+            },
         },
         label: {
             fontSize: 14,

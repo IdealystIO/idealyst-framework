@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { PressableProps } from './types';
+import { pressableStyles } from './Pressable.styles';
 
 const Pressable = forwardRef<View, PressableProps>(({
   children,
@@ -8,11 +9,22 @@ const Pressable = forwardRef<View, PressableProps>(({
   onPressIn,
   onPressOut,
   disabled = false,
+  // Spacing variants from PressableSpacingStyleProps
+  padding,
+  paddingVertical,
+  paddingHorizontal,
   style,
   testID,
   accessibilityLabel,
   accessibilityRole,
 }, ref) => {
+  // Apply spacing variants
+  pressableStyles.useVariants({
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+  });
+
   return (
     <TouchableWithoutFeedback
       onPress={disabled ? undefined : onPress}
@@ -22,7 +34,7 @@ const Pressable = forwardRef<View, PressableProps>(({
       testID={testID}
       accessibilityLabel={accessibilityLabel}
     >
-      <View ref={ref} style={style}>
+      <View ref={ref} style={[pressableStyles.pressable, style]}>
         {children}
       </View>
     </TouchableWithoutFeedback>

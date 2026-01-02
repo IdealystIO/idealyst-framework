@@ -10,6 +10,11 @@ const Text = forwardRef<RNText, TextProps>(({
   weight = 'normal',
   color,
   align = 'left',
+  // Spacing variants from TextSpacingStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
   style,
   testID,
 }, ref) => {
@@ -18,6 +23,10 @@ const Text = forwardRef<RNText, TextProps>(({
     size: typography ? 'md' : size, // Use default when typography is set (will be overridden)
     weight: typography ? 'normal' : weight, // Use default when typography is set (will be overridden)
     align,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
   });
 
   return (

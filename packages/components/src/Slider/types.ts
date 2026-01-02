@@ -1,12 +1,13 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import { Intent, Size } from '@idealyst/theme';
+import { FormInputStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type SliderIntentVariant = Intent;
 export type SliderSizeVariant = Size;
 
-export interface SliderProps {
+export interface SliderProps extends FormInputStyleProps {
   value?: number;
   defaultValue?: number;
   min?: number;

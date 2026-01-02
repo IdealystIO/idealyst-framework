@@ -33,6 +33,10 @@ const Select = forwardRef<View, SelectProps>(({
   filterOption,
   presentationMode = 'dropdown',
   maxHeight = 240,
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
   accessibilityLabel,
@@ -76,6 +80,9 @@ const Select = forwardRef<View, SelectProps>(({
     disabled,
     error,
     focused: isOpen,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const handleTriggerPress = () => {

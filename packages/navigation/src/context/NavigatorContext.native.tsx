@@ -217,10 +217,20 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
         return memo(buildNavigator(route));
     }, [route]);
 
+    const canGoBack = () => navigation.canGoBack();
+
+    const goBack = () => {
+        if (navigation.canGoBack()) {
+            navigation.goBack();
+        }
+    };
+
     return (
         <NavigatorContext.Provider value={{
             route,
             navigate,
+            canGoBack,
+            goBack,
         }}>
             <RouteComponent />
         </NavigatorContext.Provider>
@@ -294,8 +304,16 @@ const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: 
         }
     };
 
+    const canGoBack = () => navigation.canGoBack();
+
+    const goBack = () => {
+        if (navigation.canGoBack()) {
+            navigation.goBack();
+        }
+    };
+
     return (
-        <DrawerNavigatorContext.Provider value={{ navigate, route }}>
+        <DrawerNavigatorContext.Provider value={{ navigate, route, canGoBack, goBack }}>
             {children}
         </DrawerNavigatorContext.Provider>
     );

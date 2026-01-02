@@ -12,6 +12,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   label,
   size = 'md',
   intent = 'primary',
+  // Spacing variants from FormInputStyleProps
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }) => {
@@ -35,6 +39,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
     size,
     checked,
     disabled,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   const containerProps = getWebProps([radioButtonStyles.container, style]);

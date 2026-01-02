@@ -10,6 +10,14 @@ function TableInner<T = any>({
   size = 'md',
   stickyHeader = false,
   onRowPress,
+  // Spacing variants from ContainerStyleProps
+  gap,
+  padding,
+  paddingVertical,
+  paddingHorizontal,
+  margin,
+  marginVertical,
+  marginHorizontal,
   style,
   testID,
 }: TableProps<T>, ref: React.Ref<ScrollView>) {
@@ -17,6 +25,13 @@ function TableInner<T = any>({
   tableStyles.useVariants({
     type,
     size,
+    gap,
+    padding,
+    paddingVertical,
+    paddingHorizontal,
+    margin,
+    marginVertical,
+    marginHorizontal,
   });
 
   // Helper to get cell value
