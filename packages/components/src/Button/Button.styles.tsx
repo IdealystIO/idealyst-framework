@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Intent, Size, CompoundVariants} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { ButtonGradient } from './types';
 
 type ButtonSize = Size;
 type ButtonIntent = Intent;
@@ -11,6 +12,7 @@ export type ButtonVariants = {
     intent: ButtonIntent;
     type: ButtonType;
     disabled: boolean;
+    gradient?: ButtonGradient;
 }
 
 /**
@@ -84,6 +86,25 @@ function createButtonCompoundVariants(theme: Theme): CompoundVariants<keyof Butt
     };
 
     return compoundVariants;
+}
+
+/**
+ * Create gradient variant styles for web
+ * Applies a transparent overlay gradient over the intent background color
+ */
+function createGradientVariants() {
+    return {
+        'darken': {
+            _web: {
+                backgroundImage: 'linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.15) 100%)',
+            },
+        },
+        'lighten': {
+            _web: {
+                backgroundImage: 'linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.2) 100%)',
+            },
+        },
+    } as const;
 }
 
 /**
@@ -214,6 +235,7 @@ export const buttonStyles = StyleSheet.create((theme: Theme) => {
                         },
                     } },
                 } as const,
+                gradient: createGradientVariants(),
             } as const,
             compoundVariants: createButtonCompoundVariants(theme),
         } as const,

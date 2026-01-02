@@ -5,19 +5,19 @@ import Tooltip from '../Tooltip';
 export const TooltipExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
-    <View spacing="lg">
-      <Text size="xl" weight="bold">Tooltip Examples</Text>
+    <View gap="lg">
+      <Text typography="h3">Tooltip Examples</Text>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Basic Tooltip</Text>
+      <View gap="md">
+        <Text typography="h5">Basic Tooltip</Text>
         <Tooltip content="This is a tooltip">
           <Button type="outlined">Hover over me</Button>
         </Tooltip>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Placements</Text>
-        <View spacing="sm" style={{ alignItems: 'center' }}>
+      <View gap="md">
+        <Text typography="h5">Placements</Text>
+        <View gap="sm" style={{ alignItems: 'center' }}>
           <Tooltip content="Top tooltip" placement="top">
             <Button type="outlined">Top</Button>
           </Tooltip>
@@ -35,8 +35,8 @@ export const TooltipExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Sizes</Text>
+      <View gap="md">
+        <Text typography="h5">Sizes</Text>
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           <Tooltip content="Small tooltip" size="sm">
             <Button type="outlined" size="sm">Small</Button>
@@ -50,8 +50,8 @@ export const TooltipExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Intent Colors</Text>
+      <View gap="md">
+        <Text typography="h5">Intent Colors</Text>
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           <Tooltip content="Primary tooltip" intent="primary">
             <Button type="contained" intent="primary">Primary</Button>
@@ -71,8 +71,8 @@ export const TooltipExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Custom Delay</Text>
+      <View gap="md">
+        <Text typography="h5">Custom Delay</Text>
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           <Tooltip content="Instant (0ms)" delay={0}>
             <Button type="outlined">No Delay</Button>
@@ -86,16 +86,16 @@ export const TooltipExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Long Content</Text>
+      <View gap="md">
+        <Text typography="h5">Long Content</Text>
         <Tooltip content="This is a longer tooltip that demonstrates how the component handles multi-line content automatically">
           <Button type="outlined">Hover for long text</Button>
         </Tooltip>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">On Text</Text>
-        <View>
+      <View gap="md">
+        <Text typography="h5">On Text</Text>
+        <View gap="xl">
           <Tooltip content="Additional information">
             <Text style={{ textDecorationLine: 'underline' }}>
               Hover over this text
@@ -104,11 +104,11 @@ export const TooltipExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Rich Content</Text>
+      <View gap="md">
+        <Text typography="h5">Rich Content</Text>
         <Tooltip
           content={
-            <View spacing="xs">
+            <View gap="xs">
               <Text weight="bold">Rich Tooltip</Text>
               <Text>With multiple lines</Text>
               <Text>and formatting</Text>

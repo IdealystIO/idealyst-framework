@@ -1,12 +1,18 @@
 export const Screen = {
   category: "layout",
-  description: "Full-screen container component with background variants, padding, and safe area support",
+  description: "Full-screen container component with spacing variants, background variants, and safe area support",
       props: `
 - \`children\`: React.ReactNode - The content to display inside the screen
+- \`gap\`: Size - Space between children ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`padding\`: Size - Padding on all sides
+- \`paddingVertical\`: Size - Top and bottom padding
+- \`paddingHorizontal\`: Size - Left and right padding
+- \`margin\`: Size - Margin on all sides
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`background\`: Surface | 'transparent' - Background variant - controls the background color
-- \`padding\`: Size | 'none' - Screen padding variant
 - \`safeArea\`: boolean - Safe area padding for mobile devices
-- \`top\`: number - Content inset padding for scrollable content (mobile only) Adds padding to the scroll view's content container Useful for adding safe area insets or additional spacing
+- \`top\`: number - Content inset padding for scrollable content (mobile only)
 - \`bottom\`: number - Bottom content inset padding for scrollable content
 - \`left\`: number - Left content inset padding for scrollable content
 - \`right\`: number - Right content inset padding for scrollable content
@@ -14,7 +20,9 @@ export const Screen = {
 `,
   features: [
     "Four background color variants",
-    "Five padding options",
+    "Gap variant for spacing between children",
+    "Padding variants (uniform and directional)",
+    "Margin variants (uniform and directional)",
     "Safe area support for notches/home indicators",
     "Optional scrollable content",
     "Full-screen container",

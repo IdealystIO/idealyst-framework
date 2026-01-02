@@ -8,14 +8,14 @@ export const ButtonExamples = () => {
 
   return (
     <Screen background="primary">
-      <View spacing="none">
-      <Text size="lg" weight="bold" align="center">
+      <View gap="xl">
+      <Text typography="h4" align="center">
         Button Examples
       </Text>
       
       {/* Button Variants */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Variants</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Variants</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button 
             type="contained" 
@@ -42,8 +42,8 @@ export const ButtonExamples = () => {
       </View>
 
       {/* Button Sizes */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Sizes</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Sizes</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Button
             size="sm"
@@ -73,8 +73,8 @@ export const ButtonExamples = () => {
       </View>
 
       {/* Button Intents */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Intents</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Intents</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button 
             intent="primary"
@@ -115,8 +115,8 @@ export const ButtonExamples = () => {
       </View>
 
       {/* Disabled States */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Disabled States</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Disabled States</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
             type="contained"
@@ -146,8 +146,8 @@ export const ButtonExamples = () => {
       </View>
 
       {/* Buttons with Icons */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Buttons with Icons</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Buttons with Icons</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
             type="contained"
@@ -194,8 +194,8 @@ export const ButtonExamples = () => {
       </View>
 
       {/* Icon-only Buttons */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Icon-only Buttons</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Icon-only Buttons</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Button
             type="contained"
@@ -234,8 +234,8 @@ export const ButtonExamples = () => {
       </View>
 
       {/* Different Intents with Icons */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Icons with Different Intents</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Icons with Different Intents</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Button
             type="contained"
@@ -268,6 +268,118 @@ export const ButtonExamples = () => {
             onPress={() => handlePress('error')}
           >
             Error
+          </Button>
+        </View>
+      </View>
+
+      {/* Gradient Overlay */}
+      <View gap="md">
+        <Text typography="subtitle1">Gradient Overlay</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+          <Button
+            type="contained"
+            intent="primary"
+            onPress={() => handlePress('no-gradient')}
+          >
+            No Gradient
+          </Button>
+          <Button
+            type="contained"
+            intent="primary"
+            gradient="darken"
+            onPress={() => handlePress('gradient-darken')}
+          >
+            Darken
+          </Button>
+          <Button
+            type="contained"
+            intent="primary"
+            gradient="lighten"
+            onPress={() => handlePress('gradient-lighten')}
+          >
+            Lighten
+          </Button>
+        </View>
+      </View>
+
+      {/* Gradient with Different Intents */}
+      <View gap="md">
+        <Text typography="subtitle1">Gradient Intents (Darken)</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+          <Button
+            type="contained"
+            intent="primary"
+            gradient="darken"
+            onPress={() => handlePress('gradient-primary')}
+          >
+            Primary
+          </Button>
+          <Button
+            type="contained"
+            intent="success"
+            gradient="darken"
+            onPress={() => handlePress('gradient-success')}
+          >
+            Success
+          </Button>
+          <Button
+            type="contained"
+            intent="error"
+            gradient="darken"
+            onPress={() => handlePress('gradient-error')}
+          >
+            Error
+          </Button>
+          <Button
+            type="contained"
+            intent="warning"
+            gradient="darken"
+            onPress={() => handlePress('gradient-warning')}
+          >
+            Warning
+          </Button>
+          <Button
+            type="contained"
+            intent="neutral"
+            gradient="darken"
+            onPress={() => handlePress('gradient-neutral')}
+          >
+            Neutral
+          </Button>
+        </View>
+      </View>
+
+      {/* Gradient with Icons */}
+      <View gap="md">
+        <Text typography="subtitle1">Gradient with Icons</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+          <Button
+            type="contained"
+            intent="primary"
+            gradient="darken"
+            leftIcon="rocket-launch"
+            onPress={() => handlePress('gradient-icon-launch')}
+          >
+            Launch
+          </Button>
+          <Button
+            type="contained"
+            intent="success"
+            gradient="lighten"
+            leftIcon="check"
+            rightIcon="arrow-right"
+            onPress={() => handlePress('gradient-icon-submit')}
+          >
+            Submit
+          </Button>
+          <Button
+            type="contained"
+            intent="error"
+            gradient="darken"
+            leftIcon="delete"
+            onPress={() => handlePress('gradient-icon-delete')}
+          >
+            Delete
           </Button>
         </View>
       </View>

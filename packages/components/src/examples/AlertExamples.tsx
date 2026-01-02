@@ -6,13 +6,13 @@ export const AlertExamples = () => {
 
   return (
     <Screen background="primary" safeArea>
-      <View spacing="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
-        <Text size="xl" weight="bold">Alert Examples</Text>
+      <View gap="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
+        <Text typography="h3">Alert Examples</Text>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">Intent Variants</Text>
+        <View gap="md">
+          <Text typography="h5">Intent Variants</Text>
 
-          <View spacing="sm">
+          <View gap="sm">
             <Alert
               intent="primary"
               title="Primary"
@@ -51,11 +51,11 @@ export const AlertExamples = () => {
           </View>
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">Style Variants</Text>
+        <View gap="md">
+          <Text typography="h5">Style Variants</Text>
 
-          <View spacing="sm">
-            <Text size="md" weight="semibold">Filled</Text>
+          <View gap="sm">
+            <Text typography="subtitle1">Filled</Text>
             <Alert
               type="filled"
               intent="primary"
@@ -64,8 +64,8 @@ export const AlertExamples = () => {
             />
           </View>
 
-          <View spacing="sm">
-            <Text size="md" weight="semibold">Outlined</Text>
+          <View gap="sm">
+            <Text typography="subtitle1">Outlined</Text>
             <Alert
               type="outlined"
               intent="primary"
@@ -74,8 +74,8 @@ export const AlertExamples = () => {
             />
           </View>
 
-          <View spacing="sm">
-            <Text size="md" weight="semibold">Soft (Default)</Text>
+          <View gap="sm">
+            <Text typography="subtitle1">Soft (Default)</Text>
             <Alert
               type="soft"
               intent="primary"
@@ -85,8 +85,8 @@ export const AlertExamples = () => {
           </View>
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">Without Icons</Text>
+        <View gap="md">
+          <Text typography="h5">Without Icons</Text>
 
           <Alert
             intent="success"
@@ -96,10 +96,10 @@ export const AlertExamples = () => {
           />
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">Custom Icons</Text>
+        <View gap="md">
+          <Text typography="h5">Custom Icons</Text>
 
-          <View spacing="sm">
+          <View gap="sm">
             <Alert
               intent="info"
               title="Custom Icon"
@@ -116,10 +116,10 @@ export const AlertExamples = () => {
           </View>
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">Dismissible Alerts</Text>
+        <View gap="md">
+          <Text typography="h5">Dismissible Alerts</Text>
 
-          <View spacing="sm">
+          <View gap="sm">
             {successVisible && (
               <Alert
                 intent="success"
@@ -155,10 +155,10 @@ export const AlertExamples = () => {
           </View>
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">With Actions</Text>
+        <View gap="md">
+          <Text typography="h5">With Actions</Text>
 
-          <View spacing="sm">
+          <View gap="sm">
             <Alert
               intent="warning"
               title="Unsaved Changes"
@@ -189,26 +189,26 @@ export const AlertExamples = () => {
           </View>
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">With Children</Text>
+        <View gap="md">
+          <Text typography="h5">With Children</Text>
 
           <Alert
             intent="info"
             title="Custom Content"
           >
-            <View spacing="sm">
-              <Text size="sm">You can use children to add custom content:</Text>
+            <View gap="sm">
+              <Text typography="body2">You can use children to add custom content:</Text>
               <View style={{ paddingLeft: 16 }}>
-                <Text size="sm">• Custom formatted text</Text>
-                <Text size="sm">• Lists and structured content</Text>
-                <Text size="sm">• Any React components</Text>
+                <Text typography="body2">• Custom formatted text</Text>
+                <Text typography="body2">• Lists and structured content</Text>
+                <Text typography="body2">• Any React components</Text>
               </View>
             </View>
           </Alert>
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">Complex Example</Text>
+        <View gap="md">
+          <Text typography="h5">Complex Example</Text>
 
           <Alert
             type="filled"
@@ -230,10 +230,10 @@ export const AlertExamples = () => {
           />
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">All Intent Colors (Soft Variant)</Text>
+        <View gap="md">
+          <Text typography="h5">All Intent Colors (Soft Variant)</Text>
 
-          <View spacing="sm">
+          <View gap="sm">
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}
@@ -245,10 +245,10 @@ export const AlertExamples = () => {
           </View>
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">All Intent Colors (Outlined Variant)</Text>
+        <View gap="md">
+          <Text typography="h5">All Intent Colors (Outlined Variant)</Text>
 
-          <View spacing="sm">
+          <View gap="sm">
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}
@@ -260,10 +260,10 @@ export const AlertExamples = () => {
           </View>
         </View>
 
-        <View spacing="md">
-          <Text size="lg" weight="semibold">All Intent Colors (Filled Variant)</Text>
+        <View gap="md">
+          <Text typography="h5">All Intent Colors (Filled Variant)</Text>
 
-          <View spacing="sm">
+          <View gap="sm">
             {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}

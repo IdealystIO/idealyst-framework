@@ -136,35 +136,35 @@ export const TableExamples: React.FC = () => {
 
   return (
     <Screen background="primary" padding="lg">
-    <View spacing="lg">
-      <Text size="xl" weight="bold">Table Examples</Text>
+    <View gap="lg">
+      <Text typography="h3">Table Examples</Text>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Basic Table</Text>
+      <View gap="md">
+        <Text typography="h5">Basic Table</Text>
         <Table columns={userColumns} data={users} />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Variants</Text>
-        <View spacing="sm">
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Default</Text>
+      <View gap="md">
+        <Text typography="h5">Variants</Text>
+        <View gap="sm">
+          <View gap="xs">
+            <Text typography="body2">Default</Text>
             <Table
               columns={userColumns}
               data={users}
               type="standard"
             />
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Bordered</Text>
+          <View gap="xs">
+            <Text typography="body2">Bordered</Text>
             <Table
               columns={userColumns}
               data={users}
               type="bordered"
             />
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Striped</Text>
+          <View gap="xs">
+            <Text typography="body2">Striped</Text>
             <Table
               columns={userColumns}
               data={users}
@@ -174,11 +174,11 @@ export const TableExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Sizes</Text>
-        <View spacing="sm">
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Small</Text>
+      <View gap="md">
+        <Text typography="h5">Sizes</Text>
+        <View gap="sm">
+          <View gap="xs">
+            <Text typography="body2">Small</Text>
             <Table
               columns={userColumns}
               data={users.slice(0, 2)}
@@ -186,8 +186,8 @@ export const TableExamples: React.FC = () => {
               type="bordered"
             />
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Medium (default)</Text>
+          <View gap="xs">
+            <Text typography="body2">Medium (default)</Text>
             <Table
               columns={userColumns}
               data={users.slice(0, 2)}
@@ -195,8 +195,8 @@ export const TableExamples: React.FC = () => {
               type="bordered"
             />
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Large</Text>
+          <View gap="xs">
+            <Text typography="body2">Large</Text>
             <Table
               columns={userColumns}
               data={users.slice(0, 2)}
@@ -207,26 +207,26 @@ export const TableExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Custom Rendering</Text>
+      <View gap="md">
+        <Text typography="h5">Custom Rendering</Text>
         <Table columns={productColumns} data={products} type="striped" />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Clickable Rows</Text>
+      <View gap="md">
+        <Text typography="h5">Clickable Rows</Text>
         <Table
           columns={userColumns}
           data={users}
           type="bordered"
           onRowPress={(user) => console.log('Clicked user:', user)}
         />
-        <Text size="sm" color="secondary">
+        <Text typography="caption" color="secondary">
           Click any row to see console output
         </Text>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Actions</Text>
+      <View gap="md">
+        <Text typography="h5">With Actions</Text>
         <Table
           columns={actionColumns}
           data={users}
@@ -234,8 +234,8 @@ export const TableExamples: React.FC = () => {
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Column Alignment</Text>
+      <View gap="md">
+        <Text typography="h5">Column Alignment</Text>
         <Table
           columns={[
             { key: 'name', title: 'Product', dataIndex: 'name', align: 'left' },
@@ -247,8 +247,8 @@ export const TableExamples: React.FC = () => {
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Fixed Column Widths</Text>
+      <View gap="md">
+        <Text typography="h5">Fixed Column Widths</Text>
         <Table
           columns={[
             { key: 'id', title: 'ID', dataIndex: 'id', width: '60px' },
@@ -261,14 +261,14 @@ export const TableExamples: React.FC = () => {
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Empty Table</Text>
+      <View gap="md">
+        <Text typography="h5">Empty Table</Text>
         <Table
           columns={userColumns}
           data={[]}
           type="bordered"
         />
-        <Text size="sm" color="secondary">
+        <Text typography="caption" color="secondary">
           No data to display
         </Text>
       </View>

@@ -49,17 +49,17 @@ export const MenuExamples: React.FC = () => {
 
   return (
     <Screen background="primary" padding="lg">
-    <View spacing="lg">
-      <Text size="xl" weight="bold">Menu Examples</Text>
+    <View gap="lg">
+      <Text typography="h3">Menu Examples</Text>
 
       {selectedAction && (
-        <View spacing="sm" style={{ padding: 12, backgroundColor: '#f0f0f0', borderRadius: 8 }}>
+        <View gap="sm" style={{ padding: 12, backgroundColor: '#f0f0f0', borderRadius: 8 }}>
           <Text>Last selected action: <Text weight="bold">{selectedAction}</Text></Text>
         </View>
       )}
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Basic Menu</Text>
+      <View gap="md">
+        <Text typography="h5">Basic Menu</Text>
         <Menu
           items={basicItems}
           open={basicMenuOpen}
@@ -71,8 +71,8 @@ export const MenuExamples: React.FC = () => {
         </Menu>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Placement Options</Text>
+      <View gap="md">
+        <Text typography="h5">Placement Options</Text>
         <Menu
           items={basicItems}
           open={placementMenuOpen}
@@ -85,8 +85,8 @@ export const MenuExamples: React.FC = () => {
         </Menu>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Icons</Text>
+      <View gap="md">
+        <Text typography="h5">With Icons</Text>
         <Menu
           items={iconNameItems}
           open={iconNameMenuOpen}
@@ -98,8 +98,8 @@ export const MenuExamples: React.FC = () => {
         </Menu>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Intent Colors</Text>
+      <View gap="md">
+        <Text typography="h5">Intent Colors</Text>
         <Menu
           items={intentItems}
           open={intentMenuOpen}
@@ -111,8 +111,8 @@ export const MenuExamples: React.FC = () => {
         </Menu>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Separators</Text>
+      <View gap="md">
+        <Text typography="h5">With Separators</Text>
         <Menu
           items={separatorItems}
           open={separatorMenuOpen}
@@ -124,8 +124,8 @@ export const MenuExamples: React.FC = () => {
         </Menu>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Disabled Items</Text>
+      <View gap="md">
+        <Text typography="h5">Disabled Items</Text>
         <Menu
           items={disabledItems}
           open={disabledMenuOpen}

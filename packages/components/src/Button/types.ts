@@ -8,6 +8,14 @@ export type ButtonType = 'contained' | 'outlined' | 'text';
 export type ButtonIntentVariant = Intent;
 export type ButtonSizeVariant = Size;
 
+/**
+ * Gradient overlay options for buttons.
+ * Applies a transparent gradient over the intent background color.
+ * - 'darken': Transparent to semi-transparent black (darkens one corner)
+ * - 'lighten': Transparent to semi-transparent white (lightens one corner)
+ */
+export type ButtonGradient = 'darken' | 'lighten';
+
 export interface ButtonProps {
   /**
    * The text or content to display inside the button
@@ -43,6 +51,13 @@ export interface ButtonProps {
    * The size of the button
    */
   size?: ButtonSizeVariant;
+
+  /**
+   * Apply a gradient background enhancement.
+   * Only applies to 'contained' button type.
+   * Options: 'color-to-dark', 'color-to-light', 'light-to-color', 'dark-to-color'
+   */
+  gradient?: ButtonGradient;
 
   /**
    * Icon to display on the left side. Can be an icon name or custom component (ReactNode)

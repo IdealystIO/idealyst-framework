@@ -1,6 +1,6 @@
 export const Table = {
   category: "data",
-  description: "Data table component for displaying structured tabular data",
+  description: "Data table component with spacing variants for displaying structured tabular data",
   props: `
 - \`columns\`: TableColumn<T>[] - Column definitions
   - \`key\`: string - Unique column key
@@ -12,6 +12,13 @@ export const Table = {
 - \`data\`: T[] - Array of data objects
 - \`variant\`: 'default' | 'bordered' | 'striped' - Visual style
 - \`size\`: 'sm' | 'md' | 'lg' - Cell padding/size
+- \`gap\`: Size - Space between table elements ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`padding\`: Size - Padding on all sides
+- \`paddingVertical\`: Size - Top and bottom padding
+- \`paddingHorizontal\`: Size - Left and right padding
+- \`margin\`: Size - Margin on all sides
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`stickyHeader\`: boolean - Keep header fixed on scroll
 - \`onRowPress\`: (row: T, index: number) => void - Row click handler
 - \`style\`: ViewStyle - Additional styles
@@ -22,6 +29,7 @@ export const Table = {
     "Custom cell renderers",
     "Three visual variants",
     "Three sizes",
+    "Gap, padding, and margin variants",
     "Sticky header support",
     "Row click handling",
     "Column alignment",

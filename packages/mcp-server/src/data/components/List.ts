@@ -1,16 +1,25 @@
 export const List = {
 category: "display",
-    description: "Vertical list container with support for sections, icons, and interactive items",
+    description: "Vertical list container with spacing variants, sections, icons, and interactive items",
         props: `
 - \`children\`: React.ReactNode - List items and sections to display
 - \`type\`: ListType - The visual style variant of the list
 - \`size\`: ListSizeVariant - The size variant of list items
+- \`gap\`: Size - Space between children ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`padding\`: Size - Padding on all sides
+- \`paddingVertical\`: Size - Top and bottom padding
+- \`paddingHorizontal\`: Size - Left and right padding
+- \`margin\`: Size - Margin on all sides
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`scrollable\`: boolean - Whether the list is scrollable
 - \`maxHeight\`: number | string - Maximum height of the scrollable list
 `,
     features: [
       "Three visual variants",
       "Configurable item sizes",
+      "Gap variant for spacing between items",
+      "Padding and margin variants",
       "Leading and trailing elements (icons, badges, etc.)",
       "Selected and active states",
       "Section grouping with titles",

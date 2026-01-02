@@ -4,14 +4,14 @@ import { Screen, View, Button, Text, Badge, Card, Input, Checkbox } from '../ind
 export const ThemeExtensionExamples = () => {
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="lg">
-        <Text size="lg" weight="bold" align="center">
+      <View gap="lg">
+        <Text typography="h4" align="center">
           Extended Theme Test
         </Text>
         
         {/* Extended Colors */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Extended Colors</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Extended Colors</Text>
                      <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
              <Badge color={"orange" as any}>Orange</Badge>
              <Badge color={"teal" as any}>Teal</Badge>
@@ -30,8 +30,8 @@ export const ThemeExtensionExamples = () => {
         </View>
 
         {/* Extended Intents */}
-                          <View spacing="md">
-           <Text size="md" weight="semibold">Extended Intents</Text>
+                          <View gap="md">
+           <Text typography="subtitle1">Extended Intents</Text>
            <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
              <Button intent={"accent" as any}>Accent Button</Button>
              <Button intent={"feature" as any}>Feature Button</Button>
@@ -46,11 +46,11 @@ export const ThemeExtensionExamples = () => {
          </View>
 
          {/* Mixed Usage */}
-         <View spacing="md">
-           <Text size="md" weight="semibold">Mixed Extended Usage</Text>
+         <View gap="md">
+           <Text typography="subtitle1">Mixed Extended Usage</Text>
            
            <Card>
-             <View spacing="sm">
+             <View gap="sm">
                <Text color={"orange" as any} weight="bold">Orange Card Header</Text>
                <Text color="secondary">This card uses extended orange color for the header</Text>
                <Button intent={"accent" as any} size="sm">Accent Action</Button>
@@ -58,7 +58,7 @@ export const ThemeExtensionExamples = () => {
            </Card>
            
            <Card>
-             <View spacing="sm">
+             <View gap="sm">
                <Text color={"teal" as any} weight="bold">Teal Card Header</Text>
                <Text color="secondary">This card uses extended teal color for the header</Text>
                <Button intent={"feature" as any} size="sm">Feature Action</Button>
@@ -67,8 +67,8 @@ export const ThemeExtensionExamples = () => {
          </View>
 
          {/* Form with Extended Colors */}
-         <View spacing="md">
-           <Text size="md" weight="semibold">Form with Extended Styling</Text>
+         <View gap="md">
+           <Text typography="subtitle1">Form with Extended Styling</Text>
            
            <Input 
              placeholder="Input with accent intent" 

@@ -8,39 +8,39 @@ export const CardExamples = () => {
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
-      <Text size="lg" weight="bold" align="center">
+      <View gap="xl">
+      <Text typography="h4" align="center">
         Card Examples
       </Text>
       
       {/* Card Variants */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Variants</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
+      <View gap="md">
+        <Text typography="subtitle1">Variants</Text>
+        <View gap="sm" style={{ gap: 10 }}>
           <Card type="default" padding="md">
             <Text>Default Card</Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               This is a default card with standard styling
             </Text>
           </Card>
           
           <Card type="outlined" padding="md">
             <Text>Outlined Card</Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               This is an outlined card with border
             </Text>
           </Card>
           
           <Card type="elevated" padding="md">
             <Text>Elevated Card</Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               This is an elevated card with shadow
             </Text>
           </Card>
           
           <Card type="filled" padding="md">
             <Text>Filled Card</Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               This is a filled card with background
             </Text>
           </Card>
@@ -48,9 +48,9 @@ export const CardExamples = () => {
       </View>
 
       {/* Card Intents */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Intents</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
+      <View gap="md">
+        <Text typography="subtitle1">Intents</Text>
+        <View gap="sm" style={{ gap: 10 }}>
           <Card intent="neutral" padding="md" type="outlined">
             <Text>Neutral Card</Text>
           </Card>
@@ -78,10 +78,10 @@ export const CardExamples = () => {
       </View>
 
       {/* Card Padding */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Padding</Text>
-        <View spacing="sm">
-          <Card padding="none" type="outlined">
+      <View gap="md">
+        <Text typography="subtitle1">Padding</Text>
+        <View gap="sm">
+          <Card type="outlined">
             <Text>No Padding</Text>
           </Card>
           
@@ -100,9 +100,9 @@ export const CardExamples = () => {
       </View>
 
       {/* Card Radius */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Border Radius</Text>
-        <View spacing="sm">
+      <View gap="md">
+        <Text typography="subtitle1">Border Radius</Text>
+        <View gap="sm">
           <Card radius="none" type="outlined" padding="md">
             <Text>No Radius</Text>
           </Card>
@@ -122,9 +122,9 @@ export const CardExamples = () => {
       </View>
 
       {/* Clickable Cards */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Interactive Cards</Text>
-        <View spacing="sm">
+      <View gap="md">
+        <Text typography="subtitle1">Interactive Cards</Text>
+        <View gap="sm">
           <Card 
             clickable 
             onPress={() => handleCardPress('clickable')} 
@@ -132,7 +132,7 @@ export const CardExamples = () => {
             padding="md"
           >
             <Text weight="semibold">Clickable Card</Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               Click me to see interaction
             </Text>
           </Card>
@@ -145,7 +145,7 @@ export const CardExamples = () => {
             padding="md"
           >
             <Text weight="semibold">Disabled Card</Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               This card is disabled
             </Text>
           </Card>
@@ -153,11 +153,11 @@ export const CardExamples = () => {
       </View>
 
       {/* Complex Card Layout */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Complex Layout</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Complex Layout</Text>
         <Card type="elevated" padding="lg" radius="md">
-          <Text size="lg" weight="bold">Product Card</Text>
-          <Text size="sm" color="secondary" style={{ marginVertical: 8 }}>
+          <Text typography="h4">Product Card</Text>
+          <Text typography="caption" color="secondary" style={{ marginVertical: 8 }}>
             This is a more complex card layout with multiple elements
           </Text>
           <View style={{ flexDirection: 'row', gap: 8, marginTop: 12 }}>

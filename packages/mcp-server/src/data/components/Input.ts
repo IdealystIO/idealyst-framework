@@ -1,6 +1,6 @@
 export const Input = {
 category: "form",
-    description: "Text input field with icons, password visibility toggle, and various input types",
+    description: "Text input field with icons, password visibility toggle, margin variants, and various input types",
         props: `
 - \`value\`: string - The current value of the input
 - \`onChangeText\`: function - Called when the text changes
@@ -18,6 +18,9 @@ category: "form",
 - \`type\`: InputType - Style variant of the input
 - \`intent\`: InputIntent - The intent/color scheme of the input (for focus states, validation, etc.)
 - \`hasError\`: boolean - Whether the input has an error state
+- \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 `,
     features: [
       "Left and right icon support with MDI icons",

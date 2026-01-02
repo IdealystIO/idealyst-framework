@@ -1,6 +1,6 @@
 export const Switch = {
   category: "form",
-  description: "Toggle switch for binary on/off states",
+  description: "Toggle switch with margin variants for binary on/off states",
       props: `
 - \`checked\`: boolean - Whether the switch is in the on/checked state
 - \`onCheckedChange\`: function - Called when the switch state changes
@@ -9,6 +9,9 @@ export const Switch = {
 - \`labelPosition\`: 'left' | 'right' - Position of the label relative to the switch
 - \`intent\`: SwitchIntentVariant - The intent/color scheme of the switch
 - \`size\`: SwitchSizeVariant - The size variant of the switch
+- \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`enabledIcon\`: IconName | React.ReactNode - Icon to display when switch is on
 - \`disabledIcon\`: IconName | React.ReactNode - Icon to display when switch is off
 `,

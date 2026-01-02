@@ -21,6 +21,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     type = 'contained',
     intent = 'primary',
     size = 'md',
+    gradient,
     leftIcon,
     rightIcon,
     leftIconPath,
@@ -33,7 +34,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     type,
     intent,
     size,
-    disabled
+    disabled,
+    gradient,
   });
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {

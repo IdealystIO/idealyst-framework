@@ -9,14 +9,14 @@ export const DialogExamples = () => {
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
-        <Text size="lg" weight="bold" align="center">
+      <View gap="xl">
+        <Text typography="h4" align="center">
           Dialog Examples
         </Text>
         
         {/* Basic Dialog */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Basic Dialog</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Basic Dialog</Text>
           <Button onPress={() => setBasicOpen(true)}>
             Open Basic Dialog
           </Button>
@@ -26,7 +26,7 @@ export const DialogExamples = () => {
             title="Basic Dialog"
           >
             <Text>This is a basic dialog with a title and some content.</Text>
-            <View spacing="md" style={{ marginTop: 16 }}>
+            <View gap="md" style={{ marginTop: 16 }}>
               <Button 
                 type="contained" 
                 intent="primary"
@@ -39,8 +39,8 @@ export const DialogExamples = () => {
         </View>
 
         {/* Dialog Variants */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Dialog Variants</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Dialog Variants</Text>
           <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
             <Button onPress={() => setAlertOpen(true)}>
               Alert Dialog
@@ -58,7 +58,7 @@ export const DialogExamples = () => {
             type="alert"
           >
             <Text>This is an alert dialog. It has a top border to indicate importance.</Text>
-            <View spacing="md" style={{ marginTop: 16 }}>
+            <View gap="md" style={{ marginTop: 16 }}>
               <Button 
                 type="contained" 
                 intent="primary"
@@ -98,8 +98,8 @@ export const DialogExamples = () => {
         </View>
 
         {/* Dialog Sizes */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Dialog Sizes</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Dialog Sizes</Text>
           <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
             {['sm', 'md', 'lg'].map((size) => (
               <Button
@@ -121,7 +121,7 @@ export const DialogExamples = () => {
               <Text>
                 This is a {sizesOpen} dialog. The width and maximum width are adjusted based on the size prop.
               </Text>
-              <View spacing="md" style={{ marginTop: 16 }}>
+              <View gap="md" style={{ marginTop: 16 }}>
                 <Button 
                   type="contained" 
                   intent="primary"
@@ -136,18 +136,18 @@ export const DialogExamples = () => {
 
 
         {/* Dialog Options */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Dialog Options</Text>
-          <Text size="sm" color="secondary">
+        <View gap="md">
+          <Text typography="subtitle1">Dialog Options</Text>
+          <Text typography="caption" color="secondary">
             • Close on backdrop click: Enabled by default, disabled for confirmation dialog above
           </Text>
-          <Text size="sm" color="secondary">
+          <Text typography="caption" color="secondary">
             • Close on escape key: Enabled by default (web only)
           </Text>
-          <Text size="sm" color="secondary">
+          <Text typography="caption" color="secondary">
             • Hardware back button: Handled automatically (native only)
           </Text>
-          <Text size="sm" color="secondary">
+          <Text typography="caption" color="secondary">
             • Focus management: Automatic focus trapping and restoration (web only)
           </Text>
         </View>

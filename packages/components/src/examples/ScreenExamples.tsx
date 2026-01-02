@@ -4,51 +4,51 @@ import { Screen, View, Text } from '../index';
 export const ScreenExamples = () => {
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="lg">
-        <Text size="lg" weight="bold" align="center">
+      <View gap="lg">
+        <Text typography="h4" align="center">
           Screen Examples
         </Text>
         
         {/* Background Examples */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Background Variants</Text>
-          <Text size="sm" color="secondary">
+        <View gap="md">
+          <Text typography="subtitle1">Background Variants</Text>
+          <Text typography="caption" color="secondary">
             Each Screen should have a different background color
           </Text>
           
           <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="primary" padding="sm">
-                <View spacing="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                  <Text size="sm" weight="bold">Primary</Text>
-                  <Text size="sm" color="secondary">Surface</Text>
+                <View gap="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                  <Text typography="subtitle2">Primary</Text>
+                  <Text typography="caption" color="secondary">Surface</Text>
                 </View>
               </Screen>
             </View>
             
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="sm">
-                <View spacing="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                  <Text size="sm" weight="bold">Secondary</Text>
-                  <Text size="sm" color="secondary">Surface</Text>
+                <View gap="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                  <Text typography="subtitle2">Secondary</Text>
+                  <Text typography="caption" color="secondary">Surface</Text>
                 </View>
               </Screen>
             </View>
             
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="tertiary" padding="sm">
-                <View spacing="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                  <Text size="sm" weight="bold">Tertiary</Text>
-                  <Text size="sm" color="secondary">Surface</Text>
+                <View gap="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                  <Text typography="subtitle2">Tertiary</Text>
+                  <Text typography="caption" color="secondary">Surface</Text>
                 </View>
               </Screen>
             </View>
             
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="inverse" padding="sm">
-                <View spacing="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                  <Text size="sm" weight="bold" color="primary">Inverse</Text>
-                  <Text size="sm" color="secondary">Surface</Text>
+                <View gap="sm" style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                  <Text typography="subtitle2" color="primary">Inverse</Text>
+                  <Text typography="caption" color="secondary">Surface</Text>
                 </View>
               </Screen>
             </View>
@@ -56,18 +56,18 @@ export const ScreenExamples = () => {
         </View>
 
         {/* Padding Examples */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Padding Variants</Text>
-          <Text size="sm" color="secondary">
+        <View gap="md">
+          <Text typography="subtitle1">Padding Variants</Text>
+          <Text typography="caption" color="secondary">
             Different padding options for Screen content
           </Text>
           
           <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
-              <Screen background="secondary" padding="none">
+              <Screen background="secondary">
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(255,0,0,0.1)' }}>
-                  <Text size="sm" weight="bold">None</Text>
-                  <Text size="sm" color="secondary">No padding</Text>
+                  <Text typography="subtitle2">None</Text>
+                  <Text typography="caption" color="secondary">No padding</Text>
                 </View>
               </Screen>
             </View>
@@ -75,8 +75,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="sm">
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(255,0,0,0.1)' }}>
-                  <Text size="sm" weight="bold">Small</Text>
-                  <Text size="sm" color="secondary">8px</Text>
+                  <Text typography="subtitle2">Small</Text>
+                  <Text typography="caption" color="secondary">8px</Text>
                 </View>
               </Screen>
             </View>
@@ -84,8 +84,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="md">
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(255,0,0,0.1)' }}>
-                  <Text size="sm" weight="bold">Medium</Text>
-                  <Text size="sm" color="secondary">16px</Text>
+                  <Text typography="subtitle2">Medium</Text>
+                  <Text typography="caption" color="secondary">16px</Text>
                 </View>
               </Screen>
             </View>
@@ -93,8 +93,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="secondary" padding="lg">
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(255,0,0,0.1)' }}>
-                  <Text size="sm" weight="bold">Large</Text>
-                  <Text size="sm" color="secondary">24px</Text>
+                  <Text typography="subtitle2">Large</Text>
+                  <Text typography="caption" color="secondary">24px</Text>
                 </View>
               </Screen>
             </View>
@@ -102,9 +102,9 @@ export const ScreenExamples = () => {
         </View>
 
         {/* Safe Area Examples */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Safe Area</Text>
-          <Text size="sm" color="secondary">
+        <View gap="md">
+          <Text typography="subtitle1">Safe Area</Text>
+          <Text typography="caption" color="secondary">
             Safe area padding for mobile devices
           </Text>
           
@@ -112,8 +112,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="tertiary" padding="sm" safeArea={false}>
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(0,255,0,0.1)' }}>
-                  <Text size="sm" weight="bold">No Safe Area</Text>
-                  <Text size="sm" color="secondary">Standard</Text>
+                  <Text typography="subtitle2">No Safe Area</Text>
+                  <Text typography="caption" color="secondary">Standard</Text>
                 </View>
               </Screen>
             </View>
@@ -121,8 +121,8 @@ export const ScreenExamples = () => {
             <View style={{ height: 100, width: 120, borderWidth: 1, borderColor: '#ccc' }}>
               <Screen background="tertiary" padding="sm" safeArea={true}>
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'rgba(0,255,0,0.1)' }}>
-                  <Text size="sm" weight="bold">Safe Area</Text>
-                  <Text size="sm" color="secondary">Mobile</Text>
+                  <Text typography="subtitle2">Safe Area</Text>
+                  <Text typography="caption" color="secondary">Mobile</Text>
                 </View>
               </Screen>
             </View>
@@ -130,18 +130,18 @@ export const ScreenExamples = () => {
         </View>
 
         {/* Usage Examples */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Common Usage</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Common Usage</Text>
           <View style={{ height: 120, borderWidth: 1, borderColor: '#ccc' }}>
             <Screen background="primary" padding="lg">
               <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                <Text size="lg" weight="bold" align="center">
+                <Text typography="h4" align="center">
                   App Screen Layout
                 </Text>
-                <Text size="md" color="secondary" align="center">
+                <Text typography="body1" color="secondary" align="center">
                   Primary background with large padding
                 </Text>
-                <Text size="sm" color="secondary" align="center">
+                <Text typography="caption" color="secondary" align="center">
                   Perfect for main app screens
                 </Text>
               </View>

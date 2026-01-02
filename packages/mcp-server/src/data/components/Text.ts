@@ -1,18 +1,24 @@
 export const Text = {
   category: "typography",
-  description: "Styled text component with size, weight, and color variants",
+  description: "Styled text component with size, weight, color, and spacing variants",
       props: `
 - \`children\`: React.ReactNode - The text content to display
 - \`size\`: TextSizeVariant - The size variant of the text
 - \`weight\`: TextWeightVariant - The weight of the text
 - \`color\`: TextColorVariant - The color of the text
 - \`align\`: TextAlignVariant - Text alignment
+- \`gap\`: Size - Space between nested elements ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`padding\`: Size - Padding on all sides
+- \`paddingVertical\`: Size - Top and bottom padding
+- \`paddingHorizontal\`: Size - Left and right padding
 `,
   features: [
     "Four size variants",
     "Five weight options",
     "Theme color variants",
     "Three alignment options",
+    "Gap variant for nested elements",
+    "Padding variants (uniform and directional)",
     "Cross-platform support",
     "Inherits parent text styles",
   ],
@@ -22,6 +28,7 @@ export const Text = {
     "Prefer theme colors over custom colors",
     "Use 'left' alignment for body text",
     "Use 'center' for short, important text",
+    "Use padding prop for text blocks that need internal spacing",
     "Nest Text components for mixed styles",
   ],
   usage: `

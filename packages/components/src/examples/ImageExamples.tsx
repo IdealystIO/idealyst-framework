@@ -5,11 +5,11 @@ import Image from '../Image';
 export const ImageExamples: React.FC = () => {
   return (
     <Screen background="primary" padding="lg">
-    <View spacing="lg">
-      <Text size="xl" weight="bold">Image Examples</Text>
+    <View gap="lg">
+      <Text typography="h3">Image Examples</Text>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Basic Image</Text>
+      <View gap="md">
+        <Text typography="h5">Basic Image</Text>
         <Image
           source="https://picsum.photos/400/300"
           alt="Random placeholder image"
@@ -18,10 +18,10 @@ export const ImageExamples: React.FC = () => {
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Object Fit Variants</Text>
-        <View spacing="sm">
-          <Text size="sm" weight="medium">Cover (default)</Text>
+      <View gap="md">
+        <Text typography="h5">Object Fit Variants</Text>
+        <View gap="sm">
+          <Text typography="body2">Cover (default)</Text>
           <Image
             source="https://picsum.photos/800/400"
             alt="Cover example"
@@ -30,7 +30,7 @@ export const ImageExamples: React.FC = () => {
             objectFit="cover"
           />
 
-          <Text size="sm" weight="medium">Contain</Text>
+          <Text typography="body2">Contain</Text>
           <Image
             source="https://picsum.photos/800/400"
             alt="Contain example"
@@ -39,7 +39,7 @@ export const ImageExamples: React.FC = () => {
             objectFit="contain"
           />
 
-          <Text size="sm" weight="medium">Fill</Text>
+          <Text typography="body2">Fill</Text>
           <Image
             source="https://picsum.photos/800/400"
             alt="Fill example"
@@ -50,10 +50,10 @@ export const ImageExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Aspect Ratio</Text>
-        <View spacing="sm">
-          <Text size="sm" weight="medium">16:9 Aspect Ratio</Text>
+      <View gap="md">
+        <Text typography="h5">Aspect Ratio</Text>
+        <View gap="sm">
+          <Text typography="body2">16:9 Aspect Ratio</Text>
           <Image
             source="https://picsum.photos/1600/900"
             alt="16:9 aspect ratio"
@@ -61,7 +61,7 @@ export const ImageExamples: React.FC = () => {
             aspectRatio={16 / 9}
           />
 
-          <Text size="sm" weight="medium">1:1 Square</Text>
+          <Text typography="body2">1:1 Square</Text>
           <Image
             source="https://picsum.photos/600/600"
             alt="Square aspect ratio"
@@ -71,11 +71,11 @@ export const ImageExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Border Radius</Text>
+      <View gap="md">
+        <Text typography="h5">Border Radius</Text>
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Rounded (8px)</Text>
+          <View gap="xs">
+            <Text typography="body2">Rounded (8px)</Text>
             <Image
               source="https://picsum.photos/200/200?random=1"
               alt="Rounded corners"
@@ -85,8 +85,8 @@ export const ImageExamples: React.FC = () => {
             />
           </View>
 
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Very Rounded (24px)</Text>
+          <View gap="xs">
+            <Text typography="body2">Very Rounded (24px)</Text>
             <Image
               source="https://picsum.photos/200/200?random=2"
               alt="Very rounded corners"
@@ -96,8 +96,8 @@ export const ImageExamples: React.FC = () => {
             />
           </View>
 
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Circle (50%)</Text>
+          <View gap="xs">
+            <Text typography="body2">Circle (50%)</Text>
             <Image
               source="https://picsum.photos/200/200?random=3"
               alt="Circle"
@@ -109,10 +109,10 @@ export const ImageExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Lazy Loading</Text>
-        <Text size="sm" color="secondary">Images load as they scroll into view</Text>
-        <View spacing="sm">
+      <View gap="md">
+        <Text typography="h5">Lazy Loading</Text>
+        <Text typography="caption" color="secondary">Images load as they scroll into view</Text>
+        <View gap="sm">
           {[1, 2, 3, 4, 5].map((i) => (
             <Image
               key={i}
@@ -126,8 +126,8 @@ export const ImageExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Custom Placeholder</Text>
+      <View gap="md">
+        <Text typography="h5">With Custom Placeholder</Text>
         <Image
           source="https://picsum.photos/400/300?random=20"
           alt="Custom placeholder"
@@ -141,9 +141,9 @@ export const ImageExamples: React.FC = () => {
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Error Handling</Text>
-        <Text size="sm" color="secondary">Image with broken URL shows fallback</Text>
+      <View gap="md">
+        <Text typography="h5">Error Handling</Text>
+        <Text typography="caption" color="secondary">Image with broken URL shows fallback</Text>
         <Image
           source="https://broken-url-that-does-not-exist.com/image.jpg"
           alt="Broken image"
@@ -157,8 +157,8 @@ export const ImageExamples: React.FC = () => {
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Responsive Width</Text>
+      <View gap="md">
+        <Text typography="h5">Responsive Width</Text>
         <Image
           source="https://picsum.photos/1200/400"
           alt="Responsive image"

@@ -21,14 +21,14 @@ export const PopoverExamples = () => {
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="lg">
-        <Text size="lg" weight="bold" align="center">
+      <View gap="lg">
+        <Text typography="h4" align="center">
           Popover Examples
         </Text>
 
         {/* Basic Popover */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Basic Popover</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Basic Popover</Text>
             <Button
               ref={basicButtonRef}
               onPress={() => setBasicOpen(true)}>
@@ -40,9 +40,9 @@ export const PopoverExamples = () => {
             anchor={basicButtonRef}
             placement="bottom"
           >
-            <View spacing="sm">
+            <View gap="sm">
               <Text weight="bold">Basic Popover</Text>
-              <Text size="sm">This is a basic popover with some content.</Text>
+              <Text typography="body2">This is a basic popover with some content.</Text>
               <Button size="sm" onPress={() => setBasicOpen(false)}>
                 Close
               </Button>
@@ -51,8 +51,8 @@ export const PopoverExamples = () => {
         </View>
 
         {/* Placement Examples */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Placement Options</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Placement Options</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {placements.map((placement) => (
               <View key={placement.id}>
@@ -75,9 +75,9 @@ export const PopoverExamples = () => {
                     anchor={{ current: placementButtonRefs.current[placement.id] }}
                     placement={placement.id as any}
                   >
-                    <View spacing="sm">
+                    <View gap="sm">
                       <Text weight="bold">{placement.label} placement</Text>
-                      <Text size="sm">
+                      <Text typography="body2">
                         Positioned {placement.id} relative to the button
                       </Text>
                       <Button size="sm" onPress={() => setPlacementOpen(null)}>
@@ -92,8 +92,8 @@ export const PopoverExamples = () => {
         </View>
 
         {/* Arrow Example */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">With Arrow</Text>
+        <View gap="md">
+          <Text typography="subtitle1">With Arrow</Text>
           <Button
             ref={arrowButtonRef}
             type="contained"
@@ -109,9 +109,9 @@ export const PopoverExamples = () => {
             placement="top"
             showArrow={true}
           >
-            <View spacing="sm">
+            <View gap="sm">
               <Text weight="bold">Arrow Popover</Text>
-              <Text size="sm">
+              <Text typography="body2">
                 This popover includes an arrow pointing to the anchor element.
               </Text>
               <Button size="sm" onPress={() => setArrowOpen(false)}>
@@ -122,25 +122,25 @@ export const PopoverExamples = () => {
         </View>
 
         {/* Features Description */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Features</Text>
-          <View spacing="sm">
-            <Text size="sm" color="secondary">
+        <View gap="md">
+          <Text typography="subtitle1">Features</Text>
+          <View gap="sm">
+            <Text typography="caption" color="secondary">
               • Automatically positions within viewport bounds
             </Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               • 12 placement options (top, bottom, left, right with start/end variants)
             </Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               • Optional arrow pointing to anchor element
             </Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               • Click outside or escape key to close
             </Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               • Smooth animations and transitions
             </Text>
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               • Follows anchor element on scroll/resize (web)
             </Text>
           </View>

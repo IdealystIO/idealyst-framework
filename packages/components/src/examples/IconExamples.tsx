@@ -60,9 +60,9 @@ const FalsePositiveTest = () => {
   const title = "account"; // Not used with Icon
   return (
     <>
-      <Text size="sm">Page: {pageName}</Text>
-      <Text size="sm">Title: {title}</Text>
-      <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+      <Text typography="body2">Page: {pageName}</Text>
+      <Text typography="body2">Title: {title}</Text>
+      <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
         These strings are NOT transformed (not used with Icon)
       </Text>
     </>
@@ -86,76 +86,76 @@ export const IconExamples = () => {
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
-        <Text size="lg" weight="bold" align="center">
+      <View gap="xl">
+        <Text typography="h4" align="center">
           Icon Examples
         </Text>
         
         {/* Color Variants */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Color Variants</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Color Variants</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="home-account" size="md" intent="primary" />
-              <Text size="sm">Intent Primary</Text>
+              <Text typography="body2">Intent Primary</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="check" size="md" intent="success" />
-              <Text size="sm">Intent Success</Text>
+              <Text typography="body2">Intent Success</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="alert-circle" size="md" color="blue" />
-              <Text size="sm">Blue</Text>
+              <Text typography="body2">Blue</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="alert" size="md" color="green" />
-              <Text size="sm">Green</Text>
+              <Text typography="body2">Green</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="cog" size="md" color="red" />
-              <Text size="sm">Red</Text>
+              <Text typography="body2">Red</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="text" size="md" color="orange" />
-              <Text size="sm">Orange</Text>
+              <Text typography="body2">Orange</Text>
             </View>
           </View>
         </View>
 
         {/* Color Shades */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Color Shades</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Color Shades</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="star" size="md" color="blue.200" />
-              <Text size="sm">Blue 200</Text>
+              <Text typography="body2">Blue 200</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="star" size="md" color="blue.500" />
-              <Text size="sm">Blue 500</Text>
+              <Text typography="body2">Blue 500</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="star" size="md" color="blue.800" />
-              <Text size="sm">Blue 800</Text>
+              <Text typography="body2">Blue 800</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="heart" size="md" color="red.300" />
-              <Text size="sm">Red 300</Text>
+              <Text typography="body2">Red 300</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="heart" size="md" color="red.600" />
-              <Text size="sm">Red 600</Text>
+              <Text typography="body2">Red 600</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="heart" size="md" color="red.900" />
-              <Text size="sm">Red 900</Text>
+              <Text typography="body2">Red 900</Text>
             </View>
           </View>
         </View>
         
         {/* Basic Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Basic Icons</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Basic Icons</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="home" />
             <Icon name="cog" />
@@ -169,58 +169,58 @@ export const IconExamples = () => {
         </View>
 
         {/* Icon Sizes */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Sizes</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Sizes</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="home" size="xs" />
-              <Text size="sm">XS (12px)</Text>
+              <Text typography="body2">XS (12px)</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="home" size="sm" />
-              <Text size="sm">SM (16px)</Text>
+              <Text typography="body2">SM (16px)</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="home" size="md" />
-              <Text size="sm">MD (24px)</Text>
+              <Text typography="body2">MD (24px)</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="home" size="lg" />
-              <Text size="sm">LG (32px)</Text>
+              <Text typography="body2">LG (32px)</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="home" size="xl" />
-              <Text size="sm">XL (48px)</Text>
+              <Text typography="body2">XL (48px)</Text>
             </View>
           </View>
         </View>
 
         {/* Custom Colors vs Variants */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Custom Colors vs Variants</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Custom Colors vs Variants</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="heart" size="lg" style={{ color: '#FF0000' }} />
-              <Text size="sm">Custom Red</Text>
+              <Text typography="body2">Custom Red</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="heart" size="lg" color="red" />
-              <Text size="sm">Red Variant</Text>
+              <Text typography="body2">Red Variant</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="heart" size="lg" style={{ color: '#00FF00' }} />
-              <Text size="sm">Custom Green</Text>
+              <Text typography="body2">Custom Green</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="heart" size="lg" color="green" />
-              <Text size="sm">Green Variant</Text>
+              <Text typography="body2">Green Variant</Text>
             </View>
           </View>
         </View>
 
         {/* Navigation Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Navigation & Movement</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Navigation & Movement</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="arrow-left" size="md" />
             <Icon name="arrow-right" size="md" />
@@ -236,8 +236,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Action Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Actions & Controls</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Actions & Controls</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="play" size="md" />
             <Icon name="pause" size="md" />
@@ -253,8 +253,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Communication Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Communication</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Communication</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="mail" size="md" />
             <Icon name="message" size="md" />
@@ -268,8 +268,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Social Media Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Social Media</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Social Media</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="facebook" size="md" />
             <Icon name="twitter" size="md" />
@@ -283,31 +283,31 @@ export const IconExamples = () => {
         </View>
 
         {/* Status & Alert Icons with Variants */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Status & Alerts (Using Variants)</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Status & Alerts (Using Variants)</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="check-circle" size="md" color="green" />
-              <Text size="sm">Success</Text>
+              <Text typography="body2">Success</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="alert" size="md" color="orange" />
-              <Text size="sm">Warning</Text>
+              <Text typography="body2">Warning</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="alert-circle" size="md" color="red" />
-              <Text size="sm">Error</Text>
+              <Text typography="body2">Error</Text>
             </View>
             <View style={{ alignItems: 'center', gap: 4 }}>
               <Icon name="information" size="md" color="blue" />
-              <Text size="sm">Info</Text>
+              <Text typography="body2">Info</Text>
             </View>
           </View>
         </View>
 
         {/* File & Document Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Files & Documents</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Files & Documents</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="file-document" size="md" />
             <Icon name="folder" size="md" />
@@ -321,8 +321,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Media Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Media & Content</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Media & Content</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="image" size="md" />
             <Icon name="camera" size="md" />
@@ -336,8 +336,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Technology Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Technology & Devices</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Technology & Devices</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="cellphone" size="md" />
             <Icon name="laptop" size="md" />
@@ -351,8 +351,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Weather Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Weather</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Weather</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="weather-sunny" size="md" />
             <Icon name="weather-night" size="md" />
@@ -366,8 +366,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Gaming & Entertainment Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Gaming & Entertainment</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Gaming & Entertainment</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="gamepad" size="md" />
             <Icon name="trophy" size="md" />
@@ -381,8 +381,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Business & Work Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Business & Work</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Business & Work</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="briefcase" size="md" />
             <Icon name="presentation" size="md" />
@@ -396,8 +396,8 @@ export const IconExamples = () => {
         </View>
 
         {/* Tool Icons */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Tools & Utilities</Text>
+        <View gap="md">
+          <Text typography="subtitle1">Tools & Utilities</Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
             <Icon name="tools" size="md" />
             <Icon name="hammer" size="md" />
@@ -411,56 +411,56 @@ export const IconExamples = () => {
         </View>
 
         {/* Enhanced Plugin Testing Section */}
-        <View spacing="lg" style={{ marginTop: 32, padding: 16, backgroundColor: 'rgba(100, 100, 255, 0.1)', borderRadius: 8 }}>
-          <Text size="lg" weight="bold">Enhanced Plugin Testing</Text>
-          <Text size="sm" style={{ fontStyle: 'italic', marginBottom: 16 }}>
+        <View gap="lg" style={{ marginTop: 32, padding: 16, backgroundColor: 'rgba(100, 100, 255, 0.1)', borderRadius: 8 }}>
+          <Text typography="h4">Enhanced Plugin Testing</Text>
+          <Text typography="caption" style={{ fontStyle: 'italic', marginBottom: 16 }}>
             These examples test the new context-aware babel plugin features
           </Text>
 
           {/* Test 1: Simple Variable */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 1: Simple Variable</Text>
-            <Text size="sm" color="secondary">Icon name from a simple variable</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 1: Simple Variable</Text>
+            <Text typography="caption" color="secondary">Icon name from a simple variable</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <SimpleVariableTest />
             </View>
-            <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+            <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
               const iconName = "home"; &lt;Icon name={'{iconName}'} /&gt;
             </Text>
           </View>
 
           {/* Test 2: Namespace Prefix */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 2: Namespace Prefix (mdi:)</Text>
-            <Text size="sm" color="secondary">Explicit marking with mdi: prefix</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 2: Namespace Prefix (mdi:)</Text>
+            <Text typography="caption" color="secondary">Explicit marking with mdi: prefix</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <NamespaceTest />
             </View>
-            <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+            <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
               const icon = "mdi:star"; &lt;Icon name={'{icon}'} /&gt;
             </Text>
           </View>
 
           {/* Test 3: Conditional Expression */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 3: Conditional Expression</Text>
-            <Text size="sm" color="secondary">Ternary operator with two icons</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 3: Conditional Expression</Text>
+            <Text typography="caption" color="secondary">Ternary operator with two icons</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <Icon name={isPlaying ? "pause" : "play"} size="md" />
               <Button onPress={() => setIsPlaying(!isPlaying)}>
                 Toggle Play/Pause
               </Button>
-              <Text size="sm">Currently: {isPlaying ? 'Playing' : 'Paused'}</Text>
+              <Text typography="body2">Currently: {isPlaying ? 'Playing' : 'Paused'}</Text>
             </View>
-            <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+            <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
               &lt;Icon name={'{isPlaying ? "pause" : "play"}'} /&gt;
             </Text>
           </View>
 
           {/* Test 4: Function Return */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 4: Function Return Value</Text>
-            <Text size="sm" color="secondary">Icon name from function (requires manifest or namespace)</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 4: Function Return Value</Text>
+            <Text typography="caption" color="secondary">Icon name from function (requires manifest or namespace)</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <Icon name={getStatusIcon(userStatus)} size="md" />
               <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -475,81 +475,81 @@ export const IconExamples = () => {
                 </Button>
               </View>
             </View>
-            <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+            <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
               &lt;Icon name={'{getStatusIcon(status)}'} /&gt;
             </Text>
           </View>
 
           {/* Test 5: Namespace with Conditional */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 5: Namespace + Conditional</Text>
-            <Text size="sm" color="secondary">Guaranteed transformation with mdi: prefix</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 5: Namespace + Conditional</Text>
+            <Text typography="caption" color="secondary">Guaranteed transformation with mdi: prefix</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <Icon name={isPlaying ? "mdi:volume-high" : "mdi:volume-mute"} size="md" />
-              <Text size="sm">Audio: {isPlaying ? 'On' : 'Muted'}</Text>
+              <Text typography="body2">Audio: {isPlaying ? 'On' : 'Muted'}</Text>
             </View>
-            <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+            <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
               &lt;Icon name={'{isPlaying ? "mdi:volume-high" : "mdi:volume-mute"}'} /&gt;
             </Text>
           </View>
 
           {/* Test 6: Logical Expression */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 6: Logical Expression</Text>
-            <Text size="sm" color="secondary">Using && and || operators</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 6: Logical Expression</Text>
+            <Text typography="caption" color="secondary">Using && and || operators</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <Icon name={userStatus === 'online' ? "wifi" : undefined} size="md" />
               <Icon name={userStatus === 'offline' ? undefined : "wifi-off"} size="md" />
             </View>
-            <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+            <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
               &lt;Icon name={'{condition && "wifi"}'} /&gt;
             </Text>
           </View>
 
           {/* Test 7: Template Literal (Static) */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 7: Template Literal (Static)</Text>
-            <Text size="sm" color="secondary">Static template strings</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 7: Template Literal (Static)</Text>
+            <Text typography="caption" color="secondary">Static template strings</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <TemplateLiteralTest />
             </View>
-            <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+            <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
               const icon = `bell`; &lt;Icon name={'{icon}'} /&gt;
             </Text>
           </View>
 
           {/* Test 8: No False Positives */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 8: No False Positives</Text>
-            <Text size="sm" color="secondary">Common words NOT used with Icon shouldn't transform</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 8: No False Positives</Text>
+            <Text typography="caption" color="secondary">Common words NOT used with Icon shouldn't transform</Text>
             <View style={{ flexDirection: 'column', gap: 8 }}>
               <FalsePositiveTest />
             </View>
           </View>
 
           {/* Test 9: Multiple Variables */}
-          <View spacing="md">
-            <Text size="md" weight="semibold">Test 9: Multiple Icon Variables</Text>
-            <Text size="sm" color="secondary">Several variables used with Icon components</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Test 9: Multiple Icon Variables</Text>
+            <Text typography="caption" color="secondary">Several variables used with Icon components</Text>
             <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
               <MultipleVariablesTest />
             </View>
-            <Text size="sm" style={{ fontFamily: 'monospace', color: '#666' }}>
+            <Text typography="caption" style={{ fontFamily: 'monospace', color: '#666' }}>
               Multiple icon variables in same scope
             </Text>
           </View>
 
           {/* Summary */}
           <View style={{ marginTop: 16, padding: 12, backgroundColor: 'rgba(0, 255, 0, 0.1)', borderRadius: 4 }}>
-            <Text size="sm" weight="semibold">Plugin Features Tested:</Text>
-            <Text size="sm">✓ Simple variables</Text>
-            <Text size="sm">✓ Namespace prefix (mdi:)</Text>
-            <Text size="sm">✓ Conditional expressions</Text>
-            <Text size="sm">✓ Function returns</Text>
-            <Text size="sm">✓ Logical operators</Text>
-            <Text size="sm">✓ Template literals</Text>
-            <Text size="sm">✓ No false positives</Text>
-            <Text size="sm">✓ Multiple variables</Text>
+            <Text typography="subtitle2">Plugin Features Tested:</Text>
+            <Text typography="body2">✓ Simple variables</Text>
+            <Text typography="body2">✓ Namespace prefix (mdi:)</Text>
+            <Text typography="body2">✓ Conditional expressions</Text>
+            <Text typography="body2">✓ Function returns</Text>
+            <Text typography="body2">✓ Logical operators</Text>
+            <Text typography="body2">✓ Template literals</Text>
+            <Text typography="body2">✓ No false positives</Text>
+            <Text typography="body2">✓ Multiple variables</Text>
           </View>
         </View>
       </View>

@@ -1,16 +1,20 @@
 export const Pressable = {
   category: "utility",
-  description: "Wrapper component that detects various press interactions on children",
+  description: "Wrapper component that detects various press interactions on children with padding variants",
       props: `
 - \`children\`: React.ReactNode - Content to render inside the pressable area
 - \`onPress\`: function - Called when the press gesture is activated
 - \`onPressIn\`: function - Called when the press gesture starts
 - \`onPressOut\`: function - Called when the press gesture ends
 - \`disabled\`: boolean - Whether the pressable is disabled
+- \`padding\`: Size - Padding on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`paddingVertical\`: Size - Top and bottom padding
+- \`paddingHorizontal\`: Size - Left and right padding
 `,
   features: [
     "Press, press-in, press-out callbacks",
     "Disabled state",
+    "Padding variants (uniform and directional)",
     "Accessibility support",
     "Custom styling",
     "Cross-platform support",

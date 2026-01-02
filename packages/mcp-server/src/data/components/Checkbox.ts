@@ -1,6 +1,6 @@
 export const Checkbox = {
   category: "form",
-  description: "Form checkbox for boolean selection with label and validation support",
+  description: "Form checkbox with margin variants for boolean selection, label, and validation support",
       props: `
 - \`checked\`: boolean - Whether the checkbox is checked
 - \`indeterminate\`: boolean - Whether the checkbox is in an indeterminate state
@@ -14,6 +14,9 @@ export const Checkbox = {
 - \`required\`: boolean - Whether the checkbox is required
 - \`error\`: string - Error message to display
 - \`helperText\`: string - Helper text to display
+- \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 `,
   features: [
     "Checked, unchecked, and indeterminate states",

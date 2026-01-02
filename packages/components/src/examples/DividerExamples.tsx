@@ -4,14 +4,14 @@ import { Screen, View, Text, Divider, Card } from '../index';
 export const DividerExamples = () => {
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
-      <Text size="lg" weight="bold" align="center">
+      <View gap="xl">
+      <Text typography="h4" align="center">
         Divider Examples
       </Text>
       
       {/* Horizontal Dividers */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Horizontal Dividers</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Horizontal Dividers</Text>
         <View style={{ gap: 10 }}>
           <Card type="outlined" padding="md">
             <Text>Content above</Text>
@@ -32,8 +32,8 @@ export const DividerExamples = () => {
       </View>
 
       {/* Divider Variants */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Variants</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Variants</Text>
         <View style={{ gap: 10 }}>
           <Card type="outlined" padding="md">
             <Text>Solid divider</Text>
@@ -54,8 +54,8 @@ export const DividerExamples = () => {
       </View>
 
       {/* Divider Thickness */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Thickness</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Thickness</Text>
         <View style={{ gap: 10 }}>
           <Card type="outlined" padding="md">
             <Text>Thin divider</Text>
@@ -76,8 +76,8 @@ export const DividerExamples = () => {
       </View>
 
       {/* Divider Intents */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Intents</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Intents</Text>
         <View style={{ gap: 10 }}>
           <Card type="outlined" padding="md">
             <Text>Primary divider</Text>
@@ -124,12 +124,12 @@ export const DividerExamples = () => {
       </View>
 
       {/* Divider Spacing */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Spacing</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Spacing</Text>
         <View style={{ gap: 10 }}>
           <Card type="outlined" padding="md">
             <Text>No spacing</Text>
-            <Divider spacing="none" />
+            <Divider  />
             <Text>Content immediately after</Text>
           </Card>
           
@@ -154,13 +154,13 @@ export const DividerExamples = () => {
       </View>
 
       {/* Divider with Content */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">With Content</Text>
+      <View gap="md">
+        <Text typography="subtitle1">With Content</Text>
         <View style={{ gap: 10 }}>
           <Card type="outlined" padding="md">
             <Text>Content above</Text>
             <Divider spacing="md">
-              <Text size="sm" color="secondary">OR</Text>
+              <Text typography="caption" color="secondary">OR</Text>
             </Divider>
             <Text>Content below</Text>
           </Card>
@@ -168,7 +168,7 @@ export const DividerExamples = () => {
           <Card type="outlined" padding="md">
             <Text>Content above</Text>
             <Divider spacing="md" intent="primary">
-              <Text size="sm" color="primary" weight="semibold">SECTION</Text>
+              <Text typography="subtitle2" color="primary">SECTION</Text>
             </Divider>
             <Text>Content below</Text>
           </Card>
@@ -176,8 +176,8 @@ export const DividerExamples = () => {
       </View>
 
       {/* Vertical Dividers */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Vertical Dividers</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Vertical Dividers</Text>
         <Card type="outlined" padding="md">
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Text>Left</Text>
@@ -190,8 +190,8 @@ export const DividerExamples = () => {
       </View>
 
       {/* Custom Length */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Custom Length</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Custom Length</Text>
         <View style={{ gap: 10 }}>
           <Card type="outlined" padding="md">
             <Text>Auto length</Text>

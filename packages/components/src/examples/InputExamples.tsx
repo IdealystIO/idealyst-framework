@@ -11,15 +11,15 @@ export const InputExamples = () => {
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
-      <Text size="lg" weight="bold" align="center">
+      <View gap="xl">
+      <Text typography="h4" align="center">
         Input Examples
       </Text>
 
       {/* With Icons */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">With Icons</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
+      <View gap="md">
+        <Text typography="subtitle1">With Icons</Text>
+        <View gap="sm" style={{ gap: 10 }}>
           <Input
             leftIcon="email"
             value={emailValue}
@@ -61,9 +61,9 @@ export const InputExamples = () => {
       </View>
 
       {/* Input Types */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Input Types</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
+      <View gap="md">
+        <Text typography="subtitle1">Input Types</Text>
+        <View gap="sm" style={{ gap: 10 }}>
           <Input
             value={textValue}
             onChangeText={setTextValue}
@@ -95,9 +95,9 @@ export const InputExamples = () => {
       </View>
 
       {/* Input Sizes */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Sizes</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
+      <View gap="md">
+        <Text typography="subtitle1">Sizes</Text>
+        <View gap="sm" style={{ gap: 10 }}>
           <Input
             leftIcon="email"
             placeholder="Small input"
@@ -117,9 +117,9 @@ export const InputExamples = () => {
       </View>
 
       {/* Input Variants */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Variants</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
+      <View gap="md">
+        <Text typography="subtitle1">Variants</Text>
+        <View gap="sm" style={{ gap: 10 }}>
           <Input
             leftIcon="magnify"
             placeholder="Outlined variant"
@@ -139,9 +139,9 @@ export const InputExamples = () => {
       </View>
 
       {/* Input States */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">States</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
+      <View gap="md">
+        <Text typography="subtitle1">States</Text>
+        <View gap="sm" style={{ gap: 10 }}>
           <Input
             leftIcon="account"
             placeholder="Normal state"
@@ -165,9 +165,9 @@ export const InputExamples = () => {
       </View>
 
       {/* Auto-capitalization Examples */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Auto-capitalization</Text>
-        <View spacing="sm" style={{ gap: 10 }}>
+      <View gap="md">
+        <Text typography="subtitle1">Auto-capitalization</Text>
+        <View gap="sm" style={{ gap: 10 }}>
           <Input
             placeholder="No capitalization"
             autoCapitalize="none"

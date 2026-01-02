@@ -1,43 +1,45 @@
 export const View = {
   category: "layout",
-  description: "Container component with margin, padding, and background variants",
+  description: "Container component with spacing variants (gap, padding, margin) and background variants",
       props: `
 - \`children\`: React.ReactNode - The content to display inside the view
-- \`marginVariant\`: ViewMarginVariant - Margin variant ('xs' | 'sm' | 'md' | 'lg' | 'xl' | 'none')
+- \`gap\`: Size - Space between children ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`padding\`: Size - Padding on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`paddingVertical\`: Size - Top and bottom padding
+- \`paddingHorizontal\`: Size - Left and right padding
+- \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`background\`: ViewBackgroundVariant - Background variant (Surface | 'transparent')
 - \`radius\`: ViewRadiusVariant - Border radius variant ('xs' | 'sm' | 'md' | 'lg' | 'xl' | 'none')
 - \`border\`: ViewBorderVariant - Border variant ('none' | 'thin' | 'thick')
-- \`backgroundColor\`: string - Custom background color (overrides background variant)
-- \`padding\`: number - Custom padding
-- \`margin\`: number - Custom margin (overrides marginVariant)
-- \`borderRadius\`: number - Custom border radius (overrides radius variant)
-- \`borderWidth\`: number - Custom border width (overrides border variant)
-- \`borderColor\`: string - Custom border color
 - \`scrollable\`: boolean - Enable scrollable content (uses ScrollView on native, overflow:auto on web)
 - \`testID\`: string - Test ID for testing
 `,
   features: [
     "Flexible layout container",
-    "Margin variants for consistent spacing",
+    "Gap variant for spacing between children",
+    "Padding variants (uniform and directional)",
+    "Margin variants (uniform and directional)",
     "Surface-based background variants",
     "Border radius variants",
     "Border support with thin/thick options",
-    "Custom overrides for all variants",
     "Scrollable content support",
     "Flexbox-based layout",
   ],
   bestPractices: [
     "Use View for all layout containers",
-    "Use marginVariant for consistent spacing between components",
-    "Use style prop with gap for spacing between children",
-    "Prefer variants over custom values",
+    "Use gap prop for consistent spacing between children",
+    "Use padding prop instead of style for consistent spacing",
+    "Use margin variants for spacing between containers",
+    "Prefer Size variants over numeric values",
     "Combine with Screen for full-screen layouts",
     "Use background variants for semantic surface colors",
   ],
   usage: `
 import { View, Text, Button } from '@idealyst/components';
 
-<View background="surface" radius="md" style={{ padding: 16, gap: 12 }}>
+<View background="surface" radius="md" padding="md" gap="sm">
   <Text size="lg" weight="bold">Card Title</Text>
   <Text>Card content with consistent spacing</Text>
   <Button>Action</Button>
@@ -46,7 +48,7 @@ import { View, Text, Button } from '@idealyst/components';
   examples: {
     basic: `import { View, Text } from '@idealyst/components';
 
-<View style={{ gap: 12 }}>
+<View gap="md">
   <Text>Item 1</Text>
   <Text>Item 2</Text>
   <Text>Item 3</Text>
@@ -54,18 +56,18 @@ import { View, Text, Button } from '@idealyst/components';
 
     variants: `import { View, Text } from '@idealyst/components';
 
-<View style={{ gap: 24 }}>
-  <View background="surface" radius="sm" style={{ padding: 12, gap: 8 }}>
+<View gap="lg">
+  <View background="surface" radius="sm" padding="sm" gap="xs">
     <Text>Small padding container</Text>
     <Text>Second item</Text>
   </View>
 
-  <View background="surface" radius="md" style={{ padding: 16, gap: 12 }}>
+  <View background="surface" radius="md" padding="md" gap="sm">
     <Text>Medium padding container</Text>
     <Text>Second item</Text>
   </View>
 
-  <View background="surface" radius="lg" style={{ padding: 20, gap: 16 }}>
+  <View background="surface" radius="lg" padding="lg" gap="md">
     <Text>Large padding container</Text>
     <Text>Second item</Text>
   </View>
@@ -77,11 +79,11 @@ import { View, Text, Button } from '@idealyst/components';
   background="surface"
   radius="md"
   border="thin"
-  style={{ padding: 16 }}
+  padding="md"
 >
-  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+  <View style={{ flexDirection: 'row', alignItems: 'center' }} gap="sm">
     <Icon name="information-outline" size="lg" color="primary" />
-    <View style={{ flex: 1, gap: 4 }}>
+    <View style={{ flex: 1 }} gap="xs">
       <Text weight="bold">Important Information</Text>
       <Text size="sm">This is an informational message</Text>
     </View>
@@ -99,17 +101,17 @@ function Example() {
   };
 
   return (
-    <View style={{ padding: 16, gap: 24 }}>
+    <View padding="md" gap="lg">
       <Card type="outlined" padding="md">
-        <View style={{ gap: 16 }}>
+        <View gap="md">
           <Text weight="bold">Dynamic List</Text>
-          <View style={{ gap: 8 }}>
+          <View gap="sm">
             {items.map((item, index) => (
               <View
                 key={index}
                 background="surface"
                 radius="sm"
-                style={{ padding: 12 }}
+                padding="sm"
               >
                 <Text>{item}</Text>
               </View>

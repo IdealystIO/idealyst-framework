@@ -1,6 +1,6 @@
 export const RadioButton = {
   category: "form",
-  description: "Radio button for single-choice selection within a group",
+  description: "Radio button with margin variants for single-choice selection within a group",
       props: `
 - \`value\`: string - The value of this radio button option
 - \`checked\`: boolean - Whether this radio button is selected
@@ -9,6 +9,9 @@ export const RadioButton = {
 - \`label\`: string - Label text to display next to the radio button
 - \`size\`: RadioButtonSizeVariant - The size variant of the radio button
 - \`intent\`: RadioButtonIntentVariant - The intent/color scheme of the radio button
+- \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 `,
   features: [
     "Single selection within group",

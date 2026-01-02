@@ -21,11 +21,11 @@ export const ChipExamples = () => {
 
   return (
     <Screen background="primary" safeArea>
-      <View spacing="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
-        <Text size="xl" weight="bold">Chip Examples</Text>
+      <View gap="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
+        <Text typography="h3">Chip Examples</Text>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Basic Chips</Text>
+        <Text typography="h5">Basic Chips</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Default" />
@@ -37,23 +37,23 @@ export const ChipExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Variants</Text>
+        <Text typography="h5">Variants</Text>
 
-        <Text size="md" weight="semibold">Filled (Default)</Text>
+        <Text typography="subtitle1">Filled (Default)</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Filled Primary" type="filled" intent="primary" />
           <Chip label="Filled Success" type="filled" intent="success" />
           <Chip label="Filled Error" type="filled" intent="error" />
         </View>
 
-        <Text size="md" weight="semibold">Outlined</Text>
+        <Text typography="subtitle1">Outlined</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Outlined Primary" type="outlined" intent="primary" />
           <Chip label="Outlined Success" type="outlined" intent="success" />
           <Chip label="Outlined Error" type="outlined" intent="error" />
         </View>
 
-        <Text size="md" weight="semibold">Soft</Text>
+        <Text typography="subtitle1">Soft</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Soft Primary" type="soft" intent="primary" />
           <Chip label="Soft Success" type="soft" intent="success" />
@@ -61,7 +61,7 @@ export const ChipExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Sizes</Text>
+        <Text typography="h5">Sizes</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
           <Chip label="Small" size="sm" />
@@ -70,7 +70,7 @@ export const ChipExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">With Icons</Text>
+        <Text typography="h5">With Icons</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Star" icon="star" />
@@ -80,7 +80,7 @@ export const ChipExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Deletable Chips</Text>
+        <Text typography="h5">Deletable Chips</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {tags.map(tag => (
@@ -94,10 +94,10 @@ export const ChipExamples = () => {
             />
           ))}
         </View>
-        <Text size="sm" color="secondary">Click the X to remove tags</Text>
+        <Text typography="caption" color="secondary">Click the X to remove tags</Text>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Selectable Chips</Text>
+        <Text typography="h5">Selectable Chips</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {['Option 1', 'Option 2', 'Option 3', 'Option 4'].map(option => (
@@ -112,12 +112,12 @@ export const ChipExamples = () => {
             />
           ))}
         </View>
-        <Text size="sm" color="secondary">
+        <Text typography="caption" color="secondary">
           Selected: {Array.from(selectedChips).join(', ') || 'None'}
         </Text>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Clickable Chips</Text>
+        <Text typography="h5">Clickable Chips</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip
@@ -134,7 +134,7 @@ export const ChipExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Disabled State</Text>
+        <Text typography="h5">Disabled State</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Disabled" disabled />
@@ -144,7 +144,7 @@ export const ChipExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Filter Example</Text>
+        <Text typography="h5">Filter Example</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip
@@ -182,7 +182,7 @@ export const ChipExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Category Tags</Text>
+        <Text typography="h5">Category Tags</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="Design" type="soft" intent="primary" size="sm" />

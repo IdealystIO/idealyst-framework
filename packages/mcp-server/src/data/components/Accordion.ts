@@ -1,18 +1,27 @@
 export const Accordion = {
   category: "display",
-  description: "Expandable/collapsible content sections with support for single or multiple open items",
+  description: "Expandable/collapsible content sections with spacing variants and support for single or multiple open items",
       props: `
 - \`items\`: AccordionItem[] - Array of accordion items with title and content
 - \`allowMultiple\`: boolean - Whether multiple items can be expanded at once
 - \`defaultExpanded\`: string[] - Array of item IDs that should be expanded by default
 - \`type\`: AccordionType - The visual style variant of the accordion
 - \`size\`: AccordionSizeVariant - The size variant of accordion items
+- \`gap\`: Size - Space between accordion items ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`padding\`: Size - Padding on all sides
+- \`paddingVertical\`: Size - Top and bottom padding
+- \`paddingHorizontal\`: Size - Left and right padding
+- \`margin\`: Size - Margin on all sides
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 `,
   features: [
     "Single or multiple item expansion modes",
     "Default expanded items support",
     "Three visual variants",
     "Three size options",
+    "Gap variant for spacing between items",
+    "Padding and margin variants",
     "Disabled item state",
     "Controlled and uncontrolled modes",
   ],

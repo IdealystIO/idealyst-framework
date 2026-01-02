@@ -8,11 +8,11 @@ export const ListExamples: React.FC = () => {
 
   return (
     <Screen background="primary" padding="lg">
-    <View spacing="lg">
-      <Text size="xl" weight="bold">List Examples</Text>
+    <View gap="lg">
+      <Text typography="h3">List Examples</Text>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Basic List</Text>
+      <View gap="md">
+        <Text typography="h5">Basic List</Text>
         <List type="divided">
           <ListItem label="Item 1" />
           <ListItem label="Item 2" />
@@ -20,27 +20,27 @@ export const ListExamples: React.FC = () => {
         </List>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Variants</Text>
-        <View spacing="sm">
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Default</Text>
+      <View gap="md">
+        <Text typography="h5">Variants</Text>
+        <View gap="sm">
+          <View gap="xs">
+            <Text typography="body2">Default</Text>
             <List type="default">
               <ListItem label="Item 1" />
               <ListItem label="Item 2" />
               <ListItem label="Item 3" />
             </List>
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Bordered</Text>
+          <View gap="xs">
+            <Text typography="body2">Bordered</Text>
             <List type="bordered">
               <ListItem label="Item 1" />
               <ListItem label="Item 2" />
               <ListItem label="Item 3" />
             </List>
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Divided</Text>
+          <View gap="xs">
+            <Text typography="body2">Divided</Text>
             <List type="divided">
               <ListItem label="Item 1" />
               <ListItem label="Item 2" />
@@ -50,9 +50,9 @@ export const ListExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Sizes</Text>
-        <View spacing="sm">
+      <View gap="md">
+        <Text typography="h5">Sizes</Text>
+        <View gap="sm">
           <List type="bordered" size="sm">
             <ListItem label="Small Item" />
             <ListItem label="Small Item" />
@@ -68,8 +68,8 @@ export const ListExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Clickable List</Text>
+      <View gap="md">
+        <Text typography="h5">Clickable List</Text>
         <List type="bordered">
           <ListItem
             label="Home"
@@ -87,13 +87,13 @@ export const ListExamples: React.FC = () => {
             onPress={() => setSelectedItem('profile')}
           />
         </List>
-        <Text size="sm" color="secondary">
+        <Text typography="caption" color="secondary">
           Selected: {selectedItem}
         </Text>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Leading Elements</Text>
+      <View gap="md">
+        <Text typography="h5">With Leading Elements</Text>
         <List type="divided">
           <ListItem
             label="Dashboard"
@@ -113,8 +113,8 @@ export const ListExamples: React.FC = () => {
         </List>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Trailing Elements</Text>
+      <View gap="md">
+        <Text typography="h5">With Trailing Elements</Text>
         <List type="bordered">
           <ListItem
             label="Notifications"
@@ -129,13 +129,13 @@ export const ListExamples: React.FC = () => {
           <ListItem
             label="Updates"
             leading="refresh"
-            trailing={<Text size="sm" color="secondary">New</Text>}
+            trailing={<Text typography="caption" color="secondary">New</Text>}
           />
         </List>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Navigation Sidebar</Text>
+      <View gap="md">
+        <Text typography="h5">Navigation Sidebar</Text>
         <List type="bordered">
           <ListItem
             label="Dashboard"
@@ -164,8 +164,8 @@ export const ListExamples: React.FC = () => {
         </List>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Sections</Text>
+      <View gap="md">
+        <Text typography="h5">With Sections</Text>
         <List type="divided">
           <ListSection title="Main">
             <ListItem
@@ -206,8 +206,8 @@ export const ListExamples: React.FC = () => {
         </List>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Indented Items</Text>
+      <View gap="md">
+        <Text typography="h5">Indented Items</Text>
         <List type="bordered">
           <ListItem label="Parent Item 1" />
           <ListItem label="Child Item 1.1" indent={1} />
@@ -218,8 +218,8 @@ export const ListExamples: React.FC = () => {
         </List>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Disabled Items</Text>
+      <View gap="md">
+        <Text typography="h5">Disabled Items</Text>
         <List type="bordered">
           <ListItem
             label="Enabled Item"
@@ -237,32 +237,32 @@ export const ListExamples: React.FC = () => {
         </List>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Rich Content</Text>
+      <View gap="md">
+        <Text typography="h5">Rich Content</Text>
         <List type="bordered">
           <ListItem
             leading="account-circle"
-            trailing={<Text size="sm" color="secondary">Admin</Text>}
+            trailing={<Text typography="caption" color="secondary">Admin</Text>}
           >
-            <View>
+            <View gap="xl">
               <Text weight="semibold">John Doe</Text>
-              <Text size="sm" color="secondary">john.doe@example.com</Text>
+              <Text typography="caption" color="secondary">john.doe@example.com</Text>
             </View>
           </ListItem>
           <ListItem
             leading="account-circle"
-            trailing={<Text size="sm" color="secondary">User</Text>}
+            trailing={<Text typography="caption" color="secondary">User</Text>}
           >
-            <View>
+            <View gap="xl">
               <Text weight="semibold">Jane Smith</Text>
-              <Text size="sm" color="secondary">jane.smith@example.com</Text>
+              <Text typography="caption" color="secondary">jane.smith@example.com</Text>
             </View>
           </ListItem>
         </List>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Active States</Text>
+      <View gap="md">
+        <Text typography="h5">Active States</Text>
         <List type="bordered">
           <ListItem
             label="Normal Item"

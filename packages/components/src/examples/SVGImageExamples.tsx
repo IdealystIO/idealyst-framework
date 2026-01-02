@@ -6,15 +6,15 @@ import testLogo from './test-logo.svg';
 export const SVGImageExamples = () => {
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
-        <Text size="lg" weight="bold" align="center">
+      <View gap="xl">
+        <Text typography="h4" align="center">
           SVG Image Examples
         </Text>
         
         {/* Local SVG File Example */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Loading Local SVG File</Text>
-          <Text size="sm">
+        <View gap="md">
+          <Text typography="subtitle1">Loading Local SVG File</Text>
+          <Text typography="body2">
             Using the test-logo.svg file - works on web, limited support on React Native
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -41,9 +41,9 @@ export const SVGImageExamples = () => {
         </View>
 
         {/* Intent Colors */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Intent Colors</Text>
-          <Text size="sm">
+        <View gap="md">
+          <Text typography="subtitle1">Intent Colors</Text>
+          <Text typography="body2">
             SVG images with theme-based coloring
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -75,9 +75,9 @@ export const SVGImageExamples = () => {
         </View>
 
         {/* Custom Colors */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Custom Colors</Text>
-          <Text size="sm">
+        <View gap="md">
+          <Text typography="subtitle1">Custom Colors</Text>
+          <Text typography="body2">
             Direct color specification
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -103,9 +103,9 @@ export const SVGImageExamples = () => {
         </View>
 
         {/* Remote URL Example */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Loading from URL</Text>
-          <Text size="sm">
+        <View gap="md">
+          <Text typography="subtitle1">Loading from URL</Text>
+          <Text typography="body2">
             SVG images loaded from remote URLs (web only for security)
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -130,9 +130,9 @@ export const SVGImageExamples = () => {
         </View>
 
         {/* Resize Modes */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Resize Modes</Text>
-          <Text size="sm">
+        <View gap="md">
+          <Text typography="subtitle1">Resize Modes</Text>
+          <Text typography="body2">
             Different ways to fit SVG images in containers
           </Text>
           <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -164,22 +164,22 @@ export const SVGImageExamples = () => {
         </View>
 
         {/* Usage Tips */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Usage Tips</Text>
-          <View spacing="sm">
-            <Text size="sm">
+        <View gap="md">
+          <Text typography="subtitle1">Usage Tips</Text>
+          <View gap="sm">
+            <Text typography="body2">
               • <Text weight="semibold">Local files:</Text> Use relative paths for bundled SVG files
             </Text>
-            <Text size="sm">
+            <Text typography="body2">
               • <Text weight="semibold">Remote URLs:</Text> Use {`{ uri: "https://..." }`} format
             </Text>
-            <Text size="sm">
+            <Text typography="body2">
               • <Text weight="semibold">React Native:</Text> Local SVGs have limited support - use remote URLs or convert to PNG
             </Text>
-            <Text size="sm">
+            <Text typography="body2">
               • <Text weight="semibold">Coloring:</Text> Works best with single-color SVG icons
             </Text>
-            <Text size="sm">
+            <Text typography="body2">
               • <Text weight="semibold">Performance:</Text> Cache remote SVGs for better performance
             </Text>
           </View>

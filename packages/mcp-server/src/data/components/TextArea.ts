@@ -1,6 +1,6 @@
 export const TextArea = {
   category: "form",
-  description: "Multi-line text input field for longer text content",
+  description: "Multi-line text input field with margin variants for longer text content",
       props: `
 - \`value\`: string - The current value of the textarea (controlled)
 - \`defaultValue\`: string - The default value for uncontrolled usage
@@ -19,6 +19,9 @@ export const TextArea = {
 - \`showCharacterCount\`: boolean - Whether to show the character count
 - \`intent\`: TextAreaIntentVariant - The intent/color scheme (for validation states)
 - \`size\`: TextAreaSizeVariant - The size variant of the textarea
+- \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`textareaStyle\`: StyleProp<TextStyle> - Additional custom styles for the textarea element
 `,
   features: [

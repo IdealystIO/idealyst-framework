@@ -1,6 +1,6 @@
 export const Select = {
   category: "form",
-  description: "Dropdown select component for choosing from a list of options",
+  description: "Dropdown select component with margin variants for choosing from a list of options",
       props: `
 - \`options\`: SelectOption[] - Array of options to display in the select
 - \`value\`: string - The currently selected value
@@ -12,9 +12,12 @@ export const Select = {
 - \`label\`: string - Label text to display above the select
 - \`intent\`: SelectIntentVariant - The visual type of the select The intent/color scheme of the select
 - \`size\`: SelectSizeVariant - The size of the select
+- \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`searchable\`: boolean - Whether to show a search/filter input (web only)
 - \`filterOption\`: (option: SelectOption, searchTerm: string) => boolean - Custom search filter function (used with searchable)
-- \`presentationMode\`: 'dropdown' | 'actionSheet' - Native iOS presentation mode (native only) 'dropdown' uses a standard dropdown overlay 'actionSheet' uses iOS ActionSheet for selection
+- \`presentationMode\`: 'dropdown' | 'actionSheet' - Native iOS presentation mode (native only)
 - \`maxHeight\`: number - Maximum height for the dropdown content
 `,
   features: [

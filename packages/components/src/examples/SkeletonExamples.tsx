@@ -4,53 +4,53 @@ import { Screen, View, Text, Skeleton, SkeletonGroup, Divider, Card } from '../i
 export const SkeletonExamples = () => {
   return (
     <Screen background="primary" safeArea>
-      <View spacing="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
-        <Text size="xl" weight="bold">Skeleton Examples</Text>
+      <View gap="lg" style={{ maxWidth: 800, width: '100%', paddingHorizontal: 16, marginHorizontal: 'auto' }}>
+        <Text typography="h3">Skeleton Examples</Text>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Basic Shapes</Text>
+        <Text typography="h5">Basic Shapes</Text>
 
-        <Text size="md" weight="semibold">Rectangle (Default)</Text>
+        <Text typography="subtitle1">Rectangle (Default)</Text>
         <Skeleton width="100%" height={40} shape="rectangle" />
 
-        <Text size="md" weight="semibold">Rounded</Text>
+        <Text typography="subtitle1">Rounded</Text>
         <Skeleton width="100%" height={40} shape="rounded" />
 
-        <Text size="md" weight="semibold">Circle</Text>
+        <Text typography="subtitle1">Circle</Text>
         <Skeleton width={64} height={64} shape="circle" />
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Custom Border Radius</Text>
+        <Text typography="h5">Custom Border Radius</Text>
 
         <Skeleton width="100%" height={40} shape="rounded" borderRadius={4} />
         <Skeleton width="100%" height={40} shape="rounded" borderRadius={16} />
         <Skeleton width="100%" height={40} shape="rounded" borderRadius={24} />
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Animation Types</Text>
+        <Text typography="h5">Animation Types</Text>
 
-        <Text size="md" weight="semibold">Pulse (Default)</Text>
+        <Text typography="subtitle1">Pulse (Default)</Text>
         <Skeleton width="100%" height={40} animation="pulse" />
 
-        <Text size="md" weight="semibold">Wave</Text>
+        <Text typography="subtitle1">Wave</Text>
         <Skeleton width="100%" height={40} animation="wave" />
 
-        <Text size="md" weight="semibold">None</Text>
+        <Text typography="subtitle1">None</Text>
         <Skeleton width="100%" height={40} animation="none" />
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Skeleton Groups</Text>
+        <Text typography="h5">Skeleton Groups</Text>
 
-        <Text size="md" weight="semibold">Default Group (3 items)</Text>
+        <Text typography="subtitle1">Default Group (3 items)</Text>
         <SkeletonGroup />
 
-        <Text size="md" weight="semibold">Custom Count (5 items)</Text>
+        <Text typography="subtitle1">Custom Count (5 items)</Text>
         <SkeletonGroup count={5} />
 
-        <Text size="md" weight="semibold">Custom Spacing</Text>
+        <Text typography="subtitle1">Custom Spacing</Text>
         <SkeletonGroup count={3} spacing={20} />
 
-        <Text size="md" weight="semibold">Custom Skeleton Props</Text>
+        <Text typography="subtitle1">Custom Skeleton Props</Text>
         <SkeletonGroup
           count={4}
           spacing={16}
@@ -62,10 +62,10 @@ export const SkeletonExamples = () => {
         />
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Profile Card Loading</Text>
+        <Text typography="h5">Profile Card Loading</Text>
 
         <Card type="outlined">
-          <View spacing="md">
+          <View gap="md">
             <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
               <Skeleton width={64} height={64} shape="circle" />
               <View style={{ flex: 1, gap: 8 }}>
@@ -78,10 +78,10 @@ export const SkeletonExamples = () => {
         </Card>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Article Card Loading</Text>
+        <Text typography="h5">Article Card Loading</Text>
 
         <Card type="outlined">
-          <View spacing="md">
+          <View gap="md">
             <Skeleton width="100%" height={200} shape="rounded" />
             <Skeleton width="80%" height={28} shape="rounded" />
             <SkeletonGroup
@@ -97,10 +97,10 @@ export const SkeletonExamples = () => {
         </Card>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">List Item Loading</Text>
+        <Text typography="h5">List Item Loading</Text>
 
         <Card type="outlined">
-          <View spacing="md">
+          <View gap="md">
             {[1, 2, 3].map((item) => (
               <View key={item} style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
                 <Skeleton width={48} height={48} shape="rounded" />
@@ -114,10 +114,10 @@ export const SkeletonExamples = () => {
         </Card>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Table Loading</Text>
+        <Text typography="h5">Table Loading</Text>
 
         <Card type="outlined">
-          <View spacing="sm">
+          <View gap="sm">
             {/* Header */}
             <View style={{ flexDirection: 'row', gap: 12 }}>
               <Skeleton width={40} height={20} shape="rounded" />
@@ -139,12 +139,12 @@ export const SkeletonExamples = () => {
         </Card>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Dashboard Card Loading</Text>
+        <Text typography="h5">Dashboard Card Loading</Text>
 
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           {[1, 2, 3, 4].map((card) => (
             <Card key={card} type="outlined" style={{ flex: 1, minWidth: 180 }}>
-              <View spacing="sm">
+              <View gap="sm">
                 <Skeleton width="60%" height={16} shape="rounded" />
                 <Skeleton width="80%" height={32} shape="rounded" />
                 <Skeleton width="40%" height={12} shape="rounded" />
@@ -154,10 +154,10 @@ export const SkeletonExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Comment Thread Loading</Text>
+        <Text typography="h5">Comment Thread Loading</Text>
 
         <Card type="outlined">
-          <View spacing="md">
+          <View gap="md">
             {[1, 2, 3].map((comment) => (
               <View key={comment} style={{ paddingLeft: comment > 1 ? 32 : 0 }}>
                 <View style={{ flexDirection: 'row', gap: 12 }}>
@@ -177,7 +177,7 @@ export const SkeletonExamples = () => {
         </Card>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Mixed Shapes and Sizes</Text>
+        <Text typography="h5">Mixed Shapes and Sizes</Text>
 
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
           <Skeleton width={80} height={80} shape="circle" />
@@ -193,7 +193,7 @@ export const SkeletonExamples = () => {
         </View>
 
         <Divider spacing="md" />
-        <Text size="lg" weight="semibold">Custom Widths</Text>
+        <Text typography="h5">Custom Widths</Text>
 
         <Skeleton width={100} height={20} shape="rounded" />
         <Skeleton width="25%" height={20} shape="rounded" />

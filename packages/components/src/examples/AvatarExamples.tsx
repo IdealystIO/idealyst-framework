@@ -4,14 +4,14 @@ import { Screen, View, Text, Avatar } from '../index';
 export const AvatarExamples = () => {
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
-      <Text size="lg" weight="bold" align="center">
+      <View gap="xl">
+      <Text typography="h4" align="center">
         Avatar Examples
       </Text>
       
       {/* Avatar Sizes */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Sizes</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Sizes</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Avatar size="sm" fallback="S" />
           <Avatar size="md" fallback="M" />
@@ -21,8 +21,8 @@ export const AvatarExamples = () => {
       </View>
 
       {/* Avatar Shapes */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Shapes</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Shapes</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Avatar shape="circle" fallback="C" size="lg" />
           <Avatar shape="square" fallback="S" size="lg" />
@@ -30,8 +30,8 @@ export const AvatarExamples = () => {
       </View>
 
       {/* Avatar with Fallbacks */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Fallback Text</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Fallback Text</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Avatar fallback="JD" alt="John Doe" />
           <Avatar fallback="AB" alt="Alice Brown" />
@@ -41,8 +41,8 @@ export const AvatarExamples = () => {
       </View>
 
       {/* Avatar with Images */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">With Images</Text>
+      <View gap="md">
+        <Text typography="subtitle1">With Images</Text>
         <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Avatar 
             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
@@ -63,8 +63,8 @@ export const AvatarExamples = () => {
       </View>
 
       {/* Avatar Group */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Avatar Group</Text>
+      <View gap="md">
+        <Text typography="subtitle1">Avatar Group</Text>
         <View style={{ flexDirection: 'row', gap: -8, alignItems: 'center' }}>
           <Avatar fallback="JD" size="md" />
           <Avatar fallback="AB" size="md" />
@@ -74,20 +74,20 @@ export const AvatarExamples = () => {
       </View>
 
       {/* Different Size Combinations */}
-      <View spacing="md">
-        <Text size="md" weight="semibold">Size Combinations</Text>
-        <View spacing="sm">
+      <View gap="md">
+        <Text typography="subtitle1">Size Combinations</Text>
+        <View gap="sm">
           <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
             <Avatar size="sm" fallback="S" />
-            <Text size="sm">Small avatar with text</Text>
+            <Text typography="body2">Small avatar with text</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
             <Avatar size="md" fallback="M" />
-            <Text size="md">Medium avatar with text</Text>
+            <Text typography="body1">Medium avatar with text</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
             <Avatar size="lg" fallback="L" />
-            <Text size="lg">Large avatar with text</Text>
+            <Text typography="h5">Large avatar with text</Text>
           </View>
         </View>
       </View>

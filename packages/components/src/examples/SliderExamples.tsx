@@ -9,76 +9,76 @@ export const SliderExamples: React.FC = () => {
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="lg">
-        <Text size="xl" weight="bold">Slider Examples</Text>
+      <View gap="lg">
+        <Text typography="h3">Slider Examples</Text>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Basic Slider</Text>
+      <View gap="md">
+        <Text typography="h5">Basic Slider</Text>
         <Slider
           value={basicValue}
           onValueChange={setBasicValue}
           showValue
         />
-        <Text size="sm" color="secondary">Value: {basicValue}</Text>
+        <Text typography="caption" color="secondary">Value: {basicValue}</Text>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Sizes</Text>
-        <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <View spacing="xs">
-            <Text size="sm">Small</Text>
+      <View gap="md">
+        <Text typography="h5">Sizes</Text>
+        <View gap="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <View gap="xs">
+            <Text typography="body2">Small</Text>
             <Slider defaultValue={30} size="sm" />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Medium (default)</Text>
+          <View gap="xs">
+            <Text typography="body2">Medium (default)</Text>
             <Slider defaultValue={50} size="md" />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Large</Text>
+          <View gap="xs">
+            <Text typography="body2">Large</Text>
             <Slider defaultValue={70} size="lg" />
           </View>
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Intent Colors</Text>
-        <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <View spacing="xs">
-            <Text size="sm">Primary</Text>
+      <View gap="md">
+        <Text typography="h5">Intent Colors</Text>
+        <View gap="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <View gap="xs">
+            <Text typography="body2">Primary</Text>
             <Slider defaultValue={60} intent="primary" />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Success</Text>
+          <View gap="xs">
+            <Text typography="body2">Success</Text>
             <Slider defaultValue={60} intent="success" />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Error</Text>
+          <View gap="xs">
+            <Text typography="body2">Error</Text>
             <Slider defaultValue={60} intent="error" />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Warning</Text>
+          <View gap="xs">
+            <Text typography="body2">Warning</Text>
             <Slider defaultValue={60} intent="warning" />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Neutral</Text>
+          <View gap="xs">
+            <Text typography="body2">Neutral</Text>
             <Slider defaultValue={60} intent="neutral" />
           </View>
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Min/Max Labels</Text>
+      <View gap="md">
+        <Text typography="h5">With Min/Max Labels</Text>
         <Slider
           defaultValue={50}
           showMinMax
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Custom Range & Step</Text>
-        <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <View spacing="xs">
-            <Text size="sm">Range: 0-10, Step: 1</Text>
+      <View gap="md">
+        <Text typography="h5">Custom Range & Step</Text>
+        <View gap="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <View gap="xs">
+            <Text typography="body2">Range: 0-10, Step: 1</Text>
             <Slider
               min={0}
               max={10}
@@ -88,8 +88,8 @@ export const SliderExamples: React.FC = () => {
               showMinMax
             />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Range: -50 to 50, Step: 5</Text>
+          <View gap="xs">
+            <Text typography="body2">Range: -50 to 50, Step: 5</Text>
             <Slider
               min={-50}
               max={50}
@@ -102,8 +102,8 @@ export const SliderExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Marks</Text>
+      <View gap="md">
+        <Text typography="h5">With Marks</Text>
         <Slider
           min={0}
           max={100}
@@ -118,8 +118,8 @@ export const SliderExamples: React.FC = () => {
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Volume Control</Text>
+      <View gap="md">
+        <Text typography="h5">Volume Control</Text>
         <Slider
           value={volumeValue}
           onValueChange={setVolumeValue}
@@ -135,11 +135,11 @@ export const SliderExamples: React.FC = () => {
         />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">With Icons</Text>
-        <View spacing="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <View spacing="xs">
-            <Text size="sm">Volume with icon</Text>
+      <View gap="md">
+        <Text typography="h5">With Icons</Text>
+        <View gap="sm" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <View gap="xs">
+            <Text typography="body2">Volume with icon</Text>
             <Slider
               defaultValue={60}
               icon="volume-high"
@@ -147,8 +147,8 @@ export const SliderExamples: React.FC = () => {
               showMinMax
             />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Brightness with icon</Text>
+          <View gap="xs">
+            <Text typography="body2">Brightness with icon</Text>
             <Slider
               defaultValue={75}
               icon="brightness-6"
@@ -156,8 +156,8 @@ export const SliderExamples: React.FC = () => {
               showMinMax
             />
           </View>
-          <View spacing="xs">
-            <Text size="sm">Temperature with icon</Text>
+          <View gap="xs">
+            <Text typography="body2">Temperature with icon</Text>
             <Slider
               defaultValue={22}
               min={10}
@@ -170,8 +170,8 @@ export const SliderExamples: React.FC = () => {
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Temperature Control</Text>
+      <View gap="md">
+        <Text typography="h5">Temperature Control</Text>
         <Slider
           value={temperatureValue}
           onValueChange={setTemperatureValue}
@@ -182,11 +182,11 @@ export const SliderExamples: React.FC = () => {
           showMinMax
           intent="warning"
         />
-        <Text size="sm" color="secondary">Temperature: {temperatureValue}°C</Text>
+        <Text typography="caption" color="secondary">Temperature: {temperatureValue}°C</Text>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Disabled</Text>
+      <View gap="md">
+        <Text typography="h5">Disabled</Text>
         <Slider
           defaultValue={60}
           disabled

@@ -1,6 +1,6 @@
 export const TabBar = {
   category: "navigation",
-  description: "Tab bar navigation component for switching between views or sections",
+  description: "Tab bar navigation component with spacing variants for switching between views or sections",
       props: `
 - \`items\`: TabBarItem[] - Array of tab items to display
 - \`value\`: string - The currently selected tab value (controlled)
@@ -8,12 +8,20 @@ export const TabBar = {
 - \`onChange\`: function - Called when the selected tab changes
 - \`type\`: TabBarType - The visual style variant (default, underlined, pills)
 - \`size\`: TabBarSizeVariant - The size variant of the tabs
+- \`gap\`: Size - Space between tabs ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`padding\`: Size - Padding on all sides
+- \`paddingVertical\`: Size - Top and bottom padding
+- \`paddingHorizontal\`: Size - Left and right padding
+- \`margin\`: Size - Margin on all sides
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`pillMode\`: TabBarPillMode - Mode for pills variant: 'light' for light backgrounds (dark pill), 'dark' for dark backgrounds (light pill)
 `,
   features: [
     "Three visual variants",
     "Controlled and uncontrolled modes",
     "Three sizes",
+    "Gap, padding, and margin variants",
     "Five intent colors",
     "Disabled tabs",
     "Simple configuration",

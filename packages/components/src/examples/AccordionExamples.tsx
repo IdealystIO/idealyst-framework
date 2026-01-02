@@ -27,7 +27,7 @@ export const AccordionExamples: React.FC = () => {
       id: 'rich1',
       title: 'Rich Content Example',
       content: (
-        <View spacing="sm">
+        <View gap="sm">
           <Text weight="semibold">Features:</Text>
           <Text>• Cross-platform support</Text>
           <Text>• Type-safe styling</Text>
@@ -39,7 +39,7 @@ export const AccordionExamples: React.FC = () => {
       id: 'rich2',
       title: 'Another Section',
       content: (
-        <View>
+        <View gap="xl">
           <Text>This section contains rich content with multiple paragraphs.</Text>
           <Text style={{ marginTop: 8 }}>You can include any React components here.</Text>
         </View>
@@ -55,67 +55,67 @@ export const AccordionExamples: React.FC = () => {
 
   return (
     <Screen background="primary" padding="lg">
-    <View spacing="lg">
-      <Text size="xl" weight="bold">Accordion Examples</Text>
+    <View gap="lg">
+      <Text typography="h3">Accordion Examples</Text>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Basic Accordion</Text>
+      <View gap="md">
+        <Text typography="h5">Basic Accordion</Text>
         <Accordion items={basicItems} />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Allow Multiple Expanded</Text>
+      <View gap="md">
+        <Text typography="h5">Allow Multiple Expanded</Text>
         <Accordion items={basicItems} allowMultiple />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Default Expanded</Text>
+      <View gap="md">
+        <Text typography="h5">Default Expanded</Text>
         <Accordion items={basicItems} defaultExpanded={['item1', 'item2']} allowMultiple />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Variants</Text>
-        <View spacing="sm">
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Default</Text>
+      <View gap="md">
+        <Text typography="h5">Variants</Text>
+        <View gap="sm">
+          <View gap="xs">
+            <Text typography="body2">Default</Text>
             <Accordion items={basicItems} type="standard" />
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Separated</Text>
+          <View gap="xs">
+            <Text typography="body2">Separated</Text>
             <Accordion items={basicItems} type="separated" />
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Bordered</Text>
+          <View gap="xs">
+            <Text typography="body2">Bordered</Text>
             <Accordion items={basicItems} type="bordered" />
           </View>
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Sizes</Text>
-        <View spacing="sm">
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Small</Text>
+      <View gap="md">
+        <Text typography="h5">Sizes</Text>
+        <View gap="sm">
+          <View gap="xs">
+            <Text typography="body2">Small</Text>
             <Accordion items={basicItems} size="sm" type="separated" />
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Medium (default)</Text>
+          <View gap="xs">
+            <Text typography="body2">Medium (default)</Text>
             <Accordion items={basicItems} size="md" type="separated" />
           </View>
-          <View spacing="xs">
-            <Text size="sm" weight="medium">Large</Text>
+          <View gap="xs">
+            <Text typography="body2">Large</Text>
             <Accordion items={basicItems} size="lg" type="separated" />
           </View>
         </View>
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Rich Content</Text>
+      <View gap="md">
+        <Text typography="h5">Rich Content</Text>
         <Accordion items={richContentItems} type="bordered" />
       </View>
 
-      <View spacing="md">
-        <Text size="lg" weight="semibold">Disabled Items</Text>
+      <View gap="md">
+        <Text typography="h5">Disabled Items</Text>
         <Accordion items={disabledItems} type="separated" />
       </View>
     </View>

@@ -591,6 +591,165 @@ workspace/
 8. **Dependencies**: Share dependencies across packages when possible
 `,
 
+  "idealyst://framework/spacing-system": `# Spacing System
+
+Idealyst components use a variant-based spacing system for consistent layouts. Instead of specifying numeric values, you use Size variants (xs, sm, md, lg, xl) that map to theme-defined values.
+
+## Spacing Prop Interfaces
+
+Different component types receive different spacing props based on their use case:
+
+### ContainerStyleProps (Layout Containers)
+**Components**: View, Card, Screen, List, Accordion, Table, TabBar
+
+\`\`\`typescript
+interface ContainerStyleProps {
+  gap?: Size;              // Space between children
+  padding?: Size;          // Padding on all sides
+  paddingVertical?: Size;  // Top and bottom padding
+  paddingHorizontal?: Size; // Left and right padding
+  margin?: Size;           // Margin on all sides
+  marginVertical?: Size;   // Top and bottom margin
+  marginHorizontal?: Size; // Left and right margin
+}
+\`\`\`
+
+### TextSpacingStyleProps (Text Components)
+**Components**: Text
+
+\`\`\`typescript
+interface TextSpacingStyleProps {
+  gap?: Size;              // Space between nested elements
+  padding?: Size;          // Padding on all sides
+  paddingVertical?: Size;  // Top and bottom padding
+  paddingHorizontal?: Size; // Left and right padding
+}
+\`\`\`
+
+### PressableSpacingStyleProps (Interactive Elements)
+**Components**: Pressable
+
+\`\`\`typescript
+interface PressableSpacingStyleProps {
+  padding?: Size;          // Padding on all sides
+  paddingVertical?: Size;  // Top and bottom padding
+  paddingHorizontal?: Size; // Left and right padding
+}
+\`\`\`
+
+### FormInputStyleProps (Form Inputs)
+**Components**: Input, Select, TextArea, Checkbox, RadioButton, Switch, Slider
+
+\`\`\`typescript
+interface FormInputStyleProps {
+  margin?: Size;           // Margin on all sides
+  marginVertical?: Size;   // Top and bottom margin
+  marginHorizontal?: Size; // Left and right margin
+}
+\`\`\`
+
+## Size Values
+
+Size variants map to theme values:
+
+| Size | Padding | Spacing (Gap) |
+|------|---------|---------------|
+| xs   | 4px     | 4px           |
+| sm   | 8px     | 8px           |
+| md   | 16px    | 16px          |
+| lg   | 24px    | 24px          |
+| xl   | 32px    | 32px          |
+
+## Usage Examples
+
+### Container Spacing
+
+\`\`\`tsx
+import { View, Card, Text } from '@idealyst/components';
+
+// Gap between children
+<View gap="md">
+  <Text>Item 1</Text>
+  <Text>Item 2</Text>
+</View>
+
+// Padding inside container
+<Card padding="lg" gap="sm">
+  <Text weight="bold">Card Title</Text>
+  <Text>Card content</Text>
+</Card>
+
+// Directional padding
+<View paddingVertical="md" paddingHorizontal="lg">
+  <Text>Content with different vertical/horizontal padding</Text>
+</View>
+
+// Margin for spacing between containers
+<Card margin="md" padding="lg">
+  <Text>Card with margin</Text>
+</Card>
+\`\`\`
+
+### Form Input Spacing
+
+\`\`\`tsx
+import { Input, Checkbox, View } from '@idealyst/components';
+
+// Use margin to space form fields
+<View>
+  <Input placeholder="Email" marginVertical="sm" />
+  <Input placeholder="Password" marginVertical="sm" />
+  <Checkbox label="Remember me" marginVertical="md" />
+</View>
+\`\`\`
+
+### Combining with Style Prop
+
+The spacing props work alongside the style prop:
+
+\`\`\`tsx
+<View
+  gap="md"
+  padding="lg"
+  style={{ backgroundColor: '#f5f5f5', borderRadius: 8 }}
+>
+  <Text>Content</Text>
+</View>
+\`\`\`
+
+## Custom Components
+
+You can use the exported builder functions to add spacing variants to custom components:
+
+\`\`\`typescript
+import { StyleSheet } from 'react-native-unistyles';
+import { Theme } from '@idealyst/theme';
+import {
+  buildGapVariants,
+  buildPaddingVariants,
+  buildMarginVariants,
+} from '@idealyst/components';
+
+export const customStyles = StyleSheet.create((theme: Theme) => ({
+  container: {
+    variants: {
+      gap: buildGapVariants(theme),
+      padding: buildPaddingVariants(theme),
+      margin: buildMarginVariants(theme),
+    },
+  },
+}));
+\`\`\`
+
+## Best Practices
+
+1. **Use variants for consistency**: Prefer Size variants over numeric values for consistent spacing across your app
+2. **Gap over margins for children**: Use \`gap\` to space children instead of margins on individual items
+3. **Directional props for precision**: Use paddingVertical/paddingHorizontal when you need different spacing
+4. **Form spacing with margin**: Use marginVertical on form inputs to create consistent form layouts
+5. **Combine with theme values**: The variant values come from the theme, ensuring consistency
+`,
+
   "idealyst://framework/api-overview": `# API Architecture Overview
 
 Idealyst provides a dual API architecture with both tRPC and GraphQL, giving you flexibility for different use cases.

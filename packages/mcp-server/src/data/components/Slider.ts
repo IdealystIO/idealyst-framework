@@ -1,6 +1,6 @@
 export const Slider = {
   category: "form",
-  description: "Input slider for selecting numeric values from a range",
+  description: "Input slider with margin variants for selecting numeric values from a range",
       props: `
 - \`value\`: number - The current value of the slider (controlled)
 - \`defaultValue\`: number - The default value for uncontrolled usage
@@ -13,6 +13,9 @@ export const Slider = {
 - \`marks\`: SliderMark[] - Array of marks to display on the slider track
 - \`intent\`: SliderIntentVariant - The intent/color scheme of the slider
 - \`size\`: SliderSizeVariant - The size variant of the slider
+- \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+- \`marginVertical\`: Size - Top and bottom margin
+- \`marginHorizontal\`: Size - Left and right margin
 - \`icon\`: IconName | React.ReactNode - Icon to display in the slider thumb
 - \`onValueChange\`: function - Called when the slider value changes during dragging
 - \`onValueCommit\`: function - Called when the user finishes changing the value (on release)

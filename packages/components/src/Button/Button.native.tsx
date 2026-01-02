@@ -1,6 +1,7 @@
 import React, { ComponentRef, forwardRef, isValidElement } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet as RNStyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { buttonStyles } from './Button.styles';
 import { ButtonProps } from './types';
 
@@ -13,16 +14,38 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     type = 'contained',
     intent = 'primary',
     size = 'md',
+    gradient,
     leftIcon,
     rightIcon,
     style,
     testID,
   } = props;
 
+  // Apply variants
+  buttonStyles.useVariants({
+    type,
+    intent,
+    size,
+    disabled,
+    gradient,
+  });
+
   // Compute dynamic styles
   const buttonStyle = buttonStyles.button;
   const textStyle = buttonStyles.text;
   const iconStyle = buttonStyles.icon;
+
+  // Gradient is only applicable to contained buttons
+  const showGradient = gradient && type === 'contained';
+
+  // Get gradient overlay colors (transparent to semi-transparent black/white)
+  const getGradientColors = (): [string, string] => {
+    switch (gradient) {
+      case 'darken': return ['transparent', 'rgba(0, 0, 0, 0.15)'];
+      case 'lighten': return ['transparent', 'rgba(255, 255, 255, 0.2)'];
+      default: return ['transparent', 'transparent'];
+    }
+  };
 
   // Map button size to icon size
   const iconSizeMap = {
@@ -59,6 +82,31 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   // Determine if we need to wrap content in icon container
   const hasIcons = leftIcon || rightIcon;
 
+  // Render gradient background layer
+  const renderGradientLayer = () => {
+    if (!showGradient) return null;
+
+    const [startColor, endColor] = getGradientColors();
+
+    return (
+      <Svg style={RNStyleSheet.absoluteFill}>
+        <Defs>
+          <LinearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <Stop offset="0%" stopColor={startColor} />
+            <Stop offset="100%" stopColor={endColor} />
+          </LinearGradient>
+        </Defs>
+        <Rect
+          width="100%"
+          height="100%"
+          fill="url(#buttonGradient)"
+          rx={8}
+          ry={8}
+        />
+      </Svg>
+    );
+  };
+
   return (
     <TouchableOpacity
       ref={ref}
@@ -66,8 +114,13 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
       disabled={disabled}
       testID={testID}
       activeOpacity={0.7}
-      style={[buttonStyle, style]}
+      style={[
+        buttonStyle,
+        showGradient && { overflow: 'hidden' },
+        style,
+      ]}
     >
+      {renderGradientLayer()}
       {hasIcons ? (
         <View style={buttonStyles.iconContainer}>
           {leftIcon && renderIcon(leftIcon)}

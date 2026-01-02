@@ -6,9 +6,10 @@ category: "form",
 - \`title\`: string - The text title to display inside the button (for web)
 - \`onPress\`: function - Called when the button is pressed
 - \`disabled\`: boolean - Whether the button is disabled
-- \`type\`: ButtonType - The visual style type of the button
+- \`type\`: ButtonType - The visual style type of the button ('contained' | 'outlined' | 'text')
 - \`intent\`: ButtonIntentVariant - The intent/color scheme of the button
 - \`size\`: ButtonSizeVariant - The size of the button
+- \`gradient\`: ButtonGradient - Optional gradient overlay effect ('darken' | 'lighten'). Only applies to 'contained' type buttons.
 - \`leftIcon\`: IconName | React.ReactNode - Icon to display on the left side. Can be an icon name or custom component (ReactNode)
 - \`rightIcon\`: IconName | React.ReactNode - Icon to display on the right side. Can be an icon name or custom component (ReactNode)
 `,
@@ -16,6 +17,7 @@ category: "form",
       "Three variants: contained, outlined, text",
       "Five intent colors for semantic meaning",
       "Three sizes: sm, md, lg",
+      "Gradient overlay effects (darken/lighten) for contained buttons",
       "Icon support with string names or custom React elements",
       "Loading and disabled states",
       "Full width option",
@@ -26,6 +28,7 @@ category: "form",
       "Use 'contained' variant for prominent actions",
       "Use icon names (strings) for consistency with design system",
       "Keep button labels concise and action-oriented",
+      "Use gradient='darken' for a subtle depth effect on hero/CTA buttons",
     ],
     usage: `
 import { Button } from '@idealyst/components';
@@ -82,5 +85,25 @@ function Example() {
     </Button>
   );
 }`,
+      gradient: `import { Button } from '@idealyst/components';
+
+// Gradient overlay adds subtle depth to contained buttons
+<Button type="contained" intent="primary" gradient="darken">
+  Darken Effect
+</Button>
+
+<Button type="contained" intent="success" gradient="lighten">
+  Lighten Effect
+</Button>
+
+// Gradient with icons
+<Button
+  type="contained"
+  intent="primary"
+  gradient="darken"
+  leftIcon="rocket-launch"
+>
+  Launch
+</Button>`,
     }
 };

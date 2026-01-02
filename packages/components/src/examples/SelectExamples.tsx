@@ -115,9 +115,9 @@ export const SelectExamples = () => {
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="lg">
+      <View gap="lg">
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Text size="lg" weight="bold">
+          <Text typography="h4">
             Select Component Examples
           </Text>
           <Button
@@ -132,15 +132,15 @@ export const SelectExamples = () => {
 
         {/* Basic Usage */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Basic Usage</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Basic Usage</Text>
             <Select
               options={fruitOptions}
               value={basicSelect}
               onValueChange={setBasicSelect}
               placeholder="Choose a fruit"
             />
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               Selected: {basicSelect || 'None'}
             </Text>
           </View>
@@ -148,8 +148,8 @@ export const SelectExamples = () => {
 
         {/* With Icons */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">With Icons</Text>
+          <View gap="md">
+            <Text typography="subtitle1">With Icons</Text>
             <Select
               options={countryOptions}
               value={countrySelect}
@@ -157,7 +157,7 @@ export const SelectExamples = () => {
               placeholder="Select a country"
               label="Country"
             />
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               Selected: {countrySelect || 'None'}
             </Text>
           </View>
@@ -165,8 +165,8 @@ export const SelectExamples = () => {
 
         {/* Custom Icons */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Custom Icon Components</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Custom Icon Components</Text>
             <Select
               options={priorityOptions}
               value={prioritySelect}
@@ -174,7 +174,7 @@ export const SelectExamples = () => {
               placeholder="Select priority"
               label="Task Priority"
             />
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               Selected: {prioritySelect || 'None'}
             </Text>
           </View>
@@ -182,8 +182,8 @@ export const SelectExamples = () => {
 
         {/* Disabled Options */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Disabled Options</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Disabled Options</Text>
             <Select
               options={statusOptions}
               value={statusSelect}
@@ -192,7 +192,7 @@ export const SelectExamples = () => {
               label="Document Status"
               helperText="Some options are disabled"
             />
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               Selected: {statusSelect || 'None'}
             </Text>
           </View>
@@ -200,8 +200,8 @@ export const SelectExamples = () => {
 
         {/* Searchable */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Searchable Select</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Searchable Select</Text>
             <Select
               options={fruitOptions}
               value={searchableSelect}
@@ -211,7 +211,7 @@ export const SelectExamples = () => {
               searchable
               helperText="Type to filter options"
             />
-            <Text size="sm" color="secondary">
+            <Text typography="caption" color="secondary">
               Selected: {searchableSelect || 'None'}
             </Text>
           </View>
@@ -219,11 +219,11 @@ export const SelectExamples = () => {
 
         {/* Sizes */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Sizes</Text>
-            <View spacing="sm">
-              <View>
-                <Text size="sm" weight="medium">Small</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Sizes</Text>
+            <View gap="sm">
+              <View gap="xl">
+                <Text typography="body2">Small</Text>
                 <Select
                   options={fruitOptions.slice(0, 3)}
                   value={sizeSmall}
@@ -232,8 +232,8 @@ export const SelectExamples = () => {
                   size="sm"
                 />
               </View>
-              <View>
-                <Text size="sm" weight="medium">Medium (Default)</Text>
+              <View gap="xl">
+                <Text typography="body2">Medium (Default)</Text>
                 <Select
                   options={fruitOptions.slice(0, 3)}
                   value={sizeMedium}
@@ -242,8 +242,8 @@ export const SelectExamples = () => {
                   size="md"
                 />
               </View>
-              <View>
-                <Text size="sm" weight="medium">Large</Text>
+              <View gap="xl">
+                <Text typography="body2">Large</Text>
                 <Select
                   options={fruitOptions.slice(0, 3)}
                   value={sizeLarge}
@@ -258,11 +258,11 @@ export const SelectExamples = () => {
 
         {/* Variants */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Variants</Text>
-            <View spacing="sm">
-              <View>
-                <Text size="sm" weight="medium">Outlined (Default)</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Variants</Text>
+            <View gap="sm">
+              <View gap="xl">
+                <Text typography="body2">Outlined (Default)</Text>
                 <Select
                   options={fruitOptions.slice(0, 4)}
                   value={outlinedSelect}
@@ -271,8 +271,8 @@ export const SelectExamples = () => {
                   type="outlined"
                 />
               </View>
-              <View>
-                <Text size="sm" weight="medium">Filled</Text>
+              <View gap="xl">
+                <Text typography="body2">Filled</Text>
                 <Select
                   options={fruitOptions.slice(0, 4)}
                   value={filledSelect}
@@ -287,11 +287,11 @@ export const SelectExamples = () => {
 
         {/* Intents */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Intent Colors</Text>
-            <View spacing="sm">
-              <View>
-                <Text size="sm" weight="medium">Primary</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Intent Colors</Text>
+            <View gap="sm">
+              <View gap="xl">
+                <Text typography="body2">Primary</Text>
                 <Select
                   options={fruitOptions.slice(0, 3)}
                   value={primarySelect}
@@ -301,8 +301,8 @@ export const SelectExamples = () => {
                   type="outlined"
                 />
               </View>
-              <View>
-                <Text size="sm" weight="medium">Success</Text>
+              <View gap="xl">
+                <Text typography="body2">Success</Text>
                 <Select
                   options={fruitOptions.slice(0, 3)}
                   value={successSelect}
@@ -312,8 +312,8 @@ export const SelectExamples = () => {
                   type="outlined"
                 />
               </View>
-              <View>
-                <Text size="sm" weight="medium">Warning</Text>
+              <View gap="xl">
+                <Text typography="body2">Warning</Text>
                 <Select
                   options={fruitOptions.slice(0, 3)}
                   value={warningSelect}
@@ -323,8 +323,8 @@ export const SelectExamples = () => {
                   type="outlined"
                 />
               </View>
-              <View>
-                <Text size="sm" weight="medium">Error</Text>
+              <View gap="xl">
+                <Text typography="body2">Error</Text>
                 <Select
                   options={fruitOptions.slice(0, 3)}
                   value={errorSelect}
@@ -340,8 +340,8 @@ export const SelectExamples = () => {
 
         {/* Form Example */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Form Integration</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Form Integration</Text>
             <Select
               options={countryOptions}
               value={formSelect}
@@ -370,8 +370,8 @@ export const SelectExamples = () => {
 
         {/* Disabled State */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Disabled State</Text>
+          <View gap="md">
+            <Text typography="subtitle1">Disabled State</Text>
             <Select
               options={fruitOptions}
               value="apple"
@@ -386,9 +386,9 @@ export const SelectExamples = () => {
 
         {/* Platform-specific Features */}
         <Card type="outlined" padding="md">
-          <View spacing="md">
-            <Text size="md" weight="semibold">Platform Features</Text>
-            <Text size="sm" color="secondary">
+          <View gap="md">
+            <Text typography="subtitle1">Platform Features</Text>
+            <Text typography="caption" color="secondary">
               On iOS: Try the ActionSheet presentation mode for native feel
             </Text>
             <Select
@@ -407,14 +407,14 @@ export const SelectExamples = () => {
 
         {/* Summary */}
         <Card type="filled" padding="md">
-          <View spacing="sm">
-            <Text size="md" weight="semibold">Current Selections Summary</Text>
-            <Text size="sm">Basic: {basicSelect || 'None'}</Text>
-            <Text size="sm">Country: {countrySelect || 'None'}</Text>
-            <Text size="sm">Priority: {prioritySelect || 'None'}</Text>
-            <Text size="sm">Status: {statusSelect || 'None'}</Text>
-            <Text size="sm">Searchable: {searchableSelect || 'None'}</Text>
-            <Text size="sm">Form: {formSelect || 'None'}</Text>
+          <View gap="sm">
+            <Text typography="subtitle1">Current Selections Summary</Text>
+            <Text typography="body2">Basic: {basicSelect || 'None'}</Text>
+            <Text typography="body2">Country: {countrySelect || 'None'}</Text>
+            <Text typography="body2">Priority: {prioritySelect || 'None'}</Text>
+            <Text typography="body2">Status: {statusSelect || 'None'}</Text>
+            <Text typography="body2">Searchable: {searchableSelect || 'None'}</Text>
+            <Text typography="body2">Form: {formSelect || 'None'}</Text>
           </View>
         </Card>
       </View>
