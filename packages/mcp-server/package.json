@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/mcp-server",
-  "version": "1.0.99",
+  "version": "1.1.1",
   "description": "MCP server providing documentation and examples for the Idealyst framework",
   "main": "dist/index.js",
   "bin": {
@@ -22,7 +22,8 @@
     "start": "node dist/index.js"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "keywords": [
     "idealyst",
@@ -34,9 +35,9 @@
   "author": "Idealyst",
   "license": "MIT",
   "dependencies": {
-    "@idealyst/components": "^1.0.99",
-    "@idealyst/navigation": "^1.0.99",
-    "@idealyst/theme": "^1.0.99",
+    "@idealyst/components": "^1.1.1",
+    "@idealyst/navigation": "^1.1.1",
+    "@idealyst/theme": "^1.1.1",
     "@modelcontextprotocol/sdk": "^1.0.4"
   },
   "devDependencies": {

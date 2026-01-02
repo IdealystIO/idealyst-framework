@@ -175,7 +175,7 @@ export const CheckboxExamples = () => {
             checked={false}
             onCheckedChange={() => {}}
           >
-            <View gap="xl">
+            <View gap="sm">
               <Text weight="semibold">Multi-line Label</Text>
               <Text typography="caption" color="secondary">
                 This checkbox has a more complex label with multiple lines
