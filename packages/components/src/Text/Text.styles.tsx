@@ -1,47 +1,51 @@
 import { StyleSheet } from "react-native-unistyles";
-import { Theme } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { Theme, Typography } from '@idealyst/theme';
 import {
   buildGapVariants,
   buildPaddingVariants,
   buildPaddingVerticalVariants,
   buildPaddingHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
-import { TextAlignVariant, TextColorVariant, TextSizeVariant, TextWeightVariant, TextTypographyVariant } from "./types";
+import { TextAlignVariant, TextColorVariant, TextWeightVariant, TextTypographyVariant } from "./types";
 
-type TextVariants = {
-    size: TextSizeVariant;
+export type TextVariants = {
+    typography: TextTypographyVariant;
     weight: TextWeightVariant;
     align: TextAlignVariant;
 }
 
 /**
- * Create size variants for text (legacy)
- * @deprecated Use typography prop instead
+ * Create typography variants from theme
  */
-function createSizeVariants(theme: Theme): any {
-    return buildSizeVariants(theme, 'text', (size) => ({
-        fontSize: size.fontSize,
-        lineHeight: size.lineHeight,
-    }));
+function createTypographyVariants(theme: Theme) {
+    const variants: Record<string, object> = {};
+
+    for (const key in theme.sizes.typography) {
+        const typo = theme.sizes.typography[key as Typography];
+        variants[key] = {
+            fontSize: typo.fontSize,
+            lineHeight: typo.lineHeight,
+            fontWeight: typo.fontWeight,
+        };
+    }
+
+    return variants;
 }
 
 type TextStyleParams = {
     color?: TextColorVariant;
-    typography?: TextTypographyVariant;
 }
 
 function createTextStyles(theme: Theme) {
-    return ({ color, typography }: TextStyleParams) => {
-        const colorValue = theme.colors.text[color] || theme.colors.text.primary;
+    return ({ color }: TextStyleParams) => {
+        const colorValue = theme.colors.text[color ?? 'primary'] || theme.colors.text.primary;
 
-        // Base styles
-        const baseStyles: any = {
+        return {
             margin: 0,
             padding: 0,
             color: colorValue,
             variants: {
-                size: createSizeVariants(theme) as any,
+                typography: createTypographyVariants(theme),
                 weight: {
                     light: {
                         fontWeight: '300',
@@ -78,19 +82,8 @@ function createTextStyles(theme: Theme) {
             } as const,
             _web: {
                 fontFamily: 'inherit',
-                lineHeight: 'inherit',
             },
         };
-
-        // If typography is set, apply typography styles (overrides size/weight variants)
-        if (typography && theme.sizes.typography[typography]) {
-            const typo = theme.sizes.typography[typography];
-            baseStyles.fontSize = typo.fontSize;
-            baseStyles.lineHeight = typo.lineHeight;
-            baseStyles.fontWeight = typo.fontWeight;
-        }
-
-        return baseStyles;
     }
 }
 

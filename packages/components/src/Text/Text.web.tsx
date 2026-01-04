@@ -6,9 +6,8 @@ import useMergeRefs from '../hooks/useMergeRefs';
 
 const Text = forwardRef<HTMLSpanElement, TextProps>(({
   children,
-  typography,
-  size = 'md',
-  weight = 'normal',
+  typography = 'body1',
+  weight,
   color = 'primary',
   align = 'left',
   // Spacing variants from TextSpacingStyleProps
@@ -20,10 +19,9 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
   testID,
   id,
 }, ref) => {
-  // When typography is set, it overrides size and weight (handled in styles)
   textStyles.useVariants({
-    size: typography ? 'md' : size, // Use default when typography is set (will be overridden)
-    weight: typography ? 'normal' : weight, // Use default when typography is set (will be overridden)
+    typography,
+    weight,
     align,
     gap,
     padding,
@@ -31,9 +29,9 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
     paddingHorizontal,
   });
 
-  // Create the style array - pass typography to dynamic style function
+  // Create the style array
   const textStyleArray = [
-    textStyles.text({ color, typography }),
+    textStyles.text({ color }),
     style,
   ];
 

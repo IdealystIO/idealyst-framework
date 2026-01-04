@@ -33,7 +33,7 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                             {options.headerLeft && React.createElement(options.headerLeft as any)}
                             
                             {typeof options.headerTitle === 'string' ? (
-                                <Text size="lg" weight="bold" style={{ marginLeft: options.headerLeft ? 12 : 0 }}>
+                                <Text typography="h4" style={{ marginLeft: options.headerLeft ? 12 : 0 }}>
                                     {options.headerTitle}
                                 </Text>
                             ) : (
@@ -84,8 +84,8 @@ export const DefaultTabLayout: React.FC<DefaultTabLayoutProps> = ({
                                         color='blue'
                                     />
                                 )}
-                                <Text 
-                                    size="sm" 
+                                <Text
+                                    typography="body2"
                                     color={'primary'}
                                     weight={isActive ? 'semibold' : 'medium'}
                                 >

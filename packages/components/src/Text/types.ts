@@ -5,7 +5,6 @@ import { TextSpacingStyleProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type TextColorVariant = Text;
-export type TextSizeVariant = 'sm' | 'md' | 'lg' | 'xl';  // Using sm/md/lg/xl for consistency
 export type TextWeightVariant = 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
 export type TextAlignVariant = 'left' | 'center' | 'right';
 export type TextTypographyVariant = Typography;
@@ -19,19 +18,12 @@ export interface TextProps extends TextSpacingStyleProps {
   /**
    * Typography variant for semantic text styling.
    * Automatically sets fontSize, lineHeight, and fontWeight.
-   * When set, overrides size and weight props.
    */
   typography?: TextTypographyVariant;
 
   /**
-   * The size variant of the text
-   * @deprecated Use `typography` prop instead for semantic text styling (e.g., 'h1', 'body1', 'caption')
-   */
-  size?: TextSizeVariant;
-
-  /**
    * The weight of the text.
-   * Note: When `typography` is set, this is ignored as typography includes fontWeight.
+   * Overrides the weight from typography if both are set.
    */
   weight?: TextWeightVariant;
 

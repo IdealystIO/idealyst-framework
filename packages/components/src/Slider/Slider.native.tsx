@@ -210,7 +210,7 @@ const Slider = forwardRef<View, SliderProps>(({
                             { left: markPosition },
                           ]}
                         >
-                          <Text size="sm">{mark.label}</Text>
+                          <Text typography="caption">{mark.label}</Text>
                         </View>
                       )}
                     </View>
@@ -243,8 +243,8 @@ const Slider = forwardRef<View, SliderProps>(({
 
       {showMinMax && (
         <View style={sliderStyles.minMaxLabels}>
-          <Text style={sliderStyles.minMaxLabel} size="sm">{min}</Text>
-          <Text style={sliderStyles.minMaxLabel} size="sm">{max}</Text>
+          <Text style={sliderStyles.minMaxLabel} typography="caption">{min}</Text>
+          <Text style={sliderStyles.minMaxLabel} typography="caption">{max}</Text>
         </View>
       )}
     </View>

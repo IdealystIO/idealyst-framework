@@ -121,6 +121,7 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
+        minWidth: 0,
         borderRadius: 8,
         variants: {
             size: buildSizeVariants(theme, 'input', (size) => ({

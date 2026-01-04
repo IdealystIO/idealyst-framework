@@ -35,6 +35,7 @@ function createTypeVariants(theme: Theme) {
             borderWidth: 0,
         },
         outlined: {
+            boxSizing: 'border-box',
             borderWidth: 1,
             borderStyle: 'solid' ,
             backgroundColor: theme.colors.surface.primary,
