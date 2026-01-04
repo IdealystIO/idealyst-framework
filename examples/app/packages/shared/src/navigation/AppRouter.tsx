@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigatorParam } from '@idealyst/navigation';
 import { Screen, Text, View, Icon } from '@idealyst/components';
 import { HelloWorld } from '../components/HelloWorld';
+import { MicrophoneDemo } from '../components/MicrophoneDemo';
 
 const HomeScreen = () => (
   <Screen>
@@ -86,9 +87,21 @@ const AppRouter: NavigatorParam = {
       component: SettingsScreen,
       options: {
         title: 'Settings',
-        tabBarLabel: 'Settings', 
+        tabBarLabel: 'Settings',
         tabBarIcon: ({ focused, size }) => (
           <Icon name="cog" color={focused ? 'blue' : 'gray'} size={size || 24} />
+        ),
+      },
+    },
+    {
+      type: 'screen',
+      path: '/microphone',
+      component: MicrophoneDemo,
+      options: {
+        title: 'Microphone',
+        tabBarLabel: 'Microphone',
+        tabBarIcon: ({ focused, size }) => (
+          <Icon name="microphone" color={focused ? 'blue' : 'gray'} size={size || 24} />
         ),
       },
     },

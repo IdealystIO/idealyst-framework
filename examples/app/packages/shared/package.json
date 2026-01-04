@@ -20,6 +20,7 @@
   },
   "peerDependencies": {
     "@idealyst/components": "^1.0.82",
+    "@idealyst/microphone": "^1.1.2",
     "@idealyst/navigation": "^1.0.82",
     "@idealyst/theme": "^1.0.82",
     "@tanstack/react-query": "^5.83.0",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@idealyst/components": "^1.0.82",
+    "@idealyst/microphone": "portal:../../../../packages/microphone",
     "@idealyst/navigation": "^1.0.82",
     "@idealyst/theme": "^1.0.82",
     "@tanstack/react-query": "^5.83.0",

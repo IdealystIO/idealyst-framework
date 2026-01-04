@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NavigatorProvider } from '@idealyst/navigation';
 import { trpc, createTRPCClient } from '../trpc/client';
 import AppRouter from '../navigation/AppRouter';
-import { ExampleNavigationRouter } from '@idealyst/navigation/examples';
 
 interface AppProps {
   apiUrl?: string;
@@ -25,7 +24,7 @@ const defaultQueryClient = new QueryClient({
  * Unified App component that sets up tRPC, React Query providers, and Navigation
  * This component can be used by both web and mobile platforms
  */
-export const App: React.FC<AppProps> = ({ 
+export const App: React.FC<AppProps> = ({
   apiUrl = 'http://localhost:3000/trpc',
   queryClient = defaultQueryClient,
   headers
@@ -37,7 +36,11 @@ export const App: React.FC<AppProps> = ({
   });
 
   return (
-      <NavigatorProvider route={ExampleNavigationRouter} />
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <NavigatorProvider route={AppRouter} />
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 };
 

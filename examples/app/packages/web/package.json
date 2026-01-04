@@ -16,6 +16,7 @@
     "@idealyst/components": "^1.0.82",
     "@idealyst/datagrid": "^1.0.93",
     "@idealyst/datepicker": "^1.0.93",
+    "@idealyst/microphone": "portal:../../../../packages/microphone",
     "@idealyst/navigation": "^1.0.93",
     "@idealyst/theme": "^1.0.82",
     "@mdi/js": "^7.4.47",
