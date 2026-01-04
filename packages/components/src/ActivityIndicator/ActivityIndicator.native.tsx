@@ -11,6 +11,7 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
   style,
   testID,
   hidesWhenStopped = true,
+  id,
 }, ref) => {
   // Handle numeric size
   const sizeVariant = typeof size === 'number' ? 'md' : size;
@@ -41,6 +42,7 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
         style
       ]}
       ref={ref}
+      nativeID={id}
       testID={testID}
     >
       <RNActivityIndicator

@@ -23,6 +23,7 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   style,
   testID,
   accessibilityLabel,
+  id,
 }, ref) => {
   const handleClick = () => {
     if (!disabled && clickable && onPress) {
@@ -58,6 +59,7 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
     <Component
       {...webProps}
       ref={mergedRef as any}
+      id={id}
       onClick={clickable ? handleClick : undefined}
       disabled={clickable && disabled}
       data-testid={testID}

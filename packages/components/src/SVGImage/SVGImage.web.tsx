@@ -14,6 +14,7 @@ const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
   resizeMode = 'contain',
   style,
   testID,
+  id,
   ...props
 }, ref) => {
   // Apply variants using Unistyles 3.0 pattern
@@ -33,7 +34,7 @@ const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
     const componentContainerProps = getWebProps([svgImageStyles.container, style as any]);
     const mergedRefForComponent = useMergeRefs(ref, componentContainerProps.ref);
     return (
-      <div {...componentContainerProps} ref={mergedRefForComponent} {...(props as any)} data-testid={testID}>
+      <div {...componentContainerProps} ref={mergedRefForComponent} {...(props as any)} id={id} data-testid={testID}>
         <SvgComponent
           width={finalWidth || 24}
           height={finalHeight || 24}
@@ -80,7 +81,7 @@ const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
   const mergedRef = useMergeRefs(ref, containerWebProps.ref);
 
   return (
-    <div {...containerWebProps} ref={mergedRef} {...(props as any)} data-testid={testID}>
+    <div {...containerWebProps} ref={mergedRef} {...(props as any)} id={id} data-testid={testID}>
       <img
         {...imageWebProps}
         src={sourceUrl}

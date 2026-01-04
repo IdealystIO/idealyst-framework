@@ -16,6 +16,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   animationType = 'fade',
   style,
   testID,
+  id,
 }, ref) => {
   const backdropOpacity = useSharedValue(0);
   const containerScale = useSharedValue(0.9);
@@ -104,6 +105,7 @@ const Dialog = forwardRef<View, DialogProps>(({
       onRequestClose={() => onOpenChange(false)}
       statusBarTranslucent
       testID={testID}
+      nativeID={id}
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <Animated.View style={[dialogStyles.backdrop, backdropAnimatedStyle]}>

@@ -2,10 +2,11 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from "./icon-types";
 import type { Size } from '@idealyst/theme';
 import { Color, Intent } from '@idealyst/theme';
+import { BaseProps } from '../utils/viewStyleProps';
 
 export type IconSizeVariant = Size | number;
 
-export interface IconProps {
+export interface IconProps extends BaseProps {
   /**
    * The name of the icon to display
    */

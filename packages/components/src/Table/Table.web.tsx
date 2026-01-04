@@ -20,6 +20,7 @@ function Table<T = any>({
   marginHorizontal,
   style,
   testID,
+  id,
 }: TableProps<T>) {
   // Apply variants
   tableStyles.useVariants({
@@ -49,7 +50,7 @@ function Table<T = any>({
   const isClickable = !!onRowPress;
 
   return (
-    <div {...containerProps} data-testid={testID}>
+    <div {...containerProps} id={id} data-testid={testID}>
       <table {...tableProps}>
         <thead {...getWebProps([tableStyles.thead])}>
           <tr>

@@ -32,11 +32,12 @@ const Video = React.forwardRef<View, VideoProps>(({
   borderRadius,
   style,
   testID,
+  id,
 }, ref) => {
 
   if (!RNVideo) {
     return (
-      <View ref={ref} style={[videoStyles.container, { aspectRatio, borderRadius }, style]} testID={testID}>
+      <View ref={ref} nativeID={id} style={[videoStyles.container, { aspectRatio, borderRadius }, style]} testID={testID}>
         <View style={videoStyles.fallback}>
           {/* Fallback when react-native-video is not installed */}
         </View>
@@ -79,7 +80,7 @@ const Video = React.forwardRef<View, VideoProps>(({
   };
 
   return (
-    <View ref={ref} style={containerStyle} testID={testID}>
+    <View ref={ref} nativeID={id} style={containerStyle} testID={testID}>
       <RNVideo
         source={videoSource}
         poster={poster}

@@ -29,6 +29,7 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   style,
   textareaStyle,
   testID,
+  id,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -112,7 +113,7 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   const mergedTextareaRef = useMergeRefs(textareaRef, computedTextareaProps.ref);
 
   return (
-    <div {...containerProps} ref={mergedRef} data-testid={testID}>
+    <div {...containerProps} ref={mergedRef} id={id} data-testid={testID}>
       {label && (
         <label {...labelProps}>{label}</label>
       )}

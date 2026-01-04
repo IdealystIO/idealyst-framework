@@ -27,6 +27,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -125,7 +126,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   };
 
   return (
-    <View style={[inputStyles.container, style]} testID={testID}>
+    <View style={[inputStyles.container, style]} testID={testID} nativeID={id}>
       {/* Left Icon */}
       {leftIcon && (
         <View style={inputStyles.leftIconContainer}>

@@ -12,6 +12,7 @@ const Tooltip = forwardRef<View, TooltipProps>(({
   size = 'md',
   style,
   testID,
+  id,
 }, ref) => {
   const [visible, setVisible] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, width: 0 });
@@ -126,7 +127,7 @@ const Tooltip = forwardRef<View, TooltipProps>(({
 
   return (
     <>
-      <View ref={ref} collapsable={false} style={style}>
+      <View ref={ref} nativeID={id} collapsable={false} style={style}>
         {trigger}
       </View>
 

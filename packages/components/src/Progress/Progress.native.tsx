@@ -29,6 +29,7 @@ const Progress = forwardRef<View, ProgressProps>(({
   rounded = true,
   style,
   testID,
+  id,
 }, ref) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
   const { theme }: { theme: Theme } = useUnistyles();
@@ -104,7 +105,7 @@ const Progress = forwardRef<View, ProgressProps>(({
     });
 
     return (
-      <View style={[progressStyles.circularContainer, style]} testID={testID}>
+      <View nativeID={id} style={[progressStyles.circularContainer, style]} testID={testID}>
         <Animated.View style={indeterminate ? rotationStyle : {}}>
           <Svg width={circularSize} height={circularSize} style={{ transform: [{ rotate: '-90deg' }] }}>
             {/* Track circle (background) */}
@@ -157,7 +158,7 @@ const Progress = forwardRef<View, ProgressProps>(({
   });
 
   return (
-    <View ref={ref} style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
+    <View ref={ref} nativeID={id} style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
       <View style={progressStyles.linearTrack}>
         {indeterminate ? (
           <Animated.View style={[progressStyles.indeterminateBar, indeterminateAnimatedStyle]} />

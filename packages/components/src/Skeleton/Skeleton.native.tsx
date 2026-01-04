@@ -19,6 +19,7 @@ const Skeleton = forwardRef<View, SkeletonProps>(({
   animation = 'pulse',
   style,
   testID,
+  id,
 }, ref) => {
   skeletonStyles.useVariants({
     shape,
@@ -78,6 +79,7 @@ const Skeleton = forwardRef<View, SkeletonProps>(({
   return (
     <Animated.View
       ref={ref as any}
+      nativeID={id}
       style={[
         skeletonStyles.skeleton,
         customStyles,
@@ -113,11 +115,13 @@ export const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
   skeletonProps,
   style,
   testID,
+  id,
 }) => {
   skeletonStyles.useVariants({});
 
   return (
     <View
+      nativeID={id}
       style={[
         skeletonStyles.group,
         { gap: spacing },

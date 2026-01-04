@@ -1,8 +1,9 @@
 import type { StyleProp, ImageStyle, ImageSourcePropType } from 'react-native';
+import { BaseProps } from '../utils/viewStyleProps';
 
 export type ImageObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 
-export interface ImageProps {
+export interface ImageProps extends BaseProps {
   source: ImageSourcePropType | string;
   alt?: string;
   width?: number | string;

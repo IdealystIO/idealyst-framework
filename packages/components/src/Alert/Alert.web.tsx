@@ -29,6 +29,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   actions,
   style,
   testID,
+  id,
 }, ref) => {
   // Apply variants to stylesheet
   alertStyles.useVariants({
@@ -73,6 +74,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
     <div
       {...containerProps}
       ref={mergedRef}
+      id={id}
       data-testid={testID}
       role="alert"
     >

@@ -18,6 +18,7 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
   testID,
   accessibilityLabel,
   accessibilityRole = 'button',
+  id,
 }, ref) => {
   const [isPressed, setIsPressed] = useState(false);
 
@@ -74,6 +75,7 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
     <div
       {...webProps}
       ref={mergedRef}
+      id={id}
       role={accessibilityRole}
       tabIndex={disabled ? -1 : 0}
       style={{ ...baseStyle, ...webProps.style }}

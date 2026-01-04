@@ -15,6 +15,7 @@ const Divider = forwardRef<HTMLDivElement, DividerProps>(({
   style,
   testID,
   accessibilityLabel,
+  id,
 }, ref) => {
   // Apply variants for main divider
   dividerStyles.useVariants({
@@ -50,6 +51,7 @@ const Divider = forwardRef<HTMLDivElement, DividerProps>(({
       <div
         {...dividerProps}
         ref={mergedDividerRef}
+        id={id}
         data-testid={testID}
         aria-label={accessibilityLabel}
         role="separator"
@@ -62,6 +64,7 @@ const Divider = forwardRef<HTMLDivElement, DividerProps>(({
     <div
       {...containerProps}
       ref={mergedContainerRef}
+      id={id}
       data-testid={testID}
       aria-label={accessibilityLabel}
       role="separator"

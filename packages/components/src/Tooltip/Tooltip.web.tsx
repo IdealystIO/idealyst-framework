@@ -13,6 +13,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   size = 'md',
   style,
   testID,
+  id,
 }) => {
   const [visible, setVisible] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -60,6 +61,7 @@ const Tooltip: React.FC<TooltipProps> = ({
         {...containerProps}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        id={id}
         data-testid={testID}
       >
         {children}

@@ -17,6 +17,7 @@ const Popover = forwardRef<View, PopoverProps>(({
   showArrow = false,
   style,
   testID,
+  id,
 }, ref) => {
   const popoverRef = useRef<View>(null);
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0, width: 0 });
@@ -128,6 +129,7 @@ const Popover = forwardRef<View, PopoverProps>(({
       animationType="fade"
       onRequestClose={() => onOpenChange(false)}
       testID={testID}
+      nativeID={id}
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <View style={popoverStyles.backdrop}>

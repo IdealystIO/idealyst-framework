@@ -18,6 +18,7 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
   paddingHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   // When typography is set, it overrides size and weight (handled in styles)
   textStyles.useVariants({
@@ -45,6 +46,7 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
     <span
       {...webProps}
       ref={mergedRef}
+      id={id}
       data-testid={testID}
     >
       {children}

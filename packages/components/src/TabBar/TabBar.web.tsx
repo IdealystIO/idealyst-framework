@@ -89,6 +89,7 @@ const TabBar: React.FC<TabBarProps> = ({
   marginHorizontal,
   style,
   testID,
+  id,
 }) => {
   const firstItemValue = items[0]?.value || '';
   const [internalValue, setInternalValue] = useState(defaultValue || firstItemValue);
@@ -186,6 +187,7 @@ const TabBar: React.FC<TabBarProps> = ({
       {...containerProps}
       ref={mergedContainerRef}
       role="tablist"
+      id={id}
       data-testid={testID}
     >
       {/* Sliding indicator */}

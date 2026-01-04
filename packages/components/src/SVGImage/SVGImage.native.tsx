@@ -13,6 +13,7 @@ const SVGImage = forwardRef<View, SVGImageProps>(({
   intent,
   style,
   testID,
+  id,
   ...props
 }, ref) => {
   // Apply variants using Unistyles 3.0 pattern
@@ -30,7 +31,7 @@ const SVGImage = forwardRef<View, SVGImageProps>(({
   if (typeof source === 'function') {
     const SvgComponent = source;
     return (
-      <View ref={ref} style={[svgImageStyles.container, style]} testID={testID} {...props}>
+      <View ref={ref} nativeID={id} style={[svgImageStyles.container, style]} testID={testID} {...props}>
         <SvgComponent
           width={finalWidth}
           height={finalHeight}
@@ -45,7 +46,7 @@ const SVGImage = forwardRef<View, SVGImageProps>(({
   const sourceUri = typeof source === 'string' ? source : source.uri;
 
   return (
-    <View ref={ref} style={[svgImageStyles.container, style]} testID={testID} {...props}>
+    <View ref={ref} nativeID={id} style={[svgImageStyles.container, style]} testID={testID} {...props}>
       <SvgUri
         uri={sourceUri}
         width={finalWidth}

@@ -40,6 +40,7 @@ const Select = forwardRef<View, SelectProps>(({
   style,
   testID,
   accessibilityLabel,
+  id,
 }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -298,7 +299,7 @@ const Select = forwardRef<View, SelectProps>(({
   };
 
   return (
-    <View ref={ref} style={[selectStyles.container, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[selectStyles.container, style]} testID={testID}>
       {label && (
         <Text style={selectStyles.label}>
           {label}

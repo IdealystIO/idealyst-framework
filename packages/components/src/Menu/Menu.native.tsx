@@ -21,6 +21,7 @@ const Menu = forwardRef<View, MenuProps>(({
   style,
   size,
   testID,
+  id,
 }, ref) => {
   const {
     position: menuPosition,
@@ -136,7 +137,7 @@ const Menu = forwardRef<View, MenuProps>(({
 
   return (
     <>
-      <View ref={mergedTriggerRef} collapsable={false}>
+      <View ref={mergedTriggerRef} nativeID={id} collapsable={false}>
         {trigger}
       </View>
 

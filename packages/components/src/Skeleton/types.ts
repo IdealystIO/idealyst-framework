@@ -1,9 +1,10 @@
 import type { StyleProp, ViewStyle } from 'react-native';
+import { BaseProps } from '../utils/viewStyleProps';
 
 export type SkeletonShape = 'rectangle' | 'circle' | 'rounded';
 export type SkeletonAnimation = 'pulse' | 'wave' | 'none';
 
-export interface SkeletonProps {
+export interface SkeletonProps extends BaseProps {
   /**
    * Width of the skeleton (number in pixels or string with units)
    * @default '100%'
@@ -45,7 +46,7 @@ export interface SkeletonProps {
   testID?: string;
 }
 
-export interface SkeletonGroupProps {
+export interface SkeletonGroupProps extends BaseProps {
   /**
    * Number of skeleton items to render
    * @default 3

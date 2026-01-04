@@ -19,6 +19,7 @@ const Image = forwardRef<View, ImageProps>(({
   style,
   testID,
   accessibilityLabel,
+  id,
 }, ref) => {
 
   const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +57,7 @@ const Image = forwardRef<View, ImageProps>(({
   ];
 
   return (
-    <View ref={ref} style={containerStyle as any} testID={testID}>
+    <View ref={ref} nativeID={id} style={containerStyle as any} testID={testID}>
       <RNImage
         source={imageSource as any}
         style={[imageStyles.image, { borderRadius }]}

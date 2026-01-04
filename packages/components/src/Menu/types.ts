@@ -1,6 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import { Intent, Size } from '@idealyst/theme';
+import { BaseProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type MenuIntentVariant = Intent;
@@ -17,7 +18,7 @@ export interface MenuItem {
   separator?: boolean;
 }
 
-export interface MenuProps {
+export interface MenuProps extends BaseProps {
   children: React.ReactNode;
   items: MenuItem[];
   open?: boolean;

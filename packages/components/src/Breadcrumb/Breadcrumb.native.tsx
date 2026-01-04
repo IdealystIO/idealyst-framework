@@ -121,6 +121,7 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
   testID,
   responsive = false,
   minVisibleItems = 3,
+  id,
 }, ref) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -163,6 +164,7 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
   return (
     <View
       ref={ref}
+      nativeID={id}
       style={[breadcrumbContainerStyles.container, style]}
       testID={testID}
       accessibilityLabel="Breadcrumb"

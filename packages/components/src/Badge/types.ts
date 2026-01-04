@@ -2,13 +2,14 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import { Color, Size } from '@idealyst/theme';
+import { BaseProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type BadgeColorVariant = Color;
 export type BadgeSizeVariant = Size;
 export type BadgeType = 'filled' | 'outlined' | 'dot';
 
-export interface BadgeProps {
+export interface BadgeProps extends BaseProps {
   /**
    * The content to display inside the badge
    */

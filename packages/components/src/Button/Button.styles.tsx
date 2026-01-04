@@ -35,9 +35,9 @@ function createTypeVariants(theme: Theme) {
             borderWidth: 0,
         },
         outlined: {
-            borderWidth: 2,
+            borderWidth: 1,
             borderStyle: 'solid' ,
-            backgroundColor: 'transparent',
+            backgroundColor: theme.colors.surface.primary,
         },
         text: {
             borderWidth: 0,

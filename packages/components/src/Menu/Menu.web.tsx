@@ -16,6 +16,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
   size = 'md',
   style,
   testID,
+  id,
 }, ref) => {
   const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -65,6 +66,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
           {...menuProps}
           ref={mergedMenuRef}
           role="menu"
+          id={id}
           data-testid={testID}
         >
           {items.map((item, index) => {

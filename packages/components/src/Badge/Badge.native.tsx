@@ -13,6 +13,7 @@ const Badge = forwardRef<View, BadgeProps>(({
   color = 'blue',
   style,
   testID,
+  id,
 }, ref) => {
   badgeStyles.useVariants({
     size,
@@ -48,6 +49,7 @@ const Badge = forwardRef<View, BadgeProps>(({
   if (type === 'dot') {
     return (
       <View
+        nativeID={id}
         style={[badgeStyle, style]}
         testID={testID}
         accessibilityLabel="status indicator"
@@ -61,6 +63,7 @@ const Badge = forwardRef<View, BadgeProps>(({
   return (
     <View
       ref={ref}
+      nativeID={id}
       style={[badgeStyle, style]}
       testID={testID}
       accessibilityLabel="badge"

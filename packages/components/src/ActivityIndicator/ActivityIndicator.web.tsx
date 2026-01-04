@@ -12,6 +12,7 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   style,
   testID,
   hidesWhenStopped = true,
+  id,
 }, ref) => {
   // Handle numeric size
   const sizeVariant = typeof size === 'number' ? 'md' : size;
@@ -71,7 +72,7 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
           }
         `}
       </style>
-      <div {...containerProps} ref={mergedRef} data-testid={testID}>
+      <div {...containerProps} ref={mergedRef} id={id} data-testid={testID}>
         <div {...spinnerProps} />
       </div>
     </>

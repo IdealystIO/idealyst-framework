@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { BaseProps } from '../utils/viewStyleProps';
 
-export interface LinkProps {
+export interface LinkProps extends BaseProps {
   /** The destination path to navigate to */
   to: string;
   /** Variables to substitute in the path (e.g., { id: '123' } for '/user/:id') */

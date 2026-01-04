@@ -18,6 +18,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   marginHorizontal,
   style,
   testID,
+  id,
 }) => {
   const group = useRadioGroup();
 
@@ -54,6 +55,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       {...containerProps}
       onClick={handleClick}
       disabled={disabled}
+      id={id}
       data-testid={testID}
       role="radio"
       aria-checked={checked}

@@ -27,6 +27,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   const firstItemValue = items[0]?.value || '';
   const [internalValue, setInternalValue] = useState(defaultValue || firstItemValue);
@@ -104,7 +105,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ position: 'relative' }}
     >
-      <View ref={ref} style={[tabBarContainerStyles.container, style]} testID={testID}>
+      <View ref={ref} nativeID={id} style={[tabBarContainerStyles.container, style]} testID={testID}>
         {/* Animated indicator - render first so it's behind */}
         <Animated.View
           style={[

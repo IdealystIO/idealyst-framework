@@ -29,6 +29,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -179,7 +180,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   };
 
   return (
-    <div onClick={handleContainerPress} {...containerProps} data-testid={testID}>
+    <div onClick={handleContainerPress} {...containerProps} id={id} data-testid={testID}>
       {/* Left Icon */}
       {leftIcon && (
         <span {...leftIconContainerProps}>

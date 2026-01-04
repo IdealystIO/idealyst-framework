@@ -20,6 +20,7 @@ const Image: React.FC<ImageProps> = ({
   style,
   testID,
   accessibilityLabel,
+  id,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -62,6 +63,7 @@ const Image: React.FC<ImageProps> = ({
   return (
     <div
       {...containerProps}
+      id={id}
       data-testid={testID}
     >
       <img

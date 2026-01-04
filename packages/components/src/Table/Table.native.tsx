@@ -20,6 +20,7 @@ function TableInner<T = any>({
   marginHorizontal,
   style,
   testID,
+  id,
 }: TableProps<T>, ref: React.Ref<ScrollView>) {
   // Apply variants
   tableStyles.useVariants({
@@ -49,6 +50,7 @@ function TableInner<T = any>({
   return (
     <ScrollView
       ref={ref}
+      nativeID={id}
       horizontal
       style={[tableStyles.container, style]}
       testID={testID}

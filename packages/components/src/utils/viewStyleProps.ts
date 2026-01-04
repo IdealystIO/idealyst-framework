@@ -7,6 +7,14 @@ import { Size } from '@idealyst/theme';
 export type ViewStyleSize = Size;
 
 /**
+ * Base props shared by all components
+ */
+export interface BaseProps {
+  /** Unique identifier for the element (maps to id on web, nativeID on native) */
+  id?: string;
+}
+
+/**
  * Gap style props - for controlling gap/spacing between children
  */
 export interface GapStyleProps {
@@ -42,22 +50,22 @@ export interface MarginStyleProps {
  * Full container style props - includes all spacing options
  * For: View, Card, Screen, List, Accordion, Table, TabBar
  */
-export interface ContainerStyleProps extends GapStyleProps, PaddingStyleProps, MarginStyleProps {}
+export interface ContainerStyleProps extends BaseProps, GapStyleProps, PaddingStyleProps, MarginStyleProps {}
 
 /**
  * Text spacing style props - gap + padding only
  * For: Text (gap for inline elements, padding for block-level)
  */
-export interface TextSpacingStyleProps extends GapStyleProps, PaddingStyleProps {}
+export interface TextSpacingStyleProps extends BaseProps, GapStyleProps, PaddingStyleProps {}
 
 /**
  * Pressable style props - padding only
  * For: Pressable
  */
-export interface PressableSpacingStyleProps extends PaddingStyleProps {}
+export interface PressableSpacingStyleProps extends BaseProps, PaddingStyleProps {}
 
 /**
  * Form input style props - margin only
  * For: Input, Select, TextArea, Checkbox, RadioButton, Switch, Slider
  */
-export interface FormInputStyleProps extends MarginStyleProps {}
+export interface FormInputStyleProps extends BaseProps, MarginStyleProps {}

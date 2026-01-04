@@ -19,6 +19,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     rightIcon,
     style,
     testID,
+    id,
   } = props;
 
   // Apply variants
@@ -107,19 +108,23 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     );
   };
 
+  // TouchableOpacity types don't include nativeID but it's a valid RN prop
+  const touchableProps = {
+    ref,
+    onPress,
+    disabled,
+    testID,
+    nativeID: id,
+    activeOpacity: 0.7,
+    style: [
+      buttonStyle,
+      showGradient && { overflow: 'hidden' },
+      style,
+    ],
+  };
+
   return (
-    <TouchableOpacity
-      ref={ref}
-      onPress={onPress}
-      disabled={disabled}
-      testID={testID}
-      activeOpacity={0.7}
-      style={[
-        buttonStyle,
-        showGradient && { overflow: 'hidden' },
-        style,
-      ]}
-    >
+    <TouchableOpacity {...touchableProps as any}>
       {renderGradientLayer()}
       {hasIcons ? (
         <View style={buttonStyles.iconContainer}>

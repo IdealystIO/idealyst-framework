@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { BaseProps } from '../utils/viewStyleProps';
 
 export type PopoverPlacement =
   | 'top' | 'top-start' | 'top-end'
@@ -7,7 +8,7 @@ export type PopoverPlacement =
   | 'left' | 'left-start' | 'left-end'
   | 'right' | 'right-start' | 'right-end';
 
-export interface PopoverProps {
+export interface PopoverProps extends BaseProps {
   /**
    * Whether the popover is open/visible
    */

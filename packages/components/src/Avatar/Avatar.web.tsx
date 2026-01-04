@@ -12,6 +12,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
   shape = 'circle',
   style,
   testID,
+  id,
 }, ref) => {
   const [hasError, setHasError] = useState(false);
 
@@ -34,7 +35,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
   const mergedRef = useMergeRefs(ref, avatarProps.ref);
 
   return (
-    <div {...avatarProps} ref={mergedRef} data-testid={testID}>
+    <div {...avatarProps} ref={mergedRef} id={id} data-testid={testID}>
       {src && !hasError ? (
         <img
           src={src as any}

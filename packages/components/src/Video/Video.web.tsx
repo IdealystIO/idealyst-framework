@@ -25,6 +25,7 @@ const Video: React.FC<VideoProps> = ({
   borderRadius,
   style,
   testID,
+  id,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -85,6 +86,7 @@ const Video: React.FC<VideoProps> = ({
     <div
       {...containerProps}
       style={containerStyle}
+      id={id}
       data-testid={testID}
     >
       <video

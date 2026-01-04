@@ -11,6 +11,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
   animation = 'pulse',
   style,
   testID,
+  id,
 }) => {
   skeletonStyles.useVariants({
     shape,
@@ -60,6 +61,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
           ...customStyles,
           ...animationStyles,
         }}
+        id={id}
         data-testid={testID}
       >
         {animation === 'wave' && (
@@ -86,6 +88,7 @@ export const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
   skeletonProps,
   style,
   testID,
+  id,
 }) => {
   skeletonStyles.useVariants({});
   const groupProps = getWebProps([skeletonStyles.group, style as any]);
@@ -96,6 +99,7 @@ export const SkeletonGroup: React.FC<SkeletonGroupProps> = ({
       style={{
         gap: `${spacing}px`,
       }}
+      id={id}
       data-testid={testID}
     >
       {Array.from({ length: count }).map((_, index) => (

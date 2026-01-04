@@ -1,12 +1,13 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import { Intent, Size } from '@idealyst/theme';
+import { BaseProps } from '../utils/viewStyleProps';
 
 export type ChipSize = Size;
 export type ChipType = 'filled' | 'outlined' | 'soft';
 export type ChipIntent = Intent;
 
-export interface ChipProps {
+export interface ChipProps extends BaseProps {
   /** The text content of the chip */
   label: string;
 

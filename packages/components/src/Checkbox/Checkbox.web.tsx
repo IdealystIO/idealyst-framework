@@ -26,6 +26,7 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   required = false,
   error,
   helperText,
+  id,
 }, ref) => {
   const [internalChecked, setInternalChecked] = useState(checked);
 
@@ -76,7 +77,7 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   const mergedRef = useMergeRefs(ref, wrapperProps.ref);
 
   return (
-    <div {...wrapperProps} ref={mergedRef}>
+    <div {...wrapperProps} ref={mergedRef} id={id}>
       <label {...containerProps}>
         <div style={{ position: 'relative' }}>
           <input

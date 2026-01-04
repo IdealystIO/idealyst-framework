@@ -20,6 +20,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
     iconPath,
     style,
     testID,
+    id,
   } = props;
 
   badgeStyles.useVariants({
@@ -63,6 +64,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
         {...badgeProps}
         style={style as React.CSSProperties}
         ref={mergedRef}
+        id={id}
         data-testid={testID}
         role="status"
         aria-label="status indicator"
@@ -77,6 +79,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
       {...badgeProps}
       style={style as React.CSSProperties}
       ref={mergedRef}
+      id={id}
       data-testid={testID}
       role="status"
     >

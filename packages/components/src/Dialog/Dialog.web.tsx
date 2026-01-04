@@ -18,6 +18,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   closeOnEscapeKey = true,
   style,
   testID,
+  id,
 }, ref) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousActiveElementRef = useRef<HTMLElement | null>(null);
@@ -129,6 +130,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
     <div
       {...backdropProps}
       ref={mergedBackdropRef}
+      id={id}
       onClick={handleBackdropClick}
       data-testid={testID}
     >

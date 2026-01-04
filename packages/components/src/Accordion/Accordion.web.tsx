@@ -108,6 +108,7 @@ const Accordion: React.FC<AccordionProps> = ({
   marginHorizontal,
   style,
   testID,
+  id,
 }) => {
   const [expandedItems, setExpandedItems] = useState<string[]>(defaultExpanded);
 
@@ -143,7 +144,7 @@ const Accordion: React.FC<AccordionProps> = ({
   };
 
   return (
-    <div {...containerProps} data-testid={testID}>
+    <div {...containerProps} id={id} data-testid={testID}>
       {items.map((item) => (
         <AccordionItem
           key={item.id}

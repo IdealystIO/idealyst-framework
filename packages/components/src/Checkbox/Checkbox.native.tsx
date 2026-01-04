@@ -24,6 +24,7 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   required = false,
   error,
   helperText,
+  id,
 }, ref) => {
   const [internalChecked, setInternalChecked] = useState(checked);
 
@@ -56,7 +57,7 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   const displayHelperText = error || helperText;
 
   return (
-    <View ref={ref} style={[checkboxStyles.wrapper, style]}>
+    <View ref={ref} nativeID={id} style={[checkboxStyles.wrapper, style]}>
       <Pressable
         onPress={handlePress}
         disabled={disabled}

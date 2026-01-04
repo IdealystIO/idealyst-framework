@@ -27,6 +27,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   onValueCommit,
   style,
   testID,
+  id,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isDragging, setIsDragging] = useState(false);
@@ -165,7 +166,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   const mergedRef = useMergeRefs(ref, containerProps.ref);
 
   return (
-    <div {...containerProps} ref={mergedRef} data-testid={testID}>
+    <div {...containerProps} ref={mergedRef} id={id} data-testid={testID}>
       {showValue && (
         <div {...valueLabelProps}>
           {value}

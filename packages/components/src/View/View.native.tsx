@@ -24,6 +24,7 @@ const View = forwardRef<RNView | RNScrollView, ViewProps>(({
   scrollable = false,
   style,
   testID,
+  id,
 }, ref) => {
   viewStyles.useVariants({
     background,
@@ -56,6 +57,7 @@ const View = forwardRef<RNView | RNScrollView, ViewProps>(({
         style={[{ flex: 1 }, style]}
         contentContainerStyle={[viewStyles.view, getStyles()]}
         testID={testID}
+        nativeID={id}
       >
         {children}
       </RNScrollView>
@@ -63,7 +65,7 @@ const View = forwardRef<RNView | RNScrollView, ViewProps>(({
   }
 
   return (
-    <RNView ref={ref as any} style={[viewStyles.view, getStyles(), style]} testID={testID}>
+    <RNView ref={ref as any} style={[viewStyles.view, getStyles(), style]} testID={testID} nativeID={id}>
       {children}
     </RNView>
   );

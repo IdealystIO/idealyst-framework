@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { BaseProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type DialogSizeVariant = 'sm' | 'md' | 'lg' | 'fullscreen';
 export type DialogType = 'standard' | 'alert' | 'confirmation';
 export type DialogAnimationType = 'slide' | 'fade' | 'none';
 
-export interface DialogProps {
+export interface DialogProps extends BaseProps {
   /**
    * Whether the dialog is open/visible
    */

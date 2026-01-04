@@ -28,6 +28,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     rightIconPath,
     style,
     testID,
+    id,
   } = props;
 
   buttonStyles.useVariants({
@@ -95,6 +96,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     <button
       {...webProps}
       ref={mergedRef}
+      id={id}
       onClick={handleClick}
       disabled={disabled}
       data-testid={testID}

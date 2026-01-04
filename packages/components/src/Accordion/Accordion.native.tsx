@@ -142,6 +142,7 @@ const Accordion = forwardRef<View, AccordionProps>(({
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   const [expandedItems, setExpandedItems] = useState<string[]>(defaultExpanded);
 
@@ -175,7 +176,7 @@ const Accordion = forwardRef<View, AccordionProps>(({
   };
 
   return (
-    <View ref={ref} style={[accordionStyles.container, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[accordionStyles.container, style]} testID={testID}>
       {items.map((item, index) => (
         <AccordionItem
           key={item.id}

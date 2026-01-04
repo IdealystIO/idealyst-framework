@@ -157,6 +157,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   testID,
   responsive = false,
   minVisibleItems = 3,
+  id,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const containerProps = getWebProps([breadcrumbContainerStyles.container, style as any]);
@@ -200,7 +201,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   }));
 
   return (
-    <nav {...containerProps} aria-label="Breadcrumb" data-testid={testID}>
+    <nav {...containerProps} aria-label="Breadcrumb" id={id} data-testid={testID}>
       {displayItems.map((item, index) => {
         const isLast = index === displayItems.length - 1;
         const shouldShowEllipsis = showEllipsis && index === 1;

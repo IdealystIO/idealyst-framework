@@ -19,6 +19,7 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   const group = useRadioGroup();
 
@@ -64,6 +65,7 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
   return (
     <Pressable
       ref={ref}
+      nativeID={id}
       onPress={handlePress}
       disabled={disabled}
       style={[radioButtonStyles.container, style]}

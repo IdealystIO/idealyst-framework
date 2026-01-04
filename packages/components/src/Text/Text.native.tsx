@@ -17,6 +17,7 @@ const Text = forwardRef<RNText, TextProps>(({
   paddingHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   // When typography is set, it overrides size and weight (handled in styles)
   textStyles.useVariants({
@@ -32,6 +33,7 @@ const Text = forwardRef<RNText, TextProps>(({
   return (
     <RNText
       ref={ref}
+      nativeID={id}
       style={[
         textStyles.text({ color, typography }),
         style,

@@ -19,6 +19,7 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   switchStyles.useVariants({
     size,
@@ -81,6 +82,7 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
   const switchElement = (
     <Pressable
       ref={!label ? ref : undefined}
+      nativeID={!label ? id : undefined}
       onPress={handlePress}
       disabled={disabled}
       style={switchStyles.switchContainer}
@@ -115,6 +117,7 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
     return (
       <Pressable
         ref={ref}
+        nativeID={id}
         onPress={handlePress}
         disabled={disabled}
         style={[switchStyles.container, style]}

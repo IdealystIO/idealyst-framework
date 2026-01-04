@@ -20,6 +20,7 @@ const List = forwardRef<View, ListProps>(({
   testID,
   scrollable = false,
   maxHeight,
+  id,
 }, ref) => {
   // Apply types
   listStyles.useVariants({
@@ -50,6 +51,7 @@ const List = forwardRef<View, ListProps>(({
     return (
       <ScrollView
         ref={ref as any}
+        nativeID={id}
         style={containerStyle as any}
         testID={testID}
         showsVerticalScrollIndicator={true}
@@ -60,7 +62,7 @@ const List = forwardRef<View, ListProps>(({
   }
 
   return (
-    <View ref={ref} style={containerStyle as any} testID={testID}>
+    <View ref={ref} nativeID={id} style={containerStyle as any} testID={testID}>
       {content}
     </View>
   );

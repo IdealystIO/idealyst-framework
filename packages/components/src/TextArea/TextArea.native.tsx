@@ -28,6 +28,7 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
   style,
   textareaStyle,
   testID,
+  id,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
@@ -81,7 +82,7 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
   const showFooter = (error || helperText) || (showCharacterCount && maxLength);
 
   return (
-    <View style={[textAreaStyles.container, style]} testID={testID}>
+    <View nativeID={id} style={[textAreaStyles.container, style]} testID={testID}>
       {label && (
         <Text style={textAreaStyles.label}>{label}</Text>
       )}

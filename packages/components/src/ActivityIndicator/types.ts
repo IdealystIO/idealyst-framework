@@ -1,11 +1,12 @@
 import { Intent, Size } from '@idealyst/theme';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { BaseProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type ActivityIndicatorIntentVariant = Intent;
 export type ActivityIndicatorSizeVariant = Size;
 
-export interface ActivityIndicatorProps {
+export interface ActivityIndicatorProps extends BaseProps {
   /**
    * Whether the indicator is animating (visible)
    * @default true

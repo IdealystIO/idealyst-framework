@@ -25,6 +25,7 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
   scrollable, // accepted but no-op on web - layout handles scrolling
   style,
   testID,
+  id,
 }, ref) => {
   viewStyles.useVariants({
     background,
@@ -56,6 +57,7 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
     <div
       {...webProps}
       ref={mergedRef}
+      id={id}
       data-testid={testID}
     >
       {children}

@@ -1,7 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import { Intent, Size } from '@idealyst/theme';
-import { FormInputStyleProps } from '../utils/viewStyleProps';
+import { FormInputStyleProps, BaseProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type RadioButtonIntentVariant = Intent;
@@ -19,7 +19,7 @@ export interface RadioButtonProps extends FormInputStyleProps {
   testID?: string;
 }
 
-export interface RadioGroupProps {
+export interface RadioGroupProps extends BaseProps {
   value?: string;
   onValueChange?: (value: string) => void;
   disabled?: boolean;

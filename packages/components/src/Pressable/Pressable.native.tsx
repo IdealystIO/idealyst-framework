@@ -17,6 +17,7 @@ const Pressable = forwardRef<View, PressableProps>(({
   testID,
   accessibilityLabel,
   accessibilityRole,
+  id,
 }, ref) => {
   // Apply spacing variants
   pressableStyles.useVariants({
@@ -34,7 +35,7 @@ const Pressable = forwardRef<View, PressableProps>(({
       testID={testID}
       accessibilityLabel={accessibilityLabel}
     >
-      <View ref={ref} style={[pressableStyles.pressable, style]}>
+      <View ref={ref} nativeID={id} style={[pressableStyles.pressable, style]}>
         {children}
       </View>
     </TouchableWithoutFeedback>

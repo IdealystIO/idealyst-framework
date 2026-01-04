@@ -21,6 +21,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
   disabled = false,
   style,
   testID,
+  id,
 }, ref) => {
   // Compute actual selected state
   const isSelected = selectable ? selected : false;
@@ -93,6 +94,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
     <div
       {...containerProps}
       ref={mergedRef}
+      id={id}
       style={{
         cursor: isClickable ? 'pointer' : 'default',
         userSelect: 'none',

@@ -28,6 +28,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
   actions,
   style,
   testID,
+  id,
 }, ref) => {
   // Apply variants to stylesheet
   alertStyles.useVariants({
@@ -58,6 +59,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
   return (
     <View
       ref={ref}
+      nativeID={id}
       style={[alertStyles.container, style]}
       testID={testID}
       accessibilityRole="alert"

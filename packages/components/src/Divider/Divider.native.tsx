@@ -14,6 +14,7 @@ const Divider = forwardRef<View, DividerProps>(({
   style,
   testID,
   accessibilityLabel,
+  id,
 }, ref) => {
   // Apply variants for main divider
   dividerStyles.useVariants({
@@ -73,6 +74,7 @@ const Divider = forwardRef<View, DividerProps>(({
       return (
         <View
           ref={ref}
+          nativeID={id}
           style={[
             dividerStyle,
             getDashedStyle(),
@@ -87,6 +89,7 @@ const Divider = forwardRef<View, DividerProps>(({
     return (
       <View
         ref={ref}
+        nativeID={id}
         style={[dividerStyles.divider, style]}
         testID={testID}
         accessibilityLabel={accessibilityLabel || "divider"}
@@ -132,6 +135,7 @@ const Divider = forwardRef<View, DividerProps>(({
   return (
     <View
       ref={ref}
+      nativeID={id}
       style={dividerStyles.container}
       testID={testID}
       accessibilityLabel={accessibilityLabel || "divider with content"}

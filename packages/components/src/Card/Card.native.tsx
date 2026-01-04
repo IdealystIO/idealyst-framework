@@ -22,6 +22,7 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
   style,
   testID,
   accessibilityLabel,
+  id,
 }, ref) => {
   // Apply variants
   cardStyles.useVariants({
@@ -44,6 +45,7 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
 
   const componentProps = {
     ref,
+    nativeID: id,
     style: [cardStyles.card, style],
     testID,
     accessibilityLabel,

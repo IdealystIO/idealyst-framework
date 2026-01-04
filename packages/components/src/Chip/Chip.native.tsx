@@ -19,6 +19,7 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
   disabled = false,
   style,
   testID,
+  id,
 }, ref) => {
   const handlePress = () => {
     if (disabled) return;
@@ -99,6 +100,7 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
     return (
       <Pressable
         ref={ref}
+        nativeID={id}
         onPress={handlePress}
         disabled={disabled}
         accessibilityRole="button"
@@ -115,7 +117,7 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
   }
 
   return (
-    <View ref={ref} style={[containerStyle, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID}>
       {innerContent}
     </View>
   );

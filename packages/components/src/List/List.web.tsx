@@ -20,6 +20,7 @@ const List: React.FC<ListProps> = ({
   testID,
   scrollable = false,
   maxHeight,
+  id,
 }) => {
   // Apply types
   listStyles.useVariants({
@@ -47,6 +48,7 @@ const List: React.FC<ListProps> = ({
       <div
         {...containerProps}
         role="list"
+        id={id}
         data-testid={testID}
       >
         {children}

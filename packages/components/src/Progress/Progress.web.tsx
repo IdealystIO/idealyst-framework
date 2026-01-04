@@ -15,6 +15,7 @@ const Progress: React.FC<ProgressProps> = ({
   rounded = true,
   style,
   testID,
+  id,
 }) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
@@ -56,7 +57,7 @@ const Progress: React.FC<ProgressProps> = ({
     console.log(trackColorProps)
 
     return (
-      <div {...computedContainerProps} data-testid={testID}>
+      <div {...computedContainerProps} id={id} data-testid={testID}>
         <svg
           width={circularSize}
           height={circularSize}
@@ -106,7 +107,7 @@ const Progress: React.FC<ProgressProps> = ({
 
   return (
     <>
-      <div {...containerProps} data-testid={testID}>
+      <div {...containerProps} id={id} data-testid={testID}>
         <div
           {...trackProps}
           role="progressbar"

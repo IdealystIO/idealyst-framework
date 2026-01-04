@@ -22,6 +22,7 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   const handleClick = () => {
     if (!disabled && onCheckedChange) {
@@ -90,6 +91,7 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
       ref={mergedButtonRef}
       onClick={handleClick}
       disabled={disabled}
+      id={id}
       data-testid={testID}
       role="switch"
       aria-checked={checked}

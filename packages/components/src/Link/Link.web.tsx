@@ -12,6 +12,7 @@ const Link: React.FC<LinkProps> = ({
   testID,
   accessibilityLabel,
   onPress,
+  id,
 }) => {
   const navigator = useNavigator();
 
@@ -30,6 +31,7 @@ const Link: React.FC<LinkProps> = ({
       testID={testID}
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="link"
+      id={id}
     >
       {children}
     </Pressable>

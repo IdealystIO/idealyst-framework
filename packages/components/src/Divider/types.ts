@@ -1,6 +1,7 @@
 import { Intent, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { BaseProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type DividerIntentVariant = Intent;
@@ -10,7 +11,7 @@ export type DividerThicknessVariant = 'thin' | 'md' | 'thick';
 export type DividerLengthVariant = 'full' | 'auto' | number;
 export type DividerSpacingVariant = 'none' | Size;
 
-export interface DividerProps {
+export interface DividerProps extends BaseProps {
   /**
    * The orientation of the divider
    */

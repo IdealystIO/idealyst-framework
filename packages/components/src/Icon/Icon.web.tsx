@@ -19,6 +19,7 @@ const Icon = forwardRef<HTMLDivElement, IconProps>((props: InternalIconProps, re
     style,
     testID,
     accessibilityLabel,
+    id,
     ...restProps
   } = props;
 
@@ -32,7 +33,8 @@ const Icon = forwardRef<HTMLDivElement, IconProps>((props: InternalIconProps, re
   return (
     <div
       {...iconProps}
-      ref={mergedRef}>
+      ref={mergedRef}
+      id={id}>
       <MdiIcon
         path={path}
         size={'100%'}

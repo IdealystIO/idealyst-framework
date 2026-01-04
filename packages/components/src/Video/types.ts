@@ -1,11 +1,12 @@
 import type { StyleProp, ViewStyle } from 'react-native';
+import { BaseProps } from '../utils/viewStyleProps';
 
 export interface VideoSource {
   uri: string;
   type?: string;
 }
 
-export interface VideoProps {
+export interface VideoProps extends BaseProps {
   source: VideoSource | string;
   poster?: string;
   width?: number | string;

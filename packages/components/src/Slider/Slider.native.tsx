@@ -29,6 +29,7 @@ const Slider = forwardRef<View, SliderProps>(({
   onValueCommit,
   style,
   testID,
+  id,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [trackWidthState, setTrackWidthState] = useState(0);
@@ -166,7 +167,7 @@ const Slider = forwardRef<View, SliderProps>(({
   };
 
   return (
-    <View ref={ref} style={[sliderStyles.container, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[sliderStyles.container, style]} testID={testID}>
       {showValue && (
         <View style={sliderStyles.valueLabel as any}>
           <Text>{value}</Text>

@@ -18,6 +18,7 @@ const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
   screenStyles.useVariants({
     background,
@@ -40,6 +41,7 @@ const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
     <div
       {...webProps}
       ref={mergedRef}
+      id={id}
       data-testid={testID}
     >
       {children}

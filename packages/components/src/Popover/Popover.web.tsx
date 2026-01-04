@@ -16,6 +16,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
   closeOnEscapeKey = true,
   showArrow = false,
   testID,
+  id,
 }, ref) => {
   const popoverRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +48,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
       onEscapeKey={closeOnEscapeKey ? () => onOpenChange(false) : undefined}
       zIndex={9999}
     >
-      <div ref={mergedPopoverRef} data-testid={testID}>
+      <div ref={mergedPopoverRef} id={id} data-testid={testID}>
         <div {...containerProps}>
           <div {...contentProps}>
             {children}

@@ -50,7 +50,7 @@ export const DefaultStackLayout: React.FC<DefaultStackLayoutProps> = ({
             )}
             
             {/* Content Area */}
-            <View style={{ flex: 1, padding: 20 }}>
+            <View style={{ flex: 1 }}>
                 <Outlet />
             </View>
         </View>

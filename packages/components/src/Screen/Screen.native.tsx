@@ -19,6 +19,7 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   marginHorizontal,
   style,
   testID,
+  id,
 }, ref) => {
 
   screenStyles.useVariants({
@@ -51,6 +52,7 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
     return (
       <RNScrollView
         ref={ref as any}
+        nativeID={id}
         style={scrollViewStyle}
         contentContainerStyle={contentContainerStyleArray}
         testID={testID}
@@ -63,7 +65,7 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   const containerStyle = [screenStyles.screen, style];
 
   const view = (
-    <RNView ref={ref as any} style={containerStyle} testID={testID}>
+    <RNView ref={ref as any} nativeID={id} style={containerStyle} testID={testID}>
       {children}
     </RNView>
   );

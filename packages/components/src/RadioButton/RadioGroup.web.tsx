@@ -19,6 +19,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   children,
   style,
   testID,
+  id,
 }) => {
   // Apply variants
   radioButtonStyles.useVariants({
@@ -35,6 +36,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
       <div
         {...groupProps}
         role="radiogroup"
+        id={id}
         data-testid={testID}
         style={{
           display: 'flex',

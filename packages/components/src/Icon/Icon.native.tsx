@@ -11,6 +11,7 @@ const Icon = forwardRef<any, IconProps>(({
   style,
   testID,
   accessibilityLabel,
+  id,
 }: IconProps, ref) => {
 
 
@@ -22,6 +23,7 @@ const Icon = forwardRef<any, IconProps>(({
   return (
     <MaterialCommunityIcons
       ref={ref}
+      nativeID={id}
       name={name}
       style={[iconStyle, style]}
       testID={testID}

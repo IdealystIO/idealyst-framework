@@ -11,6 +11,7 @@ const Avatar = forwardRef<View, AvatarProps>(({
   shape = 'circle',
   style,
   testID,
+  id,
 }, ref) => {
   const [hasError, setHasError] = useState(false);
 
@@ -24,7 +25,7 @@ const Avatar = forwardRef<View, AvatarProps>(({
   };
 
   return (
-    <View ref={ref} style={[avatarStyles.avatar, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[avatarStyles.avatar, style]} testID={testID}>
       {src && !hasError ? (
         <Image
           source={typeof src === 'string' ? { uri: src } : src}

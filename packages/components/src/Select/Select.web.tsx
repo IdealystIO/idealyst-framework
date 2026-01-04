@@ -30,6 +30,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   style,
   testID,
   accessibilityLabel,
+  id,
 }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -191,7 +192,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   const mergedRef = useMergeRefs(ref, containerWebProps.ref);
 
   return (
-    <div {...containerWebProps} ref={mergedRef} data-testid={testID}>
+    <div {...containerWebProps} ref={mergedRef} id={id} data-testid={testID}>
       {label && (
         <label {...getWebProps([selectStyles.label])}>
           {label}

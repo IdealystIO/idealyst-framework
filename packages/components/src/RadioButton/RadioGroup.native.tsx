@@ -19,12 +19,14 @@ const RadioGroup = forwardRef<View, RadioGroupProps>(({
   children,
   style,
   testID,
+  id,
 }, ref) => {
 
   return (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>
       <View
         ref={ref}
+        nativeID={id}
         style={[
           radioButtonStyles.groupContainer,
           style as any,
