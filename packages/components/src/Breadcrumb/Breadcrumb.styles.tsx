@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, CompoundVariants, Size } from '@idealyst/theme';
+import { Theme, StylesheetStyles, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type BreadcrumbSize = Size;
@@ -27,6 +27,13 @@ export type BreadcrumbStylesheet = {
     menuButtonIcon: ExpandedBreadcrumbStyles;
 }
 
+type ItemTextDynamicProps = {
+    intent?: BreadcrumbIntent;
+    isLast?: boolean;
+    disabled?: boolean;
+    clickable?: boolean;
+};
+
 /**
  * Create size variants for item text
  */
@@ -38,31 +45,19 @@ function createItemTextSizeVariants(theme: Theme) {
 }
 
 /**
- * Create compound variants for item text
+ * Get item text color based on state
  */
-function createItemTextCompoundVariants(theme: Theme): CompoundVariants<keyof BreadcrumbVariants> {
-    return [
-        {
-            clickable: true,
-            intent: 'primary',
-            isLast: false,
-            disabled: false,
-            styles: { color: theme.intents.primary.primary },
-        },
-        {
-            clickable: true,
-            intent: 'neutral',
-            isLast: false,
-            disabled: false,
-            styles: { color: theme.colors.text.secondary },
-        },
-        {
-            clickable: false,
-            isLast: false,
-            disabled: false,
-            styles: { color: theme.colors.text.secondary },
-        },
-    ];
+function getItemTextColor(theme: Theme, intent: BreadcrumbIntent, isLast: boolean, disabled: boolean, clickable: boolean): string {
+    if (disabled) {
+        return theme.colors.text.secondary;
+    }
+    if (isLast) {
+        return theme.colors.text.primary;
+    }
+    if (clickable) {
+        return intent === 'primary' ? theme.intents.primary.primary : theme.colors.text.secondary;
+    }
+    return theme.colors.text.secondary;
 }
 
 /**
@@ -86,25 +81,16 @@ function getIconColor(theme: Theme, intent: BreadcrumbIntent) {
 }
 
 const createItemTextStyles = (theme: Theme) => {
-    return {
-        variants: {
-            size: createItemTextSizeVariants(theme),
-            intent: { primary: {}, neutral: {} },
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                    color: theme.colors.text.secondary,
-                },
-                false: {},
+    return ({ intent = 'primary', isLast = false, disabled = false, clickable = true }: ItemTextDynamicProps) => {
+        const color = getItemTextColor(theme, intent, isLast, disabled, clickable);
+        return {
+            color,
+            opacity: disabled ? 0.5 : 1,
+            variants: {
+                size: createItemTextSizeVariants(theme),
             },
-            isLast: {
-                true: { color: theme.colors.text.primary },
-                false: {},
-            },
-            clickable: { true: {}, false: {} },
-        },
-        compoundVariants: createItemTextCompoundVariants(theme),
-    } as const;
+        } as const;
+    };
 }
 
 const createIconStyles = (theme: Theme) => {

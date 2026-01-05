@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, CompoundVariants } from '@idealyst/theme';
+import { Theme } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import {
   buildGapVariants,
@@ -47,44 +47,26 @@ function createContainerTypeVariants(theme: Theme) {
 }
 
 
+type ItemDynamicProps = {
+    type?: ListType;
+    disabled?: boolean;
+    clickable?: boolean;
+};
+
 /**
- * Create compound variants for item
+ * Get item hover styles based on disabled and clickable state
  */
-function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof ListVariants> {
-    return [
-        {
-            type: 'divided',
-            styles: {
-                _web: {
-                    ':last-child': {
-                        borderBottom: 'none',
-                    },
-                },
-            },
-        },
-        {
-            disabled: true,
-            styles: {
-                _web: {
-                    _hover: {
-                        backgroundColor: 'transparent',
-                        borderRadius: 0,
-                    },
-                },
-            },
-        },
-        {
-            clickable: false,
-            styles: {
-                _web: {
-                    _hover: {
-                        backgroundColor: 'transparent',
-                        borderRadius: 0,
-                    },
-                },
-            },
-        },
-    ];
+function getItemHoverStyles(theme: Theme, disabled: boolean, clickable: boolean) {
+    if (disabled || !clickable) {
+        return {
+            backgroundColor: 'transparent',
+            borderRadius: 0,
+        };
+    }
+    return {
+        backgroundColor: theme.colors.surface.secondary,
+        borderRadius: 4,
+    };
 }
 
 
@@ -114,77 +96,52 @@ export const listStyles = StyleSheet.create((theme: Theme) => {
                 marginHorizontal: buildMarginHorizontalVariants(theme),
             },
         },
-        item: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'transparent',
-            textAlign: 'left',
-            variants: {
-                size: buildSizeVariants(theme, 'list', (size) => ({
-                    paddingVertical: size.paddingVertical,
-                    paddingHorizontal: size.paddingHorizontal,
-                    minHeight: size.minHeight,
-                })),
-                type: {
-                    default: {},
-                    bordered: {},
-                    divided: {
-                        borderBottomWidth: 1,
-                        borderBottomStyle: 'solid',
-                        borderBottomColor: theme.colors.border.primary,
-                        _web: {
-                            borderBottom: `1px solid ${theme.colors.border.primary}`,
+        item: (({ type = 'default', disabled = false, clickable = true }: ItemDynamicProps) => {
+            const hoverStyles = getItemHoverStyles(theme, disabled, clickable);
+            return {
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: 'transparent',
+                textAlign: 'left',
+                borderBottomWidth: type === 'divided' ? 1 : 0,
+                borderBottomStyle: type === 'divided' ? 'solid' as const : undefined,
+                borderBottomColor: type === 'divided' ? theme.colors.border.primary : undefined,
+                variants: {
+                    size: buildSizeVariants(theme, 'list', (size) => ({
+                        paddingVertical: size.paddingVertical,
+                        paddingHorizontal: size.paddingHorizontal,
+                        minHeight: size.minHeight,
+                    })),
+                    active: {
+                        true: {
+                            backgroundColor: theme.colors.surface.secondary,
                         },
+                        false: {},
                     },
-                },
-                active: {
-                    true: {
-                        backgroundColor: theme.colors.surface.secondary,
-                    },
-                    false: {},
-                },
-                selected: {
-                    true: {
-                        backgroundColor: theme.intents.primary.light + '20',
-                        borderLeftWidth: 3,
-                        borderLeftColor: theme.intents.primary.primary,
-                        _web: {
-                            borderLeft: `3px solid ${theme.intents.primary.primary}`,
+                    selected: {
+                        true: {
+                            backgroundColor: theme.intents.primary.light + '20',
+                            borderLeftWidth: 3,
+                            borderLeftColor: theme.intents.primary.primary,
+                            _web: {
+                                borderLeft: `3px solid ${theme.intents.primary.primary}`,
+                            },
                         },
+                        false: {},
                     },
-                    false: {},
+                } as const,
+                opacity: disabled ? 0.5 : 1,
+                _web: {
+                    border: 'none',
+                    cursor: disabled ? 'not-allowed' : (clickable ? 'pointer' : 'default'),
+                    outline: 'none',
+                    transition: 'background-color 0.2s ease, border-color 0.2s ease',
+                    borderBottom: type === 'divided' ? `1px solid ${theme.colors.border.primary}` : undefined,
+                    _hover: hoverStyles,
                 },
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                        _web: {
-                            cursor: 'not-allowed',
-                        },
-                    },
-                    false: {},
-                },
-                clickable: {
-                    true: {},
-                    false: {
-                        _web: {
-                            cursor: 'default',
-                        },
-                    },
-                },
-            } as const,
-            compoundVariants: createItemCompoundVariants(theme),
-            _web: {
-                border: 'none',
-                cursor: 'pointer',
-                outline: 'none',
-                transition: 'background-color 0.2s ease, border-color 0.2s ease',
-                _hover: {
-                    backgroundColor: theme.colors.surface.secondary,
-                    borderRadius: 4,
-                },
-            },
-        } as const,
+            } as const;
+        }),
         itemContent: {
             display: 'flex',
             flexDirection: 'row',

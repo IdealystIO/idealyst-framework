@@ -14,14 +14,15 @@ interface MenuItemProps {
 }
 
 const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
-  // Initialize styles with useVariants
+  // Initialize styles with useVariants (for size and disabled)
   menuItemStyles.useVariants({
     size,
     disabled: Boolean(item.disabled),
-    intent: item.intent || 'neutral',
   });
 
-  const itemProps = getWebProps([menuItemStyles.item]);
+  // Compute dynamic item style with intent
+  const itemStyle = (menuItemStyles.item as any)({ intent: item.intent || 'neutral' });
+  const itemProps = getWebProps([itemStyle]);
   const iconProps = getWebProps([menuItemStyles.icon]);
   const labelProps = getWebProps([menuItemStyles.label]);
 

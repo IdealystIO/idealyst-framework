@@ -34,12 +34,17 @@ const Progress = forwardRef<View, ProgressProps>(({
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
   const { theme }: { theme: Theme } = useUnistyles();
 
-  // Apply variants
+  // Apply variants (for size and rounded)
   progressStyles.useVariants({
     size,
-    intent,
     rounded,
   });
+
+  // Compute dynamic styles with intent
+  const dynamicProps = { intent };
+  const linearBarStyle = (progressStyles.linearBar as any)(dynamicProps);
+  const indeterminateBarStyle = (progressStyles.indeterminateBar as any)(dynamicProps);
+  const circularBarStyle = (progressStyles.circularBar as any)(dynamicProps);
 
   // Animation values
   const animatedValue = useSharedValue(0);
@@ -161,9 +166,9 @@ const Progress = forwardRef<View, ProgressProps>(({
     <View ref={ref} nativeID={id} style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
       <View style={progressStyles.linearTrack}>
         {indeterminate ? (
-          <Animated.View style={[progressStyles.indeterminateBar, indeterminateAnimatedStyle]} />
+          <Animated.View style={[indeterminateBarStyle, indeterminateAnimatedStyle]} />
         ) : (
-          <Animated.View style={[progressStyles.linearBar, barAnimatedStyle]} />
+          <Animated.View style={[linearBarStyle, barAnimatedStyle]} />
         )}
       </View>
       {showLabel && (

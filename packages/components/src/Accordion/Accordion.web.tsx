@@ -12,6 +12,7 @@ interface AccordionItemProps {
   isExpanded: boolean;
   onToggle: () => void;
   size: AccordionProps['size'];
+  isLast: boolean;
   testID?: string;
   headerId: string;
   panelId: string;
@@ -24,6 +25,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   onToggle,
   type,
   size,
+  isLast,
   testID,
   headerId,
   panelId,
@@ -33,14 +35,16 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const [contentHeight, setContentHeight] = useState(0);
   const chevronIconPath = resolveIconPath('chevron-down');
 
+  // Apply item-specific variants (for size, expanded, disabled)
   accordionStyles.useVariants({
     size,
-    type,
     expanded: isExpanded,
     disabled: Boolean(item.disabled),
   });
 
-  const itemProps = getWebProps([accordionStyles.item]);
+  // Get dynamic item style with type and isLast props
+  const itemStyle = (accordionStyles.item as any)({ type, isLast });
+  const itemProps = getWebProps([itemStyle]);
   const headerProps = getWebProps([accordionStyles.header]);
   const titleProps = getWebProps([accordionStyles.title]);
   const iconProps = getWebProps([accordionStyles.icon]);
@@ -213,7 +217,7 @@ const Accordion: React.FC<AccordionProps> = ({
 
   return (
     <div {...containerProps} {...ariaProps} id={accordionId} data-testid={testID}>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <AccordionItem
           key={item.id}
           item={item}
@@ -221,6 +225,7 @@ const Accordion: React.FC<AccordionProps> = ({
           isExpanded={expandedItems.includes(item.id)}
           onToggle={() => toggleItem(item.id, item.disabled)}
           size={size}
+          isLast={index === items.length - 1}
           testID={`${testID}-item-${item.id}`}
           headerId={getHeaderId(item.id)}
           panelId={getPanelId(item.id)}

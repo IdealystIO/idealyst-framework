@@ -1,236 +1,79 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent, CompoundVariants} from '@idealyst/theme';
+import { Theme, Intent } from '@idealyst/theme';
 
 type AlertType = 'filled' | 'outlined' | 'soft';
-type AlertIntent = Intent | 'info'; // Alert includes 'info' which maps to primary
+type AlertIntent = Intent;
 
 export type AlertVariants = {
     type: AlertType;
     intent: AlertIntent;
 }
 
+type AlertDynamicProps = {
+    intent?: AlertIntent;
+    type?: AlertType;
+};
 
 /**
- * Create type variants (structure only, colors handled by compound variants)
+ * Get the intent value, mapping 'info' to 'primary' for backwards compatibility
  */
-const TypeVariants = {
-    filled: {
-        borderWidth: 1,
-        borderStyle: 'solid' as const,
-    },
-    outlined: {
-        backgroundColor: 'transparent',
-        borderWidth: 1,
-        borderStyle: 'solid' as const,
-    },
-    soft: {
-        borderWidth: 1,
-        borderStyle: 'solid' as const,
-    }
-} as const;
-
-/**
- * Create compound variants for container (type + intent combinations)
- */
-function createContainerCompoundVariants(theme: Theme) {
-    const compoundVariants: CompoundVariants<keyof AlertVariants> = [];
-
-    // Process standard intents from theme
-    for (const intent in theme.intents) {
-        const intentValue = theme.intents[intent as Intent];
-
-        // Filled + intent
-        compoundVariants.push({
-            intent,
-            type: 'filled',
-            styles: {
-                backgroundColor: intentValue.primary,
-                borderColor: intentValue.primary,
-            },
-        });
-
-        // Outlined + intent
-        compoundVariants.push({
-            intent,
-            type: 'outlined',
-            styles: {
-                borderColor: intentValue.primary,
-            },
-        });
-
-        // Soft + intent
-        compoundVariants.push({
-            intent,
-            type: 'soft',
-            styles: {
-                backgroundColor: intentValue.light,
-                borderColor: intentValue.light,
-            },
-        });
-    }
-
-    // Add 'info' intent (maps to primary)
-    const primaryIntent = theme.intents.primary;
-    compoundVariants.push({
-        intent: 'info',
-        type: 'filled',
-        styles: {
-            backgroundColor: primaryIntent.primary,
-            borderColor: primaryIntent.primary,
-        },
-    });
-    compoundVariants.push({
-        intent: 'info',
-        type: 'outlined',
-        styles: {
-            borderColor: primaryIntent.primary,
-        },
-    });
-    compoundVariants.push({
-        intent: 'info',
-        type: 'soft',
-        styles: {
-            backgroundColor: primaryIntent.light,
-            borderColor: primaryIntent.light,
-        },
-    });
-
-    return compoundVariants;
+function getIntentValue(theme: Theme, intent: AlertIntent) {
+    return theme.intents[intent];
 }
 
 /**
- * Create compound variants for icon/title colors (type + intent combinations)
+ * Get container background color based on intent and type
  */
-function createIconTitleCompoundVariants(theme: Theme) {
-    const compoundVariants: CompoundVariants<keyof AlertVariants> = [];
-
-    // Process standard intents from theme
-    for (const intent in theme.intents) {
-        const intentValue = theme.intents[intent as Intent];
-
-        // Filled type: use contrast color
-        compoundVariants.push({
-            intent,
-            type: 'filled',
-            styles: {
-                color: intentValue.contrast,
-            },
-        });
-
-        // Outlined type: use primary color
-        compoundVariants.push({
-            intent,
-            type: 'outlined',
-            styles: {
-                color: intentValue.primary,
-            },
-        });
-
-        // Soft type: use primary color
-        compoundVariants.push({
-            intent,
-            type: 'soft',
-            styles: {
-                color: intentValue.primary,
-            },
-        });
+function getContainerBackgroundColor(theme: Theme, intent: AlertIntent, type: AlertType): string {
+    const intentValue = getIntentValue(theme, intent);
+    if (type === 'filled') {
+        return intentValue.primary;
     }
-
-    // Add 'info' intent (maps to primary)
-    const primaryIntent = theme.intents.primary;
-    compoundVariants.push({
-        intent: 'info',
-        type: 'filled',
-        styles: {
-            color: primaryIntent.contrast,
-        },
-    });
-    compoundVariants.push({
-        intent: 'info',
-        type: 'outlined',
-        styles: {
-            color: primaryIntent.primary,
-        },
-    });
-    compoundVariants.push({
-        intent: 'info',
-        type: 'soft',
-        styles: {
-            color: primaryIntent.primary,
-        },
-    });
-
-    return compoundVariants;
+    if (type === 'soft') {
+        return intentValue.light;
+    }
+    return 'transparent'; // outlined
 }
 
 /**
- * Create compound variants for message colors (type + intent combinations)
+ * Get container border color based on intent and type
  */
-function createMessageCompoundVariants(theme: Theme): CompoundVariants<keyof AlertVariants> {
-    const compoundVariants: CompoundVariants<keyof AlertVariants> = [];
-
-    // Process standard intents from theme
-    for (const intent in theme.intents) {
-        const intentValue = theme.intents[intent as Intent];
-
-        // Filled type: use contrast color
-        compoundVariants.push({
-            intent,
-            type: 'filled',
-            styles: {
-                color: intentValue.contrast,
-            },
-        });
-
-        // Outlined type: use primary text color
-        compoundVariants.push({
-            intent,
-            type: 'outlined',
-            styles: {
-                color: theme.colors.text.primary,
-            },
-        });
-
-        // Soft type: use primary text color
-        compoundVariants.push({
-            intent,
-            type: 'soft',
-            styles: {
-                color: theme.colors.text.primary,
-            },
-        });
+function getContainerBorderColor(theme: Theme, intent: AlertIntent, type: AlertType): string {
+    const intentValue = getIntentValue(theme, intent);
+    if (type === 'filled' || type === 'outlined') {
+        return intentValue.primary;
     }
-
-    // Add 'info' intent (maps to primary)
-    const primaryIntent = theme.intents.primary;
-    compoundVariants.push({
-        intent: 'info',
-        type: 'filled',
-        styles: {
-            color: primaryIntent.contrast,
-        },
-    });
-    compoundVariants.push({
-        intent: 'info',
-        type: 'outlined',
-        styles: {
-            color: theme.colors.text.primary,
-        },
-    });
-    compoundVariants.push({
-        intent: 'info',
-        type: 'soft',
-        styles: {
-            color: theme.colors.text.primary,
-        },
-    });
-
-    return compoundVariants;
+    return intentValue.light; // soft
 }
 
-export const alertStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        container: {
+/**
+ * Get icon/title color based on intent and type
+ */
+function getIconTitleColor(theme: Theme, intent: AlertIntent, type: AlertType): string {
+    const intentValue = getIntentValue(theme, intent);
+    if (type === 'filled') {
+        return intentValue.contrast;
+    }
+    return intentValue.primary; // outlined, soft
+}
+
+/**
+ * Get message color based on intent and type
+ */
+function getMessageColor(theme: Theme, intent: AlertIntent, type: AlertType): string {
+    const intentValue = getIntentValue(theme, intent);
+    if (type === 'filled') {
+        return intentValue.contrast;
+    }
+    return theme.colors.text.primary; // outlined, soft
+}
+
+/**
+ * Create dynamic container styles
+ */
+function createContainerStyles(theme: Theme) {
+    return ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        return {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-start',
@@ -239,36 +82,67 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             borderRadius: 8,
             borderWidth: 1,
             borderStyle: 'solid' as const,
-            variants: {
-                type: TypeVariants,
-            } as const,
-            compoundVariants: createContainerCompoundVariants(theme),
-        } as const,
-        iconContainer: {
+            backgroundColor: getContainerBackgroundColor(theme, intent, type),
+            borderColor: getContainerBorderColor(theme, intent, type),
+        } as const;
+    };
+}
+
+/**
+ * Create dynamic icon container styles
+ */
+function createIconContainerStyles(theme: Theme) {
+    return ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        return {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
             width: 24,
             height: 24,
-            compoundVariants: createIconTitleCompoundVariants(theme),
-        } as const,
+            color: getIconTitleColor(theme, intent, type),
+        } as const;
+    };
+}
+
+/**
+ * Create dynamic title styles
+ */
+function createTitleStyles(theme: Theme) {
+    return ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        return {
+            fontSize: 16,
+            lineHeight: 24,
+            fontWeight: '600',
+            color: getIconTitleColor(theme, intent, type),
+        } as const;
+    };
+}
+
+/**
+ * Create dynamic message styles
+ */
+function createMessageStyles(theme: Theme) {
+    return ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        return {
+            fontSize: 14,
+            lineHeight: 20,
+            color: getMessageColor(theme, intent, type),
+        } as const;
+    };
+}
+
+export const alertStyles = StyleSheet.create((theme: Theme) => {
+    return {
+        container: createContainerStyles(theme),
+        iconContainer: createIconContainerStyles(theme),
+        title: createTitleStyles(theme),
+        message: createMessageStyles(theme),
         content: {
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
             gap: 4,
-        },
-        title: {
-            fontSize: 16,
-            lineHeight: 24,
-            fontWeight: '600',
-            compoundVariants: createIconTitleCompoundVariants(theme),
-        },
-        message: {
-            fontSize: 14,
-            lineHeight: 20,
-            compoundVariants: createMessageCompoundVariants(theme),
         },
         actions: {
             marginTop: 4,
@@ -300,5 +174,5 @@ export const alertStyles = StyleSheet.create((theme: Theme) => {
             width: 16,
             height: 16,
         },
-    } as const;
+    };
 });

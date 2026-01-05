@@ -49,12 +49,10 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
     }
   };
 
-  // Apply variants
+  // Apply variants (for radius, clickable, disabled, and spacing)
   cardStyles.useVariants({
     clickable,
     radius,
-    type,
-    intent,
     disabled,
     gap,
     padding,
@@ -65,8 +63,11 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
     marginHorizontal,
   });
 
+  // Get dynamic card style with type and intent props
+  const cardStyle = (cardStyles.card as any)({ type, intent });
+
   // Generate web props
-  const webProps = getWebProps([cardStyles.card, style as any]);
+  const webProps = getWebProps([cardStyle, style as any]);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
 

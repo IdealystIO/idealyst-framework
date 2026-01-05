@@ -82,17 +82,16 @@ const Input = React.forwardRef<TextInput, InputProps>(({
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  // Apply variants to the stylesheet
+  // Apply variants to the stylesheet (for size and spacing)
   inputStyles.useVariants({
     size,
-    type,
-    focused: isFocused,
-    hasError,
-    disabled,
     margin,
     marginVertical,
     marginHorizontal,
   });
+
+  // Compute dynamic container styles
+  const containerStyle = (inputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
 
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
@@ -161,7 +160,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   };
 
   return (
-    <View style={[inputStyles.container, style]} testID={testID} nativeID={id}>
+    <View style={[containerStyle, style]} testID={testID} nativeID={id}>
       {/* Left Icon */}
       {leftIcon && (
         <View style={inputStyles.leftIconContainer}>

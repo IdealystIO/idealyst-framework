@@ -16,21 +16,30 @@ const Divider = forwardRef<View, DividerProps>(({
   accessibilityLabel,
   id,
 }, ref) => {
-  // Apply variants for main divider
+  // Apply variants for container, content (orientation, spacing)
   dividerStyles.useVariants({
     orientation,
-    thickness,
-    type: type as any,
-    intent,
+    spacing,
     length: typeof length === 'number' ? 'auto' : length,
+  });
+
+  // Get dynamic divider style
+  const dividerStyle = (dividerStyles.divider as any)({
+    orientation,
+    thickness,
+    type,
+    intent,
     spacing,
   });
 
-  // Get the current styles for color and dimensions
-  const dividerStyle = dividerStyles.divider;
-  
-  // Get thickness value
-  const getThickness = () => {
+  // Get dynamic line style
+  const lineStyle = (dividerStyles.line as any)({
+    orientation,
+    thickness,
+  });
+
+  // Get thickness value for dashed/dotted border handling on native
+  const getThicknessValue = () => {
     switch (thickness) {
       case 'thin': return 1;
       case 'md': return 2;
@@ -39,11 +48,11 @@ const Divider = forwardRef<View, DividerProps>(({
     }
   };
 
-  // For dashed/dotted variants, use border instead of background
-  const getDashedStyle = () => {
+  // For dashed/dotted variants on native, we need to use border instead of background
+  const getNativeDashedStyle = () => {
     if (type === 'dashed' || type === 'dotted') {
-      const actualThickness = getThickness();
-      
+      const actualThickness = getThicknessValue();
+
       return {
         backgroundColor: 'transparent',
         borderStyle: type,
@@ -53,15 +62,11 @@ const Divider = forwardRef<View, DividerProps>(({
           borderBottomWidth: 0,
           borderLeftWidth: 0,
           borderRightWidth: 0,
-          width: '100%',
-          height: actualThickness,
         } : {
           borderLeftWidth: actualThickness,
           borderTopWidth: 0,
           borderBottomWidth: 0,
           borderRightWidth: 0,
-          height: '100%',
-          width: actualThickness,
         }),
       };
     }
@@ -70,66 +75,48 @@ const Divider = forwardRef<View, DividerProps>(({
 
   // If no children, render simple divider
   if (!children) {
-    if (type === 'dashed' || type === 'dotted') {
-      return (
-        <View
-          ref={ref}
-          nativeID={id}
-          style={[
-            dividerStyle,
-            getDashedStyle(),
-            style,
-          ]}
-          testID={testID}
-          accessibilityLabel={accessibilityLabel || "divider"}
-        />
-      );
-    }
-
     return (
       <View
         ref={ref}
         nativeID={id}
-        style={[dividerStyles.divider, style]}
+        style={[dividerStyle, getNativeDashedStyle(), style]}
         testID={testID}
         accessibilityLabel={accessibilityLabel || "divider"}
       />
     );
   }
 
-  // For lines with content, create a simple dashed line
+  // For lines with content, create line segments
   const renderLineSegment = () => {
     if (type === 'dashed' || type === 'dotted') {
-      const actualThickness = getThickness();
-      
+      const actualThickness = getThicknessValue();
+
       return (
         <View
           style={[
-            dividerStyles.line,
+            lineStyle,
             {
               backgroundColor: 'transparent',
               borderStyle: type,
-              borderColor: dividerStyles.line.backgroundColor,
+              borderColor: lineStyle.backgroundColor,
               ...(orientation === 'horizontal' ? {
                 borderTopWidth: actualThickness,
                 borderBottomWidth: 0,
                 borderLeftWidth: 0,
                 borderRightWidth: 0,
-                height: actualThickness,
               } : {
                 borderLeftWidth: actualThickness,
                 borderTopWidth: 0,
                 borderBottomWidth: 0,
                 borderRightWidth: 0,
-                width: actualThickness,
               }),
             },
           ]}
         />
       );
     }
-    
-    return <View style={dividerStyles.line} />;
+
+    return <View style={lineStyle} />;
   };
 
   return (

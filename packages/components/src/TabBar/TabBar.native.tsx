@@ -128,11 +128,8 @@ const TabBar = forwardRef<View, TabBarProps>(({
     };
   });
 
-  // Apply container and indicator types right before rendering
+  // Apply container variants (for spacing only)
   tabBarContainerStyles.useVariants({
-    type,
-    size,
-    pillMode,
     justify,
     gap,
     padding,
@@ -142,7 +139,10 @@ const TabBar = forwardRef<View, TabBarProps>(({
     marginVertical,
     marginHorizontal,
   });
-  tabBarIndicatorStyles.useVariants({ type, pillMode });
+
+  // Compute dynamic container and indicator styles
+  const containerStyle = (tabBarContainerStyles.container as any)({ type, pillMode });
+  const indicatorStyle = (tabBarIndicatorStyles.indicator as any)({ type, pillMode });
 
   return (
     <ScrollView
@@ -150,11 +150,11 @@ const TabBar = forwardRef<View, TabBarProps>(({
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ position: 'relative' }}
     >
-      <View ref={ref} nativeID={id} style={[tabBarContainerStyles.container, style]} testID={testID} {...nativeA11yProps}>
+      <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
         {/* Animated indicator - render first so it's behind */}
         <Animated.View
           style={[
-            tabBarIndicatorStyles.indicator,
+            indicatorStyle,
             indicatorAnimatedStyle,
           ]}
         />
@@ -165,29 +165,17 @@ const TabBar = forwardRef<View, TabBarProps>(({
             const isActive = value === item.value;
             const iconSize = ICON_SIZES[size] || 18;
 
-            // Apply tab and label types for this specific tab
-            tabBarTabStyles.useVariants({
-              size,
-              type,
-              active: isActive,
-              disabled: Boolean(item.disabled),
-              pillMode,
-              iconPosition,
-              justify,
-            });
-            tabBarLabelStyles.useVariants({
-              size,
-              type,
-              pillMode,
-              active: isActive,
-              disabled: Boolean(item.disabled),
-            });
+            // Apply icon variants (size, disabled, iconPosition)
             tabBarIconStyles.useVariants({
               size,
               active: isActive,
               disabled: Boolean(item.disabled),
               iconPosition,
             });
+
+            // Compute dynamic styles for this tab
+            const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode });
+            const labelStyle = (tabBarLabelStyles.tabLabel as any)({ type, active: isActive, pillMode });
 
             const icon = renderIcon(item.icon, isActive, iconSize);
 
@@ -198,7 +186,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
                   const { x, width } = event.nativeEvent.layout;
                   handleTabLayout(item.value, x, width);
                 }}
-                style={tabBarTabStyles.tab}
+                style={tabStyle}
                 onPress={() => handleTabClick(item.value, item.disabled)}
                 disabled={item.disabled}
                 activeOpacity={0.7}
@@ -208,7 +196,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
                 accessibilityState={{ selected: isActive, disabled: item.disabled }}
               >
                 {icon && <View style={tabBarIconStyles.tabIcon}>{icon}</View>}
-                <Text style={tabBarLabelStyles.tabLabel}>{item.label}</Text>
+                <Text style={labelStyle}>{item.label}</Text>
               </TouchableOpacity>
             );
           })}

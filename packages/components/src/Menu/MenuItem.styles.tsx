@@ -1,27 +1,47 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme } from '@idealyst/theme';
+import { Theme, Intent } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const menuItemStyles = StyleSheet.create((theme: Theme) => {
+type MenuItemDynamicProps = {
+    intent?: Intent;
+};
+
+/**
+ * Get hover styles for menu item based on intent
+ */
+function getItemHoverStyles(theme: Theme, intent: Intent) {
+    if (intent === 'neutral') {
+        return {
+            _web: {
+                _hover: {
+                    backgroundColor: theme.colors.surface.secondary,
+                },
+            },
+        } as const;
+    }
+    const intentValue = theme.intents[intent];
     return {
-        item: {
+        _web: {
+            _hover: {
+                backgroundColor: intentValue.light,
+                color: intentValue.primary,
+            },
+        },
+    } as const;
+}
+
+/**
+ * Create dynamic item styles
+ */
+function createItemStyles(theme: Theme) {
+    return ({ intent = 'neutral' }: MenuItemDynamicProps) => {
+        const hoverStyles = getItemHoverStyles(theme, intent);
+        return {
             flexDirection: 'row',
             alignItems: 'center',
             backgroundColor: 'transparent',
             borderRadius: 4,
             minHeight: 44,
-            _web: {
-                cursor: 'pointer',
-                border: 'none',
-                outline: 'none',
-                transition: 'background-color 0.2s ease',
-                textAlign: 'left',
-                _hover: {
-                    backgroundColor: theme.colors.surface.secondary,
-                },
-            },
             variants: {
                 size: buildSizeVariants(theme, 'menu', (size) => ({
                     paddingVertical: size.paddingVertical,
@@ -32,67 +52,33 @@ export const menuItemStyles = StyleSheet.create((theme: Theme) => {
                         opacity: 0.5,
                         _web: {
                             cursor: 'not-allowed',
-                        },
-                    },
-                    false: {},
-                },
-                intent: {
-                    primary: {
-                        _web: {
-                            _hover: {
-                                backgroundColor: theme.intents.primary.light,
-                                color: theme.intents.primary.primary,
-                            },
-                        },
-                    },
-                    neutral: {},
-                    success: {
-                        _web: {
-                            _hover: {
-                                backgroundColor: theme.intents.success.light,
-                                color: theme.intents.success.primary,
-                            },
-                        },
-                    },
-                    error: {
-                        _web: {
-                            _hover: {
-                                backgroundColor: theme.intents.error.light,
-                                color: theme.intents.error.primary,
-                            },
-                        },
-                    },
-                    warning: {
-                        _web: {
-                            _hover: {
-                                backgroundColor: theme.intents.warning.light,
-                                color: theme.intents.warning.primary,
-                            },
-                        },
-                    },
-                    info: {
-                        _web: {
-                            _hover: {
-                                backgroundColor: theme.intents.info.light,
-                                color: theme.intents.info.primary,
-                            },
-                        },
-                    },
-                },
-            },
-            compoundVariants: [
-                {
-                    disabled: true,
-                    styles: {
-                        _web: {
                             _hover: {
                                 backgroundColor: 'transparent',
                             },
                         },
                     },
+                    false: {},
                 },
-            ],
-        },
+            },
+            _web: {
+                cursor: 'pointer',
+                border: 'none',
+                outline: 'none',
+                transition: 'background-color 0.2s ease',
+                textAlign: 'left',
+                _hover: {
+                    backgroundColor: theme.colors.surface.secondary,
+                },
+            },
+            ...hoverStyles,
+        } as const;
+    };
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
+export const menuItemStyles = StyleSheet.create((theme: Theme) => {
+    return {
+        item: createItemStyles(theme),
         icon: {
             alignItems: 'center',
             justifyContent: 'center',

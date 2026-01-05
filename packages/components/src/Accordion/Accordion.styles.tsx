@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, CompoundVariants, Size} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Size} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import {
   buildGapVariants,
@@ -24,6 +24,11 @@ type AccordionVariants = {
 
 export type ExpandedAccordionStyles = StylesheetStyles<keyof AccordionVariants>;
 
+type ItemDynamicProps = {
+    type?: AccordionType;
+    isLast?: boolean;
+};
+
 /**
  * Create type variants for container
  */
@@ -47,50 +52,52 @@ function createContainerTypeVariants(theme: Theme) {
 }
 
 /**
- * Create type variants for items
+ * Get item styles based on type and isLast
  */
-function createItemTypeVariants(theme: Theme) {
-    return {
-        standard: {
-            borderBottomWidth: 1,
-            borderBottomStyle: 'solid' as const,
-            borderBottomColor: theme.colors.border.primary,
-        },
-        separated: {
-            borderWidth: 1,
-            borderStyle: 'solid' as const,
-            borderColor: theme.colors.border.primary,
-            borderRadius: 8,
-            overflow: 'hidden' as const,
-        },
-        bordered: {
-            borderBottomWidth: 1,
-            borderBottomStyle: 'solid' as const,
-            borderBottomColor: theme.colors.border.primary,
-        },
-    } as const;
+function getItemTypeStyles(theme: Theme, type: AccordionType, isLast: boolean) {
+    switch (type) {
+        case 'standard':
+            return {
+                borderBottomWidth: isLast ? 0 : 1,
+                borderBottomStyle: 'solid' as const,
+                borderBottomColor: theme.colors.border.primary,
+            };
+        case 'separated':
+            return {
+                borderWidth: 1,
+                borderStyle: 'solid' as const,
+                borderColor: theme.colors.border.primary,
+                borderRadius: 8,
+                overflow: 'hidden' as const,
+            };
+        case 'bordered':
+            return {
+                borderBottomWidth: isLast ? 0 : 1,
+                borderBottomStyle: 'solid' as const,
+                borderBottomColor: theme.colors.border.primary,
+            };
+        default:
+            return {};
+    }
 }
 
 /**
- * Create compound variants for item (type + isLast)
+ * Create dynamic item styles
  */
-function createItemCompoundVariants(): CompoundVariants<keyof AccordionVariants> {
-    return [
-        {
-            type: 'standard',
-            isLast: true,
-            styles: {
-                borderBottomWidth: 0,
+function createItemStyles(theme: Theme) {
+    return ({ type = 'standard', isLast = false }: ItemDynamicProps) => {
+        const typeStyles = getItemTypeStyles(theme, type, isLast);
+        return {
+            display: 'flex' as const,
+            flexDirection: 'column' as const,
+            ...typeStyles,
+            variants: {
+                size: { xs: {}, sm: {}, md: {}, lg: {}, xl: {} },
+                expanded: { true: {}, false: {} },
+                disabled: { true: {}, false: {} },
             },
-        },
-        {
-            type: 'bordered',
-            isLast: true,
-            styles: {
-                borderBottomWidth: 0,
-            },
-        },
-    ];
+        } as const;
+    };
 }
 
 /**
@@ -146,21 +153,7 @@ export const accordionStyles = StyleSheet.create((theme: Theme) => {
                 marginHorizontal: buildMarginHorizontalVariants(theme),
             },
         },
-        item: {
-            display: 'flex' as const,
-            flexDirection: 'column' as const,
-            variants: {
-                size: { xs: {}, sm: {}, md: {}, lg: {}, xl: {} },
-                type: createItemTypeVariants(theme),
-                expanded: { true: {}, false: {} },
-                disabled: { true: {}, false: {} },
-                isLast: {
-                    true: {},
-                    false: {},
-                },
-            },
-            compoundVariants: createItemCompoundVariants(),
-        },
+        item: createItemStyles(theme),
         header: {
             display: 'flex' as const,
             flexDirection: 'row' as const,

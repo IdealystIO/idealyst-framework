@@ -22,17 +22,24 @@ interface BreadcrumbItemProps {
 }
 
 const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, intent, itemStyle }) => {
-  // Apply variants for this item only
+  const isClickable = !!item.onPress && !item.disabled;
+  const isDisabled = item.disabled || false;
+
+  // Apply size variant
   breadcrumbItemStyles.useVariants({
     size,
+  });
+
+  // Get dynamic item text style
+  const itemTextStyle = (breadcrumbItemStyles.itemText as any)({
     intent,
-    disabled: item.disabled || false,
     isLast,
-    clickable: !!item.onPress && !item.disabled,
+    disabled: isDisabled,
+    clickable: isClickable,
   });
 
   const itemProps = getWebProps([breadcrumbItemStyles.item]);
-  const itemTextProps = getWebProps([breadcrumbItemStyles.itemText, itemStyle]);
+  const itemTextProps = getWebProps([itemTextStyle, itemStyle]);
   const iconProps = getWebProps([breadcrumbItemStyles.icon]);
 
   const handleClick = () => {
@@ -80,7 +87,7 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
     </div>
   );
 
-  if (item.onPress && !item.disabled) {
+  if (isClickable) {
     return (
       <button
         onClick={handleClick}
@@ -91,7 +98,7 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
           cursor: 'pointer',
           textDecoration: 'none',
         }}
-        disabled={item.disabled}
+        disabled={isDisabled}
         aria-current={isLast ? 'page' : undefined}
       >
         {content}

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent, Size, CompoundVariants, StaticStyles } from '@idealyst/theme';
+import { Theme, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 
 type ProgressSize = Size;
@@ -10,6 +10,10 @@ export type ProgressVariants = {
     intent: ProgressIntent;
     rounded: boolean;
 }
+
+type ProgressDynamicProps = {
+    intent?: ProgressIntent;
+};
 
 function createLinearTrackSizeVariants(theme: Theme) {
     return buildSizeVariants(theme, 'progress', (size) => ({
@@ -36,48 +40,65 @@ function createCircularLabelSizeVariants(theme: Theme) {
     }));
 }
 
-function createIntentVariants(theme: Theme) {
-    const variants: any = {};
-    for (const intent in theme.intents) {
-        variants[intent] = {};
-    }
-    return variants;
+/**
+ * Get bar background color based on intent
+ */
+function getBarBackgroundColor(theme: Theme, intent: ProgressIntent): string {
+    return theme.intents[intent].primary;
 }
 
-function createLinearBarCompoundVariants(theme: Theme) {
-    const compoundVariants: CompoundVariants<keyof ProgressVariants> = [];
-
-    for (const intent in theme.intents) {
-        const intentValue = theme.intents[intent as Intent];
-
-        compoundVariants.push({
-            intent,
-            styles: {
-                backgroundColor: intentValue.primary,
-            },
-        });
-    }
-
-    return compoundVariants;
-}
-
-function createCircularBarCompoundVariants(theme: Theme) {
-    const compoundVariants: CompoundVariants<keyof ProgressVariants> = [];
-
-    for (const intent in theme.intents) {
-        const intentValue = theme.intents[intent as Intent];
-
-        compoundVariants.push({
-            intent,
-            styles: {
-                _web: {
-                    stroke: intentValue.primary,
+/**
+ * Create dynamic linear bar styles
+ */
+function createLinearBarStyles(theme: Theme) {
+    return ({ intent = 'primary' }: ProgressDynamicProps) => {
+        return {
+            height: '100%' as const,
+            backgroundColor: getBarBackgroundColor(theme, intent),
+            variants: {
+                rounded: {
+                    true: { borderRadius: 9999 },
+                    false: { borderRadius: 0 },
                 },
             },
-        });
-    }
+            _web: {
+                transition: 'width 0.3s ease' as const,
+            },
+        } as const;
+    };
+}
 
-    return compoundVariants;
+/**
+ * Create dynamic indeterminate bar styles
+ */
+function createIndeterminateBarStyles(theme: Theme) {
+    return ({ intent = 'primary' }: ProgressDynamicProps) => {
+        return {
+            position: 'absolute' as const,
+            height: '100%' as const,
+            width: '40%' as const,
+            backgroundColor: getBarBackgroundColor(theme, intent),
+            variants: {
+                rounded: {
+                    true: { borderRadius: 9999 },
+                    false: { borderRadius: 0 },
+                },
+            },
+        } as const;
+    };
+}
+
+/**
+ * Create dynamic circular bar styles
+ */
+function createCircularBarStyles(theme: Theme) {
+    return ({ intent = 'primary' }: ProgressDynamicProps) => {
+        return {
+            _web: {
+                stroke: getBarBackgroundColor(theme, intent),
+            },
+        } as const;
+    };
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
@@ -99,33 +120,8 @@ export const progressStyles = StyleSheet.create((theme: Theme) => {
             },
         },
     },
-    linearBar: {
-        height: '100%' as const,
-        variants: {
-            intent: createIntentVariants(theme),
-            rounded: {
-                true: { borderRadius: 9999 },
-                false: { borderRadius: 0 },
-            },
-        },
-        compoundVariants: createLinearBarCompoundVariants(theme),
-        _web: {
-            transition: 'width 0.3s ease' as const,
-        },
-    },
-    indeterminateBar: {
-        position: 'absolute' as const,
-        height: '100%' as const,
-        width: '40%' as const,
-        variants: {
-            intent: createIntentVariants(theme),
-            rounded: {
-                true: { borderRadius: 9999 },
-                false: { borderRadius: 0 },
-            },
-        },
-        compoundVariants: createLinearBarCompoundVariants(theme),
-    },
+    linearBar: createLinearBarStyles(theme),
+    indeterminateBar: createIndeterminateBarStyles(theme),
     circularContainer: {
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
@@ -139,12 +135,7 @@ export const progressStyles = StyleSheet.create((theme: Theme) => {
             stroke: theme.colors.border.secondary,
         }
     },
-    circularBar: {
-        variants: {
-            intent: createIntentVariants(theme),
-        },
-        compoundVariants: createCircularBarCompoundVariants(theme),
-    },
+    circularBar: createCircularBarStyles(theme),
     label: {
         color: theme.colors.text.primary,
         textAlign: 'center' as const,

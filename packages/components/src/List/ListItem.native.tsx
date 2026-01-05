@@ -51,14 +51,16 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
   const effectiveSize = size ?? listContext.size ?? 'md';
   const effectiveVariant = listContext.type ?? 'default';
 
-  // Apply types
+  // Apply variants (for size, active, selected, disabled on label)
   listStyles.useVariants({
     size: effectiveSize,
     active,
     selected,
     disabled,
-    clickable: isClickable,
   });
+
+  // Get dynamic item style with type, disabled, and clickable props
+  const itemStyle = (listStyles.item as any)({ type: effectiveVariant, disabled, clickable: isClickable });
 
   // Resolve icon color - check intents first, then color palette
   const resolvedIconColor = (() => {
@@ -117,7 +119,7 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
   );
 
   const indentStyle = indent > 0 ? { paddingLeft: indent * 16 } : {};
-  const combinedStyle = [listStyles.item, indentStyle, style];
+  const combinedStyle = [itemStyle, indentStyle, style];
 
   if (isClickable) {
     return (

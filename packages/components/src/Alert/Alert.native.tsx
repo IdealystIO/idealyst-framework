@@ -30,11 +30,12 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
   testID,
   id,
 }, ref) => {
-  // Apply variants to stylesheet
-  alertStyles.useVariants({
-    type,
-    intent,
-  });
+  // Compute dynamic styles with intent and type
+  const dynamicProps = { intent, type };
+  const containerStyle = (alertStyles.container as any)(dynamicProps);
+  const iconContainerStyle = (alertStyles.iconContainer as any)(dynamicProps);
+  const titleStyle = (alertStyles.title as any)(dynamicProps);
+  const messageStyle = (alertStyles.message as any)(dynamicProps);
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
 
@@ -47,7 +48,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
         <MaterialCommunityIcons
           name={displayIcon}
           size={20}
-          style={alertStyles.iconContainer}
+          style={iconContainerStyle}
         />
       );
     } else if (isValidElement(displayIcon)) {
@@ -60,25 +61,25 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
     <View
       ref={ref}
       nativeID={id}
-      style={[alertStyles.container, style]}
+      style={[containerStyle, style]}
       testID={testID}
       accessibilityRole="alert"
     >
       {displayIcon && (
-        <View style={alertStyles.iconContainer}>
+        <View style={iconContainerStyle}>
           {renderIcon()}
         </View>
       )}
 
       <View style={alertStyles.content}>
         {title && (
-          <Text style={alertStyles.title}>
+          <Text style={titleStyle}>
             {title}
           </Text>
         )}
 
         {message && (
-          <Text style={alertStyles.message}>
+          <Text style={messageStyle}>
             {message}
           </Text>
         )}

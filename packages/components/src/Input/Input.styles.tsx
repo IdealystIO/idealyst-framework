@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Size, CompoundVariants} from '@idealyst/theme';
+import { Theme, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import {
   buildMarginVariants,
@@ -17,159 +17,123 @@ export type InputVariants = {
     disabled: boolean;
 }
 
-/**
- * Create type variants for container
- */
-function createContainerTypeVariants(theme: Theme) {
-    return {
-        outlined: {
-            backgroundColor: 'transparent',
-            borderWidth: 1,
-            borderColor: theme.colors.border.primary,
-            borderStyle: 'solid' as const,
-            _web: {
-                border: `1px solid ${theme.colors.border.primary}`,
-            },
-        },
-        filled: {
-            backgroundColor: theme.colors.surface.secondary,
-            borderWidth: 0,
-            _web: {
-                border: 'none',
-            },
-        },
-        bare: {
-            backgroundColor: 'transparent',
-            borderWidth: 0,
-            _web: {
-                border: 'none',
-            },
-        },
-    } as const;
-}
+type InputDynamicProps = {
+    type?: InputType;
+    focused?: boolean;
+    hasError?: boolean;
+    disabled?: boolean;
+};
 
 /**
- * Create compound variants for focused + type + hasError combinations
+ * Get container border/background styles based on type, focused, hasError, disabled
  */
-function createFocusedCompoundVariants(theme: Theme) {
-    const compoundVariants = [] as CompoundVariants<keyof InputVariants>;
+function getContainerDynamicStyles(theme: Theme, props: InputDynamicProps) {
+    const { type = 'outlined', focused = false, hasError = false, disabled = false } = props;
     const focusColor = theme.intents.primary.primary;
     const errorColor = theme.intents.error.primary;
 
+    // Base styles by type
+    let backgroundColor = 'transparent';
+    let borderWidth = 1;
+    let borderColor = theme.colors.border.primary;
+    let borderStyle = 'solid' as const;
+
+    if (type === 'filled') {
+        backgroundColor = theme.colors.surface.secondary;
+        borderWidth = 0;
+    } else if (type === 'bare') {
+        backgroundColor = 'transparent';
+        borderWidth = 0;
+    }
+
     // Error state takes precedence
-    compoundVariants.push({
-        focused: true,
-        hasError: true,
-        styles: {
-            borderColor: errorColor,
-            _web: {
-                border: `1px solid ${errorColor}`,
-                boxShadow: `0 0 0 2px ${errorColor}20`,
-            },
-        },
-    });
+    if (hasError) {
+        borderColor = errorColor;
+        borderWidth = 1;
+    }
 
-    // Default type + focused (no error)
-    compoundVariants.push({
-        type: 'default',
-        focused: true,
-        hasError: false,
-        styles: {
-            borderColor: focusColor,
-            _web: {
-                border: `1px solid ${focusColor}`,
-                boxShadow: `0 0 0 2px ${focusColor}20`,
-            },
-        },
-    });
+    // Focus state (error still takes precedence for color)
+    if (focused && !hasError) {
+        borderColor = focusColor;
+        borderWidth = 1;
+    }
 
-    // Outlined type + focused (no error)
-    compoundVariants.push({
-        type: 'outlined',
-        focused: true,
-        hasError: false,
-        styles: {
-            borderColor: focusColor,
-            _web: {
-                border: `1px solid ${focusColor}`,
-                boxShadow: `0 0 0 2px ${focusColor}20`,
-            },
-        },
-    });
+    // Disabled state
+    if (disabled) {
+        backgroundColor = theme.colors.surface.secondary;
+    }
 
-    // Filled type + focused (no error)
-    compoundVariants.push({
-        type: 'filled',
-        focused: true,
-        hasError: false,
-        styles: {
-            _web: {
-                boxShadow: `0 0 0 2px ${focusColor}20`,
-            },
-        },
-    });
+    return {
+        backgroundColor,
+        borderWidth,
+        borderColor,
+        borderStyle,
+    };
+}
 
-    return compoundVariants;
+/**
+ * Create dynamic container styles
+ */
+function createContainerStyles(theme: Theme) {
+    return (props: InputDynamicProps) => {
+        const { type = 'outlined', focused = false, hasError = false, disabled = false } = props;
+        const dynamicStyles = getContainerDynamicStyles(theme, props);
+        const focusColor = theme.intents.primary.primary;
+        const errorColor = theme.intents.error.primary;
+
+        // Web-specific border and shadow
+        let webBorder = `1px solid ${dynamicStyles.borderColor}`;
+        let webBoxShadow = 'none';
+
+        if (type === 'filled' || type === 'bare') {
+            webBorder = 'none';
+        }
+
+        if (hasError) {
+            webBorder = `1px solid ${errorColor}`;
+            if (focused) {
+                webBoxShadow = `0 0 0 2px ${errorColor}20`;
+            }
+        } else if (focused) {
+            webBorder = `1px solid ${focusColor}`;
+            webBoxShadow = `0 0 0 2px ${focusColor}20`;
+        }
+
+        return {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+            minWidth: 0,
+            borderRadius: 8,
+            ...dynamicStyles,
+            opacity: disabled ? 0.6 : 1,
+            variants: {
+                size: buildSizeVariants(theme, 'input', (size) => ({
+                    height: size.height,
+                    paddingHorizontal: size.paddingHorizontal,
+                })),
+                // Spacing variants from FormInputStyleProps
+                margin: buildMarginVariants(theme),
+                marginVertical: buildMarginVerticalVariants(theme),
+                marginHorizontal: buildMarginHorizontalVariants(theme),
+            },
+            _web: {
+                boxSizing: 'border-box',
+                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                border: webBorder,
+                boxShadow: webBoxShadow,
+                cursor: disabled ? 'not-allowed' : 'text',
+            },
+        } as const;
+    };
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 export const inputStyles = StyleSheet.create((theme: Theme) => {
   return {
-    container: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        minWidth: 0,
-        borderRadius: 8,
-        variants: {
-            size: buildSizeVariants(theme, 'input', (size) => ({
-                height: size.height,
-                paddingHorizontal: size.paddingHorizontal,
-            })),
-            type: createContainerTypeVariants(theme),
-            focused: {
-                true: {},
-                false: {},
-            },
-            hasError: {
-                true: {
-                    borderColor: theme.intents.error.primary,
-                    _web: {
-                        border: `1px solid ${theme.intents.error.primary}`,
-                    },
-                },
-                false: {},
-            },
-            disabled: {
-                true: {
-                    opacity: 0.6,
-                    backgroundColor: theme.colors.surface.secondary,
-                    _web: {
-                        cursor: 'not-allowed',
-                    },
-                },
-                false: {
-                    _web: {
-                        cursor: 'text',
-                        _hover: {
-                            borderColor: theme.intents.primary.primary,
-                        },
-                    },
-                },
-            },
-            // Spacing variants from FormInputStyleProps
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
-        },
-        compoundVariants: createFocusedCompoundVariants(theme),
-        _web: {
-            boxSizing: 'border-box',
-            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-        },
-    },
+    container: createContainerStyles(theme),
     leftIconContainer: {
         display: 'flex',
         alignItems: 'center',

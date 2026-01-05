@@ -66,23 +66,7 @@ const Tab: React.FC<TabProps> = ({
 }) => {
   const iconSize = ICON_SIZES[size || 'md'] || 18;
 
-  // Apply tab and label types for this specific tab
-  tabBarTabStyles.useVariants({
-    size,
-    type,
-    active: isActive,
-    disabled: Boolean(item.disabled),
-    pillMode,
-    iconPosition,
-    justify,
-  });
-  tabBarLabelStyles.useVariants({
-    size,
-    type,
-    pillMode,
-    active: isActive,
-    disabled: Boolean(item.disabled),
-  });
+  // Apply icon variants (size, disabled, iconPosition)
   tabBarIconStyles.useVariants({
     size,
     active: isActive,
@@ -90,8 +74,12 @@ const Tab: React.FC<TabProps> = ({
     iconPosition,
   });
 
-  const tabProps = getWebProps([tabBarTabStyles.tab]);
-  const labelProps = getWebProps([tabBarLabelStyles.tabLabel]);
+  // Compute dynamic styles for this tab
+  const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode });
+  const labelStyle = (tabBarLabelStyles.tabLabel as any)({ type, active: isActive, pillMode });
+
+  const tabProps = getWebProps([tabStyle]);
+  const labelProps = getWebProps([labelStyle]);
   const iconProps = getWebProps([tabBarIconStyles.tabIcon]);
 
   // Merge refs from getWebProps with our tracking ref
@@ -255,11 +243,8 @@ const TabBar: React.FC<TabBarProps> = ({
     onChange?.(itemValue);
   };
 
-  // Apply container and indicator types
+  // Apply container variants (for spacing only)
   tabBarContainerStyles.useVariants({
-    type,
-    size,
-    pillMode,
     justify,
     gap,
     padding,
@@ -269,10 +254,13 @@ const TabBar: React.FC<TabBarProps> = ({
     marginVertical,
     marginHorizontal,
   });
-  const containerProps = getWebProps([tabBarContainerStyles.container, style as any]);
 
-  tabBarIndicatorStyles.useVariants({ type, pillMode });
-  const indicatorProps = getWebProps([tabBarIndicatorStyles.indicator]);
+  // Compute dynamic container and indicator styles
+  const containerStyle = (tabBarContainerStyles.container as any)({ type, pillMode });
+  const containerProps = getWebProps([containerStyle, style as any]);
+
+  const indicatorStyle = (tabBarIndicatorStyles.indicator as any)({ type, pillMode });
+  const indicatorProps = getWebProps([indicatorStyle]);
 
   // Merge container ref with getWebProps ref
   const mergedContainerRef = useMergeRefs<HTMLDivElement>(

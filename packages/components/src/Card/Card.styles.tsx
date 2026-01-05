@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent, CompoundVariants } from '@idealyst/theme';
+import { Theme, Intent } from '@idealyst/theme';
 import {
   buildGapVariants,
   buildPaddingVariants,
@@ -31,76 +31,63 @@ export type CardVariants = {
   marginHorizontal: ViewStyleSize;
 };
 
-/**
- * Create type variants (structure only, colors handled by compound variants)
- */
-function createTypeVariants(theme: Theme) {
-  return {
-    outlined: {
-      backgroundColor: 'transparent',
-      borderWidth: 1,
-      borderStyle: 'solid' as const,
-    },
-    elevated: {
-      backgroundColor: theme.colors.surface.primary,
-      borderWidth: 0,
-      ...theme.shadows.md,
-    },
-    filled: {
-      backgroundColor: theme.colors.surface.secondary,
-      borderWidth: 0,
-    },
-  } as const;
-}
+type CardDynamicProps = {
+  intent?: CardIntent;
+  type?: CardType;
+};
 
 /**
- * Create compound variants for type + intent combinations
+ * Get the border color based on intent (only used for outlined type)
  */
-function createCardCompoundVariants(theme: Theme) {
-  const compoundVariants: CompoundVariants<keyof CardVariants> = [];
-
-  // Add intent-based border colors for outlined type
-  for (const intent in theme.intents) {
-    const intentValue = theme.intents[intent as Intent];
-
-    compoundVariants.push({
-      intent,
-      type: 'outlined',
-      styles: {
-        borderColor: intentValue.primary,
-      },
-    });
+function getBorderColor(theme: Theme, intent: CardIntent): string {
+  if (intent === 'info' || intent === 'neutral') {
+    return theme.colors.border.secondary;
   }
-
-  // Add special intents (info, neutral) for outlined type
-  compoundVariants.push({
-    intent: 'info',
-    type: 'outlined',
-    styles: {
-      borderColor: theme.colors.border.secondary,
-    },
-  });
-  compoundVariants.push({
-    intent: 'neutral',
-    type: 'outlined',
-    styles: {
-      borderColor: theme.colors.border.secondary,
-    },
-  });
-
-  return compoundVariants;
+  if (intent in theme.intents) {
+    return theme.intents[intent as Intent].primary;
+  }
+  return theme.colors.border.secondary;
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const cardStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    card: {
-      backgroundColor: theme.colors.surface.primary,
+/**
+ * Get type-specific styles
+ */
+function getTypeStyles(theme: Theme, type: CardType, intent: CardIntent) {
+  switch (type) {
+    case 'outlined':
+      return {
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+        borderColor: getBorderColor(theme, intent),
+      };
+    case 'elevated':
+      return {
+        backgroundColor: theme.colors.surface.primary,
+        borderWidth: 0,
+        ...theme.shadows.md,
+      };
+    case 'filled':
+      return {
+        backgroundColor: theme.colors.surface.secondary,
+        borderWidth: 0,
+      };
+    default:
+      return {};
+  }
+}
+
+/**
+ * Create dynamic card styles
+ */
+function createCardStyles(theme: Theme) {
+  return ({ intent = 'neutral', type = 'elevated' }: CardDynamicProps) => {
+    const typeStyles = getTypeStyles(theme, type, intent);
+    return {
+      ...typeStyles,
       position: 'relative',
       overflow: 'hidden',
       variants: {
-        type: createTypeVariants(theme),
         radius: {
           none: { borderRadius: 0 },
           xs: { borderRadius: 2 },
@@ -147,12 +134,19 @@ export const cardStyles = StyleSheet.create((theme: Theme) => {
         marginVertical: buildMarginVerticalVariants(theme),
         marginHorizontal: buildMarginHorizontalVariants(theme),
       },
-      compoundVariants: createCardCompoundVariants(theme),
       _web: {
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box',
       },
-    } as const,
+    } as const;
+  };
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const cardStyles = StyleSheet.create((theme: Theme) => {
+  return {
+    card: createCardStyles(theme),
   };
 });

@@ -19,18 +19,20 @@ const Progress: React.FC<ProgressProps> = ({
 }) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
-  // Apply variants using the correct Unistyles v3 pattern
+  // Apply variants (for size and rounded)
   progressStyles.useVariants({
     size,
-    intent,
     rounded,
   });
 
-    // Linear progress
+  // Compute dynamic styles with intent
+  const dynamicProps = { intent };
+
+  // Linear progress
   const containerProps = getWebProps([progressStyles.container, style as any]);
   const trackProps = getWebProps([progressStyles.linearTrack]);
-  const barProps = getWebProps([progressStyles.linearBar, { width: `${percentage}%` }]);
-  const indeterminateProps = getWebProps([progressStyles.indeterminateBar]);
+  const barProps = getWebProps([(progressStyles.linearBar as any)(dynamicProps), { width: `${percentage}%` }]);
+  const indeterminateProps = getWebProps([(progressStyles.indeterminateBar as any)(dynamicProps)]);
   const labelProps = getWebProps([progressStyles.label]);
 
   const getCircularSize = () => {
@@ -53,8 +55,7 @@ const Progress: React.FC<ProgressProps> = ({
     ]);
     const labelProps = getWebProps([progressStyles.circularLabel]);
     const trackColorProps = getWebProps([progressStyles.circularTrack]);
-    const barColorProps = getWebProps([progressStyles.circularBar]);
-    console.log(trackColorProps)
+    const barColorProps = getWebProps([(progressStyles.circularBar as any)(dynamicProps)]);
 
     return (
       <div {...computedContainerProps} id={id} data-testid={testID}>

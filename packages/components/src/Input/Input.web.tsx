@@ -111,20 +111,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  // Apply variants for container
+  // Apply variants (for size and spacing)
   inputStyles.useVariants({
     size,
-    type,
-    focused: isFocused,
-    hasError,
-    disabled,
     margin,
     marginVertical,
     marginHorizontal,
   });
 
-  // Get web props for all styled elements
-  const {ref: containerStyleRef, ...containerProps} = getWebProps([inputStyles.container, style]);
+  // Get web props for all styled elements (container uses dynamic function)
+  const dynamicContainerStyle = (inputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
+  const {ref: containerStyleRef, ...containerProps} = getWebProps([dynamicContainerStyle, style]);
   const leftIconContainerProps = getWebProps([inputStyles.leftIconContainer]);
   const rightIconContainerProps = getWebProps([inputStyles.rightIconContainer]);
   const leftIconProps = getWebProps([inputStyles.leftIcon]);

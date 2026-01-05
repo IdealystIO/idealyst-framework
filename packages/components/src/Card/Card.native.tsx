@@ -42,12 +42,10 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
       accessibilityPressed,
     });
   }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, clickable, accessibilityPressed]);
-  // Apply variants
+  // Apply variants (for radius, clickable, disabled, and spacing)
   cardStyles.useVariants({
     clickable,
     radius,
-    type,
-    intent,
     disabled,
     gap,
     padding,
@@ -58,13 +56,16 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
     marginHorizontal,
   });
 
+  // Get dynamic card style with type and intent props
+  const cardStyle = (cardStyles.card as any)({ type, intent });
+
   // Use appropriate component based on clickable state
   const Component = clickable ? Pressable : View;
 
   const componentProps = {
     ref,
     nativeID: id,
-    style: [cardStyles.card, style],
+    style: [cardStyle, style],
     testID,
     ...nativeA11yProps,
     ...(clickable && {

@@ -30,14 +30,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const iconRotation = useSharedValue(0);
   const [measuredHeight, setMeasuredHeight] = useState(0);
 
-  // Apply item-specific variants
+  // Apply item-specific variants (for size, expanded, disabled)
   accordionStyles.useVariants({
-    type,
-    isLast,
     size,
     expanded: isExpanded,
     disabled: Boolean(item.disabled),
   });
+
+  // Get dynamic item style with type and isLast props
+  const itemStyle = (accordionStyles.item as any)({ type, isLast });
 
   // Animate height and icon rotation when expanded state changes
   useEffect(() => {
@@ -74,7 +75,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   };
 
   return (
-    <View style={accordionStyles.item} testID={testID}>
+    <View style={itemStyle} testID={testID}>
       <TouchableOpacity
         style={accordionStyles.header}
         onPress={onToggle}

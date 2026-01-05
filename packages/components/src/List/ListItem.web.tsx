@@ -32,16 +32,17 @@ const ListItem: React.FC<ListItemProps> = ({
   const effectiveSize = size ?? listContext.size ?? 'md';
   const effectiveVariant = listContext.type ?? 'default';
 
-  // Apply types
+  // Apply variants (for size, active, selected, disabled on label)
   listStyles.useVariants({
     size: effectiveSize,
     active,
     selected,
     disabled,
-    clickable: isClickable,
   });
 
-  const itemProps = getWebProps([listStyles.item, style]);
+  // Get dynamic item style with type, disabled, and clickable props
+  const itemStyle = (listStyles.item as any)({ type: effectiveVariant, disabled, clickable: isClickable });
+  const itemProps = getWebProps([itemStyle, style]);
   const labelProps = getWebProps([listStyles.label]);
   const leadingProps = getWebProps([listStyles.leading]);
   const trailingProps = getWebProps([listStyles.trailing]);

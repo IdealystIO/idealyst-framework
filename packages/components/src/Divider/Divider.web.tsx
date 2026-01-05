@@ -17,30 +17,33 @@ const Divider = forwardRef<HTMLDivElement, DividerProps>(({
   accessibilityLabel,
   id,
 }, ref) => {
-  // Apply variants for main divider
+  // Apply variants for container, content (orientation, spacing)
   dividerStyles.useVariants({
+    orientation,
+    spacing,
+    length: typeof length === 'number' ? 'auto' : length,
+  });
+
+  // Get dynamic divider style
+  const dividerStyle = (dividerStyles.divider as any)({
     orientation,
     thickness,
     type,
     intent,
-    length: typeof length === 'number' ? 'auto' : length,
     spacing,
   });
 
-  // Create style arrays
-
-  const containerStyleArray = [dividerStyles.container];
-  const contentStyleArray = [dividerStyles.content];
-  const lineStyleArray = [dividerStyles.line];
+  // Get dynamic line style
+  const lineStyle = (dividerStyles.line as any)({
+    orientation,
+    thickness,
+  });
 
   // Generate web props
-  const dividerProps = getWebProps([
-    dividerStyles.divider,
-    style as any,
-  ]);
-  const containerProps = getWebProps(containerStyleArray);
-  const contentProps = getWebProps(contentStyleArray);
-  const lineProps = getWebProps(lineStyleArray);
+  const dividerProps = getWebProps([dividerStyle, style as any]);
+  const containerProps = getWebProps([dividerStyles.container]);
+  const contentProps = getWebProps([dividerStyles.content]);
+  const lineProps = getWebProps([lineStyle]);
 
   const mergedDividerRef = useMergeRefs(ref, dividerProps.ref);
   const mergedContainerRef = useMergeRefs(ref, containerProps.ref);

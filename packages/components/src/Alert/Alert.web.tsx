@@ -31,17 +31,13 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   testID,
   id,
 }, ref) => {
-  // Apply variants to stylesheet
-  alertStyles.useVariants({
-    type,
-    intent,
-  });
-
-  const containerProps = getWebProps([alertStyles.container, style as any]);
-  const iconContainerProps = getWebProps([alertStyles.iconContainer]);
+  // Compute dynamic styles with intent and type
+  const dynamicProps = { intent, type };
+  const containerProps = getWebProps([(alertStyles.container as any)(dynamicProps), style as any]);
+  const iconContainerProps = getWebProps([(alertStyles.iconContainer as any)(dynamicProps)]);
   const contentProps = getWebProps([alertStyles.content]);
-  const titleProps = getWebProps([alertStyles.title]);
-  const messageProps = getWebProps([alertStyles.message]);
+  const titleProps = getWebProps([(alertStyles.title as any)(dynamicProps)]);
+  const messageProps = getWebProps([(alertStyles.message as any)(dynamicProps)]);
   const actionsProps = getWebProps([alertStyles.actions]);
   const closeButtonProps = getWebProps([alertStyles.closeButton]);
   const closeIconProps = getWebProps([alertStyles.closeIcon]);
