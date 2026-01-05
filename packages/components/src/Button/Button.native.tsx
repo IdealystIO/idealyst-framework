@@ -51,11 +51,12 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   const showGradient = gradient && type === 'contained';
 
   // Get gradient overlay colors (transparent to semi-transparent black/white)
+  // Note: Use explicit rgba(0,0,0,0) instead of 'transparent' for RN SVG compatibility
   const getGradientColors = (): [string, string] => {
     switch (gradient) {
-      case 'darken': return ['transparent', 'rgba(0, 0, 0, 0.15)'];
-      case 'lighten': return ['transparent', 'rgba(255, 255, 255, 0.2)'];
-      default: return ['transparent', 'transparent'];
+      case 'darken': return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.15)'];
+      case 'lighten': return ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.2)'];
+      default: return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)'];
     }
   };
 
@@ -132,14 +133,38 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   const renderGradientLayer = () => {
     if (!showGradient) return null;
 
-    const [startColor, endColor] = getGradientColors();
+    const [startColor, endColor] = useMemo(() => {
+      switch (gradient) {
+        case 'darken': return [{
+          stopColor: 'black',
+          stopOpacity: 0,
+        }, {
+          stopColor: 'black',
+          stopOpacity: 0.15,
+        }];
+        case 'lighten': return [{
+          stopColor: 'white',
+          stopOpacity: 0,
+        }, {
+          stopColor: 'white',
+          stopOpacity: 0.2,
+        }];
+        default: return [{
+          stopColor: 'black',
+          stopOpacity: 0,
+        }, {
+          stopColor: 'black',
+          stopOpacity: 0,
+        }];
+      }
+    }, [gradient]);
 
     return (
       <Svg style={RNStyleSheet.absoluteFill}>
         <Defs>
           <LinearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <Stop offset="0%" stopColor={startColor} />
-            <Stop offset="100%" stopColor={endColor} />
+            <Stop offset="0%" {...startColor} />
+            <Stop offset="100%" {...endColor} />
           </LinearGradient>
         </Defs>
         <Rect

@@ -88,11 +88,11 @@ const TabBar = forwardRef<View, TabBarProps>(({
       const containerPadding = type === 'pills' ? 4 : 0;
 
       indicatorPosition.value = withSpring(layout.x + containerPadding, {
-        damping: 30,
+        damping: 100,
         stiffness: 300,
       });
       indicatorWidth.value = withSpring(layout.width, {
-        damping: 30,
+        damping: 100,
         stiffness: 300,
       });
     }
@@ -148,7 +148,11 @@ const TabBar = forwardRef<View, TabBarProps>(({
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ position: 'relative' }}
+      contentContainerStyle={{
+        position: 'relative',
+        flexGrow: 1,
+      }}
+      style={{ width: '100%' }}
     >
       <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
         {/* Animated indicator - render first so it's behind */}
@@ -160,7 +164,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
         />
 
         {/* Tabs - render second so they're on top */}
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', flex: 1 }}>
           {items.map((item) => {
             const isActive = value === item.value;
             const iconSize = ICON_SIZES[size] || 18;
@@ -174,7 +178,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
             });
 
             // Compute dynamic styles for this tab
-            const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode });
+            const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode, justify });
             const labelStyle = (tabBarLabelStyles.tabLabel as any)({ type, active: isActive, pillMode });
 
             const icon = renderIcon(item.icon, isActive, iconSize);
@@ -195,7 +199,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
                 accessibilityLabel={item.label}
                 accessibilityState={{ selected: isActive, disabled: item.disabled }}
               >
-                {icon && <View style={tabBarIconStyles.tabIcon}>{icon}</View>}
+                {icon && <View style={tabBarIconStyles.tabIcon as any}>{icon}</View>}
                 <Text style={labelStyle}>{item.label}</Text>
               </TouchableOpacity>
             );

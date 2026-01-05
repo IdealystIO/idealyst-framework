@@ -1,7 +1,8 @@
-import { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IconProps } from './types';
-import { iconStyles } from './Icon.styles';
+import { iconStyles, buildIconSize } from './Icon.styles';
+import { useUnistyles } from 'react-native-unistyles';
 
 const Icon = forwardRef<any, IconProps>(({
   name,
@@ -18,12 +19,21 @@ const Icon = forwardRef<any, IconProps>(({
   // Call dynamic style with variants
   const iconStyle = iconStyles.icon({ color, intent, size });
 
+  const { theme } = useUnistyles();
+
+  const iconSize = useMemo(() => {
+    return buildIconSize(theme, size).width;
+  }, [theme, size]);
+
+  console.log(iconStyle)
+
   // Get fontSize from styles for numeric size prop
 
   return (
     <MaterialCommunityIcons
       ref={ref}
       nativeID={id}
+      size={iconSize}
       name={name}
       style={[iconStyle, style]}
       testID={testID}

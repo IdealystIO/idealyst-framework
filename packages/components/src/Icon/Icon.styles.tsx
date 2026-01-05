@@ -27,7 +27,7 @@ function getIconColor(theme: Theme, color?: Color, intent?: Intent): string {
     return theme.colors.text.primary;
 }
 
-function buildIconSize(theme: Theme, size?: IconSizeVariant) {
+export function buildIconSize(theme: Theme, size?: IconSizeVariant) {
     // Handle direct numeric sizes
     if (typeof size === 'number') {
         return {

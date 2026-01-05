@@ -101,6 +101,9 @@ export * from './Chip/types';
 export { default as Breadcrumb } from './Breadcrumb';
 export * from './Breadcrumb/types';
 
+export { default as Link } from './Link';                                                               
+export * from './Link/types';  
+
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
@@ -133,6 +136,7 @@ export type { AlertProps } from './Alert/types';
 export type { SkeletonProps, SkeletonGroupProps, SkeletonShape, SkeletonAnimation } from './Skeleton/types';
 export type { ChipProps, ChipSize, ChipIntent } from './Chip/types';
 export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
+export type { LinkProps } from './Link/types';
 
 // Event utilities
 export * from './utils/events';

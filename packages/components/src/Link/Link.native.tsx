@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigator } from '@idealyst/navigation';
 import { Pressable } from '../Pressable';
 import type { LinkProps } from './types';
+import { Text } from 'react-native';
 
 const Link: React.FC<LinkProps> = ({
   to,
@@ -22,6 +23,8 @@ const Link: React.FC<LinkProps> = ({
     onPress?.();
     navigator.navigate({ path: to, vars });
   };
+  
+  console.log("Rendering Link to:", to, "children:", children);
 
   return (
     <Pressable
@@ -33,7 +36,7 @@ const Link: React.FC<LinkProps> = ({
       accessibilityLabel={accessibilityLabel}
       accessibilityRole="link"
     >
-      {children}
+      {typeof children === 'string' ? <Text>{children}</Text> : children}
     </Pressable>
   );
 };

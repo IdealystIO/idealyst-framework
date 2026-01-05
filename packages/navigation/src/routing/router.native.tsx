@@ -213,24 +213,64 @@ const buildScreen = (params: RouteParam, Navigator: TypedNavigator, parentPath =
         component = buildNavigator(params, fullPath);
     }
 
-    // Build screen options, adding fullScreen presentation if specified
-    let screenOptions = params.options;
-    if (params.type === 'screen' && params.options?.fullScreen) {
-        screenOptions = {
-            ...params.options,
-            // Use fullScreenModal presentation to bypass parent navigator chrome
-            presentation: 'fullScreenModal',
-            // Hide header for true fullScreen experience
-            headerShown: params.options.headerShown ?? false,
-        } as ScreenOptions;
-    }
+    // Build screen options
+    // React Navigation expects headerLeft/headerRight to be functions returning elements
+    const buildScreenOptions = (navProps: any) => {
+        let options = params.options || {};
+
+        // Handle fullScreen presentation
+        if (params.type === 'screen' && options?.fullScreen) {
+            options = {
+                ...options,
+                presentation: 'fullScreenModal',
+                headerShown: options.headerShown ?? false,
+            };
+        }
+
+        // Wrap headerLeft if it's a component
+        if (options.headerLeft) {
+            const HeaderLeftContent = options.headerLeft as React.ComponentType<any>;
+            options = {
+                ...options,
+                headerLeft: () => (
+                    <HeaderWrapper
+                        content={HeaderLeftContent}
+                        route={params as NavigatorParam}
+                        navigation={navProps.navigation}
+                    />
+                ),
+            };
+        }
+
+        // Wrap headerRight if it's a component
+        if (options.headerRight) {
+            const HeaderRightContent = options.headerRight as React.ComponentType<any>;
+            options = {
+                ...options,
+                headerRight: () => (
+                    <HeaderWrapper
+                        content={HeaderRightContent}
+                        route={params as NavigatorParam}
+                        navigation={navProps.navigation}
+                    />
+                ),
+            };
+        }
+
+        return options;
+    };
+
+    // Use function form of options to access navigation props for header wrappers
+    const screenOptions = (params.options?.headerLeft || params.options?.headerRight)
+        ? buildScreenOptions
+        : params.options;
 
     return (
         <Navigator.Screen
             key={`${fullPath}-${index}`}
             name={fullPath}
             component={component}
-            options={screenOptions}
+            options={screenOptions as any}
         />
     )
 }

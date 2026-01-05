@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
-import { View as RNView, ScrollView as RNScrollView, SafeAreaView } from 'react-native';
+import { View as RNView, ScrollView as RNScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenProps } from './types';
 import { screenStyles } from './Screen.styles';
 
@@ -21,6 +22,7 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   testID,
   id,
 }, ref) => {
+  const insets = useSafeAreaInsets();
 
   screenStyles.useVariants({
     background,
@@ -34,6 +36,14 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
     marginHorizontal,
   });
 
+  // Calculate safe area padding
+  const safeAreaStyle = safeArea ? {
+    paddingTop: insets.top,
+    paddingBottom: insets.bottom,
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+  } : undefined;
+
   if (scrollable) {
     // For ScrollView, flex: 1 goes on the ScrollView style
     // Background and padding go on contentContainerStyle (without flex: 1)
@@ -41,11 +51,12 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
 
     const contentContainerStyleArray = [
       screenStyles.screenContent,
+      safeAreaStyle,
       contentInset ? {
-        paddingTop: contentInset.top,
-        paddingBottom: contentInset.bottom,
-        paddingLeft: contentInset.left,
-        paddingRight: contentInset.right,
+        paddingTop: (safeArea ? insets.top : 0) + (contentInset.top ?? 0),
+        paddingBottom: (safeArea ? insets.bottom : 0) + (contentInset.bottom ?? 0),
+        paddingLeft: (safeArea ? insets.left : 0) + (contentInset.left ?? 0),
+        paddingRight: (safeArea ? insets.right : 0) + (contentInset.right ?? 0),
       } : undefined,
     ];
 
@@ -62,19 +73,17 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
     );
   }
 
-  const containerStyle = [screenStyles.screen, style];
+  const containerStyle = [
+    screenStyles.screen,
+    safeAreaStyle,
+    style,
+  ];
 
-  const view = (
+  return (
     <RNView ref={ref as any} nativeID={id} style={containerStyle} testID={testID}>
       {children}
     </RNView>
   );
-
-  if (safeArea) {
-    return <SafeAreaView style={{ flex: 1 }}>{view}</SafeAreaView>;
-  }
-
-  return view;
 });
 
 Screen.displayName = 'Screen';

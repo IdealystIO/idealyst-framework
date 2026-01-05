@@ -117,8 +117,8 @@ function createLabelSizeVariants(theme: Theme) {
  */
 function createIconSizeVariants(theme: Theme) {
     return buildSizeVariants(theme, 'tabBar', (size) => ({
-        width: size.iconSize || size.fontSize,
-        height: size.iconSize || size.fontSize,
+        width: size.fontSize,
+        height: size.fontSize,
     }));
 }
 
@@ -141,6 +141,8 @@ function createContainerStyles(theme: Theme) {
             backgroundColor: bgColor || (type === 'pills' ? theme.colors.surface.secondary : undefined),
             overflow: type === 'pills' ? 'hidden' as const : undefined,
             alignSelf: type === 'pills' ? 'flex-start' as const : undefined,
+            width: type === 'pills' ? undefined : '100%',
+            borderRadius: type === 'pills' ? 9999 : undefined,
             variants: {
                 justify: {
                     start: { justifyContent: 'flex-start' },
@@ -165,7 +167,7 @@ function createContainerStyles(theme: Theme) {
  * Create dynamic tab styles
  */
 function createTabStyles(theme: Theme) {
-    return ({ type = 'standard', size = 'md', active = false, pillMode = 'light' }: TabDynamicProps) => {
+    return ({ type = 'standard', size = 'md', active = false, pillMode = 'light', justify = 'start' }: TabDynamicProps) => {
         const tabPadding = getTabPadding(type, size);
         const color = getTabColor(theme, type, active);
 
@@ -175,6 +177,7 @@ function createTabStyles(theme: Theme) {
             alignItems: 'center',
             justifyContent: 'center',
             fontWeight: '500',
+            flex: justify === 'equal' ? 1 : undefined,
             color: color || (active ? theme.colors.text.primary : theme.colors.text.secondary),
             position: 'relative',
             zIndex: 2,

@@ -9,7 +9,7 @@ import {
 } from './TabBar.styles';
 import type { TabBarProps, TabBarItem } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
-import { getWebAriaProps, generateAccessibilityId, TAB_KEYS } from '../utils/accessibility';
+import { getWebAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
 // Icon size mapping based on size variant
 const ICON_SIZES: Record<string, number> = {
@@ -75,12 +75,12 @@ const Tab: React.FC<TabProps> = ({
   });
 
   // Compute dynamic styles for this tab
-  const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode });
+  const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode, justify });
   const labelStyle = (tabBarLabelStyles.tabLabel as any)({ type, active: isActive, pillMode });
 
   const tabProps = getWebProps([tabStyle]);
   const labelProps = getWebProps([labelStyle]);
-  const iconProps = getWebProps([tabBarIconStyles.tabIcon]);
+  const iconProps = getWebProps([tabBarIconStyles.tabIcon as any]);
 
   // Merge refs from getWebProps with our tracking ref
   const mergedRef = useMergeRefs<HTMLButtonElement>(
@@ -162,16 +162,16 @@ const TabBar: React.FC<TabBarProps> = ({
     const currentIndex = enabledItems.findIndex(item => item.value === itemValue);
     let nextIndex = -1;
 
-    if (TAB_KEYS.next.includes(key)) {
+    if (key === 'ArrowRight') {
       e.preventDefault();
       nextIndex = currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
-    } else if (TAB_KEYS.prev.includes(key)) {
+    } else if (key === 'ArrowLeft') {
       e.preventDefault();
       nextIndex = currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
-    } else if (TAB_KEYS.first.includes(key)) {
+    } else if (key === 'Home') {
       e.preventDefault();
       nextIndex = 0;
-    } else if (TAB_KEYS.last.includes(key)) {
+    } else if (key === 'End') {
       e.preventDefault();
       nextIndex = enabledItems.length - 1;
     }
@@ -244,7 +244,7 @@ const TabBar: React.FC<TabBarProps> = ({
   };
 
   // Apply container variants (for spacing only)
-  tabBarContainerStyles.useVariants({
+  (tabBarContainerStyles.useVariants as any)({
     justify,
     gap,
     padding,
@@ -259,8 +259,8 @@ const TabBar: React.FC<TabBarProps> = ({
   const containerStyle = (tabBarContainerStyles.container as any)({ type, pillMode });
   const containerProps = getWebProps([containerStyle, style as any]);
 
-  const indicatorStyle = (tabBarIndicatorStyles.indicator as any)({ type, pillMode });
-  const indicatorProps = getWebProps([indicatorStyle]);
+  const indicatorVisualStyle = (tabBarIndicatorStyles.indicator as any)({ type, pillMode });
+  const indicatorProps = getWebProps([indicatorVisualStyle]);
 
   // Merge container ref with getWebProps ref
   const mergedContainerRef = useMergeRefs<HTMLDivElement>(
