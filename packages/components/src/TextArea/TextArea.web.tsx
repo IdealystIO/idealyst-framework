@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { textAreaStyles } from './TextArea.styles';
 import type { TextAreaProps } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebFormAriaProps, combineIds, generateAccessibilityId } from '../utils/accessibility';
 
 const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   value: controlledValue,
@@ -30,12 +31,87 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   textareaStyle,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityControls,
+  accessibilityExpanded,
+  accessibilityPressed,
+  accessibilityOwns,
+  accessibilityHasPopup,
+  accessibilityRequired,
+  accessibilityInvalid,
+  accessibilityErrorMessage,
+  accessibilityAutoComplete,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
   const hasError = Boolean(error);
+
+  // Generate unique IDs for accessibility
+  const textareaId = useMemo(() => id || generateAccessibilityId('textarea'), [id]);
+  const errorId = useMemo(() => `${textareaId}-error`, [textareaId]);
+  const helperId = useMemo(() => `${textareaId}-helper`, [textareaId]);
+  const labelId = useMemo(() => label ? `${textareaId}-label` : undefined, [textareaId, label]);
+
+  // Generate ARIA props for the textarea element
+  const ariaProps = useMemo(() => {
+    const isInvalid = accessibilityInvalid ?? hasError;
+    const describedByIds = combineIds(
+      accessibilityDescribedBy,
+      error ? errorId : helperText ? helperId : undefined
+    );
+
+    return getWebFormAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'textbox',
+      accessibilityLabelledBy: accessibilityLabelledBy ?? labelId,
+      accessibilityDescribedBy: describedByIds,
+      accessibilityControls,
+      accessibilityExpanded,
+      accessibilityPressed,
+      accessibilityOwns,
+      accessibilityHasPopup,
+      accessibilityRequired,
+      accessibilityInvalid: isInvalid,
+      accessibilityErrorMessage: accessibilityErrorMessage ?? (error ? errorId : undefined),
+      accessibilityAutoComplete,
+    });
+  }, [
+    accessibilityLabel,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    labelId,
+    accessibilityDescribedBy,
+    error,
+    errorId,
+    helperText,
+    helperId,
+    accessibilityControls,
+    accessibilityExpanded,
+    accessibilityPressed,
+    accessibilityOwns,
+    accessibilityHasPopup,
+    accessibilityRequired,
+    accessibilityInvalid,
+    hasError,
+    accessibilityErrorMessage,
+    accessibilityAutoComplete,
+  ]);
 
   // Apply variants
   textAreaStyles.useVariants({
@@ -115,12 +191,14 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   return (
     <div {...containerProps} ref={mergedRef} id={id} data-testid={testID}>
       {label && (
-        <label {...labelProps}>{label}</label>
+        <label {...labelProps} id={labelId} htmlFor={textareaId}>{label}</label>
       )}
 
       <div {...textareaContainerProps}>
         <textarea
           {...computedTextareaProps}
+          {...ariaProps}
+          id={textareaId}
           ref={mergedTextareaRef}
           value={value}
           onChange={handleChange}
@@ -128,8 +206,6 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
           disabled={disabled}
           rows={autoGrow ? undefined : rows}
           maxLength={maxLength}
-          aria-invalid={hasError}
-          aria-describedby={error ? `${testID}-error` : helperText ? `${testID}-helper` : undefined}
         />
       </div>
 
@@ -137,12 +213,12 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
         <div {...footerProps}>
           <div style={{ flex: 1 }}>
             {error && (
-              <span {...helperTextProps} id={`${testID}-error`}>
+              <span {...helperTextProps} id={errorId} role="alert">
                 {error}
               </span>
             )}
             {!error && helperText && (
-              <span {...helperTextProps} id={`${testID}-helper`}>
+              <span {...helperTextProps} id={helperId}>
                 {helperText}
               </span>
             )}

@@ -1,8 +1,8 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NavigatorProvider } from '@idealyst/navigation';
+import { ExampleNavigationRouter } from '@idealyst/navigation/examples';
 import { trpc, createTRPCClient } from '../trpc/client';
-import AppRouter from '../navigation/AppRouter';
 
 interface AppProps {
   apiUrl?: string;
@@ -38,7 +38,7 @@ export const App: React.FC<AppProps> = ({
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <NavigatorProvider route={AppRouter} />
+        <NavigatorProvider route={ExampleNavigationRouter} />
       </QueryClientProvider>
     </trpc.Provider>
   );

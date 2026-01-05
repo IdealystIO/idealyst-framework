@@ -2,13 +2,14 @@ import { Intent, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { FormInputStyleProps } from '../utils/viewStyleProps';
+import { SelectionAccessibilityProps } from '../utils/accessibility';
 
 // Component-specific type aliases for future extensibility
 export type CheckboxIntentVariant = Intent;
 export type CheckboxSizeVariant = Size;
 export type CheckboxVariant = 'default' | 'outlined';
 
-export interface CheckboxProps extends FormInputStyleProps {
+export interface CheckboxProps extends FormInputStyleProps, SelectionAccessibilityProps {
   /**
    * Whether the checkbox is checked
    */
@@ -63,11 +64,6 @@ export interface CheckboxProps extends FormInputStyleProps {
    * Test ID for testing
    */
   testID?: string;
-
-  /**
-   * Accessibility label
-   */
-  accessibilityLabel?: string;
 
   /**
    * Whether the checkbox is required

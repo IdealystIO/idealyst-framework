@@ -1,8 +1,9 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useMemo } from 'react';
 import { View, TextInput, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from 'react-native';
 import { textAreaStyles } from './TextArea.styles';
 import Text from '../Text';
 import type { TextAreaProps } from './types';
+import { getNativeFormAccessibilityProps } from '../utils/accessibility';
 
 const TextArea = forwardRef<TextInput, TextAreaProps>(({
   value: controlledValue,
@@ -29,12 +30,59 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
   textareaStyle,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityRequired,
+  accessibilityInvalid,
+  accessibilityErrorMessage,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
   const hasError = Boolean(error);
+
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    const computedLabel = accessibilityLabel ?? label ?? placeholder;
+    const isInvalid = accessibilityInvalid ?? hasError;
+
+    return getNativeFormAccessibilityProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint: accessibilityHint ?? (error || helperText),
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'textbox',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityRequired,
+      accessibilityInvalid: isInvalid,
+      accessibilityErrorMessage: accessibilityErrorMessage ?? error,
+    });
+  }, [
+    accessibilityLabel,
+    label,
+    placeholder,
+    accessibilityHint,
+    error,
+    helperText,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityRequired,
+    accessibilityInvalid,
+    hasError,
+    accessibilityErrorMessage,
+  ]);
 
   // Apply variants
   textAreaStyles.useVariants({
@@ -90,6 +138,7 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
       <View style={textAreaStyles.textareaContainer}>
         <TextInput
           ref={ref}
+          {...nativeA11yProps}
           style={[
             textAreaStyles.textarea({ intent, disabled, hasError }),
             {

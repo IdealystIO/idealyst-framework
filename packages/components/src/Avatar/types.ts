@@ -1,13 +1,14 @@
 import { Color } from '@idealyst/theme';
 import type { StyleProp, ViewStyle, ImageSourcePropType } from 'react-native';
 import { BaseProps } from '../utils/viewStyleProps';
+import { AccessibilityProps } from '../utils/accessibility';
 
 // Component-specific type aliases for future extensibility
 export type AvatarColorVariant = Color;
 export type AvatarSizeVariant = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarShapeVariant = 'circle' | 'square';
 
-export interface AvatarProps extends BaseProps {
+export interface AvatarProps extends BaseProps, AccessibilityProps {
   /**
    * Image source (URL or require())
    */

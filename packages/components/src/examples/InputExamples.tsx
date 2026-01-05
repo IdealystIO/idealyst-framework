@@ -186,6 +186,59 @@ export const InputExamples = () => {
           />
         </View>
       </View>
+
+      {/* Accessibility Examples */}
+      <View gap="md">
+        <Text typography="subtitle1">Accessibility</Text>
+        <View gap="sm" style={{ gap: 10 }}>
+          {/* Basic accessible input with label */}
+          <Input
+            leftIcon="email"
+            value={emailValue}
+            onChangeText={setEmailValue}
+            placeholder="Email address"
+            inputType="email"
+            accessibilityLabel="Email address"
+            accessibilityRequired
+          />
+          <Text id="email-helper" typography="caption" color="muted">
+            Enter your work email address
+          </Text>
+
+          {/* Input with error state and accessible error association */}
+          <Input
+            leftIcon="lock"
+            value={passwordValue}
+            onChangeText={setPasswordValue}
+            placeholder="Password"
+            inputType="password"
+            accessibilityLabel="Password"
+            accessibilityDescribedBy="password-helper"
+            accessibilityInvalid={passwordValue.length > 0 && passwordValue.length < 8}
+            accessibilityRequired
+            hasError={passwordValue.length > 0 && passwordValue.length < 8}
+          />
+          <Text
+            id="password-helper"
+            typography="caption"
+            color={passwordValue.length > 0 && passwordValue.length < 8 ? 'error' : 'muted'}
+          >
+            {passwordValue.length > 0 && passwordValue.length < 8
+              ? 'Password must be at least 8 characters'
+              : 'Enter a secure password'}
+          </Text>
+
+          {/* Disabled input with accessibility indication */}
+          <Input
+            leftIcon="account"
+            value="readonly@example.com"
+            placeholder="Readonly input"
+            disabled
+            accessibilityLabel="Email (read-only)"
+            accessibilityDisabled
+          />
+        </View>
+      </View>
     </View>
     </Screen>
   );

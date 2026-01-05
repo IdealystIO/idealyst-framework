@@ -1,9 +1,10 @@
-import React, { ComponentRef, forwardRef } from 'react';
+import React, { ComponentRef, forwardRef, useMemo } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { switchStyles } from './Switch.styles';
 import Text from '../Text';
 import type { SwitchProps } from './types';
+import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
 
 const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
   checked = false,
@@ -20,6 +21,15 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityChecked,
 }, ref) => {
   switchStyles.useVariants({
     size,
@@ -44,6 +54,35 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
       onCheckedChange(!checked);
     }
   };
+
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    const computedLabel = accessibilityLabel ?? label;
+    const computedChecked = accessibilityChecked ?? checked;
+
+    return getNativeSelectionAccessibilityProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'switch',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityChecked: computedChecked,
+    });
+  }, [
+    accessibilityLabel,
+    label,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityChecked,
+    checked,
+  ]);
 
   const getThumbDistance = () => {
     if (size === 'sm') return 16;
@@ -87,8 +126,7 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
       disabled={disabled}
       style={switchStyles.switchContainer}
       testID={testID}
-      accessibilityRole="switch"
-      accessibilityState={{ checked, disabled }}
+      {...nativeA11yProps}
     >
       <Animated.View style={switchStyles.switchTrack({ checked, intent })}>
         <Animated.View

@@ -1,7 +1,8 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { ActivityIndicator as RNActivityIndicator, View } from 'react-native';
 import { ActivityIndicatorProps } from './types';
 import { activityIndicatorStyles } from './ActivityIndicator.styles';
+import { getNativeLiveRegionAccessibilityProps } from '../utils/accessibility';
 
 const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
   animating = true,
@@ -12,7 +13,19 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
   testID,
   hidesWhenStopped = true,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityLiveRegion,
+  accessibilityBusy,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeLiveRegionAccessibilityProps({
+      accessibilityLabel: accessibilityLabel ?? 'Loading',
+      accessibilityLiveRegion: accessibilityLiveRegion ?? 'polite',
+      accessibilityBusy: accessibilityBusy ?? animating,
+    });
+  }, [accessibilityLabel, accessibilityLiveRegion, accessibilityBusy, animating]);
   // Handle numeric size
   const sizeVariant = typeof size === 'number' ? 'md' : size;
   const customSize = typeof size === 'number' ? size : undefined;
@@ -44,6 +57,7 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
       ref={ref}
       nativeID={id}
       testID={testID}
+      {...nativeA11yProps}
     >
       <RNActivityIndicator
         animating={animating}

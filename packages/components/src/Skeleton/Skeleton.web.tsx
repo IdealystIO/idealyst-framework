@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { skeletonStyles } from './Skeleton.styles';
 import type { SkeletonProps, SkeletonGroupProps } from './types';
+import { getWebLiveRegionAriaProps } from '../utils/accessibility';
 
 const Skeleton: React.FC<SkeletonProps> = ({
   width = '100%',
@@ -12,7 +13,23 @@ const Skeleton: React.FC<SkeletonProps> = ({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityLiveRegion,
+  accessibilityBusy,
+  accessibilityAtomic,
+  accessibilityRelevant,
 }) => {
+  // Generate ARIA props for loading state
+  const ariaProps = useMemo(() => {
+    return getWebLiveRegionAriaProps({
+      accessibilityLabel: accessibilityLabel ?? 'Loading content',
+      accessibilityLiveRegion: accessibilityLiveRegion ?? 'polite',
+      accessibilityBusy: accessibilityBusy ?? true,
+      accessibilityAtomic,
+      accessibilityRelevant,
+    });
+  }, [accessibilityLabel, accessibilityLiveRegion, accessibilityBusy, accessibilityAtomic, accessibilityRelevant]);
   skeletonStyles.useVariants({
     shape,
     animation,
@@ -57,6 +74,8 @@ const Skeleton: React.FC<SkeletonProps> = ({
       )}
       <div
         {...skeletonProps}
+        {...ariaProps}
+        role="status"
         style={{
           ...customStyles,
           ...animationStyles,

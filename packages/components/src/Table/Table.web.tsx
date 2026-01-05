@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { tableStyles } from './Table.styles';
 import type { TableProps, TableColumn } from './types';
+import { getWebAriaProps } from '../utils/accessibility';
 
 function Table<T = any>({
   columns,
@@ -21,7 +22,21 @@ function Table<T = any>({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityHidden,
 }: TableProps<T>) {
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    return getWebAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityRole: accessibilityRole ?? 'table',
+      accessibilityHidden,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
   // Apply variants
   tableStyles.useVariants({
     type,
@@ -50,8 +65,8 @@ function Table<T = any>({
   const isClickable = !!onRowPress;
 
   return (
-    <div {...containerProps} id={id} data-testid={testID}>
-      <table {...tableProps}>
+    <div {...containerProps} {...ariaProps} id={id} data-testid={testID}>
+      <table {...tableProps} role="table">
         <thead {...getWebProps([tableStyles.thead])}>
           <tr>
             {columns.map((column) => {
@@ -67,6 +82,8 @@ function Table<T = any>({
                 <th
                   key={column.key}
                   {...headerCellProps}
+                  scope="col"
+                  aria-sort={column.accessibilitySort}
                   style={{
                     width: column.width,
                   }}

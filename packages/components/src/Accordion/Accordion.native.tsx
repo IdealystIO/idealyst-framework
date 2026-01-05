@@ -1,10 +1,11 @@
-import React, { useState, forwardRef, useEffect } from 'react';
+import React, { useState, forwardRef, useEffect, useMemo } from 'react';
 import { View, TouchableOpacity, LayoutChangeEvent } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { accordionStyles } from './Accordion.styles';
 import Text from '../Text';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
+import { getNativeAccessibilityProps } from '../utils/accessibility';
 
 interface AccordionItemProps {
   item: AccordionItemType;
@@ -79,6 +80,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         onPress={onToggle}
         disabled={item.disabled}
         activeOpacity={0.7}
+        accessibilityRole="button"
+        accessibilityLabel={item.title}
+        accessibilityState={{ expanded: isExpanded, disabled: item.disabled }}
       >
         <View style={accordionStyles.title}>
           <Text style={accordionStyles.header}>
@@ -143,8 +147,25 @@ const Accordion = forwardRef<View, AccordionProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
 }, ref) => {
   const [expandedItems, setExpandedItems] = useState<string[]>(defaultExpanded);
+
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'none',
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, accessibilityHidden, accessibilityRole]);
 
   // Apply variants
   accordionStyles.useVariants({
@@ -176,7 +197,7 @@ const Accordion = forwardRef<View, AccordionProps>(({
   };
 
   return (
-    <View ref={ref} nativeID={id} style={[accordionStyles.container, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[accordionStyles.container, style]} testID={testID} {...nativeA11yProps}>
       {items.map((item, index) => (
         <AccordionItem
           key={item.id}

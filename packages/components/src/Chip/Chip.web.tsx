@@ -22,6 +22,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityChecked,
 }, ref) => {
   // Compute actual selected state
   const isSelected = selectable ? selected : false;
@@ -102,8 +105,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
       onClick={handleClick}
       data-testid={testID}
       role={isClickable ? 'button' : undefined}
+      aria-label={accessibilityLabel ?? label}
       aria-disabled={disabled}
-      aria-pressed={selectable ? selected : undefined}
+      aria-pressed={accessibilityChecked ?? (selectable ? selected : undefined)}
     >
       {icon && (
         <span

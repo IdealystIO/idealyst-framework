@@ -1,8 +1,9 @@
-import React, { useState, isValidElement } from 'react';
+import React, { useState, isValidElement, useMemo } from 'react';
 import { View, TextInput, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { InputProps } from './types';
 import { inputStyles } from './Input.styles';
+import { getNativeFormAccessibilityProps } from '../utils/accessibility';
 
 const Input = React.forwardRef<TextInput, InputProps>(({
   value,
@@ -28,6 +29,14 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityRequired,
+  accessibilityInvalid,
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -84,6 +93,32 @@ const Input = React.forwardRef<TextInput, InputProps>(({
     marginVertical,
     marginHorizontal,
   });
+
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    // Derive invalid state from hasError or explicit accessibilityInvalid
+    const isInvalid = accessibilityInvalid ?? hasError;
+
+    return getNativeFormAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'textbox',
+      accessibilityRequired,
+      accessibilityInvalid: isInvalid,
+    });
+  }, [
+    accessibilityLabel,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityRequired,
+    accessibilityInvalid,
+    hasError,
+  ]);
 
   // Helper to render left icon
   const renderLeftIcon = () => {
@@ -149,6 +184,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
         onBlur={handleBlur}
         style={inputStyles.input}
         placeholderTextColor="#999999"
+        {...nativeA11yProps}
       />
 
       {/* Right Icon or Password Toggle */}

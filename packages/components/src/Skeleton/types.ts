@@ -1,10 +1,11 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import { BaseProps } from '../utils/viewStyleProps';
+import { LiveRegionAccessibilityProps } from '../utils/accessibility';
 
 export type SkeletonShape = 'rectangle' | 'circle' | 'rounded';
 export type SkeletonAnimation = 'pulse' | 'wave' | 'none';
 
-export interface SkeletonProps extends BaseProps {
+export interface SkeletonProps extends BaseProps, LiveRegionAccessibilityProps {
   /**
    * Width of the skeleton (number in pixels or string with units)
    * @default '100%'

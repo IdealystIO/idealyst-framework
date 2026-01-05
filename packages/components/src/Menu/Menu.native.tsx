@@ -1,4 +1,4 @@
-import React, { useRef, useState, isValidElement, cloneElement, forwardRef, useEffect } from 'react';
+import React, { useRef, useState, isValidElement, cloneElement, forwardRef, useEffect, useMemo } from 'react';
 import {
   View,
   Modal,
@@ -11,6 +11,7 @@ import MenuItem from './MenuItem.native';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { BoundedModalContent } from '../internal/BoundedModalContent.native';
 import { useSmartPosition } from '../hooks/useSmartPosition.native';
+import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 
 const Menu = forwardRef<View, MenuProps>(({
   children,
@@ -22,7 +23,25 @@ const Menu = forwardRef<View, MenuProps>(({
   size,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityExpanded,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeInteractiveAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'menu',
+      accessibilityExpanded: accessibilityExpanded ?? open,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, accessibilityHidden, accessibilityRole, accessibilityExpanded, open]);
   const {
     position: menuPosition,
     size: menuSize,
@@ -137,7 +156,7 @@ const Menu = forwardRef<View, MenuProps>(({
 
   return (
     <>
-      <View ref={mergedTriggerRef} nativeID={id} collapsable={false}>
+      <View ref={mergedTriggerRef} nativeID={id} collapsable={false} {...nativeA11yProps}>
         {trigger}
       </View>
 

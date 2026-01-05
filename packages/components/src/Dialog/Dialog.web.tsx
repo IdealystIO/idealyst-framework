@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState, forwardRef } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { getWebProps } from 'react-native-unistyles/web';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
 import Icon from '../Icon';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
 const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   open,
@@ -19,11 +20,34 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityDescribedBy,
 }, ref) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousActiveElementRef = useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
+
+  // Generate unique IDs for accessibility
+  const dialogId = useMemo(() => id || generateAccessibilityId('dialog'), [id]);
+  const titleId = useMemo(() => `${dialogId}-title`, [dialogId]);
+
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    return getWebInteractiveAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'dialog',
+      accessibilityDescribedBy,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, accessibilityHidden, accessibilityRole, accessibilityDescribedBy]);
 
   // Handle mounting/unmounting with animation
   useEffect(() => {
@@ -130,23 +154,24 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
     <div
       {...backdropProps}
       ref={mergedBackdropRef}
-      id={id}
       onClick={handleBackdropClick}
       data-testid={testID}
     >
       <div
         {...containerProps}
+        {...ariaProps}
         ref={dialogRef}
+        id={dialogId}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={title ? 'dialog-title' : undefined}
+        aria-labelledby={title ? titleId : undefined}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         {(title || showCloseButton) && (
           <div {...headerProps}>
             {title && (
-              <h2 {...titleProps} id="dialog-title">
+              <h2 {...titleProps} id={titleId}>
                 {title}
               </h2>
             )}

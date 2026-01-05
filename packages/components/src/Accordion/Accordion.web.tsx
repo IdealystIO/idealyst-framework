@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { accordionStyles } from './Accordion.styles';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
+import { getWebAriaProps, generateAccessibilityId, ACCORDION_KEYS } from '../utils/accessibility';
 
 interface AccordionItemProps {
   item: AccordionItemType;
@@ -12,6 +13,9 @@ interface AccordionItemProps {
   onToggle: () => void;
   size: AccordionProps['size'];
   testID?: string;
+  headerId: string;
+  panelId: string;
+  onKeyDown: (e: React.KeyboardEvent, itemId: string) => void;
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({
@@ -21,6 +25,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   type,
   size,
   testID,
+  headerId,
+  panelId,
+  onKeyDown,
 }) => {
   const contentInnerRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
@@ -61,9 +68,12 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     >
       <button
         {...headerProps}
+        id={headerId}
         onClick={onToggle}
+        onKeyDown={(e) => onKeyDown(e, item.id)}
         disabled={item.disabled}
         aria-expanded={isExpanded}
+        aria-controls={panelId}
         aria-disabled={item.disabled}
       >
         <span {...titleProps}>
@@ -80,6 +90,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
       <div
         {...contentProps}
+        id={panelId}
+        role="region"
+        aria-labelledby={headerId}
         aria-hidden={!isExpanded}
       >
         <div ref={contentInnerRef}>
@@ -109,8 +122,63 @@ const Accordion: React.FC<AccordionProps> = ({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
 }) => {
   const [expandedItems, setExpandedItems] = useState<string[]>(defaultExpanded);
+  const headerRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+
+  // Generate unique ID for the accordion
+  const accordionId = useMemo(() => id || generateAccessibilityId('accordion'), [id]);
+
+  // Generate header and panel IDs for each item
+  const getHeaderId = useCallback((itemId: string) => `${accordionId}-header-${itemId}`, [accordionId]);
+  const getPanelId = useCallback((itemId: string) => `${accordionId}-panel-${itemId}`, [accordionId]);
+
+  // Get enabled items for keyboard navigation
+  const enabledItems = useMemo(() => items.filter(item => !item.disabled), [items]);
+
+  // Keyboard navigation handler
+  const handleKeyDown = useCallback((e: React.KeyboardEvent, itemId: string) => {
+    const key = e.key;
+    const currentIndex = enabledItems.findIndex(item => item.id === itemId);
+    let nextIndex = -1;
+
+    if (ACCORDION_KEYS.next.includes(key)) {
+      e.preventDefault();
+      nextIndex = currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
+    } else if (ACCORDION_KEYS.prev.includes(key)) {
+      e.preventDefault();
+      nextIndex = currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
+    } else if (ACCORDION_KEYS.first.includes(key)) {
+      e.preventDefault();
+      nextIndex = 0;
+    } else if (ACCORDION_KEYS.last.includes(key)) {
+      e.preventDefault();
+      nextIndex = enabledItems.length - 1;
+    }
+
+    if (nextIndex >= 0) {
+      const nextItem = enabledItems[nextIndex];
+      const headerButton = headerRefs.current.get(nextItem.id);
+      headerButton?.focus();
+    }
+  }, [enabledItems]);
+
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    return getWebAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'group',
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, accessibilityHidden, accessibilityRole]);
 
   // Apply variants
   accordionStyles.useVariants({
@@ -144,7 +212,7 @@ const Accordion: React.FC<AccordionProps> = ({
   };
 
   return (
-    <div {...containerProps} id={id} data-testid={testID}>
+    <div {...containerProps} {...ariaProps} id={accordionId} data-testid={testID}>
       {items.map((item) => (
         <AccordionItem
           key={item.id}
@@ -154,6 +222,9 @@ const Accordion: React.FC<AccordionProps> = ({
           onToggle={() => toggleItem(item.id, item.disabled)}
           size={size}
           testID={`${testID}-item-${item.id}`}
+          headerId={getHeaderId(item.id)}
+          panelId={getPanelId(item.id)}
+          onKeyDown={handleKeyDown}
         />
       ))}
     </div>

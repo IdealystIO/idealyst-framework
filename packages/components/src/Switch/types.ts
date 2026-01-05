@@ -2,12 +2,13 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import { Intent, Size } from '@idealyst/theme';
 import { FormInputStyleProps } from '../utils/viewStyleProps';
+import { SelectionAccessibilityProps } from '../utils/accessibility';
 
 // Component-specific type aliases for future extensibility
 export type SwitchIntentVariant = Intent;
 export type SwitchSizeVariant = Size;
 
-export interface SwitchProps extends FormInputStyleProps {
+export interface SwitchProps extends FormInputStyleProps, SelectionAccessibilityProps {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   disabled?: boolean;

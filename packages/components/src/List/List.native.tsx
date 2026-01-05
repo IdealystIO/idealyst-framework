@@ -1,8 +1,9 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { View, ScrollView } from 'react-native';
 import { listStyles } from './List.styles';
 import type { ListProps } from './types';
 import { ListProvider } from './ListContext';
+import { getNativeAccessibilityProps } from '../utils/accessibility';
 
 const List = forwardRef<View, ListProps>(({
   children,
@@ -21,7 +22,21 @@ const List = forwardRef<View, ListProps>(({
   scrollable = false,
   maxHeight,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityHidden,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityRole: accessibilityRole ?? 'list',
+      accessibilityHidden,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
   // Apply types
   listStyles.useVariants({
     size,
@@ -55,6 +70,7 @@ const List = forwardRef<View, ListProps>(({
         style={containerStyle as any}
         testID={testID}
         showsVerticalScrollIndicator={true}
+        {...nativeA11yProps}
       >
         {content}
       </ScrollView>
@@ -62,7 +78,7 @@ const List = forwardRef<View, ListProps>(({
   }
 
   return (
-    <View ref={ref} nativeID={id} style={containerStyle as any} testID={testID}>
+    <View ref={ref} nativeID={id} style={containerStyle as any} testID={testID} {...nativeA11yProps}>
       {content}
     </View>
   );

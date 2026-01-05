@@ -1,8 +1,9 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { ActivityIndicatorProps } from './types';
 import { activityIndicatorStyles } from './ActivityIndicator.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebLiveRegionAriaProps } from '../utils/accessibility';
 
 const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   animating = true,
@@ -13,7 +14,23 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   testID,
   hidesWhenStopped = true,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityLiveRegion,
+  accessibilityBusy,
+  accessibilityAtomic,
+  accessibilityRelevant,
 }, ref) => {
+  // Generate ARIA props for loading state
+  const ariaProps = useMemo(() => {
+    return getWebLiveRegionAriaProps({
+      accessibilityLabel: accessibilityLabel ?? 'Loading',
+      accessibilityLiveRegion: accessibilityLiveRegion ?? 'polite',
+      accessibilityBusy: accessibilityBusy ?? animating,
+      accessibilityAtomic,
+      accessibilityRelevant,
+    });
+  }, [accessibilityLabel, accessibilityLiveRegion, accessibilityBusy, animating, accessibilityAtomic, accessibilityRelevant]);
   // Handle numeric size
   const sizeVariant = typeof size === 'number' ? 'md' : size;
   const customSize = typeof size === 'number' ? size : undefined;
@@ -72,7 +89,7 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
           }
         `}
       </style>
-      <div {...containerProps} ref={mergedRef} id={id} data-testid={testID}>
+      <div {...containerProps} {...ariaProps} ref={mergedRef} role="status" id={id} data-testid={testID}>
         <div {...spinnerProps} />
       </div>
     </>

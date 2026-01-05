@@ -1,8 +1,9 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef, useMemo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CheckboxProps } from './types';
 import { checkboxStyles } from './Checkbox.styles';
+import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
 
 const Checkbox = forwardRef<View, CheckboxProps>(({
   checked = false,
@@ -20,11 +21,19 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   marginHorizontal,
   style,
   testID,
-  accessibilityLabel,
   required = false,
   error,
   helperText,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityChecked,
 }, ref) => {
   const [internalChecked, setInternalChecked] = useState(checked);
 
@@ -39,6 +48,40 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
     setInternalChecked(newChecked);
     onCheckedChange?.(newChecked);
   };
+
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    const labelContent = children || label;
+    const computedLabel = accessibilityLabel ?? (typeof labelContent === 'string' ? labelContent : undefined);
+    const computedChecked = accessibilityChecked ?? (indeterminate ? 'mixed' : internalChecked);
+
+    return getNativeSelectionAccessibilityProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint: accessibilityHint ?? (error || helperText),
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'checkbox',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityChecked: computedChecked,
+    });
+  }, [
+    accessibilityLabel,
+    children,
+    label,
+    accessibilityHint,
+    error,
+    helperText,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityChecked,
+    indeterminate,
+    internalChecked,
+  ]);
 
   // Apply variants
   checkboxStyles.useVariants({
@@ -62,9 +105,7 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
         onPress={handlePress}
         disabled={disabled}
         testID={testID}
-        accessibilityLabel={accessibilityLabel}
-        accessibilityRole="checkbox"
-        accessibilityState={{ checked: internalChecked }}
+        {...nativeA11yProps}
         style={checkboxStyles.container}
       >
         <View style={checkboxStyles.checkbox({ intent })}>

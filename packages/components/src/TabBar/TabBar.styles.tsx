@@ -10,12 +10,13 @@ import {
   buildMarginVerticalVariants,
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
-import { TabBarPillMode, TabBarSizeVariant, TabBarType } from './types';
+import { TabBarPillMode, TabBarSizeVariant, TabBarType, TabBarIconPosition, TabBarJustify } from './types';
 
 type TabBarContainerVariants = {
     type: TabBarType;
     size: TabBarSizeVariant;
     pillMode: TabBarPillMode;
+    justify: TabBarJustify;
 }
 
 type TabBarTabVariants = {
@@ -24,6 +25,15 @@ type TabBarTabVariants = {
     active: boolean;
     disabled: boolean;
     pillMode: TabBarPillMode;
+    iconPosition: TabBarIconPosition;
+    justify: TabBarJustify;
+}
+
+type TabBarIconVariants = {
+    size: TabBarSizeVariant;
+    active: boolean;
+    disabled: boolean;
+    iconPosition: TabBarIconPosition;
 }
 
 type TabBarLabelVariants = {
@@ -238,6 +248,22 @@ const createContainerStyles = (theme: Theme) => {
                 light: {},
                 dark: {},
             },
+            justify: {
+                start: {
+                    justifyContent: 'flex-start',
+                },
+                center: {
+                    justifyContent: 'center',
+                },
+                equal: {
+                    justifyContent: 'stretch',
+                    width: '100%',
+                },
+                'space-between': {
+                    justifyContent: 'space-between',
+                    width: '100%',
+                },
+            },
             // Spacing variants from ContainerStyleProps
             gap: buildGapVariants(theme),
             padding: buildPaddingVariants(theme),
@@ -262,6 +288,7 @@ const createTabStyles = (theme: Theme) => {
         position: 'relative',
         zIndex: 2,
         backgroundColor: 'transparent',
+        gap: 6,
         variants: {
             size: createTabSizeVariants(theme),
             type: {
@@ -297,6 +324,22 @@ const createTabStyles = (theme: Theme) => {
             pillMode: {
                 light: {},
                 dark: {},
+            },
+            iconPosition: {
+                left: {
+                    flexDirection: 'row',
+                },
+                top: {
+                    flexDirection: 'column',
+                },
+            },
+            justify: {
+                start: {},
+                center: {},
+                equal: {
+                    flex: 1,
+                },
+                'space-between': {},
             },
         } as const,
         compoundVariants: createTabCompoundVariants(theme),
@@ -379,6 +422,43 @@ const createIndicatorStyles = (theme: Theme) => {
     } as const;
 }
 
+/**
+ * Create size variants for icon
+ */
+function createIconSizeVariants(theme: Theme) {
+    return buildSizeVariants(theme, 'tabBar', (size) => ({
+        width: size.iconSize || size.fontSize,
+        height: size.iconSize || size.fontSize,
+    }));
+}
+
+const createIconStyles = (theme: Theme) => {
+    return {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        variants: {
+            size: createIconSizeVariants(theme),
+            active: {
+                true: {},
+                false: {},
+            },
+            disabled: {
+                true: {
+                    opacity: 0.5,
+                },
+                false: {},
+            },
+            iconPosition: {
+                left: {},
+                top: {
+                    marginBottom: 2,
+                },
+            },
+        } as const,
+    } as const;
+}
+
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const tabBarStyles = StyleSheet.create((theme: Theme) => {
@@ -386,6 +466,7 @@ export const tabBarStyles = StyleSheet.create((theme: Theme) => {
         container: createContainerStyles(theme),
         tab: createTabStyles(theme),
         tabLabel: createTabLabelStyles(theme),
+        tabIcon: createIconStyles(theme),
         indicator: createIndicatorStyles(theme),
     };
 });
@@ -412,5 +493,11 @@ export const tabBarLabelStyles = StyleSheet.create((theme: Theme) => {
 export const tabBarIndicatorStyles = StyleSheet.create((theme: Theme) => {
     return {
         indicator: createIndicatorStyles(theme),
+    } as const;
+});
+
+export const tabBarIconStyles = StyleSheet.create((theme: Theme) => {
+    return {
+        tabIcon: createIconStyles(theme),
     } as const;
 });

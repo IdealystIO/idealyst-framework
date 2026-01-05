@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState, forwardRef } from 'react';
+import React, { useEffect, useRef, useState, forwardRef, useMemo } from 'react';
 import { Modal, View, TouchableWithoutFeedback, BackHandler, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PopoverProps } from './types';
 import { popoverStyles } from './Popover.styles';
 import { calculateSmartPosition, calculateAvailableHeight } from '../utils/positionUtils.native';
 import { BoundedModalContent } from '../internal/BoundedModalContent.native';
+import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 
 const Popover = forwardRef<View, PopoverProps>(({
   open,
@@ -18,7 +19,21 @@ const Popover = forwardRef<View, PopoverProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityHidden,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeInteractiveAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityRole: accessibilityRole ?? 'none',
+      accessibilityHidden,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
   const popoverRef = useRef<View>(null);
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0, width: 0 });
   const [popoverSize, setPopoverSize] = useState({ width: 0, height: 0 });
@@ -141,6 +156,7 @@ const Popover = forwardRef<View, PopoverProps>(({
               maxHeight={500}
               style={[popoverStyles.container, style]}
               onLayout={handlePopoverLayout}
+              {...nativeA11yProps}
             >
               {showArrow && <View style={popoverStyles.arrow} />}
               <View style={popoverStyles.content}>

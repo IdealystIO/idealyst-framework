@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioButtonProps } from './types';
 import { useRadioGroup } from './RadioGroup.web';
+import { getWebSelectionAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
 const RadioButton: React.FC<RadioButtonProps> = ({
   value,
@@ -19,6 +20,15 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityChecked,
 }) => {
   const group = useRadioGroup();
 
@@ -34,6 +44,38 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       }
     }
   };
+
+  // Generate unique ID for accessibility
+  const radioId = useMemo(() => id || generateAccessibilityId('radio'), [id]);
+
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    const computedLabel = accessibilityLabel ?? label;
+    const computedChecked = accessibilityChecked ?? checked;
+
+    return getWebSelectionAriaProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'radio',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityChecked: computedChecked,
+    });
+  }, [
+    accessibilityLabel,
+    label,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityChecked,
+    checked,
+  ]);
 
   // Apply variants using the correct Unistyles v3 pattern
   radioButtonStyles.useVariants({
@@ -53,13 +95,11 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   return (
     <button
       {...containerProps}
+      {...ariaProps}
       onClick={handleClick}
       disabled={disabled}
-      id={id}
+      id={radioId}
       data-testid={testID}
-      role="radio"
-      aria-checked={checked}
-      aria-disabled={disabled}
       style={{
         background: 'none',
         border: 'none',
@@ -68,7 +108,6 @@ const RadioButton: React.FC<RadioButtonProps> = ({
         display: 'inline-flex',
         alignItems: 'center',
       }}
-      {...containerProps}
     >
       <div {...radioProps} style={{
         display: 'flex',

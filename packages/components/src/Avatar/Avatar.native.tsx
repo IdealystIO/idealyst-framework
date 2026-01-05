@@ -1,7 +1,8 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useMemo } from 'react';
 import { View, Text, Image } from 'react-native';
 import { AvatarProps } from './types';
 import { avatarStyles } from './Avatar.styles';
+import { getNativeAccessibilityProps } from '../utils/accessibility';
 
 const Avatar = forwardRef<View, AvatarProps>(({
   src,
@@ -12,7 +13,23 @@ const Avatar = forwardRef<View, AvatarProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeAccessibilityProps({
+      accessibilityLabel: accessibilityLabel ?? alt,
+      accessibilityHint,
+      accessibilityDisabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'image',
+    });
+  }, [accessibilityLabel, alt, accessibilityHint, accessibilityDisabled, accessibilityHidden, accessibilityRole]);
   const [hasError, setHasError] = useState(false);
 
   avatarStyles.useVariants({
@@ -25,7 +42,7 @@ const Avatar = forwardRef<View, AvatarProps>(({
   };
 
   return (
-    <View ref={ref} nativeID={id} style={[avatarStyles.avatar, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[avatarStyles.avatar, style]} testID={testID} {...nativeA11yProps}>
       {src && !hasError ? (
         <Image
           source={typeof src === 'string' ? { uri: src } : src}

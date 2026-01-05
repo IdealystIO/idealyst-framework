@@ -1,9 +1,10 @@
-import React, { isValidElement } from 'react';
+import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { menuItemStyles } from './MenuItem.styles';
 import type { MenuItem as MenuItemType, MenuSizeVariant } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 interface MenuItemProps {
   item: MenuItemType;
@@ -12,7 +13,7 @@ interface MenuItemProps {
   testID?: string;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, size = 'md', testID }) => {
+const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
   // Initialize styles with useVariants
   menuItemStyles.useVariants({
     size,
@@ -44,12 +45,18 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, size = 'md', testID 
     return null;
   };
 
+  // Merge refs
+  const mergedRef = useMergeRefs(ref, itemProps.ref);
+
   return (
     <button
       {...itemProps}
+      ref={mergedRef}
       onClick={() => onPress(item)}
       disabled={item.disabled}
       role="menuitem"
+      aria-disabled={item.disabled}
+      tabIndex={-1}
       data-testid={testID}
     >
       {item.icon && (
@@ -62,6 +69,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ item, onPress, size = 'md', testID 
       </span>
     </button>
   );
-};
+});
+
+MenuItem.displayName = 'MenuItem';
 
 export default MenuItem;

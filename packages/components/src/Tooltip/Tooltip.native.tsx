@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect, isValidElement, cloneElement, forwardRef } from 'react';
+import React, { useState, useRef, useEffect, isValidElement, cloneElement, forwardRef, useMemo } from 'react';
 import { View, Modal, Text, Pressable } from 'react-native';
 import { tooltipStyles } from './Tooltip.styles';
 import type { TooltipProps } from './types';
+import { getNativeAccessibilityProps } from '../utils/accessibility';
 
 const Tooltip = forwardRef<View, TooltipProps>(({
   content,
@@ -13,7 +14,23 @@ const Tooltip = forwardRef<View, TooltipProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint: accessibilityHint ?? (typeof content === 'string' ? content : undefined),
+      accessibilityDisabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'none',
+    });
+  }, [accessibilityLabel, accessibilityHint, content, accessibilityDisabled, accessibilityHidden, accessibilityRole]);
   const [visible, setVisible] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0, width: 0 });
   const triggerRef = useRef<any>(null);
@@ -127,7 +144,7 @@ const Tooltip = forwardRef<View, TooltipProps>(({
 
   return (
     <>
-      <View ref={ref} nativeID={id} collapsable={false} style={style}>
+      <View ref={ref} nativeID={id} collapsable={false} style={style} {...nativeA11yProps}>
         {trigger}
       </View>
 

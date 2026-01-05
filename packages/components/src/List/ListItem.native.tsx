@@ -1,11 +1,12 @@
-import React, { isValidElement, forwardRef, ComponentRef } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import React, { isValidElement, forwardRef, ComponentRef, useMemo } from 'react';
+import { View, Pressable, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 import { useListContext } from './ListContext';
+import { getNativeSelectableAccessibilityProps } from '../utils/accessibility';
 
-const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof TouchableOpacity>, ListItemProps>(({
+const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, ListItemProps>(({
   id,
   label,
   children,
@@ -19,9 +20,28 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Touc
   onPress,
   style,
   testID,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityHidden,
+  accessibilitySelected,
+  accessibilityDisabled,
 }, ref) => {
   const listContext = useListContext();
   const isClickable = !disabled && !!onPress;
+
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeSelectableAccessibilityProps({
+      accessibilityLabel: accessibilityLabel ?? label,
+      accessibilityHint,
+      accessibilityRole: accessibilityRole ?? (isClickable ? 'button' : 'none'),
+      accessibilityHidden,
+      accessibilitySelected: accessibilitySelected ?? selected,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+    });
+  }, [accessibilityLabel, label, accessibilityHint, accessibilityRole, isClickable, accessibilityHidden, accessibilitySelected, selected, accessibilityDisabled, disabled]);
 
   // Use explicit size prop, fallback to context size, then default
   const effectiveSize = size ?? listContext.size ?? 'md';
@@ -86,21 +106,22 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Touc
 
   if (isClickable) {
     return (
-      <TouchableOpacity
+      <Pressable
         ref={ref as any}
+        nativeID={id}
         style={combinedStyle}
         onPress={onPress}
         disabled={disabled}
-        activeOpacity={0.7}
         testID={testID}
+        {...nativeA11yProps}
       >
         {content}
-      </TouchableOpacity>
+      </Pressable>
     );
   }
 
   return (
-    <View ref={ref as any} style={combinedStyle} testID={testID}>
+    <View ref={ref as any} nativeID={id} style={combinedStyle} testID={testID} {...nativeA11yProps}>
       {content}
     </View>
   );

@@ -1,8 +1,9 @@
-import React, { useEffect, forwardRef } from 'react';
+import React, { useEffect, forwardRef, useMemo } from 'react';
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
+import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 
 const Dialog = forwardRef<View, DialogProps>(({
   open,
@@ -17,7 +18,24 @@ const Dialog = forwardRef<View, DialogProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeInteractiveAccessibilityProps({
+      accessibilityLabel: accessibilityLabel ?? title,
+      accessibilityHint,
+      accessibilityDisabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'none',
+    });
+  }, [accessibilityLabel, title, accessibilityHint, accessibilityDisabled, accessibilityHidden, accessibilityRole]);
+
   const backdropOpacity = useSharedValue(0);
   const containerScale = useSharedValue(0.9);
   const containerOpacity = useSharedValue(0);
@@ -105,12 +123,11 @@ const Dialog = forwardRef<View, DialogProps>(({
       onRequestClose={() => onOpenChange(false)}
       statusBarTranslucent
       testID={testID}
-      nativeID={id}
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <Animated.View style={[dialogStyles.backdrop, backdropAnimatedStyle]}>
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <Animated.View ref={ref as any} style={[dialogStyles.container, style, containerAnimatedStyle]}>
+            <Animated.View ref={ref as any} style={[dialogStyles.container, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
               {(title || showCloseButton) && (
                 <View style={dialogStyles.header}>
                   {title && (

@@ -20,6 +20,9 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityChecked,
 }, ref) => {
   const handlePress = () => {
     if (disabled) return;
@@ -103,10 +106,12 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
         nativeID={id}
         onPress={handlePress}
         disabled={disabled}
+        accessibilityLabel={accessibilityLabel ?? label}
         accessibilityRole="button"
         accessibilityState={{
           disabled,
           selected: selectable ? selected : undefined,
+          checked: accessibilityChecked ?? (selectable ? selected : undefined),
         }}
       >
         <View style={[containerStyle, style]} testID={testID}>

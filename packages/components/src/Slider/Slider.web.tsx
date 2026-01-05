@@ -1,10 +1,11 @@
-import React, { useState, useRef, useCallback, isValidElement, forwardRef } from 'react';
+import React, { useState, useRef, useCallback, isValidElement, forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { sliderStyles } from './Slider.styles';
 import type { SliderProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebRangeAriaProps, generateAccessibilityId, SLIDER_KEYS } from '../utils/accessibility';
 
 const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   value: controlledValue,
@@ -28,6 +29,16 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityValueNow,
+  accessibilityValueMin,
+  accessibilityValueMax,
+  accessibilityValueText,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isDragging, setIsDragging] = useState(false);
@@ -119,6 +130,72 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
     }
   }, [isDragging, value, onValueCommit]);
 
+  // Handle keyboard navigation for accessibility
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (disabled) return;
+
+    const key = e.key;
+    let newValue = value;
+    const largeStep = (max - min) / 10; // 10% of range for PageUp/PageDown
+
+    if (SLIDER_KEYS.increase.includes(key)) {
+      e.preventDefault();
+      newValue = clampValue(value + step);
+    } else if (SLIDER_KEYS.decrease.includes(key)) {
+      e.preventDefault();
+      newValue = clampValue(value - step);
+    } else if (SLIDER_KEYS.min.includes(key)) {
+      e.preventDefault();
+      newValue = min;
+    } else if (SLIDER_KEYS.max.includes(key)) {
+      e.preventDefault();
+      newValue = max;
+    } else if (key === 'PageUp') {
+      e.preventDefault();
+      newValue = clampValue(value + largeStep);
+    } else if (key === 'PageDown') {
+      e.preventDefault();
+      newValue = clampValue(value - largeStep);
+    }
+
+    if (newValue !== value) {
+      updateValue(newValue);
+      onValueCommit?.(newValue);
+    }
+  }, [disabled, value, step, min, max, clampValue, updateValue, onValueCommit]);
+
+  // Generate unique ID for accessibility
+  const sliderId = useMemo(() => id || generateAccessibilityId('slider'), [id]);
+
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    return getWebRangeAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'slider',
+      accessibilityValueNow: accessibilityValueNow ?? value,
+      accessibilityValueMin: accessibilityValueMin ?? min,
+      accessibilityValueMax: accessibilityValueMax ?? max,
+      accessibilityValueText,
+    });
+  }, [
+    accessibilityLabel,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityValueNow,
+    value,
+    accessibilityValueMin,
+    min,
+    accessibilityValueMax,
+    max,
+    accessibilityValueText,
+  ]);
+
   React.useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
@@ -166,7 +243,7 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   const mergedRef = useMergeRefs(ref, containerProps.ref);
 
   return (
-    <div {...containerProps} ref={mergedRef} id={id} data-testid={testID}>
+    <div {...containerProps} ref={mergedRef} id={sliderId} data-testid={testID}>
       {showValue && (
         <div {...valueLabelProps}>
           {value}
@@ -176,13 +253,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
       <div {...wrapperProps}>
         <div
           {...trackProps}
+          {...ariaProps}
           ref={trackRef}
           onMouseDown={handleMouseDown}
-          role="slider"
-          aria-valuenow={value}
-          aria-valuemin={min}
-          aria-valuemax={max}
-          aria-disabled={disabled}
+          onKeyDown={handleKeyDown}
           tabIndex={disabled ? -1 : 0}
         >
           {/* Filled track */}

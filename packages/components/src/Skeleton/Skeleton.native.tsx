@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef } from 'react';
+import React, { useEffect, forwardRef, useMemo } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { skeletonStyles } from './Skeleton.styles';
 import type { SkeletonProps, SkeletonGroupProps } from './types';
+import { getNativeLiveRegionAccessibilityProps } from '../utils/accessibility';
 
 const Skeleton = forwardRef<View, SkeletonProps>(({
   width = '100%',
@@ -20,7 +21,19 @@ const Skeleton = forwardRef<View, SkeletonProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityLiveRegion,
+  accessibilityBusy,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeLiveRegionAccessibilityProps({
+      accessibilityLabel: accessibilityLabel ?? 'Loading content',
+      accessibilityLiveRegion: accessibilityLiveRegion ?? 'polite',
+      accessibilityBusy: accessibilityBusy ?? true,
+    });
+  }, [accessibilityLabel, accessibilityLiveRegion, accessibilityBusy]);
   skeletonStyles.useVariants({
     shape,
     animation,
@@ -87,6 +100,7 @@ const Skeleton = forwardRef<View, SkeletonProps>(({
         pulseAnimatedStyle,
       ]}
       testID={testID}
+      {...nativeA11yProps}
     >
       {animation === 'wave' && (
         <Animated.View

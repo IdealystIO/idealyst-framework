@@ -1,9 +1,10 @@
-import React, { ComponentRef, forwardRef } from 'react';
+import React, { ComponentRef, forwardRef, useMemo } from 'react';
 import { View, Pressable, Animated } from 'react-native';
 import Text from '../Text';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioButtonProps } from './types';
 import { useRadioGroup } from './RadioGroup.native';
+import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
 
 const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>(({
   value,
@@ -20,6 +21,15 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityChecked,
 }, ref) => {
   const group = useRadioGroup();
 
@@ -47,6 +57,35 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
     }
   };
 
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    const computedLabel = accessibilityLabel ?? label;
+    const computedChecked = accessibilityChecked ?? checked;
+
+    return getNativeSelectionAccessibilityProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'radio',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityChecked: computedChecked,
+    });
+  }, [
+    accessibilityLabel,
+    label,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityChecked,
+    checked,
+  ]);
+
   // Apply variants for radio styles
   radioButtonStyles.useVariants({
     size,
@@ -70,8 +109,7 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
       disabled={disabled}
       style={[radioButtonStyles.container, style]}
       testID={testID}
-      accessibilityRole="radio"
-      accessibilityState={{ checked, disabled }}
+      {...nativeA11yProps}
     >
       <View style={radioButtonStyles.radio({ intent })}>
         <Animated.View

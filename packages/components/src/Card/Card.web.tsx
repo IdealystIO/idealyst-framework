@@ -1,8 +1,9 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebInteractiveAriaProps } from '../utils/accessibility';
 
 const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   children,
@@ -22,9 +23,26 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   marginHorizontal,
   style,
   testID,
-  accessibilityLabel,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityPressed,
 }, ref) => {
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    return getWebInteractiveAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? (clickable ? 'button' : 'region'),
+      accessibilityPressed,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, clickable, accessibilityPressed]);
   const handleClick = () => {
     if (!disabled && clickable && onPress) {
       onPress();
@@ -58,13 +76,12 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   return (
     <Component
       {...webProps}
+      {...ariaProps}
       ref={mergedRef as any}
       id={id}
       onClick={clickable ? handleClick : undefined}
       disabled={clickable && disabled}
       data-testid={testID}
-      aria-label={accessibilityLabel}
-      role={clickable ? 'button' : undefined}
     >
       {children}
     </Component>

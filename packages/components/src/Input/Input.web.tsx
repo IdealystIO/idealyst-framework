@@ -1,10 +1,11 @@
-import React, { isValidElement, useState } from 'react';
+import React, { isValidElement, useState, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName, resolveIconPath } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { inputStyles } from './Input.styles';
 import { InputProps } from './types';
+import { getWebFormAriaProps, generateAccessibilityId, combineIds } from '../utils/accessibility';
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   value,
@@ -30,6 +31,23 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityControls,
+  accessibilityExpanded,
+  accessibilityPressed,
+  accessibilityOwns,
+  accessibilityHasPopup,
+  accessibilityRequired,
+  accessibilityInvalid,
+  accessibilityErrorMessage,
+  accessibilityAutoComplete,
 }, ref) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -117,6 +135,50 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   // Get input props
   const inputWebProps = getWebProps([inputStyles.input]);
 
+  // Generate accessibility props
+  const ariaProps = useMemo(() => {
+    // Derive invalid state from hasError or explicit accessibilityInvalid
+    const isInvalid = accessibilityInvalid ?? hasError;
+
+    return getWebFormAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'textbox',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityControls,
+      accessibilityExpanded,
+      accessibilityPressed,
+      accessibilityOwns,
+      accessibilityHasPopup,
+      accessibilityRequired,
+      accessibilityInvalid: isInvalid,
+      accessibilityErrorMessage,
+      accessibilityAutoComplete,
+    });
+  }, [
+    accessibilityLabel,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityControls,
+    accessibilityExpanded,
+    accessibilityPressed,
+    accessibilityOwns,
+    accessibilityHasPopup,
+    accessibilityRequired,
+    accessibilityInvalid,
+    hasError,
+    accessibilityErrorMessage,
+    accessibilityAutoComplete,
+  ]);
+
   const handleContainerPress = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -191,6 +253,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
       {/* Input */}
       <input
         {...inputWebProps}
+        {...ariaProps}
         ref={mergedInputRef}
         type={getInputType()}
         value={value}

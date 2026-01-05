@@ -1,9 +1,10 @@
-import React, { useRef, forwardRef } from 'react';
+import React, { useRef, forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { PopoverProps } from './types';
 import { popoverStyles } from './Popover.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
+import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
 const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
   open,
@@ -17,7 +18,28 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
   showArrow = false,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityHidden,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
 }, ref) => {
+  // Generate unique ID for the popover
+  const popoverId = useMemo(() => id || generateAccessibilityId('popover'), [id]);
+
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    return getWebInteractiveAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityRole: accessibilityRole ?? 'dialog',
+      accessibilityHidden,
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden, accessibilityLabelledBy, accessibilityDescribedBy]);
   const popoverRef = useRef<HTMLDivElement>(null);
 
   popoverStyles.useVariants({});
@@ -48,7 +70,14 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
       onEscapeKey={closeOnEscapeKey ? () => onOpenChange(false) : undefined}
       zIndex={9999}
     >
-      <div ref={mergedPopoverRef} id={id} data-testid={testID}>
+      <div
+        ref={mergedPopoverRef}
+        id={popoverId}
+        data-testid={testID}
+        {...ariaProps}
+        role="dialog"
+        aria-modal="false"
+      >
         <div {...containerProps}>
           <div {...contentProps}>
             {children}

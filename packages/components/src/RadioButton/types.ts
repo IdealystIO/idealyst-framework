@@ -2,12 +2,13 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import { Intent, Size } from '@idealyst/theme';
 import { FormInputStyleProps, BaseProps } from '../utils/viewStyleProps';
+import { SelectionAccessibilityProps, AccessibilityProps } from '../utils/accessibility';
 
 // Component-specific type aliases for future extensibility
 export type RadioButtonIntentVariant = Intent;
 export type RadioButtonSizeVariant = Size;
 
-export interface RadioButtonProps extends FormInputStyleProps {
+export interface RadioButtonProps extends FormInputStyleProps, SelectionAccessibilityProps {
   value: string;
   checked?: boolean;
   onPress?: () => void;
@@ -19,7 +20,7 @@ export interface RadioButtonProps extends FormInputStyleProps {
   testID?: string;
 }
 
-export interface RadioGroupProps extends BaseProps {
+export interface RadioGroupProps extends BaseProps, AccessibilityProps {
   value?: string;
   onValueChange?: (value: string) => void;
   disabled?: boolean;

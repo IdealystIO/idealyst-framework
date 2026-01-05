@@ -1,9 +1,10 @@
-import React, { isValidElement, forwardRef } from 'react';
+import React, { isValidElement, forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
 // Extended props to include path props added by Babel plugin
 interface InternalButtonProps extends ButtonProps {
@@ -29,6 +30,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     style,
     testID,
     id,
+    // Accessibility props
+    accessibilityLabel,
+    accessibilityHint,
+    accessibilityDisabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityControls,
+    accessibilityExpanded,
+    accessibilityPressed,
+    accessibilityOwns,
+    accessibilityHasPopup,
   } = props;
 
   buttonStyles.useVariants({
@@ -46,6 +60,50 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
       onPress();
     }
   };
+
+  // Generate unique ID for accessibility
+  const buttonId = useMemo(() => id || generateAccessibilityId('button'), [id]);
+
+  // Generate ARIA props - especially important for icon-only buttons
+  const ariaProps = useMemo(() => {
+    // For icon-only buttons, accessibilityLabel is critical
+    const buttonContent = children || title;
+    const isIconOnly = !buttonContent && (leftIcon || rightIcon);
+    const computedLabel = accessibilityLabel ?? (isIconOnly && typeof leftIcon === 'string' ? leftIcon : undefined);
+
+    return getWebInteractiveAriaProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'button',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityControls,
+      accessibilityExpanded,
+      accessibilityPressed,
+      accessibilityOwns,
+      accessibilityHasPopup,
+    });
+  }, [
+    accessibilityLabel,
+    children,
+    title,
+    leftIcon,
+    rightIcon,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityControls,
+    accessibilityExpanded,
+    accessibilityPressed,
+    accessibilityOwns,
+    accessibilityHasPopup,
+  ]);
 
   // Compute dynamic styles
   const buttonStyleArray = [
@@ -95,8 +153,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   return (
     <button
       {...webProps}
+      {...ariaProps}
       ref={mergedRef}
-      id={id}
+      id={buttonId}
       onClick={handleClick}
       disabled={disabled}
       data-testid={testID}

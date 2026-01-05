@@ -1,35 +1,71 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import {
   tabBarContainerStyles,
   tabBarTabStyles,
   tabBarLabelStyles,
-  tabBarIndicatorStyles
+  tabBarIndicatorStyles,
+  tabBarIconStyles
 } from './TabBar.styles';
 import type { TabBarProps, TabBarItem } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebAriaProps, generateAccessibilityId, TABS_KEYS } from '../utils/accessibility';
+
+// Icon size mapping based on size variant
+const ICON_SIZES: Record<string, number> = {
+  xs: 14,
+  sm: 16,
+  md: 18,
+  lg: 20,
+  xl: 24,
+};
+
+// Helper to render icon
+function renderIcon(
+  icon: TabBarItem['icon'],
+  active: boolean,
+  size: number
+): ReactNode {
+  if (!icon) return null;
+  if (typeof icon === 'function') {
+    return icon({ active, size });
+  }
+  return icon;
+}
 
 interface TabProps {
   item: TabBarItem;
   isActive: boolean;
   onClick: () => void;
+  onKeyDown: (e: React.KeyboardEvent) => void;
   size: TabBarProps['size'];
   type: TabBarProps['type'];
   pillMode: TabBarProps['pillMode'];
+  iconPosition: TabBarProps['iconPosition'];
+  justify: TabBarProps['justify'];
   testID?: string;
   tabRef: (el: HTMLButtonElement | null) => void;
+  tabId: string;
+  panelId: string;
 }
 
 const Tab: React.FC<TabProps> = ({
   item,
   isActive,
   onClick,
+  onKeyDown,
   size,
   type,
   pillMode,
+  iconPosition,
+  justify,
   testID,
   tabRef,
+  tabId,
+  panelId,
 }) => {
+  const iconSize = ICON_SIZES[size || 'md'] || 18;
+
   // Apply tab and label types for this specific tab
   tabBarTabStyles.useVariants({
     size,
@@ -37,6 +73,8 @@ const Tab: React.FC<TabProps> = ({
     active: isActive,
     disabled: Boolean(item.disabled),
     pillMode,
+    iconPosition,
+    justify,
   });
   tabBarLabelStyles.useVariants({
     size,
@@ -45,9 +83,16 @@ const Tab: React.FC<TabProps> = ({
     active: isActive,
     disabled: Boolean(item.disabled),
   });
+  tabBarIconStyles.useVariants({
+    size,
+    active: isActive,
+    disabled: Boolean(item.disabled),
+    iconPosition,
+  });
 
   const tabProps = getWebProps([tabBarTabStyles.tab]);
   const labelProps = getWebProps([tabBarLabelStyles.tabLabel]);
+  const iconProps = getWebProps([tabBarIconStyles.tabIcon]);
 
   // Merge refs from getWebProps with our tracking ref
   const mergedRef = useMergeRefs<HTMLButtonElement>(
@@ -55,17 +100,24 @@ const Tab: React.FC<TabProps> = ({
     tabRef
   );
 
+  const icon = renderIcon(item.icon, isActive, iconSize);
+
   return (
     <button
       {...tabProps}
       ref={mergedRef}
+      id={tabId}
       onClick={onClick}
+      onKeyDown={onKeyDown}
       disabled={item.disabled}
       role="tab"
       aria-selected={isActive}
+      aria-controls={panelId}
       aria-disabled={item.disabled}
+      tabIndex={isActive ? 0 : -1}
       data-testid={`${testID}-tab-${item.value}`}
     >
+      {icon && <span {...iconProps}>{icon}</span>}
       <span {...labelProps}>{item.label}</span>
     </button>
   );
@@ -79,6 +131,8 @@ const TabBar: React.FC<TabBarProps> = ({
   type = 'standard',
   size = 'md',
   pillMode = 'light',
+  iconPosition = 'left',
+  justify = 'start',
   // Spacing variants from ContainerStyleProps
   gap,
   padding,
@@ -90,6 +144,12 @@ const TabBar: React.FC<TabBarProps> = ({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
 }) => {
   const firstItemValue = items[0]?.value || '';
   const [internalValue, setInternalValue] = useState(defaultValue || firstItemValue);
@@ -97,6 +157,54 @@ const TabBar: React.FC<TabBarProps> = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  // Generate unique ID for the tablist
+  const tabListId = useMemo(() => id || generateAccessibilityId('tablist'), [id]);
+
+  // Generate tab and panel IDs
+  const getTabId = useCallback((itemValue: string) => `${tabListId}-tab-${itemValue}`, [tabListId]);
+  const getPanelId = useCallback((itemValue: string) => `${tabListId}-panel-${itemValue}`, [tabListId]);
+
+  // Get enabled items for keyboard navigation
+  const enabledItems = useMemo(() => items.filter(item => !item.disabled), [items]);
+
+  // Keyboard navigation handler
+  const handleKeyDown = useCallback((e: React.KeyboardEvent, itemValue: string) => {
+    const key = e.key;
+    const currentIndex = enabledItems.findIndex(item => item.value === itemValue);
+    let nextIndex = -1;
+
+    if (TABS_KEYS.next.includes(key)) {
+      e.preventDefault();
+      nextIndex = currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
+    } else if (TABS_KEYS.prev.includes(key)) {
+      e.preventDefault();
+      nextIndex = currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
+    } else if (TABS_KEYS.first.includes(key)) {
+      e.preventDefault();
+      nextIndex = 0;
+    } else if (TABS_KEYS.last.includes(key)) {
+      e.preventDefault();
+      nextIndex = enabledItems.length - 1;
+    }
+
+    if (nextIndex >= 0) {
+      const nextItem = enabledItems[nextIndex];
+      const tabButton = tabRefs.current[nextItem.value];
+      tabButton?.focus();
+    }
+  }, [enabledItems]);
+
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    return getWebAriaProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'tablist',
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, accessibilityHidden, accessibilityRole]);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
 
@@ -152,6 +260,7 @@ const TabBar: React.FC<TabBarProps> = ({
     type,
     size,
     pillMode,
+    justify,
     gap,
     padding,
     paddingVertical,
@@ -185,9 +294,10 @@ const TabBar: React.FC<TabBarProps> = ({
   return (
     <div
       {...containerProps}
+      {...ariaProps}
       ref={mergedContainerRef}
       role="tablist"
-      id={id}
+      id={tabListId}
       data-testid={testID}
     >
       {/* Sliding indicator */}
@@ -205,10 +315,15 @@ const TabBar: React.FC<TabBarProps> = ({
             item={item}
             isActive={isActive}
             onClick={() => handleTabClick(item.value, item.disabled)}
+            onKeyDown={(e) => handleKeyDown(e, item.value)}
             size={size}
             type={type}
             pillMode={pillMode}
+            iconPosition={iconPosition}
+            justify={justify}
             testID={testID}
+            tabId={getTabId(item.value)}
+            panelId={getPanelId(item.value)}
             tabRef={(el) => {
               tabRefs.current[item.value] = el;
               // Update indicator when active tab ref is set

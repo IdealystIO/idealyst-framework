@@ -1,9 +1,10 @@
-import React, { ComponentRef, forwardRef, isValidElement } from 'react';
+import React, { ComponentRef, forwardRef, isValidElement, useMemo } from 'react';
 import { StyleSheet as RNStyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { buttonStyles } from './Button.styles';
 import { ButtonProps } from './types';
+import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 
 const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((props, ref) => {
   const {
@@ -20,6 +21,17 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     style,
     testID,
     id,
+    // Accessibility props
+    accessibilityLabel,
+    accessibilityHint,
+    accessibilityDisabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityControls,
+    accessibilityExpanded,
+    accessibilityPressed,
   } = props;
 
   // Apply variants
@@ -83,6 +95,40 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   // Determine if we need to wrap content in icon container
   const hasIcons = leftIcon || rightIcon;
 
+  // Generate native accessibility props - especially important for icon-only buttons
+  const nativeA11yProps = useMemo(() => {
+    const isIconOnly = !buttonContent && (leftIcon || rightIcon);
+    const computedLabel = accessibilityLabel ?? (isIconOnly && typeof leftIcon === 'string' ? leftIcon : undefined);
+
+    return getNativeInteractiveAccessibilityProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'button',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityControls,
+      accessibilityExpanded,
+      accessibilityPressed,
+    });
+  }, [
+    accessibilityLabel,
+    buttonContent,
+    leftIcon,
+    rightIcon,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityControls,
+    accessibilityExpanded,
+    accessibilityPressed,
+  ]);
+
   // Render gradient background layer
   const renderGradientLayer = () => {
     if (!showGradient) return null;
@@ -121,6 +167,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
       showGradient && { overflow: 'hidden' },
       style,
     ],
+    ...nativeA11yProps,
   };
 
   return (

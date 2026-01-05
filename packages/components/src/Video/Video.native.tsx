@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { videoStyles } from './Video.styles';
 import type { VideoProps, VideoSource } from './types';
+import { getNativeAccessibilityProps } from '../utils/accessibility';
 
 // Import react-native-video - it's a peer dependency
 let RNVideo: any;
@@ -33,11 +34,25 @@ const Video = React.forwardRef<View, VideoProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityHidden,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeAccessibilityProps({
+      accessibilityLabel: accessibilityLabel ?? 'Video player',
+      accessibilityHint,
+      accessibilityRole: accessibilityRole ?? 'none',
+      accessibilityHidden,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
 
   if (!RNVideo) {
     return (
-      <View ref={ref} nativeID={id} style={[videoStyles.container, { aspectRatio, borderRadius }, style]} testID={testID}>
+      <View ref={ref} nativeID={id} style={[videoStyles.container, { aspectRatio, borderRadius }, style]} testID={testID} {...nativeA11yProps}>
         <View style={videoStyles.fallback}>
           {/* Fallback when react-native-video is not installed */}
         </View>
@@ -80,7 +95,7 @@ const Video = React.forwardRef<View, VideoProps>(({
   };
 
   return (
-    <View ref={ref} nativeID={id} style={containerStyle} testID={testID}>
+    <View ref={ref} nativeID={id} style={containerStyle} testID={testID} {...nativeA11yProps}>
       <RNVideo
         source={videoSource}
         poster={poster}

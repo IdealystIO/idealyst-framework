@@ -1,10 +1,11 @@
-import React, { isValidElement, forwardRef } from 'react';
+import React, { isValidElement, forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { switchStyles } from './Switch.styles';
 import type { SwitchProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebSelectionAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
 const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   checked = false,
@@ -23,12 +24,53 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityChecked,
 }, ref) => {
   const handleClick = () => {
     if (!disabled && onCheckedChange) {
       onCheckedChange(!checked);
     }
   };
+
+  // Generate unique ID for accessibility
+  const switchId = useMemo(() => id || generateAccessibilityId('switch'), [id]);
+
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    const computedLabel = accessibilityLabel ?? label;
+    const computedChecked = accessibilityChecked ?? checked;
+
+    return getWebSelectionAriaProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'switch',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy,
+      accessibilityChecked: computedChecked,
+    });
+  }, [
+    accessibilityLabel,
+    label,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    accessibilityChecked,
+    checked,
+  ]);
 
   // Apply variants using the correct Unistyles v3 pattern
   switchStyles.useVariants({
@@ -88,14 +130,12 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   const switchElement = (
     <button
       {...computedButtonProps}
+      {...ariaProps}
       ref={mergedButtonRef}
       onClick={handleClick}
       disabled={disabled}
-      id={id}
+      id={switchId}
       data-testid={testID}
-      role="switch"
-      aria-checked={checked}
-      aria-disabled={disabled}
     >
       <div {...trackProps}>
         <div {...thumbProps}>

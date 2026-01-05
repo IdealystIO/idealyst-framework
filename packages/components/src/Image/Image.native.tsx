@@ -57,7 +57,7 @@ const Image = forwardRef<View, ImageProps>(({
   ];
 
   return (
-    <View ref={ref} nativeID={id} style={containerStyle as any} testID={testID}>
+    <View ref={ref} nativeID={id} style={containerStyle as any} testID={testID} accessibilityRole="image" accessibilityLabel={accessibilityLabel || alt}>
       <RNImage
         source={imageSource as any}
         style={[imageStyles.image, { borderRadius }]}

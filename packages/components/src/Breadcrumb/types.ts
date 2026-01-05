@@ -2,12 +2,13 @@ import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import { Size } from '@idealyst/theme';
 import { BaseProps } from '../utils/viewStyleProps';
+import { AccessibilityProps, CurrentAccessibilityProps } from '../utils/accessibility';
 
 // Component-specific type aliases for future extensibility
 export type BreadcrumbIntentVariant = 'primary' | 'neutral';
 export type BreadcrumbSizeVariant = Size;
 
-export interface BreadcrumbItem {
+export interface BreadcrumbItem extends CurrentAccessibilityProps {
   /** Label text for the breadcrumb item */
   label: string;
 
@@ -21,7 +22,7 @@ export interface BreadcrumbItem {
   disabled?: boolean;
 }
 
-export interface BreadcrumbProps extends BaseProps {
+export interface BreadcrumbProps extends BaseProps, AccessibilityProps {
   /** Array of breadcrumb items */
   items: BreadcrumbItem[];
 

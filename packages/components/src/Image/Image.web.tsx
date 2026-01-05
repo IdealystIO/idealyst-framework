@@ -63,6 +63,8 @@ const Image: React.FC<ImageProps> = ({
   return (
     <div
       {...containerProps}
+      role="img"
+      aria-label={accessibilityLabel || alt}
       id={id}
       data-testid={testID}
     >

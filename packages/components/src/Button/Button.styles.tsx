@@ -35,7 +35,6 @@ function createTypeVariants(theme: Theme) {
             borderWidth: 0,
         },
         outlined: {
-            boxSizing: 'border-box',
             borderWidth: 1,
             borderStyle: 'solid' ,
             backgroundColor: theme.colors.surface.primary,
@@ -208,6 +207,7 @@ const createButtonTextStyles = (theme: Theme) => {
 export const buttonStyles = StyleSheet.create((theme: Theme) => {
     return {
         button: {
+            boxSizing: 'border-box',
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 8,

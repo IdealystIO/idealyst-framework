@@ -1,10 +1,11 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CheckboxProps } from './types';
 import { checkboxStyles } from './Checkbox.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebSelectionAriaProps, generateAccessibilityId, combineIds } from '../utils/accessibility';
 
 const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   checked = false,
@@ -22,11 +23,24 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   marginHorizontal,
   style,
   testID,
-  accessibilityLabel,
   required = false,
   error,
   helperText,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityLabelledBy,
+  accessibilityDescribedBy,
+  accessibilityControls,
+  accessibilityExpanded,
+  accessibilityPressed,
+  accessibilityOwns,
+  accessibilityHasPopup,
+  accessibilityChecked,
 }, ref) => {
   const [internalChecked, setInternalChecked] = useState(checked);
 
@@ -41,6 +55,61 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
     setInternalChecked(newChecked);
     onCheckedChange?.(newChecked);
   };
+
+  // Generate unique IDs for accessibility
+  const checkboxId = useMemo(() => id || generateAccessibilityId('checkbox'), [id]);
+  const errorId = useMemo(() => `${checkboxId}-error`, [checkboxId]);
+  const helperId = useMemo(() => `${checkboxId}-helper`, [checkboxId]);
+
+  // Generate ARIA props for the input element
+  const ariaProps = useMemo(() => {
+    const labelContent = children || label;
+    const computedLabel = accessibilityLabel ?? (typeof labelContent === 'string' ? labelContent : undefined);
+    const computedChecked = accessibilityChecked ?? (indeterminate ? 'mixed' : internalChecked);
+    const describedByIds = combineIds(
+      accessibilityDescribedBy,
+      error ? errorId : helperText ? helperId : undefined
+    );
+
+    return getWebSelectionAriaProps({
+      accessibilityLabel: computedLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'checkbox',
+      accessibilityLabelledBy,
+      accessibilityDescribedBy: describedByIds,
+      accessibilityControls,
+      accessibilityExpanded,
+      accessibilityPressed,
+      accessibilityOwns,
+      accessibilityHasPopup,
+      accessibilityChecked: computedChecked,
+    });
+  }, [
+    accessibilityLabel,
+    children,
+    label,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityLabelledBy,
+    accessibilityDescribedBy,
+    error,
+    errorId,
+    helperText,
+    helperId,
+    accessibilityControls,
+    accessibilityExpanded,
+    accessibilityPressed,
+    accessibilityOwns,
+    accessibilityHasPopup,
+    accessibilityChecked,
+    indeterminate,
+    internalChecked,
+  ]);
 
   // Apply variants
   checkboxStyles.useVariants({
@@ -82,12 +151,15 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
         <div style={{ position: 'relative' }}>
           <input
             type="checkbox"
+            id={checkboxId}
             checked={internalChecked}
             onChange={handleChange}
             disabled={disabled}
             required={required}
             data-testid={testID}
-            aria-label={accessibilityLabel}
+            {...ariaProps}
+            aria-required={required}
+            aria-invalid={Boolean(error)}
             ref={(ref) => {
               if (ref) {
                 ref.indeterminate = indeterminate;
@@ -119,7 +191,11 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
         )}
       </label>
       {displayHelperText && (
-        <div {...helperTextProps}>
+        <div
+          {...helperTextProps}
+          id={error ? errorId : helperId}
+          role={error ? 'alert' : undefined}
+        >
           {error || helperText}
         </div>
       )}

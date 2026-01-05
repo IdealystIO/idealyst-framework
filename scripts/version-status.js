@@ -16,6 +16,12 @@ const packagePaths = [
   'packages/components/package.json',
   'packages/navigation/package.json',
   'packages/cli/package.json',
+  'packages/datagrid/package.json',
+  'packages/datepicker/package.json',
+  'packages/oauth-client/package.json',
+  'packages/storage/package.json',
+  'packages/mcp-server/package.json',
+  'packages/microphone/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json'
 ];

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { BaseProps } from '../utils/viewStyleProps';
+import { InteractiveAccessibilityProps } from '../utils/accessibility';
 
 export type PopoverPlacement =
   | 'top' | 'top-start' | 'top-end'
@@ -8,7 +9,7 @@ export type PopoverPlacement =
   | 'left' | 'left-start' | 'left-end'
   | 'right' | 'right-start' | 'right-end';
 
-export interface PopoverProps extends BaseProps {
+export interface PopoverProps extends BaseProps, InteractiveAccessibilityProps {
   /**
    * Whether the popover is open/visible
    */

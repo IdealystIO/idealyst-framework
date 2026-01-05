@@ -1,7 +1,8 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { View } from 'react-native';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioGroupProps } from './types';
+import { getNativeAccessibilityProps } from '../utils/accessibility';
 
 const RadioGroupContext = React.createContext<{
   value?: string;
@@ -20,7 +21,24 @@ const RadioGroup = forwardRef<View, RadioGroupProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
 }, ref) => {
+
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'radiogroup',
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole]);
 
   return (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>
@@ -31,8 +49,8 @@ const RadioGroup = forwardRef<View, RadioGroupProps>(({
           radioButtonStyles.groupContainer,
           style as any,
         ]}
-        accessibilityRole="radiogroup"
         testID={testID}
+        {...nativeA11yProps}
       >
         {children}
       </View>

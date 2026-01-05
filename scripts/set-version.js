@@ -38,6 +38,7 @@ const packagePaths = [
   'packages/oauth-client/package.json',
   'packages/storage/package.json',
   'packages/mcp-server/package.json',
+  'packages/microphone/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
 ];

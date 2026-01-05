@@ -1,4 +1,4 @@
-import React, { useState, useCallback, forwardRef } from 'react';
+import React, { useState, useCallback, forwardRef, useMemo } from 'react';
 import { View } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, runOnJS, withSpring } from 'react-native-reanimated';
@@ -7,6 +7,7 @@ import { sliderStyles } from './Slider.styles';
 import Text from '../Text';
 import type { SliderProps } from './types';
 import { isIconName } from '../Icon/icon-resolver';
+import { getNativeRangeAccessibilityProps } from '../utils/accessibility';
 
 const Slider = forwardRef<View, SliderProps>(({
   value: controlledValue,
@@ -30,6 +31,16 @@ const Slider = forwardRef<View, SliderProps>(({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityValueNow,
+  accessibilityValueMin,
+  accessibilityValueMax,
+  accessibilityValueText,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [trackWidthState, setTrackWidthState] = useState(0);
@@ -74,6 +85,35 @@ const Slider = forwardRef<View, SliderProps>(({
   const commitValue = useCallback((finalValue: number) => {
     onValueCommit?.(finalValue);
   }, [onValueCommit]);
+
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeRangeAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? 'adjustable',
+      accessibilityValueNow: accessibilityValueNow ?? value,
+      accessibilityValueMin: accessibilityValueMin ?? min,
+      accessibilityValueMax: accessibilityValueMax ?? max,
+      accessibilityValueText: accessibilityValueText ?? `${value}`,
+    });
+  }, [
+    accessibilityLabel,
+    accessibilityHint,
+    accessibilityDisabled,
+    disabled,
+    accessibilityHidden,
+    accessibilityRole,
+    accessibilityValueNow,
+    value,
+    accessibilityValueMin,
+    min,
+    accessibilityValueMax,
+    max,
+    accessibilityValueText,
+  ]);
 
   // Update translateX when value changes externally
   React.useEffect(() => {
@@ -167,7 +207,7 @@ const Slider = forwardRef<View, SliderProps>(({
   };
 
   return (
-    <View ref={ref} nativeID={id} style={[sliderStyles.container, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[sliderStyles.container, style]} testID={testID} {...nativeA11yProps}>
       {showValue && (
         <View style={sliderStyles.valueLabel as any}>
           <Text>{value}</Text>

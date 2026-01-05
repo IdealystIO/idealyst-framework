@@ -1,7 +1,8 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { tableStyles } from './Table.styles';
 import type { TableProps, TableColumn } from './types';
+import { getNativeAccessibilityProps } from '../utils/accessibility';
 
 function TableInner<T = any>({
   columns,
@@ -21,7 +22,21 @@ function TableInner<T = any>({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityHidden,
 }: TableProps<T>, ref: React.Ref<ScrollView>) {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityRole: accessibilityRole ?? 'grid',
+      accessibilityHidden,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
   // Apply variants
   tableStyles.useVariants({
     type,
@@ -54,6 +69,7 @@ function TableInner<T = any>({
       horizontal
       style={[tableStyles.container, style]}
       testID={testID}
+      {...nativeA11yProps}
     >
       <View style={tableStyles.table}>
         {/* Header */}

@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { videoStyles } from './Video.styles';
 import type { VideoProps, VideoSource } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { getWebAriaProps } from '../utils/accessibility';
 
 const Video: React.FC<VideoProps> = ({
   source,
@@ -26,7 +27,21 @@ const Video: React.FC<VideoProps> = ({
   style,
   testID,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
+  accessibilityHidden,
 }) => {
+  // Generate ARIA props
+  const ariaProps = useMemo(() => {
+    return getWebAriaProps({
+      accessibilityLabel: accessibilityLabel ?? 'Video player',
+      accessibilityHint,
+      accessibilityRole,
+      accessibilityHidden,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const containerProps = getWebProps([videoStyles.container, style as any]);
@@ -85,6 +100,7 @@ const Video: React.FC<VideoProps> = ({
   return (
     <div
       {...containerProps}
+      {...ariaProps}
       style={containerStyle}
       id={id}
       data-testid={testID}

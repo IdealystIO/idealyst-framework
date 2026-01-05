@@ -3,6 +3,7 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
 import { Intent, Size } from '@idealyst/theme';
 import { BaseProps } from '../utils/viewStyleProps';
+import { InteractiveAccessibilityProps } from '../utils/accessibility';
 
 // Component-specific type aliases for future extensibility
 export type ButtonType = 'contained' | 'outlined' | 'text';
@@ -17,7 +18,7 @@ export type ButtonSizeVariant = Size;
  */
 export type ButtonGradient = 'darken' | 'lighten';
 
-export interface ButtonProps extends BaseProps {
+export interface ButtonProps extends BaseProps, InteractiveAccessibilityProps {
   /**
    * The text or content to display inside the button
    */

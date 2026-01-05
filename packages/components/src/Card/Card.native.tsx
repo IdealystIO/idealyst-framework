@@ -1,7 +1,8 @@
-import React, { forwardRef, ComponentRef } from 'react';
+import React, { forwardRef, ComponentRef, useMemo } from 'react';
 import { View, Pressable } from 'react-native';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
+import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 
 const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, CardProps>(({
   children,
@@ -21,9 +22,26 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
   marginHorizontal,
   style,
   testID,
-  accessibilityLabel,
   id,
+  // Accessibility props
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityDisabled,
+  accessibilityHidden,
+  accessibilityRole,
+  accessibilityPressed,
 }, ref) => {
+  // Generate native accessibility props
+  const nativeA11yProps = useMemo(() => {
+    return getNativeInteractiveAccessibilityProps({
+      accessibilityLabel,
+      accessibilityHint,
+      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityHidden,
+      accessibilityRole: accessibilityRole ?? (clickable ? 'button' : 'none'),
+      accessibilityPressed,
+    });
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, clickable, accessibilityPressed]);
   // Apply variants
   cardStyles.useVariants({
     clickable,
@@ -48,9 +66,7 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
     nativeID: id,
     style: [cardStyles.card, style],
     testID,
-    accessibilityLabel,
-    // Only use button role for clickable cards in React Native
-    ...(clickable && { accessibilityRole: 'button' as const }),
+    ...nativeA11yProps,
     ...(clickable && {
       onPress: disabled ? undefined : onPress,
       disabled,
