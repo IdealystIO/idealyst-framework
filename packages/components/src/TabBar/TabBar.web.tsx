@@ -9,7 +9,7 @@ import {
 } from './TabBar.styles';
 import type { TabBarProps, TabBarItem } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
-import { getWebAriaProps, generateAccessibilityId, TABS_KEYS } from '../utils/accessibility';
+import { getWebAriaProps, generateAccessibilityId, TAB_KEYS } from '../utils/accessibility';
 
 // Icon size mapping based on size variant
 const ICON_SIZES: Record<string, number> = {
@@ -174,16 +174,16 @@ const TabBar: React.FC<TabBarProps> = ({
     const currentIndex = enabledItems.findIndex(item => item.value === itemValue);
     let nextIndex = -1;
 
-    if (TABS_KEYS.next.includes(key)) {
+    if (TAB_KEYS.next.includes(key)) {
       e.preventDefault();
       nextIndex = currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
-    } else if (TABS_KEYS.prev.includes(key)) {
+    } else if (TAB_KEYS.prev.includes(key)) {
       e.preventDefault();
       nextIndex = currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
-    } else if (TABS_KEYS.first.includes(key)) {
+    } else if (TAB_KEYS.first.includes(key)) {
       e.preventDefault();
       nextIndex = 0;
-    } else if (TABS_KEYS.last.includes(key)) {
+    } else if (TAB_KEYS.last.includes(key)) {
       e.preventDefault();
       nextIndex = enabledItems.length - 1;
     }

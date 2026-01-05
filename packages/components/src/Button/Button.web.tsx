@@ -45,9 +45,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     accessibilityHasPopup,
   } = props;
 
+  // Apply variants for size, disabled, gradient
   buttonStyles.useVariants({
-    type,
-    intent,
     size,
     disabled,
     gradient,
@@ -105,10 +104,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     accessibilityHasPopup,
   ]);
 
-  // Compute dynamic styles
+  // Compute dynamic styles with intent and type
+  const dynamicProps = { intent, type };
   const buttonStyleArray = [
-    buttonStyles.button,
-    buttonStyles.text,
+    (buttonStyles.button as any)(dynamicProps),
+    (buttonStyles.text as any)(dynamicProps),
     style as any,
   ];
 
@@ -119,7 +119,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   const iconContainerProps = getWebProps([buttonStyles.iconContainer]);
 
   // Icon styles with dynamic function
-  const iconStyleArray = [buttonStyles.icon];
+  const iconStyleArray = [(buttonStyles.icon as any)(dynamicProps)];
   const iconProps = getWebProps(iconStyleArray);
 
   // Helper to render icon

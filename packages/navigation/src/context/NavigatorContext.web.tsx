@@ -238,8 +238,23 @@ export const NavigatorProvider = ({
                 // If no notFoundComponent configured, React Router will render nothing
             }
 
-            // Use React Router's navigate function with replace option
-            reactRouterNavigate(path, { replace: params.replace });
+            // Build URL with query params if state is provided
+            let finalPath = path;
+            if (params.state && Object.keys(params.state).length > 0) {
+                const searchParams = new URLSearchParams();
+                for (const [key, value] of Object.entries(params.state)) {
+                    if (value !== undefined && value !== null) {
+                        searchParams.set(key, String(value));
+                    }
+                }
+                const queryString = searchParams.toString();
+                if (queryString) {
+                    finalPath = `${path}?${queryString}`;
+                }
+            }
+
+            // Use React Router's navigate function
+            reactRouterNavigate(finalPath, { replace: params.replace });
         }
     };
 

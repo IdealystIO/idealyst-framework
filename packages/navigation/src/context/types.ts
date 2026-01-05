@@ -11,6 +11,16 @@ export type NavigateParams = {
      * On web, this uses history.replace(). On native, this resets the navigation state.
      */
     replace?: boolean;
+    /**
+     * Optional state data to pass to the destination screen.
+     * On web, this is passed as URL query parameters (e.g., ?autostart=true).
+     * On native, this is passed via route params.
+     * Use useNavigationState() hook to access this data in the destination screen.
+     *
+     * Note: Values are serialized to strings. Booleans and numbers are automatically
+     * parsed back when using useNavigationState().
+     */
+    state?: Record<string, string | number | boolean>;
 };
 
 export type NavigatorProviderProps = {

@@ -135,6 +135,40 @@ export const ListExamples: React.FC = () => {
       </View>
 
       <View gap="md">
+        <Text typography="h5">Custom Icon Colors</Text>
+        <List type="bordered">
+          <ListItem
+            label="Primary Color"
+            leading="home"
+            trailing="chevron-right"
+            iconColor="primary"
+            onPress={() => {}}
+          />
+          <ListItem
+            label="Success Color"
+            leading="check-circle"
+            trailing="chevron-right"
+            iconColor="success"
+            onPress={() => {}}
+          />
+          <ListItem
+            label="Error Color"
+            leading="alert-circle"
+            trailing="chevron-right"
+            iconColor="error"
+            onPress={() => {}}
+          />
+          <ListItem
+            label="Warning Color"
+            leading="alert"
+            trailing="chevron-right"
+            iconColor="warning"
+            onPress={() => {}}
+          />
+        </List>
+      </View>
+
+      <View gap="md">
         <Text typography="h5">Navigation Sidebar</Text>
         <List type="bordered">
           <ListItem

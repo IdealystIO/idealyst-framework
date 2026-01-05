@@ -1,5 +1,7 @@
 import React, { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
+import { useUnistyles } from 'react-native-unistyles';
+import { getColorFromString, Intent, Theme, Color } from '@idealyst/theme';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
@@ -12,6 +14,7 @@ const ListItem: React.FC<ListItemProps> = ({
   children,
   leading,
   trailing,
+  iconColor,
   active = false,
   selected = false,
   disabled = false,
@@ -21,6 +24,7 @@ const ListItem: React.FC<ListItemProps> = ({
   style,
   testID,
 }) => {
+  const { theme } = useUnistyles() as { theme: Theme };
   const listContext = useListContext();
   const isClickable = !disabled && !!onPress;
 
@@ -49,6 +53,17 @@ const ListItem: React.FC<ListItemProps> = ({
     }
   };
 
+  // Resolve icon color - check intents first, then color palette
+  const resolvedIconColor = (() => {
+    if (!iconColor) return undefined;
+    // Check if it's an intent name
+    if (iconColor in theme.intents) {
+      return theme.intents[iconColor as Intent]?.primary;
+    }
+    // Otherwise try color palette
+    return getColorFromString(theme, iconColor as Color);
+  })();
+
   // Helper to render leading/trailing icons
   const renderElement = (element: typeof leading | typeof trailing, props: any, isTrailing = false) => {
     if (!element) return null;
@@ -61,6 +76,7 @@ const ListItem: React.FC<ListItemProps> = ({
         <IconSvg
           path={iconPath}
           {...iconPropsToUse}
+          color={resolvedIconColor}
           aria-label={element}
         />
       );

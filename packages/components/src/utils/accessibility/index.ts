@@ -155,16 +155,16 @@ export function resetAccessibilityIdCounter(): void {
  * Combine multiple accessibility IDs into a space-separated string.
  * Filters out undefined/null values.
  *
- * @param ids - Array of IDs (can include undefined/null)
+ * @param ids - IDs to combine (can include undefined/null)
  * @returns Space-separated string of IDs, or undefined if all are empty
  *
  * @example
  * ```tsx
- * const describedBy = combineIds([helperId, hasError ? errorId : undefined]);
+ * const describedBy = combineIds(helperId, hasError ? errorId : undefined);
  * // Returns: "helper-1 error-2" or "helper-1" depending on hasError
  * ```
  */
-export function combineIds(ids: (string | undefined | null)[]): string | undefined {
+export function combineIds(...ids: (string | undefined | null)[]): string | undefined {
   const filtered = ids.filter((id): id is string => Boolean(id));
   return filtered.length > 0 ? filtered.join(' ') : undefined;
 }

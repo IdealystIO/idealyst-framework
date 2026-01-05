@@ -1,20 +1,15 @@
-// Date Picker Components
-export { DatePicker, Calendar } from './DatePicker/index.native';
-export type { DatePickerProps, CalendarProps } from './DatePicker';
+// Components - native platform
+export { DatePicker } from './DatePicker';
+export { TimePicker } from './TimePicker';
+export { DateInput } from './DateInput.native';
+export { TimeInput } from './TimeInput.native';
+export { DateTimePicker } from './DateTimePicker';
 
-// Date Time Picker Components
-export { DateTimePicker, TimePicker } from './DateTimePicker/index.native';
-export type { DateTimePickerProps, TimePickerProps } from './DateTimePicker';
-
-// Date Range Picker Components
-export { DateRangePicker, RangeCalendar } from './DateRangePicker/index.native';
-export type { DateRangePickerProps, RangeCalendarProps, DateRange } from './DateRangePicker';
-
-// Date Time Range Picker Components
-export { DateTimeRangePicker } from './DateTimeRangePicker/index.native';
-export type { DateTimeRangePickerProps, DateTimeRange } from './DateTimeRangePicker';
-
-// Date Input Component
-export { DateInput } from './DateInput/index.native';
-export type { DateInputProps } from './DateInput';
-
+// Types
+export type {
+  DatePickerProps,
+  TimePickerProps,
+  DateInputProps,
+  TimeInputProps,
+  DateTimePickerProps,
+} from './types';

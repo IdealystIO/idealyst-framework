@@ -198,17 +198,23 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
             return;
         }
 
+        // Merge route params with navigation state (state values stored directly in params)
+        const navigationParams = {
+            ...parsed.params,
+            ...(params.state || {}),
+        };
+
         if (params.replace) {
             // Use CommonActions.reset to replace the current route
             navigation.dispatch(
                 CommonActions.reset({
                     index: 0,
-                    routes: [{ name: parsed.routeName, params: parsed.params }],
+                    routes: [{ name: parsed.routeName, params: navigationParams }],
                 })
             );
         } else {
             // Navigate to the pattern route with extracted parameters
-            navigation.navigate(parsed.routeName as never, parsed.params as never);
+            navigation.navigate(parsed.routeName as never, navigationParams as never);
         }
     };
 
@@ -290,17 +296,23 @@ const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: 
             return;
         }
 
+        // Merge route params with navigation state (state values stored directly in params)
+        const navigationParams = {
+            ...parsed.params,
+            ...(params.state || {}),
+        };
+
         if (params.replace) {
             // Use CommonActions.reset to replace the current route
             navigation.dispatch(
                 CommonActions.reset({
                     index: 0,
-                    routes: [{ name: parsed.routeName, params: parsed.params }],
+                    routes: [{ name: parsed.routeName, params: navigationParams }],
                 })
             );
         } else {
             // Navigate to the pattern route with extracted parameters
-            navigation.navigate(parsed.routeName as never, parsed.params as never);
+            navigation.navigate(parsed.routeName as never, navigationParams as never);
         }
     };
 

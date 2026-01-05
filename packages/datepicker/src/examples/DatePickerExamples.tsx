@@ -1,16 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Screen, View, Text, Button } from '@idealyst/components';
-import { DatePicker } from '../DatePicker';
-import { DateTimePicker } from '../DateTimePicker';
-import { DateTimeRangePicker, DateTimeRange } from '../DateTimeRangePicker';
+import { DatePicker, TimePicker, DateInput, TimeInput, DateTimePicker } from '../index';
 
 export const DatePickerExamples = () => {
-  const [basicDate, setBasicDate] = useState<Date | null>(null);
-  const [rangeDate, setRangeDate] = useState<Date | null>(null);
-  const [disabledDate, setDisabledDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date | null>(null);
+  const [time, setTime] = useState<Date | null>(null);
   const [dateTime, setDateTime] = useState<Date | null>(null);
-  const [dateTime24h, setDateTime24h] = useState<Date | null>(null);
-  const [dateTimeRange, setDateTimeRange] = useState<DateTimeRange | null>(null);
+  const [inlineDate, setInlineDate] = useState(new Date());
+  const [inlineTime, setInlineTime] = useState(new Date());
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -20,176 +17,143 @@ export const DatePickerExamples = () => {
 
   return (
     <Screen background="primary" padding="lg">
-      <View spacing="none">
-        <Text size="lg" weight="bold" align="center">
-          DatePicker & DateTimePicker Examples
+      <View gap="lg">
+        <Text typography="h2" weight="bold" align="center">
+          DatePicker Examples
         </Text>
-        
-        {/* DateTime Picker Examples */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">DateTimePicker Examples</Text>
-          
-          {/* Basic DateTime */}
-          <View spacing="sm">
-            <Text size="sm" weight="medium">Basic DateTimePicker (12-hour)</Text>
-            <DateTimePicker
-              value={dateTime}
-              onChange={setDateTime}
-              label="Select Date & Time"
-              placeholder="Choose date and time"
-              helperText="Responsive layout - side-by-side on large screens, step-by-step on mobile"
-            />
-            {dateTime && (
-              <Text size="sm" color="secondary">
-                Selected: {dateTime.toLocaleString()}
-              </Text>
-            )}
-          </View>
 
-          {/* 24-hour format */}
-          <View spacing="sm">
-            <Text size="sm" weight="medium">24-hour format with seconds</Text>
-            <DateTimePicker
-              value={dateTime24h}
-              onChange={setDateTime24h}
-              label="24-hour with seconds"
-              placeholder="Choose date and time"
-              timeMode="24h"
-              timeStep={5}
-              helperText="24-hour format with seconds, 5-minute steps"
-            />
-            {dateTime24h && (
-              <Text size="sm" color="secondary">
-                Selected: {dateTime24h.toLocaleString()}
-              </Text>
-            )}
-          </View>
-        </View>
-
-        {/* Basic DatePicker */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Basic DatePicker</Text>
-          <DatePicker
-            value={basicDate}
-            onChange={setBasicDate}
+        {/* DateInput */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">DateInput</Text>
+          <Text typography="caption" color="secondary">
+            Type a date (MM/DD/YYYY) or click the calendar button
+          </Text>
+          <DateInput
+            value={date ?? undefined}
+            onChange={setDate}
             label="Select Date"
-            placeholder="Choose a date"
-            helperText="Pick any date"
+            placeholder="MM/DD/YYYY"
           />
-          {basicDate && (
-            <Text size="sm" color="secondary">
-              Selected: {basicDate.toDateString()}
+          {date && (
+            <Text typography="caption" color="secondary">
+              Selected: {date.toDateString()}
             </Text>
           )}
         </View>
 
-        {/* Date Range Restricted */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Date Range Restricted</Text>
-          <DatePicker
-            value={rangeDate}
-            onChange={setRangeDate}
+        {/* TimeInput */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">TimeInput</Text>
+          <Text typography="caption" color="secondary">
+            Type a time (e.g., 2:30 PM) or click the clock button
+          </Text>
+          <TimeInput
+            value={time ?? undefined}
+            onChange={setTime}
+            label="Select Time"
+            placeholder="12:00 PM"
+          />
+          {time && (
+            <Text typography="caption" color="secondary">
+              Selected: {time.toLocaleTimeString()}
+            </Text>
+          )}
+        </View>
+
+        {/* DateTimePicker */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">DateTimePicker</Text>
+          <DateTimePicker
+            value={dateTime ?? undefined}
+            onChange={setDateTime}
+            label="Select Date & Time"
+          />
+          {dateTime && (
+            <Text typography="caption" color="secondary">
+              Selected: {dateTime.toLocaleString()}
+            </Text>
+          )}
+        </View>
+
+        {/* Date Range Restriction */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">With Min/Max Date</Text>
+          <DateInput
+            value={undefined}
+            onChange={() => {}}
             label="Future Dates Only"
-            placeholder="Select future date"
+            placeholder="MM/DD/YYYY"
             minDate={tomorrow}
             maxDate={nextMonth}
-            helperText="Only dates between tomorrow and next month"
           />
-          {rangeDate && (
-            <Text size="sm" color="secondary">
-              Selected: {rangeDate.toDateString()}
-            </Text>
-          )}
+          <Text typography="caption" color="secondary">
+            Only dates between tomorrow and next month
+          </Text>
         </View>
 
-        {/* Disabled DatePicker */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Disabled DatePicker</Text>
+        {/* Inline DatePicker */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">Inline DatePicker</Text>
           <DatePicker
-            value={disabledDate}
-            onChange={setDisabledDate}
-            label="Disabled"
-            placeholder="Cannot select"
-            disabled
-            helperText="This picker is disabled"
+            value={inlineDate}
+            onChange={setInlineDate}
           />
+          <Text typography="caption" color="secondary">
+            Selected: {inlineDate.toDateString()}
+          </Text>
         </View>
 
+        {/* Inline TimePicker */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">Inline TimePicker</Text>
+          <TimePicker
+            value={inlineTime}
+            onChange={setInlineTime}
+            mode="12h"
+          />
+          <Text typography="caption" color="secondary">
+            Selected: {inlineTime.toLocaleTimeString()}
+          </Text>
+        </View>
+
+        {/* 24-hour Time */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">24-hour Format</Text>
+          <TimeInput
+            value={undefined}
+            onChange={() => {}}
+            label="24-hour Time"
+            placeholder="14:30"
+            mode="24h"
+            minuteStep={5}
+          />
+        </View>
 
         {/* Actions */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Actions</Text>
-          <View>
+        <View gap="md">
+          <Text typography="h4" weight="semibold">Actions</Text>
+          <View gap="sm">
             <Button
-              type='outlined'
-              onPress={() => setBasicDate(new Date())}
+              type="outlined"
+              onPress={() => {
+                const now = new Date();
+                setDate(now);
+                setTime(now);
+                setDateTime(now);
+              }}
             >
-              Set Today
+              Set All to Now
             </Button>
             <Button
               type="outlined"
               onPress={() => {
-                setBasicDate(null);
-                setRangeDate(null);
+                setDate(null);
+                setTime(null);
+                setDateTime(null);
               }}
             >
               Clear All
             </Button>
-          </View>
-        </View>
-
-
-
-        {/* Date Time Range Picker Examples */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">DateTimeRangePicker Examples</Text>
-          
-          {/* Basic DateTime Range */}
-          <View spacing="sm">
-            <Text size="sm" weight="medium">Date and time range selection</Text>
-            <DateTimeRangePicker
-              value={dateTimeRange}
-              onChange={setDateTimeRange}
-              label="Select Date & Time Range"
-              placeholder="Choose date/time range"
-              helperText="Select date range first, then adjust times"
-            />
-            {dateTimeRange?.startDate && dateTimeRange?.endDate && (
-              <Text size="sm" color="secondary">
-                Range: {dateTimeRange.startDate.toLocaleString()} to {dateTimeRange.endDate.toLocaleString()}
-              </Text>
-            )}
-          </View>
-        </View>
-
-        {/* Features Description */}
-        <View spacing="md">
-          <Text size="md" weight="semibold">Features</Text>
-          <View spacing="sm">
-            <Text size="sm" color="secondary">
-              • Cross-platform calendar picker
-            </Text>
-            <Text size="sm" color="secondary">
-              • Date and time selection
-            </Text>
-            <Text size="sm" color="secondary">
-              • Date/time range selection
-            </Text>
-            <Text size="sm" color="secondary">
-              • 12/24 hour time formats
-            </Text>
-            <Text size="sm" color="secondary">
-              • Min/max date restrictions
-            </Text>
-            <Text size="sm" color="secondary">
-              • Accessible and keyboard navigable
-            </Text>
-            <Text size="sm" color="secondary">
-              • Theme-aware styling
-            </Text>
-            <Text size="sm" color="secondary">
-              • Customizable date/time formats
-            </Text>
           </View>
         </View>
       </View>

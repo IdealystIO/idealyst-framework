@@ -1,6 +1,8 @@
 import React, { isValidElement, forwardRef, ComponentRef, useMemo } from 'react';
 import { View, Pressable, Text } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { getColorFromString, Intent, Theme, Color } from '@idealyst/theme';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 import { useListContext } from './ListContext';
@@ -12,6 +14,7 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
   children,
   leading,
   trailing,
+  iconColor,
   active = false,
   selected = false,
   disabled = false,
@@ -28,6 +31,7 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
   accessibilitySelected,
   accessibilityDisabled,
 }, ref) => {
+  const { theme } = useUnistyles() as { theme: Theme };
   const listContext = useListContext();
   const isClickable = !disabled && !!onPress;
 
@@ -56,6 +60,17 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
     clickable: isClickable,
   });
 
+  // Resolve icon color - check intents first, then color palette
+  const resolvedIconColor = (() => {
+    if (!iconColor) return undefined;
+    // Check if it's an intent name
+    if (iconColor in theme.intents) {
+      return theme.intents[iconColor as Intent]?.primary;
+    }
+    // Otherwise try color palette
+    return getColorFromString(theme, iconColor as Color);
+  })();
+
   // Helper to render leading/trailing icons
   const renderElement = (element: typeof leading | typeof trailing, styleKey: 'leading' | 'trailingIcon') => {
     if (!element) return null;
@@ -67,7 +82,7 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
         <MaterialCommunityIcons
           name={element}
           size={iconStyle.width}
-          color={iconStyle.color}
+          color={resolvedIconColor ?? iconStyle.color}
         />
       );
     } else if (isValidElement(element)) {

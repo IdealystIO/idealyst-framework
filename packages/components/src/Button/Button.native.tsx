@@ -34,19 +34,18 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     accessibilityPressed,
   } = props;
 
-  // Apply variants
+  // Apply variants for size, disabled, gradient
   buttonStyles.useVariants({
-    type,
-    intent,
     size,
     disabled,
     gradient,
   });
 
-  // Compute dynamic styles
-  const buttonStyle = buttonStyles.button;
-  const textStyle = buttonStyles.text;
-  const iconStyle = buttonStyles.icon;
+  // Compute dynamic styles with intent and type
+  const dynamicProps = { intent, type };
+  const buttonStyle = (buttonStyles.button as any)(dynamicProps);
+  const textStyle = (buttonStyles.text as any)(dynamicProps);
+  const iconStyle = (buttonStyles.icon as any)(dynamicProps);
 
   // Gradient is only applicable to contained buttons
   const showGradient = gradient && type === 'contained';

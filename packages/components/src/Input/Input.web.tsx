@@ -1,4 +1,4 @@
-import React, { isValidElement, useState, useMemo } from 'react';
+import React, { isValidElement, useState, useMemo, useRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName, resolveIconPath } from '../Icon/icon-resolver';
@@ -124,7 +124,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   });
 
   // Get web props for all styled elements
-  const containerProps = getWebProps([inputStyles.container, style]);
+  const {ref: containerStyleRef, ...containerProps} = getWebProps([inputStyles.container, style]);
   const leftIconContainerProps = getWebProps([inputStyles.leftIconContainer]);
   const rightIconContainerProps = getWebProps([inputStyles.rightIconContainer]);
   const leftIconProps = getWebProps([inputStyles.leftIcon]);
@@ -178,12 +178,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     accessibilityErrorMessage,
     accessibilityAutoComplete,
   ]);
-
-  const handleContainerPress = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    inputWebProps.ref?.current?.focus();
-  }
 
   // Merge the forwarded ref with unistyles ref for the input
   const mergedInputRef = useMergeRefs(ref, inputWebProps.ref);
@@ -241,8 +235,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     );
   };
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+    const handleContainerPress = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    containerRef.current?.focus();
+  }
+
+  const mergedContainerRef = useMergeRefs(containerRef, containerStyleRef);
+
   return (
-    <div onClick={handleContainerPress} {...containerProps} id={id} data-testid={testID}>
+    <div onClick={handleContainerPress} ref={mergedContainerRef} {...containerProps} id={id} data-testid={testID}>
       {/* Left Icon */}
       {leftIcon && (
         <span {...leftIconContainerProps}>
