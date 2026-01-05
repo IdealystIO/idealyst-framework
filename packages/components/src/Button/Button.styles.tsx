@@ -103,6 +103,7 @@ function createTextStyles(theme: Theme) {
             variants: {
                 size: buildSizeVariants(theme, 'button', size => ({
                     fontSize: size.fontSize,
+                    lineHeight: size.fontSize,
                 })),
                 disabled: {
                     true: { opacity: 0.6 },

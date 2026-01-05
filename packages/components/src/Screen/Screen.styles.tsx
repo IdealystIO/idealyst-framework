@@ -29,7 +29,6 @@ export const screenStyles = StyleSheet.create((theme: Theme) => {
   return {
     screen: {
       flex: 1,
-      backgroundColor: theme.colors.surface.primary,
       variants: {
         background: generateBackgroundVariants(theme),
         safeArea: {

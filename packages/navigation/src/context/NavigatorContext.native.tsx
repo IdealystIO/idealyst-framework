@@ -89,6 +89,29 @@ function hasNotFoundComponent(route: NavigatorParam): boolean {
     return false;
 }
 
+/**
+ * Normalize a path and substitute variables
+ */
+function normalizePath(path: string, vars?: Record<string, string>): string {
+    let normalizedPath = path;
+
+    // Convert empty string to '/'
+    if (normalizedPath === '' || normalizedPath === '/') {
+        normalizedPath = '/';
+    } else if (!normalizedPath.startsWith('/')) {
+        normalizedPath = `/${normalizedPath}`;
+    }
+
+    // Substitute variables in the path if provided
+    if (vars) {
+        Object.entries(vars).forEach(([key, value]) => {
+            normalizedPath = normalizedPath.replace(`:${key}`, value);
+        });
+    }
+
+    return normalizedPath;
+}
+
 // Utility function to parse path with parameters and find matching route
 const parseParameterizedPath = (path: string, rootRoute: any): { routeName: string, params: Record<string, string> } | null => {
     // Handle absolute paths like /event/123
@@ -166,14 +189,17 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
             return;
         }
 
+        // Normalize path and substitute variables (e.g., /visit/:id with vars { id: "123" } becomes /visit/123)
+        const normalizedPath = normalizePath(params.path, params.vars);
+
         // Parse parameterized path for mobile
-        const parsed = parseParameterizedPath(params.path, route);
+        const parsed = parseParameterizedPath(normalizedPath, route);
 
         if (!parsed) {
             // Invalid route - try to find a handler
-            const handler = findInvalidRouteHandler(route, params.path);
+            const handler = findInvalidRouteHandler(route, normalizedPath);
             if (handler) {
-                const redirectParams = handler(params.path);
+                const redirectParams = handler(normalizedPath);
                 if (redirectParams) {
                     // Handler returned NavigateParams - redirect
                     return navigate(
@@ -187,14 +213,13 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
             // Navigate to 404 screen if configured
             if (route.notFoundComponent) {
                 navigation.navigate(NOT_FOUND_SCREEN_NAME as never, {
-                    path: params.path,
-                    params: params.vars
+                    path: normalizedPath,
                 } as never);
                 return;
             }
 
             // No handler and no 404 screen - log warning
-            console.warn(`Navigation: Invalid route "${params.path}" and no handler or notFoundComponent configured.`);
+            console.warn(`Navigation: Invalid route "${normalizedPath}" and no handler or notFoundComponent configured.`);
             return;
         }
 
@@ -245,7 +270,7 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
 
 const NavigatorProvider = ({ route }: NavigatorProviderProps) => {
     const {rt} = useUnistyles()
-    
+
     const isDarkMode = rt.themeName === 'dark';
 
     return (
@@ -264,14 +289,17 @@ const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: 
             return;
         }
 
+        // Normalize path and substitute variables (e.g., /visit/:id with vars { id: "123" } becomes /visit/123)
+        const normalizedPath = normalizePath(params.path, params.vars);
+
         // Parse parameterized path for mobile
-        const parsed = parseParameterizedPath(params.path, route);
+        const parsed = parseParameterizedPath(normalizedPath, route);
 
         if (!parsed) {
             // Invalid route - try to find a handler
-            const handler = findInvalidRouteHandler(route, params.path);
+            const handler = findInvalidRouteHandler(route, normalizedPath);
             if (handler) {
-                const redirectParams = handler(params.path);
+                const redirectParams = handler(normalizedPath);
                 if (redirectParams) {
                     // Handler returned NavigateParams - redirect
                     return navigate(
@@ -285,14 +313,13 @@ const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: 
             // Navigate to 404 screen if configured
             if (route.notFoundComponent) {
                 navigation.navigate(NOT_FOUND_SCREEN_NAME as never, {
-                    path: params.path,
-                    params: params.vars
+                    path: normalizedPath,
                 } as never);
                 return;
             }
 
             // No handler and no 404 screen - log warning
-            console.warn(`Navigation: Invalid route "${params.path}" and no handler or notFoundComponent configured.`);
+            console.warn(`Navigation: Invalid route "${normalizedPath}" and no handler or notFoundComponent configured.`);
             return;
         }
 

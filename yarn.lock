@@ -2014,6 +2014,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@idealyst/camera@workspace:packages/camera":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/camera@workspace:packages/camera"
+  dependencies:
+    "@types/react": "npm:^19.1.0"
+    "@types/react-native": "npm:^0.73.0"
+    react-native: "npm:^0.80.0"
+    react-native-gesture-handler: "npm:^2.20.0"
+    react-native-vision-camera: "npm:^4.0.0"
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-vision-camera: ">=4.0.0"
+  peerDependenciesMeta:
+    react-native:
+      optional: true
+    react-native-vision-camera:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@idealyst/cli@workspace:packages/cli":
   version: 0.0.0-use.local
   resolution: "@idealyst/cli@workspace:packages/cli"
@@ -2043,11 +2065,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/components@npm:^1.1.4, @idealyst/components@workspace:packages/components":
+"@idealyst/components@npm:^1.1.6, @idealyst/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
-    "@idealyst/theme": "npm:^1.1.4"
+    "@idealyst/theme": "npm:^1.1.6"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
@@ -2060,7 +2082,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.3.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.1.4
+    "@idealyst/theme": ^1.1.6
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.0.0"
     "@react-native-vector-icons/common": ">=12.0.0"
@@ -2103,8 +2125,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datagrid@workspace:packages/datagrid"
   dependencies:
-    "@idealyst/components": "npm:^1.1.4"
-    "@idealyst/theme": "npm:^1.1.4"
+    "@idealyst/components": "npm:^1.1.6"
+    "@idealyst/theme": "npm:^1.1.6"
     "@types/react": "npm:^19.1.0"
     "@types/react-window": "npm:^1.8.8"
     react: "npm:^19.1.0"
@@ -2112,8 +2134,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.1.4
-    "@idealyst/theme": ^1.1.4
+    "@idealyst/components": ^1.1.6
+    "@idealyst/theme": ^1.1.6
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -2136,8 +2158,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datepicker@workspace:packages/datepicker"
   dependencies:
-    "@idealyst/components": "npm:^1.1.4"
-    "@idealyst/theme": "npm:^1.1.4"
+    "@idealyst/components": "npm:^1.1.6"
+    "@idealyst/theme": "npm:^1.1.6"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
@@ -2145,8 +2167,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.1.4
-    "@idealyst/theme": ^1.1.4
+    "@idealyst/components": ^1.1.6
+    "@idealyst/theme": ^1.1.6
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-svg: ">=13.0.0"
@@ -2169,9 +2191,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/mcp-server@workspace:packages/mcp-server"
   dependencies:
-    "@idealyst/components": "npm:^1.1.4"
-    "@idealyst/navigation": "npm:^1.1.4"
-    "@idealyst/theme": "npm:^1.1.4"
+    "@idealyst/components": "npm:^1.1.6"
+    "@idealyst/navigation": "npm:^1.1.6"
+    "@idealyst/theme": "npm:^1.1.6"
     "@modelcontextprotocol/sdk": "npm:^1.0.4"
     "@types/node": "npm:^20.0.0"
     "@types/react": "npm:^19.1.0"
@@ -2206,14 +2228,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/navigation@npm:^1.1.4, @idealyst/navigation@workspace:packages/navigation":
+"@idealyst/navigation@npm:^1.1.6, @idealyst/navigation@workspace:packages/navigation":
   version: 0.0.0-use.local
   resolution: "@idealyst/navigation@workspace:packages/navigation"
   dependencies:
-    "@idealyst/components": "npm:^1.1.4"
+    "@idealyst/components": "npm:^1.1.6"
     "@idealyst/datagrid": "npm:^1.0.93"
     "@idealyst/datepicker": "npm:^1.0.93"
-    "@idealyst/theme": "npm:^1.1.4"
+    "@idealyst/theme": "npm:^1.1.6"
     "@types/react": "npm:^19.1.8"
     "@types/react-dom": "npm:^19.1.6"
     react: "npm:^19.1.0"
@@ -2223,8 +2245,8 @@ __metadata:
     react-router-dom: "npm:7.9.1"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.1.4
-    "@idealyst/theme": ^1.1.4
+    "@idealyst/components": ^1.1.6
+    "@idealyst/theme": ^1.1.6
     "@react-navigation/bottom-tabs": ">=7.0.0"
     "@react-navigation/drawer": ">=7.0.0"
     "@react-navigation/native": ">=7.0.0"
@@ -2277,7 +2299,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/theme@npm:^1.1.4, @idealyst/theme@workspace:packages/theme":
+"@idealyst/theme@npm:^1.1.6, @idealyst/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
@@ -7827,6 +7849,26 @@ __metadata:
     fa6-upgrade: bin/fa6-upgrade.sh
     generate-icon: bin/generate-icon.js
   checksum: 10/8f83860985f89be7c6a46298e23802aad12d1743987b015d7eaf4eb206d03e1818d3b48c1ad9a19ec1e0a3a17a8ecf22385ab52b0cfb16f6602a3df264ec87cb
+  languageName: node
+  linkType: hard
+
+"react-native-vision-camera@npm:^4.0.0":
+  version: 4.7.3
+  resolution: "react-native-vision-camera@npm:4.7.3"
+  peerDependencies:
+    "@shopify/react-native-skia": "*"
+    react: "*"
+    react-native: "*"
+    react-native-reanimated: "*"
+    react-native-worklets-core: "*"
+  peerDependenciesMeta:
+    "@shopify/react-native-skia":
+      optional: true
+    react-native-reanimated:
+      optional: true
+    react-native-worklets-core:
+      optional: true
+  checksum: 10/2487d3651cb07918820e1f255480e28fec77f936450570b531b429a1861fad573f6bfd4cdb15a78ea7adb471ee45d08e0006cdac81db4fe35949291f3e12d680
   languageName: node
   linkType: hard
 
