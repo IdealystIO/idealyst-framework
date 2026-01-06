@@ -1,5 +1,5 @@
 import { deepMerge } from '../utils/deepMerge';
-import { Styles, ComponentName } from './types';
+import { Styles, ElementStyle, ComponentName } from './types';
 import { getExtension, getReplacement } from './extendComponent';
 import { Theme } from '@idealyst/theme';
 
@@ -11,7 +11,9 @@ import { Theme } from '@idealyst/theme';
  * to automatically merge extension styles when the function is called.
  *
  * @param styleFn - The original dynamic style function
- * @param elementExtension - Extension styles for this element (can be undefined)
+ * @param elementExtension - Extension styles for this element (can be undefined).
+ *        Can be either a static styles object or a function (props) => styles
+ *        for prop-aware extensions.
  * @returns A new function that returns merged styles
  *
  * @example
@@ -33,10 +35,11 @@ import { Theme } from '@idealyst/theme';
  * - If no extension is provided, returns the original function unchanged
  * - Extension styles take priority over base styles (deep merged)
  * - Works with any style function signature
+ * - If extension is a function, it receives the same props as the base style function
  */
 export function withExtension<TProps, TResult extends Styles>(
     styleFn: (props: TProps) => TResult,
-    elementExtension: Styles | undefined
+    elementExtension: Styles | ((props: TProps) => Styles) | undefined
 ): (props: TProps) => TResult {
     // If no extension, return original function unchanged
     if (!elementExtension) {
@@ -46,7 +49,11 @@ export function withExtension<TProps, TResult extends Styles>(
     // Return wrapped function that merges extension
     return (props: TProps): TResult => {
         const baseStyles = styleFn(props);
-        return deepMerge(baseStyles, elementExtension) as TResult;
+        // If extension is a function, call it with props; otherwise use as-is
+        const extStyles = typeof elementExtension === 'function'
+            ? elementExtension(props)
+            : elementExtension;
+        return deepMerge(baseStyles, extStyles) as TResult;
     };
 }
 
@@ -189,8 +196,8 @@ export function applyExtensions<
 
     for (const key in styleCreators) {
         const creator = styleCreators[key];
-        const elementExt = ext?.[key as keyof typeof ext] as Styles | undefined;
-        const elementReplacement = replacement?.[key as keyof typeof replacement];
+        const elementExt = ext?.[key as string as keyof typeof ext] as ElementStyle | undefined;
+        const elementReplacement = replacement?.[key as string as keyof typeof replacement];
 
         // Apply replacement (if any) then extension (if any)
         result[key] = withExtension(

@@ -1,171 +1,92 @@
-/**
- * Theme Extension Interfaces
- *
- * These interfaces use TypeScript's declaration merging to allow users to extend
- * theme types with custom values while maintaining full type safety.
- *
- * @example Adding custom intents
- * ```typescript
- * // In your app's types file (e.g., src/theme/extensions.d.ts)
- * declare module '@idealyst/theme' {
- *   interface IntentExtensions {
- *     brand: true;
- *     accent: true;
- *   }
- * }
- * ```
- *
- * @example Extending IntentValue structure
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface IntentValueExtensions {
- *     shadowColor: string;
- *     hoverBackground: string;
- *   }
- * }
- * ```
- *
- * After declaring extensions, your custom intents will be type-safe:
- * - `<Button intent="brand" />` will autocomplete and type-check
- * - Theme objects must include values for custom intents
- * - Extended IntentValue properties must be provided for all intents
- */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+
+import type { IntentValue, ShadowValue, Shade, ColorValue, InteractionConfig, ButtonSizeValue, ChipSizeValue, BadgeSizeValue, IconSizeValue, InputSizeValue, RadioButtonSizeValue, SelectSizeValue, SliderSizeValue, SwitchSizeValue, TextAreaSizeValue, AvatarSizeValue, ProgressSizeValue, AccordionSizeValue, ActivityIndicatorSizeValue, BreadcrumbSizeValue, ListSizeValue, MenuSizeValue, TextSizeValue, TabBarSizeValue, TableSizeValue, TooltipSizeValue, ViewSizeValue, Typography, TypographyValue } from './structures';
 
 /**
- * Extend this interface to add custom intent names.
- * The keys become valid Intent values.
+ * Default fallback theme structure.
+ * Used when no custom theme is registered.
+ */
+export interface DefaultTheme {
+    intents: Record<string, IntentValue>;
+    radii: Record<string, number>;
+    shadows: Record<string, ShadowValue>;
+    colors: {
+        pallet: Record<string, Record<Shade, ColorValue>>;
+        surface: Record<string, ColorValue>;
+        text: Record<string, ColorValue>;
+        border: Record<string, ColorValue>;
+    };
+    sizes: {
+        button: Record<string, ButtonSizeValue>;
+        chip: Record<string, ChipSizeValue>;
+        badge: Record<string, BadgeSizeValue>;
+        icon: Record<string, IconSizeValue>;
+        input: Record<string, InputSizeValue>;
+        radioButton: Record<string, RadioButtonSizeValue>;
+        select: Record<string, SelectSizeValue>;
+        slider: Record<string, SliderSizeValue>;
+        switch: Record<string, SwitchSizeValue>;
+        textarea: Record<string, TextAreaSizeValue>;
+        avatar: Record<string, AvatarSizeValue>;
+        progress: Record<string, ProgressSizeValue>;
+        accordion: Record<string, AccordionSizeValue>;
+        activityIndicator: Record<string, ActivityIndicatorSizeValue>;
+        breadcrumb: Record<string, BreadcrumbSizeValue>;
+        list: Record<string, ListSizeValue>;
+        menu: Record<string, MenuSizeValue>;
+        text: Record<string, TextSizeValue>;
+        tabBar: Record<string, TabBarSizeValue>;
+        table: Record<string, TableSizeValue>;
+        tooltip: Record<string, TooltipSizeValue>;
+        view: Record<string, ViewSizeValue>;
+        typography: Record<Typography, TypographyValue>;
+    };
+    interaction: InteractionConfig;
+}
+
+/**
+ * CustomThemeRegistry - Augment this interface to register your custom theme.
+ *
+ * All derived types (Intent, Radius, Size, etc.) come from this interface.
+ * Build your theme, then register it via module augmentation:
  *
  * @example
  * ```typescript
+ * import { createTheme, fromTheme, lightTheme } from '@idealyst/theme';
+ *
+ * const myTheme = fromTheme(lightTheme)
+ *   .addIntent('brand', { ... })
+ *   .addRadius('2xl', 24)
+ *   .build();
+ *
+ * // Register your theme to get type inference
  * declare module '@idealyst/theme' {
- *   interface IntentExtensions {
- *     brand: true;
- *     accent: true;
- *     destructive: true;
+ *   interface CustomThemeRegistry {
+ *     theme: typeof myTheme;
  *   }
  * }
+ *
+ * // Now all components get: Intent = 'primary' | 'brand' | ..., Radius = 'none' | ... | '2xl', etc.
  * ```
  */
-export interface IntentExtensions {}
+export interface CustomThemeRegistry {
+    // Empty by default - users augment to add 'theme' property
+}
+
+/**
+ * Helper to extract theme type from registry, falling back to DefaultTheme.
+ */
+type ResolveCustomTheme = CustomThemeRegistry extends { theme: infer T } ? T : DefaultTheme;
+
+/**
+ * RegisteredTheme - Contains the resolved theme type.
+ * DO NOT augment this directly - augment CustomThemeRegistry instead.
+ */
+export interface RegisteredTheme {
+    theme: ResolveCustomTheme;
+}
 
 /**
  * Extend this interface to add custom properties to IntentValue.
- * All intents (including base ones) must provide these properties.
- *
- * @example
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface IntentValueExtensions {
- *     shadowColor: string;
- *     hoverBackground: string;
- *   }
- * }
- * ```
  */
 export interface IntentValueExtensions {}
-
-/**
- * Extend this interface to add custom palette color names.
- *
- * @example
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface PalletExtensions {
- *     coral: true;
- *     mint: true;
- *     brand: true;
- *   }
- * }
- * ```
- */
-export interface PalletExtensions {}
-
-/**
- * Extend this interface to add custom surface types.
- *
- * @example
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface SurfaceExtensions {
- *     elevated: true;
- *     sunken: true;
- *   }
- * }
- * ```
- */
-export interface SurfaceExtensions {}
-
-/**
- * Extend this interface to add custom text color types.
- *
- * @example
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface TextExtensions {
- *     muted: true;
- *     accent: true;
- *   }
- * }
- * ```
- */
-export interface TextExtensions {}
-
-/**
- * Extend this interface to add custom border types.
- *
- * @example
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface BorderExtensions {
- *     focus: true;
- *     error: true;
- *   }
- * }
- * ```
- */
-export interface BorderExtensions {}
-
-/**
- * Extend this interface to add custom shadow variants.
- *
- * @example
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface ShadowExtensions {
- *     '2xl': true;
- *     inner: true;
- *   }
- * }
- * ```
- */
-export interface ShadowExtensions {}
-
-/**
- * Extend this interface to add custom size variants.
- *
- * @example
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface SizeExtensions {
- *     '2xl': true;
- *     '3xl': true;
- *   }
- * }
- * ```
- */
-export interface SizeExtensions {}
-
-/**
- * Extend this interface to add custom border radius values.
- *
- * @example
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface RadiusExtensions {
- *     '2xl': true;
- *     full: true;
- *   }
- * }
- * ```
- */
-export interface RadiusExtensions {}

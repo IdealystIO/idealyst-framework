@@ -1,134 +1,36 @@
-import {
-    PalletExtensions,
-    SurfaceExtensions,
-    TextExtensions,
-    BorderExtensions,
-} from './extensions';
-
-/**
- * Base palette color names.
- */
-type BasePallet = 'red' | 'orange' | 'blue' | 'green' | 'yellow' | 'purple' | 'gray' | 'black' | 'white';
-
-/**
- * Custom palette colors added via declaration merging.
- */
-type CustomPallet = keyof PalletExtensions;
+import { RegisteredTheme } from './extensions';
 
 /**
  * All available palette color names.
- * Includes base colors plus any custom colors defined via PalletExtensions.
- *
- * @example Adding custom palette colors
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface PalletExtensions {
- *     coral: true;
- *     mint: true;
- *     brand: true;
- *   }
- * }
- * ```
+ * Derived from your registered theme's color pallet.
  */
-export type Pallet = BasePallet | CustomPallet;
-
-/**
- * Shade values for palette colors (50-900 scale).
- */
-export type Shade = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+export type Pallet = keyof RegisteredTheme['theme']['colors']['pallet'] & string;
 
 /**
  * Color reference string. Either a palette.shade combination or just a palette name.
  * @example 'blue.500', 'red.100', 'gray'
  */
-export type Color = `${Pallet}.${Shade}` | Pallet;
-
-/**
- * A color value string (hex, rgb, rgba, etc.)
- */
-export type ColorValue = string;
-
-/**
- * Base surface types.
- */
-type BaseSurface = 'primary' | 'secondary' | 'tertiary' | 'inverse' | 'inverse-secondary' | 'inverse-tertiary';
-
-/**
- * Custom surface types added via declaration merging.
- */
-type CustomSurface = keyof SurfaceExtensions;
+export type Color = `${Pallet}.${50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900}` | Pallet;
 
 /**
  * All available surface types.
- *
- * @example Adding custom surfaces
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface SurfaceExtensions {
- *     elevated: true;
- *     sunken: true;
- *   }
- * }
- * ```
+ * Derived from your registered theme's surfaces.
  */
-export type Surface = BaseSurface | CustomSurface;
-
-/**
- * Base text color types.
- */
-type BaseText = 'primary' | 'secondary' | 'tertiary' | 'inverse' | 'inverse-secondary' | 'inverse-tertiary';
-
-/**
- * Custom text color types added via declaration merging.
- */
-type CustomText = keyof TextExtensions;
+export type Surface = keyof RegisteredTheme['theme']['colors']['surface'];
 
 /**
  * All available text color types.
- *
- * @example Adding custom text colors
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface TextExtensions {
- *     muted: true;
- *     accent: true;
- *   }
- * }
- * ```
+ * Derived from your registered theme's text colors.
  */
-export type Text = BaseText | CustomText;
-
-/**
- * Base border color types.
- */
-type BaseBorder = 'primary' | 'secondary' | 'tertiary' | 'disabled';
-
-/**
- * Custom border color types added via declaration merging.
- */
-type CustomBorder = keyof BorderExtensions;
+export type Text = keyof RegisteredTheme['theme']['colors']['text'];
 
 /**
  * All available border color types.
- *
- * @example Adding custom border colors
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface BorderExtensions {
- *     focus: true;
- *     error: true;
- *   }
- * }
- * ```
+ * Derived from your registered theme's borders.
  */
-export type Border = BaseBorder | CustomBorder;
+export type Border = keyof RegisteredTheme['theme']['colors']['border'];
 
 /**
  * Complete color system structure.
  */
-export type AllColorTypes = {
-    surface: Record<Surface, ColorValue>;
-    text: Record<Text, ColorValue>;
-    border: Record<Border, ColorValue>;
-    pallet: Record<Pallet, Record<Shade, ColorValue>>;
-};
+export type AllColorTypes = RegisteredTheme['theme']['colors'];

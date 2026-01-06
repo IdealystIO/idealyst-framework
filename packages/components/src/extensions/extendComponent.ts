@@ -231,15 +231,24 @@ export function hasReplacement<K extends ComponentName>(component: K): boolean {
  * });
  * ```
  */
+// Overload for static object extension
+export function extendComponent<K extends ComponentName>(
+    component: K,
+    extension: Partial<ComponentStyleElements[K]>
+): void;
+// Overload for theme-aware function extension
+export function extendComponent<K extends ComponentName>(
+    component: K,
+    extension: (theme: Theme) => Partial<ComponentStyleElements[K]>
+): void;
+// Implementation
 export function extendComponent<K extends ComponentName>(
     component: K,
     extension: StyleExtension<ComponentStyleElements[K]>
 ): void {
-    console.log('[extendComponent] Registering extension for:', component, extension);
     const existing = extensionRegistry.get(component) ?? [];
     existing.push(extension);
     extensionRegistry.set(component, existing);
-    console.log('[extendComponent] Registry now has', extensionRegistry.size, 'entries');
 }
 
 /**
@@ -260,7 +269,6 @@ export function getExtension<K extends ComponentName>(
     theme: Theme
 ): Partial<ComponentStyleElements[K]> | undefined {
     const extensions = extensionRegistry.get(component);
-    console.log('[getExtension] Looking up:', component, '- found:', extensions?.length ?? 0, 'extensions');
 
     if (!extensions || extensions.length === 0) {
         return undefined;
@@ -270,8 +278,6 @@ export function getExtension<K extends ComponentName>(
     const resolved = extensions.map(ext =>
         typeof ext === 'function' ? ext(theme) : ext
     );
-
-    console.log('[getExtension] Resolved extensions for', component, ':', resolved);
 
     // Merge all extensions in order (later ones win)
     return deepMergeAll(...resolved) as Partial<ComponentStyleElements[K]>;

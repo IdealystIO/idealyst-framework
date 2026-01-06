@@ -1,29 +1,59 @@
-import { lightTheme, darkTheme } from '@idealyst/theme';
+import { lightTheme, darkTheme, fromTheme } from '@idealyst/theme';
 import { StyleSheet } from 'react-native-unistyles';
-import { extendComponent } from '@idealyst/components/extensions';
 
-// Register component style extensions BEFORE StyleSheet.configure
-extendComponent('Button', {
-  button: {
-    borderRadius: 20,
-  },
-});
+// =============================================================================
+// Custom Theme with ThemeBuilder
+// =============================================================================
 
-// Extend UnistylesThemes to include high contrast themes
-// This overrides the more limited declaration from the components package
-declare module 'react-native-unistyles' {
-  export interface UnistylesThemes {
-    light: typeof lightTheme,
-    dark: typeof darkTheme,
+// Build custom themes with type-safe additions using fromTheme()
+export const customLightTheme = fromTheme(lightTheme)
+  .addIntent('brand', {
+    primary: '#6366f1',
+    contrast: '#ffffff',
+    light: '#818cf8',
+    dark: '#4f46e5',
+  })
+  .addIntent('accent', {
+    primary: '#f59e0b',
+    contrast: '#000000',
+    light: '#fbbf24',
+    dark: '#d97706',
+  })
+  .addRadius('2xl', 24)
+  .addRadius('full', 9999)
+  .build();
+
+// Build dark theme with same additions
+export const customDarkTheme = fromTheme(darkTheme)
+  .addIntent('brand', {
+    primary: '#818cf8',
+    contrast: '#000000',
+    light: '#6366f1',
+    dark: '#4f46e5',
+  })
+  .addIntent('accent', {
+    primary: '#fbbf24',
+    contrast: '#000000',
+    light: '#f59e0b',
+    dark: '#d97706',
+  })
+  .addRadius('2xl', 24)
+  .addRadius('full', 9999)
+  .build();
+
+// Register custom theme type via module augmentation
+// This enables type inference for Intent, Size, Radius, etc.
+declare module '@idealyst/theme' {
+  interface CustomThemeRegistry {
+    theme: typeof customLightTheme;
   }
 }
-  
-// Configure with all themes, including high contrast variants
-// This will override any previous configuration
+
+// Configure Unistyles with custom themes
 StyleSheet.configure({
   themes: {
-    light: lightTheme,
-    dark: darkTheme,
+    light: customLightTheme,
+    dark: customDarkTheme,
   },
   settings: {
     initialTheme: 'light',

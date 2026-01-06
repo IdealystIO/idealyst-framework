@@ -1,3 +1,6 @@
+// Import globals to set up Unistyles theme types
+import './globals';
+
 import useMergeRefs from './hooks/useMergeRefs';
 
 export { default as Button } from './Button';

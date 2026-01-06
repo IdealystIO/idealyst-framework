@@ -1,49 +1,14 @@
-import { ShadowExtensions } from './extensions';
-
-/**
- * Base shadow variant names.
- */
-type BaseShadowVariant = 'none' | 'sm' | 'md' | 'lg' | 'xl';
-
-/**
- * Custom shadow variants added via declaration merging.
- */
-type CustomShadowVariant = keyof ShadowExtensions;
+import { RegisteredTheme } from './extensions';
+import type { ShadowValue } from './structures';
+export type { ShadowValue };
 
 /**
  * All available shadow variant names.
- *
- * @example Adding custom shadow variants
- * ```typescript
- * declare module '@idealyst/theme' {
- *   interface ShadowExtensions {
- *     '2xl': true;
- *     inner: true;
- *   }
- * }
- * ```
+ * Derived from your registered theme's shadows.
  */
-export type ShadowVariant = BaseShadowVariant | CustomShadowVariant;
-
-/**
- * Shadow value structure for cross-platform shadows.
- */
-export type ShadowValue = {
-    // Android: elevation value
-    elevation: number;
-
-    // iOS: shadow properties
-    shadowColor: string;
-    shadowOffset: {
-        width: number;
-        height: number;
-    };
-    shadowOpacity: number;
-    shadowRadius: number;
-    boxShadow?: string;
-} | {};
+export type ShadowVariant = keyof RegisteredTheme['theme']['shadows'];
 
 /**
  * Complete shadow system structure.
  */
-export type AllShadowTypes = Record<ShadowVariant, ShadowValue>;
+export type AllShadowTypes = RegisteredTheme['theme']['shadows'];

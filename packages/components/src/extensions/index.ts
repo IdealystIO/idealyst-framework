@@ -63,6 +63,7 @@ export type {
     ComponentStyleExtensions,
     ComponentName,
     StyleExtension,
+    ElementStyle,
     Styles,
     // Individual component styleable elements
     ButtonStyleableElements,

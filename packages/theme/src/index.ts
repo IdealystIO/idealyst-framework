@@ -6,3 +6,4 @@ export * from './variants';
 export * from './components';
 export * from './styles';
 export * from './helpers';
+export * from './builder';

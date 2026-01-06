@@ -8,8 +8,15 @@ import type { ViewStyle, TextStyle, ImageStyle } from 'react-native';
 export type Styles = ViewStyle & TextStyle & Partial<ImageStyle> & Record<string, any>;
 
 /**
+ * An element style in an extension can be either:
+ * - A static styles object
+ * - A function that receives props and returns styles (for prop-aware extensions)
+ */
+export type ElementStyle = Styles | ((props: any) => Styles);
+
+/**
  * A style extension can be either:
- * - A partial style object
+ * - A partial style object (with static or function element styles)
  * - A function that receives the theme and returns partial styles
  */
 export type StyleExtension<T> = Partial<T> | ((theme: Theme) => Partial<T>);
@@ -22,13 +29,14 @@ export type StyleExtension<T> = Partial<T> | ((theme: Theme) => Partial<T>);
 
 /**
  * Button styleable elements.
+ * Each element can be either a static styles object or a function (props) => styles.
  * @see ButtonStylesheet in @idealyst/theme/components/button
  */
 export type ButtonStyleableElements = {
-    button: Styles;
-    text: Styles;
-    icon: Styles;
-    iconContainer: Styles;
+    button: ElementStyle;
+    text: ElementStyle;
+    icon: ElementStyle;
+    iconContainer: ElementStyle;
 };
 
 /**
