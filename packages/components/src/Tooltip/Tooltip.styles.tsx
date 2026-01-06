@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type TooltipSize = Size;
 type TooltipIntent = Intent;
@@ -38,19 +39,19 @@ function createTooltipIntentVariants(theme: Theme) {
     return intents;
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const tooltipStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: {
-        position: 'relative',
+// Style creators for extension support
+function createContainerStyles() {
+    return () => ({
+        position: 'relative' as const,
         _web: {
             display: 'inline-flex',
             width: 'fit-content',
         },
-    } as const,
-    tooltip: {
+    });
+}
+
+function createTooltipStyles(theme: Theme) {
+    return () => ({
         borderRadius: 8,
         maxWidth: 300,
         shadowColor: '#000',
@@ -68,6 +69,14 @@ export const tooltipStyles = StyleSheet.create((theme: Theme) => {
             width: 'max-content',
             wordWrap: 'break-word',
         },
-    } as const,
-  } as const;
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const tooltipStyles = StyleSheet.create((theme: Theme) => {
+    return applyExtensions('Tooltip', theme, {
+        container: createContainerStyles(),
+        tooltip: createTooltipStyles(theme),
+    });
 });

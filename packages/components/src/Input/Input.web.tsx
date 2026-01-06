@@ -130,7 +130,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   const passwordToggleIconProps = getWebProps([inputStyles.passwordToggleIcon]);
 
   // Get input props
-  const inputWebProps = getWebProps([inputStyles.input]);
+  const inputWebProps = getWebProps([(inputStyles.input as any)({})]);
 
   // Generate accessibility props
   const ariaProps = useMemo(() => {

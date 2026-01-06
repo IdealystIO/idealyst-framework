@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type ProgressSize = Size;
 type ProgressIntent = Intent;
@@ -101,14 +102,20 @@ function createCircularBarStyles(theme: Theme) {
     };
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const progressStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: {
+/**
+ * Create container styles
+ */
+function createContainerStyles() {
+    return () => ({
         gap: 4 as const,
-    },
-    linearTrack: {
+    });
+}
+
+/**
+ * Create linear track styles
+ */
+function createLinearTrackStyles(theme: Theme) {
+    return () => ({
         backgroundColor: theme.colors.border.secondary,
         overflow: 'hidden' as const,
         position: 'relative' as const,
@@ -119,37 +126,79 @@ export const progressStyles = StyleSheet.create((theme: Theme) => {
                 false: { borderRadius: 0 },
             },
         },
-    },
-    linearBar: createLinearBarStyles(theme),
-    indeterminateBar: createIndeterminateBarStyles(theme),
-    circularContainer: {
+    });
+}
+
+/**
+ * Create circular container styles
+ */
+function createCircularContainerStyles(theme: Theme) {
+    return () => ({
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         position: 'relative' as const,
         variants: {
             size: createCircularContainerSizeVariants(theme),
         } as const,
-    } as const,
-    circularTrack: {
+    });
+}
+
+/**
+ * Create circular track styles
+ */
+function createCircularTrackStyles(theme: Theme) {
+    return () => ({
         _web: {
             stroke: theme.colors.border.secondary,
-        }
-    },
-    circularBar: createCircularBarStyles(theme),
-    label: {
+        },
+    });
+}
+
+/**
+ * Create label styles
+ */
+function createLabelStyles(theme: Theme) {
+    return () => ({
         color: theme.colors.text.primary,
         textAlign: 'center' as const,
         variants: {
             size: createLabelSizeVariants(theme),
         },
-    },
-    circularLabel: {
+    });
+}
+
+/**
+ * Create circular label styles
+ */
+function createCircularLabelStyles(theme: Theme) {
+    return () => ({
         position: 'absolute' as const,
         fontWeight: '600' as const,
         color: theme.colors.text.primary,
         variants: {
             size: createCircularLabelSizeVariants(theme),
         },
-    },
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const progressStyles = StyleSheet.create((theme: Theme) => {
+  // Apply extensions to main visual elements
+  const extended = applyExtensions('Progress', theme, {
+    container: createContainerStyles(),
+    linearTrack: createLinearTrackStyles(theme),
+    linearBar: createLinearBarStyles(theme),
+  });
+
+  return {
+    ...extended,
+    // Minor utility styles (not extended)
+    indeterminateBar: createIndeterminateBarStyles(theme),
+    circularContainer: createCircularContainerStyles(theme)(),
+    circularTrack: createCircularTrackStyles(theme)(),
+    circularBar: createCircularBarStyles(theme),
+    label: createLabelStyles(theme)(),
+    circularLabel: createCircularLabelStyles(theme)(),
   };
 });

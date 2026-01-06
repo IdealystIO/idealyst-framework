@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type ActivityIndicatorSize = Size;
 type ActivityIndicatorIntent = Intent;
@@ -62,14 +63,11 @@ function createSpinnerStyles(theme: Theme) {
     }
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const activityIndicatorStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: {
-        alignItems: 'center',
-        justifyContent: 'center',
+// Style creators for extension support
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         variants: {
             size: createContainerSizeVariants(theme),
             animating: {
@@ -81,7 +79,20 @@ export const activityIndicatorStyles = StyleSheet.create((theme: Theme) => {
                 },
             },
         },
-    },
-    spinner: createSpinnerStyles(theme),
-  };
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const activityIndicatorStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('ActivityIndicator', theme, {
+        container: createContainerStyles(theme),
+        spinner: createSpinnerStyles(theme),
+    });
+
+    return {
+        ...extended,
+    };
 });

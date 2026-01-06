@@ -126,11 +126,11 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
 
   // Create style arrays
   const wrapperStyleArray = [checkboxStyles.wrapper, style as any];
-  const containerStyleArray = [checkboxStyles.container];
-  const checkboxStyleArray = [checkboxStyles.checkbox({ intent })];
+  const containerStyleArray = [(checkboxStyles.container as any)({})];
+  const checkboxStyleArray = [(checkboxStyles.checkbox as any)({ intent })];
   const labelStyleArray = [checkboxStyles.label];
   const helperTextStyleArray = [checkboxStyles.helperText];
-  const checkmarkStyleArray = [checkboxStyles.checkmark];
+  const checkmarkStyleArray = [(checkboxStyles.checkmark as any)({})];
 
   // Generate web props
   const wrapperProps = getWebProps(wrapperStyleArray);

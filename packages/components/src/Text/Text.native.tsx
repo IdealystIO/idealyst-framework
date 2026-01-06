@@ -28,14 +28,13 @@ const Text = forwardRef<RNText, TextProps>(({
     paddingHorizontal,
   });
 
+  const textStyle = (textStyles.text as any)({ color });
+
   return (
     <RNText
       ref={ref}
       nativeID={id}
-      style={[
-        textStyles.text({ color }),
-        style,
-      ]}
+      style={[textStyle, style]}
       testID={testID}
     >
       {children}

@@ -49,10 +49,22 @@ const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ item, onPress, 
   // Merge refs
   const mergedRef = useMergeRefs(ref, itemProps.ref);
 
+  // Button reset styles that must be applied directly
+  const buttonResetStyles: React.CSSProperties = {
+    display: 'flex',
+    width: '100%',
+    border: 'none',
+    outline: 'none',
+    cursor: item.disabled ? 'not-allowed' : 'pointer',
+    background: 'transparent',
+    textAlign: 'left',
+  };
+
   return (
     <button
       {...itemProps}
       ref={mergedRef}
+      style={{ ...buttonResetStyles, ...itemProps.style }}
       onClick={() => onPress(item)}
       disabled={item.disabled}
       role="menuitem"

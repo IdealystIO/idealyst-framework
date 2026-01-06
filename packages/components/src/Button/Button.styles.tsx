@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import { ButtonGradient } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type ButtonSize = Size;
 type ButtonType = 'contained' | 'outlined' | 'text';
@@ -14,9 +15,17 @@ export type ButtonVariants = {
     gradient?: ButtonGradient;
 }
 
-type ButtonDynamicProps = {
+/**
+ * All dynamic props passed to button style functions.
+ * Every style function receives all props for maximum flexibility
+ * when using extensions or replacements.
+ */
+export type ButtonDynamicProps = {
     intent?: Intent;
     type?: ButtonType;
+    size?: Size;
+    disabled?: boolean;
+    gradient?: ButtonGradient;
 };
 
 /**
@@ -54,9 +63,11 @@ function getTextColor(theme: Theme, intent: Intent, type: ButtonType): string {
 
 /**
  * Create dynamic button styles
+ * Receives all ButtonDynamicProps for flexibility in extensions/replacements
  */
 function createButtonStyles(theme: Theme) {
-    return ({ intent = 'primary', type = 'contained' }: ButtonDynamicProps) => {
+    return (props: ButtonDynamicProps) => {
+        const { intent = 'primary', type = 'contained' } = props;
         return {
             boxSizing: 'border-box',
             alignItems: 'center',
@@ -93,9 +104,11 @@ function createButtonStyles(theme: Theme) {
 
 /**
  * Create dynamic text styles
+ * Receives all ButtonDynamicProps for flexibility in extensions/replacements
  */
 function createTextStyles(theme: Theme) {
-    return ({ intent = 'primary', type = 'contained' }: ButtonDynamicProps) => {
+    return (props: ButtonDynamicProps) => {
+        const { intent = 'primary', type = 'contained' } = props;
         return {
             fontWeight: '600',
             textAlign: 'center',
@@ -116,9 +129,11 @@ function createTextStyles(theme: Theme) {
 
 /**
  * Create dynamic icon styles
+ * Receives all ButtonDynamicProps for flexibility in extensions/replacements
  */
 function createIconStyles(theme: Theme) {
-    return ({ intent = 'primary', type = 'contained' }: ButtonDynamicProps) => {
+    return (props: ButtonDynamicProps) => {
+        const { intent = 'primary', type = 'contained' } = props;
         return {
             display: 'flex',
             alignItems: 'center',
@@ -134,18 +149,29 @@ function createIconStyles(theme: Theme) {
     };
 }
 
+/**
+ * Create icon container styles.
+ * Receives all ButtonDynamicProps for flexibility in extensions/replacements.
+ * NOTE: All styles must be dynamic functions (not static objects) to avoid
+ * Babel transform issues with Unistyles on native.
+ */
+function createIconContainerStyles() {
+    return (_props: ButtonDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        gap: 4,
+    });
+}
+
 // Styles use dynamic functions for intent/type to support theme extensions
+// applyExtensions handles both replacements and extensions automatically
 export const buttonStyles = StyleSheet.create((theme: Theme) => {
-    return {
+    return applyExtensions('Button', theme, {
         button: createButtonStyles(theme),
         text: createTextStyles(theme),
         icon: createIconStyles(theme),
-        iconContainer: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 4,
-        },
-    };
+        iconContainer: createIconContainerStyles(),
+    });
 });

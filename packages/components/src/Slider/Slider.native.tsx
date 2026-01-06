@@ -193,7 +193,7 @@ const Slider = forwardRef<View, SliderProps>(({
     if (!icon) return null;
 
     if (typeof icon === 'string' && isIconName(icon)) {
-      const iconStyle = sliderStyles.thumbIcon({ intent });
+      const iconStyle = (sliderStyles.thumbIcon as any)({ intent });
       return (
         <MaterialCommunityIcons
           name={icon}
@@ -206,8 +206,12 @@ const Slider = forwardRef<View, SliderProps>(({
     return icon;
   };
 
+  // Get dynamic styles
+  const containerStyle = (sliderStyles.container as any)({});
+  const trackStyle = (sliderStyles.track as any)({});
+
   return (
-    <View ref={ref} nativeID={id} style={[sliderStyles.container, style]} testID={testID} {...nativeA11yProps}>
+    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
       {showValue && (
         <View style={sliderStyles.valueLabel as any}>
           <Text>{value}</Text>
@@ -217,7 +221,7 @@ const Slider = forwardRef<View, SliderProps>(({
       <View style={sliderStyles.sliderWrapper}>
         <GestureDetector gesture={composedGesture}>
           <View
-            style={sliderStyles.track}
+            style={trackStyle}
             onLayout={(e) => {
               const width = e.nativeEvent.layout.width;
               trackWidth.value = width;
@@ -226,7 +230,7 @@ const Slider = forwardRef<View, SliderProps>(({
           >
             {/* Filled track */}
             <Animated.View
-              style={[sliderStyles.filledTrack({ intent }), filledTrackAnimatedStyle]}
+              style={[(sliderStyles.filledTrack as any)({ intent }), filledTrackAnimatedStyle]}
             />
 
             {/* Marks */}
@@ -262,7 +266,7 @@ const Slider = forwardRef<View, SliderProps>(({
             {/* Thumb */}
             <Animated.View
               style={[
-                sliderStyles.thumb({ intent, disabled }),
+                (sliderStyles.thumb as any)({ intent, disabled }),
                 {
                   // Manual positioning/sizing for native layout
                   position: 'absolute',

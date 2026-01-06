@@ -31,7 +31,7 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
 
   // Create the style array
   const textStyleArray = [
-    textStyles.text({ color }),
+    (textStyles.text as any)({ color }),
     style,
   ];
 

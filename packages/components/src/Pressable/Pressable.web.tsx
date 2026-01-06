@@ -54,7 +54,7 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
     paddingHorizontal,
   });
 
-  const webProps = getWebProps([pressableStyles.pressable, style as any]);
+  const webProps = getWebProps([(pressableStyles.pressable as any)({}), style as any]);
 
   const baseStyle: React.CSSProperties = {
     cursor: disabled ? 'default' : 'pointer',

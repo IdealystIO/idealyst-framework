@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Intent } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type MenuItemDynamicProps = {
     intent?: Intent;
@@ -61,8 +62,11 @@ function createItemStyles(theme: Theme) {
                 },
             },
             _web: {
+                display: 'flex',
+                width: '100%',
                 cursor: 'pointer',
                 border: 'none',
+                borderWidth: 0,
                 outline: 'none',
                 transition: 'background-color 0.2s ease',
                 textAlign: 'left',
@@ -77,8 +81,14 @@ function createItemStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const menuItemStyles = StyleSheet.create((theme: Theme) => {
-    return {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('MenuItem', theme, {
         item: createItemStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
         icon: {
             alignItems: 'center',
             justifyContent: 'center',
@@ -90,6 +100,9 @@ export const menuItemStyles = StyleSheet.create((theme: Theme) => {
                     height: size.iconSize,
                     fontSize: size.iconSize,
                 }))
+            },
+            _web: {
+                display: 'flex',
             },
         },
         label: {

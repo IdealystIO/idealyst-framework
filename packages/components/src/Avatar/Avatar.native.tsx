@@ -41,8 +41,11 @@ const Avatar = forwardRef<View, AvatarProps>(({
     setHasError(true);
   };
 
+  const avatarStyle = (avatarStyles.avatar as any)({});
+  const fallbackStyle = (avatarStyles.fallback as any)({});
+
   return (
-    <View ref={ref} nativeID={id} style={[avatarStyles.avatar, style]} testID={testID} {...nativeA11yProps}>
+    <View ref={ref} nativeID={id} style={[avatarStyle, style]} testID={testID} {...nativeA11yProps}>
       {src && !hasError ? (
         <Image
           source={typeof src === 'string' ? { uri: src } : src}
@@ -51,7 +54,7 @@ const Avatar = forwardRef<View, AvatarProps>(({
           accessibilityLabel={alt}
         />
       ) : (
-        <Text style={avatarStyles.fallback}>
+        <Text style={fallbackStyle}>
           {fallback}
         </Text>
       )}

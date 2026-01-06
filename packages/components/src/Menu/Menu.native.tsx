@@ -113,7 +113,7 @@ const Menu = forwardRef<View, MenuProps>(({
             width={menuPosition.width}
             maxHeight={300}
             style={[
-              menuStyles.menu,
+              (menuStyles.menu as any)({}),
               style,
               { opacity: shouldShow ? 1 : 0 }
             ]}

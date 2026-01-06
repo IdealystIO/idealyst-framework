@@ -1,15 +1,28 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent} from '@idealyst/theme';
+import { Theme, Intent } from '@idealyst/theme';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type ChipType = 'filled' | 'outlined' | 'soft';
 type ChipIntent = Intent;
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const chipStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: (size: ChipSize, intent: ChipIntent, type: ChipType, selected: boolean, disabled: boolean) => {
+type ChipDynamicProps = {
+    size: ChipSize;
+    intent: ChipIntent;
+    type: ChipType;
+    selected: boolean;
+    disabled?: boolean;
+};
+
+type ChipDeleteButtonProps = {
+    size: ChipSize;
+};
+
+/**
+ * Create container styles
+ */
+function createContainerStyles(theme: Theme) {
+    return ({ size, intent, type, selected, disabled = false }: ChipDynamicProps) => {
         const intentValue = theme.intents[intent];
         const sizeValue = theme.sizes.chip[size];
 
@@ -48,9 +61,14 @@ export const chipStyles = StyleSheet.create((theme: Theme) => {
             borderStyle: borderWidth > 0 ? ('solid' as const) : undefined,
             opacity: disabled ? 0.5 : 1,
         } as const;
-    },
+    };
+}
 
-    label: (size: ChipSize, intent: ChipIntent, type: ChipType, selected: boolean) => {
+/**
+ * Create label styles
+ */
+function createLabelStyles(theme: Theme) {
+    return ({ size, intent, type, selected }: ChipDynamicProps) => {
         const intentValue = theme.intents[intent];
         const sizeValue = theme.sizes.chip[size];
 
@@ -72,9 +90,14 @@ export const chipStyles = StyleSheet.create((theme: Theme) => {
             lineHeight: sizeValue.lineHeight as number,
             color,
         } as const;
-    },
+    };
+}
 
-    icon: (size: ChipSize, intent: ChipIntent, type: ChipType, selected: boolean) => {
+/**
+ * Create icon styles
+ */
+function createIconStyles(theme: Theme) {
+    return ({ size, intent, type, selected }: ChipDynamicProps) => {
         const intentValue = theme.intents[intent];
         const sizeValue = theme.sizes.chip[size];
 
@@ -97,9 +120,14 @@ export const chipStyles = StyleSheet.create((theme: Theme) => {
             height: sizeValue.iconSize as number,
             color,
         } as const;
-    },
+    };
+}
 
-    deleteButton: (size: ChipSize) => {
+/**
+ * Create delete button styles
+ */
+function createDeleteButtonStyles(theme: Theme) {
+    return ({ size }: ChipDeleteButtonProps) => {
         const sizeValue = theme.sizes.chip[size];
 
         return {
@@ -112,9 +140,14 @@ export const chipStyles = StyleSheet.create((theme: Theme) => {
             width: sizeValue.iconSize as number,
             height: sizeValue.iconSize as number,
         } as const;
-    },
+    };
+}
 
-    deleteIcon: (size: ChipSize, intent: ChipIntent, type: ChipType, selected: boolean) => {
+/**
+ * Create delete icon styles
+ */
+function createDeleteIconStyles(theme: Theme) {
+    return ({ size, intent, type, selected }: ChipDynamicProps) => {
         const intentValue = theme.intents[intent];
         const sizeValue = theme.sizes.chip[size];
 
@@ -133,6 +166,23 @@ export const chipStyles = StyleSheet.create((theme: Theme) => {
             fontSize: sizeValue.iconSize as number,
             color,
         } as const;
-    },
-  } as const;
+    };
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const chipStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Chip', theme, {
+        container: createContainerStyles(theme),
+        label: createLabelStyles(theme),
+        icon: createIconStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
+        deleteButton: createDeleteButtonStyles(theme),
+        deleteIcon: createDeleteIconStyles(theme),
+    };
 });

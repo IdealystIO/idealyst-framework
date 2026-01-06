@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent} from '@idealyst/theme';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type SVGImageIntent = Intent;
 
@@ -47,14 +48,11 @@ function createContainerNativeIntentVariants(theme: Theme) {
     return variants;
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const svgImageStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: {
-        alignItems: 'center',
-        justifyContent: 'center',
+// Style creators for extension support
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         variants: {
             intent: createContainerIntentVariants(theme),
         },
@@ -66,13 +64,27 @@ export const svgImageStyles = StyleSheet.create((theme: Theme) => {
                 intent: createContainerNativeIntentVariants(theme),
             },
         },
-    },
-    image: {
-        _web: {
-            display: 'block',
-            maxWidth: '100%',
-            height: 'auto',
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+// @ts-ignore - TS language server needs restart to pick up theme structure changes
+export const svgImageStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('SVGImage', theme, {
+        container: createContainerStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
+        image: {
+            _web: {
+                display: 'block',
+                maxWidth: '100%',
+                height: 'auto',
+            },
         },
-    },
-  };
+    };
 });

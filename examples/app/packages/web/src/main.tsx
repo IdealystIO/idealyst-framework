@@ -1,4 +1,5 @@
-import '@idealyst/navigation/examples/unistyles';
+
+import '@test-select-demo/shared/unistyles';
 
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';

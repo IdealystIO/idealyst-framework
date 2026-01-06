@@ -54,8 +54,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    e.stopPropagation();
+    // Only stop propagation if we have an onPress handler
+    // Otherwise, let clicks bubble up to parent handlers (e.g., Menu triggers)
     if (!disabled && onPress) {
+      e.stopPropagation();
       onPress();
     }
   };
@@ -104,8 +106,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     accessibilityHasPopup,
   ]);
 
-  // Compute dynamic styles with intent and type
-  const dynamicProps = { intent, type };
+  // Compute dynamic styles with all props for full flexibility
+  const dynamicProps = { intent, type, size, disabled, gradient };
   const buttonStyleArray = [
     (buttonStyles.button as any)(dynamicProps),
     (buttonStyles.text as any)(dynamicProps),
@@ -116,7 +118,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   const webProps = getWebProps(buttonStyleArray);
 
   // Icon container styles
-  const iconContainerProps = getWebProps([buttonStyles.iconContainer]);
+  const iconContainerProps = getWebProps([(buttonStyles.iconContainer as any)(dynamicProps)]);
 
   // Icon styles with dynamic function
   const iconStyleArray = [(buttonStyles.icon as any)(dynamicProps)];

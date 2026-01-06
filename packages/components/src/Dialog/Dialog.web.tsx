@@ -133,20 +133,20 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   });
 
   const backdropProps = getWebProps([
-    dialogStyles.backdrop,
+    (dialogStyles.backdrop as any)({}),
     { opacity: isVisible ? 1 : 0 }
   ]);
   const containerProps = getWebProps([
-    dialogStyles.container,
+    (dialogStyles.container as any)({}),
     style as any,
     isVisible
       ? { opacity: 1, transform: 'scale(1) translateY(0px)' }
       : { opacity: 0, transform: 'scale(0.96) translateY(-4px)' }
   ]);
-  const headerProps = getWebProps([dialogStyles.header]);
+  const headerProps = getWebProps([(dialogStyles.header as any)({})]);
   const titleProps = getWebProps([dialogStyles.title]);
   const closeButtonProps = getWebProps([dialogStyles.closeButton]);
-  const contentProps = getWebProps([dialogStyles.content]);
+  const contentProps = getWebProps([(dialogStyles.content as any)({})]);
 
   const mergedBackdropRef = useMergeRefs(ref, backdropProps.ref);
 

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, CompoundVariants, Intent, Size} from '@idealyst/theme';
+import { Theme, StylesheetStyles, CompoundVariants, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type MenuSize = Size;
 type MenuIntent = Intent;
@@ -88,9 +89,46 @@ function createLabelSizeVariants(theme: Theme) {
     }));
 }
 
-const createItemStyles = (theme: Theme) => {
-    return ({ intent }: MenuVariants) => {
-        const hoverStyles = getItemHoverStyles(theme, intent);
+// Main element style creators (for extension support)
+function createOverlayStyles(theme: Theme) {
+    return () => ({
+        backgroundColor: 'transparent',
+        _web: {
+            position: 'fixed' as const,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 999,
+        },
+    });
+}
+
+function createMenuStyles(theme: Theme) {
+    return () => ({
+        position: 'absolute' as const,
+        zIndex: 1000,
+        backgroundColor: theme.colors.surface.primary,
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+        borderColor: theme.colors.border.primary,
+        borderRadius: 8,
+        minWidth: 120,
+        maxWidth: 400,
+        padding: 4,
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        _web: {
+            border: `1px solid ${theme.colors.border.primary}`,
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            width: 'fit-content',
+        },
+    });
+}
+
+function createItemStyles(theme: Theme) {
+    return ({ intent }: Partial<MenuVariants>) => {
+        const hoverStyles = getItemHoverStyles(theme, intent ?? 'neutral');
         return {
             flexDirection: 'row',
             alignItems: 'center',
@@ -122,49 +160,27 @@ const createItemStyles = (theme: Theme) => {
             },
             ...hoverStyles,
         } as const;
-    }
+    };
 }
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const menuStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Menu', theme, {
+        overlay: createOverlayStyles(theme),
+        menu: createMenuStyles(theme),
+        item: createItemStyles(theme),
+    });
+
     return {
-        overlay: {
-            backgroundColor: 'transparent',
-            _web: {
-                position: 'fixed' as const,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: 999,
-            }
-        } as const,
-        menu: {
-            position: 'absolute',
-            zIndex: 1000,
-            backgroundColor: theme.colors.surface.primary,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme.colors.border.primary,
-            borderRadius: 8,
-            minWidth: 120,
-            maxWidth: 400,
-            padding: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            _web: {
-                border: `1px solid ${theme.colors.border.primary}`,
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                width: 'fit-content',
-            },
-        } as const,
+        ...extended,
+        // Minor utility styles (not extended)
         separator: {
             height: 1,
             backgroundColor: theme.colors.border.primary,
             marginTop: 4,
             marginBottom: 4,
         },
-        item: createItemStyles(theme),
         icon: {
             alignItems: 'center',
             justifyContent: 'center',
@@ -181,5 +197,5 @@ export const menuStyles = StyleSheet.create((theme: Theme) => {
                 size: createLabelSizeVariants(theme),
             } as const,
         } as const,
-    } as const;
+    };
 });

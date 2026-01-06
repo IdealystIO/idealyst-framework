@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type BreadcrumbSize = Size;
 type BreadcrumbIntent = 'primary' | 'neutral';
@@ -132,24 +133,38 @@ const createMenuButtonIconStyles = (theme: Theme) => {
     }
 }
 
+// Style creators for extension support
+function createContainerStyles() {
+    return () => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        flexWrap: 'wrap' as const,
+        gap: 8,
+    });
+}
+
+function createItemStyles() {
+    return () => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        gap: 4,
+    });
+}
+
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const breadcrumbStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        container: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: 8,
-        },
-        item: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 4,
-        },
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Breadcrumb', theme, {
+        container: createContainerStyles(),
+        item: createItemStyles(),
         itemText: createItemTextStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
         icon: createIconStyles(theme),
         separator: createSeparatorStyles(theme),
         ellipsis: {

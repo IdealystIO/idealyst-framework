@@ -149,4 +149,29 @@ export * from './utils/events';
 export * from './utils/viewStyleProps';
 export * from './utils/buildViewStyleVariants';
 
+// Component style extensions
+export {
+    extendComponent,
+    clearExtension,
+    clearAllExtensions,
+    hasExtension,
+    getExtendedComponents,
+    getExtensionCount,
+} from './extensions';
+
+export type {
+    ComponentStyleElements,
+    ComponentStyleExtensions,
+    ComponentName,
+    StyleExtension,
+    Styles,
+    ButtonStyleableElements,
+    CardStyleableElements,
+    InputStyleableElements,
+    ChipStyleableElements,
+    AlertStyleableElements,
+    SwitchStyleableElements,
+    SelectStyleableElements,
+} from './extensions';
+
 export type { AppTheme } from '@idealyst/theme';

@@ -10,6 +10,11 @@
       "import": "./src/index.ts",
       "require": "./src/index.ts",
       "types": "./src/index.ts"
+    },
+    "./unistyles": {
+      "import": "./src/unistyles.ts",
+      "require": "./src/unistyles.ts",
+      "types": "./src/unistyles.ts"
     }
   },
   "scripts": {
@@ -40,6 +45,7 @@
     "@idealyst/microphone": "portal:../../../../packages/microphone",
     "@idealyst/navigation": "^1.0.82",
     "@idealyst/theme": "^1.0.82",
+    "react-native-unistyles": "^3.0.0",
     "@tanstack/react-query": "^5.83.0",
     "@trpc/client": "^11.5.1",
     "@trpc/react-query": "^11.5.1",

@@ -57,10 +57,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
     marginHorizontal,
   });
 
-  const containerProps = getWebProps([sliderStyles.container, style as any]);
+  const containerProps = getWebProps([(sliderStyles.container as any)({}), style as any]);
   const wrapperProps = getWebProps([sliderStyles.sliderWrapper]);
-  const trackProps = getWebProps([sliderStyles.track]);
-  const thumbIconProps = getWebProps([sliderStyles.thumbIcon({ intent })]);
+  const trackProps = getWebProps([(sliderStyles.track as any)({})]);
+  const thumbIconProps = getWebProps([(sliderStyles.thumbIcon as any)({ intent })]);
   const valueLabelProps = getWebProps([sliderStyles.valueLabel]);
   const minMaxLabelsProps = getWebProps([sliderStyles.minMaxLabels]);
   const minMaxLabelProps = getWebProps([sliderStyles.minMaxLabel]);
@@ -211,9 +211,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   const percentage = ((value - min) / (max - min)) * 100;
 
   // Dynamic styles with percentage
-  const filledTrackProps = getWebProps([sliderStyles.filledTrack({ intent }), { width: `${percentage}%` }]);
+  const filledTrackProps = getWebProps([(sliderStyles.filledTrack as any)({ intent }), { width: `${percentage}%` }]);
   const thumbProps = getWebProps([
-    sliderStyles.thumb({ intent, disabled }),
+    (sliderStyles.thumb as any)({ intent, disabled }),
     isDragging && sliderStyles.thumbActive,
     { left: `${percentage}%` }
   ]);

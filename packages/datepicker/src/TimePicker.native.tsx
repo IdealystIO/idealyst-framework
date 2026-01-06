@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Button, Icon } from '@idealyst/components';
+import { View } from 'react-native';
+import { Text, Button, Icon } from '@idealyst/components';
 import { datePickerStyles } from './styles';
 import type { TimePickerProps } from './types';
 

@@ -6,6 +6,7 @@ import {
   buildMarginVerticalVariants,
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type RadioButtonSize = Size;
 type RadioButtonIntent = Intent;
@@ -117,56 +118,62 @@ function createRadioDotStyles(theme: Theme) {
     }
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
+// Container style creator for extension support
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
         paddingVertical: 4,
         variants: {
             size: buildSizeVariants(theme, 'radioButton', (size) => ({
                 gap: size.gap,
             })),
-            // Spacing variants from FormInputStyleProps
             margin: buildMarginVariants(theme),
             marginVertical: buildMarginVerticalVariants(theme),
             marginHorizontal: buildMarginHorizontalVariants(theme),
         } as const,
-    },
-    radio: createRadioStyles(theme),
-    radioDot: createRadioDotStyles(theme),
-    label: {
-        color: theme.colors.text.primary,
-        variants: {
-            size: buildSizeVariants(theme, 'radioButton', (size) => ({
-                fontSize: size.fontSize,
-            })),
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                },
-                false: {
-                    opacity: 1,
-                },
-            },
-        },
-    },
-    groupContainer: {
-        gap: 4,
-        variants: {
-            orientation: {
-                horizontal: {
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    gap: 16,
-                },
-                vertical: {
-                    flexDirection: 'column',
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('RadioButton', theme, {
+        container: createContainerStyles(theme),
+        radio: createRadioStyles(theme),
+        radioDot: createRadioDotStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles
+        label: {
+            color: theme.colors.text.primary,
+            variants: {
+                size: buildSizeVariants(theme, 'radioButton', (size) => ({
+                    fontSize: size.fontSize,
+                })),
+                disabled: {
+                    true: { opacity: 0.5 },
+                    false: { opacity: 1 },
                 },
             },
         },
-    },
-  };
+        groupContainer: {
+            gap: 4,
+            variants: {
+                orientation: {
+                    horizontal: {
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        gap: 16,
+                    },
+                    vertical: {
+                        flexDirection: 'column',
+                    },
+                },
+            },
+        },
+    };
 });

@@ -115,6 +115,12 @@ const Dialog = forwardRef<View, DialogProps>(({
     };
   });
 
+  // Get dynamic styles
+  const backdropStyle = (dialogStyles.backdrop as any)({});
+  const containerStyle = (dialogStyles.container as any)({});
+  const headerStyle = (dialogStyles.header as any)({});
+  const contentStyle = (dialogStyles.content as any)({});
+
   return (
     <Modal
       visible={open}
@@ -125,11 +131,11 @@ const Dialog = forwardRef<View, DialogProps>(({
       testID={testID}
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
-        <Animated.View style={[dialogStyles.backdrop, backdropAnimatedStyle]}>
+        <Animated.View style={[backdropStyle, backdropAnimatedStyle]}>
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <Animated.View ref={ref as any} style={[dialogStyles.container, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
+            <Animated.View ref={ref as any} style={[containerStyle, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
               {(title || showCloseButton) && (
-                <View style={dialogStyles.header}>
+                <View style={headerStyle}>
                   {title && (
                     <Text style={dialogStyles.title}>
                       {title}
@@ -147,7 +153,7 @@ const Dialog = forwardRef<View, DialogProps>(({
                   )}
                 </View>
               )}
-              <View style={dialogStyles.content}>
+              <View style={contentStyle}>
                 {children}
               </View>
             </Animated.View>

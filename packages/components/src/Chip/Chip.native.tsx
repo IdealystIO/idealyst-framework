@@ -42,11 +42,11 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
   const isSelected = selectable ? selected : false;
 
   // Compute dynamic styles
-  const containerStyle = chipStyles.container(size, intent, type, isSelected, disabled);
-  const labelStyle = chipStyles.label(size, intent, type, isSelected);
-  const iconStyle = chipStyles.icon(size, intent, type, isSelected);
-  const deleteButtonStyle = chipStyles.deleteButton(size);
-  const deleteIconStyle = chipStyles.deleteIcon(size, intent, type, isSelected);
+  const containerStyle = (chipStyles.container as any)({ size, intent, type, selected: isSelected, disabled });
+  const labelStyle = (chipStyles.label as any)({ size, intent, type, selected: isSelected });
+  const iconStyle = (chipStyles.icon as any)({ size, intent, type, selected: isSelected });
+  const deleteButtonStyle = (chipStyles.deleteButton as any)({ size });
+  const deleteIconStyle = (chipStyles.deleteIcon as any)({ size, intent, type, selected: isSelected });
 
   // Map chip size to icon size
   const iconSize = size === 'sm' ? 12 : size === 'md' ? 14 : 16;

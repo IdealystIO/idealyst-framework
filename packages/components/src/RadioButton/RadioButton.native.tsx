@@ -101,20 +101,25 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
     outputRange: [0, 1],
   });
 
+  // Get dynamic styles
+  const containerStyle = (radioButtonStyles.container as any)({});
+  const radioStyle = (radioButtonStyles.radio as any)({ intent });
+  const radioDotStyle = (radioButtonStyles.radioDot as any)({ intent });
+
   return (
     <Pressable
       ref={ref}
       nativeID={id}
       onPress={handlePress}
       disabled={disabled}
-      style={[radioButtonStyles.container, style]}
+      style={[containerStyle, style]}
       testID={testID}
       {...nativeA11yProps}
     >
-      <View style={radioButtonStyles.radio({ intent })}>
+      <View style={radioStyle}>
         <Animated.View
           style={[
-            radioButtonStyles.radioDot({ intent }),
+            radioDotStyle,
             {
               transform: [{ scale: dotScale }],
             },

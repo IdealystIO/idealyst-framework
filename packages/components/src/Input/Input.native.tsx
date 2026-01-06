@@ -181,7 +181,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
         autoCapitalize={autoCapitalize}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={inputStyles.input}
+        style={(inputStyles.input as any)({})}
         placeholderTextColor="#999999"
         {...nativeA11yProps}
       />

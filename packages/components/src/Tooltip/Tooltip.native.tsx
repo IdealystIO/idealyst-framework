@@ -159,14 +159,14 @@ const Tooltip = forwardRef<View, TooltipProps>(({
           <Pressable style={{ flex: 1 }} onPress={() => setVisible(false)}>
             <View
               style={[
-                tooltipStyles.tooltip,
+                (tooltipStyles.tooltip as any)({}),
                 { position: 'absolute' },
                 getPositionStyle(),
               ]}
               pointerEvents="none"
             >
               {typeof content === 'string' ? (
-                <Text style={tooltipStyles.tooltip}>{content}</Text>
+                <Text style={(tooltipStyles.tooltip as any)({})}>{content}</Text>
               ) : (
                 content
               )}

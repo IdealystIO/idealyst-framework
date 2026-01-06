@@ -48,7 +48,7 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
 
   // Create the style array following the official documentation pattern
   const containerStyleArray = [
-    activityIndicatorStyles.container,
+    (activityIndicatorStyles.container as any)({}),
     customSize && {
       width: customSize,
       height: customSize,
@@ -57,7 +57,7 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   ];
 
   const spinnerStyleArray = [
-    activityIndicatorStyles.spinner({
+    (activityIndicatorStyles.spinner as any)({
       intent,
     }),
     customSize ? {

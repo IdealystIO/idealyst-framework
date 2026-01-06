@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import {
   buildMarginVariants,
@@ -7,6 +7,7 @@ import {
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { SwitchIntentVariant, SwitchSizeVariant } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 function createTrackSizeVariants(theme: Theme) {
     return buildSizeVariants(theme, 'switch', (size) => ({
@@ -127,34 +128,42 @@ function createThumbIconStyles(theme: Theme) {
     }
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const switchStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
+/**
+ * Create container styles
+ */
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
         gap: 8,
         variants: {
-            // Spacing variants from FormInputStyleProps
             margin: buildMarginVariants(theme),
             marginVertical: buildMarginVerticalVariants(theme),
             marginHorizontal: buildMarginHorizontalVariants(theme),
         },
-    },
-    switchContainer: {
-        justifyContent: 'center',
+    });
+}
+
+/**
+ * Create switch container styles
+ */
+function createSwitchContainerStyles() {
+    return () => ({
+        justifyContent: 'center' as const,
         _web: {
             border: 'none',
             padding: 0,
             backgroundColor: 'transparent',
             width: 'fit-content',
-        }
-    },
-    switchTrack: createSwitchTrackStyles(theme),
-    switchThumb: createSwitchThumbStyles(theme),
-    thumbIcon: createThumbIconStyles(theme),
-    label: {
+        },
+    });
+}
+
+/**
+ * Create label styles
+ */
+function createLabelStyles(theme: Theme) {
+    return () => ({
         fontSize: 14,
         color: theme.colors.text.primary,
         variants: {
@@ -175,6 +184,24 @@ export const switchStyles = StyleSheet.create((theme: Theme) => {
                 },
             },
         } as const,
-    } as const,
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const switchStyles = StyleSheet.create((theme: Theme) => {
+  // Apply extensions to main visual elements
+  const extended = applyExtensions('Switch', theme, {
+    container: createContainerStyles(theme),
+    switchTrack: createSwitchTrackStyles(theme),
+    switchThumb: createSwitchThumbStyles(theme),
+  });
+
+  return {
+    ...extended,
+    // Minor utility styles (not extended)
+    switchContainer: createSwitchContainerStyles()(),
+    thumbIcon: createThumbIconStyles(theme),
+    label: createLabelStyles(theme)(),
   };
 });

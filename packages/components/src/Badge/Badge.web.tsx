@@ -28,13 +28,13 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
     type,
   });
   
-  const badgeStyle = badgeStyles.badge({ color });
+  const badgeStyle = (badgeStyles.badge as any)({ color });
   const contentStyle = badgeStyles.content;
-  const textStyle = badgeStyles.text({ color });
-  
-  const badgeProps = getWebProps(badgeStyle);
-  const contentProps = getWebProps(contentStyle);
-  const textProps = getWebProps(textStyle);
+  const textStyle = (badgeStyles.text as any)({ color });
+
+  const badgeProps = getWebProps([badgeStyle]);
+  const contentProps = getWebProps([contentStyle]);
+  const textProps = getWebProps([textStyle]);
   const iconProps = getWebProps([badgeStyles.icon, textStyle]);
 
   // Helper to render icon

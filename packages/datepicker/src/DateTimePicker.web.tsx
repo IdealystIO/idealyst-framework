@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text } from '@idealyst/components';
+import { getWebProps } from 'react-native-unistyles/web';
+import { Text } from '@idealyst/components';
 import { DateInput } from './DateInput';
 import { TimeInput } from './TimeInput';
 import { datePickerStyles } from './styles';
@@ -54,15 +55,18 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     onChange(updated);
   };
 
+  // Get web props for styled elements
+  const inputRowProps = getWebProps([datePickerStyles.inputRow]);
+
   return (
-    <View style={style}>
+    <div style={style as React.CSSProperties}>
       {label && (
         <Text typography="body2" weight="medium" style={{ marginBottom: 4 }}>
           {label}
         </Text>
       )}
-      <View style={datePickerStyles.inputRow}>
-        <View style={{ flex: 1 }}>
+      <div {...inputRowProps}>
+        <div style={{ flex: 1 }}>
           <DateInput
             value={value ?? undefined}
             onChange={handleDateChange}
@@ -72,8 +76,8 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             disabled={disabled}
             error={error}
           />
-        </View>
-        <View style={{ flex: 1 }}>
+        </div>
+        <div style={{ flex: 1 }}>
           <TimeInput
             value={value ?? undefined}
             onChange={handleTimeChange}
@@ -82,8 +86,8 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             minuteStep={minuteStep}
             disabled={disabled}
           />
-        </View>
-      </View>
-    </View>
+        </div>
+      </div>
+    </div>
   );
 };

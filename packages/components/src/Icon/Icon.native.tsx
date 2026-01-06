@@ -17,15 +17,13 @@ const Icon = forwardRef<any, IconProps>(({
 
 
   // Call dynamic style with variants
-  const iconStyle = iconStyles.icon({ color, intent, size });
+  const iconStyle = (iconStyles.icon as any)({ color, intent, size });
 
   const { theme } = useUnistyles();
 
   const iconSize = useMemo(() => {
     return buildIconSize(theme, size).width;
   }, [theme, size]);
-
-  console.log(iconStyle)
 
   // Get fontSize from styles for numeric size prop
 

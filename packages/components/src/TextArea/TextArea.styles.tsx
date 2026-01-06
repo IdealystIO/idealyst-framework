@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import {
   buildMarginVariants,
@@ -7,6 +7,7 @@ import {
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { TextAreaIntentVariant } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 
 /**
@@ -114,73 +115,104 @@ const createTextareaStyles = (theme: Theme) => {
     }
 }
 
+// Helper functions to create static styles wrapped in dynamic functions
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        gap: 4,
+        variants: {
+            // Spacing variants from FormInputStyleProps
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
+        },
+    });
+}
+
+function createLabelStyles(theme: Theme) {
+    return () => ({
+        fontSize: 14,
+        fontWeight: '500' as const,
+        color: theme.colors.text.primary,
+        variants: {
+            disabled: {
+                true: {
+                    opacity: 0.5,
+                },
+                false: {},
+            },
+        },
+    });
+}
+
+function createTextareaContainerStyles() {
+    return () => ({
+        position: 'relative' as const,
+    });
+}
+
+function createHelperTextStyles(theme: Theme) {
+    return () => ({
+        fontSize: 12,
+        color: theme.colors.text.secondary,
+        variants: {
+            hasError: {
+                true: {
+                    color: theme.intents.error.primary,
+                },
+                false: {},
+            },
+        },
+    });
+}
+
+function createFooterStyles() {
+    return () => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between' as const,
+        alignItems: 'center' as const,
+        gap: 4,
+    });
+}
+
+function createCharacterCountStyles(theme: Theme) {
+    return () => ({
+        fontSize: 12,
+        color: theme.colors.text.secondary,
+        variants: {
+            isNearLimit: {
+                true: {
+                    color: theme.intents.warning.primary,
+                },
+                false: {},
+            },
+            isAtLimit: {
+                true: {
+                    color: theme.intents.error.primary,
+                },
+                false: {},
+            },
+        },
+    });
+}
+
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const textAreaStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        container: {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-            variants: {
-                // Spacing variants from FormInputStyleProps
-                margin: buildMarginVariants(theme),
-                marginVertical: buildMarginVerticalVariants(theme),
-                marginHorizontal: buildMarginHorizontalVariants(theme),
-            },
-        },
-        label: {
-            fontSize: 14,
-            fontWeight: '500',
-            color: theme.colors.text.primary,
-            variants: {
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                    },
-                    false: {},
-                },
-            },
-        },
-        textareaContainer: {
-            position: 'relative',
-        },
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('TextArea', theme, {
+        container: createContainerStyles(theme),
         textarea: createTextareaStyles(theme),
-        helperText: {
-            fontSize: 12,
-            color: theme.colors.text.secondary,
-            variants: {
-                hasError: {
-                    true: {
-                        color: theme.intents.error.primary,
-                    },
-                    false: {},
-                },
-            },
-        },
-        footer: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: 4,
-        },
-        characterCount: {
-            fontSize: 12,
-            color: theme.colors.text.secondary,
-            variants: {
-                isNearLimit: {
-                    true: {
-                        color: theme.intents.warning.primary,
-                    },
-                    false: {},
-                },
-                isAtLimit: {
-                    true: {
-                        color: theme.intents.error.primary,
-                    },
-                    false: {},
-                },
-            },
-        },
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
+        label: createLabelStyles(theme)(),
+        textareaContainer: createTextareaContainerStyles()(),
+        helperText: createHelperTextStyles(theme)(),
+        footer: createFooterStyles()(),
+        characterCount: createCharacterCountStyles(theme)(),
     };
 });

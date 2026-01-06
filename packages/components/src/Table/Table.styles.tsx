@@ -10,6 +10,7 @@ import {
   buildMarginVerticalVariants,
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type TableType = 'default' | 'bordered' | 'striped';
 
@@ -166,8 +167,8 @@ function createCellTypeVariants(theme: Theme) {
     } as const;
 }
 
-const createContainerStyles = (theme: Theme) => {
-    return {
+function createContainerStyles(theme: Theme) {
+    return () => ({
         width: '100%',
         _web: {
             overflow: 'auto',
@@ -183,7 +184,7 @@ const createContainerStyles = (theme: Theme) => {
             marginVertical: buildMarginVerticalVariants(theme),
             marginHorizontal: buildMarginHorizontalVariants(theme),
         },
-    } as const;
+    });
 }
 
 const createTableStyles = (theme: Theme) => {
@@ -298,8 +299,14 @@ const createCellStyles = (theme: Theme) => {
 }
 
 export const tableStyles = StyleSheet.create((theme: Theme) => {
-    return {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Table', theme, {
         container: createContainerStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
         table: createTableStyles(theme),
         thead: createTheadStyles(theme),
         tbody: {},

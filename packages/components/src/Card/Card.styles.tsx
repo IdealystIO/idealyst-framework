@@ -10,6 +10,7 @@ import {
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { ViewStyleSize } from '../utils/viewStyleProps';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type CardType = 'outlined' | 'elevated' | 'filled';
 type CardRadius = Radius;
@@ -153,7 +154,7 @@ function createCardStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 export const cardStyles = StyleSheet.create((theme: Theme) => {
-  return {
+  return applyExtensions('Card', theme, {
     card: createCardStyles(theme),
-  };
+  });
 });

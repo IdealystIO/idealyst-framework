@@ -154,7 +154,7 @@ const Popover = forwardRef<View, PopoverProps>(({
               left={popoverPosition.left}
               width={Math.min(popoverPosition.width || 200, maxPopoverWidth)}
               maxHeight={500}
-              style={[popoverStyles.container, style]}
+              style={[(popoverStyles.container as any)({}), style]}
               onLayout={handlePopoverLayout}
               {...nativeA11yProps}
             >

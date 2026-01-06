@@ -7,6 +7,7 @@ import {
   buildPaddingHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { TextAlignVariant, TextColorVariant, TextWeightVariant, TextTypographyVariant } from "./types";
+import { applyExtensions } from '../extensions/applyExtension';
 
 export type TextVariants = {
     typography: TextTypographyVariant;
@@ -90,7 +91,12 @@ function createTextStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 export const textStyles = StyleSheet.create((theme: Theme) => {
-  return {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Text', theme, {
         text: createTextStyles(theme),
+    });
+
+    return {
+        ...extended,
     };
 });

@@ -29,8 +29,8 @@ const Progress: React.FC<ProgressProps> = ({
   const dynamicProps = { intent };
 
   // Linear progress
-  const containerProps = getWebProps([progressStyles.container, style as any]);
-  const trackProps = getWebProps([progressStyles.linearTrack]);
+  const containerProps = getWebProps([(progressStyles.container as any)({}), style as any]);
+  const trackProps = getWebProps([(progressStyles.linearTrack as any)({})]);
   const barProps = getWebProps([(progressStyles.linearBar as any)(dynamicProps), { width: `${percentage}%` }]);
   const indeterminateProps = getWebProps([(progressStyles.indeterminateBar as any)(dynamicProps)]);
   const labelProps = getWebProps([progressStyles.label]);

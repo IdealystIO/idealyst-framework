@@ -87,9 +87,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
     marginHorizontal,
   });
 
-  const containerProps = getWebProps([radioButtonStyles.container, style]);
-  const radioProps = getWebProps([radioButtonStyles.radio({ intent })]);
-  const dotProps = getWebProps([radioButtonStyles.radioDot({ intent })]);
+  const containerProps = getWebProps([(radioButtonStyles.container as any)({}), style]);
+  const radioProps = getWebProps([(radioButtonStyles.radio as any)({ intent })]);
+  const dotProps = getWebProps([(radioButtonStyles.radioDot as any)({ intent })]);
   const labelProps = getWebProps([radioButtonStyles.label]);
 
   return (

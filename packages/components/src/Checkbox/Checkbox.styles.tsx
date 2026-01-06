@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
 import {
   buildMarginVariants,
   buildMarginVerticalVariants,
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type CheckboxSize = Size;
 type CheckboxIntent = Intent | 'info';
@@ -169,11 +170,11 @@ function createCheckboxStyles(theme: Theme) {
 }
 
 function createCheckmarkStyles(_theme: Theme) {
-    return {
-        position: 'absolute',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    return () => ({
+        position: 'absolute' as const,
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         color: '#ffffff',
         variants: {
             size: createCheckmarkSizeVariants(),
@@ -182,15 +183,13 @@ function createCheckmarkStyles(_theme: Theme) {
                 false: { opacity: 0 },
             },
         },
-    } as const;
+    });
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const checkboxStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    wrapper: {
-        flexDirection: 'column',
+// Helper functions to create static styles wrapped in dynamic functions
+function createWrapperStyles(theme: Theme) {
+    return () => ({
+        flexDirection: 'column' as const,
         gap: 4,
         variants: {
             // Spacing variants from FormInputStyleProps
@@ -204,10 +203,13 @@ export const checkboxStyles = StyleSheet.create((theme: Theme) => {
             alignItems: 'flex-start',
             width: 'auto',
         },
-    },
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    });
+}
+
+function createContainerStyles() {
+    return () => ({
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
         gap: 8,
         _web: {
             display: 'flex',
@@ -217,9 +219,11 @@ export const checkboxStyles = StyleSheet.create((theme: Theme) => {
             width: 'fit-content',
             cursor: 'pointer',
         },
-    },
-    checkbox: createCheckboxStyles(theme),
-    label: {
+    });
+}
+
+function createLabelStyles(theme: Theme) {
+    return () => ({
         color: theme.colors.text.primary,
         variants: {
             size: createLabelSizeVariants(),
@@ -234,9 +238,11 @@ export const checkboxStyles = StyleSheet.create((theme: Theme) => {
             margin: 0,
             padding: 0,
         },
-    },
-    checkmark: createCheckmarkStyles(theme),
-    helperText: {
+    });
+}
+
+function createHelperTextStyles(theme: Theme) {
+    return () => ({
         fontSize: 14,
         color: theme.colors.text.secondary,
         marginTop: 2,
@@ -246,6 +252,24 @@ export const checkboxStyles = StyleSheet.create((theme: Theme) => {
                 false: { color: theme.colors.text.secondary },
             },
         },
-    },
-  };
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const checkboxStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Checkbox', theme, {
+        container: createContainerStyles(),
+        checkbox: createCheckboxStyles(theme),
+        checkmark: createCheckmarkStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
+        wrapper: createWrapperStyles(theme)(),
+        label: createLabelStyles(theme)(),
+        helperText: createHelperTextStyles(theme)(),
+    };
 });

@@ -73,8 +73,9 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
     );
   }
 
+  const screenStyle = (screenStyles.screen as any)({});
   const containerStyle = [
-    screenStyles.screen,
+    screenStyle,
     safeAreaStyle,
     style,
   ];

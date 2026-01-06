@@ -38,11 +38,11 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
     shape,
   });
 
-  const avatarStyleArray = [avatarStyles.avatar, style];
+  const avatarStyleArray = [(avatarStyles.avatar as any)({}), style];
   const avatarProps = getWebProps(avatarStyleArray);
 
   // Generate fallback text styles with proper theming and size
-  const fallbackStyleArray = [avatarStyles.fallback];
+  const fallbackStyleArray = [(avatarStyles.fallback as any)({})];
   const fallbackProps = getWebProps(fallbackStyleArray);
 
   const handleImageError = () => {

@@ -5,20 +5,27 @@ import {
   buildPaddingVerticalVariants,
   buildPaddingHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
-const createPressableStyles = (theme: Theme) => {
-  return {
-    variants: {
-      // Spacing variants from PressableSpacingStyleProps
-      padding: buildPaddingVariants(theme),
-      paddingVertical: buildPaddingVerticalVariants(theme),
-      paddingHorizontal: buildPaddingHorizontalVariants(theme),
-    },
-  } as const;
-};
+// Style creators for extension support
+function createPressableStyles(theme: Theme) {
+    return () => ({
+        variants: {
+            // Spacing variants from PressableSpacingStyleProps
+            padding: buildPaddingVariants(theme),
+            paddingVertical: buildPaddingVerticalVariants(theme),
+            paddingHorizontal: buildPaddingHorizontalVariants(theme),
+        },
+    });
+}
 
 export const pressableStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    pressable: createPressableStyles(theme),
-  };
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Pressable', theme, {
+        pressable: createPressableStyles(theme),
+    });
+
+    return {
+        ...extended,
+    };
 });

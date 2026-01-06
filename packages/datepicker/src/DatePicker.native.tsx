@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, Button, Icon } from '@idealyst/components';
+import { View } from 'react-native';
+import { Text, Button, Icon } from '@idealyst/components';
 import { datePickerStyles } from './styles';
 import type { DatePickerProps } from './types';
 
@@ -21,7 +22,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   datePickerStyles.useVariants({ disabled });
 
-  const { days, monthLabel, monthShort, year } = useMemo(() => {
+  const { days, monthShort, year } = useMemo(() => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
     const firstDay = new Date(year, month, 1);
@@ -53,12 +54,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       }
     }
 
-    const monthLabel = firstDay.toLocaleDateString('en-US', {
-      month: 'short',
-      year: 'numeric',
-    });
-
-    return { days, monthLabel, monthShort: MONTHS[month], year };
+    return { days, monthShort: MONTHS[month], year };
   }, [currentMonth]);
 
   const isSelected = (date: Date): boolean => {

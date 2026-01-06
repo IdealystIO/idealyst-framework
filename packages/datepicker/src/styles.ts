@@ -33,18 +33,27 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
       justifyContent: 'space-between',
       marginBottom: 4,
       paddingHorizontal: 2,
+      _web: {
+        display: 'flex',
+      },
     },
 
     calendarTitle: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: 2,
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Weekday header row
     weekdayRow: {
       flexDirection: 'row',
       marginBottom: 2,
+      _web: {
+        display: 'flex',
+      },
     },
 
     weekdayCell: {
@@ -52,12 +61,18 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
       height: 20,
       alignItems: 'center',
       justifyContent: 'center',
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Calendar grid
     calendarGrid: {
       flexDirection: 'row',
       flexWrap: 'wrap',
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Month selector grid (3x4)
@@ -66,6 +81,9 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
       flexWrap: 'wrap',
       justifyContent: 'center',
       paddingVertical: 8,
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Year selector grid
@@ -74,6 +92,9 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
       flexWrap: 'wrap',
       justifyContent: 'center',
       paddingVertical: 8,
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Individual day cell - compact
@@ -82,6 +103,9 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
       height: 28,
       alignItems: 'center',
       justifyContent: 'center',
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Time picker container
@@ -102,12 +126,18 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
       flexDirection: 'row',
       gap: 8,
       alignItems: 'center',
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Individual time column (hours, minutes, period)
     timeColumn: {
       alignItems: 'center',
       gap: 2,
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Time separator (colon)
@@ -119,6 +149,9 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
     inputRow: {
       flexDirection: 'row',
       gap: 8,
+      _web: {
+        display: 'flex',
+      },
     },
 
     // Popover content wrapper
@@ -153,6 +186,9 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
         },
       },
       _web: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
         border: `1px solid ${theme.colors.border.primary}`,
       },
     },

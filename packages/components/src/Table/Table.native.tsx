@@ -67,7 +67,7 @@ function TableInner<T = any>({
       ref={ref}
       nativeID={id}
       horizontal
-      style={[tableStyles.container, style]}
+      style={[(tableStyles.container as any)({}), style]}
       testID={testID}
       {...nativeA11yProps}
     >

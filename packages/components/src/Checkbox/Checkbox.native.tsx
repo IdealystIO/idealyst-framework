@@ -99,6 +99,10 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   const labelContent = children || label;
   const displayHelperText = error || helperText;
 
+  const containerStyle = (checkboxStyles.container as any)({});
+  const checkboxStyle = (checkboxStyles.checkbox as any)({ intent });
+  const checkmarkStyle = (checkboxStyles.checkmark as any)({});
+
   return (
     <View ref={ref} nativeID={id} style={[checkboxStyles.wrapper, style]}>
       <Pressable
@@ -106,15 +110,15 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
         disabled={disabled}
         testID={testID}
         {...nativeA11yProps}
-        style={checkboxStyles.container}
+        style={containerStyle}
       >
-        <View style={checkboxStyles.checkbox({ intent })}>
+        <View style={checkboxStyle}>
           {(internalChecked || indeterminate) && (
             <MaterialCommunityIcons
               name={indeterminate ? 'minus' : 'check'}
               size={14}
               color="#ffffff"
-              style={checkboxStyles.checkmark}
+              style={checkmarkStyle}
             />
           )}
         </View>

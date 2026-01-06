@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Intent } from '@idealyst/theme';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type DividerOrientation = 'horizontal' | 'vertical';
 type DividerThickness = 'thin' | 'md' | 'thick';
@@ -122,48 +123,54 @@ function createLineStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 export const dividerStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    divider: createDividerStyles(theme),
-    container: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex',
-        variants: {
-            orientation: {
-                horizontal: {
-                    flexDirection: 'row',
-                    width: '100%',
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Divider', theme, {
+        divider: createDividerStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
+        container: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            display: 'flex',
+            variants: {
+                orientation: {
+                    horizontal: {
+                        flexDirection: 'row',
+                        width: '100%',
+                    },
+                    vertical: {
+                        flexDirection: 'column',
+                        height: '100%',
+                    },
                 },
-                vertical: {
-                    flexDirection: 'column',
-                    height: '100%',
-                },
-            },
-            spacing: {
-                none: { gap: 0 },
-                xs: { gap: 4 },
-                sm: { gap: 8 },
-                md: { gap: 16 },
-                lg: { gap: 24 },
-                xl: { gap: 32 },
-            },
-        },
-    },
-    content: {
-        backgroundColor: theme.colors.surface.primary,
-        color: theme.colors.text.secondary,
-        fontSize: 14,
-        variants: {
-            orientation: {
-                horizontal: {
-                    paddingHorizontal: 8,
-                },
-                vertical: {
-                    paddingVertical: 8,
+                spacing: {
+                    none: { gap: 0 },
+                    xs: { gap: 4 },
+                    sm: { gap: 8 },
+                    md: { gap: 16 },
+                    lg: { gap: 24 },
+                    xl: { gap: 32 },
                 },
             },
         },
-    },
-    line: createLineStyles(theme),
-  };
+        content: {
+            backgroundColor: theme.colors.surface.primary,
+            color: theme.colors.text.secondary,
+            fontSize: 14,
+            variants: {
+                orientation: {
+                    horizontal: {
+                        paddingHorizontal: 8,
+                    },
+                    vertical: {
+                        paddingVertical: 8,
+                    },
+                },
+            },
+        },
+        line: createLineStyles(theme),
+    };
 });

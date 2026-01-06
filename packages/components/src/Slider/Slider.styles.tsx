@@ -7,6 +7,7 @@ import {
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { SliderIntentVariant } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 /**
  * Create size variants for track
@@ -155,69 +156,79 @@ const createThumbIconStyles = (theme: Theme) => {
     }
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const sliderStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        container: {
-            gap: 4,
-            paddingVertical: 8,
-            variants: {
-                // Spacing variants from FormInputStyleProps
-                margin: buildMarginVariants(theme),
-                marginVertical: buildMarginVerticalVariants(theme),
-                marginHorizontal: buildMarginHorizontalVariants(theme),
-            },
+// Container style creator for extension support
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        gap: 4,
+        paddingVertical: 8,
+        variants: {
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
         },
+    });
+}
+
+// Track style creator for extension support
+function createTrackStyles(theme: Theme) {
+    return () => ({
+        backgroundColor: theme.colors.surface.tertiary,
+        borderRadius: 9999,
+        position: 'relative' as const,
+        variants: {
+            size: createTrackSizeVariants(theme),
+            disabled: {
+                true: {
+                    opacity: 0.5,
+                    _web: { cursor: 'not-allowed' },
+                },
+                false: {
+                    opacity: 1,
+                    _web: { cursor: 'pointer' },
+                },
+            },
+        } as const,
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
+export const sliderStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Slider', theme, {
+        container: createContainerStyles(theme),
+        track: createTrackStyles(theme),
+        filledTrack: createFilledTrackStyles(theme),
+        thumb: createThumbStyles(theme),
+        thumbIcon: createThumbIconStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles
         sliderWrapper: {
             position: 'relative',
             paddingVertical: 4,
         },
-        track: {
-            backgroundColor: theme.colors.surface.tertiary,
-            borderRadius: 9999,
-            position: 'relative',
-            variants: {
-                size: createTrackSizeVariants(theme),
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                        _web: {
-                            cursor: 'not-allowed',
-                        },
-                    },
-                    false: {
-                        opacity: 1,
-                        _web: {
-                            cursor: 'pointer',
-                        },
-                    },
-                },
-            } as const,
-        } as const,
-        filledTrack: createFilledTrackStyles(theme),
-        thumb: createThumbStyles(theme),
         thumbActive: {
             _web: {
                 transform: 'translate(-50%, -50%) scale(1.1)',
             },
         },
-        thumbIcon: createThumbIconStyles(theme),
         valueLabel: {
-        fontSize: 12,
-        fontWeight: '600',
-        color: theme.colors.text.primary,
-        textAlign: 'center',
-    },
+            fontSize: 12,
+            fontWeight: '600',
+            color: theme.colors.text.primary,
+            textAlign: 'center',
+        },
         minMaxLabels: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 4,
-    },
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 4,
+        },
         minMaxLabel: {
-        fontSize: 12,
-        color: theme.colors.text.secondary,
-    },
+            fontSize: 12,
+            color: theme.colors.text.secondary,
+        },
         mark: {
             position: 'absolute',
             width: 2,

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, Intent } from '@idealyst/theme';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type AlertType = 'filled' | 'outlined' | 'soft';
 type AlertIntent = Intent;
@@ -132,47 +133,81 @@ function createMessageStyles(theme: Theme) {
     };
 }
 
+/**
+ * Create content styles
+ */
+function createContentStyles() {
+    return () => ({
+        flex: 1,
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        gap: 4,
+    });
+}
+
+/**
+ * Create actions styles
+ */
+function createActionsStyles() {
+    return () => ({
+        marginTop: 4,
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        gap: 8,
+    });
+}
+
+/**
+ * Create close button styles
+ */
+function createCloseButtonStyles() {
+    return () => ({
+        padding: 4,
+        backgroundColor: 'transparent',
+        borderRadius: 4,
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        flexShrink: 0,
+        _web: {
+            border: 'none',
+            cursor: 'pointer',
+            outline: 'none',
+            _hover: {
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+            },
+        },
+    });
+}
+
+/**
+ * Create close icon styles
+ */
+function createCloseIconStyles() {
+    return () => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        width: 16,
+        height: 16,
+    });
+}
+
 export const alertStyles = StyleSheet.create((theme: Theme) => {
-    return {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Alert', theme, {
         container: createContainerStyles(theme),
         iconContainer: createIconContainerStyles(theme),
         title: createTitleStyles(theme),
         message: createMessageStyles(theme),
-        content: {
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-        },
-        actions: {
-            marginTop: 4,
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 8,
-        },
-        closeButton: {
-            padding: 4,
-            backgroundColor: 'transparent',
-            borderRadius: 4,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            _web: {
-                border: 'none',
-                cursor: 'pointer',
-                outline: 'none',
-                _hover: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                },
-            },
-        },
-        closeIcon: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 16,
-            height: 16,
-        },
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
+        content: createContentStyles()(),
+        actions: createActionsStyles()(),
+        closeButton: createCloseButtonStyles()(),
+        closeIcon: createCloseIconStyles()(),
     };
 });

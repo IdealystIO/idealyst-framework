@@ -113,8 +113,8 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
     size,
   });
 
-  const overlayProps = getWebProps([menuStyles.overlay]);
-  const menuProps = getWebProps([menuStyles.menu, style as any]);
+  const overlayProps = getWebProps([(menuStyles.overlay as any)({})]);
+  const menuProps = getWebProps([(menuStyles.menu as any)({}), style as any]);
   const separatorProps = getWebProps([menuStyles.separator]);
 
   const handleTriggerClick = () => {

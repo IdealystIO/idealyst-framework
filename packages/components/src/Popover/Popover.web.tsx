@@ -44,7 +44,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
 
   popoverStyles.useVariants({});
 
-  const containerProps = getWebProps([popoverStyles.container]);
+  const containerProps = getWebProps([(popoverStyles.container as any)({})]);
   const contentProps = getWebProps([popoverStyles.content]);
 
   const mergedPopoverRef = useMergeRefs(ref, popoverRef);

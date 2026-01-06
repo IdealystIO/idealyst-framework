@@ -162,9 +162,13 @@ const Progress = forwardRef<View, ProgressProps>(({
     };
   });
 
+  // Get dynamic styles for extended styles
+  const containerStyle = (progressStyles.container as any)({});
+  const linearTrackStyle = (progressStyles.linearTrack as any)({});
+
   return (
-    <View ref={ref} nativeID={id} style={[progressStyles.container, style]} testID={testID} accessibilityRole="progressbar">
-      <View style={progressStyles.linearTrack}>
+    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} accessibilityRole="progressbar">
+      <View style={linearTrackStyle}>
         {indeterminate ? (
           <Animated.View style={[indeterminateBarStyle, indeterminateAnimatedStyle]} />
         ) : (

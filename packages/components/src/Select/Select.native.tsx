@@ -233,7 +233,7 @@ const Select = forwardRef<View, SelectProps>(({
           >
             <Animated.View
               style={[
-                selectStyles.dropdown,
+                (selectStyles.dropdown as any)({}),
                 {
                   position: 'relative', // Override absolute positioning from styles
                   top: 0, // Override top: '100%' from styles
@@ -264,7 +264,7 @@ const Select = forwardRef<View, SelectProps>(({
               {filteredOptions.map((option) => (
                   <Pressable
                     key={option.value}
-                    style={selectStyles.option}
+                    style={(selectStyles.option as any)({})}
                     onPress={() => handleOptionSelect(option)}
                     disabled={option.disabled}
                     android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
@@ -284,7 +284,7 @@ const Select = forwardRef<View, SelectProps>(({
                 ))}
 
               {filteredOptions.length === 0 && (
-                <View style={selectStyles.option}>
+                <View style={(selectStyles.option as any)({})}>
                   <Text style={selectStyles.optionText}>
                     No options found
                   </Text>
@@ -298,8 +298,14 @@ const Select = forwardRef<View, SelectProps>(({
     );
   };
 
+  // Get dynamic styles
+  const containerStyle = (selectStyles.container as any)({});
+  const triggerStyle = (selectStyles.trigger as any)({ type, intent });
+  const dropdownStyle = (selectStyles.dropdown as any)({});
+  const optionStyle = (selectStyles.option as any)({});
+
   return (
-    <View ref={ref} nativeID={id} style={[selectStyles.container, style]} testID={testID}>
+    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID}>
       {label && (
         <Text style={selectStyles.label}>
           {label}
@@ -308,7 +314,7 @@ const Select = forwardRef<View, SelectProps>(({
 
       <Pressable
         ref={mergedTriggerRef}
-        style={selectStyles.trigger({ type, intent })}
+        style={triggerStyle}
         onPress={handleTriggerPress}
         disabled={disabled}
         accessibilityLabel={accessibilityLabel || label}

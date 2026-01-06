@@ -11,6 +11,7 @@ import {
 } from '../utils/buildViewStyleVariants';
 import { ViewBackgroundVariant, ViewBorderVariant, ViewRadiusVariant } from './types';
 import { ViewStyleSize } from '../utils/viewStyleProps';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type ViewVariants = {
   background: ViewBackgroundVariant;
@@ -86,29 +87,39 @@ function createBorderVariants(theme: Theme) {
   } as const;
 }
 
+// Style creators for extension support
+function createViewStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        variants: {
+            background: createBackgroundVariants(theme),
+            radius: createRadiusVariants(),
+            border: createBorderVariants(theme),
+            gap: buildGapVariants(theme),
+            padding: buildPaddingVariants(theme),
+            paddingVertical: buildPaddingVerticalVariants(theme),
+            paddingHorizontal: buildPaddingHorizontalVariants(theme),
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
+        },
+        _web: {
+            display: 'flex',
+            flexDirection: 'column',
+            boxSizing: 'border-box',
+        },
+    });
+}
+
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 export const viewStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    view: {
-      display: 'flex',
-      variants: {
-        background: createBackgroundVariants(theme),
-        radius: createRadiusVariants(),
-        border: createBorderVariants(theme),
-        gap: buildGapVariants(theme),
-        padding: buildPaddingVariants(theme),
-        paddingVertical: buildPaddingVerticalVariants(theme),
-        paddingHorizontal: buildPaddingHorizontalVariants(theme),
-        margin: buildMarginVariants(theme),
-        marginVertical: buildMarginVerticalVariants(theme),
-        marginHorizontal: buildMarginHorizontalVariants(theme),
-      },
-      _web: {
-        display: 'flex',
-        flexDirection: 'column',
-        boxSizing: 'border-box',
-      },
-    },
-  };
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('View', theme, {
+        view: createViewStyles(theme),
+    });
+
+    return {
+        ...extended,
+    };
 });

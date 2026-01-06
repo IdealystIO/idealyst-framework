@@ -41,11 +41,12 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     gradient,
   });
 
-  // Compute dynamic styles with intent and type
-  const dynamicProps = { intent, type };
+  // Compute dynamic styles with all props for full flexibility
+  const dynamicProps = { intent, type, size, disabled, gradient };
   const buttonStyle = (buttonStyles.button as any)(dynamicProps);
   const textStyle = (buttonStyles.text as any)(dynamicProps);
   const iconStyle = (buttonStyles.icon as any)(dynamicProps);
+  const iconContainerStyle = (buttonStyles.iconContainer as any)(dynamicProps);
 
   // Gradient is only applicable to contained buttons
   const showGradient = gradient && type === 'contained';
@@ -198,7 +199,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     <TouchableOpacity {...touchableProps as any}>
       {renderGradientLayer()}
       {hasIcons ? (
-        <View style={buttonStyles.iconContainer}>
+        <View style={iconContainerStyle}>
           {leftIcon && renderIcon(leftIcon)}
           <Text style={textStyle}>
             {buttonContent}

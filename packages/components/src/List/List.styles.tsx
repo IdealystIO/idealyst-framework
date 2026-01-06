@@ -11,6 +11,7 @@ import {
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { ListSizeVariant, ListType } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type ListVariants = {
     type: ListType;
@@ -70,78 +71,94 @@ function getItemHoverStyles(theme: Theme, disabled: boolean, clickable: boolean)
 }
 
 
-export const listStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        container: {
+// Container style creator for extension support
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        width: '100%',
+        variants: {
+            type: createContainerTypeVariants(theme),
+            scrollable: {
+                true: {
+                    _web: {
+                        overflow: 'auto',
+                    },
+                },
+                false: {},
+            },
+            // Spacing variants from ContainerStyleProps
+            gap: buildGapVariants(theme),
+            padding: buildPaddingVariants(theme),
+            paddingVertical: buildPaddingVerticalVariants(theme),
+            paddingHorizontal: buildPaddingHorizontalVariants(theme),
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
+        },
+    });
+}
+
+// Item style creator for extension support
+function createItemStyles(theme: Theme) {
+    return ({ type = 'default', disabled = false, clickable = true }: ItemDynamicProps) => {
+        const hoverStyles = getItemHoverStyles(theme, disabled, clickable);
+        return {
             display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: 'transparent',
+            textAlign: 'left',
+            borderBottomWidth: type === 'divided' ? 1 : 0,
+            borderBottomStyle: type === 'divided' ? 'solid' as const : undefined,
+            borderBottomColor: type === 'divided' ? theme.colors.border.primary : undefined,
             variants: {
-                type: createContainerTypeVariants(theme),
-                scrollable: {
+                size: buildSizeVariants(theme, 'list', (size) => ({
+                    paddingVertical: size.paddingVertical,
+                    paddingHorizontal: size.paddingHorizontal,
+                    minHeight: size.minHeight,
+                })),
+                active: {
                     true: {
+                        backgroundColor: theme.colors.surface.secondary,
+                    },
+                    false: {},
+                },
+                selected: {
+                    true: {
+                        backgroundColor: theme.intents.primary.light + '20',
+                        borderLeftWidth: 3,
+                        borderLeftColor: theme.intents.primary.primary,
                         _web: {
-                            overflow: 'auto',
+                            borderLeft: `3px solid ${theme.intents.primary.primary}`,
                         },
                     },
                     false: {},
                 },
-                // Spacing variants from ContainerStyleProps
-                gap: buildGapVariants(theme),
-                padding: buildPaddingVariants(theme),
-                paddingVertical: buildPaddingVerticalVariants(theme),
-                paddingHorizontal: buildPaddingHorizontalVariants(theme),
-                margin: buildMarginVariants(theme),
-                marginVertical: buildMarginVerticalVariants(theme),
-                marginHorizontal: buildMarginHorizontalVariants(theme),
+            } as const,
+            opacity: disabled ? 0.5 : 1,
+            _web: {
+                border: 'none',
+                cursor: disabled ? 'not-allowed' : (clickable ? 'pointer' : 'default'),
+                outline: 'none',
+                transition: 'background-color 0.2s ease, border-color 0.2s ease',
+                borderBottom: type === 'divided' ? `1px solid ${theme.colors.border.primary}` : undefined,
+                _hover: hoverStyles,
             },
-        },
-        item: (({ type = 'default', disabled = false, clickable = true }: ItemDynamicProps) => {
-            const hoverStyles = getItemHoverStyles(theme, disabled, clickable);
-            return {
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: 'transparent',
-                textAlign: 'left',
-                borderBottomWidth: type === 'divided' ? 1 : 0,
-                borderBottomStyle: type === 'divided' ? 'solid' as const : undefined,
-                borderBottomColor: type === 'divided' ? theme.colors.border.primary : undefined,
-                variants: {
-                    size: buildSizeVariants(theme, 'list', (size) => ({
-                        paddingVertical: size.paddingVertical,
-                        paddingHorizontal: size.paddingHorizontal,
-                        minHeight: size.minHeight,
-                    })),
-                    active: {
-                        true: {
-                            backgroundColor: theme.colors.surface.secondary,
-                        },
-                        false: {},
-                    },
-                    selected: {
-                        true: {
-                            backgroundColor: theme.intents.primary.light + '20',
-                            borderLeftWidth: 3,
-                            borderLeftColor: theme.intents.primary.primary,
-                            _web: {
-                                borderLeft: `3px solid ${theme.intents.primary.primary}`,
-                            },
-                        },
-                        false: {},
-                    },
-                } as const,
-                opacity: disabled ? 0.5 : 1,
-                _web: {
-                    border: 'none',
-                    cursor: disabled ? 'not-allowed' : (clickable ? 'pointer' : 'default'),
-                    outline: 'none',
-                    transition: 'background-color 0.2s ease, border-color 0.2s ease',
-                    borderBottom: type === 'divided' ? `1px solid ${theme.colors.border.primary}` : undefined,
-                    _hover: hoverStyles,
-                },
-            } as const;
-        }),
+        } as const;
+    };
+}
+
+export const listStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('List', theme, {
+        container: createContainerStyles(theme),
+        item: createItemStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
         itemContent: {
             display: 'flex',
             flexDirection: 'row',
@@ -179,16 +196,16 @@ export const listStyles = StyleSheet.create((theme: Theme) => {
                     true: {
                         color: theme.colors.text.secondary,
                     },
-                false: {},
-            },
-            selected: {
-                true: {
-                    color: theme.intents.primary.primary,
-                    fontWeight: '600',
+                    false: {},
                 },
-                false: {},
+                selected: {
+                    true: {
+                        color: theme.intents.primary.primary,
+                        fontWeight: '600',
+                    },
+                    false: {},
+                },
             },
-        },
         },
         trailing: {
             display: 'flex',

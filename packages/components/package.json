@@ -25,6 +25,11 @@
       "require": "./src/index.ts",
       "types": "./src/index.ts"
     },
+    "./extensions": {
+      "import": "./src/extensions/index.ts",
+      "require": "./src/extensions/index.ts",
+      "types": "./src/extensions/index.ts"
+    },
     "./utils": {
       "import": "./src/utils/index.ts",
       "require": "./src/utils/index.ts",

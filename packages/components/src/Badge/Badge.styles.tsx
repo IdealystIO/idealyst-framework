@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, getColorFromString, Size, Color } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type BadgeType = 'filled' | 'outlined' | 'dot';
 
@@ -112,29 +113,49 @@ function createTextStyles(theme: Theme) {
     };
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const badgeStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    badge: createBadgeStyles(theme),
-    content: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+/**
+ * Create content styles
+ */
+function createContentStyles() {
+    return () => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         gap: 4,
-    },
-    icon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    });
+}
+
+/**
+ * Create icon styles
+ */
+function createIconStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         variants: {
             size: buildSizeVariants(theme, 'badge', (size) => ({
                 width: size.iconSize,
                 height: size.iconSize,
             })),
         },
-    },
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const badgeStyles = StyleSheet.create((theme: Theme) => {
+  // Apply extensions to main visual elements
+  const extended = applyExtensions('Badge', theme, {
+    badge: createBadgeStyles(theme),
     text: createTextStyles(theme),
+  });
+
+  return {
+    ...extended,
+    // Minor utility styles (not extended)
+    content: createContentStyles()(),
+    icon: createIconStyles(theme)(),
   };
 });

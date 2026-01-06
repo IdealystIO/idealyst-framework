@@ -1,4 +1,30 @@
-export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+import { SizeExtensions } from './extensions';
+
+/**
+ * Base size variants.
+ */
+type BaseSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * Custom size variants added via declaration merging.
+ */
+type CustomSize = keyof SizeExtensions;
+
+/**
+ * All available size variants.
+ *
+ * @example Adding custom sizes
+ * ```typescript
+ * declare module '@idealyst/theme' {
+ *   interface SizeExtensions {
+ *     '2xl': true;
+ *     '3xl': true;
+ *   }
+ * }
+ * ```
+ */
+export type Size = BaseSize | CustomSize;
+
 export type SizeValue = number | string
 
 /**

@@ -50,7 +50,7 @@ function Table<T = any>({
     marginHorizontal,
   });
 
-  const containerProps = getWebProps([tableStyles.container, style as any]);
+  const containerProps = getWebProps([(tableStyles.container as any)({}), style as any]);
   const tableProps = getWebProps([tableStyles.table]);
 
   // Helper to get cell value

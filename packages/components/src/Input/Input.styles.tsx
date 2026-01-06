@@ -7,6 +7,7 @@ import {
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { InputSize, InputType } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 
 export type InputVariants = {
@@ -129,34 +130,45 @@ function createContainerStyles(theme: Theme) {
     };
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const inputStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    container: createContainerStyles(theme),
-    leftIconContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+/**
+ * Create left icon container styles
+ */
+function createLeftIconContainerStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         flexShrink: 0,
         variants: {
             size: buildSizeVariants(theme, 'input', (size) => ({
                 marginRight: size.iconMargin,
             })),
         },
-    },
-    rightIconContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    });
+}
+
+/**
+ * Create right icon container styles
+ */
+function createRightIconContainerStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         flexShrink: 0,
         variants: {
             size: buildSizeVariants(theme, 'input', (size) => ({
                 marginLeft: size.iconMargin,
             })),
         },
-    },
-    leftIcon: {
+    });
+}
+
+/**
+ * Create left icon styles
+ */
+function createLeftIconStyles(theme: Theme) {
+    return () => ({
         color: theme.colors.text.secondary,
         variants: {
             size: buildSizeVariants(theme, 'input', (size) => ({
@@ -165,25 +177,37 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
                 height: size.iconSize,
             })),
         },
-    },
-    rightIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    });
+}
+
+/**
+ * Create right icon styles
+ */
+function createRightIconStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         flexShrink: 0,
         color: theme.colors.text.secondary,
         variants: {
             size: buildSizeVariants(theme, 'input', (size) => ({
-            fontSize: size.iconSize,
-            width: size.iconSize,
-            height: size.iconSize,
-        })),
+                fontSize: size.iconSize,
+                width: size.iconSize,
+                height: size.iconSize,
+            })),
         },
-    },
-    passwordToggle: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    });
+}
+
+/**
+ * Create password toggle styles
+ */
+function createPasswordToggleStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         flexShrink: 0,
         padding: 0,
         variants: {
@@ -202,11 +226,17 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
                 opacity: 0.5,
             },
         },
-    },
-    passwordToggleIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+    });
+}
+
+/**
+ * Create password toggle icon styles
+ */
+function createPasswordToggleIconStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         flexShrink: 0,
         color: theme.colors.text.secondary,
         variants: {
@@ -216,13 +246,19 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
                 height: size.iconSize,
             })),
         },
-    },
-    input: {
+    });
+}
+
+/**
+ * Create input styles
+ */
+function createInputStyles(theme: Theme) {
+    return () => ({
         flex: 1,
         minWidth: 0,
         backgroundColor: 'transparent',
         color: theme.colors.text.primary,
-        fontWeight: '400',
+        fontWeight: '400' as const,
         variants: {
             size: buildSizeVariants(theme, 'input', (size) => ({
                 fontSize: size.fontSize,
@@ -233,6 +269,26 @@ export const inputStyles = StyleSheet.create((theme: Theme) => {
             outline: 'none',
             fontFamily: 'inherit',
         },
-    },
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const inputStyles = StyleSheet.create((theme: Theme) => {
+  // Apply extensions to main visual elements
+  const extended = applyExtensions('Input', theme, {
+    container: createContainerStyles(theme),
+    input: createInputStyles(theme),
+  });
+
+  return {
+    ...extended,
+    // Minor utility styles (not extended)
+    leftIconContainer: createLeftIconContainerStyles(theme)(),
+    rightIconContainer: createRightIconContainerStyles(theme)(),
+    leftIcon: createLeftIconStyles(theme)(),
+    rightIcon: createRightIconStyles(theme)(),
+    passwordToggle: createPasswordToggleStyles(theme)(),
+    passwordToggleIcon: createPasswordToggleIconStyles(theme)(),
   };
 });

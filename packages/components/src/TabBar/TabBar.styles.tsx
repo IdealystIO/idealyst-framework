@@ -11,6 +11,7 @@ import {
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { TabBarPillMode, TabBarSizeVariant, TabBarType, TabBarIconPosition, TabBarJustify } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type ContainerDynamicProps = {
     type?: TabBarType;
@@ -299,12 +300,18 @@ function createIconStyles(theme: Theme) {
 
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const tabBarStyles = StyleSheet.create((theme: Theme) => {
-    return {
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('TabBar', theme, {
         container: createContainerStyles(theme),
         tab: createTabStyles(theme),
+        indicator: createIndicatorStyles(theme),
+    });
+
+    return {
+        ...extended,
+        // Minor utility styles (not extended)
         tabLabel: createTabLabelStyles(theme),
         tabIcon: createIconStyles(theme),
-        indicator: createIndicatorStyles(theme),
     };
 });
 

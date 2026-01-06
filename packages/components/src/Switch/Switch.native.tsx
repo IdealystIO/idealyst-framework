@@ -118,6 +118,10 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
     };
   });
 
+  // Get dynamic styles
+  const switchTrackStyle = (switchStyles.switchTrack as any)({ checked, intent });
+  const containerStyle = (switchStyles.container as any)({});
+
   const switchElement = (
     <Pressable
       ref={!label ? ref : undefined}
@@ -128,7 +132,7 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
       testID={testID}
       {...nativeA11yProps}
     >
-      <Animated.View style={switchStyles.switchTrack({ checked, intent })}>
+      <Animated.View style={switchTrackStyle}>
         <Animated.View
           style={[
             {
@@ -158,7 +162,7 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
         nativeID={id}
         onPress={handlePress}
         disabled={disabled}
-        style={[switchStyles.container, style]}
+        style={[containerStyle, style]}
       >
         {labelPosition === 'left' && (
           <Text style={switchStyles.label}>{label}</Text>

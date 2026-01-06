@@ -37,8 +37,11 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     disabled: Boolean(item.disabled),
   });
 
-  // Get dynamic item style with type and isLast props
+  // Get dynamic styles
   const itemStyle = (accordionStyles.item as any)({ type, isLast });
+  const headerStyle = (accordionStyles.header as any)({});
+  const iconStyle = (accordionStyles.icon as any)({});
+  const contentStyle = (accordionStyles.content as any)({});
 
   // Animate height and icon rotation when expanded state changes
   useEffect(() => {
@@ -77,7 +80,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   return (
     <View style={itemStyle} testID={testID}>
       <TouchableOpacity
-        style={accordionStyles.header}
+        style={headerStyle}
         onPress={onToggle}
         disabled={item.disabled}
         activeOpacity={0.7}
@@ -86,15 +89,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         accessibilityState={{ expanded: isExpanded, disabled: item.disabled }}
       >
         <View style={accordionStyles.title}>
-          <Text style={accordionStyles.header}>
+          <Text style={headerStyle}>
             {item.title}
           </Text>
         </View>
-        <Animated.View style={[accordionStyles.icon, animatedIconStyle]}>
+        <Animated.View style={[iconStyle, animatedIconStyle]}>
           <MaterialCommunityIcons
             name="chevron-down"
             size={20}
-            style={accordionStyles.icon}
+            style={iconStyle}
           />
         </Animated.View>
       </TouchableOpacity>
@@ -197,8 +200,10 @@ const Accordion = forwardRef<View, AccordionProps>(({
     });
   };
 
+  const containerStyle = (accordionStyles.container as any)({});
+
   return (
-    <View ref={ref} nativeID={id} style={[accordionStyles.container, style]} testID={testID} {...nativeA11yProps}>
+    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
       {items.map((item, index) => (
         <AccordionItem
           key={item.id}

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Size} from '@idealyst/theme';
+import { Theme, StylesheetStyles, Size } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type AvatarSize = Size;
 type AvatarShape = 'circle' | 'square';
@@ -42,32 +43,61 @@ function createFallbackSizeVariants(theme: Theme) {
     }));
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const avatarStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    avatar: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+/**
+ * Create container styles
+ */
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
         backgroundColor: theme.colors.surface.secondary,
-        overflow: 'hidden',
+        overflow: 'hidden' as const,
         variants: {
             size: createAvatarSizeVariants(theme),
             shape: createAvatarShapeVariants(theme),
         },
-    },
-    image: {
-        width: '100%',
-        height: '100%',
-    },
-    fallback: {
+    });
+}
+
+/**
+ * Create image styles
+ */
+function createImageStyles() {
+    return () => ({
+        width: '100%' as const,
+        height: '100%' as const,
+    });
+}
+
+/**
+ * Create fallback styles
+ */
+function createFallbackStyles(theme: Theme) {
+    return () => ({
         color: theme.colors.text.primary,
-        fontWeight: '600',
+        fontWeight: '600' as const,
         variants: {
             size: createFallbackSizeVariants(theme),
         },
+    });
+}
+
+// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
+// transform on native cannot resolve function calls to extract variant structures.
+export const avatarStyles = StyleSheet.create((theme: Theme) => {
+  // Apply extensions to main visual elements
+  const extended = applyExtensions('Avatar', theme, {
+    avatar: createContainerStyles(theme),
+    fallback: createFallbackStyles(theme),
+  });
+
+  return {
+    ...extended,
+    // Minor utility styles (not extended)
+    image: {
+        width: '100%',
+        height: '100%',
     },
   };
 });

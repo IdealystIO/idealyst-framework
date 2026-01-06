@@ -82,9 +82,9 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
     marginHorizontal,
   });
 
-  const trackProps = getWebProps([switchStyles.switchTrack({ checked, intent })]);
-  const thumbProps = getWebProps([switchStyles.switchThumb({ size, checked })]);
-  const thumbIconProps = getWebProps([switchStyles.thumbIcon({ checked, intent })]);
+  const trackProps = getWebProps([(switchStyles.switchTrack as any)({ checked, intent })]);
+  const thumbProps = getWebProps([(switchStyles.switchThumb as any)({ size, checked })]);
+  const thumbIconProps = getWebProps([(switchStyles.thumbIcon as any)({ checked, intent })]);
   const labelProps = getWebProps([switchStyles.label]);
 
   // Helper to render icon
@@ -115,7 +115,7 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
 
   // Computed container props with dynamic styles (for when label exists)
   const computedContainerProps = getWebProps([
-    switchStyles.container,
+    (switchStyles.container as any)({}),
     style as any,
     {
       cursor: disabled ? 'not-allowed' : 'pointer',

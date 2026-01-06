@@ -26,6 +26,8 @@ const Pressable = forwardRef<View, PressableProps>(({
     paddingHorizontal,
   });
 
+  const pressableStyle = (pressableStyles.pressable as any)({});
+
   return (
     <TouchableWithoutFeedback
       onPress={disabled ? undefined : onPress}
@@ -35,7 +37,7 @@ const Pressable = forwardRef<View, PressableProps>(({
       testID={testID}
       accessibilityLabel={accessibilityLabel}
     >
-      <View ref={ref} nativeID={id} style={[pressableStyles.pressable, style]}>
+      <View ref={ref} nativeID={id} style={[pressableStyle, style]}>
         {children}
       </View>
     </TouchableWithoutFeedback>

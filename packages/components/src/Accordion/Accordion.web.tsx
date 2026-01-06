@@ -45,11 +45,11 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   // Get dynamic item style with type and isLast props
   const itemStyle = (accordionStyles.item as any)({ type, isLast });
   const itemProps = getWebProps([itemStyle]);
-  const headerProps = getWebProps([accordionStyles.header]);
+  const headerProps = getWebProps([(accordionStyles.header as any)({})]);
   const titleProps = getWebProps([accordionStyles.title]);
-  const iconProps = getWebProps([accordionStyles.icon]);
+  const iconProps = getWebProps([(accordionStyles.icon as any)({})]);
   const contentProps = getWebProps([
-    accordionStyles.content,
+    (accordionStyles.content as any)({}),
     {
       height: isExpanded ? contentHeight : 0,
       overflow: 'hidden' as const,
@@ -197,7 +197,7 @@ const Accordion: React.FC<AccordionProps> = ({
     marginHorizontal,
   });
 
-  const containerProps = getWebProps([accordionStyles.container, style as any]);
+  const containerProps = getWebProps([(accordionStyles.container as any)({}), style as any]);
 
   const toggleItem = (itemId: string, disabled?: boolean) => {
     if (disabled) return;

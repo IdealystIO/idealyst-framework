@@ -176,12 +176,12 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   };
 
   const containerWebProps = getWebProps([
-    selectStyles.container,
+    (selectStyles.container as any)({}),
     style as any
   ]);
 
   const triggerWebProps = getWebProps([
-    selectStyles.trigger({ type, intent }),
+    (selectStyles.trigger as any)({ type, intent }),
   ]);
 
   const handleClose = () => {
@@ -247,7 +247,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
         zIndex={1000}
       >
         <div
-          {...getWebProps([selectStyles.dropdown])}
+          {...getWebProps([(selectStyles.dropdown as any)({})])}
           style={{
             maxHeight: maxHeight,
             position: 'relative',
@@ -282,7 +282,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     aria-selected={option.value === value}
                     onMouseEnter={() => setFocusedIndex(index)}
                     {...getWebProps([
-                      selectStyles.option,
+                      (selectStyles.option as any)({}),
                       isFocused && selectStyles.optionFocused,
                       option.disabled && selectStyles.optionDisabled,
                     ])}
@@ -305,7 +305,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
               })}
 
               {filteredOptions.length === 0 && (
-                <div {...getWebProps([selectStyles.option])} style={{ cursor: 'default' }}>
+                <div {...getWebProps([(selectStyles.option as any)({})])} style={{ cursor: 'default' }}>
                   <span {...getWebProps([selectStyles.optionText])}>
                     No options found
                   </span>

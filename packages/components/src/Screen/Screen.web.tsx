@@ -33,7 +33,7 @@ const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
   });
 
   // Use getWebProps to generate className and ref for web
-  const webProps = getWebProps([screenStyles.screen, style as any]);
+  const webProps = getWebProps([(screenStyles.screen as any)({}), style as any]);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);
 

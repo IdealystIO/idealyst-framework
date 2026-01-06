@@ -7,6 +7,7 @@ import {
   buildMarginHorizontalVariants,
 } from '../utils/buildViewStyleVariants';
 import { SelectIntentVariant } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 // Type definitions
 type SelectSize = Size;
@@ -137,26 +138,87 @@ function buildDynamicTriggerStyles(theme: Theme) {
     }
 }
 
+// Main element style creators (wrapped for extension support)
+function createContainerStyles(theme: Theme) {
+    return () => ({
+        position: 'relative' as const,
+        variants: {
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
+        },
+    });
+}
+
+function createDropdownStyles(theme: Theme) {
+    return () => ({
+        position: 'absolute' as const,
+        top: '100%',
+        left: 0,
+        right: 0,
+        backgroundColor: theme.colors.surface.primary,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+        borderColor: theme.colors.border.primary,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.1,
+        shadowRadius: 24,
+        elevation: 8,
+        zIndex: 9999,
+        maxHeight: 240,
+        minWidth: 200,
+        overflow: 'hidden' as const,
+        _web: {
+            border: `1px solid ${theme.colors.border.primary}`,
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06)',
+            overflowY: 'auto',
+        },
+    });
+}
+
+function createOptionStyles(theme: Theme) {
+    return () => ({
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        minHeight: 36,
+        _web: {
+            display: 'flex',
+            cursor: 'pointer',
+            _hover: {
+                backgroundColor: theme.colors.surface.secondary,
+            },
+            _active: {
+                opacity: 0.8,
+            },
+        },
+    });
+}
+
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 export const selectStyles = StyleSheet.create((theme: Theme) => {
+    // Apply extensions to main visual elements
+    const extendedStyles = applyExtensions('Select', theme, {
+        container: createContainerStyles(theme),
+        trigger: buildDynamicTriggerStyles(theme),
+        dropdown: createDropdownStyles(theme),
+        option: createOptionStyles(theme),
+    });
+
     return {
-        container: {
-            position: 'relative',
-            variants: {
-                // Spacing variants from FormInputStyleProps
-                margin: buildMarginVariants(theme),
-                marginVertical: buildMarginVerticalVariants(theme),
-                marginHorizontal: buildMarginHorizontalVariants(theme),
-            },
-        },
+        // Extended main elements
+        ...extendedStyles,
+        // Minor utility styles (not extended)
         label: {
             fontSize: 14,
             fontWeight: '500',
             color: theme.colors.text.primary,
             marginBottom: 4,
         },
-        trigger: buildDynamicTriggerStyles(theme),
         triggerContent: {
             flex: 1,
             flexDirection: 'row',
@@ -204,31 +266,6 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                 transform: 'rotate(180deg)',
             }
         },
-        dropdown: {
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            backgroundColor: theme.colors.surface.primary,
-            borderRadius: 8,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme.colors.border.primary,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 8 },
-            shadowOpacity: 0.1,
-            shadowRadius: 24,
-            elevation: 8,
-            zIndex: 9999,
-            maxHeight: 240,
-            minWidth: 200,
-            overflow: 'hidden',
-            _web: {
-                border: `1px solid ${theme.colors.border.primary}`,
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06)',
-                overflowY: 'auto',
-            },
-        },
         searchContainer: {
             padding: 8,
             borderBottomWidth: 1,
@@ -260,23 +297,6 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
         },
         optionsList: {
             paddingVertical: 4,
-        },
-        option: {
-            paddingHorizontal: 8,
-            paddingVertical: 4,
-            flexDirection: 'row',
-            alignItems: 'center',
-            minHeight: 36,
-            _web: {
-                display: 'flex',
-                cursor: 'pointer',
-                _hover: {
-                    backgroundColor: theme.colors.surface.secondary,
-                },
-                _active: {
-                    opacity: 0.8,
-                },
-            },
         },
         optionFocused: {
             backgroundColor: theme.interaction.focusedBackground,

@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native-unistyles';
 import { Theme, StylesheetStyles, Intent, Color, getColorFromString } from '@idealyst/theme';
 import { buildSizeVariants } from '../utils/buildSizeVariants';
 import { IconSizeVariant } from './types';
+import { applyExtensions } from '../extensions/applyExtension';
 
 type IconVariants = {
     size: IconSizeVariant;
@@ -73,7 +74,12 @@ function createIconStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 export const iconStyles = StyleSheet.create((theme: Theme) => {
-  return {
-    icon: createIconStyles(theme),
-  } as const;
+    // Apply extensions to main visual elements
+    const extended = applyExtensions('Icon', theme, {
+        icon: createIconStyles(theme),
+    });
+
+    return {
+        ...extended,
+    };
 });

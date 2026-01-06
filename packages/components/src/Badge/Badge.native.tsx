@@ -21,8 +21,8 @@ const Badge = forwardRef<View, BadgeProps>(({
   });
 
   // Call dynamic styles with color variant
-  const badgeStyle = badgeStyles.badge({ color });
-  const textStyle = badgeStyles.text({ color });
+  const badgeStyle = (badgeStyles.badge as any)({ color });
+  const textStyle = (badgeStyles.text as any)({ color });
 
   // Map badge size to icon size
   const iconSize = size === 'sm' ? 12 : size === 'md' ? 14 : 16;
