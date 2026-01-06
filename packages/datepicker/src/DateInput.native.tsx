@@ -69,38 +69,27 @@ export const DateInput: React.FC<DateInputProps> = ({
     setOpen(false);
   };
 
+  // Apply variants for input container
+  datePickerStyles.useVariants({
+    disabled,
+    error: !!error,
+  });
+
   return (
     <View style={style}>
       {label && (
-        <Text typography="body2" weight="medium" style={{ marginBottom: 4 }}>
+        <Text typography="body2" weight="medium" style={datePickerStyles.labelText}>
           {label}
         </Text>
       )}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderWidth: 1,
-          borderColor: error ? '#ef4444' : '#d1d5db',
-          borderRadius: 6,
-          backgroundColor: disabled ? '#f3f4f6' : 'white',
-          overflow: 'hidden',
-        }}
-      >
+      <View style={datePickerStyles.inputContainer}>
         <RNTextInput
           value={inputValue}
           onChangeText={handleInputChange}
           onBlur={handleInputBlur}
           placeholder={placeholder}
           editable={!disabled}
-          style={{
-            flex: 1,
-            padding: 8,
-            paddingHorizontal: 12,
-            fontSize: 14,
-            backgroundColor: 'transparent',
-            color: disabled ? '#9ca3af' : '#111827',
-          }}
+          style={datePickerStyles.textInput}
         />
         <Button
           type="text"
@@ -113,7 +102,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         </Button>
       </View>
       {error && (
-        <Text typography="caption" style={{ marginTop: 4, color: '#ef4444' }}>
+        <Text typography="caption" style={datePickerStyles.errorText}>
           {error}
         </Text>
       )}
@@ -124,14 +113,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         animationType="fade"
         onRequestClose={() => setOpen(false)}
       >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          }}
-        >
+        <View style={datePickerStyles.modalBackdrop}>
           <View style={datePickerStyles.popoverContent}>
             <DatePicker
               value={value ?? undefined}

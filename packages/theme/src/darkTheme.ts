@@ -11,6 +11,14 @@ export const darkTheme: Theme = {
       disabled: 0.4,
     },
   },
+  radii: {
+    none: 0,
+    xs: 2,
+    sm: 4,
+    md: 8,
+    lg: 12,
+    xl: 16,
+  },
   shadows: {
     none: {},
     sm: {

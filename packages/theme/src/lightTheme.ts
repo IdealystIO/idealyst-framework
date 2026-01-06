@@ -11,11 +11,19 @@ export const lightTheme: Theme = {
           disabled: 0.5,
         },
       },
+      radii: {
+        none: 0,
+        xs: 2,
+        sm: 4,
+        md: 8,
+        lg: 12,
+        xl: 16,
+      },
       shadows: {
         none: {},
         sm: {
           elevation: 1,
-          shadowColor: 'rgb(0, 0, 0, 0.5)',
+          shadowColor: '#000000',
           shadowOffset: { width: 0, height: 1 },
           shadowOpacity: 0.08,
           shadowRadius: 1.0,
@@ -23,7 +31,7 @@ export const lightTheme: Theme = {
         },
         md: {
           elevation: 2,
-          shadowColor: 'rgb(0, 0, 0, 0.5)',
+          shadowColor: '#000000',
           shadowOffset: { width: 0, height: 3 },
           shadowOpacity: 0.1,
           shadowRadius: 4.65,
@@ -31,7 +39,7 @@ export const lightTheme: Theme = {
         },
         lg: {
           elevation: 3,
-          shadowColor: 'rgb(0, 0, 0, 0.5)',
+          shadowColor: '#000000',
           shadowOffset: { width: 0, height: 6 },
           shadowOpacity: 0.12,
           shadowRadius: 6.27,
@@ -39,7 +47,7 @@ export const lightTheme: Theme = {
         },
         xl: {
           elevation: 4,
-          shadowColor: 'rgb(0, 0, 0, 0.5)',
+          shadowColor: '#000000',
           shadowOffset: { width: 0, height: 12 },
           shadowOpacity: 0.14,
           shadowRadius: 16.0,

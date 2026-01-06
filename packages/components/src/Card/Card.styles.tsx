@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent } from '@idealyst/theme';
+import { Theme, Intent, Radius } from '@idealyst/theme';
 import {
   buildGapVariants,
   buildPaddingVariants,
@@ -12,8 +12,15 @@ import {
 import { ViewStyleSize } from '../utils/viewStyleProps';
 
 type CardType = 'outlined' | 'elevated' | 'filled';
-type CardRadius = 'none' | 'sm' | 'md' | 'lg' | 'xs' | 'xl';
+type CardRadius = Radius;
 type CardIntent = Intent | 'info' | 'neutral';
+
+/**
+ * Get border radius value from theme
+ */
+export function getCardBorderRadius(theme: Theme, radius: CardRadius): number {
+  return theme.radii[radius];
+}
 
 export type CardVariants = {
   type: CardType;

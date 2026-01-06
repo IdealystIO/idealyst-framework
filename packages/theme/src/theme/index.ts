@@ -22,12 +22,15 @@ export type InteractionConfig = {
     };
 };
 
+export type Radius = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
 export type Theme = {
     intents: Record<Intent, IntentValue>;
     colors: AllColorTypes;
     sizes: AllComponentSizes;
     shadows: AllShadowTypes;
     interaction: InteractionConfig;
+    radii: Record<Radius, number>;
 };
 
 export * from "./intent";

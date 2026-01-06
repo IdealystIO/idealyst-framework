@@ -240,16 +240,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
               key={index}
               style={[
                 datePickerStyles.dayCell,
-                selected && {
-                  backgroundColor: '#3b82f6',
-                  borderRadius: 4,
-                },
+                selected && datePickerStyles.selectedDay,
                 !isCurrentMonth && { opacity: 0.3 },
-                today && !selected && {
-                  borderWidth: 1,
-                  borderColor: '#3b82f6',
-                  borderRadius: 4,
-                },
+                today && !selected && datePickerStyles.todayDay,
                 dayDisabled && { opacity: 0.3 },
               ]}
             >

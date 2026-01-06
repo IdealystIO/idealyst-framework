@@ -5,6 +5,11 @@ export type DatePickerVariants = {
   disabled: boolean;
 };
 
+export type InputContainerVariants = {
+  disabled: boolean;
+  error: boolean;
+};
+
 export const datePickerStyles = StyleSheet.create((theme: Theme) => {
   return {
     // Calendar container - compact
@@ -122,6 +127,92 @@ export const datePickerStyles = StyleSheet.create((theme: Theme) => {
       borderRadius: 6,
       ...theme.shadows.lg,
       overflow: 'hidden',
+    },
+
+    // Input container for DateInput/TimeInput
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderRadius: 6,
+      overflow: 'hidden',
+      borderColor: theme.colors.border.primary,
+      backgroundColor: theme.colors.surface.primary,
+      variants: {
+        disabled: {
+          true: {
+            backgroundColor: theme.colors.surface.secondary,
+          },
+          false: {},
+        },
+        error: {
+          true: {
+            borderColor: theme.intents.error.primary,
+          },
+          false: {},
+        },
+      },
+      _web: {
+        border: `1px solid ${theme.colors.border.primary}`,
+      },
+    },
+
+    // Text input inside the input container
+    textInput: {
+      flex: 1,
+      padding: 8,
+      paddingHorizontal: 12,
+      fontSize: 14,
+      backgroundColor: 'transparent',
+      color: theme.colors.text.primary,
+      variants: {
+        disabled: {
+          true: {
+            color: theme.colors.text.tertiary,
+          },
+          false: {},
+        },
+      },
+      _web: {
+        outline: 'none',
+        border: 'none',
+      },
+    },
+
+    // Error text below input
+    errorText: {
+      marginTop: 4,
+      color: theme.intents.error.primary,
+    },
+
+    // Label text above input
+    labelText: {
+      marginBottom: 4,
+    },
+
+    // Modal backdrop
+    modalBackdrop: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+
+    // Selected day styling
+    selectedDay: {
+      backgroundColor: theme.intents.primary.primary,
+      borderRadius: 14,
+    },
+
+    selectedDayText: {
+      color: theme.intents.primary.contrast,
+    },
+
+    // Today styling
+    todayDay: {
+      borderWidth: 1,
+      borderColor: theme.intents.primary.primary,
+      borderRadius: 14,
     },
   } as const;
 });

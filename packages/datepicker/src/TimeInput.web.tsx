@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { getWebProps } from 'react-native-unistyles/web';
 import { View, Text, Button, Icon } from '@idealyst/components';
 import { PositionedPortal } from '@idealyst/components/internal';
 import { TimePicker } from './TimePicker';
@@ -96,24 +97,24 @@ export const TimeInput: React.FC<TimeInputProps> = ({
     onChange(date);
   };
 
+  // Apply variants for input container
+  datePickerStyles.useVariants({
+    disabled,
+    error: !!error,
+  });
+
+  // Get web props for styled elements
+  const containerProps = getWebProps([datePickerStyles.inputContainer]);
+  const inputProps = getWebProps([datePickerStyles.textInput]);
+
   return (
     <View style={style}>
       {label && (
-        <Text typography="body2" weight="medium" style={{ marginBottom: 4 }}>
+        <Text typography="body2" weight="medium" style={datePickerStyles.labelText}>
           {label}
         </Text>
       )}
-      <div
-        ref={triggerRef}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          border: `1px solid ${error ? '#ef4444' : '#d1d5db'}`,
-          borderRadius: 6,
-          backgroundColor: disabled ? '#f3f4f6' : 'white',
-          overflow: 'hidden',
-        }}
-      >
+      <div ref={triggerRef} {...containerProps}>
         <input
           type="text"
           value={inputValue}
@@ -121,15 +122,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
           onBlur={handleInputBlur}
           placeholder={placeholder}
           disabled={disabled}
-          style={{
-            flex: 1,
-            padding: '8px 12px',
-            fontSize: 14,
-            border: 'none',
-            outline: 'none',
-            backgroundColor: 'transparent',
-            color: disabled ? '#9ca3af' : '#111827',
-          }}
+          {...inputProps}
         />
         <Button
           type="text"
@@ -142,7 +135,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
         </Button>
       </div>
       {error && (
-        <Text typography="caption" style={{ marginTop: 4, color: '#ef4444' }}>
+        <Text typography="caption" style={datePickerStyles.errorText}>
           {error}
         </Text>
       )}
