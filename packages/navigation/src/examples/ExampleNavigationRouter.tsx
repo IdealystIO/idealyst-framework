@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, LinkExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
+import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, LinkExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples, StyleBuilderTestExamples } from '@idealyst/components/examples';
 import { DataGridShowcase } from '@idealyst/datagrid/examples';
 import { DatePickerExamples } from '@idealyst/datepicker/examples';
 import { CameraExamples } from '@idealyst/camera/examples';
@@ -336,6 +336,7 @@ const ExampleNavigationRouter: NavigatorParam = {
         { path: "datagrid", type: 'screen', component: DataGridShowcase, options: { title: "Data Grid" } },
         { path: "datepicker", type: 'screen', component: DatePickerExamples, options: { title: "Date Picker" } },
         { path: "theme-extension", type: 'screen', component: ThemeExtensionExamples, options: { title: "Theme Extension" } },
+        { path: "stylebuilder-test", type: 'screen', component: StyleBuilderTestExamples, options: { title: "StyleBuilder Test" } },
     ],
 };
 

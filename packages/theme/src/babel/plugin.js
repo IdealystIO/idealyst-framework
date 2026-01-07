@@ -1,152 +1,474 @@
 /**
- * Idealyst Styles Babel Plugin
+ * Idealyst StyleBuilder Babel Plugin
  *
- * Transforms StyleSheet.create calls to enable Unistyles theme reactivity.
+ * Transforms defineStyle/extendStyle calls to expand $iterator patterns,
+ * enabling Unistyles theme reactivity.
  *
- * Main transformations:
- * 1. Remove applyExtensions() wrapper - Unistyles can't trace through function calls
- * 2. Optionally inline helper function results from prebuild cache
+ * Transformation:
+ *   defineStyle('Button', (theme) => ({
+ *     button: {
+ *       variants: {
+ *         intent: { backgroundColor: theme.$intents.primary }
+ *       }
+ *     }
+ *   }))
+ *
+ *   → defineStyle('Button', (theme) => ({
+ *     button: {
+ *       variants: {
+ *         intent: {
+ *           primary: { backgroundColor: theme.intents.primary.primary },
+ *           success: { backgroundColor: theme.intents.success.primary },
+ *           ...
+ *         }
+ *       }
+ *     }
+ *   }))
  *
  * Configuration:
  * ['@idealyst/theme/plugin', {
- *   cachePath: '.cache/idealyst-styles.json',  // Optional prebuild cache
  *   autoProcessPaths: ['@idealyst/components'], // Paths to process
- *   removeApplyExtensions: true,               // Strip applyExtensions wrapper
+ *   themePath: '@idealyst/theme',               // Path to theme for key extraction
+ *   debug: true,                                // Enable debug logging
  * }]
  */
 
 const nodePath = require('path');
-const fs = require('fs');
 
 // ============================================================================
-// Cache Management (Optional - for prebuild integration)
+// Theme Key Extraction - Dynamically loads theme to get keys
 // ============================================================================
 
-let styleCache = null;
-let cacheLoadAttempted = false;
+let themeKeys = null;
+let themeLoadAttempted = false;
 
-function loadCache(cachePath, rootDir) {
-    if (cacheLoadAttempted) return styleCache;
-    cacheLoadAttempted = true;
+/**
+ * Extract keys from theme object structure.
+ * Identifies Record-like properties (objects with string keys).
+ */
+function extractThemeKeys(theme) {
+    const keys = {
+        intents: [],
+        sizes: {},      // sizes.button, sizes.typography, etc.
+        radii: [],
+        shadows: [],
+    };
 
-    if (!cachePath) return null;
+    // Extract intent keys
+    if (theme.intents && typeof theme.intents === 'object') {
+        keys.intents = Object.keys(theme.intents);
+    }
 
-    const resolved = nodePath.resolve(rootDir || process.cwd(), cachePath);
+    // Extract radii keys
+    if (theme.radii && typeof theme.radii === 'object') {
+        keys.radii = Object.keys(theme.radii);
+    }
+
+    // Extract shadow keys
+    if (theme.shadows && typeof theme.shadows === 'object') {
+        keys.shadows = Object.keys(theme.shadows);
+    }
+
+    // Extract size keys per component
+    if (theme.sizes && typeof theme.sizes === 'object') {
+        for (const [componentName, sizeObj] of Object.entries(theme.sizes)) {
+            if (sizeObj && typeof sizeObj === 'object') {
+                keys.sizes[componentName] = Object.keys(sizeObj);
+            }
+        }
+    }
+
+    return keys;
+}
+
+/**
+ * Try to load theme and extract keys.
+ * Falls back to default keys if theme can't be loaded.
+ */
+function loadThemeKeys(themePath, rootDir) {
+    if (themeLoadAttempted) return themeKeys;
+    themeLoadAttempted = true;
 
     try {
-        if (fs.existsSync(resolved)) {
-            const content = fs.readFileSync(resolved, 'utf-8');
-            styleCache = JSON.parse(content);
+        // Try to resolve the theme module
+        const resolvedPath = themePath.startsWith('.')
+            ? nodePath.resolve(rootDir, themePath)
+            : themePath;
+
+        // Clear require cache to get fresh theme
+        const resolved = require.resolve(resolvedPath);
+        delete require.cache[resolved];
+
+        const themeModule = require(resolved);
+        const theme = themeModule.lightTheme || themeModule.theme || themeModule.default;
+
+        if (theme) {
+            themeKeys = extractThemeKeys(theme);
+            console.log('[idealyst-plugin] Loaded theme keys:', {
+                intents: themeKeys.intents,
+                sizeComponents: Object.keys(themeKeys.sizes),
+            });
         }
     } catch (err) {
-        // Cache not available - that's ok
+        // Fall back to defaults if theme can't be loaded
+        themeKeys = {
+            intents: ['primary', 'success', 'error', 'warning', 'info', 'neutral'],
+            sizes: {
+                button: ['xs', 'sm', 'md', 'lg', 'xl'],
+                text: ['xs', 'sm', 'md', 'lg', 'xl'],
+                view: ['xs', 'sm', 'md', 'lg', 'xl'],
+                typography: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2', 'body1', 'body2', 'caption'],
+            },
+            radii: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
+            shadows: ['none', 'sm', 'md', 'lg', 'xl'],
+        };
     }
 
-    return styleCache;
+    return themeKeys;
 }
 
 // ============================================================================
-// AST Generation from Cache
+// $iterator Expansion Logic
 // ============================================================================
 
 /**
- * Convert cached value to Babel AST.
- * Handles __themeRef markers, arrays, objects, and primitives.
+ * Expand $iterator patterns in the style callback.
+ *
+ * Patterns:
+ * - theme.$intents.primary → expands for each intent key
+ * - theme.sizes.$button.padding → expands for each button size key
  */
-function cacheValueToAST(t, value, themeId = 'theme') {
-    if (value === null) return t.nullLiteral();
-    if (value === undefined) return t.identifier('undefined');
+function expandIterators(t, callback, themeParam, keys, verbose, expandedVariants) {
+    // Clone the callback to avoid mutating the original
+    const cloned = t.cloneDeep(callback);
 
-    if (typeof value === 'object' && value !== null) {
-        // Theme reference: { __themeRef: "colors.primary" }
-        if (value.__themeRef) {
-            return pathToMemberExpr(t, themeId, value.__themeRef);
+    // Find variants objects and expand $iterator patterns
+    function processNode(node, depth = 0) {
+        if (!node || typeof node !== 'object') return node;
+
+        if (Array.isArray(node)) {
+            return node.map(n => processNode(n, depth));
         }
 
-        // Undefined marker
-        if (value.__undefined) {
-            return t.identifier('undefined');
+        const indent = '  '.repeat(depth);
+
+        // Look for variants: { intent: { ... }, size: { ... } }
+        if (t.isObjectProperty(node) && t.isIdentifier(node.key, { name: 'variants' })) {
+            verbose(`${indent}Found 'variants' property, value type: ${node.value?.type}`);
+            if (t.isObjectExpression(node.value)) {
+                verbose(`${indent}  -> Expanding variants object`);
+                const expanded = expandVariantsObject(t, node.value, themeParam, keys, verbose, expandedVariants);
+                return t.objectProperty(node.key, expanded);
+            } else if (t.isTSAsExpression(node.value)) {
+                verbose(`${indent}  -> variants value is TSAsExpression, unwrapping`);
+                const innerValue = node.value.expression;
+                if (t.isObjectExpression(innerValue)) {
+                    const expanded = expandVariantsObject(t, innerValue, themeParam, keys, verbose, expandedVariants);
+                    return t.objectProperty(node.key, t.tsAsExpression(expanded, node.value.typeAnnotation));
+                }
+            }
         }
 
-        // Function marker - keep as arrow function
-        if (value.__fn) {
-            if (value.error) {
-                return t.arrowFunctionExpression(
-                    [t.identifier('_props')],
-                    t.objectExpression([])
-                );
-            }
+        // Recursively process other nodes
+        if (t.isObjectExpression(node)) {
+            verbose(`${indent}Processing ObjectExpression with ${node.properties.length} properties at depth ${depth}`);
+            return t.objectExpression(
+                node.properties.map(prop => processNode(prop, depth + 1))
+            );
+        }
 
-            // Static function - just return the result directly
-            if (value.static) {
-                const resultAST = cacheValueToAST(t, value.result, themeId);
-                return t.arrowFunctionExpression(
-                    [t.identifier('_props')],
-                    resultAST
-                );
-            }
+        if (t.isObjectProperty(node)) {
+            const keyName = t.isIdentifier(node.key) ? node.key.name : 'computed';
+            verbose(`${indent}Processing ObjectProperty '${keyName}' at depth ${depth}`);
+            return t.objectProperty(
+                node.key,
+                processNode(node.value, depth + 1),
+                node.computed,
+                node.shorthand
+            );
+        }
 
-            // Dynamic function with props - we need to preserve the function nature
-            // but we've lost the exact props-to-theme mapping
-            // For now, return as-is (function returning the captured result)
-            const resultAST = cacheValueToAST(t, value.result, themeId);
+        if (t.isArrowFunctionExpression(node) || t.isFunctionExpression(node)) {
+            verbose(`${indent}Processing arrow function at depth ${depth}, body type: ${node.body?.type}`);
+            const processedBody = processNode(node.body, depth + 1);
+            verbose(`${indent}  Processed body type: ${processedBody?.type}`);
             return t.arrowFunctionExpression(
-                [t.identifier('_props')],
-                resultAST
+                node.params,
+                processedBody
             );
         }
 
-        // Array
-        if (Array.isArray(value)) {
-            return t.arrayExpression(
-                value.map(v => cacheValueToAST(t, v, themeId))
-            );
-        }
-
-        // Object
-        const props = [];
-        for (const key of Object.keys(value)) {
-            const keyNode = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key)
-                ? t.identifier(key)
-                : t.stringLiteral(key);
-
-            props.push(t.objectProperty(keyNode, cacheValueToAST(t, value[key], themeId)));
-        }
-        return t.objectExpression(props);
+        return node;
     }
 
-    // Primitives
-    if (typeof value === 'string') return t.stringLiteral(value);
-    if (typeof value === 'number') {
-        if (Number.isNaN(value)) return t.identifier('NaN');
-        if (!Number.isFinite(value)) {
-            return value > 0
-                ? t.identifier('Infinity')
-                : t.unaryExpression('-', t.identifier('Infinity'));
-        }
-        return t.numericLiteral(value);
+    // Process the callback body
+    if (t.isObjectExpression(cloned.body)) {
+        cloned.body = processNode(cloned.body);
+    } else if (t.isBlockStatement(cloned.body)) {
+        // Handle block statement with return
+        cloned.body.body = cloned.body.body.map(stmt => {
+            if (t.isReturnStatement(stmt) && stmt.argument) {
+                return t.returnStatement(processNode(stmt.argument));
+            }
+            return stmt;
+        });
     }
-    if (typeof value === 'boolean') return t.booleanLiteral(value);
 
-    return t.identifier('undefined');
+    return cloned;
 }
 
 /**
- * Convert dot path to MemberExpression: "a.b.c" -> theme.a.b.c
+ * Expand a variants object.
+ * Detects $iterator patterns and expands them to concrete keys.
  */
-function pathToMemberExpr(t, base, path) {
-    let expr = t.identifier(base);
+function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expandedVariants) {
+    const newProperties = [];
 
-    for (const part of path.split('.')) {
-        const arrayMatch = part.match(/^\[(\d+)\]$/);
-        if (arrayMatch) {
-            const idx = parseInt(arrayMatch[1], 10);
-            expr = t.memberExpression(expr, t.numericLiteral(idx), true);
-        } else if (part) {
-            expr = t.memberExpression(expr, t.identifier(part));
+    for (const prop of variantsObj.properties) {
+        if (!t.isObjectProperty(prop)) {
+            newProperties.push(prop);
+            continue;
+        }
+
+        // Get variant name (e.g., 'intent', 'size')
+        let variantName;
+        if (t.isIdentifier(prop.key)) {
+            variantName = prop.key.name;
+        } else if (t.isStringLiteral(prop.key)) {
+            variantName = prop.key.value;
+        } else {
+            newProperties.push(prop);
+            continue;
+        }
+
+        // Check if the value needs expansion (has $iterator patterns)
+        const iteratorInfo = findIteratorPattern(t, prop.value, themeParam);
+
+        if (iteratorInfo) {
+            verbose(`      Expanding ${variantName} variant with ${iteratorInfo.type} iterator`);
+            const expanded = expandVariantWithIterator(t, prop.value, themeParam, keys, iteratorInfo, verbose);
+            newProperties.push(t.objectProperty(prop.key, expanded));
+
+            // Track for summary
+            const iteratorKey = iteratorInfo.componentName
+                ? `${iteratorInfo.type}.${iteratorInfo.componentName}`
+                : iteratorInfo.type;
+            expandedVariants.push({ variant: variantName, iterator: iteratorKey });
+        } else {
+            // No iterator, keep as-is
+            newProperties.push(prop);
         }
     }
 
+    return t.objectExpression(newProperties);
+}
+
+/**
+ * Find $iterator patterns in a node.
+ * Returns { type: 'intents' | 'sizes', componentName?: string, accessPath: string[] } or null
+ */
+function findIteratorPattern(t, node, themeParam) {
+    let result = null;
+
+    function walk(n) {
+        if (!n || typeof n !== 'object' || result) return;
+
+        if (t.isMemberExpression(n)) {
+            const chain = getMemberChain(t, n, themeParam);
+            if (chain) {
+                for (let i = 0; i < chain.length; i++) {
+                    const part = chain[i];
+                    if (part.startsWith('$')) {
+                        const iteratorName = part.slice(1);
+
+                        if (iteratorName === 'intents') {
+                            result = {
+                                type: 'intents',
+                                accessPath: chain.slice(i + 1),
+                            };
+                            return;
+                        }
+
+                        // Size iterator: sizes.$button, sizes.$typography, etc.
+                        if (i > 0 && chain[i - 1] === 'sizes') {
+                            result = {
+                                type: 'sizes',
+                                componentName: iteratorName,
+                                accessPath: chain.slice(i + 1),
+                            };
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Recursively check children
+        for (const key of Object.keys(n)) {
+            if (key === 'type' || key === 'start' || key === 'end' || key === 'loc') continue;
+            if (n[key] && typeof n[key] === 'object') {
+                walk(n[key]);
+            }
+        }
+    }
+
+    walk(node);
+    return result;
+}
+
+/**
+ * Get member expression chain as array.
+ * theme.intents.primary → ['intents', 'primary']
+ */
+function getMemberChain(t, node, themeParam) {
+    const parts = [];
+
+    function walk(n) {
+        if (t.isIdentifier(n)) {
+            if (n.name === themeParam) {
+                return true;
+            }
+            return false;
+        }
+
+        if (t.isMemberExpression(n)) {
+            if (!walk(n.object)) return false;
+
+            if (t.isIdentifier(n.property)) {
+                parts.push(n.property.name);
+            } else if (t.isStringLiteral(n.property)) {
+                parts.push(n.property.value);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    return walk(node) ? parts : null;
+}
+
+/**
+ * Expand a variant value using iterator info.
+ */
+function expandVariantWithIterator(t, valueNode, themeParam, keys, iteratorInfo, verbose) {
+    let keysToExpand = [];
+
+    if (iteratorInfo.type === 'intents') {
+        keysToExpand = keys?.intents || [];
+    } else if (iteratorInfo.type === 'sizes' && iteratorInfo.componentName) {
+        keysToExpand = keys?.sizes?.[iteratorInfo.componentName] || [];
+        verbose(`        Looking for sizes.${iteratorInfo.componentName}, available: ${Object.keys(keys?.sizes || {}).join(', ')}`);
+    }
+
+    if (keysToExpand.length === 0) {
+        verbose(`        No keys found for ${iteratorInfo.type}${iteratorInfo.componentName ? '.' + iteratorInfo.componentName : ''}`);
+        verbose(`        Keys object: ${JSON.stringify(keys)}`);
+        return valueNode;
+    }
+
+    verbose(`        Expanding to keys: ${keysToExpand.join(', ')}`);
+
+    const expandedProps = [];
+
+    for (const key of keysToExpand) {
+        const expandedValue = replaceIteratorRefs(t, valueNode, themeParam, iteratorInfo, key);
+        expandedProps.push(
+            t.objectProperty(
+                t.identifier(key),
+                expandedValue
+            )
+        );
+    }
+
+    return t.objectExpression(expandedProps);
+}
+
+/**
+ * Replace $iterator references in a node with concrete key access.
+ *
+ * theme.$intents.primary → theme.intents.primary.primary (when key='primary')
+ * theme.sizes.$button.padding → theme.sizes.button.xs.padding (when key='xs')
+ */
+function replaceIteratorRefs(t, node, themeParam, iteratorInfo, key) {
+    if (!node || typeof node !== 'object') return node;
+
+    const cloned = t.cloneDeep(node);
+
+    function walk(n) {
+        if (!n || typeof n !== 'object') return n;
+
+        if (Array.isArray(n)) {
+            return n.map(walk);
+        }
+
+        if (t.isMemberExpression(n)) {
+            const chain = getMemberChain(t, n, themeParam);
+            if (chain) {
+                let hasIterator = false;
+                let dollarIndex = -1;
+
+                for (let i = 0; i < chain.length; i++) {
+                    if (chain[i].startsWith('$')) {
+                        const iterName = chain[i].slice(1);
+                        if (iteratorInfo.type === 'intents' && iterName === 'intents') {
+                            hasIterator = true;
+                            dollarIndex = i;
+                            break;
+                        }
+                        if (iteratorInfo.type === 'sizes' && iterName === iteratorInfo.componentName && i > 0 && chain[i - 1] === 'sizes') {
+                            hasIterator = true;
+                            dollarIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (hasIterator) {
+                    const newChain = [];
+                    for (let i = 0; i < chain.length; i++) {
+                        if (i === dollarIndex) {
+                            const iterName = chain[i].slice(1);
+                            newChain.push(iterName);
+                            newChain.push(key);
+                        } else {
+                            newChain.push(chain[i]);
+                        }
+                    }
+                    return buildMemberExpression(t, themeParam, newChain);
+                }
+            }
+        }
+
+        if (t.isObjectExpression(n)) {
+            return t.objectExpression(
+                n.properties.map(prop => walk(prop))
+            );
+        }
+
+        if (t.isObjectProperty(n)) {
+            return t.objectProperty(
+                n.key,
+                walk(n.value),
+                n.computed,
+                n.shorthand
+            );
+        }
+
+        return n;
+    }
+
+    return walk(cloned);
+}
+
+/**
+ * Build a member expression from a chain.
+ */
+function buildMemberExpression(t, base, chain) {
+    let expr = t.identifier(base);
+    for (const part of chain) {
+        expr = t.memberExpression(expr, t.identifier(part));
+    }
     return expr;
 }
 
@@ -156,124 +478,18 @@ function pathToMemberExpr(t, base, path) {
 
 module.exports = function idealystStylesPlugin({ types: t }) {
     let debugMode = false;
-    // Map of function name -> function node (for inlining)
-    let localFunctions = new Map();
+    let verboseMode = false;
 
     function debug(...args) {
-        if (debugMode) {
+        if (debugMode || verboseMode) {
             console.log('[idealyst-plugin]', ...args);
         }
     }
 
-    /**
-     * Clone an AST node deeply, replacing identifier references.
-     * @param {Object} node - AST node to clone
-     * @param {Map<string, Object>} replacements - Map of identifier name -> replacement node
-     */
-    function cloneWithReplacements(node, replacements) {
-        if (!node || typeof node !== 'object') return node;
-
-        // Handle identifier replacement
-        if (t.isIdentifier(node) && replacements.has(node.name)) {
-            return t.cloneDeep(replacements.get(node.name));
+    function verbose(...args) {
+        if (verboseMode) {
+            console.log('[idealyst-plugin]', ...args);
         }
-
-        // Clone the node
-        const cloned = t.cloneDeep(node);
-        return cloned;
-    }
-
-    /**
-     * Inline a function call if the function is defined locally.
-     * Returns the inlined body or null if can't inline.
-     * @param {Set<string>} inliningStack - Track functions being inlined to prevent recursion
-     */
-    function tryInlineFunction(callExpr, themeParamName, inliningStack = new Set()) {
-        if (!t.isIdentifier(callExpr.callee)) return null;
-
-        const fnName = callExpr.callee.name;
-
-        // Prevent infinite recursion
-        if (inliningStack.has(fnName)) {
-            debug(`    Skipping ${fnName}: already in inlining stack (would cause recursion)`);
-            return null;
-        }
-
-        const fnNode = localFunctions.get(fnName);
-        if (!fnNode) return null;
-
-        debug(`  Attempting to inline function: ${fnName}`);
-
-        // Get the function body
-        let body = fnNode.body;
-        const params = fnNode.params;
-
-        // Build replacement map for parameters
-        const replacements = new Map();
-        for (let i = 0; i < params.length; i++) {
-            if (t.isIdentifier(params[i]) && callExpr.arguments[i]) {
-                replacements.set(params[i].name, callExpr.arguments[i]);
-            }
-        }
-
-        // If body is a block statement with a return, extract the return value
-        if (t.isBlockStatement(body)) {
-            const returnStmt = body.body.find(stmt => t.isReturnStatement(stmt));
-            if (returnStmt && returnStmt.argument) {
-                body = returnStmt.argument;
-            } else {
-                debug(`    Cannot inline ${fnName}: no return statement found`);
-                return null;
-            }
-        }
-
-        // Clone the body and replace parameter references
-        const cloned = t.cloneDeep(body);
-
-        // Add current function to stack before recursing
-        const newStack = new Set(inliningStack);
-        newStack.add(fnName);
-
-        // Simple replacement without traverse (to avoid recursion issues)
-        // Replace identifiers that match parameter names
-        function replaceInNode(node) {
-            if (!node || typeof node !== 'object') return node;
-
-            // Handle arrays
-            if (Array.isArray(node)) {
-                return node.map(replaceInNode);
-            }
-
-            // Handle identifier replacement
-            if (t.isIdentifier(node) && replacements.has(node.name)) {
-                return t.cloneDeep(replacements.get(node.name));
-            }
-
-            // Handle nested function calls - inline them too
-            if (t.isCallExpression(node) && t.isIdentifier(node.callee) && localFunctions.has(node.callee.name)) {
-                // First replace parameters in the arguments
-                const newArgs = node.arguments.map(replaceInNode);
-                const newCall = t.callExpression(node.callee, newArgs);
-                const inlined = tryInlineFunction(newCall, themeParamName, newStack);
-                if (inlined) {
-                    return inlined;
-                }
-            }
-
-            // Recursively process object properties
-            const newNode = { ...node };
-            for (const key of Object.keys(node)) {
-                if (key === 'type' || key === 'start' || key === 'end' || key === 'loc') continue;
-                if (node[key] && typeof node[key] === 'object') {
-                    newNode[key] = replaceInNode(node[key]);
-                }
-            }
-            return newNode;
-        }
-
-        const result = replaceInNode(cloned);
-        debug(`    Successfully inlined ${fnName}`);
-        return result;
     }
 
     return {
@@ -282,43 +498,53 @@ module.exports = function idealystStylesPlugin({ types: t }) {
         visitor: {
             Program: {
                 enter(path, state) {
-                    const opts = state.opts || {};
-                    debugMode = opts.debug === true;
-                    const cachePath = opts.cachePath;
-                    const rootDir = opts.rootDir || state.cwd || process.cwd();
-                    loadCache(cachePath, rootDir);
+                    // Track if we need to add StyleSheet import
+                    state.needsStyleSheetImport = false;
+                    state.hasStyleSheetImport = false;
 
-                    // Reset local functions map for each file
-                    localFunctions = new Map();
-
-                    // Collect all function declarations in the file
+                    // Check existing imports for StyleSheet from react-native-unistyles
                     path.traverse({
-                        FunctionDeclaration(fnPath) {
-                            if (fnPath.node.id && t.isIdentifier(fnPath.node.id)) {
-                                const name = fnPath.node.id.name;
-                                localFunctions.set(name, fnPath.node);
-                                debug(`Collected function: ${name}`);
+                        ImportDeclaration(importPath) {
+                            if (importPath.node.source.value === 'react-native-unistyles') {
+                                for (const spec of importPath.node.specifiers) {
+                                    if (t.isImportSpecifier(spec) &&
+                                        t.isIdentifier(spec.imported, { name: 'StyleSheet' })) {
+                                        state.hasStyleSheetImport = true;
+                                    }
+                                }
+                                // Store reference to add StyleSheet to existing import if needed
+                                state.unistylesImportPath = importPath;
                             }
-                        },
-                        VariableDeclarator(varPath) {
-                            // Also collect arrow functions assigned to variables
-                            // const foo = (theme) => { ... }
-                            if (t.isIdentifier(varPath.node.id) &&
-                                (t.isArrowFunctionExpression(varPath.node.init) ||
-                                 t.isFunctionExpression(varPath.node.init))) {
-                                const name = varPath.node.id.name;
-                                localFunctions.set(name, varPath.node.init);
-                                debug(`Collected arrow function: ${name}`);
-                            }
-                        },
+                        }
                     });
                 },
+                exit(path, state) {
+                    // Add StyleSheet import if needed
+                    if (state.needsStyleSheetImport && !state.hasStyleSheetImport) {
+                        if (state.unistylesImportPath) {
+                            // Add StyleSheet to existing unistyles import
+                            state.unistylesImportPath.node.specifiers.push(
+                                t.importSpecifier(t.identifier('StyleSheet'), t.identifier('StyleSheet'))
+                            );
+                            debugMode && debug('Added StyleSheet to existing unistyles import');
+                        } else {
+                            // Add new import declaration
+                            const importDecl = t.importDeclaration(
+                                [t.importSpecifier(t.identifier('StyleSheet'), t.identifier('StyleSheet'))],
+                                t.stringLiteral('react-native-unistyles')
+                            );
+                            path.unshiftContainer('body', importDecl);
+                            debugMode && debug('Added new StyleSheet import');
+                        }
+                    }
+                }
             },
 
             CallExpression(path, state) {
                 const { node } = path;
                 const opts = state.opts || {};
                 debugMode = opts.debug === true;
+                verboseMode = opts.verbose === true;
                 const filename = state.filename || '';
 
                 // Check if we should process this file
@@ -326,207 +552,97 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     opts.processAll ||
                     (opts.autoProcessPaths?.some(p => filename.includes(p)));
 
-                if (!shouldProcess) {
-                    // Only log once per file for skipped files
-                    if (debugMode && t.isIdentifier(node.callee, { name: 'applyExtensions' })) {
-                        debug(`SKIP (path not matched): ${filename}`);
-                        debug(`  autoProcessPaths: ${JSON.stringify(opts.autoProcessPaths)}`);
-                    }
-                    return;
-                }
-
-                // ============================================================
-                // Transform 1: Remove applyExtensions wrapper
-                // ============================================================
-                // Pattern A - Direct return:
-                //   return applyExtensions('Button', theme, { button: ... })
-                //   -> return { button: ... }
-                //
-                // Pattern B - Variable + spread (handled in parent):
-                //   const extended = applyExtensions(...);
-                //   return { ...extended };
-                //   -> return { ... }
-
-                if (opts.removeApplyExtensions !== false) {
-                    if (t.isIdentifier(node.callee, { name: 'applyExtensions' })) {
-                        debug(`FOUND applyExtensions in: ${filename}`);
-
-                        // applyExtensions(componentName, theme, stylesObject)
-                        const [componentNameArg, , stylesArg] = node.arguments;
-
-                        if (stylesArg && (t.isObjectExpression(stylesArg) || t.isIdentifier(stylesArg))) {
-                            const componentName = t.isStringLiteral(componentNameArg)
-                                ? componentNameArg.value
-                                : 'unknown';
-
-                            // Check if this is Pattern B: const extended = applyExtensions(...)
-                            const varDeclarator = path.parentPath;
-                            if (varDeclarator && t.isVariableDeclarator(varDeclarator.node)) {
-                                const varName = varDeclarator.node.id.name;
-                                const varDeclaration = varDeclarator.parentPath;
-                                const blockStatement = varDeclaration?.parentPath;
-
-                                // Find return statement with { ...extended }
-                                if (blockStatement && t.isBlockStatement(blockStatement.node)) {
-                                    const returnStmt = blockStatement.node.body.find(
-                                        stmt => t.isReturnStatement(stmt)
-                                    );
-
-                                    if (returnStmt &&
-                                        t.isObjectExpression(returnStmt.argument) &&
-                                        returnStmt.argument.properties.length === 1 &&
-                                        t.isSpreadElement(returnStmt.argument.properties[0]) &&
-                                        t.isIdentifier(returnStmt.argument.properties[0].argument, { name: varName })) {
-
-                                        debug(`TRANSFORMING Pattern B: const ${varName} = applyExtensions('${componentName}', ...) + spread`);
-
-                                        // Find the arrow function and replace its body with direct return
-                                        const arrowFn = blockStatement.parentPath;
-                                        if (arrowFn && (t.isArrowFunctionExpression(arrowFn.node) || t.isFunctionExpression(arrowFn.node))) {
-                                            // Replace block body with direct expression return
-                                            arrowFn.node.body = stylesArg;
-                                            debug(`  -> Converted to direct return`);
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-
-                            // Pattern A: Direct return - convert block body to expression body
-                            // Find if we're inside: return applyExtensions(...)
-                            const parentReturn = path.parentPath;
-                            if (parentReturn && t.isReturnStatement(parentReturn.node)) {
-                                const blockPath = parentReturn.parentPath;
-                                if (blockPath && t.isBlockStatement(blockPath.node)) {
-                                    const fnPath = blockPath.parentPath;
-                                    if (fnPath && t.isArrowFunctionExpression(fnPath.node)) {
-                                        // Check if return is the only statement
-                                        if (blockPath.node.body.length === 1) {
-                                            debug(`TRANSFORMING Pattern A: applyExtensions('${componentName}', ...) -> expression body`);
-                                            // Replace the entire arrow function body with expression body
-                                            fnPath.get('body').replaceWith(stylesArg);
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
-
-                            // Fallback: just replace the call (keeps return statement)
-                            debug(`TRANSFORMING Pattern A (fallback): applyExtensions('${componentName}', ...) -> styles object`);
-                            path.replaceWith(stylesArg);
-                            return;
-                        } else {
-                            debug(`SKIP transform - stylesArg is not ObjectExpression or Identifier`);
-                            debug(`  stylesArg type: ${stylesArg?.type}`);
-                        }
-                    }
-                }
-
-                // ============================================================
-                // Transform 2: Inline local function calls in StyleSheet.create
-                // ============================================================
-                // StyleSheet.create((theme) => ({ view: createViewStyles(theme) }))
-                // -> StyleSheet.create((theme) => ({ view: { ...inlined body... } }))
-
-                if (!t.isMemberExpression(node.callee)) return;
-                if (!t.isIdentifier(node.callee.object, { name: 'StyleSheet' })) return;
-                if (!t.isIdentifier(node.callee.property, { name: 'create' })) return;
-
-                debug(`FOUND StyleSheet.create in: ${filename}`);
-
-                const callback = node.arguments[0];
-                if (!t.isArrowFunctionExpression(callback) && !t.isFunctionExpression(callback)) return;
-
-                let themeParam = 'theme';
-                if (callback.params?.[0] && t.isIdentifier(callback.params[0])) {
-                    themeParam = callback.params[0].name;
-                }
-
-                // Inline function calls if enabled
-                if (opts.inlineFunctions !== false && localFunctions.size > 0) {
-                    debug(`  Inlining functions in StyleSheet.create (${localFunctions.size} local functions available)`);
-
-                    // Traverse the callback body and inline function calls
-                    path.traverse({
-                        CallExpression(callPath) {
-                            if (!t.isIdentifier(callPath.node.callee)) return;
-
-                            const fnName = callPath.node.callee.name;
-                            if (!localFunctions.has(fnName)) return;
-
-                            const inlined = tryInlineFunction(callPath.node, themeParam);
-                            if (inlined) {
-                                debug(`    Inlined: ${fnName}`);
-                                callPath.replaceWith(inlined);
-                            }
-                        },
-                    });
-                }
-
-                // If we have cache data, try to use it (legacy support)
-                if (styleCache?.files && opts.cachePath) {
-                    const rootDir = opts.rootDir || state.cwd || process.cwd();
-                    const relativePath = nodePath.relative(rootDir, filename).replace(/\\/g, '/');
-
-                    const cachedData = styleCache.files[relativePath];
-                    if (cachedData?.[0]?.styles) {
-                        const cachedStyles = cachedData[0].styles;
-                        const newBody = cacheValueToAST(t, cachedStyles, themeParam);
-                        callback.body = newBody;
-                    }
-                }
-            },
-
-            // ============================================================
-            // Transform 3: Remove applyExtensions import
-            // ============================================================
-            ImportDeclaration(path, state) {
-                const opts = state.opts || {};
-                debugMode = opts.debug === true;
-                const filename = state.filename || '';
-
-                const shouldProcess =
-                    opts.processAll ||
-                    (opts.autoProcessPaths?.some(p => filename.includes(p)));
-
                 if (!shouldProcess) return;
-                if (opts.removeApplyExtensions === false) return;
 
-                const source = path.node.source.value;
+                // Handle defineStyle/extendStyle calls
+                if (t.isIdentifier(node.callee, { name: 'defineStyle' }) ||
+                    t.isIdentifier(node.callee, { name: 'extendStyle' })) {
 
-                // Check if this imports applyExtensions
-                if (source.includes('extensions/applyExtension') ||
-                    source === '../extensions/applyExtension') {
+                    const fnName = node.callee.name;
+                    debug(`FOUND ${fnName} in: ${filename}`);
 
-                    debug(`FOUND applyExtensions import in: ${filename}`);
-                    debug(`  source: ${source}`);
+                    const [componentNameArg, stylesCallback] = node.arguments;
 
-                    // Filter out applyExtensions from specifiers
-                    const remaining = path.node.specifiers.filter(spec => {
-                        if (t.isImportSpecifier(spec)) {
-                            const name = t.isIdentifier(spec.imported)
-                                ? spec.imported.name
-                                : spec.imported.value;
-                            return name !== 'applyExtensions';
-                        }
-                        return true;
-                    });
-
-                    if (remaining.length === 0) {
-                        // Remove entire import
-                        debug(`REMOVING entire import`);
-                        path.remove();
-                    } else if (remaining.length < path.node.specifiers.length) {
-                        // Update specifiers
-                        debug(`REMOVING applyExtensions from import specifiers`);
-                        path.node.specifiers = remaining;
+                    if (!t.isStringLiteral(componentNameArg)) {
+                        debug(`  SKIP - componentName is not a string literal`);
+                        return;
                     }
+
+                    if (!t.isArrowFunctionExpression(stylesCallback) &&
+                        !t.isFunctionExpression(stylesCallback)) {
+                        debug(`  SKIP - callback is not a function`);
+                        return;
+                    }
+
+                    const componentName = componentNameArg.value;
+                    debug(`  Processing ${fnName}('${componentName}')`);
+
+                    // Get theme parameter name
+                    let themeParam = 'theme';
+                    if (stylesCallback.params?.[0] && t.isIdentifier(stylesCallback.params[0])) {
+                        themeParam = stylesCallback.params[0].name;
+                    }
+
+                    // Load theme keys for expansion
+                    const rootDir = opts.rootDir || state.cwd || process.cwd();
+                    const themePath = opts.themePath || '@idealyst/theme';
+                    const keys = loadThemeKeys(themePath, rootDir);
+
+                    // Transform the callback body to expand $iterator patterns
+                    const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, debug);
+
+                    // Replace defineStyle/extendStyle with StyleSheet.create
+                    path.replaceWith(
+                        t.callExpression(
+                            t.memberExpression(
+                                t.identifier('StyleSheet'),
+                                t.identifier('create')
+                            ),
+                            [expandedCallback]
+                        )
+                    );
+
+                    // Mark that we need StyleSheet import
+                    state.needsStyleSheetImport = true;
+
+                    debug(`  -> Replaced ${fnName} with StyleSheet.create`);
+                }
+
+                // Handle StyleSheet.create calls - expand $iterator patterns inside
+                if (t.isMemberExpression(node.callee) &&
+                    t.isIdentifier(node.callee.object, { name: 'StyleSheet' }) &&
+                    t.isIdentifier(node.callee.property, { name: 'create' })) {
+
+                    debug(`FOUND StyleSheet.create in: ${filename}`);
+
+                    const [stylesCallback] = node.arguments;
+
+                    if (!t.isArrowFunctionExpression(stylesCallback) &&
+                        !t.isFunctionExpression(stylesCallback)) {
+                        debug(`  SKIP - callback is not a function`);
+                        return;
+                    }
+
+                    // Get theme parameter name
+                    let themeParam = 'theme';
+                    if (stylesCallback.params?.[0] && t.isIdentifier(stylesCallback.params[0])) {
+                        themeParam = stylesCallback.params[0].name;
+                    }
+
+                    // Load theme keys for expansion
+                    const rootDir = opts.rootDir || state.cwd || process.cwd();
+                    const themePath = opts.themePath || '@idealyst/theme';
+                    const keys = loadThemeKeys(themePath, rootDir);
+
+                    // Transform the callback body to expand $iterator patterns
+                    const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, debug);
+
+                    // Replace the callback argument
+                    node.arguments[0] = expandedCallback;
+
+                    debug(`  -> Expanded $iterator patterns in StyleSheet.create`);
                 }
             },
         },
     };
 };
-
-// Export for testing
-module.exports.cacheValueToAST = cacheValueToAST;
-module.exports.pathToMemberExpr = pathToMemberExpr;

@@ -126,35 +126,40 @@ const parseParameterizedPath = (path: string, rootRoute: any): { routeName: stri
                 const cleanPath = route.path.startsWith('/') ? route.path.slice(1) : route.path;
                 const fullRoutePath = pathPrefix ? `${pathPrefix}/${cleanPath}` : route.path;
                 
-                if (routeSegments.length === segments.length - startIndex) {
-                    let isMatch = true;
-                    const extractedParams: Record<string, string> = {};
-                    
+                // Check if route segments match the path segments at current position
+                const remainingSegments = segments.length - startIndex;
+
+                // Check if this route's segments match as a prefix (for nested routes) or exactly
+                let prefixMatches = routeSegments.length <= remainingSegments;
+                const extractedParams: Record<string, string> = {};
+
+                if (prefixMatches) {
                     for (let i = 0; i < routeSegments.length; i++) {
                         const routeSegment = routeSegments[i];
                         const pathSegment = segments[startIndex + i];
-                        
+
                         if (routeSegment.startsWith(':')) {
                             // Parameter segment - extract value
                             const paramName = routeSegment.slice(1);
                             extractedParams[paramName] = pathSegment;
                         } else if (routeSegment !== pathSegment) {
                             // Literal segment must match exactly
-                            isMatch = false;
+                            prefixMatches = false;
                             break;
                         }
                     }
-                    
-                    if (isMatch) {
-                        return { route, params: extractedParams, fullPath: fullRoutePath };
-                    }
                 }
-                
-                // Check nested routes
-                if (route.routes) {
+
+                // Exact match - route segments consume all remaining path segments
+                if (prefixMatches && routeSegments.length === remainingSegments) {
+                    return { route, params: extractedParams, fullPath: fullRoutePath };
+                }
+
+                // Check nested routes ONLY if this route's path is a prefix of the target path
+                if (prefixMatches && route.routes) {
                     const nestedMatch = findMatchingRoute(
-                        route.routes, 
-                        segments, 
+                        route.routes,
+                        segments,
                         startIndex + routeSegments.length,
                         fullRoutePath
                     );

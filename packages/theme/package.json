@@ -28,9 +28,8 @@
       "types": "./src/unistyles.ts"
     },
     "./plugin": {
-      "import": "./src/babel/plugin.ts",
-      "require": "./src/babel/plugin.ts",
-      "types": "./src/babel/plugin.ts"
+      "import": "./src/babel/plugin.js",
+      "require": "./src/babel/plugin.js"
     },
     "./extensions": {
       "import": "./src/extensions.ts",

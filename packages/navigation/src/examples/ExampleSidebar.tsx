@@ -93,6 +93,7 @@ const componentGroups: ComponentGroup[] = [
         title: 'Theme',
         items: [
             { label: 'Theme Extension', path: '/theme-extension', icon: 'palette' },
+            { label: 'StyleBuilder Test', path: '/stylebuilder-test', icon: 'test-tube' },
         ],
     },
 ];

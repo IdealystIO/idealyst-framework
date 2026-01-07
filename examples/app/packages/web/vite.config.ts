@@ -22,13 +22,30 @@ export default defineConfig({
           ],
         ],
         plugins: [
-          // Idealyst extensions plugin MUST run BEFORE unistyles plugin
-          path.resolve(__dirname, "../../../../packages/theme/src/babel/plugin.js"),
+          // Idealyst plugin runs FIRST to expand $iterator patterns
+          [
+            path.resolve(__dirname, "../../../../packages/theme/src/babel/plugin.js"),
+            {
+              autoProcessPaths: [
+                'packages/components',
+                'packages/navigation',
+                'packages/theme',
+                '@idealyst/components',
+                '@idealyst/navigation',
+                '@idealyst/theme',
+              ],
+              debug: true,
+            }
+          ],
+          // Unistyles plugin runs SECOND to process expanded StyleSheet.create
           [
             "react-native-unistyles/plugin",
             {
               root: "src",
               autoProcessPaths: [
+                "packages/components",
+                "packages/navigation",
+                "packages/theme",
                 "@idealyst/components",
                 "@idealyst/navigation",
                 "@idealyst/theme",

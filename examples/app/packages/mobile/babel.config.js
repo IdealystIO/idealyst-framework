@@ -1,8 +1,7 @@
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
-    // Idealyst extensions plugin MUST run BEFORE unistyles plugin
-    // It transforms applyExtensions calls into Unistyles-compatible code
+    // Idealyst StyleBuilder plugin - expands $iterator patterns in defineStyle/extendStyle
     ['../../../../packages/theme/src/babel/plugin.js', {
       // Use filesystem paths since this runs before module-resolver
       autoProcessPaths: [
@@ -17,12 +16,18 @@ module.exports = {
         '@idealyst/datagrid',
         '@idealyst/datepicker',
       ],
-      removeApplyExtensions: true,
+      debug: true,
     }],
     ['react-native-unistyles/plugin', {
       root: 'src',
       debug: true,
-      autoProcessPaths: ['@idealyst/components', '@idealyst/navigation', '@idealyst/theme', '@idealyst/datagrid', '@idealyst/datepicker'],
+      autoProcessPaths: [
+        '@idealyst/components',
+        '@idealyst/navigation',
+        '@idealyst/theme',
+        '@idealyst/datagrid',
+        '@idealyst/datepicker',
+      ],
     }],
     'react-native-reanimated/plugin',
     ['module-resolver', {

@@ -7,3 +7,5 @@ export * from './components';
 export * from './styles';
 export * from './helpers';
 export * from './builder';
+export * from './styleBuilder';
+export * from './extensions';
