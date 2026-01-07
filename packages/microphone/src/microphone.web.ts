@@ -25,6 +25,7 @@ import {
   float32ToInt8,
   createMicrophoneError,
   mergeConfig,
+  arrayBufferToBase64,
 } from './utils';
 import { checkPermission, requestPermission } from './permissions/permissions.web';
 
@@ -111,25 +112,31 @@ export class WebMicrophone implements IMicrophone {
     this.config = mergeConfig(config, DEFAULT_AUDIO_CONFIG);
 
     try {
-      // Check/request permission
-      const permResult = await this.requestPermission();
-      if (permResult.status !== 'granted') {
-        throw createMicrophoneError(
-          permResult.status === 'blocked' ? 'PERMISSION_BLOCKED' : 'PERMISSION_DENIED',
-          'Microphone permission not granted'
-        );
+      // Get microphone access directly - this will trigger permission prompt if needed
+      try {
+        this.mediaStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            channelCount: this.config.channels,
+            sampleRate: this.config.sampleRate,
+            echoCancellation: false,
+            noiseSuppression: false,
+            autoGainControl: false,
+          },
+        });
+        this.updateStatus({ permission: 'granted' });
+      } catch (error) {
+        if (error instanceof Error) {
+          if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            this.updateStatus({ permission: 'denied' });
+            throw createMicrophoneError('PERMISSION_DENIED', 'Microphone permission not granted', error);
+          }
+          if (error.name === 'NotFoundError') {
+            this.updateStatus({ permission: 'unavailable' });
+            throw createMicrophoneError('DEVICE_NOT_FOUND', 'No microphone found', error);
+          }
+        }
+        throw error;
       }
-
-      // Get microphone access
-      this.mediaStream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          channelCount: this.config.channels,
-          sampleRate: this.config.sampleRate,
-          echoCancellation: false,
-          noiseSuppression: false,
-          autoGainControl: false,
-        },
-      });
 
       // Create audio context with specified sample rate
       this.audioContext = new AudioContext({
@@ -290,11 +297,27 @@ export class WebMicrophone implements IMicrophone {
         break;
     }
 
+    // Cache base64 for lazy conversion
+    let cachedBase64: string | null = null;
+
     const pcmData: PCMData = {
       buffer,
       samples,
       timestamp: Date.now(),
       config: this.config,
+      async toBlob(mimeType = 'application/octet-stream'): Promise<Blob> {
+        // Web can create Blob directly from ArrayBuffer
+        return new Blob([buffer], { type: mimeType });
+      },
+      toBase64(): string {
+        if (cachedBase64 === null) {
+          cachedBase64 = arrayBufferToBase64(buffer);
+        }
+        return cachedBase64;
+      },
+      toDataUri(mimeType = 'application/octet-stream'): string {
+        return `data:${mimeType};base64,${this.toBase64()}`;
+      },
     };
 
     // Notify all audio data listeners

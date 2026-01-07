@@ -1938,6 +1938,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@idealyst/camera@portal:../../../../packages/camera::locator=%40test-select-demo%2Fshared%40workspace%3Apackages%2Fshared":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/camera@portal:../../../../packages/camera::locator=%40test-select-demo%2Fshared%40workspace%3Apackages%2Fshared"
+  peerDependencies:
+    "@idealyst/components": ">=1.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-vision-camera: ">=4.0.0"
+  peerDependenciesMeta:
+    "@idealyst/components":
+      optional: true
+    react-native:
+      optional: true
+    react-native-vision-camera:
+      optional: true
+  languageName: node
+  linkType: soft
+
 "@idealyst/components@npm:^1.0.82":
   version: 1.0.82
   resolution: "@idealyst/components@npm:1.0.82"
@@ -2030,10 +2048,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/microphone@portal:../../../../packages/microphone::locator=%40test-select-demo%2Fshared%40workspace%3Apackages%2Fshared"
   peerDependencies:
+    "@idealyst/components": ">=1.0.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-live-audio-stream: ">=1.1.0"
   peerDependenciesMeta:
+    "@idealyst/components":
+      optional: true
     react-native:
       optional: true
     react-native-live-audio-stream:
@@ -2045,10 +2066,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/microphone@portal:../../../../packages/microphone::locator=%40test-select-demo%2Fweb%40workspace%3Apackages%2Fweb"
   peerDependencies:
+    "@idealyst/components": ">=1.0.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-live-audio-stream: ">=1.1.0"
   peerDependenciesMeta:
+    "@idealyst/components":
+      optional: true
     react-native:
       optional: true
     react-native-live-audio-stream:
@@ -3556,6 +3580,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@test-select-demo/shared@workspace:packages/shared"
   dependencies:
+    "@idealyst/camera": "portal:../../../../packages/camera"
     "@idealyst/components": "npm:^1.0.82"
     "@idealyst/microphone": "portal:../../../../packages/microphone"
     "@idealyst/navigation": "npm:^1.0.82"
@@ -3567,9 +3592,11 @@ __metadata:
     "@types/jest": "npm:^29.5.12"
     "@types/react": "npm:^19.1.0"
     jest: "npm:^29.7.0"
+    react-native-unistyles: "npm:^3.0.0"
     ts-jest: "npm:^29.1.2"
     typescript: "npm:^5.0.0"
   peerDependencies:
+    "@idealyst/camera": ^1.1.6
     "@idealyst/components": ^1.0.82
     "@idealyst/microphone": ^1.1.2
     "@idealyst/navigation": ^1.0.82
@@ -9936,12 +9963,12 @@ __metadata:
     react-native: "npm:0.81.4"
     react-native-edge-to-edge: "npm:^1.6.2"
     react-native-gesture-handler: "npm:^2.27.1"
-    react-native-nitro-modules: "npm:0.30.0"
+    react-native-nitro-modules: "npm:0.32.0"
     react-native-reanimated: "npm:^3.18.0"
     react-native-safe-area-context: "npm:^5.5.1"
     react-native-screens: "npm:^4.11.1"
     react-native-svg: "npm:^15.8.0"
-    react-native-unistyles: "npm:3.0.15"
+    react-native-unistyles: "npm:^3.0.15"
     react-native-vector-icons: "npm:^10.2.0"
     react-native-video: "npm:^6.17.0"
     react-test-renderer: "npm:19.1.0"
@@ -10939,6 +10966,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-nitro-modules@npm:0.32.0":
+  version: 0.32.0
+  resolution: "react-native-nitro-modules@npm:0.32.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/bc605c5a65a8817e2e62e64494fbb82af5d917e003d9e4c3f430a559ce100ccb3ed01751a5e599e224ca8dfb6d9008b5b02092770b03daa61936816e91046b67
+  languageName: node
+  linkType: hard
+
 "react-native-reanimated@npm:^3.18.0":
   version: 3.19.1
   resolution: "react-native-reanimated@npm:3.19.1"
@@ -11015,6 +11052,23 @@ __metadata:
     react-native-reanimated:
       optional: true
   checksum: 10/383701cfe4736d0202008b097925d65b0093540cfcb680d978d319e3fc05ce82db5b1346ffc5c6716e5773e61fa56cc3414d8930cd8b5b9dba0639adfa2ca04f
+  languageName: node
+  linkType: hard
+
+"react-native-unistyles@npm:^3.0.0, react-native-unistyles@npm:^3.0.15":
+  version: 3.0.21
+  resolution: "react-native-unistyles@npm:3.0.21"
+  peerDependencies:
+    "@react-native/normalize-colors": "*"
+    react: "*"
+    react-native: ">=0.76.0"
+    react-native-edge-to-edge: "*"
+    react-native-nitro-modules: "*"
+    react-native-reanimated: "*"
+  peerDependenciesMeta:
+    react-native-reanimated:
+      optional: true
+  checksum: 10/49a57ee289ee8bfabe4a982156464e5ab51f547995a2b026da443a7ba30a2add3344c039b4bd434f40fb7b885be7ce46f83290adbe76ed3c85419f257d9af112
   languageName: node
   linkType: hard
 

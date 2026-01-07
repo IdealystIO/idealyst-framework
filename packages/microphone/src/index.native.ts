@@ -57,6 +57,7 @@ export {
 export {
   base64ToArrayBuffer,
   arrayBufferToBase64,
+  arrayBufferToBlob,
   createPCMTypedArray,
   calculateAudioLevels,
   float32ToInt16,

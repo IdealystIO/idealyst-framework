@@ -1,9 +1,54 @@
-import React, { useState, isValidElement, useMemo } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, isValidElement, useMemo, useEffect, useRef, useCallback } from 'react';
+import { View, TextInput, TouchableOpacity, Platform, TextInputProps } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useUnistyles } from 'react-native-unistyles';
 import { InputProps } from './types';
 import { inputStyles } from './Input.styles';
 import { getNativeFormAccessibilityProps } from '../utils/accessibility';
+
+// Inner TextInput component that can be memoized to prevent re-renders
+// for Android secure text entry
+type InnerTextInputProps = {
+  inputRef: React.ForwardedRef<TextInput>;
+  value: string | undefined;
+  onChangeText: ((text: string) => void) | undefined;
+  isAndroidSecure: boolean;
+  textInputProps: Omit<TextInputProps, 'value' | 'defaultValue' | 'onChangeText'>;
+  inputStyle: any;
+};
+
+const InnerTextInput = React.memo<InnerTextInputProps>(
+  ({ inputRef, value, onChangeText, isAndroidSecure, textInputProps, inputStyle }) => {
+    return (
+      <TextInput
+        ref={inputRef}
+        // For Android secure text entry, don't pass value prop at all
+        // Let TextInput manage its own state to preserve character reveal animation
+        {...(isAndroidSecure ? {} : { value })}
+        onChangeText={onChangeText}
+        style={inputStyle}
+        {...textInputProps}
+      />
+    );
+  },
+  (prevProps, nextProps) => {
+    // For Android secure text entry, skip re-renders when only value changes
+    if (nextProps.isAndroidSecure) {
+      // Only re-render if non-value props change
+      const valueChanged = prevProps.value !== nextProps.value;
+      const otherPropsChanged =
+        prevProps.onChangeText !== nextProps.onChangeText ||
+        prevProps.isAndroidSecure !== nextProps.isAndroidSecure ||
+        prevProps.textInputProps !== nextProps.textInputProps ||
+        prevProps.inputStyle !== nextProps.inputStyle;
+
+      if (valueChanged && !otherPropsChanged) {
+        return true; // Skip re-render
+      }
+    }
+    return false; // Allow re-render
+  }
+);
 
 const Input = React.forwardRef<TextInput, InputProps>(({
   value,
@@ -41,11 +86,30 @@ const Input = React.forwardRef<TextInput, InputProps>(({
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  // Track if this is a secure field that needs Android workaround
+  const isSecureField = inputType === 'password' || secureTextEntry;
+  const needsAndroidSecureWorkaround = Platform.OS === 'android' && isSecureField && !isPasswordVisible;
+
+  // For Android secure text entry, we use an internal ref to track value
+  const internalValueRef = useRef(value ?? '');
+
+  // Sync external value changes to internal ref (for programmatic updates)
+  useEffect(() => {
+    if (value !== undefined) {
+      internalValueRef.current = value;
+    }
+  }, [value]);
+
+  // Get theme for icon sizes and colors
+  const { theme } = useUnistyles();
+  const iconSize = theme.sizes.input[size].iconSize;
+  const iconColor = theme.colors.text.secondary;
+
   // Determine if we should show password toggle
   const isPasswordField = inputType === 'password' || secureTextEntry;
   const shouldShowPasswordToggle = isPasswordField && (showPasswordToggle !== false);
 
-  const getKeyboardType = () => {
+  const getKeyboardType = useCallback((): 'default' | 'email-address' | 'numeric' => {
     switch (inputType) {
       case 'email':
         return 'email-address';
@@ -56,42 +120,34 @@ const Input = React.forwardRef<TextInput, InputProps>(({
       default:
         return 'default';
     }
-  };
+  }, [inputType]);
 
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     setIsFocused(true);
-    if (onFocus) {
-      onFocus();
-    }
-  };
+    onFocus?.();
+  }, [onFocus]);
 
-  const handlePress = () => {
-    if (onPress) {
-      onPress();
-    }
-  }
+  const handlePress = useCallback(() => {
+    onPress?.();
+  }, [onPress]);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     setIsFocused(false);
-    if (onBlur) {
-      onBlur();
-    }
-  };
+    onBlur?.();
+  }, [onBlur]);
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  // Apply variants to the stylesheet (for size and spacing)
-  inputStyles.useVariants({
-    size,
-    margin,
-    marginVertical,
-    marginHorizontal,
-  });
+  // Memoized change handler for InnerTextInput
+  const handleChangeText = useCallback((text: string) => {
+    internalValueRef.current = text;
+    onChangeText?.(text);
+  }, [onChangeText]);
 
-  // Compute dynamic container styles
-  const containerStyle = (inputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
+  // Memoized input style
+  const inputStyle = useMemo(() => (inputStyles.input as any)({}), []);
 
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
@@ -119,17 +175,52 @@ const Input = React.forwardRef<TextInput, InputProps>(({
     hasError,
   ]);
 
+  // Memoized TextInput props (everything except value/onChangeText)
+  const textInputProps = useMemo(() => ({
+    onPress: handlePress,
+    placeholder,
+    editable: !disabled,
+    keyboardType: getKeyboardType(),
+    secureTextEntry: isSecureField && !isPasswordVisible,
+    autoCapitalize,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+    placeholderTextColor: '#999999',
+    ...nativeA11yProps,
+  }), [
+    handlePress,
+    placeholder,
+    disabled,
+    getKeyboardType,
+    isSecureField,
+    isPasswordVisible,
+    autoCapitalize,
+    handleFocus,
+    handleBlur,
+    nativeA11yProps,
+  ]);
+
+  // Apply variants to the stylesheet (for size and spacing)
+  inputStyles.useVariants({
+    size,
+    margin,
+    marginVertical,
+    marginHorizontal,
+  });
+
+  // Compute dynamic container styles
+  const containerStyle = (inputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
+
   // Helper to render left icon
   const renderLeftIcon = () => {
     if (!leftIcon) return null;
 
     if (typeof leftIcon === 'string') {
-      const iconStyle = inputStyles.leftIcon;
       return (
         <MaterialCommunityIcons
           name={leftIcon}
-          size={iconStyle.width}
-          color={iconStyle.color}
+          size={iconSize}
+          color={iconColor}
         />
       );
     } else if (isValidElement(leftIcon)) {
@@ -144,12 +235,11 @@ const Input = React.forwardRef<TextInput, InputProps>(({
     if (!rightIcon) return null;
 
     if (typeof rightIcon === 'string') {
-      const iconStyle = inputStyles.rightIcon;
       return (
         <MaterialCommunityIcons
           name={rightIcon}
-          size={iconStyle.width}
-          color={iconStyle.color}
+          size={iconSize}
+          color={iconColor}
         />
       );
     } else if (isValidElement(rightIcon)) {
@@ -169,21 +259,13 @@ const Input = React.forwardRef<TextInput, InputProps>(({
       )}
 
       {/* Input */}
-      <TextInput
-        onPress={handlePress}
-        ref={ref}
+      <InnerTextInput
+        inputRef={ref}
         value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        editable={!disabled}
-        keyboardType={getKeyboardType()}
-        secureTextEntry={(secureTextEntry || inputType === 'password') && !isPasswordVisible}
-        autoCapitalize={autoCapitalize}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        style={(inputStyles.input as any)({})}
-        placeholderTextColor="#999999"
-        {...nativeA11yProps}
+        onChangeText={handleChangeText}
+        isAndroidSecure={needsAndroidSecureWorkaround}
+        inputStyle={inputStyle}
+        textInputProps={textInputProps}
       />
 
       {/* Right Icon or Password Toggle */}
@@ -196,8 +278,8 @@ const Input = React.forwardRef<TextInput, InputProps>(({
         >
           <MaterialCommunityIcons
             name={isPasswordVisible ? 'eye-off' : 'eye'}
-            size={inputStyles.passwordToggleIcon.width}
-            color={inputStyles.passwordToggleIcon.color}
+            size={iconSize}
+            color={iconColor}
           />
         </TouchableOpacity>
       ) : rightIcon ? (

@@ -24,6 +24,7 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
+    "@idealyst/camera": "^1.1.6",
     "@idealyst/components": "^1.0.82",
     "@idealyst/microphone": "^1.1.2",
     "@idealyst/navigation": "^1.0.82",
@@ -41,11 +42,11 @@
     }
   },
   "devDependencies": {
+    "@idealyst/camera": "portal:../../../../packages/camera",
     "@idealyst/components": "^1.0.82",
     "@idealyst/microphone": "portal:../../../../packages/microphone",
     "@idealyst/navigation": "^1.0.82",
     "@idealyst/theme": "^1.0.82",
-    "react-native-unistyles": "^3.0.0",
     "@tanstack/react-query": "^5.83.0",
     "@trpc/client": "^11.5.1",
     "@trpc/react-query": "^11.5.1",
@@ -53,6 +54,7 @@
     "@types/jest": "^29.5.12",
     "@types/react": "^19.1.0",
     "jest": "^29.7.0",
+    "react-native-unistyles": "^3.0.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.0.0"
   },

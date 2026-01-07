@@ -95,11 +95,14 @@ export class NativeMicrophone implements IMicrophone {
       }
 
       // Initialize LiveAudioStream
+      // audioSource values (Android):
+      //   0 = DEFAULT, 1 = MIC, 6 = VOICE_RECOGNITION, 7 = VOICE_COMMUNICATION
+      // Using VOICE_COMMUNICATION (7) for speakerphone mode with better gain
       LiveAudioStream.init({
         sampleRate: this.config.sampleRate,
         channels: this.config.channels,
         bitsPerSample: this.config.bitDepth === 32 ? 16 : this.config.bitDepth, // Native doesn't support 32-bit
-        audioSource: 6, // VOICE_RECOGNITION on Android for better quality
+        audioSource: 7, // VOICE_COMMUNICATION - speakerphone mode with better gain
         bufferSize: this.config.bufferSize,
         wavFile: '', // Empty string = streaming mode (no file output)
       });
@@ -243,6 +246,20 @@ export class NativeMicrophone implements IMicrophone {
         config: {
           ...this.config,
           bitDepth: effectiveBitDepth, // Actual bit depth used
+        },
+        async toBlob(mimeType = 'application/octet-stream'): Promise<Blob> {
+          // React Native can't create Blob from ArrayBuffer/Uint8Array directly
+          // The only reliable way is to use fetch with a data URI
+          const dataUri = `data:${mimeType};base64,${base64Data}`;
+          const response = await fetch(dataUri);
+          return response.blob();
+        },
+        toBase64(): string {
+          // Native already has the base64 data, so just return it
+          return base64Data;
+        },
+        toDataUri(mimeType = 'application/octet-stream'): string {
+          return `data:${mimeType};base64,${base64Data}`;
         },
       };
 

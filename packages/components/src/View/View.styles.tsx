@@ -87,9 +87,14 @@ function createBorderVariants(theme: Theme) {
   } as const;
 }
 
-// Style creators for extension support
+/**
+ * Create dynamic view styles.
+ * Returns a function to ensure Unistyles can track theme changes.
+ * All styles must be dynamic functions (not static objects) to work with
+ * Unistyles' Babel transform and theme reactivity on native.
+ */
 function createViewStyles(theme: Theme) {
-    return () => ({
+    return (_props?: {}) => ({
         display: 'flex' as const,
         variants: {
             background: createBackgroundVariants(theme),
@@ -111,15 +116,10 @@ function createViewStyles(theme: Theme) {
     });
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
+// Styles use applyExtensions to enable theme extensions and ensure proper
+// reactivity with Unistyles' native Shadow Tree updates.
 export const viewStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-    const extended = applyExtensions('View', theme, {
+    return applyExtensions('View', theme, {
         view: createViewStyles(theme),
     });
-
-    return {
-        ...extended,
-    };
 });

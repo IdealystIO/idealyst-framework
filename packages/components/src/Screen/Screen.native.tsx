@@ -24,6 +24,7 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
 }, ref) => {
   const insets = useSafeAreaInsets();
 
+  // Set active variants for this render
   screenStyles.useVariants({
     background,
     safeArea,
@@ -36,6 +37,10 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
     marginHorizontal,
   });
 
+  // Call styles as functions to get theme-reactive styles
+  const screenStyle = (screenStyles.screen as any)({});
+  const screenContentStyle = (screenStyles.screenContent as any)({});
+
   // Calculate safe area padding
   const safeAreaStyle = safeArea ? {
     paddingTop: insets.top,
@@ -45,27 +50,21 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   } : undefined;
 
   if (scrollable) {
-    // For ScrollView, flex: 1 goes on the ScrollView style
-    // Background and padding go on contentContainerStyle (without flex: 1)
-    const scrollViewStyle = [{ flex: 1 }, style];
-
-    const contentContainerStyleArray = [
-      screenStyles.screenContent,
-      safeAreaStyle,
-      contentInset ? {
-        paddingTop: (safeArea ? insets.top : 0) + (contentInset.top ?? 0),
-        paddingBottom: (safeArea ? insets.bottom : 0) + (contentInset.bottom ?? 0),
-        paddingLeft: (safeArea ? insets.left : 0) + (contentInset.left ?? 0),
-        paddingRight: (safeArea ? insets.right : 0) + (contentInset.right ?? 0),
-      } : undefined,
-    ];
-
     return (
       <RNScrollView
         ref={ref as any}
         nativeID={id}
-        style={scrollViewStyle}
-        contentContainerStyle={contentContainerStyleArray}
+        style={[{ flex: 1 }, style]}
+        contentContainerStyle={[
+          screenContentStyle,
+          safeAreaStyle,
+          contentInset ? {
+            paddingTop: (safeArea ? insets.top : 0) + (contentInset.top ?? 0),
+            paddingBottom: (safeArea ? insets.bottom : 0) + (contentInset.bottom ?? 0),
+            paddingLeft: (safeArea ? insets.left : 0) + (contentInset.left ?? 0),
+            paddingRight: (safeArea ? insets.right : 0) + (contentInset.right ?? 0),
+          } : undefined,
+        ]}
         testID={testID}
       >
         {children}
@@ -73,15 +72,8 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
     );
   }
 
-  const screenStyle = (screenStyles.screen as any)({});
-  const containerStyle = [
-    screenStyle,
-    safeAreaStyle,
-    style,
-  ];
-
   return (
-    <RNView ref={ref as any} nativeID={id} style={containerStyle} testID={testID}>
+    <RNView ref={ref as any} nativeID={id} style={[screenStyle, safeAreaStyle, style]} testID={testID}>
       {children}
     </RNView>
   );

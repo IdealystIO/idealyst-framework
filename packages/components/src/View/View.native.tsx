@@ -26,6 +26,7 @@ const View = forwardRef<RNView | RNScrollView, ViewProps>(({
   testID,
   id,
 }, ref) => {
+  // Set active variants for this render
   viewStyles.useVariants({
     background,
     radius,
@@ -39,25 +40,22 @@ const View = forwardRef<RNView | RNScrollView, ViewProps>(({
     marginHorizontal,
   });
 
-  const getStyles = (): ViewStyle => {
-    const baseStyles: ViewStyle = {};
-
-    if (backgroundColor) baseStyles.backgroundColor = backgroundColor;
-    if (borderRadius !== undefined) baseStyles.borderRadius = borderRadius;
-    if (borderWidth !== undefined) baseStyles.borderWidth = borderWidth;
-    if (borderColor) baseStyles.borderColor = borderColor;
-
-    return baseStyles;
-  };
-
+  // Call style as function to get theme-reactive styles
   const viewStyle = (viewStyles.view as any)({});
+
+  // Override styles for direct prop values
+  const overrideStyles: ViewStyle = {};
+  if (backgroundColor) overrideStyles.backgroundColor = backgroundColor;
+  if (borderRadius !== undefined) overrideStyles.borderRadius = borderRadius;
+  if (borderWidth !== undefined) overrideStyles.borderWidth = borderWidth;
+  if (borderColor) overrideStyles.borderColor = borderColor;
 
   if (scrollable) {
     return (
       <RNScrollView
         ref={ref as any}
         style={[{ flex: 1 }, style]}
-        contentContainerStyle={[viewStyle, getStyles()]}
+        contentContainerStyle={[viewStyle, overrideStyles]}
         testID={testID}
         nativeID={id}
       >
@@ -67,7 +65,7 @@ const View = forwardRef<RNView | RNScrollView, ViewProps>(({
   }
 
   return (
-    <RNView ref={ref as any} style={[viewStyle, getStyles(), style]} testID={testID} nativeID={id}>
+    <RNView ref={ref as any} style={[viewStyle, overrideStyles, style]} testID={testID} nativeID={id}>
       {children}
     </RNView>
   );

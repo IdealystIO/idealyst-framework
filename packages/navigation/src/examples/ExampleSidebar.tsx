@@ -77,6 +77,8 @@ const componentGroups: ComponentGroup[] = [
             { label: 'Image', path: '/image', icon: 'image' },
             { label: 'SVG Image', path: '/svg-image', icon: 'image' },
             { label: 'Video', path: '/video', icon: 'video' },
+            { label: 'Camera', path: '/camera', icon: 'camera' },
+            { label: 'Microphone', path: '/microphone', icon: 'microphone' },
         ],
     },
     {

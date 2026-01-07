@@ -1,12 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Screen, Text, View, Button, Card } from '@idealyst/components';
-import {
-  useMicrophone,
-  useRecorder,
-  AUDIO_PROFILES,
-  type AudioLevel,
-  type PCMData,
-} from '@idealyst/microphone';
+import { useMicrophone, useRecorder } from '../hooks/index.web';
+import { AUDIO_PROFILES } from '../constants';
+import type { PCMData } from '../types';
 
 /**
  * Audio level visualization bar
@@ -145,9 +141,9 @@ const ConfigSelector = ({
 };
 
 /**
- * Main Microphone Demo Component
+ * Microphone Examples - Demonstrates @idealyst/microphone package usage
  */
-export const MicrophoneDemo = () => {
+export const MicrophoneExamples = () => {
   const [selectedProfile, setSelectedProfile] = useState<keyof typeof AUDIO_PROFILES>('speech');
   const [waveformSamples, setWaveformSamples] = useState<number[]>([]);
   const [sampleCount, setSampleCount] = useState(0);
@@ -266,10 +262,10 @@ export const MicrophoneDemo = () => {
     <Screen scroll>
       <View spacing="lg" style={{ padding: 16 }}>
         <Text size="xl" weight="bold">
-          Microphone Demo
+          Microphone
         </Text>
         <Text size="md" color="secondary">
-          Test the @idealyst/microphone package with streaming audio and recording.
+          Cross-platform microphone access with streaming audio and file recording.
         </Text>
 
         {/* Permission Status */}
@@ -455,4 +451,4 @@ export const MicrophoneDemo = () => {
   );
 };
 
-export default MicrophoneDemo;
+export default MicrophoneExamples;

@@ -58,6 +58,7 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
     return style;
   }, [style]);
 
+  // Call style as function to get theme-reactive styles
   /** @ts-ignore */
   const webProps = getWebProps([(viewStyles.view as any)({}), dynamicStyles]);
 

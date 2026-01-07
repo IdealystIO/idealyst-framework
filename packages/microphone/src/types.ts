@@ -42,6 +42,27 @@ export interface PCMData {
 
   /** Audio configuration this data was captured with */
   config: AudioConfig;
+
+  /**
+   * Get the audio data as a Blob (cross-platform).
+   * On web, creates a Blob directly from ArrayBuffer.
+   * On native, uses fetch with data URI to create Blob.
+   * @param mimeType MIME type for the blob. Default: 'application/octet-stream'
+   */
+  toBlob(mimeType?: string): Promise<Blob>;
+
+  /**
+   * Get the audio data as a base64 string (cross-platform).
+   * Useful for sending audio data over APIs or storing.
+   */
+  toBase64(): string;
+
+  /**
+   * Get the audio data as a data URI (cross-platform).
+   * Useful for audio playback or display.
+   * @param mimeType MIME type for the data URI. Default: 'application/octet-stream'
+   */
+  toDataUri(mimeType?: string): string;
 }
 
 export interface AudioLevel {

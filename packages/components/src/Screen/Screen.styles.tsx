@@ -23,9 +23,12 @@ function generateBackgroundVariants(theme: Theme) {
   };
 }
 
-// Style creators for extension support
+/**
+ * Create dynamic screen styles.
+ * Returns a function to ensure Unistyles can track theme changes.
+ */
 function createScreenStyles(theme: Theme) {
-    return () => ({
+    return (_props?: {}) => ({
         flex: 1,
         variants: {
             background: generateBackgroundVariants(theme),
@@ -33,7 +36,6 @@ function createScreenStyles(theme: Theme) {
                 true: {},
                 false: {},
             },
-            // Spacing variants from ContainerStyleProps
             gap: buildGapVariants(theme),
             padding: buildPaddingVariants(theme),
             paddingVertical: buildPaddingVerticalVariants(theme),
@@ -52,36 +54,34 @@ function createScreenStyles(theme: Theme) {
     });
 }
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const screenStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-    const extended = applyExtensions('Screen', theme, {
-        screen: createScreenStyles(theme),
-    });
-
-    return {
-        ...extended,
-        // Minor utility styles (not extended)
-        // Content style for ScrollView - no flex: 1 so content can grow
-        screenContent: {
-            backgroundColor: theme.colors.surface.primary,
-            variants: {
-                background: generateBackgroundVariants(theme),
-                safeArea: {
-                    true: {},
-                    false: {},
-                },
-                // Spacing variants from ContainerStyleProps
-                gap: buildGapVariants(theme),
-                padding: buildPaddingVariants(theme),
-                paddingVertical: buildPaddingVerticalVariants(theme),
-                paddingHorizontal: buildPaddingHorizontalVariants(theme),
-                margin: buildMarginVariants(theme),
-                marginVertical: buildMarginVerticalVariants(theme),
-                marginHorizontal: buildMarginHorizontalVariants(theme),
+/**
+ * Create dynamic screen content styles for ScrollView.
+ * No flex: 1 so content can grow beyond screen height.
+ */
+function createScreenContentStyles(theme: Theme) {
+    return (_props?: {}) => ({
+        variants: {
+            background: generateBackgroundVariants(theme),
+            safeArea: {
+                true: {},
+                false: {},
             },
+            gap: buildGapVariants(theme),
+            padding: buildPaddingVariants(theme),
+            paddingVertical: buildPaddingVerticalVariants(theme),
+            paddingHorizontal: buildPaddingHorizontalVariants(theme),
+            margin: buildMarginVariants(theme),
+            marginVertical: buildMarginVerticalVariants(theme),
+            marginHorizontal: buildMarginHorizontalVariants(theme),
         },
-    };
+    });
+}
+
+// Styles use applyExtensions to enable theme extensions and ensure proper
+// reactivity with Unistyles' native Shadow Tree updates.
+export const screenStyles = StyleSheet.create((theme: Theme) => {
+    return applyExtensions('Screen', theme, {
+        screen: createScreenStyles(theme),
+        screenContent: createScreenContentStyles(theme),
+    });
 });

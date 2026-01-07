@@ -84,7 +84,13 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
           </Text>
         )}
 
-        {children}
+        {children && (
+          typeof children === 'string' ? (
+            <Text style={messageStyle}>{children}</Text>
+          ) : (
+            children
+          )
+        )}
 
         {actions && (
           <View style={alertStyles.actions}>

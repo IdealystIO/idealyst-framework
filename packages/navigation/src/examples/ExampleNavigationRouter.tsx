@@ -2,6 +2,8 @@ import React from 'react';
 import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, LinkExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
 import { DataGridShowcase } from '@idealyst/datagrid/examples';
 import { DatePickerExamples } from '@idealyst/datepicker/examples';
+import { CameraExamples } from '@idealyst/camera/examples';
+import { MicrophoneExamples } from '@idealyst/microphone/examples';
 import { Text, View, Card, Screen, Icon, Button } from '@idealyst/components';
 import { NavigatorParam, RouteParam, NotFoundComponentProps } from '../routing';
 import { ExampleWebLayout } from './ExampleWebLayout';
@@ -329,6 +331,8 @@ const ExampleNavigationRouter: NavigatorParam = {
         { path: "breadcrumb", type: 'screen', component: BreadcrumbExamples, options: { title: "Breadcrumb" } },
         { path: "image", type: 'screen', component: ImageExamples, options: { title: "Image" } },
         { path: "video", type: 'screen', component: VideoExamples, options: { title: "Video" } },
+        { path: "camera", type: 'screen', component: CameraExamples, options: { title: "Camera" } },
+        { path: "microphone", type: 'screen', component: MicrophoneExamples, options: { title: "Microphone" } },
         { path: "datagrid", type: 'screen', component: DataGridShowcase, options: { title: "Data Grid" } },
         { path: "datepicker", type: 'screen', component: DatePickerExamples, options: { title: "Date Picker" } },
         { path: "theme-extension", type: 'screen', component: ThemeExtensionExamples, options: { title: "Theme Extension" } },

@@ -32,7 +32,7 @@ const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
     marginHorizontal,
   });
 
-  // Use getWebProps to generate className and ref for web
+  // Call style as function to get theme-reactive styles
   const webProps = getWebProps([(screenStyles.screen as any)({}), style as any]);
 
   const mergedRef = useMergeRefs(ref, webProps.ref);

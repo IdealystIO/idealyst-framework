@@ -35,6 +35,89 @@ export function arrayBufferToBase64(buffer: ArrayBuffer): string {
 }
 
 /**
+ * A Blob-like object for React Native that wraps an ArrayBuffer.
+ * Provides the essential Blob interface methods needed for our use case.
+ */
+class ArrayBufferBlob implements Blob {
+  private buffer: ArrayBuffer;
+  readonly size: number;
+  readonly type: string;
+
+  constructor(buffer: ArrayBuffer, mimeType: string) {
+    this.buffer = buffer;
+    this.size = buffer.byteLength;
+    this.type = mimeType;
+  }
+
+  async arrayBuffer(): Promise<ArrayBuffer> {
+    return this.buffer;
+  }
+
+  async text(): Promise<string> {
+    // TextDecoder may not be available in React Native
+    if (typeof TextDecoder !== 'undefined') {
+      const decoder = new TextDecoder();
+      return decoder.decode(this.buffer);
+    }
+    // Fallback: convert bytes to string manually
+    const bytes = new Uint8Array(this.buffer);
+    let result = '';
+    for (let i = 0; i < bytes.length; i++) {
+      result += String.fromCharCode(bytes[i]);
+    }
+    return result;
+  }
+
+  slice(start?: number, end?: number, contentType?: string): Blob {
+    const sliced = this.buffer.slice(start, end);
+    return new ArrayBufferBlob(sliced, contentType || this.type);
+  }
+
+  stream(): ReadableStream<Uint8Array> {
+    // ReadableStream may not be available in React Native
+    if (typeof ReadableStream === 'undefined') {
+      throw new Error('ReadableStream not supported in this environment');
+    }
+    const buffer = this.buffer;
+    return new ReadableStream({
+      start(controller) {
+        controller.enqueue(new Uint8Array(buffer));
+        controller.close();
+      },
+    });
+  }
+}
+
+/**
+ * Convert ArrayBuffer to Blob (cross-platform).
+ * On web, creates Blob directly.
+ * On React Native, creates a Blob-like wrapper since RN doesn't support Blob([ArrayBuffer]).
+ * @param buffer - The ArrayBuffer to convert
+ * @param mimeType - MIME type for the blob. Default: 'application/octet-stream'
+ */
+export async function arrayBufferToBlob(
+  buffer: ArrayBuffer,
+  mimeType = 'application/octet-stream'
+): Promise<Blob> {
+  // Check if we're in an environment where Blob([ArrayBuffer]) works
+  // This is a runtime check since React Native's Blob doesn't support ArrayBuffer
+  try {
+    // Try the direct approach first (works on web)
+    const blob = new Blob([buffer], { type: mimeType });
+    // Verify it actually worked by checking size
+    if (blob.size === buffer.byteLength) {
+      return blob;
+    }
+  } catch {
+    // Fall through to wrapper approach
+  }
+
+  // React Native path: use our ArrayBufferBlob wrapper
+  // This provides a Blob-like interface that works with arrayBuffer() calls
+  return new ArrayBufferBlob(buffer, mimeType) as Blob;
+}
+
+/**
  * Create appropriate TypedArray for PCM data based on bit depth.
  */
 export function createPCMTypedArray(
