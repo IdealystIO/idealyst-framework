@@ -9,5 +9,4 @@ export * from './helpers';
 export * from './builder';
 export * from './styleBuilder';
 export * from './extensions';
-export * from './styleRegistry';
 export * from './componentStyles';

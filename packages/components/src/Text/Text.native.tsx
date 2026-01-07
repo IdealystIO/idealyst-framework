@@ -28,7 +28,8 @@ const Text = forwardRef<RNText, TextProps>(({
     paddingHorizontal,
   });
 
-  const textStyle = (textStyles.text as any)({ color });
+  // Pass all style-affecting props to dynamic style function
+  const textStyle = (textStyles.text as any)({ color, typography, weight, align });
 
   return (
     <RNText

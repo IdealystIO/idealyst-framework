@@ -38,7 +38,7 @@ export type ComponentStyleDef<K extends string> = K extends keyof ComponentStyle
 
 /**
  * Deep partial type that works with functions.
- * Allows partial overrides of style definitions.
+ * For style functions, preserves the function signature but makes the return type partial.
  */
 export type DeepPartialStyle<T> = T extends (...args: infer A) => infer R
   ? (...args: A) => DeepPartialStyle<R>
@@ -47,14 +47,27 @@ export type DeepPartialStyle<T> = T extends (...args: infer A) => infer R
     : T;
 
 /**
- * Style definition for extendStyle - allows partial overrides.
+ * Style definition for extendStyle - requires functions with same params as base.
+ * All style properties must be functions to access dynamic params.
  */
 export type ExtendStyleDef<K extends string> = DeepPartialStyle<ComponentStyleDef<K>>;
 
 /**
- * Style definition for overrideStyle - requires full implementation.
+ * Style definition for overrideStyle - requires full implementation with functions.
  */
 export type OverrideStyleDef<K extends string> = ComponentStyleDef<K>;
+
+/**
+ * Helper to extract the params type from a dynamic style function.
+ * Use this to type your extension functions.
+ *
+ * @example
+ * ```typescript
+ * type TextParams = StyleParams<TextStyleDef['text']>;
+ * // TextParams = { color?: TextColorVariant }
+ * ```
+ */
+export type StyleParams<T> = T extends (params: infer P) => any ? P : never;
 
 // =============================================================================
 // Common Style Types

@@ -109,10 +109,6 @@ export * from './Chip/types';
 export { default as Breadcrumb } from './Breadcrumb';
 export * from './Breadcrumb/types';
 
-// StyleBuilder test component
-export { StyleBuilderTest } from './StyleBuilderTest';
-export type { StyleBuilderTestProps } from './StyleBuilderTest';
-
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';

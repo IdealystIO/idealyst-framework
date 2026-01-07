@@ -11,7 +11,14 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "jsx": "react-jsx",
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@idealyst/theme": ["../../../../packages/theme/src/index.ts"],
+      "@idealyst/theme/*": ["../../../../packages/theme/src/*"],
+      "@idealyst/components": ["../../../../packages/components/src/index.ts"],
+      "@idealyst/components/*": ["../../../../packages/components/src/*"]
+    }
   },
   "include": [
     "src/**/*"

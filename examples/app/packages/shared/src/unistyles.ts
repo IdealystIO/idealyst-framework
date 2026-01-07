@@ -1,6 +1,8 @@
 import { lightTheme, darkTheme, fromTheme, extendStyle, ThemeStyleWrapper } from '@idealyst/theme';
 import type { Theme as BaseTheme } from '@idealyst/theme';
+import { overrideStyle } from '@idealyst/theme';
 import { StyleSheet } from 'react-native-unistyles';
+import '@idealyst/components'
 
 // Wrap theme type for $iterator support in extensions
 type Theme = ThemeStyleWrapper<BaseTheme>;

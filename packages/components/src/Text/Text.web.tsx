@@ -29,9 +29,9 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
     paddingHorizontal,
   });
 
-  // Create the style array
+  // Create the style array - pass all style-affecting props to dynamic style function
   const textStyleArray = [
-    (textStyles.text as any)({ color }),
+    (textStyles.text as any)({ color, typography, weight, align }),
     style,
   ];
 

@@ -32,4 +32,3 @@ export { SkeletonExamples } from './SkeletonExamples';
 export { ChipExamples } from './ChipExamples';
 export { BreadcrumbExamples } from './BreadcrumbExamples';
 export { ThemeExtensionExamples } from './ThemeExtensionExamples';
-export { StyleBuilderTestExamples } from '../StyleBuilderTest';

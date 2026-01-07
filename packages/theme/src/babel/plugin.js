@@ -1,19 +1,22 @@
 /**
  * Idealyst StyleBuilder Babel Plugin
  *
- * Transforms defineStyle/extendStyle calls to expand $iterator patterns,
- * enabling Unistyles theme reactivity.
+ * Transforms defineStyle/extendStyle calls to StyleSheet.create with $iterator expansion.
+ * All merging happens at BUILD TIME so Unistyles can properly trace theme dependencies.
+ *
+ * IMPORTANT: For extensions to work, the extension file must be imported BEFORE
+ * the components that use defineStyle. Example:
+ *
+ *   // App.tsx
+ *   import './style-extensions'; // FIRST - registers extensions
+ *   import { Text } from '@idealyst/components'; // SECOND - uses extensions
  *
  * Transformation:
  *   defineStyle('Button', (theme) => ({
- *     button: {
- *       variants: {
- *         intent: { backgroundColor: theme.$intents.primary }
- *       }
- *     }
+ *     button: { backgroundColor: theme.$intents.primary }
  *   }))
  *
- *   → defineStyle('Button', (theme) => ({
+ *   → StyleSheet.create((theme) => ({
  *     button: {
  *       variants: {
  *         intent: {
@@ -24,52 +27,53 @@
  *       }
  *     }
  *   }))
- *
- * Configuration:
- * ['@idealyst/theme/plugin', {
- *   autoProcessPaths: ['@idealyst/components'], // Paths to process
- *   themePath: '@idealyst/theme',               // Path to theme for key extraction
- *   debug: true,                                // Enable debug logging
- * }]
  */
 
 const nodePath = require('path');
 
 // ============================================================================
-// Theme Key Extraction - Dynamically loads theme to get keys
+// Global Extension Registry - Persists across files during build
+// ============================================================================
+
+// Map of componentName -> { base: AST | null, extensions: AST[], overrides: AST | null }
+const styleRegistry = {};
+
+function getOrCreateEntry(componentName) {
+    if (!styleRegistry[componentName]) {
+        styleRegistry[componentName] = {
+            base: null,
+            extensions: [],
+            override: null,
+            themeParam: 'theme',
+        };
+    }
+    return styleRegistry[componentName];
+}
+
+// ============================================================================
+// Theme Key Extraction
 // ============================================================================
 
 let themeKeys = null;
 let themeLoadAttempted = false;
 
-/**
- * Extract keys from theme object structure.
- * Identifies Record-like properties (objects with string keys).
- */
 function extractThemeKeys(theme) {
     const keys = {
         intents: [],
-        sizes: {},      // sizes.button, sizes.typography, etc.
+        sizes: {},
         radii: [],
         shadows: [],
     };
 
-    // Extract intent keys
     if (theme.intents && typeof theme.intents === 'object') {
         keys.intents = Object.keys(theme.intents);
     }
-
-    // Extract radii keys
     if (theme.radii && typeof theme.radii === 'object') {
         keys.radii = Object.keys(theme.radii);
     }
-
-    // Extract shadow keys
     if (theme.shadows && typeof theme.shadows === 'object') {
         keys.shadows = Object.keys(theme.shadows);
     }
-
-    // Extract size keys per component
     if (theme.sizes && typeof theme.sizes === 'object') {
         for (const [componentName, sizeObj] of Object.entries(theme.sizes)) {
             if (sizeObj && typeof sizeObj === 'object') {
@@ -81,21 +85,15 @@ function extractThemeKeys(theme) {
     return keys;
 }
 
-/**
- * Try to load theme and extract keys.
- * Falls back to default keys if theme can't be loaded.
- */
 function loadThemeKeys(themePath, rootDir) {
     if (themeLoadAttempted) return themeKeys;
     themeLoadAttempted = true;
 
     try {
-        // Try to resolve the theme module
         const resolvedPath = themePath.startsWith('.')
             ? nodePath.resolve(rootDir, themePath)
             : themePath;
 
-        // Clear require cache to get fresh theme
         const resolved = require.resolve(resolvedPath);
         delete require.cache[resolved];
 
@@ -110,7 +108,6 @@ function loadThemeKeys(themePath, rootDir) {
             });
         }
     } catch (err) {
-        // Fall back to defaults if theme can't be loaded
         themeKeys = {
             intents: ['primary', 'success', 'error', 'warning', 'info', 'neutral'],
             sizes: {
@@ -128,21 +125,132 @@ function loadThemeKeys(themePath, rootDir) {
 }
 
 // ============================================================================
-// $iterator Expansion Logic
+// AST Deep Merge - Merges style object ASTs at build time
 // ============================================================================
 
 /**
- * Expand $iterator patterns in the style callback.
- *
- * Patterns:
- * - theme.$intents.primary → expands for each intent key
- * - theme.sizes.$button.padding → expands for each button size key
+ * Deep merge two ObjectExpression ASTs.
+ * Source properties override target properties.
+ * Nested objects are recursively merged.
  */
+function mergeObjectExpressions(t, target, source) {
+    if (!t.isObjectExpression(target) || !t.isObjectExpression(source)) {
+        // If source is not an object, it replaces target entirely
+        return source;
+    }
+
+    const targetProps = new Map();
+    for (const prop of target.properties) {
+        if (t.isObjectProperty(prop)) {
+            const key = t.isIdentifier(prop.key) ? prop.key.name :
+                        t.isStringLiteral(prop.key) ? prop.key.value : null;
+            if (key) {
+                targetProps.set(key, prop);
+            }
+        }
+    }
+
+    const resultProps = [...target.properties];
+
+    for (const prop of source.properties) {
+        if (!t.isObjectProperty(prop)) continue;
+
+        const key = t.isIdentifier(prop.key) ? prop.key.name :
+                    t.isStringLiteral(prop.key) ? prop.key.value : null;
+        if (!key) continue;
+
+        const existingProp = targetProps.get(key);
+
+        if (existingProp) {
+            // Both have this property - need to merge or replace
+            const existingValue = existingProp.value;
+            const newValue = prop.value;
+
+            // If both are objects, deep merge
+            if (t.isObjectExpression(existingValue) && t.isObjectExpression(newValue)) {
+                const mergedValue = mergeObjectExpressions(t, existingValue, newValue);
+                // Replace the existing prop's value
+                const idx = resultProps.indexOf(existingProp);
+                resultProps[idx] = t.objectProperty(existingProp.key, mergedValue);
+            }
+            // If both are arrow functions (dynamic styles), merge their return values
+            else if (t.isArrowFunctionExpression(existingValue) && t.isArrowFunctionExpression(newValue)) {
+                const mergedFn = mergeDynamicStyleFunctions(t, existingValue, newValue);
+                const idx = resultProps.indexOf(existingProp);
+                resultProps[idx] = t.objectProperty(existingProp.key, mergedFn);
+            }
+            // Otherwise, source replaces target
+            else {
+                const idx = resultProps.indexOf(existingProp);
+                resultProps[idx] = prop;
+            }
+        } else {
+            // New property from source
+            resultProps.push(prop);
+        }
+    }
+
+    return t.objectExpression(resultProps);
+}
+
+/**
+ * Merge two dynamic style functions (arrow functions that return style objects).
+ * Creates a new function that merges both return values.
+ */
+function mergeDynamicStyleFunctions(t, baseFn, extFn) {
+    // Get the bodies (assuming they return ObjectExpressions)
+    let baseBody = baseFn.body;
+    let extBody = extFn.body;
+
+    // Handle parenthesized expressions
+    if (t.isParenthesizedExpression(baseBody)) {
+        baseBody = baseBody.expression;
+    }
+    if (t.isParenthesizedExpression(extBody)) {
+        extBody = extBody.expression;
+    }
+
+    // If both return ObjectExpressions directly, merge them
+    if (t.isObjectExpression(baseBody) && t.isObjectExpression(extBody)) {
+        const mergedBody = mergeObjectExpressions(t, baseBody, extBody);
+        return t.arrowFunctionExpression(baseFn.params, mergedBody);
+    }
+
+    // For block statements, this is more complex - just use extension for now
+    return extFn;
+}
+
+/**
+ * Merge a callback body (the object returned by theme => ({ ... }))
+ */
+function mergeCallbackBodies(t, baseCallback, extCallback) {
+    let baseBody = baseCallback.body;
+    let extBody = extCallback.body;
+
+    // Handle parenthesized expressions
+    if (t.isParenthesizedExpression(baseBody)) {
+        baseBody = baseBody.expression;
+    }
+    if (t.isParenthesizedExpression(extBody)) {
+        extBody = extBody.expression;
+    }
+
+    if (t.isObjectExpression(baseBody) && t.isObjectExpression(extBody)) {
+        const mergedBody = mergeObjectExpressions(t, baseBody, extBody);
+        return t.arrowFunctionExpression(baseCallback.params, mergedBody);
+    }
+
+    // If can't merge, use base
+    return baseCallback;
+}
+
+// ============================================================================
+// $iterator Expansion Logic
+// ============================================================================
+
 function expandIterators(t, callback, themeParam, keys, verbose, expandedVariants) {
-    // Clone the callback to avoid mutating the original
     const cloned = t.cloneDeep(callback);
 
-    // Find variants objects and expand $iterator patterns
     function processNode(node, depth = 0) {
         if (!node || typeof node !== 'object') return node;
 
@@ -150,17 +258,12 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
             return node.map(n => processNode(n, depth));
         }
 
-        const indent = '  '.repeat(depth);
-
         // Look for variants: { intent: { ... }, size: { ... } }
         if (t.isObjectProperty(node) && t.isIdentifier(node.key, { name: 'variants' })) {
-            verbose(`${indent}Found 'variants' property, value type: ${node.value?.type}`);
             if (t.isObjectExpression(node.value)) {
-                verbose(`${indent}  -> Expanding variants object`);
                 const expanded = expandVariantsObject(t, node.value, themeParam, keys, verbose, expandedVariants);
                 return t.objectProperty(node.key, expanded);
             } else if (t.isTSAsExpression(node.value)) {
-                verbose(`${indent}  -> variants value is TSAsExpression, unwrapping`);
                 const innerValue = node.value.expression;
                 if (t.isObjectExpression(innerValue)) {
                     const expanded = expandVariantsObject(t, innerValue, themeParam, keys, verbose, expandedVariants);
@@ -169,17 +272,13 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
             }
         }
 
-        // Recursively process other nodes
         if (t.isObjectExpression(node)) {
-            verbose(`${indent}Processing ObjectExpression with ${node.properties.length} properties at depth ${depth}`);
             return t.objectExpression(
                 node.properties.map(prop => processNode(prop, depth + 1))
             );
         }
 
         if (t.isObjectProperty(node)) {
-            const keyName = t.isIdentifier(node.key) ? node.key.name : 'computed';
-            verbose(`${indent}Processing ObjectProperty '${keyName}' at depth ${depth}`);
             return t.objectProperty(
                 node.key,
                 processNode(node.value, depth + 1),
@@ -189,9 +288,7 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
         }
 
         if (t.isArrowFunctionExpression(node) || t.isFunctionExpression(node)) {
-            verbose(`${indent}Processing arrow function at depth ${depth}, body type: ${node.body?.type}`);
             const processedBody = processNode(node.body, depth + 1);
-            verbose(`${indent}  Processed body type: ${processedBody?.type}`);
             return t.arrowFunctionExpression(
                 node.params,
                 processedBody
@@ -201,11 +298,9 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
         return node;
     }
 
-    // Process the callback body
     if (t.isObjectExpression(cloned.body)) {
         cloned.body = processNode(cloned.body);
     } else if (t.isBlockStatement(cloned.body)) {
-        // Handle block statement with return
         cloned.body.body = cloned.body.body.map(stmt => {
             if (t.isReturnStatement(stmt) && stmt.argument) {
                 return t.returnStatement(processNode(stmt.argument));
@@ -217,10 +312,6 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
     return cloned;
 }
 
-/**
- * Expand a variants object.
- * Detects $iterator patterns and expands them to concrete keys.
- */
 function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expandedVariants) {
     const newProperties = [];
 
@@ -230,7 +321,6 @@ function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expande
             continue;
         }
 
-        // Get variant name (e.g., 'intent', 'size')
         let variantName;
         if (t.isIdentifier(prop.key)) {
             variantName = prop.key.name;
@@ -241,7 +331,6 @@ function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expande
             continue;
         }
 
-        // Check if the value needs expansion (has $iterator patterns)
         const iteratorInfo = findIteratorPattern(t, prop.value, themeParam);
 
         if (iteratorInfo) {
@@ -249,13 +338,11 @@ function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expande
             const expanded = expandVariantWithIterator(t, prop.value, themeParam, keys, iteratorInfo, verbose);
             newProperties.push(t.objectProperty(prop.key, expanded));
 
-            // Track for summary
             const iteratorKey = iteratorInfo.componentName
                 ? `${iteratorInfo.type}.${iteratorInfo.componentName}`
                 : iteratorInfo.type;
             expandedVariants.push({ variant: variantName, iterator: iteratorKey });
         } else {
-            // No iterator, keep as-is
             newProperties.push(prop);
         }
     }
@@ -263,10 +350,6 @@ function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expande
     return t.objectExpression(newProperties);
 }
 
-/**
- * Find $iterator patterns in a node.
- * Returns { type: 'intents' | 'sizes', componentName?: string, accessPath: string[] } or null
- */
 function findIteratorPattern(t, node, themeParam) {
     let result = null;
 
@@ -289,7 +372,6 @@ function findIteratorPattern(t, node, themeParam) {
                             return;
                         }
 
-                        // Size iterator: sizes.$button, sizes.$typography, etc.
                         if (i > 0 && chain[i - 1] === 'sizes') {
                             result = {
                                 type: 'sizes',
@@ -303,7 +385,6 @@ function findIteratorPattern(t, node, themeParam) {
             }
         }
 
-        // Recursively check children
         for (const key of Object.keys(n)) {
             if (key === 'type' || key === 'start' || key === 'end' || key === 'loc') continue;
             if (n[key] && typeof n[key] === 'object') {
@@ -316,10 +397,6 @@ function findIteratorPattern(t, node, themeParam) {
     return result;
 }
 
-/**
- * Get member expression chain as array.
- * theme.intents.primary → ['intents', 'primary']
- */
 function getMemberChain(t, node, themeParam) {
     const parts = [];
 
@@ -348,9 +425,6 @@ function getMemberChain(t, node, themeParam) {
     return walk(node) ? parts : null;
 }
 
-/**
- * Expand a variant value using iterator info.
- */
 function expandVariantWithIterator(t, valueNode, themeParam, keys, iteratorInfo, verbose) {
     let keysToExpand = [];
 
@@ -358,12 +432,9 @@ function expandVariantWithIterator(t, valueNode, themeParam, keys, iteratorInfo,
         keysToExpand = keys?.intents || [];
     } else if (iteratorInfo.type === 'sizes' && iteratorInfo.componentName) {
         keysToExpand = keys?.sizes?.[iteratorInfo.componentName] || [];
-        verbose(`        Looking for sizes.${iteratorInfo.componentName}, available: ${Object.keys(keys?.sizes || {}).join(', ')}`);
     }
 
     if (keysToExpand.length === 0) {
-        verbose(`        No keys found for ${iteratorInfo.type}${iteratorInfo.componentName ? '.' + iteratorInfo.componentName : ''}`);
-        verbose(`        Keys object: ${JSON.stringify(keys)}`);
         return valueNode;
     }
 
@@ -384,12 +455,6 @@ function expandVariantWithIterator(t, valueNode, themeParam, keys, iteratorInfo,
     return t.objectExpression(expandedProps);
 }
 
-/**
- * Replace $iterator references in a node with concrete key access.
- *
- * theme.$intents.primary → theme.intents.primary.primary (when key='primary')
- * theme.sizes.$button.padding → theme.sizes.button.xs.padding (when key='xs')
- */
 function replaceIteratorRefs(t, node, themeParam, iteratorInfo, key) {
     if (!node || typeof node !== 'object') return node;
 
@@ -461,9 +526,6 @@ function replaceIteratorRefs(t, node, themeParam, iteratorInfo, key) {
     return walk(cloned);
 }
 
-/**
- * Build a member expression from a chain.
- */
 function buildMemberExpression(t, base, chain) {
     let expr = t.identifier(base);
     for (const part of chain) {
@@ -492,17 +554,26 @@ module.exports = function idealystStylesPlugin({ types: t }) {
         }
     }
 
+    // Log plugin initialization
+    console.log('[idealyst-plugin] Plugin loaded (build-time merge version)');
+
     return {
         name: 'idealyst-styles',
 
         visitor: {
             Program: {
                 enter(path, state) {
-                    // Track if we need to add StyleSheet import
+                    const filename = state.filename || '';
+                    const opts = state.opts || {};
+
+                    // Check if this file should be processed
+                    const shouldProcess =
+                        opts.processAll ||
+                        (opts.autoProcessPaths?.some(p => filename.includes(p)));
+                        
                     state.needsStyleSheetImport = false;
                     state.hasStyleSheetImport = false;
 
-                    // Check existing imports for StyleSheet from react-native-unistyles
                     path.traverse({
                         ImportDeclaration(importPath) {
                             if (importPath.node.source.value === 'react-native-unistyles') {
@@ -512,51 +583,49 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                                         state.hasStyleSheetImport = true;
                                     }
                                 }
-                                // Store reference to add StyleSheet to existing import if needed
                                 state.unistylesImportPath = importPath;
                             }
                         }
                     });
                 },
                 exit(path, state) {
-                    // Add StyleSheet import if needed
-                    if (state.needsStyleSheetImport && !state.hasStyleSheetImport) {
-                        if (state.unistylesImportPath) {
-                            // Add StyleSheet to existing unistyles import
-                            state.unistylesImportPath.node.specifiers.push(
-                                t.importSpecifier(t.identifier('StyleSheet'), t.identifier('StyleSheet'))
-                            );
-                            debugMode && debug('Added StyleSheet to existing unistyles import');
-                        } else {
-                            // Add new import declaration
-                            const importDecl = t.importDeclaration(
-                                [t.importSpecifier(t.identifier('StyleSheet'), t.identifier('StyleSheet'))],
-                                t.stringLiteral('react-native-unistyles')
-                            );
-                            path.unshiftContainer('body', importDecl);
-                            debugMode && debug('Added new StyleSheet import');
-                        }
-                    }
+                    const filename = state.filename || '';
 
-                    // Add registry imports if needed
-                    if (state.needsRegistryImport) {
-                        const specifiers = [];
-                        if (state.needsRegistryImport.__defineStyle) {
-                            specifiers.push(t.importSpecifier(t.identifier('__defineStyle'), t.identifier('__defineStyle')));
-                        }
-                        if (state.needsRegistryImport.__extendStyle) {
-                            specifiers.push(t.importSpecifier(t.identifier('__extendStyle'), t.identifier('__extendStyle')));
-                        }
-                        if (state.needsRegistryImport.__overrideStyle) {
-                            specifiers.push(t.importSpecifier(t.identifier('__overrideStyle'), t.identifier('__overrideStyle')));
-                        }
-                        if (specifiers.length > 0) {
-                            const importDecl = t.importDeclaration(
-                                specifiers,
-                                t.stringLiteral('@idealyst/theme')
-                            );
-                            path.unshiftContainer('body', importDecl);
-                            debugMode && debug(`Added registry imports: ${specifiers.map(s => s.local.name).join(', ')}`);
+                    // Always ensure StyleSheet import when needed
+                    // (existing import might have been removed by tree-shaking)
+                    if (state.needsStyleSheetImport) {
+                        // Check if StyleSheet is currently in the AST
+                        let hasStyleSheet = false;
+                        let unistylesImport = null;
+
+                        path.traverse({
+                            ImportDeclaration(importPath) {
+                                if (importPath.node.source.value === 'react-native-unistyles') {
+                                    unistylesImport = importPath;
+                                    for (const spec of importPath.node.specifiers) {
+                                        if (t.isImportSpecifier(spec) &&
+                                            t.isIdentifier(spec.imported, { name: 'StyleSheet' })) {
+                                            hasStyleSheet = true;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                        if (!hasStyleSheet) {
+                            if (unistylesImport) {
+                                // Add StyleSheet to existing import
+                                unistylesImport.node.specifiers.push(
+                                    t.importSpecifier(t.identifier('StyleSheet'), t.identifier('StyleSheet'))
+                                );
+                            } else {
+                                // Create new import
+                                const importDecl = t.importDeclaration(
+                                    [t.importSpecifier(t.identifier('StyleSheet'), t.identifier('StyleSheet'))],
+                                    t.stringLiteral('react-native-unistyles')
+                                );
+                                path.unshiftContainer('body', importDecl);
+                            }
                         }
                     }
                 }
@@ -569,23 +638,17 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                 verboseMode = opts.verbose === true;
                 const filename = state.filename || '';
 
-                // Check if we should process this file
                 const shouldProcess =
                     opts.processAll ||
                     (opts.autoProcessPaths?.some(p => filename.includes(p)));
 
                 if (!shouldProcess) return;
 
-                // Handle defineStyle/extendStyle/overrideStyle calls
-                if (t.isIdentifier(node.callee, { name: 'defineStyle' }) ||
-                    t.isIdentifier(node.callee, { name: 'extendStyle' }) ||
-                    t.isIdentifier(node.callee, { name: 'overrideStyle' })) {
-
-                    const fnName = node.callee.name;
-                    const registryFn = fnName === 'defineStyle' ? '__defineStyle'
-                        : fnName === 'extendStyle' ? '__extendStyle'
-                        : '__overrideStyle';
-                    debug(`FOUND ${fnName} in: ${filename}`);
+                // ============================================================
+                // Handle extendStyle - Store extension AST for later merging
+                // ============================================================
+                if (t.isIdentifier(node.callee, { name: 'extendStyle' })) {
+                    debug(`FOUND extendStyle in: ${filename}`);
 
                     const [componentNameArg, stylesCallback] = node.arguments;
 
@@ -601,7 +664,7 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     }
 
                     const componentName = componentNameArg.value;
-                    debug(`  Processing ${fnName}('${componentName}')`);
+                    debug(`  Processing extendStyle('${componentName}')`);
 
                     // Get theme parameter name
                     let themeParam = 'theme';
@@ -609,43 +672,37 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                         themeParam = stylesCallback.params[0].name;
                     }
 
-                    // Load theme keys for expansion
+                    // Load theme keys and expand iterators
                     const rootDir = opts.rootDir || state.cwd || process.cwd();
                     const themePath = opts.themePath || '@idealyst/theme';
                     const keys = loadThemeKeys(themePath, rootDir);
-
-                    // Track expanded variants for summary
                     const expandedVariants = [];
-
-                    // Transform the callback body to expand $iterator patterns
                     const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
 
-                    // Replace defineStyle/extendStyle with registry call
-                    path.replaceWith(
-                        t.callExpression(
-                            t.identifier(registryFn),
-                            [componentNameArg, expandedCallback]
-                        )
-                    );
+                    // Store in registry for later merging
+                    const entry = getOrCreateEntry(componentName);
+                    entry.extensions.push(expandedCallback);
+                    entry.themeParam = themeParam;
 
-                    // Mark that we need registry import
-                    state.needsRegistryImport = state.needsRegistryImport || {};
-                    state.needsRegistryImport[registryFn] = true;
+                    debug(`  -> Stored extension for '${componentName}' (${entry.extensions.length} total)`);
 
-                    debug(`  -> Replaced ${fnName}('${componentName}') with ${registryFn}`);
-                    if (expandedVariants.length > 0) {
-                        debug(`     Expanded: ${expandedVariants.map(v => `${v.variant}(${v.iterator})`).join(', ')}`);
-                    }
+                    // Remove the extendStyle call (it's been captured)
+                    path.remove();
+                    return;
                 }
 
-                // Handle StyleSheet.create calls - expand $iterator patterns inside
-                if (t.isMemberExpression(node.callee) &&
-                    t.isIdentifier(node.callee.object, { name: 'StyleSheet' }) &&
-                    t.isIdentifier(node.callee.property, { name: 'create' })) {
+                // ============================================================
+                // Handle overrideStyle - Store as override (replaces base)
+                // ============================================================
+                if (t.isIdentifier(node.callee, { name: 'overrideStyle' })) {
+                    debug(`FOUND overrideStyle in: ${filename}`);
 
-                    debug(`FOUND StyleSheet.create in: ${filename}`);
+                    const [componentNameArg, stylesCallback] = node.arguments;
 
-                    const [stylesCallback] = node.arguments;
+                    if (!t.isStringLiteral(componentNameArg)) {
+                        debug(`  SKIP - componentName is not a string literal`);
+                        return;
+                    }
 
                     if (!t.isArrowFunctionExpression(stylesCallback) &&
                         !t.isFunctionExpression(stylesCallback)) {
@@ -653,29 +710,140 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                         return;
                     }
 
-                    // Get theme parameter name
+                    const componentName = componentNameArg.value;
+                    debug(`  Processing overrideStyle('${componentName}')`);
+
                     let themeParam = 'theme';
                     if (stylesCallback.params?.[0] && t.isIdentifier(stylesCallback.params[0])) {
                         themeParam = stylesCallback.params[0].name;
                     }
 
-                    // Load theme keys for expansion
                     const rootDir = opts.rootDir || state.cwd || process.cwd();
                     const themePath = opts.themePath || '@idealyst/theme';
                     const keys = loadThemeKeys(themePath, rootDir);
-
-                    // Track expanded variants for summary
                     const expandedVariants = [];
-
-                    // Transform the callback body to expand $iterator patterns
                     const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
 
-                    // Replace the callback argument
+                    // Store as override (replaces base entirely)
+                    const entry = getOrCreateEntry(componentName);
+                    entry.override = expandedCallback;
+                    entry.themeParam = themeParam;
+
+                    debug(`  -> Stored override for '${componentName}'`);
+
+                    // Remove the overrideStyle call
+                    path.remove();
+                    return;
+                }
+
+                // ============================================================
+                // Handle defineStyle - Merge with extensions and output StyleSheet.create
+                // ============================================================
+                if (t.isIdentifier(node.callee, { name: 'defineStyle' })) {
+                    debug(`FOUND defineStyle in: ${filename}`);
+
+                    const [componentNameArg, stylesCallback] = node.arguments;
+
+                    if (!t.isStringLiteral(componentNameArg)) {
+                        debug(`  SKIP - componentName is not a string literal`);
+                        return;
+                    }
+
+                    if (!t.isArrowFunctionExpression(stylesCallback) &&
+                        !t.isFunctionExpression(stylesCallback)) {
+                        debug(`  SKIP - callback is not a function`);
+                        return;
+                    }
+
+                    const componentName = componentNameArg.value;
+                    debug(`  Processing defineStyle('${componentName}')`);
+
+                    let themeParam = 'theme';
+                    if (stylesCallback.params?.[0] && t.isIdentifier(stylesCallback.params[0])) {
+                        themeParam = stylesCallback.params[0].name;
+                    }
+
+                    const rootDir = opts.rootDir || state.cwd || process.cwd();
+                    const themePath = opts.themePath || '@idealyst/theme';
+                    const keys = loadThemeKeys(themePath, rootDir);
+                    const expandedVariants = [];
+
+                    try {
+                        // Expand iterators in the base callback
+                        let expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
+
+                        // Check for registered override or extensions
+                        const entry = getOrCreateEntry(componentName);
+
+                        if (entry.override) {
+                            // Override completely replaces base
+                            debug(`  -> Using override for '${componentName}'`);
+                            expandedCallback = entry.override;
+                        } else if (entry.extensions.length > 0) {
+                            // Merge extensions into base
+                            debug(`  -> Merging ${entry.extensions.length} extensions for '${componentName}'`);
+                            for (const ext of entry.extensions) {
+                                expandedCallback = mergeCallbackBodies(t, expandedCallback, ext);
+                            }
+                        }
+
+                        if (!expandedCallback) {
+                            console.error(`[idealyst-plugin] ERROR: expandedCallback is null/undefined for ${componentName}`);
+                            return;
+                        }
+
+                        // Transform to StyleSheet.create
+                        state.needsStyleSheetImport = true;
+
+                        const newCall = t.callExpression(
+                            t.memberExpression(
+                                t.identifier('StyleSheet'),
+                                t.identifier('create')
+                            ),
+                            [expandedCallback]
+                        );
+
+                        path.replaceWith(newCall);
+
+                        debug(`  -> Transformed to StyleSheet.create`);
+                        if (expandedVariants.length > 0) {
+                            debug(`     Expanded: ${expandedVariants.map(v => `${v.variant}(${v.iterator})`).join(', ')}`);
+                        }
+                    } catch (err) {
+                        console.error(`[idealyst-plugin] ERROR transforming defineStyle('${componentName}'):`, err);
+                    }
+                    return;
+                }
+
+                // ============================================================
+                // Handle StyleSheet.create - Just expand $iterator patterns
+                // ============================================================
+                if (t.isMemberExpression(node.callee) &&
+                    t.isIdentifier(node.callee.object, { name: 'StyleSheet' }) &&
+                    t.isIdentifier(node.callee.property, { name: 'create' })) {
+
+                    const [stylesCallback] = node.arguments;
+
+                    if (!t.isArrowFunctionExpression(stylesCallback) &&
+                        !t.isFunctionExpression(stylesCallback)) {
+                        return;
+                    }
+
+                    let themeParam = 'theme';
+                    if (stylesCallback.params?.[0] && t.isIdentifier(stylesCallback.params[0])) {
+                        themeParam = stylesCallback.params[0].name;
+                    }
+
+                    const rootDir = opts.rootDir || state.cwd || process.cwd();
+                    const themePath = opts.themePath || '@idealyst/theme';
+                    const keys = loadThemeKeys(themePath, rootDir);
+                    const expandedVariants = [];
+
+                    const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
                     node.arguments[0] = expandedCallback;
 
-                    debug(`  -> Expanded $iterator patterns in StyleSheet.create`);
                     if (expandedVariants.length > 0) {
-                        debug(`     Expanded: ${expandedVariants.map(v => `${v.variant}(${v.iterator})`).join(', ')}`);
+                        debug(`  -> Expanded $iterator patterns in StyleSheet.create: ${expandedVariants.map(v => `${v.variant}(${v.iterator})`).join(', ')}`);
                     }
                 }
             },

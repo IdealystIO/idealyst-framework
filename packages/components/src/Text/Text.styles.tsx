@@ -1,7 +1,12 @@
 /**
  * Text styles using defineStyle with $iterator expansion.
  */
+import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+
+// Reference StyleSheet so Unistyles detects this file for processing
+// Our Babel plugin transforms defineStyle to StyleSheet.create
+void StyleSheet;
 import type { Theme as BaseTheme } from '@idealyst/theme';
 import type { TextStyle, ViewStyle } from 'react-native';
 import { TextAlignVariant, TextColorVariant, TextWeightVariant, TextTypographyVariant } from "./types";
@@ -15,8 +20,19 @@ export type TextVariants = {
     align: TextAlignVariant;
 }
 
+/**
+ * All props available to dynamic Text style functions.
+ * Extensions and overrides receive these to make conditional styling decisions.
+ */
 export type TextStyleParams = {
+    /** Text color variant */
     color?: TextColorVariant;
+    /** Typography variant (h1, h2, body1, etc.) */
+    typography?: TextTypographyVariant;
+    /** Font weight override */
+    weight?: TextWeightVariant;
+    /** Text alignment */
+    align?: TextAlignVariant;
 }
 
 /**
@@ -52,9 +68,10 @@ declare module '@idealyst/theme' {
  */
 // @ts-ignore - $iterator patterns are expanded by Babel
 export const textStyles = defineStyle('Text', (theme: Theme) => ({
-    text: ({ color }: TextStyleParams) => ({
+    text: ({ color, typography, weight, align }: TextStyleParams) => ({
         margin: 0,
         padding: 0,
+        // Base color - can be overridden by extensions using any of the params
         color: theme.colors.text[color ?? 'primary'] || theme.colors.text.primary,
         variants: {
             // Typography variants - $iterator expands for each typography key
