@@ -87,17 +87,13 @@ function createFallbackStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const avatarStyles = StyleSheet.create((theme: Theme) => {
   // Apply extensions to main visual elements
-  const extended = applyExtensions('Avatar', theme, {
-    avatar: createContainerStyles(theme),
-    fallback: createFallbackStyles(theme),
-  });
 
-  return {
-    ...extended,
-    // Minor utility styles (not extended)
+  return applyExtensions('Avatar', theme, {avatar: createContainerStyles(theme),
+    fallback: createFallbackStyles(theme),
+        // Additional styles (merged from return)
+        // Minor utility styles (not extended)
     image: {
         width: '100%',
         height: '100%',
-    },
-  };
+    }});
 });

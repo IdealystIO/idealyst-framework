@@ -191,17 +191,13 @@ function createLabelStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const switchStyles = StyleSheet.create((theme: Theme) => {
   // Apply extensions to main visual elements
-  const extended = applyExtensions('Switch', theme, {
-    container: createContainerStyles(theme),
+
+  return applyExtensions('Switch', theme, {container: createContainerStyles(theme),
     switchTrack: createSwitchTrackStyles(theme),
     switchThumb: createSwitchThumbStyles(theme),
-  });
-
-  return {
-    ...extended,
-    // Minor utility styles (not extended)
+        // Additional styles (merged from return)
+        // Minor utility styles (not extended)
     switchContainer: createSwitchContainerStyles()(),
     thumbIcon: createThumbIconStyles(theme),
-    label: createLabelStyles(theme)(),
-  };
+    label: createLabelStyles(theme)()});
 });

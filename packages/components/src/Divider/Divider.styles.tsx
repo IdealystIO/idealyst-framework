@@ -124,12 +124,9 @@ function createLineStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const dividerStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Divider', theme, {
-        divider: createDividerStyles(theme),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('Divider', theme, {divider: createDividerStyles(theme),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         container: {
             alignItems: 'center',
@@ -171,6 +168,5 @@ export const dividerStyles = StyleSheet.create((theme: Theme) => {
                 },
             },
         },
-        line: createLineStyles(theme),
-    };
+        line: createLineStyles(theme)});
 });

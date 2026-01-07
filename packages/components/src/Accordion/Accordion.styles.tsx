@@ -285,18 +285,14 @@ function createContentInnerStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const accordionStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Accordion', theme, {
-        container: createContainerStyles(theme),
+
+    return applyExtensions('Accordion', theme, {container: createContainerStyles(theme),
         item: createItemStyles(theme),
         header: createHeaderStyles(theme),
         content: createContentStyles(),
         icon: createIconStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         title: createTitleStyles()(),
-        contentInner: createContentInnerStyles(theme)(),
-    };
+        contentInner: createContentInnerStyles(theme)()});
 });

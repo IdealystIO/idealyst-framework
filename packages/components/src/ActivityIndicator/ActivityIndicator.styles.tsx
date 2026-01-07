@@ -87,12 +87,8 @@ function createContainerStyles(theme: Theme) {
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const activityIndicatorStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('ActivityIndicator', theme, {
+    return applyExtensions('ActivityIndicator', theme, {
         container: createContainerStyles(theme),
         spinner: createSpinnerStyles(theme),
     });
-
-    return {
-        ...extended,
-    };
 });

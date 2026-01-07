@@ -195,19 +195,15 @@ function createCloseIconStyles() {
 
 export const alertStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Alert', theme, {
-        container: createContainerStyles(theme),
+
+    return applyExtensions('Alert', theme, {container: createContainerStyles(theme),
         iconContainer: createIconContainerStyles(theme),
         title: createTitleStyles(theme),
         message: createMessageStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         content: createContentStyles()(),
         actions: createActionsStyles()(),
         closeButton: createCloseButtonStyles()(),
-        closeIcon: createCloseIconStyles()(),
-    };
+        closeIcon: createCloseIconStyles()()});
 });

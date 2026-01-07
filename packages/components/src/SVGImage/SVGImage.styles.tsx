@@ -72,12 +72,9 @@ function createContainerStyles(theme: Theme) {
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const svgImageStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('SVGImage', theme, {
-        container: createContainerStyles(theme),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('SVGImage', theme, {container: createContainerStyles(theme),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         image: {
             _web: {
@@ -85,6 +82,5 @@ export const svgImageStyles = StyleSheet.create((theme: Theme) => {
                 maxWidth: '100%',
                 height: 'auto',
             },
-        },
-    };
+        }});
 });

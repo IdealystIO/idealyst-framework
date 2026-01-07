@@ -156,14 +156,11 @@ function createItemStyles() {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const breadcrumbStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Breadcrumb', theme, {
-        container: createContainerStyles(),
+
+    return applyExtensions('Breadcrumb', theme, {container: createContainerStyles(),
         item: createItemStyles(),
         itemText: createItemTextStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         icon: createIconStyles(theme),
         separator: createSeparatorStyles(theme),
@@ -177,8 +174,7 @@ export const breadcrumbStyles = StyleSheet.create((theme: Theme) => {
             paddingVertical: 4,
             paddingHorizontal: 8,
         },
-        menuButtonIcon: createMenuButtonIconStyles(theme),
-    };
+        menuButtonIcon: createMenuButtonIconStyles(theme)});
 });
 
 // Export individual style sheets for backwards compatibility

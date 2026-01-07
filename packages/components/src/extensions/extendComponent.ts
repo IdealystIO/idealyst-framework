@@ -1,4 +1,5 @@
 import { Theme } from '@idealyst/theme';
+import { UnistylesRuntime } from 'react-native-unistyles';
 import {
     ComponentStyleElements,
     ComponentName,
@@ -17,6 +18,57 @@ const extensionRegistry = new Map<ComponentName, StyleExtension<any>[]>();
  * When set, the replacement is used instead of base styles + extensions.
  */
 const replacementRegistry = new Map<ComponentName, StyleExtension<any>>();
+
+/**
+ * Compute all extensions for a given theme.
+ * Returns an object with component names as keys and merged element extensions as values.
+ */
+function computeExtensionsForTheme(theme: Theme): Record<string, Record<string, any>> {
+    const result: Record<string, Record<string, any>> = {};
+
+    for (const [component, extensions] of extensionRegistry) {
+        if (!extensions || extensions.length === 0) continue;
+
+        // Resolve all extensions (call functions with theme)
+        const resolved = extensions.map(ext =>
+            typeof ext === 'function' ? ext(theme) : ext
+        );
+
+        // Merge all extensions in order (later ones win)
+        result[component] = deepMergeAll(...resolved);
+    }
+
+    return result;
+}
+
+/**
+ * Update theme's __extensions to trigger Unistyles reactivity.
+ * This is called whenever extensions change.
+ */
+function syncExtensionsToThemes(): void {
+    try {
+        // Update both light and dark themes with computed extensions
+        UnistylesRuntime.updateTheme('light', (currentTheme) => {
+            const extensions = computeExtensionsForTheme(currentTheme);
+            return {
+                ...currentTheme,
+                __extensions: extensions,
+            };
+        });
+
+        UnistylesRuntime.updateTheme('dark', (currentTheme) => {
+            const extensions = computeExtensionsForTheme(currentTheme);
+            return {
+                ...currentTheme,
+                __extensions: extensions,
+            };
+        });
+    } catch (error) {
+        // UnistylesRuntime may not be available in all contexts (e.g., SSR)
+        // Silently ignore errors - extensions will still work via getExtension
+        console.warn('Unable to sync extensions to theme:', error);
+    }
+}
 
 /**
  * Completely replace the styles of a component.
@@ -249,6 +301,9 @@ export function extendComponent<K extends ComponentName>(
     const existing = extensionRegistry.get(component) ?? [];
     existing.push(extension);
     extensionRegistry.set(component, existing);
+
+    // Sync extensions to theme for Unistyles reactivity
+    syncExtensionsToThemes();
 }
 
 /**
@@ -298,6 +353,9 @@ export function getExtension<K extends ComponentName>(
  */
 export function clearExtension<K extends ComponentName>(component: K): void {
     extensionRegistry.delete(component);
+
+    // Sync extensions to theme for Unistyles reactivity
+    syncExtensionsToThemes();
 }
 
 /**
@@ -313,6 +371,9 @@ export function clearExtension<K extends ComponentName>(component: K): void {
  */
 export function clearAllExtensions(): void {
     extensionRegistry.clear();
+
+    // Sync extensions to theme for Unistyles reactivity
+    syncExtensionsToThemes();
 }
 
 /**

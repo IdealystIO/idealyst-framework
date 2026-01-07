@@ -82,12 +82,9 @@ function createItemStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const menuItemStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('MenuItem', theme, {
-        item: createItemStyles(theme),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('MenuItem', theme, {item: createItemStyles(theme),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         icon: {
             alignItems: 'center',
@@ -113,6 +110,5 @@ export const menuItemStyles = StyleSheet.create((theme: Theme) => {
                     fontSize: size.labelFontSize,
                 })),
             },
-        },
-    };
+        }});
 });

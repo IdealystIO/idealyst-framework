@@ -42,6 +42,13 @@ export interface DefaultTheme {
         typography: Record<Typography, TypographyValue>;
     };
     interaction: InteractionConfig;
+    /**
+     * Component style extensions.
+     * Populated by the extension system when extendComponent is called.
+     * Used by the Babel plugin to merge extensions into component styles.
+     * @internal
+     */
+    __extensions?: Record<string, Record<string, any>>;
 }
 
 /**

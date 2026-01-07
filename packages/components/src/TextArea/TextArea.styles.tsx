@@ -9,7 +9,6 @@ import {
 import { TextAreaIntentVariant } from './types';
 import { applyExtensions } from '../extensions/applyExtension';
 
-
 /**
  * Create size variants for textarea
  */
@@ -201,18 +200,14 @@ function createCharacterCountStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const textAreaStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('TextArea', theme, {
-        container: createContainerStyles(theme),
-        textarea: createTextareaStyles(theme),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('TextArea', theme, {container: createContainerStyles(theme),
+        textarea: createTextareaStyles(theme),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         label: createLabelStyles(theme)(),
         textareaContainer: createTextareaContainerStyles()(),
         helperText: createHelperTextStyles(theme)(),
         footer: createFooterStyles()(),
-        characterCount: createCharacterCountStyles(theme)(),
-    };
+        characterCount: createCharacterCountStyles(theme)()});
 });

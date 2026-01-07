@@ -188,19 +188,15 @@ function createModalStyles() {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const dialogStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Dialog', theme, {
-        backdrop: createBackdropStyles(),
+
+    return applyExtensions('Dialog', theme, {backdrop: createBackdropStyles(),
         container: createDialogContainerStyles(theme),
         header: createHeaderStyles(theme),
         content: createContentStyles(),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         title: createTitleStyles(theme)(),
         closeButton: createCloseButtonStyles(theme)(),
         closeButtonText: createCloseButtonTextStyles(theme)(),
-        modal: createModalStyles()(),
-    };
+        modal: createModalStyles()()});
 });

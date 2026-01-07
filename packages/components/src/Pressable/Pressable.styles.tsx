@@ -21,11 +21,7 @@ function createPressableStyles(theme: Theme) {
 
 export const pressableStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Pressable', theme, {
+    return applyExtensions('Pressable', theme, {
         pressable: createPressableStyles(theme),
     });
-
-    return {
-        ...extended,
-    };
 });

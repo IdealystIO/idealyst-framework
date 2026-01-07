@@ -26,6 +26,31 @@
       "import": "./src/unistyles.ts",
       "require": "./src/unistyles.ts",
       "types": "./src/unistyles.ts"
+    },
+    "./plugin": {
+      "import": "./src/babel/plugin.ts",
+      "require": "./src/babel/plugin.ts",
+      "types": "./src/babel/plugin.ts"
+    },
+    "./extensions": {
+      "import": "./src/extensions.ts",
+      "require": "./src/extensions.ts",
+      "types": "./src/extensions.ts"
+    },
+    "./config": {
+      "import": "./src/config/index.ts",
+      "require": "./src/config/index.ts",
+      "types": "./src/config/index.ts"
+    },
+    "./lightTheme": {
+      "import": "./src/lightTheme.ts",
+      "require": "./src/lightTheme.ts",
+      "types": "./src/lightTheme.ts"
+    },
+    "./darkTheme": {
+      "import": "./src/darkTheme.ts",
+      "require": "./src/darkTheme.ts",
+      "types": "./src/darkTheme.ts"
     }
   },
   "scripts": {
@@ -41,6 +66,10 @@
     }
   },
   "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@babel/types": "^7.28.5",
+    "@types/babel__core": "^7.20.0",
     "@types/react": "^19.1.0",
     "react-native-unistyles": ">=3.0.0",
     "typescript": "^5.0.0"

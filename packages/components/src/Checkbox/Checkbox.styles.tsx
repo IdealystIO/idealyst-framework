@@ -259,17 +259,13 @@ function createHelperTextStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const checkboxStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Checkbox', theme, {
-        container: createContainerStyles(),
+
+    return applyExtensions('Checkbox', theme, {container: createContainerStyles(),
         checkbox: createCheckboxStyles(theme),
         checkmark: createCheckmarkStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         wrapper: createWrapperStyles(theme)(),
         label: createLabelStyles(theme)(),
-        helperText: createHelperTextStyles(theme)(),
-    };
+        helperText: createHelperTextStyles(theme)()});
 });

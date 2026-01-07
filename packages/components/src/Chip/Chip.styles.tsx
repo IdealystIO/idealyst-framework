@@ -173,16 +173,12 @@ function createDeleteIconStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const chipStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Chip', theme, {
-        container: createContainerStyles(theme),
+
+    return applyExtensions('Chip', theme, {container: createContainerStyles(theme),
         label: createLabelStyles(theme),
         icon: createIconStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         deleteButton: createDeleteButtonStyles(theme),
-        deleteIcon: createDeleteIconStyles(theme),
-    };
+        deleteIcon: createDeleteIconStyles(theme)});
 });

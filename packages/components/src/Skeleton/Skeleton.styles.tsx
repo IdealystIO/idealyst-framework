@@ -56,16 +56,12 @@ function createSkeletonStyles(theme: Theme) {
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const skeletonStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Skeleton', theme, {
-        skeleton: createSkeletonStyles(theme),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('Skeleton', theme, {skeleton: createSkeletonStyles(theme),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         group: {
             display: 'flex',
             flexDirection: 'column',
-        },
-    };
+        }});
 });

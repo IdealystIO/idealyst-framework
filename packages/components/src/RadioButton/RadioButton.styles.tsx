@@ -139,14 +139,11 @@ function createContainerStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('RadioButton', theme, {
-        container: createContainerStyles(theme),
+
+    return applyExtensions('RadioButton', theme, {container: createContainerStyles(theme),
         radio: createRadioStyles(theme),
         radioDot: createRadioDotStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles
         label: {
             color: theme.colors.text.primary,
@@ -174,6 +171,5 @@ export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
                     },
                 },
             },
-        },
-    };
+        }});
 });

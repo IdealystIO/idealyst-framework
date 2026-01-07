@@ -301,18 +301,14 @@ function createIconStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const tabBarStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('TabBar', theme, {
-        container: createContainerStyles(theme),
+
+    return applyExtensions('TabBar', theme, {container: createContainerStyles(theme),
         tab: createTabStyles(theme),
         indicator: createIndicatorStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         tabLabel: createTabLabelStyles(theme),
-        tabIcon: createIconStyles(theme),
-    };
+        tabIcon: createIconStyles(theme)});
 });
 
 // Export individual style sheets for backwards compatibility

@@ -201,18 +201,12 @@ function createOptionStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
 // transform on native cannot resolve function calls to extract variant structures.
 export const selectStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-    const extendedStyles = applyExtensions('Select', theme, {
+    return applyExtensions('Select', theme, {
         container: createContainerStyles(theme),
         trigger: buildDynamicTriggerStyles(theme),
         dropdown: createDropdownStyles(theme),
         option: createOptionStyles(theme),
-    });
-
-    return {
-        // Extended main elements
-        ...extendedStyles,
-        // Minor utility styles (not extended)
+        // Minor utility styles
         label: {
             fontSize: 14,
             fontWeight: '500',
@@ -355,5 +349,5 @@ export const selectStyles = StyleSheet.create((theme: Theme) => {
                 position: 'fixed',
             },
         },
-    } as const;
+    });
 });

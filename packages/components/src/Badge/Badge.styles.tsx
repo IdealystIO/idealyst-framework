@@ -147,15 +147,11 @@ function createIconStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const badgeStyles = StyleSheet.create((theme: Theme) => {
   // Apply extensions to main visual elements
-  const extended = applyExtensions('Badge', theme, {
-    badge: createBadgeStyles(theme),
-    text: createTextStyles(theme),
-  });
 
-  return {
-    ...extended,
-    // Minor utility styles (not extended)
+  return applyExtensions('Badge', theme, {badge: createBadgeStyles(theme),
+    text: createTextStyles(theme),
+        // Additional styles (merged from return)
+        // Minor utility styles (not extended)
     content: createContentStyles()(),
-    icon: createIconStyles(theme)(),
-  };
+    icon: createIconStyles(theme)()});
 });

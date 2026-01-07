@@ -22,6 +22,8 @@ export default defineConfig({
           ],
         ],
         plugins: [
+          // Idealyst extensions plugin MUST run BEFORE unistyles plugin
+          path.resolve(__dirname, "../../../../packages/theme/src/babel/plugin.js"),
           [
             "react-native-unistyles/plugin",
             {

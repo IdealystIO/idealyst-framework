@@ -1,6 +1,6 @@
 import React, { createContext, memo, useContext, useMemo } from 'react';
 import { NavigateParams, NavigatorProviderProps, NavigatorContextValue } from './types';
-import { useNavigation, DarkTheme, DefaultTheme, NavigationContainer, CommonActions } from '@react-navigation/native';
+import { useNavigation, DarkTheme, DefaultTheme, NavigationContainer, CommonActions, StackActions } from '@react-navigation/native';
 import { buildNavigator, NavigatorParam, NOT_FOUND_SCREEN_NAME } from '../routing';
 import { useUnistyles } from 'react-native-unistyles';
 
@@ -230,17 +230,38 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
         };
 
         if (params.replace) {
-            // Use CommonActions.reset to replace the current route
+            // Use StackActions.replace to replace the current screen in the stack
             navigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: parsed.routeName, params: navigationParams }],
-                })
+                StackActions.replace(parsed.routeName, navigationParams)
             );
         } else {
             // Navigate to the pattern route with extracted parameters
             navigation.navigate(parsed.routeName as never, navigationParams as never);
         }
+    };
+
+    const replace = (params: Omit<NavigateParams, 'replace'>) => {
+        // Normalize path and substitute variables
+        const normalizedPath = normalizePath(params.path, params.vars);
+
+        // Parse parameterized path for mobile
+        const parsed = parseParameterizedPath(normalizedPath, route);
+
+        if (!parsed) {
+            console.warn(`Navigation: Cannot replace to invalid route "${normalizedPath}".`);
+            return;
+        }
+
+        // Merge route params with navigation state
+        const navigationParams = {
+            ...parsed.params,
+            ...(params.state || {}),
+        };
+
+        // Use StackActions.replace to replace the current screen
+        navigation.dispatch(
+            StackActions.replace(parsed.routeName, navigationParams)
+        );
     };
 
     const RouteComponent = useMemo(() => {
@@ -260,6 +281,7 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
         <NavigatorContext.Provider value={{
             route,
             navigate,
+            replace,
             canGoBack,
             goBack,
         }}>
@@ -330,17 +352,38 @@ const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: 
         };
 
         if (params.replace) {
-            // Use CommonActions.reset to replace the current route
+            // Use StackActions.replace to replace the current screen in the stack
             navigation.dispatch(
-                CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: parsed.routeName, params: navigationParams }],
-                })
+                StackActions.replace(parsed.routeName, navigationParams)
             );
         } else {
             // Navigate to the pattern route with extracted parameters
             navigation.navigate(parsed.routeName as never, navigationParams as never);
         }
+    };
+
+    const replace = (params: Omit<NavigateParams, 'replace'>) => {
+        // Normalize path and substitute variables
+        const normalizedPath = normalizePath(params.path, params.vars);
+
+        // Parse parameterized path for mobile
+        const parsed = parseParameterizedPath(normalizedPath, route);
+
+        if (!parsed) {
+            console.warn(`Navigation: Cannot replace to invalid route "${normalizedPath}".`);
+            return;
+        }
+
+        // Merge route params with navigation state
+        const navigationParams = {
+            ...parsed.params,
+            ...(params.state || {}),
+        };
+
+        // Use StackActions.replace to replace the current screen
+        navigation.dispatch(
+            StackActions.replace(parsed.routeName, navigationParams)
+        );
     };
 
     const canGoBack = () => navigation.canGoBack();
@@ -352,7 +395,7 @@ const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: 
     };
 
     return (
-        <DrawerNavigatorContext.Provider value={{ navigate, route, canGoBack, goBack }}>
+        <DrawerNavigatorContext.Provider value={{ navigate, replace, route, canGoBack, goBack }}>
             {children}
         </DrawerNavigatorContext.Provider>
     );

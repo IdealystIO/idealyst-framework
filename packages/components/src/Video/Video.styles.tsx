@@ -31,13 +31,10 @@ function createVideoStyles() {
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const videoStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Video', theme, {
-        container: createContainerStyles(theme),
-        video: createVideoStyles(),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('Video', theme, {container: createContainerStyles(theme),
+        video: createVideoStyles(),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         fallback: {
             position: 'absolute',
@@ -50,6 +47,5 @@ export const videoStyles = StyleSheet.create((theme: Theme) => {
             justifyContent: 'center',
             backgroundColor: theme.colors['gray.300'],
             color: theme.colors['gray.600'],
-        },
-    };
+        }});
 });

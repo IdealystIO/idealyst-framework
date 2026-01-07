@@ -108,12 +108,9 @@ function createContainerStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const popoverStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Popover', theme, {
-        container: createContainerStyles(theme),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('Popover', theme, {container: createContainerStyles(theme),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         content: {
             padding: 16,
@@ -134,6 +131,5 @@ export const popoverStyles = StyleSheet.create((theme: Theme) => {
         backdrop: {
             flex: 1,
             backgroundColor: 'transparent',
-        },
-    };
+        }});
 });

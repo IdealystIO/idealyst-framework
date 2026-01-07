@@ -35,6 +35,13 @@ export type NavigatorContextValue = {
     route: NavigatorParam | undefined;
     navigate: (params: NavigateParams) => void;
     /**
+     * Replace the current screen with a new one. The current screen unmounts
+     * and the new screen takes its place in the navigation stack.
+     * On native, this uses StackActions.replace() to swap the current screen.
+     * On web, this behaves the same as navigate (no special handling needed).
+     */
+    replace: (params: Omit<NavigateParams, 'replace'>) => void;
+    /**
      * Returns true if there is a parent route in the route hierarchy to navigate back to.
      * On web, this checks for parent routes (not browser history).
      * On native, this uses react-navigation's canGoBack().

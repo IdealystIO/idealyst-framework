@@ -5,6 +5,7 @@ import { buildNavigator, NavigatorParam } from '../routing';
 
 const NavigatorContext = createContext<NavigatorContextValue>({
     navigate: () => {},
+    replace: () => {},
     route: undefined,
     canGoBack: () => false,
     goBack: () => {},
@@ -278,10 +279,16 @@ export const NavigatorProvider = ({
         }
     };
 
+    const replace = (params: Omit<NavigateParams, 'replace'>) => {
+        // On web, replace just delegates to navigate (no special handling needed)
+        navigateFunction(params);
+    };
+
     return (
         <NavigatorContext.Provider value={{
             route,
             navigate: navigateFunction,
+            replace,
             canGoBack,
             goBack,
         }}>

@@ -1,6 +1,24 @@
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
+    // Idealyst extensions plugin MUST run BEFORE unistyles plugin
+    // It transforms applyExtensions calls into Unistyles-compatible code
+    ['../../../../packages/theme/src/babel/plugin.js', {
+      // Use filesystem paths since this runs before module-resolver
+      autoProcessPaths: [
+        'packages/components',
+        'packages/navigation',
+        'packages/theme',
+        'packages/datagrid',
+        'packages/datepicker',
+        '@idealyst/components',
+        '@idealyst/navigation',
+        '@idealyst/theme',
+        '@idealyst/datagrid',
+        '@idealyst/datepicker',
+      ],
+      removeApplyExtensions: true,
+    }],
     ['react-native-unistyles/plugin', {
       root: 'src',
       debug: true,
@@ -21,6 +39,10 @@ module.exports = {
           '@idealyst/datepicker': '../../../../packages/datepicker/src',
           '@idealyst/datagrid': '../../../../packages/datagrid/src',
           '@idealyst/theme': '../../../../packages/theme/src',
+          '@idealyst/camera/examples': '../../../../packages/camera/src/examples',
+          '@idealyst/camera': '../../../../packages/camera/src',
+          '@idealyst/microphone/examples': '../../../../packages/microphone/src/examples',
+          '@idealyst/microphone': '../../../../packages/microphone/src',
         },
     }]
   ],

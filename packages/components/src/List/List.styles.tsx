@@ -47,7 +47,6 @@ function createContainerTypeVariants(theme: Theme) {
     };
 }
 
-
 type ItemDynamicProps = {
     type?: ListType;
     disabled?: boolean;
@@ -69,7 +68,6 @@ function getItemHoverStyles(theme: Theme, disabled: boolean, clickable: boolean)
         borderRadius: 4,
     };
 }
-
 
 // Container style creator for extension support
 function createContainerStyles(theme: Theme) {
@@ -151,13 +149,10 @@ function createItemStyles(theme: Theme) {
 
 export const listStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('List', theme, {
-        container: createContainerStyles(theme),
-        item: createItemStyles(theme),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('List', theme, {container: createContainerStyles(theme),
+        item: createItemStyles(theme),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         itemContent: {
             display: 'flex',
@@ -243,6 +238,5 @@ export const listStyles = StyleSheet.create((theme: Theme) => {
         sectionContent: {
             display: 'flex',
             flexDirection: 'column',
-        },
-    };
+        }});
 });

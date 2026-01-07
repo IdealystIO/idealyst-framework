@@ -16,6 +16,10 @@ const extraNodeModules = {
   '@idealyst/datagrid/examples': path.resolve(__dirname, '../../../../packages/datagrid/src/examples'),
   '@idealyst/datepicker': path.resolve(__dirname, '../../../../packages/datepicker/src'),
   '@idealyst/datepicker/examples': path.resolve(__dirname, '../../../../packages/datepicker/src/examples'),
+  '@idealyst/camera': path.resolve(__dirname, '../../../../packages/camera/src'),
+  '@idealyst/camera/examples': path.resolve(__dirname, '../../../../packages/camera/src/examples'),
+  '@idealyst/microphone': path.resolve(__dirname, '../../../../packages/microphone/src'),
+  '@idealyst/microphone/examples': path.resolve(__dirname, '../../../../packages/microphone/src/examples'),
 };
 
 const config = {

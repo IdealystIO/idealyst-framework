@@ -299,19 +299,13 @@ const createCellStyles = (theme: Theme) => {
 }
 
 export const tableStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-    const extended = applyExtensions('Table', theme, {
+    return applyExtensions('Table', theme, {
         container: createContainerStyles(theme),
-    });
-
-    return {
-        ...extended,
-        // Minor utility styles (not extended)
         table: createTableStyles(theme),
         thead: createTheadStyles(theme),
         tbody: {},
         row: createRowStyles(theme),
         headerCell: createHeaderCellStyles(theme),
         cell: createCellStyles(theme),
-    } as const;
+    });
 });

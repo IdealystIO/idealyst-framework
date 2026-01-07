@@ -9,7 +9,6 @@ import {
 import { InputSize, InputType } from './types';
 import { applyExtensions } from '../extensions/applyExtension';
 
-
 export type InputVariants = {
     size: InputSize;
     type: InputType;
@@ -276,19 +275,15 @@ function createInputStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const inputStyles = StyleSheet.create((theme: Theme) => {
   // Apply extensions to main visual elements
-  const extended = applyExtensions('Input', theme, {
-    container: createContainerStyles(theme),
-    input: createInputStyles(theme),
-  });
 
-  return {
-    ...extended,
-    // Minor utility styles (not extended)
+  return applyExtensions('Input', theme, {container: createContainerStyles(theme),
+    input: createInputStyles(theme),
+        // Additional styles (merged from return)
+        // Minor utility styles (not extended)
     leftIconContainer: createLeftIconContainerStyles(theme)(),
     rightIconContainer: createRightIconContainerStyles(theme)(),
     leftIcon: createLeftIconStyles(theme)(),
     rightIcon: createRightIconStyles(theme)(),
     passwordToggle: createPasswordToggleStyles(theme)(),
-    passwordToggleIcon: createPasswordToggleIconStyles(theme)(),
-  };
+    passwordToggleIcon: createPasswordToggleIconStyles(theme)()});
 });

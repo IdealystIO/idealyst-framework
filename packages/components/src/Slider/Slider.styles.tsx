@@ -194,16 +194,13 @@ function createTrackStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const sliderStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Slider', theme, {
-        container: createContainerStyles(theme),
+
+    return applyExtensions('Slider', theme, {container: createContainerStyles(theme),
         track: createTrackStyles(theme),
         filledTrack: createFilledTrackStyles(theme),
         thumb: createThumbStyles(theme),
         thumbIcon: createThumbIconStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles
         sliderWrapper: {
             position: 'relative',
@@ -258,6 +255,5 @@ export const sliderStyles = StyleSheet.create((theme: Theme) => {
                 transform: 'translateX(-50%)',
                 whiteSpace: 'nowrap',
             },
-        },
-    };
+        }});
 });

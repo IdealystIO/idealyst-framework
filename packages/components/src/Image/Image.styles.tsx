@@ -35,13 +35,10 @@ function createImageStyles() {
 // @ts-ignore - TS language server needs restart to pick up theme structure changes
 export const imageStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Image', theme, {
-        container: createContainerStyles(theme),
-        image: createImageStyles(),
-    });
 
-    return {
-        ...extended,
+    return applyExtensions('Image', theme, {container: createContainerStyles(theme),
+        image: createImageStyles(),
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         placeholder: {
             position: 'absolute',
@@ -68,6 +65,5 @@ export const imageStyles = StyleSheet.create((theme: Theme) => {
         },
         loadingIndicator: {
             color: theme.colors['gray.600'],
-        },
-    };
+        }});
 });

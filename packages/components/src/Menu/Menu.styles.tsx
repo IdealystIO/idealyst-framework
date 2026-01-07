@@ -166,14 +166,11 @@ function createItemStyles(theme: Theme) {
 // Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
 export const menuStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Menu', theme, {
-        overlay: createOverlayStyles(theme),
+
+    return applyExtensions('Menu', theme, {overlay: createOverlayStyles(theme),
         menu: createMenuStyles(theme),
         item: createItemStyles(theme),
-    });
-
-    return {
-        ...extended,
+        // Additional styles (merged from return)
         // Minor utility styles (not extended)
         separator: {
             height: 1,
@@ -196,6 +193,5 @@ export const menuStyles = StyleSheet.create((theme: Theme) => {
             variants: {
                 size: createLabelSizeVariants(theme),
             } as const,
-        } as const,
-    };
+        } as const});
 });

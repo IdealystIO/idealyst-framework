@@ -75,11 +75,7 @@ function createIconStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const iconStyles = StyleSheet.create((theme: Theme) => {
     // Apply extensions to main visual elements
-    const extended = applyExtensions('Icon', theme, {
+    return applyExtensions('Icon', theme, {
         icon: createIconStyles(theme),
     });
-
-    return {
-        ...extended,
-    };
 });

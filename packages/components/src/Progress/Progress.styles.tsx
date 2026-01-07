@@ -185,20 +185,16 @@ function createCircularLabelStyles(theme: Theme) {
 // transform on native cannot resolve function calls to extract variant structures.
 export const progressStyles = StyleSheet.create((theme: Theme) => {
   // Apply extensions to main visual elements
-  const extended = applyExtensions('Progress', theme, {
-    container: createContainerStyles(),
+
+  return applyExtensions('Progress', theme, {container: createContainerStyles(),
     linearTrack: createLinearTrackStyles(theme),
     linearBar: createLinearBarStyles(theme),
-  });
-
-  return {
-    ...extended,
-    // Minor utility styles (not extended)
+        // Additional styles (merged from return)
+        // Minor utility styles (not extended)
     indeterminateBar: createIndeterminateBarStyles(theme),
     circularContainer: createCircularContainerStyles(theme)(),
     circularTrack: createCircularTrackStyles(theme)(),
     circularBar: createCircularBarStyles(theme),
     label: createLabelStyles(theme)(),
-    circularLabel: createCircularLabelStyles(theme)(),
-  };
+    circularLabel: createCircularLabelStyles(theme)()});
 });
