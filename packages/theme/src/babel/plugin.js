@@ -537,6 +537,28 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                             debugMode && debug('Added new StyleSheet import');
                         }
                     }
+
+                    // Add registry imports if needed
+                    if (state.needsRegistryImport) {
+                        const specifiers = [];
+                        if (state.needsRegistryImport.__defineStyle) {
+                            specifiers.push(t.importSpecifier(t.identifier('__defineStyle'), t.identifier('__defineStyle')));
+                        }
+                        if (state.needsRegistryImport.__extendStyle) {
+                            specifiers.push(t.importSpecifier(t.identifier('__extendStyle'), t.identifier('__extendStyle')));
+                        }
+                        if (state.needsRegistryImport.__overrideStyle) {
+                            specifiers.push(t.importSpecifier(t.identifier('__overrideStyle'), t.identifier('__overrideStyle')));
+                        }
+                        if (specifiers.length > 0) {
+                            const importDecl = t.importDeclaration(
+                                specifiers,
+                                t.stringLiteral('@idealyst/theme')
+                            );
+                            path.unshiftContainer('body', importDecl);
+                            debugMode && debug(`Added registry imports: ${specifiers.map(s => s.local.name).join(', ')}`);
+                        }
+                    }
                 }
             },
 
@@ -554,11 +576,15 @@ module.exports = function idealystStylesPlugin({ types: t }) {
 
                 if (!shouldProcess) return;
 
-                // Handle defineStyle/extendStyle calls
+                // Handle defineStyle/extendStyle/overrideStyle calls
                 if (t.isIdentifier(node.callee, { name: 'defineStyle' }) ||
-                    t.isIdentifier(node.callee, { name: 'extendStyle' })) {
+                    t.isIdentifier(node.callee, { name: 'extendStyle' }) ||
+                    t.isIdentifier(node.callee, { name: 'overrideStyle' })) {
 
                     const fnName = node.callee.name;
+                    const registryFn = fnName === 'defineStyle' ? '__defineStyle'
+                        : fnName === 'extendStyle' ? '__extendStyle'
+                        : '__overrideStyle';
                     debug(`FOUND ${fnName} in: ${filename}`);
 
                     const [componentNameArg, stylesCallback] = node.arguments;
@@ -588,24 +614,28 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     const themePath = opts.themePath || '@idealyst/theme';
                     const keys = loadThemeKeys(themePath, rootDir);
 
-                    // Transform the callback body to expand $iterator patterns
-                    const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, debug);
+                    // Track expanded variants for summary
+                    const expandedVariants = [];
 
-                    // Replace defineStyle/extendStyle with StyleSheet.create
+                    // Transform the callback body to expand $iterator patterns
+                    const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
+
+                    // Replace defineStyle/extendStyle with registry call
                     path.replaceWith(
                         t.callExpression(
-                            t.memberExpression(
-                                t.identifier('StyleSheet'),
-                                t.identifier('create')
-                            ),
-                            [expandedCallback]
+                            t.identifier(registryFn),
+                            [componentNameArg, expandedCallback]
                         )
                     );
 
-                    // Mark that we need StyleSheet import
-                    state.needsStyleSheetImport = true;
+                    // Mark that we need registry import
+                    state.needsRegistryImport = state.needsRegistryImport || {};
+                    state.needsRegistryImport[registryFn] = true;
 
-                    debug(`  -> Replaced ${fnName} with StyleSheet.create`);
+                    debug(`  -> Replaced ${fnName}('${componentName}') with ${registryFn}`);
+                    if (expandedVariants.length > 0) {
+                        debug(`     Expanded: ${expandedVariants.map(v => `${v.variant}(${v.iterator})`).join(', ')}`);
+                    }
                 }
 
                 // Handle StyleSheet.create calls - expand $iterator patterns inside
@@ -634,13 +664,19 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     const themePath = opts.themePath || '@idealyst/theme';
                     const keys = loadThemeKeys(themePath, rootDir);
 
+                    // Track expanded variants for summary
+                    const expandedVariants = [];
+
                     // Transform the callback body to expand $iterator patterns
-                    const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, debug);
+                    const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
 
                     // Replace the callback argument
                     node.arguments[0] = expandedCallback;
 
                     debug(`  -> Expanded $iterator patterns in StyleSheet.create`);
+                    if (expandedVariants.length > 0) {
+                        debug(`     Expanded: ${expandedVariants.map(v => `${v.variant}(${v.iterator})`).join(', ')}`);
+                    }
                 }
             },
         },

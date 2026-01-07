@@ -14,18 +14,30 @@ import type { Theme } from './theme';
 // ThemeStyleWrapper - Type utility for style definitions
 // =============================================================================
 
-// Detect if T has a string index signature (is Record-like)
-type HasStringIndex<T> = string extends keyof T ? true : false;
+// Check if T is an object we can iterate over (not array, not function, not primitive)
+type IsIterableObject<T> = T extends object
+  ? T extends any[]
+    ? false
+    : T extends (...args: any[]) => any
+      ? false
+      : true
+  : false;
 
-// Get value type from the index signature
-type IndexValue<T> = T extends { [key: string]: infer V } ? V : never;
+// Get value type from an object - works for both Record and named-key objects
+type ObjectValue<T> = T extends { [key: string]: infer V }
+  ? V
+  : T[keyof T];
 
 /**
- * Wraps a Theme type to add $iterator properties for any Record/mapping types.
+ * Wraps a Theme type to add $iterator properties for any object types.
  *
- * For each property that is a Record<string, V>, adds a sibling $propertyName
- * that represents the value type V. This enables Babel to expand iterations
+ * For each property that is an object (dictionary-like), adds a sibling $propertyName
+ * that represents the value type. This enables Babel to expand iterations
  * over theme values (like intents, typography sizes, etc.)
+ *
+ * Works with:
+ * - Record<string, V> types
+ * - Objects with named keys like { primary: V, success: V, ... }
  *
  * @example
  * ```typescript
@@ -43,8 +55,8 @@ export type ThemeStyleWrapper<T> = T extends object
   ? {
       [K in keyof T]: ThemeStyleWrapper<T[K]>
     } & {
-      [K in keyof T as HasStringIndex<T[K]> extends true ? `$${K & string}` : never]:
-        ThemeStyleWrapper<IndexValue<T[K]>>
+      [K in keyof T as IsIterableObject<T[K]> extends true ? `$${K & string}` : never]:
+        ThemeStyleWrapper<ObjectValue<T[K]>>
     }
   : T;
 

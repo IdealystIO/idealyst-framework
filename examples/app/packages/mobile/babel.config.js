@@ -10,6 +10,7 @@ module.exports = {
         'packages/theme',
         'packages/datagrid',
         'packages/datepicker',
+        'packages/shared', // Process app extensions
         '@idealyst/components',
         '@idealyst/navigation',
         '@idealyst/theme',

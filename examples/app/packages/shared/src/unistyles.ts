@@ -1,5 +1,9 @@
-import { lightTheme, darkTheme, fromTheme } from '@idealyst/theme';
+import { lightTheme, darkTheme, fromTheme, extendStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
 import { StyleSheet } from 'react-native-unistyles';
+
+// Wrap theme type for $iterator support in extensions
+type Theme = ThemeStyleWrapper<BaseTheme>;
 
 // =============================================================================
 // Custom Theme with ThemeBuilder

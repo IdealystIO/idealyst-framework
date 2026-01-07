@@ -1,9 +1,9 @@
 /**
- * Text styles using $iterator expansion for theme reactivity.
+ * Text styles using defineStyle with $iterator expansion.
  */
-import { StyleSheet } from "react-native-unistyles";
-import { ThemeStyleWrapper } from '@idealyst/theme';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
 import type { Theme as BaseTheme } from '@idealyst/theme';
+import type { TextStyle, ViewStyle } from 'react-native';
 import { TextAlignVariant, TextColorVariant, TextWeightVariant, TextTypographyVariant } from "./types";
 
 // Wrap theme for $iterator support
@@ -15,8 +15,32 @@ export type TextVariants = {
     align: TextAlignVariant;
 }
 
-type TextStyleParams = {
+export type TextStyleParams = {
     color?: TextColorVariant;
+}
+
+/**
+ * Text style definition type for use with extendStyle/overrideStyle.
+ */
+export interface TextStyleDef {
+    text: (params: TextStyleParams) => TextStyle & {
+        variants?: {
+            typography?: Record<string, TextStyle>;
+            weight?: Record<string, TextStyle>;
+            align?: Record<string, TextStyle>;
+            gap?: Record<string, ViewStyle>;
+            padding?: Record<string, ViewStyle>;
+            paddingVertical?: Record<string, ViewStyle>;
+            paddingHorizontal?: Record<string, ViewStyle>;
+        };
+    };
+}
+
+// Register Text style types for type-safe extendStyle/overrideStyle
+declare module '@idealyst/theme' {
+    interface ComponentStyleRegistry {
+        Text: TextStyleDef;
+    }
 }
 
 /**
@@ -24,9 +48,10 @@ type TextStyleParams = {
  *
  * Babel expands:
  * - theme.sizes.$typography.X → all typography keys (h1, h2, body1, etc.)
+ * - theme.sizes.$view.X → all view size keys (xs, sm, md, lg, xl)
  */
 // @ts-ignore - $iterator patterns are expanded by Babel
-export const textStyles = StyleSheet.create((theme: Theme) => ({
+export const textStyles = defineStyle('Text', (theme: Theme) => ({
     text: ({ color }: TextStyleParams) => ({
         margin: 0,
         padding: 0,
