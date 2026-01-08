@@ -1,73 +1,29 @@
+/**
+ * Dialog styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles } from '@idealyst/theme';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
+
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
 type DialogSize = 'sm' | 'md' | 'lg' | 'fullscreen';
 type DialogType = 'default' | 'alert' | 'confirmation';
 
-type DialogVariants = {
-    size: DialogSize;
-    type: DialogType;
-}
-
-export type ExpandedDialogStyles = StylesheetStyles<keyof DialogVariants>;
-
-export type DialogStylesheet = {
-    backdrop: ExpandedDialogStyles;
-    container: ExpandedDialogStyles;
-    header: ExpandedDialogStyles;
-    title: ExpandedDialogStyles;
-    closeButton: ExpandedDialogStyles;
-    closeButtonText: ExpandedDialogStyles;
-    content: ExpandedDialogStyles;
-    modal: ExpandedDialogStyles;
-}
+export type DialogDynamicProps = {
+    size?: DialogSize;
+    type?: DialogType;
+};
 
 /**
- * Create size variants for container
+ * Dialog styles with size/type handling.
  */
-function createContainerSizeVariants() {
-    return {
-        sm: {
-            width: '90%',
-            maxWidth: 400,
-        },
-        md: {
-            width: '90%',
-            maxWidth: 600,
-        },
-        lg: {
-            width: '90%',
-            maxWidth: 800,
-        },
-        fullscreen: {
-            width: '100%',
-            height: '100%',
-            borderRadius: 0,
-            maxHeight: '100%',
-        },
-    } as const;
-}
-
-/**
- * Create type variants for container
- */
-function createContainerTypeVariants(theme: Theme) {
-    return {
-        standard: {},
-        alert: {
-            borderTopWidth: 4,
-            borderTopColor: theme.colors.border.primary,
-        },
-        confirmation: {
-            borderTopWidth: 4,
-            borderTopColor: theme.colors.border.primary,
-        },
-    } as const;
-}
-
-// Helper functions to create static styles wrapped in dynamic functions
-function createBackdropStyles() {
-    return () => ({
+export const dialogStyles = defineStyle('Dialog', (theme: Theme) => ({
+    backdrop: (_props: DialogDynamicProps) => ({
         position: 'absolute' as const,
         top: 0,
         left: 0,
@@ -82,37 +38,47 @@ function createBackdropStyles() {
             position: 'fixed',
             transition: 'opacity 150ms ease-out',
         },
-    });
-}
+    }),
 
-function createDialogContainerStyles(theme: Theme) {
-    return () => ({
-        backgroundColor: theme.colors.surface.primary,
-        borderRadius: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.25,
-        shadowRadius: 20,
-        elevation: 10,
-        maxHeight: '90%',
-        variants: {
-            size: createContainerSizeVariants(),
-            type: createContainerTypeVariants(theme),
-        },
-        _web: {
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'auto',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-            transition: 'opacity 150ms ease-out, transform 150ms ease-out',
-            transformOrigin: 'center center',
-        },
-    });
-}
+    container: ({ size = 'md', type = 'default' }: DialogDynamicProps) => {
+        // Size dimensions
+        const sizeStyles = {
+            sm: { width: '90%', maxWidth: 400 },
+            md: { width: '90%', maxWidth: 600 },
+            lg: { width: '90%', maxWidth: 800 },
+            fullscreen: { width: '100%', height: '100%', borderRadius: 0, maxHeight: '100%' },
+        }[size];
 
-function createHeaderStyles(theme: Theme) {
-    return () => ({
+        // Type-specific styles
+        const typeStyles = type !== 'default' ? {
+            borderTopWidth: 4,
+            borderTopColor: theme.colors.border.primary,
+        } : {};
+
+        return {
+            backgroundColor: theme.colors.surface.primary,
+            borderRadius: 12,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.25,
+            shadowRadius: 20,
+            elevation: 10,
+            maxHeight: '90%',
+            ...sizeStyles,
+            ...typeStyles,
+            _web: {
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'auto',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                transition: 'opacity 150ms ease-out, transform 150ms ease-out',
+                transformOrigin: 'center center',
+            },
+        } as const;
+    },
+
+    header: (_props: DialogDynamicProps) => ({
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border.primary,
         display: 'flex' as const,
@@ -122,11 +88,9 @@ function createHeaderStyles(theme: Theme) {
         _web: {
             borderBottomStyle: 'solid',
         },
-    });
-}
+    }),
 
-function createTitleStyles(theme: Theme) {
-    return () => ({
+    title: (_props: DialogDynamicProps) => ({
         marginLeft: 24,
         fontSize: 18,
         paddingVertical: 16,
@@ -136,11 +100,9 @@ function createTitleStyles(theme: Theme) {
         _web: {
             paddingVertical: 4,
         },
-    });
-}
+    }),
 
-function createCloseButtonStyles(theme: Theme) {
-    return () => ({
+    closeButton: (_props: DialogDynamicProps) => ({
         width: 32,
         height: 32,
         marginRight: 16,
@@ -156,47 +118,25 @@ function createCloseButtonStyles(theme: Theme) {
                 backgroundColor: theme.colors.surface.secondary,
             },
         },
-    });
-}
+    }),
 
-function createCloseButtonTextStyles(theme: Theme) {
-    return () => ({
+    closeButtonText: (_props: DialogDynamicProps) => ({
         fontSize: 18,
         color: theme.colors.text.secondary,
         fontWeight: '500' as const,
-    });
-}
+    }),
 
-function createContentStyles() {
-    return () => ({
+    content: (_props: DialogDynamicProps) => ({
         padding: 24,
         _web: {
             overflow: 'visible',
             maxHeight: 'none',
         },
-    });
-}
+    }),
 
-function createModalStyles() {
-    return () => ({
+    modal: (_props: DialogDynamicProps) => ({
         margin: 0,
         justifyContent: 'center' as const,
         alignItems: 'center' as const,
-    });
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const dialogStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-
-    return applyExtensions('Dialog', theme, {backdrop: createBackdropStyles(),
-        container: createDialogContainerStyles(theme),
-        header: createHeaderStyles(theme),
-        content: createContentStyles(),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        title: createTitleStyles(theme)(),
-        closeButton: createCloseButtonStyles(theme)(),
-        closeButtonText: createCloseButtonTextStyles(theme)(),
-        modal: createModalStyles()()});
-});
+    }),
+}));

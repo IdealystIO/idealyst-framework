@@ -1,125 +1,95 @@
+/**
+ * View styles using defineStyle with $iterator expansion.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Surface } from '@idealyst/theme';
-import {
-  buildGapVariants,
-  buildPaddingVariants,
-  buildPaddingVerticalVariants,
-  buildPaddingHorizontalVariants,
-  buildMarginVariants,
-  buildMarginVerticalVariants,
-  buildMarginHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
 import { ViewBackgroundVariant, ViewBorderVariant, ViewRadiusVariant } from './types';
 import { ViewStyleSize } from '../utils/viewStyleProps';
-import { applyExtensions } from '../extensions/applyExtension';
 
-type ViewVariants = {
-  background: ViewBackgroundVariant;
-  radius: ViewRadiusVariant;
-  border: ViewBorderVariant;
-  gap: ViewStyleSize;
-  padding: ViewStyleSize;
-  paddingVertical: ViewStyleSize;
-  paddingHorizontal: ViewStyleSize;
-  margin: ViewStyleSize;
-  marginVertical: ViewStyleSize;
-  marginHorizontal: ViewStyleSize;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+export type ViewVariants = {
+    background: ViewBackgroundVariant;
+    radius: ViewRadiusVariant;
+    border: ViewBorderVariant;
+    gap: ViewStyleSize;
+    padding: ViewStyleSize;
+    paddingVertical: ViewStyleSize;
+    paddingHorizontal: ViewStyleSize;
+    margin: ViewStyleSize;
+    marginVertical: ViewStyleSize;
+    marginHorizontal: ViewStyleSize;
 };
 
-export type ExpandedViewStyles = StylesheetStyles<keyof ViewVariants>;
-
-export type ViewStylesheet = {
-  view: ExpandedViewStyles;
-};
+export type ViewDynamicProps = Partial<ViewVariants>;
 
 /**
- * Create background variants for view
+ * View styles with $iterator expansion for spacing variants.
+ *
+ * NOTE: At least one top-level theme access is required for Unistyles to trace
+ * theme dependencies. We use a transparent borderColor as a marker.
  */
-function createBackgroundVariants(theme: Theme) {
-  const variants: any = {
-    transparent: {
-      backgroundColor: 'transparent',
-    },
-  };
-
-  // Add all surface colors programmatically
-  for (const surface in theme.colors.surface) {
-    variants[surface] = {
-      backgroundColor: theme.colors.surface[surface as Surface],
-    };
-  }
-
-  return variants;
-}
-
-/**
- * Create radius variants for view
- */
-function createRadiusVariants() {
-  return {
-    none: { borderRadius: 0 },
-    xs: { borderRadius: 2 },
-    sm: { borderRadius: 4 },
-    md: { borderRadius: 8 },
-    lg: { borderRadius: 12 },
-    xl: { borderRadius: 16 },
-  } as const;
-}
-
-/**
- * Create border variants for view
- */
-function createBorderVariants(theme: Theme) {
-  return {
-    none: {
-      borderWidth: 0,
-    },
-    thin: {
-      borderWidth: 1,
-      borderStyle: 'solid',
-      borderColor: theme.colors['gray.300'],
-    },
-    thick: {
-      borderWidth: 2,
-      borderStyle: 'solid',
-      borderColor: theme.colors['gray.300'],
-    },
-  } as const;
-}
-
-/**
- * Create dynamic view styles.
- * Returns a function to ensure Unistyles can track theme changes.
- * All styles must be dynamic functions (not static objects) to work with
- * Unistyles' Babel transform and theme reactivity on native.
- */
-function createViewStyles(theme: Theme) {
-    return (_props?: {}) => ({
+export const viewStyles = defineStyle('View', (theme: Theme) => ({
+    view: (_props: ViewDynamicProps) => ({
         display: 'flex' as const,
+        // Theme marker for Unistyles reactivity (invisible, overridden by variants)
+        borderColor: theme.colors.border.primary,
+        borderWidth: 0,
         variants: {
-            background: createBackgroundVariants(theme),
-            radius: createRadiusVariants(),
-            border: createBorderVariants(theme),
-            gap: buildGapVariants(theme),
-            padding: buildPaddingVariants(theme),
-            paddingVertical: buildPaddingVerticalVariants(theme),
-            paddingHorizontal: buildPaddingHorizontalVariants(theme),
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
+            background: {
+                transparent: { backgroundColor: 'transparent' },
+                primary: { backgroundColor: theme.colors.surface.primary },
+                secondary: { backgroundColor: theme.colors.surface.secondary },
+                tertiary: { backgroundColor: theme.colors.surface.tertiary },
+                inverse: { backgroundColor: theme.colors.surface.inverse },
+                'inverse-secondary': { backgroundColor: theme.colors.surface['inverse-secondary'] },
+                'inverse-tertiary': { backgroundColor: theme.colors.surface['inverse-tertiary'] },
+            },
+            radius: {
+                none: { borderRadius: 0 },
+                xs: { borderRadius: 2 },
+                sm: { borderRadius: 4 },
+                md: { borderRadius: 8 },
+                lg: { borderRadius: 12 },
+                xl: { borderRadius: 16 },
+            },
+            border: {
+                none: { borderWidth: 0 },
+                thin: { borderWidth: 1, borderStyle: 'solid' as const, borderColor: theme.colors['gray.300'] },
+                thick: { borderWidth: 2, borderStyle: 'solid' as const, borderColor: theme.colors['gray.300'] },
+            },
+            // $iterator expands for each view size
+            gap: {
+                gap: theme.sizes.$view.spacing,
+            },
+            padding: {
+                padding: theme.sizes.$view.padding,
+            },
+            paddingVertical: {
+                paddingVertical: theme.sizes.$view.padding,
+            },
+            paddingHorizontal: {
+                paddingHorizontal: theme.sizes.$view.padding,
+            },
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
         },
         _web: {
             display: 'flex',
             flexDirection: 'column',
             boxSizing: 'border-box',
         },
-    });
-}
-
-// Styles use applyExtensions to enable theme extensions and ensure proper
-// reactivity with Unistyles' native Shadow Tree updates.
-export const viewStyles = StyleSheet.create((theme: Theme) => {
-    return applyExtensions('View', theme, {
-        view: createViewStyles(theme),
-    });
-});
+    }),
+}));

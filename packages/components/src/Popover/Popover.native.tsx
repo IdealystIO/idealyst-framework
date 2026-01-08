@@ -43,6 +43,12 @@ const Popover = forwardRef<View, PopoverProps>(({
   // Apply variants
   popoverStyles.useVariants({});
 
+  // Get dynamic styles - call as functions for theme reactivity
+  const backdropStyle = (popoverStyles.backdrop as any)({});
+  const containerStyle = (popoverStyles.container as any)({});
+  const arrowStyle = (popoverStyles.arrow as any)({});
+  const contentStyle = (popoverStyles.content as any)({});
+
   // Determine if anchor is a ref object
   const anchorRefToUse = React.useMemo(() => {
     if (!anchor || typeof anchor !== 'object') return null;
@@ -147,19 +153,19 @@ const Popover = forwardRef<View, PopoverProps>(({
       nativeID={id}
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
-        <View style={popoverStyles.backdrop}>
+        <View style={backdropStyle}>
           <TouchableWithoutFeedback>
             <BoundedModalContent
               top={popoverPosition.top}
               left={popoverPosition.left}
               width={Math.min(popoverPosition.width || 200, maxPopoverWidth)}
               maxHeight={500}
-              style={[(popoverStyles.container as any)({}), style]}
+              style={[containerStyle, style]}
               onLayout={handlePopoverLayout}
               {...nativeA11yProps}
             >
-              {showArrow && <View style={popoverStyles.arrow} />}
-              <View style={popoverStyles.content}>
+              {showArrow && <View style={arrowStyle} />}
+              <View style={contentStyle}>
                 {children}
               </View>
             </BoundedModalContent>

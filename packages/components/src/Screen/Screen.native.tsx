@@ -39,7 +39,6 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
 
   // Call styles as functions to get theme-reactive styles
   const screenStyle = (screenStyles.screen as any)({});
-  const screenContentStyle = (screenStyles.screenContent as any)({});
 
   // Calculate safe area padding
   const safeAreaStyle = safeArea ? {
@@ -50,24 +49,26 @@ const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   } : undefined;
 
   if (scrollable) {
+    // Content styles applied via View wrapper for Unistyles reactivity
+    // (contentContainerStyle isn't reactive, only style prop is)
+    const contentInsetStyle = contentInset ? {
+      paddingTop: (safeArea ? insets.top : 0) + (contentInset.top ?? 0),
+      paddingBottom: (safeArea ? insets.bottom : 0) + (contentInset.bottom ?? 0),
+      paddingLeft: (safeArea ? insets.left : 0) + (contentInset.left ?? 0),
+      paddingRight: (safeArea ? insets.right : 0) + (contentInset.right ?? 0),
+    } : safeAreaStyle;
+
     return (
       <RNScrollView
         ref={ref as any}
         nativeID={id}
-        style={[{ flex: 1 }, style]}
-        contentContainerStyle={[
-          screenContentStyle,
-          safeAreaStyle,
-          contentInset ? {
-            paddingTop: (safeArea ? insets.top : 0) + (contentInset.top ?? 0),
-            paddingBottom: (safeArea ? insets.bottom : 0) + (contentInset.bottom ?? 0),
-            paddingLeft: (safeArea ? insets.left : 0) + (contentInset.left ?? 0),
-            paddingRight: (safeArea ? insets.right : 0) + (contentInset.right ?? 0),
-          } : undefined,
-        ]}
+        style={[screenStyle, style]}
+        contentContainerStyle={{ flexGrow: 1 }}
         testID={testID}
       >
-        {children}
+        <RNView style={[contentInsetStyle, { flex: 1 }]}>
+          {children}
+        </RNView>
       </RNScrollView>
     );
   }

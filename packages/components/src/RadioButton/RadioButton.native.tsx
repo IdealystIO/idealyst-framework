@@ -101,10 +101,11 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
     outputRange: [0, 1],
   });
 
-  // Get dynamic styles
+  // Get dynamic styles - call as functions for theme reactivity
   const containerStyle = (radioButtonStyles.container as any)({});
-  const radioStyle = (radioButtonStyles.radio as any)({ intent });
+  const radioStyle = (radioButtonStyles.radio as any)({ intent, checked, disabled });
   const radioDotStyle = (radioButtonStyles.radioDot as any)({ intent });
+  const labelStyle = (radioButtonStyles.label as any)({ disabled });
 
   return (
     <Pressable
@@ -127,7 +128,7 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
         />
       </View>
       {label && (
-        <Text style={radioButtonStyles.label}>
+        <Text style={labelStyle}>
           {label}
         </Text>
       )}

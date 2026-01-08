@@ -1,15 +1,5 @@
-import { lightTheme, darkTheme, fromTheme, extendStyle, ThemeStyleWrapper } from '@idealyst/theme';
-import type { Theme as BaseTheme } from '@idealyst/theme';
-import { overrideStyle } from '@idealyst/theme';
+import { lightTheme, darkTheme, fromTheme } from '@idealyst/theme';
 import { StyleSheet } from 'react-native-unistyles';
-import '@idealyst/components'
-
-// Wrap theme type for $iterator support in extensions
-type Theme = ThemeStyleWrapper<BaseTheme>;
-
-// =============================================================================
-// Custom Theme with ThemeBuilder
-// =============================================================================
 
 // Build custom themes with type-safe additions using fromTheme()
 export const customLightTheme = fromTheme(lightTheme)
@@ -47,15 +37,7 @@ export const customDarkTheme = fromTheme(darkTheme)
   .addRadius('full', 9999)
   .build();
 
-// Register custom theme type via module augmentation
-// This enables type inference for Intent, Size, Radius, etc.
-declare module '@idealyst/theme' {
-  interface CustomThemeRegistry {
-    theme: typeof customLightTheme;
-  }
-}
-
-// Configure Unistyles with custom themes
+// CRITICAL: Configure Unistyles BEFORE any StyleSheet.create calls
 StyleSheet.configure({
   themes: {
     light: customLightTheme,

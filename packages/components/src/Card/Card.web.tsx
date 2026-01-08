@@ -49,10 +49,11 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
     }
   };
 
-  // Apply variants (for radius, clickable, disabled, and spacing)
+  // Apply variants
   cardStyles.useVariants({
-    clickable,
+    type,
     radius,
+    clickable,
     disabled,
     gap,
     padding,
@@ -63,8 +64,8 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
     marginHorizontal,
   });
 
-  // Get dynamic card style with type and intent props
-  const cardStyle = (cardStyles.card as any)({ type, intent });
+  // Get card style
+  const cardStyle = (cardStyles.card as any)({});
 
   // Generate web props
   const webProps = getWebProps([cardStyle, style as any]);

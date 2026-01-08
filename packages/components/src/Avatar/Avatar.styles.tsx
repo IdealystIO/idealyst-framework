@@ -1,99 +1,58 @@
+/**
+ * Avatar styles using defineStyle with $iterator expansion.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Size } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Size } from '@idealyst/theme';
 
-type AvatarSize = Size;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
 type AvatarShape = 'circle' | 'square';
 
-type AvatarVariants = {
-    size: AvatarSize;
-    shape: AvatarShape;
-}
-
-export type ExpandedAvatarStyles = StylesheetStyles<keyof AvatarVariants>;
-
-export type AvatarStylesheet = {
-    avatar: ExpandedAvatarStyles;
-    image: ExpandedAvatarStyles;
-    fallback: ExpandedAvatarStyles;
-}
-
-function createAvatarSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'avatar', (size) => ({
-        width: size.width,
-        height: size.height,
-    }));
-}
-
-function createAvatarShapeVariants(theme: Theme) {
-    return {
-        circle: {
-            borderRadius: 9999,
-        },
-        square: {
-            borderRadius: 8,
-        },
-    } as const;
-}
-
-function createFallbackSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'avatar', (size) => ({
-        fontSize: size.fontSize,
-    }));
-}
+export type AvatarDynamicProps = {
+    size?: Size;
+    shape?: AvatarShape;
+};
 
 /**
- * Create container styles
+ * Avatar styles with size and shape variants.
  */
-function createContainerStyles(theme: Theme) {
-    return () => ({
+export const avatarStyles = defineStyle('Avatar', (theme: Theme) => ({
+    avatar: (_props: AvatarDynamicProps) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         backgroundColor: theme.colors.surface.secondary,
         overflow: 'hidden' as const,
         variants: {
-            size: createAvatarSizeVariants(theme),
-            shape: createAvatarShapeVariants(theme),
+            // $iterator expands for each avatar size
+            size: {
+                width: theme.sizes.$avatar.width,
+                height: theme.sizes.$avatar.height,
+            },
+            shape: {
+                circle: { borderRadius: 9999 },
+                square: { borderRadius: 8 },
+            },
         },
-    });
-}
+    }),
 
-/**
- * Create image styles
- */
-function createImageStyles() {
-    return () => ({
+    image: (_props: AvatarDynamicProps) => ({
         width: '100%' as const,
         height: '100%' as const,
-    });
-}
+    }),
 
-/**
- * Create fallback styles
- */
-function createFallbackStyles(theme: Theme) {
-    return () => ({
+    fallback: (_props: AvatarDynamicProps) => ({
         color: theme.colors.text.primary,
         fontWeight: '600' as const,
         variants: {
-            size: createFallbackSizeVariants(theme),
+            size: {
+                fontSize: theme.sizes.$avatar.fontSize,
+            },
         },
-    });
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const avatarStyles = StyleSheet.create((theme: Theme) => {
-  // Apply extensions to main visual elements
-
-  return applyExtensions('Avatar', theme, {avatar: createContainerStyles(theme),
-    fallback: createFallbackStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-    image: {
-        width: '100%',
-        height: '100%',
-    }});
-});
+    }),
+}));

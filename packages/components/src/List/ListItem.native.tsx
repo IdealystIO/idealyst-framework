@@ -59,8 +59,14 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
     disabled,
   });
 
-  // Get dynamic item style with type, disabled, and clickable props
+  // Get dynamic styles - call as functions to get theme-reactive styles
   const itemStyle = (listStyles.item as any)({ type: effectiveVariant, disabled, clickable: isClickable });
+  const labelStyle = (listStyles.label as any)({ disabled, selected });
+  const leadingStyle = (listStyles.leading as any)({});
+  const trailingStyle = (listStyles.trailing as any)({});
+  const trailingIconStyle = (listStyles.trailingIcon as any)({});
+  const labelContainerStyle = (listStyles.labelContainer as any)({});
+  const itemContentStyle = (listStyles.itemContent as any)({});
 
   // Resolve icon color - check intents first, then color palette
   const resolvedIconColor = (() => {
@@ -79,7 +85,7 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
 
     // If it's a string, treat it as an icon name
     if (typeof element === 'string') {
-      const iconStyle = styleKey === 'leading' ? listStyles.leading : listStyles.trailingIcon;
+      const iconStyle = styleKey === 'leading' ? leadingStyle : trailingIconStyle;
       return (
         <MaterialCommunityIcons
           name={element}
@@ -98,20 +104,20 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
   const content = (
     <>
       {leading && (
-        <View style={listStyles.leading}>
+        <View style={leadingStyle}>
           {renderElement(leading, 'leading')}
         </View>
       )}
 
-      <View style={listStyles.labelContainer}>
+      <View style={labelContainerStyle}>
         {label && (
-          <Text style={listStyles.label}>{label}</Text>
+          <Text style={labelStyle}>{label}</Text>
         )}
         {children}
       </View>
 
       {trailing && (
-        <View style={listStyles.trailing}>
+        <View style={trailingStyle}>
           {renderElement(trailing, 'trailingIcon')}
         </View>
       )}

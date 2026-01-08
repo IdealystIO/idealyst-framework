@@ -40,6 +40,19 @@ const config = {
     sourceExts: ['native.tsx', 'native.ts', 'tsx', 'ts', 'native.jsx', 'native.js', 'jsx', 'js', 'json', 'cjs'],
     extraNodeModules,
     disableHierarchicalLookup: true,
+    // Force @idealyst packages to resolve to local source
+    resolveRequest: (context, moduleName, platform) => {
+      // Check if this is an @idealyst package
+      for (const [alias, aliasPath] of Object.entries(extraNodeModules)) {
+        if (moduleName === alias || moduleName.startsWith(alias + '/')) {
+          const subPath = moduleName.slice(alias.length);
+          const resolvedPath = subPath ? path.join(aliasPath, subPath) : aliasPath;
+          return context.resolveRequest(context, resolvedPath, platform);
+        }
+      }
+      // Default resolution for everything else
+      return context.resolveRequest(context, moduleName, platform);
+    },
   },
   watcher: {
     // When configuring custom components with .native extensions, make sure the watcher looks for them

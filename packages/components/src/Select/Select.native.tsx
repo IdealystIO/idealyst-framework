@@ -86,6 +86,27 @@ const Select = forwardRef<View, SelectProps>(({
     marginHorizontal,
   });
 
+  // Get dynamic styles - call as functions for theme reactivity
+  const containerStyle = (selectStyles.container as any)({});
+  const labelStyle = (selectStyles.label as any)({});
+  const triggerStyle = (selectStyles.trigger as any)({ type, intent, disabled, error, focused: isOpen });
+  const triggerContentStyle = (selectStyles.triggerContent as any)({});
+  const triggerTextStyle = (selectStyles.triggerText as any)({});
+  const placeholderStyle = (selectStyles.placeholder as any)({});
+  const iconStyle = (selectStyles.icon as any)({});
+  const chevronStyle = (selectStyles.chevron as any)({});
+  const dropdownStyle = (selectStyles.dropdown as any)({});
+  const searchContainerStyle = (selectStyles.searchContainer as any)({});
+  const searchInputStyle = (selectStyles.searchInput as any)({});
+  const optionsListStyle = (selectStyles.optionsList as any)({});
+  const optionStyle = (selectStyles.option as any)({});
+  const optionContentStyle = (selectStyles.optionContent as any)({});
+  const optionIconStyle = (selectStyles.optionIcon as any)({});
+  const optionTextStyle = (selectStyles.optionText as any)({});
+  const optionTextDisabledStyle = (selectStyles.optionTextDisabled as any)({});
+  const helperTextStyle = (selectStyles.helperText as any)({ error });
+  const overlayStyle = (selectStyles.overlay as any)({});
+
   const handleTriggerPress = () => {
     if (disabled) return;
 
@@ -158,10 +179,10 @@ const Select = forwardRef<View, SelectProps>(({
 
   const renderChevron = () => {
     return (
-      <View style={selectStyles.chevron}>
+      <View style={chevronStyle}>
         <MaterialCommunityIcons
           name="chevron-down"
-          style={selectStyles.chevron}
+          style={chevronStyle}
         />
       </View>
     );
@@ -172,7 +193,6 @@ const Select = forwardRef<View, SelectProps>(({
 
     // If it's a string, render as MaterialCommunityIcons
     if (typeof icon === 'string') {
-      const iconStyle = selectStyles.icon;
       return (
         <View style={iconStyle}>
           <MaterialCommunityIcons
@@ -184,7 +204,7 @@ const Select = forwardRef<View, SelectProps>(({
     }
 
     // Otherwise render the React element directly
-    return <View style={selectStyles.icon}>{icon}</View>;
+    return <View style={iconStyle}>{icon}</View>;
   };
 
   const renderOptionIcon = (icon: any) => {
@@ -192,11 +212,10 @@ const Select = forwardRef<View, SelectProps>(({
 
     // If it's a string, render as MaterialCommunityIcons
     if (typeof icon === 'string') {
-      const iconStyle = selectStyles.optionIcon;
       return (
-        <View style={iconStyle}>
+        <View style={optionIconStyle}>
           <MaterialCommunityIcons
-            style={iconStyle}
+            style={optionIconStyle}
             name={icon}
           />
         </View>
@@ -204,7 +223,7 @@ const Select = forwardRef<View, SelectProps>(({
     }
 
     // Otherwise render the React element directly
-    return <View style={selectStyles.optionIcon}>{icon}</View>;
+    return <View style={optionIconStyle}>{icon}</View>;
   };
 
   const renderDropdown = () => {
@@ -222,7 +241,7 @@ const Select = forwardRef<View, SelectProps>(({
         onRequestClose={closeDropdown}
       >
         <Pressable
-          style={selectStyles.overlay}
+          style={overlayStyle}
           onPress={closeDropdown}
         >
           <BoundedModalContent
@@ -233,7 +252,7 @@ const Select = forwardRef<View, SelectProps>(({
           >
             <Animated.View
               style={[
-                (selectStyles.dropdown as any)({}),
+                dropdownStyle,
                 {
                   position: 'relative', // Override absolute positioning from styles
                   top: 0, // Override top: '100%' from styles
@@ -246,9 +265,9 @@ const Select = forwardRef<View, SelectProps>(({
               onLayout={handleDropdownLayout}
             >
             {searchable && (
-              <View style={selectStyles.searchContainer}>
+              <View style={searchContainerStyle}>
                 <TextInput
-                  style={selectStyles.searchInput}
+                  style={searchInputStyle}
                   placeholder="Search options..."
                   value={searchTerm}
                   onChangeText={handleSearchChange}
@@ -258,23 +277,23 @@ const Select = forwardRef<View, SelectProps>(({
             )}
 
             <ScrollView
-              style={selectStyles.optionsList}
+              style={optionsListStyle}
               showsVerticalScrollIndicator={true}
             >
               {filteredOptions.map((option) => (
                   <Pressable
                     key={option.value}
-                    style={(selectStyles.option as any)({})}
+                    style={optionStyle}
                     onPress={() => handleOptionSelect(option)}
                     disabled={option.disabled}
                     android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
                   >
-                    <View style={selectStyles.optionContent}>
+                    <View style={optionContentStyle}>
                       {renderOptionIcon(option.icon)}
                       <Text
                         style={[
-                          selectStyles.optionText,
-                          option.disabled && selectStyles.optionTextDisabled,
+                          optionTextStyle,
+                          option.disabled && optionTextDisabledStyle,
                         ]}
                       >
                         {option.label}
@@ -284,8 +303,8 @@ const Select = forwardRef<View, SelectProps>(({
                 ))}
 
               {filteredOptions.length === 0 && (
-                <View style={(selectStyles.option as any)({})}>
-                  <Text style={selectStyles.optionText}>
+                <View style={optionStyle}>
+                  <Text style={optionTextStyle}>
                     No options found
                   </Text>
                 </View>
@@ -298,16 +317,10 @@ const Select = forwardRef<View, SelectProps>(({
     );
   };
 
-  // Get dynamic styles
-  const containerStyle = (selectStyles.container as any)({});
-  const triggerStyle = (selectStyles.trigger as any)({ type, intent });
-  const dropdownStyle = (selectStyles.dropdown as any)({});
-  const optionStyle = (selectStyles.option as any)({});
-
   return (
     <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID}>
       {label && (
-        <Text style={selectStyles.label}>
+        <Text style={labelStyle}>
           {label}
         </Text>
       )}
@@ -325,11 +338,11 @@ const Select = forwardRef<View, SelectProps>(({
         }}
         android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
       >
-        <View style={selectStyles.triggerContent}>
+        <View style={triggerContentStyle}>
           {renderTriggerIcon(selectedOption?.icon)}
           <Text
             style={[
-              selectedOption ? selectStyles.triggerText : selectStyles.placeholder,
+              selectedOption ? triggerTextStyle : placeholderStyle,
             ]}
             numberOfLines={1}
           >
@@ -344,11 +357,7 @@ const Select = forwardRef<View, SelectProps>(({
       {!(Platform.OS === 'ios' && presentationMode === 'actionSheet') && renderDropdown()}
 
       {helperText && (
-        <Text
-          style={[
-            selectStyles.helperText,
-          ]}
-        >
+        <Text style={helperTextStyle}>
           {helperText}
         </Text>
       )}

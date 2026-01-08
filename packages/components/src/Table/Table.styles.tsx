@@ -1,311 +1,183 @@
+/**
+ * Table styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, CompoundVariants, Size } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import {
-  buildGapVariants,
-  buildPaddingVariants,
-  buildPaddingVerticalVariants,
-  buildPaddingHorizontalVariants,
-  buildMarginVariants,
-  buildMarginVerticalVariants,
-  buildMarginHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Size } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
 
-type TableType = 'default' | 'bordered' | 'striped';
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
 
-type TableRowVariants = {
-    type: TableType;
-    clickable: boolean;
-}
-/**
- * Create type variants for container
- */
-function createContainerTypeVariants(theme: Theme) {
-    return {
-        standard: {
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme.colors.border.primary,
-            borderRadius: 8,
-            overflow: 'hidden',
-            _web: {
-                border: `1px solid ${theme.colors.border.primary}`,
-            },
-        },
-        bordered: {
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme.colors.border.primary,
-            borderRadius: 8,
-            overflow: 'hidden',
-            _web: {
-                border: `1px solid ${theme.colors.border.primary}`,
-            },
-        },
-        striped: {
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme.colors.border.primary,
-            borderRadius: 8,
-            overflow: 'hidden',
-            _web: {
-                border: `1px solid ${theme.colors.border.primary}`,
-            },
-        },
-    } as const;
-}
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+type TableType = 'standard' | 'bordered' | 'striped';
+type CellAlign = 'left' | 'center' | 'right';
+
+export type TableDynamicProps = {
+    size?: Size;
+    type?: TableType;
+    clickable?: boolean;
+    sticky?: boolean;
+    align?: CellAlign;
+    gap?: ViewStyleSize;
+    padding?: ViewStyleSize;
+    paddingVertical?: ViewStyleSize;
+    paddingHorizontal?: ViewStyleSize;
+    margin?: ViewStyleSize;
+    marginVertical?: ViewStyleSize;
+    marginHorizontal?: ViewStyleSize;
+};
 
 /**
- * Create type variants for row
+ * Table styles with type/size handling.
  */
-function createRowTypeVariants(theme: Theme) {
-    return {
-        standard: {},
-        bordered: {
-            borderBottomWidth: 1,
-            borderBottomStyle: 'solid',
-            borderBottomColor: theme.colors.border.primary,
-            _web: {
-                borderBottom: `1px solid ${theme.colors.border.primary}`,
-            },
-        },
-        striped: {
-            borderBottomWidth: 1,
-            borderBottomStyle: 'solid',
-            borderBottomColor: theme.colors.border.primary,
-            _web: {
-                borderBottom: `1px solid ${theme.colors.border.primary}`,
-                ':nth-child(even)': {
-                    backgroundColor: theme.colors.surface.secondary,
-                },
-            },
-        },
-    } as const;
-}
-
-/**
- * Create compound variants for row
- */
-function createRowCompoundVariants(theme: Theme): CompoundVariants<keyof TableRowVariants> {
-    return [
-        {
-            type: 'striped',
-            clickable: true,
-            styles: {
-                _web: {
-                    _hover: {
-                        backgroundColor: theme.colors.surface.tertiary,
-                    },
-                },
-            },
-        },
-    ] as const;
-}
-
-/**
- * Create size variants for header cell
- */
-function createHeaderCellSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'table', (size) => ({
-        padding: size.padding,
-        fontSize: size.fontSize,
-        lineHeight: size.lineHeight,
-    }));
-}
-
-/**
- * Create type variants for header cell
- */
-function createHeaderCellTypeVariants(theme: Theme) {
-    return {
-        standard: {},
-        bordered: {
-            borderRightWidth: 1,
-            borderRightStyle: 'solid',
-            borderRightColor: theme.colors.border.primary,
-            _web: {
-                borderRight: `1px solid ${theme.colors.border.primary}`,
-                ':last-child': {
-                    borderRight: 'none',
-                },
-            },
-        },
-        striped: {},
-    } as const;
-}
-
-/**
- * Create size variants for cell
- */
-function createCellSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'table', (size) => ({
-        padding: size.padding,
-        fontSize: size.fontSize,
-        lineHeight: size.lineHeight,
-    }));
-}
-
-/**
- * Create type variants for cell
- */
-function createCellTypeVariants(theme: Theme) {
-    return {
-        standard: {},
-        bordered: {
-            borderRightWidth: 1,
-            borderRightStyle: 'solid',
-            borderRightColor: theme.colors.border.primary,
-            _web: {
-                borderRight: `1px solid ${theme.colors.border.primary}`,
-                ':last-child': {
-                    borderRight: 'none',
-                },
-            },
-        },
-        striped: {},
-    } as const;
-}
-
-function createContainerStyles(theme: Theme) {
-    return () => ({
+export const tableStyles = defineStyle('Table', (theme: Theme) => ({
+    container: ({ type = 'standard' }: TableDynamicProps) => ({
         width: '100%',
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+        borderColor: theme.colors.border.primary,
+        borderRadius: 8,
+        overflow: 'hidden' as const,
+        variants: {
+            gap: {
+                gap: theme.sizes.$view.padding,
+            },
+            padding: {
+                padding: theme.sizes.$view.padding,
+            },
+            paddingVertical: {
+                paddingVertical: theme.sizes.$view.padding,
+            },
+            paddingHorizontal: {
+                paddingHorizontal: theme.sizes.$view.padding,
+            },
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
+        },
         _web: {
             overflow: 'auto',
+            border: `1px solid ${theme.colors.border.primary}`,
         },
-        variants: {
-            type: createContainerTypeVariants(theme),
-            // Spacing variants from ContainerStyleProps
-            gap: buildGapVariants(theme),
-            padding: buildPaddingVariants(theme),
-            paddingVertical: buildPaddingVerticalVariants(theme),
-            paddingHorizontal: buildPaddingHorizontalVariants(theme),
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
-        },
-    });
-}
+    }),
 
-const createTableStyles = (theme: Theme) => {
-    return {
+    table: (_props: TableDynamicProps) => ({
         width: '100%',
         _web: {
             borderCollapse: 'collapse',
         },
-    } as const;
-}
+    }),
 
-const createTheadStyles = (theme: Theme) => {
-    return {
+    thead: ({ sticky = false }: TableDynamicProps) => ({
         backgroundColor: theme.colors.surface.secondary,
-        variants: {
-            sticky: {
-                true: {
-                    _web: {
-                            position: 'sticky',
-                            top: 0,
-                            zIndex: 10,
-                    }
-                },
-                false: {},
-            },
-        },
-    } as const;
-}
+        _web: sticky ? {
+            position: 'sticky' as const,
+            top: 0,
+            zIndex: 10,
+        } : {},
+    }),
 
-const createRowStyles = (theme: Theme) => {
-    return {
-        variants: {
-            type: createRowTypeVariants(theme),
-            clickable: {
-                true: {
-                    _web: {
-                        cursor: 'pointer',
-                        _hover: {
-                            backgroundColor: theme.colors.surface.secondary,
-                        },
+    tbody: (_props: TableDynamicProps) => ({}),
+
+    row: ({ type = 'standard', clickable = false }: TableDynamicProps) => {
+        const typeStyles = type === 'bordered' || type === 'striped' ? {
+            borderBottomWidth: 1,
+            borderBottomColor: theme.colors.border.primary,
+        } : {};
+
+        return {
+            ...typeStyles,
+            _web: {
+                transition: 'background-color 0.2s ease',
+                borderBottom: (type === 'bordered' || type === 'striped')
+                    ? `1px solid ${theme.colors.border.primary}`
+                    : undefined,
+                cursor: clickable ? 'pointer' : undefined,
+                _hover: clickable ? { backgroundColor: theme.colors.surface.secondary } : {},
+                // Striped rows handled via CSS pseudo-selector
+                ...(type === 'striped' ? {
+                    ':nth-child(even)': {
+                        backgroundColor: theme.colors.surface.secondary,
                     },
-                },
-                false: {},
+                } : {}),
             },
-        },
-        compoundVariants: createRowCompoundVariants(theme),
-        _web: {
-            transition: 'background-color 0.2s ease',
-        },
-    } as const;
-}
+        } as const;
+    },
 
-const createHeaderCellStyles = (theme: Theme) => {
-    return {
-        flexDirection: 'row',
-        alignItems: 'center',
-        textAlign: 'left',
-        fontWeight: '600',
-        color: theme.colors.text.primary,
-        borderBottomWidth: 2,
-        borderBottomStyle: 'solid',
-        borderBottomColor: theme.colors.border.primary,
-        _web: {
-            borderBottom: `2px solid ${theme.colors.border.primary}`,
-        },
-        variants: {
-            size: createHeaderCellSizeVariants(theme),
-            align: {
-                left: {
-                    textAlign: 'left',
-                    justifyContent: 'flex-start',
-                },
-                center: {
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                },
-                right: {
-                    textAlign: 'right',
-                    justifyContent: 'flex-end',
+    headerCell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => {
+        const alignStyles = {
+            left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
+            center: { textAlign: 'center' as const, justifyContent: 'center' as const },
+            right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
+        }[align];
+
+        const borderStyles = type === 'bordered' ? {
+            borderRightWidth: 1,
+            borderRightColor: theme.colors.border.primary,
+        } : {};
+
+        return {
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            fontWeight: '600' as const,
+            color: theme.colors.text.primary,
+            borderBottomWidth: 2,
+            borderBottomColor: theme.colors.border.primary,
+            ...alignStyles,
+            ...borderStyles,
+            variants: {
+                size: {
+                    padding: theme.sizes.$table.padding,
+                    fontSize: theme.sizes.$table.fontSize,
+                    lineHeight: theme.sizes.$table.lineHeight,
                 },
             },
-            type: createHeaderCellTypeVariants(theme),
-        },
-    } as const;
-}
+            _web: {
+                borderBottom: `2px solid ${theme.colors.border.primary}`,
+                borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
+                ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},
+            },
+        } as const;
+    },
 
-const createCellStyles = (theme: Theme) => {
-    return {
-        flexDirection: 'row',
-        alignItems: 'center',
-        textAlign: 'left',
-        color: theme.colors.text.primary,
-        variants: {
-            size: createCellSizeVariants(theme),
-            align: {
-                left: {
-                    textAlign: 'left',
-                    justifyContent: 'flex-start',
-                },
-                center: {
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                },
-                right: {
-                    textAlign: 'right',
-                    justifyContent: 'flex-end',
+    cell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => {
+        const alignStyles = {
+            left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
+            center: { textAlign: 'center' as const, justifyContent: 'center' as const },
+            right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
+        }[align];
+
+        const borderStyles = type === 'bordered' ? {
+            borderRightWidth: 1,
+            borderRightColor: theme.colors.border.primary,
+        } : {};
+
+        return {
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            color: theme.colors.text.primary,
+            ...alignStyles,
+            ...borderStyles,
+            variants: {
+                size: {
+                    padding: theme.sizes.$table.padding,
+                    fontSize: theme.sizes.$table.fontSize,
+                    lineHeight: theme.sizes.$table.lineHeight,
                 },
             },
-            type: createCellTypeVariants(theme),
-        },
-    } as const;
-}
-
-export const tableStyles = StyleSheet.create((theme: Theme) => {
-    return applyExtensions('Table', theme, {
-        container: createContainerStyles(theme),
-        table: createTableStyles(theme),
-        thead: createTheadStyles(theme),
-        tbody: {},
-        row: createRowStyles(theme),
-        headerCell: createHeaderCellStyles(theme),
-        cell: createCellStyles(theme),
-    });
-});
+            _web: {
+                borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
+                ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},
+            },
+        } as const;
+    },
+}));

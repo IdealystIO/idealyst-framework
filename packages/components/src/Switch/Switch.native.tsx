@@ -118,9 +118,11 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
     };
   });
 
-  // Get dynamic styles
-  const switchTrackStyle = (switchStyles.switchTrack as any)({ checked, intent });
+  // Get dynamic styles - call as functions for theme reactivity
+  const switchTrackStyle = (switchStyles.switchTrack as any)({ checked, intent, disabled });
   const containerStyle = (switchStyles.container as any)({});
+  const switchContainerStyle = (switchStyles.switchContainer as any)({});
+  const labelStyle = (switchStyles.label as any)({ disabled, labelPosition });
 
   const switchElement = (
     <Pressable
@@ -128,7 +130,7 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
       nativeID={!label ? id : undefined}
       onPress={handlePress}
       disabled={disabled}
-      style={switchStyles.switchContainer}
+      style={switchContainerStyle}
       testID={testID}
       {...nativeA11yProps}
     >
@@ -165,11 +167,11 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
         style={[containerStyle, style]}
       >
         {labelPosition === 'left' && (
-          <Text style={switchStyles.label}>{label}</Text>
+          <Text style={labelStyle}>{label}</Text>
         )}
         {switchElement}
         {labelPosition === 'right' && (
-          <Text style={switchStyles.label}>{label}</Text>
+          <Text style={labelStyle}>{label}</Text>
         )}
       </Pressable>
     );

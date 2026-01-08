@@ -1,175 +1,108 @@
+/**
+ * RadioButton styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import {
-  buildMarginVariants,
-  buildMarginVerticalVariants,
-  buildMarginHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
 
-type RadioButtonSize = Size;
-type RadioButtonIntent = Intent;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
 type RadioGroupOrientation = 'horizontal' | 'vertical';
 
-type RadioButtonVariants = {
-    size: RadioButtonSize;
-    intent: RadioButtonIntent;
-    checked: boolean;
-    disabled: boolean;
-}
+export type RadioButtonDynamicProps = {
+    size?: Size;
+    intent?: Intent;
+    checked?: boolean;
+    disabled?: boolean;
+    orientation?: RadioGroupOrientation;
+    margin?: ViewStyleSize;
+    marginVertical?: ViewStyleSize;
+    marginHorizontal?: ViewStyleSize;
+};
 
-type RadioGroupVariants = {
-    orientation: RadioGroupOrientation;
-}
-
-export type ExpandedRadioButtonStyles = StylesheetStyles<keyof RadioButtonVariants>;
-export type ExpandedRadioGroupStyles = StylesheetStyles<keyof RadioGroupVariants>;
-
-export type RadioButtonStylesheet = {
-    container: ExpandedRadioButtonStyles;
-    radio: ExpandedRadioButtonStyles;
-    radioDot: ExpandedRadioButtonStyles;
-    label: ExpandedRadioButtonStyles;
-    groupContainer: ExpandedRadioGroupStyles;
-}
-
-function createRadioSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'radioButton', (size) => ({
-        width: size.radioSize,
-        height: size.radioSize,
-    }));
-}
-
-function createCheckedVariants(theme: Theme, intent: RadioButtonIntent) {
-    const intentValue = theme.intents[intent];
-    return {
-        true: {
-            borderColor: intentValue.primary,
-        },
-        false: {
-            borderColor: theme.colors.border.primary,
-        },
-    } as const;
-}
-
-function createRadioDotSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'radioButton', (size) => ({
-        width: size.radioDotSize,
-        height: size.radioDotSize,
-    }));
-}
-
-function createRadioDotIntentColor(theme: Theme, intent: RadioButtonIntent) {
-    return theme.intents[intent].primary;
-}
-
-function createRadioStyles(theme: Theme) {
-    return ({ intent }: Partial<RadioButtonVariants>) => {
-        return {
-            borderRadius: 9999,
-            borderWidth: 1.5,
-            borderStyle: 'solid',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: theme.colors.surface.primary,
-            variants: {
-                size: createRadioSizeVariants(theme),
-                checked: createCheckedVariants(theme, intent),
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                        backgroundColor: theme.colors.surface.tertiary,
-                        _web: {
-                            cursor: 'not-allowed',
-                        },
-                    },
-                    false: {
-                        opacity: 1,
-                        backgroundColor: theme.colors.surface.primary,
-                        _web: {
-                            cursor: 'pointer',
-                            _hover: {
-                                opacity: 0.8,
-                            },
-                            _active: {
-                                opacity: 0.6,
-                            },
-                        },
-                    },
-                },
-            },
-            _web: {
-                transition: 'all 0.2s ease',
-            },
-        } as const;
-    }
-}
-
-function createRadioDotStyles(theme: Theme) {
-    return ({ intent }: Partial<RadioButtonVariants>) => {
-        return {
-            borderRadius: 9999,
-            backgroundColor: createRadioDotIntentColor(theme, intent),
-            variants: {
-                size: createRadioDotSizeVariants(theme),
-            },
-        } as const;
-    }
-}
-
-// Container style creator for extension support
-function createContainerStyles(theme: Theme) {
-    return () => ({
+/**
+ * RadioButton styles with intent/checked/disabled handling.
+ */
+export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
+    container: (_props: RadioButtonDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         paddingVertical: 4,
         variants: {
-            size: buildSizeVariants(theme, 'radioButton', (size) => ({
-                gap: size.gap,
-            })),
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
-        } as const,
-    });
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const radioButtonStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-
-    return applyExtensions('RadioButton', theme, {container: createContainerStyles(theme),
-        radio: createRadioStyles(theme),
-        radioDot: createRadioDotStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles
-        label: {
-            color: theme.colors.text.primary,
-            variants: {
-                size: buildSizeVariants(theme, 'radioButton', (size) => ({
-                    fontSize: size.fontSize,
-                })),
-                disabled: {
-                    true: { opacity: 0.5 },
-                    false: { opacity: 1 },
-                },
+            size: {
+                gap: theme.sizes.$radioButton.gap,
+            },
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
             },
         },
-        groupContainer: {
-            gap: 4,
+    }),
+
+    radio: ({ intent = 'primary', checked = false, disabled = false }: RadioButtonDynamicProps) => {
+        const intentValue = theme.intents[intent];
+
+        return {
+            borderRadius: 9999,
+            borderWidth: 1.5,
+            borderStyle: 'solid' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
+            backgroundColor: disabled
+                ? theme.colors.surface.tertiary
+                : theme.colors.surface.primary,
+            borderColor: checked ? intentValue.primary : theme.colors.border.primary,
+            opacity: disabled ? 0.5 : 1,
             variants: {
-                orientation: {
-                    horizontal: {
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        gap: 16,
-                    },
-                    vertical: {
-                        flexDirection: 'column',
-                    },
+                size: {
+                    width: theme.sizes.$radioButton.radioSize,
+                    height: theme.sizes.$radioButton.radioSize,
                 },
             },
-        }});
-});
+            _web: {
+                transition: 'all 0.2s ease',
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                _hover: disabled ? {} : { opacity: 0.8 },
+                _active: disabled ? {} : { opacity: 0.6 },
+            },
+        } as const;
+    },
+
+    radioDot: ({ intent = 'primary' }: RadioButtonDynamicProps) => ({
+        borderRadius: 9999,
+        backgroundColor: theme.intents[intent].primary,
+        variants: {
+            size: {
+                width: theme.sizes.$radioButton.radioDotSize,
+                height: theme.sizes.$radioButton.radioDotSize,
+            },
+        },
+    }),
+
+    label: ({ disabled = false }: RadioButtonDynamicProps) => ({
+        color: theme.colors.text.primary,
+        opacity: disabled ? 0.5 : 1,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$radioButton.fontSize,
+            },
+        },
+    }),
+
+    groupContainer: ({ orientation = 'vertical' }: RadioButtonDynamicProps) => ({
+        gap: 4,
+        flexDirection: orientation === 'horizontal' ? ('row' as const) : ('column' as const),
+        flexWrap: orientation === 'horizontal' ? ('wrap' as const) : undefined,
+        ...(orientation === 'horizontal' ? { gap: 16 } : {}),
+    }),
+}));

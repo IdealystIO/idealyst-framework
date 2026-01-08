@@ -1,98 +1,28 @@
+/**
+ * Menu styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, CompoundVariants, Intent, Size } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 
-type MenuSize = Size;
-type MenuIntent = Intent;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
 
-type MenuVariants = {
-    size: MenuSize;
-    intent: MenuIntent;
-    disabled: boolean;
-}
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
 
-export type ExpandedMenuStyles = StylesheetStyles<keyof MenuVariants>;
-
-export type MenuStylesheet = {
-    overlay: ExpandedMenuStyles;
-    menu: ExpandedMenuStyles;
-    separator: ExpandedMenuStyles;
-    item: ExpandedMenuStyles;
-    icon: ExpandedMenuStyles;
-    label: ExpandedMenuStyles;
-}
+export type MenuDynamicProps = {
+    size?: Size;
+    intent?: Intent;
+    disabled?: boolean;
+};
 
 /**
- * Create size variants for menu item
+ * Menu styles with intent/disabled handling.
  */
-function createItemSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'menu', (size) => ({
-        paddingVertical: size.paddingVertical,
-        paddingHorizontal: size.paddingHorizontal,
-    }));
-}
-
-/**
- * Get hover styles for menu item based on intent
- */
-function getItemHoverStyles(theme: Theme, intent: MenuIntent) {
-    if (intent === 'neutral') {
-        return {};
-    }
-    const intentValue = theme.intents[intent];
-    return {
-        _web: {
-            _hover: {
-                backgroundColor: intentValue.light + '20',
-                color: intentValue.primary,
-            },
-        },
-    } as const;
-}
-
-/**
- * Create compound variants for menu item
- */
-function createItemCompoundVariants(theme: Theme): CompoundVariants<keyof MenuVariants> {
-    return [
-        {
-            disabled: true,
-            styles: {
-                _web: {
-                    _hover: {
-                        backgroundColor: 'transparent',
-                    },
-                },
-            },
-        },
-    ] as const;
-}
-
-/**
- * Create size variants for icon
- */
-function createIconSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'menu', (size) => ({
-        width: size.iconSize,
-        height: size.iconSize,
-        fontSize: size.iconSize,
-    }));
-}
-
-/**
- * Create size variants for label
- */
-function createLabelSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'menu', (size) => ({
-        fontSize: size.labelFontSize,
-    }));
-}
-
-// Main element style creators (for extension support)
-function createOverlayStyles(theme: Theme) {
-    return () => ({
-        backgroundColor: 'transparent',
+export const menuStyles = defineStyle('Menu', (theme: Theme) => ({
+    overlay: (_props: MenuDynamicProps) => ({
+        backgroundColor: 'transparent' as const,
         _web: {
             position: 'fixed' as const,
             top: 0,
@@ -101,11 +31,9 @@ function createOverlayStyles(theme: Theme) {
             bottom: 0,
             zIndex: 999,
         },
-    });
-}
+    }),
 
-function createMenuStyles(theme: Theme) {
-    return () => ({
+    menu: (_props: MenuDynamicProps) => ({
         position: 'absolute' as const,
         zIndex: 1000,
         backgroundColor: theme.colors.surface.primary,
@@ -123,75 +51,69 @@ function createMenuStyles(theme: Theme) {
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
             width: 'fit-content',
         },
-    });
-}
+    }),
 
-function createItemStyles(theme: Theme) {
-    return ({ intent }: Partial<MenuVariants>) => {
-        const hoverStyles = getItemHoverStyles(theme, intent ?? 'neutral');
+    item: ({ intent = 'neutral', disabled = false }: MenuDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const hoverStyles = intent !== 'neutral' ? {
+            backgroundColor: intentValue.light + '20',
+            color: intentValue.primary,
+        } : {
+            backgroundColor: theme.colors.surface.secondary,
+        };
+
         return {
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'transparent',
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            backgroundColor: 'transparent' as const,
             borderRadius: 4,
             minHeight: 44,
+            opacity: disabled ? 0.5 : 1,
             variants: {
-                size: createItemSizeVariants(theme),
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                        _web: {
-                            cursor: 'not-allowed',
-                        },
-                    },
-                    false: {},
+                size: {
+                    paddingVertical: theme.sizes.$menu.paddingVertical,
+                    paddingHorizontal: theme.sizes.$menu.paddingHorizontal,
                 },
             },
-            compoundVariants: createItemCompoundVariants(theme),
             _web: {
-                cursor: 'pointer',
+                cursor: disabled ? 'not-allowed' : 'pointer',
                 border: 'none',
                 outline: 'none',
                 transition: 'background-color 0.2s ease',
                 textAlign: 'left',
-                _hover: {
-                    backgroundColor: theme.colors.surface.secondary,
-                },
+                _hover: disabled ? { backgroundColor: 'transparent' } : hoverStyles,
             },
-            ...hoverStyles,
         } as const;
-    };
-}
+    },
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const menuStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
+    separator: (_props: MenuDynamicProps) => ({
+        height: 1,
+        backgroundColor: theme.colors.border.primary,
+        marginTop: 4,
+        marginBottom: 4,
+    }),
 
-    return applyExtensions('Menu', theme, {overlay: createOverlayStyles(theme),
-        menu: createMenuStyles(theme),
-        item: createItemStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        separator: {
-            height: 1,
-            backgroundColor: theme.colors.border.primary,
-            marginTop: 4,
-            marginBottom: 4,
+    icon: (_props: MenuDynamicProps) => ({
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        flexShrink: 0,
+        marginRight: 8,
+        variants: {
+            size: {
+                width: theme.sizes.$menu.iconSize,
+                height: theme.sizes.$menu.iconSize,
+                fontSize: theme.sizes.$menu.iconSize,
+            },
         },
-        icon: {
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            marginRight: 8,
-            variants: {
-                size: createIconSizeVariants(theme),
-            } as const,
-        } as const,
-        label: {
-            flex: 1,
-            color: theme.colors.text.primary,
-            variants: {
-                size: createLabelSizeVariants(theme),
-            } as const,
-        } as const});
-});
+    }),
+
+    label: (_props: MenuDynamicProps) => ({
+        flex: 1,
+        color: theme.colors.text.primary,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$menu.labelFontSize,
+            },
+        },
+    }),
+}));

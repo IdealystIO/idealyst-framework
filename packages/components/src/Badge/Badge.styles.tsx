@@ -1,86 +1,49 @@
+/**
+ * Badge styles using defineStyle with $iterator expansion.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, getColorFromString, Size, Color } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper, getColorFromString } from '@idealyst/theme';
+import type { Theme as BaseTheme, Size, Color } from '@idealyst/theme';
+
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
 
 type BadgeType = 'filled' | 'outlined' | 'dot';
 
-type BadgeVariants = {
-    size: Size;
-    type: BadgeType;
-    color: Color;
-}
-
-export type ExpandedBadgeStyles = StylesheetStyles<keyof BadgeVariants>;
-
-export type BadgeStylesheet = {
-    badge: ExpandedBadgeStyles;
-    content: ExpandedBadgeStyles;
-    icon: ExpandedBadgeStyles;
-    text: ExpandedBadgeStyles;
-}
+export type BadgeDynamicProps = {
+    size?: Size;
+    type?: BadgeType;
+    color?: Color;
+};
 
 /**
- * Create type variants for badge
+ * Badge styles with color-based type variants.
  */
-function createBadgeTypeVariants(theme: Theme, color: Color) {
-    const colorValue = getColorFromString(theme, color);
-    return {
-        filled: {
-            borderWidth: 0,
-            backgroundColor: colorValue,
-        },
-        outlined: {
-            backgroundColor: 'transparent',
-            borderWidth: 2,
-            borderStyle: 'solid',
-            borderColor: colorValue,
-        },
-        dot: {
-            minWidth: 8,
-            width: 8,
-            height: 8,
-            paddingHorizontal: 0,
-            paddingVertical: 0,
-            backgroundColor: colorValue,
-        },
-    } as const;
-}
+export const badgeStyles = defineStyle('Badge', (theme: Theme) => ({
+    badge: ({ color = 'primary', type = 'filled' }: BadgeDynamicProps) => {
+        const colorValue = getColorFromString(theme as unknown as BaseTheme, color);
 
-/**
- * Create type variants for badge text
- */
-function createTextTypeVariants(theme: Theme, color: Color){
-    const colorValue = getColorFromString(theme, color);
-    return {
-        filled: {
-            color: theme.colors.text.inverse,
-        },
-        outlined: {
-            color: colorValue,
-        },
-        dot: {
-            display: 'none',
-        },
-    } as const;
-}
+        const typeStyles = type === 'filled'
+            ? { borderWidth: 0, backgroundColor: colorValue }
+            : type === 'outlined'
+                ? { backgroundColor: 'transparent', borderWidth: 2, borderStyle: 'solid' as const, borderColor: colorValue }
+                : { minWidth: 8, width: 8, height: 8, paddingHorizontal: 0, paddingVertical: 0, backgroundColor: colorValue };
 
-/**
- * Generate badge container styles
- */
-function createBadgeStyles(theme: Theme) {
-    return ({ color }: Partial<BadgeVariants>) => {
         return {
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
             borderRadius: 9999,
+            ...typeStyles,
             variants: {
-                size: buildSizeVariants(theme, 'badge', (size) => ({
-                    minWidth: size.minWidth,
-                    height: size.height,
-                    paddingHorizontal: size.paddingHorizontal,
-                })),
-                type: createBadgeTypeVariants(theme, color),
+                // $iterator expands for each badge size
+                size: {
+                    minWidth: theme.sizes.$badge.minWidth,
+                    height: theme.sizes.$badge.height,
+                    paddingHorizontal: theme.sizes.$badge.paddingHorizontal,
+                },
             },
             _web: {
                 display: 'flex',
@@ -91,67 +54,48 @@ function createBadgeStyles(theme: Theme) {
                 lineHeight: 1,
             },
         } as const;
-    }
-}
+    },
 
-/**
- * Generate badge text styles
- */
-function createTextStyles(theme: Theme) {
-    return ({ color }: Partial<BadgeVariants>) => {
+    text: ({ color = 'primary', type = 'filled' }: BadgeDynamicProps) => {
+        const colorValue = getColorFromString(theme as unknown as BaseTheme, color);
+
+        const textColor = type === 'filled'
+            ? theme.colors.text.inverse
+            : type === 'outlined'
+                ? colorValue
+                : 'transparent'; // dot type hides text
+
         return {
-            fontWeight: '600',
-            textAlign: 'center',
+            fontWeight: '600' as const,
+            textAlign: 'center' as const,
+            color: textColor,
+            ...(type === 'dot' ? { display: 'none' as const } : {}),
             variants: {
-                size: buildSizeVariants(theme, 'badge', (size) => ({
-                    fontSize: size.fontSize,
-                    lineHeight: size.lineHeight,
-                })),
-                type: createTextTypeVariants(theme, color),
+                size: {
+                    fontSize: theme.sizes.$badge.fontSize,
+                    lineHeight: theme.sizes.$badge.lineHeight,
+                },
             },
         } as const;
-    };
-}
+    },
 
-/**
- * Create content styles
- */
-function createContentStyles() {
-    return () => ({
+    content: (_props: BadgeDynamicProps) => ({
         display: 'flex' as const,
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         gap: 4,
-    });
-}
+    }),
 
-/**
- * Create icon styles
- */
-function createIconStyles(theme: Theme) {
-    return () => ({
+    icon: (_props: BadgeDynamicProps) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         variants: {
-            size: buildSizeVariants(theme, 'badge', (size) => ({
-                width: size.iconSize,
-                height: size.iconSize,
-            })),
+            size: {
+                width: theme.sizes.$badge.iconSize,
+                height: theme.sizes.$badge.iconSize,
+            },
         },
-    });
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const badgeStyles = StyleSheet.create((theme: Theme) => {
-  // Apply extensions to main visual elements
-
-  return applyExtensions('Badge', theme, {badge: createBadgeStyles(theme),
-    text: createTextStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-    content: createContentStyles()(),
-    icon: createIconStyles(theme)()});
-});
+    }),
+}));

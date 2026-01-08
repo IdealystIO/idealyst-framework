@@ -1,48 +1,77 @@
+/**
+ * Screen styles using defineStyle with $iterator expansion.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme } from '@idealyst/theme';
-import {
-  buildGapVariants,
-  buildPaddingVariants,
-  buildPaddingVerticalVariants,
-  buildPaddingHorizontalVariants,
-  buildMarginVariants,
-  buildMarginVerticalVariants,
-  buildMarginHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
 
-function generateBackgroundVariants(theme: Theme) {
-  return {
-    primary: { backgroundColor: theme.colors.surface.primary },
-    secondary: { backgroundColor: theme.colors.surface.secondary },
-    tertiary: { backgroundColor: theme.colors.surface.tertiary },
-    inverse: { backgroundColor: theme.colors.surface.inverse },
-    'inverse-secondary': { backgroundColor: theme.colors.surface['inverse-secondary'] },
-    'inverse-tertiary': { backgroundColor: theme.colors.surface['inverse-tertiary'] },
-    transparent: { backgroundColor: 'transparent' },
-  };
-}
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+type ScreenBackground = 'primary' | 'secondary' | 'tertiary' | 'inverse' | 'inverse-secondary' | 'inverse-tertiary' | 'transparent';
+
+export type ScreenDynamicProps = {
+    background?: ScreenBackground;
+    safeArea?: boolean;
+    gap?: ViewStyleSize;
+    padding?: ViewStyleSize;
+    paddingVertical?: ViewStyleSize;
+    paddingHorizontal?: ViewStyleSize;
+    margin?: ViewStyleSize;
+    marginVertical?: ViewStyleSize;
+    marginHorizontal?: ViewStyleSize;
+};
 
 /**
- * Create dynamic screen styles.
- * Returns a function to ensure Unistyles can track theme changes.
+ * Screen styles with $iterator expansion for spacing variants.
+ *
+ * NOTE: Top-level theme access required for Unistyles reactivity.
  */
-function createScreenStyles(theme: Theme) {
-    return (_props?: {}) => ({
+export const screenStyles = defineStyle('Screen', (theme: Theme) => ({
+    screen: (_props: ScreenDynamicProps) => ({
         flex: 1,
+        // Theme marker for Unistyles reactivity
+        backgroundColor: theme.colors.surface.primary,
         variants: {
-            background: generateBackgroundVariants(theme),
+            background: {
+                primary: { backgroundColor: theme.colors.surface.primary },
+                secondary: { backgroundColor: theme.colors.surface.secondary },
+                tertiary: { backgroundColor: theme.colors.surface.tertiary },
+                inverse: { backgroundColor: theme.colors.surface.inverse },
+                'inverse-secondary': { backgroundColor: theme.colors.surface['inverse-secondary'] },
+                'inverse-tertiary': { backgroundColor: theme.colors.surface['inverse-tertiary'] },
+                transparent: { backgroundColor: 'transparent' },
+            },
             safeArea: {
                 true: {},
                 false: {},
             },
-            gap: buildGapVariants(theme),
-            padding: buildPaddingVariants(theme),
-            paddingVertical: buildPaddingVerticalVariants(theme),
-            paddingHorizontal: buildPaddingHorizontalVariants(theme),
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
+            // $iterator expands for each view size
+            gap: {
+                gap: theme.sizes.$view.spacing,
+            },
+            padding: {
+                padding: theme.sizes.$view.padding,
+            },
+            paddingVertical: {
+                paddingVertical: theme.sizes.$view.padding,
+            },
+            paddingHorizontal: {
+                paddingHorizontal: theme.sizes.$view.padding,
+            },
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
         },
         _web: {
             overflow: 'auto',
@@ -51,37 +80,46 @@ function createScreenStyles(theme: Theme) {
             minHeight: '100%',
             boxSizing: 'border-box',
         },
-    });
-}
+    }),
 
-/**
- * Create dynamic screen content styles for ScrollView.
- * No flex: 1 so content can grow beyond screen height.
- */
-function createScreenContentStyles(theme: Theme) {
-    return (_props?: {}) => ({
+    screenContent: (_props: ScreenDynamicProps) => ({
+        // Theme marker for Unistyles reactivity
+        backgroundColor: theme.colors.surface.primary,
         variants: {
-            background: generateBackgroundVariants(theme),
+            background: {
+                primary: { backgroundColor: theme.colors.surface.primary },
+                secondary: { backgroundColor: theme.colors.surface.secondary },
+                tertiary: { backgroundColor: theme.colors.surface.tertiary },
+                inverse: { backgroundColor: theme.colors.surface.inverse },
+                'inverse-secondary': { backgroundColor: theme.colors.surface['inverse-secondary'] },
+                'inverse-tertiary': { backgroundColor: theme.colors.surface['inverse-tertiary'] },
+                transparent: { backgroundColor: 'transparent' },
+            },
             safeArea: {
                 true: {},
                 false: {},
             },
-            gap: buildGapVariants(theme),
-            padding: buildPaddingVariants(theme),
-            paddingVertical: buildPaddingVerticalVariants(theme),
-            paddingHorizontal: buildPaddingHorizontalVariants(theme),
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
+            gap: {
+                gap: theme.sizes.$view.spacing,
+            },
+            padding: {
+                padding: theme.sizes.$view.padding,
+            },
+            paddingVertical: {
+                paddingVertical: theme.sizes.$view.padding,
+            },
+            paddingHorizontal: {
+                paddingHorizontal: theme.sizes.$view.padding,
+            },
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
         },
-    });
-}
-
-// Styles use applyExtensions to enable theme extensions and ensure proper
-// reactivity with Unistyles' native Shadow Tree updates.
-export const screenStyles = StyleSheet.create((theme: Theme) => {
-    return applyExtensions('Screen', theme, {
-        screen: createScreenStyles(theme),
-        screenContent: createScreenContentStyles(theme),
-    });
-});
+    }),
+}));

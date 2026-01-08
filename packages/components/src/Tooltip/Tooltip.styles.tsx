@@ -1,57 +1,34 @@
+/**
+ * Tooltip styles using defineStyle with $iterator expansion.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 
-type TooltipSize = Size;
-type TooltipIntent = Intent;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
 
-type TooltipTooltipVariants = {
-    size: TooltipSize;
-    intent: TooltipIntent;
-}
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
 
-export type ExpandedTooltipTooltipStyles = StylesheetStyles<keyof TooltipTooltipVariants>;
-export type ExpandedTooltipStyles = StylesheetStyles<never>;
+export type TooltipDynamicProps = {
+    size?: Size;
+    intent?: Intent;
+};
 
-export type TooltipStylesheet = {
-    container: ExpandedTooltipStyles;
-    tooltip: ExpandedTooltipTooltipStyles;
-}
-
-function createTooltipSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'tooltip', (size) => ({
-        fontSize: size.fontSize,
-        padding: size.padding,
-    }));
-}
-
-function createTooltipIntentVariants(theme: Theme) {
-    const intents: Record<string, any> = {};
-
-    for (const [intentName, intentValue] of Object.entries(theme.intents)) {
-        intents[intentName] = {
-            backgroundColor: intentValue.primary,
-            color: intentValue.contrast,
-        };
-    }
-
-    return intents;
-}
-
-// Style creators for extension support
-function createContainerStyles() {
-    return () => ({
+/**
+ * Tooltip styles with size and intent variants.
+ */
+export const tooltipStyles = defineStyle('Tooltip', (theme: Theme) => ({
+    container: (_props: TooltipDynamicProps) => ({
         position: 'relative' as const,
         _web: {
             display: 'inline-flex',
             width: 'fit-content',
         },
-    });
-}
+    }),
 
-function createTooltipStyles(theme: Theme) {
-    return () => ({
+    tooltip: (_props: TooltipDynamicProps) => ({
         borderRadius: 8,
         maxWidth: 300,
         shadowColor: '#000',
@@ -60,8 +37,16 @@ function createTooltipStyles(theme: Theme) {
         shadowRadius: 8,
         elevation: 4,
         variants: {
-            size: createTooltipSizeVariants(theme),
-            intent: createTooltipIntentVariants(theme),
+            // $iterator expands for each tooltip size
+            size: {
+                fontSize: theme.sizes.$tooltip.fontSize,
+                padding: theme.sizes.$tooltip.padding,
+            },
+            // $iterator expands for each intent
+            intent: {
+                backgroundColor: theme.$intents.primary,
+                color: theme.$intents.contrast,
+            },
         },
         _web: {
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
@@ -69,14 +54,5 @@ function createTooltipStyles(theme: Theme) {
             width: 'max-content',
             wordWrap: 'break-word',
         },
-    });
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const tooltipStyles = StyleSheet.create((theme: Theme) => {
-    return applyExtensions('Tooltip', theme, {
-        container: createContainerStyles(),
-        tooltip: createTooltipStyles(theme),
-    });
-});
+    }),
+}));

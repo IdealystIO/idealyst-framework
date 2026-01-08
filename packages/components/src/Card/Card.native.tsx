@@ -2,7 +2,7 @@ import React, { forwardRef, ComponentRef, useMemo } from 'react';
 import { View, Pressable } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import { CardProps } from './types';
-import { cardStyles, getCardBorderRadius } from './Card.styles';
+import { cardStyles } from './Card.styles';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 
 const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, CardProps>(({
@@ -44,11 +44,10 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
     });
   }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, clickable, accessibilityPressed]);
 
-  // Get theme for radii values
-  const { theme } = useUnistyles();
-
-  // Apply variants (for spacing only - radius is applied directly below)
+  // Apply variants
   cardStyles.useVariants({
+    type,
+    radius,
     clickable,
     disabled,
     gap,
@@ -60,11 +59,8 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
     marginHorizontal,
   });
 
-  // Get dynamic card style with type and intent props
-  const cardStyle = (cardStyles.card as any)({ type, intent });
-
-  // Get border radius from theme - variants don't work with dynamic styles on iOS
-  const borderRadius = getCardBorderRadius(theme, radius);
+  // Get card style
+  const cardStyle = (cardStyles.card as any)({});
 
   // Use appropriate component based on clickable state
   const Component = clickable ? Pressable : View;
@@ -72,7 +68,7 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
   const componentProps = {
     ref,
     nativeID: id,
-    style: [cardStyle, { borderRadius }, style],
+    style: [cardStyle, style],
     testID,
     ...nativeA11yProps,
     ...(clickable && {

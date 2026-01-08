@@ -82,10 +82,10 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
     marginHorizontal,
   });
 
-  const trackProps = getWebProps([(switchStyles.switchTrack as any)({ checked, intent })]);
+  const trackProps = getWebProps([(switchStyles.switchTrack as any)({ checked, intent, disabled })]);
   const thumbProps = getWebProps([(switchStyles.switchThumb as any)({ size, checked })]);
   const thumbIconProps = getWebProps([(switchStyles.thumbIcon as any)({ checked, intent })]);
-  const labelProps = getWebProps([switchStyles.label]);
+  const labelProps = getWebProps([(switchStyles.label as any)({ disabled, labelPosition })]);
 
   // Helper to render icon
   const renderIcon = () => {
@@ -109,9 +109,9 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   };
 
   // Computed button props with dynamic styles
-  const computedButtonProps = getWebProps(
-    switchStyles.switchContainer
-  );
+  const computedButtonProps = getWebProps([
+    (switchStyles.switchContainer as any)({})
+  ]);
 
   // Computed container props with dynamic styles (for when label exists)
   const computedContainerProps = getWebProps([

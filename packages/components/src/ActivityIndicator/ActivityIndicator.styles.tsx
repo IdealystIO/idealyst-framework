@@ -1,52 +1,56 @@
+/**
+ * ActivityIndicator styles using defineStyle with $iterator expansion.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size} from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 
-type ActivityIndicatorSize = Size;
-type ActivityIndicatorIntent = Intent;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
 
-type ActivityIndicatorVariants = {
-    size: ActivityIndicatorSize;
-    intent: ActivityIndicatorIntent;
-    animating: boolean;
-}
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
 
-export type ExpandedActivityIndicatorStyles = StylesheetStyles<keyof ActivityIndicatorVariants>;
+export type ActivityIndicatorDynamicProps = {
+    size?: Size;
+    intent?: Intent;
+    animating?: boolean;
+};
 
-export type ActivityIndicatorStylesheet = {
-    container: ExpandedActivityIndicatorStyles;
-    spinner: ExpandedActivityIndicatorStyles;
-}
+/**
+ * ActivityIndicator styles with size and intent handling.
+ */
+export const activityIndicatorStyles = defineStyle('ActivityIndicator', (theme: Theme) => ({
+    container: (_props: ActivityIndicatorDynamicProps) => ({
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        variants: {
+            // $iterator expands for each activityIndicator size
+            size: {
+                width: theme.sizes.$activityIndicator.size,
+                height: theme.sizes.$activityIndicator.size,
+            },
+            animating: {
+                true: { opacity: 1 },
+                false: { opacity: 0 },
+            },
+        },
+    }),
 
-function createContainerSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'activityIndicator', (size) => ({
-        width: size.size,
-        height: size.size,
-    }));
-}
+    spinner: ({ intent = 'primary' }: ActivityIndicatorDynamicProps) => {
+        // Inline color access for Unistyles to trace
+        const color = theme.intents[intent].primary;
 
-function createSpinnerSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'activityIndicator', (size) => ({
-        width: size.size,
-        height: size.size,
-        borderWidth: size.borderWidth,
-    }));
-}
-
-function getSpinnerColor(theme: Theme, intent: ActivityIndicatorIntent) {
-    return theme.intents[intent].primary;
-}
-
-function createSpinnerStyles(theme: Theme) {
-    return ({ intent }: Partial<ActivityIndicatorVariants>) => {
-        const color = getSpinnerColor(theme, intent);
         return {
             borderRadius: 9999,
-            borderStyle: 'solid',
+            borderStyle: 'solid' as const,
             color,
             variants: {
-                size: createSpinnerSizeVariants(theme),
+                size: {
+                    width: theme.sizes.$activityIndicator.size,
+                    height: theme.sizes.$activityIndicator.size,
+                    borderWidth: theme.sizes.$activityIndicator.borderWidth,
+                },
                 animating: {
                     true: {},
                     false: {},
@@ -60,35 +64,5 @@ function createSpinnerStyles(theme: Theme) {
                 boxSizing: 'border-box',
             },
         } as const;
-    }
-}
-
-// Style creators for extension support
-function createContainerStyles(theme: Theme) {
-    return () => ({
-        alignItems: 'center' as const,
-        justifyContent: 'center' as const,
-        variants: {
-            size: createContainerSizeVariants(theme),
-            animating: {
-                true: {
-                    opacity: 1,
-                },
-                false: {
-                    opacity: 0,
-                },
-            },
-        },
-    });
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const activityIndicatorStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-    return applyExtensions('ActivityIndicator', theme, {
-        container: createContainerStyles(theme),
-        spinner: createSpinnerStyles(theme),
-    });
-});
+    },
+}));

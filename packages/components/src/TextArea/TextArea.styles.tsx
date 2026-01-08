@@ -1,106 +1,96 @@
+/**
+ * TextArea styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import {
-  buildMarginVariants,
-  buildMarginVerticalVariants,
-  buildMarginHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
-import { TextAreaIntentVariant } from './types';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
+
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+type ResizeMode = 'none' | 'vertical' | 'horizontal' | 'both';
+
+export type TextAreaDynamicProps = {
+    size?: Size;
+    intent?: Intent;
+    disabled?: boolean;
+    hasError?: boolean;
+    resize?: ResizeMode;
+    isNearLimit?: boolean;
+    isAtLimit?: boolean;
+    margin?: ViewStyleSize;
+    marginVertical?: ViewStyleSize;
+    marginHorizontal?: ViewStyleSize;
+};
 
 /**
- * Create size variants for textarea
+ * TextArea styles with intent/disabled/error handling.
  */
-function createTextareaSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'textarea', (size) => ({
-        fontSize: size.fontSize,
-        padding: size.padding,
-        lineHeight: size.lineHeight,
-        minHeight: size.minHeight,
-    }));
-}
-
-/**
- * Get textarea styles based on intent, disabled, and hasError state
- */
-function getTextareaIntentStyles(theme: Theme, intent: TextAreaIntentVariant, disabled: boolean, hasError: boolean) {
-    if (disabled || hasError) {
-        return {} as const;
-    }
-
-    const intentValue = theme.intents[intent];
-    const baseStyles: any = {};
-
-    // For success and warning, set border color
-    if (intent === 'success' || intent === 'warning') {
-        baseStyles.borderColor = intentValue.primary;
-    }
-
-    // Focus styles for all intents when not disabled and not in error
-    baseStyles._web = {
-        _focus: {
-            borderColor: intentValue.primary,
-            boxShadow: `0 0 0 2px ${intentValue.primary}33`,
+export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
+    container: (_props: TextAreaDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        gap: 4,
+        variants: {
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
         },
-    };
+    }),
 
-    return baseStyles;
-}
+    label: ({ disabled = false }: TextAreaDynamicProps) => ({
+        fontSize: 14,
+        fontWeight: '500' as const,
+        color: theme.colors.text.primary,
+        opacity: disabled ? 0.5 : 1,
+    }),
 
-const createTextareaStyles = (theme: Theme) => {
-    return ({ intent, disabled, hasError }: { intent: TextAreaIntentVariant, disabled: boolean, hasError: boolean }) => {
-        const intentStyles = getTextareaIntentStyles(theme, intent, disabled, hasError);
+    textareaContainer: (_props: TextAreaDynamicProps) => ({
+        position: 'relative' as const,
+    }),
+
+    textarea: ({ intent = 'primary', disabled = false, hasError = false, resize = 'none' }: TextAreaDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const errorColor = theme.intents.error.primary;
+
+        // Get border color based on state
+        let borderColor = theme.colors.border.primary;
+        if (hasError) {
+            borderColor = errorColor;
+        } else if (intent === 'success' || intent === 'warning') {
+            borderColor = intentValue.primary;
+        }
+
+        // Get web-specific styles
+        const webFocusStyles = hasError
+            ? { borderColor: errorColor, boxShadow: `0 0 0 2px ${errorColor}33` }
+            : { borderColor: intentValue.primary, boxShadow: `0 0 0 2px ${intentValue.primary}33` };
 
         return {
             width: '100%',
             color: theme.colors.text.primary,
-            backgroundColor: theme.colors.surface.primary,
+            backgroundColor: disabled ? theme.colors.surface.secondary : theme.colors.surface.primary,
             borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme.colors.border.primary,
+            borderStyle: 'solid' as const,
+            borderColor,
             borderRadius: 8,
-            lineHeight: 'normal',
-            ...intentStyles,
+            opacity: disabled ? 0.5 : 1,
             variants: {
-                size: createTextareaSizeVariants(theme),
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                        backgroundColor: theme.colors.surface.secondary,
-                        _web: {
-                            cursor: 'not-allowed',
-                        },
-                    },
-                    false: {},
-                },
-                hasError: {
-                    true: {
-                        borderColor: theme.intents.error.primary,
-                    },
-                    false: {},
-                },
-                resize: {
-                    none: {
-                        _web: {
-                            resize: 'none',
-                        },
-                    },
-                    vertical: {
-                        _web: {
-                            resize: 'vertical',
-                        },
-                    },
-                    horizontal: {
-                        _web: {
-                            resize: 'horizontal',
-                        },
-                    },
-                    both: {
-                        _web: {
-                            resize: 'both',
-                        },
-                    },
+                size: {
+                    fontSize: theme.sizes.$textarea.fontSize,
+                    padding: theme.sizes.$textarea.padding,
+                    lineHeight: theme.sizes.$textarea.lineHeight,
+                    minHeight: theme.sizes.$textarea.minHeight,
                 },
             },
             _web: {
@@ -109,105 +99,32 @@ const createTextareaStyles = (theme: Theme) => {
                 transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
                 boxSizing: 'border-box',
                 overflowY: 'hidden',
+                cursor: disabled ? 'not-allowed' : 'text',
+                resize: resize,
+                _focus: disabled ? {} : webFocusStyles,
             },
         } as const;
-    }
-}
+    },
 
-// Helper functions to create static styles wrapped in dynamic functions
-function createContainerStyles(theme: Theme) {
-    return () => ({
-        display: 'flex' as const,
-        flexDirection: 'column' as const,
-        gap: 4,
-        variants: {
-            // Spacing variants from FormInputStyleProps
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
-        },
-    });
-}
-
-function createLabelStyles(theme: Theme) {
-    return () => ({
-        fontSize: 14,
-        fontWeight: '500' as const,
-        color: theme.colors.text.primary,
-        variants: {
-            disabled: {
-                true: {
-                    opacity: 0.5,
-                },
-                false: {},
-            },
-        },
-    });
-}
-
-function createTextareaContainerStyles() {
-    return () => ({
-        position: 'relative' as const,
-    });
-}
-
-function createHelperTextStyles(theme: Theme) {
-    return () => ({
+    helperText: ({ hasError = false }: TextAreaDynamicProps) => ({
         fontSize: 12,
-        color: theme.colors.text.secondary,
-        variants: {
-            hasError: {
-                true: {
-                    color: theme.intents.error.primary,
-                },
-                false: {},
-            },
-        },
-    });
-}
+        color: hasError ? theme.intents.error.primary : theme.colors.text.secondary,
+    }),
 
-function createFooterStyles() {
-    return () => ({
+    footer: (_props: TextAreaDynamicProps) => ({
         display: 'flex' as const,
         flexDirection: 'row' as const,
         justifyContent: 'space-between' as const,
         alignItems: 'center' as const,
         gap: 4,
-    });
-}
+    }),
 
-function createCharacterCountStyles(theme: Theme) {
-    return () => ({
+    characterCount: ({ isNearLimit = false, isAtLimit = false }: TextAreaDynamicProps) => ({
         fontSize: 12,
-        color: theme.colors.text.secondary,
-        variants: {
-            isNearLimit: {
-                true: {
-                    color: theme.intents.warning.primary,
-                },
-                false: {},
-            },
-            isAtLimit: {
-                true: {
-                    color: theme.intents.error.primary,
-                },
-                false: {},
-            },
-        },
-    });
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const textAreaStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-
-    return applyExtensions('TextArea', theme, {container: createContainerStyles(theme),
-        textarea: createTextareaStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        label: createLabelStyles(theme)(),
-        textareaContainer: createTextareaContainerStyles()(),
-        helperText: createHelperTextStyles(theme)(),
-        footer: createFooterStyles()(),
-        characterCount: createCharacterCountStyles(theme)()});
-});
+        color: isAtLimit
+            ? theme.intents.error.primary
+            : isNearLimit
+                ? theme.intents.warning.primary
+                : theme.colors.text.secondary,
+    }),
+}));

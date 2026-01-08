@@ -1,81 +1,71 @@
+/**
+ * Icon styles using defineStyle with dynamic functions.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Color, getColorFromString } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
+import { defineStyle, ThemeStyleWrapper, getColorFromString } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Color } from '@idealyst/theme';
 import { IconSizeVariant } from './types';
-import { applyExtensions } from '../extensions/applyExtension';
 
-type IconVariants = {
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+export type IconVariants = {
     size: IconSizeVariant;
     intent?: Intent;
     color?: Color;
-}
+};
 
-export type ExpandedIconStyles = StylesheetStyles<keyof IconVariants>;
-
-export type IconStylesheet = {
-    icon: ExpandedIconStyles;
-}
+export type IconDynamicProps = Partial<IconVariants>;
 
 /**
- * Create color variants for icon
+ * Icon styles with dynamic color/size handling.
  */
-function getIconColor(theme: Theme, color?: Color, intent?: Intent): string {
-    if (intent) {
-        return theme.intents[intent]?.primary
-    } else if (color) {
-        return getColorFromString(theme, color);
-    }
-    return theme.colors.text.primary;
-}
+export const iconStyles = defineStyle('Icon', (theme: Theme) => ({
+    icon: ({ color, intent, size = 'md' }: IconDynamicProps) => {
+        // Handle size - can be a named size or number
+        let iconWidth: number;
+        let iconHeight: number;
 
-export function buildIconSize(theme: Theme, size?: IconSizeVariant) {
-    // Handle direct numeric sizes
-    if (typeof size === 'number') {
+        if (typeof size === 'number') {
+            iconWidth = size;
+            iconHeight = size;
+        } else {
+            const sizeKey = size || 'md';
+            const iconSize = theme.sizes.icon[sizeKey];
+            if (typeof iconSize === 'number') {
+                iconWidth = iconSize;
+                iconHeight = iconSize;
+            } else {
+                iconWidth = (iconSize?.width as number) ?? 24;
+                iconHeight = (iconSize?.height as number) ?? 24;
+            }
+        }
+
+        // Get color - intent takes priority, then color prop, then default
+        const iconColor = intent
+            ? theme.intents[intent]?.primary
+            : color
+                ? getColorFromString(theme as unknown as BaseTheme, color)
+                : theme.colors.text.primary;
+
         return {
-            width: size,
-            height: size,
-        };
-    }
-
-    // Default to 'md' if size is undefined
-    const sizeKey = size || 'md';
-    const iconSize = theme.sizes.icon[sizeKey];
-
-    if (typeof iconSize === 'number') {
-        return {
-            width: iconSize,
-            height: iconSize,
-        };
-    }
-
-    return buildSizeVariants(theme, 'icon', (size) => ({
-        width: size.width,
-        height: size.height,
-    }))[sizeKey];
-}
-
-function createIconStyles(theme: Theme) {
-    return ({ color, intent, size }: Partial<IconVariants>) => {
-        const iconSize = buildIconSize(theme, size);
-        return {
-            width: iconSize.width,
-            height: iconSize.height,
-            color: getIconColor(theme, color, intent),
+            width: iconWidth,
+            height: iconHeight,
+            color: iconColor,
             _web: {
-                display: 'inline-block',
+                fontSize: iconWidth,
+                width: '1em',
+                height: '1em',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 verticalAlign: 'middle',
                 flexShrink: 0,
-                lineHeight: 0,
+                lineHeight: 1,
             },
         } as const;
-    }
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const iconStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-    return applyExtensions('Icon', theme, {
-        icon: createIconStyles(theme),
-    });
-});
+    },
+}));

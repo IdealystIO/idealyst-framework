@@ -35,6 +35,7 @@ export default defineConfig({
                 '@idealyst/navigation',
                 '@idealyst/theme',
               ],
+            themePath: '../shared/src/unistyles.ts',
               debug: true,
             }
           ],

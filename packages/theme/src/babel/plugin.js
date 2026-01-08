@@ -29,7 +29,7 @@
  *   }))
  */
 
-const nodePath = require('path');
+const { loadThemeKeys } = require('./theme-analyzer');
 
 // ============================================================================
 // Global Extension Registry - Persists across files during build
@@ -48,80 +48,6 @@ function getOrCreateEntry(componentName) {
         };
     }
     return styleRegistry[componentName];
-}
-
-// ============================================================================
-// Theme Key Extraction
-// ============================================================================
-
-let themeKeys = null;
-let themeLoadAttempted = false;
-
-function extractThemeKeys(theme) {
-    const keys = {
-        intents: [],
-        sizes: {},
-        radii: [],
-        shadows: [],
-    };
-
-    if (theme.intents && typeof theme.intents === 'object') {
-        keys.intents = Object.keys(theme.intents);
-    }
-    if (theme.radii && typeof theme.radii === 'object') {
-        keys.radii = Object.keys(theme.radii);
-    }
-    if (theme.shadows && typeof theme.shadows === 'object') {
-        keys.shadows = Object.keys(theme.shadows);
-    }
-    if (theme.sizes && typeof theme.sizes === 'object') {
-        for (const [componentName, sizeObj] of Object.entries(theme.sizes)) {
-            if (sizeObj && typeof sizeObj === 'object') {
-                keys.sizes[componentName] = Object.keys(sizeObj);
-            }
-        }
-    }
-
-    return keys;
-}
-
-function loadThemeKeys(themePath, rootDir) {
-    if (themeLoadAttempted) return themeKeys;
-    themeLoadAttempted = true;
-
-    try {
-        const resolvedPath = themePath.startsWith('.')
-            ? nodePath.resolve(rootDir, themePath)
-            : themePath;
-
-        const resolved = require.resolve(resolvedPath);
-        delete require.cache[resolved];
-
-        const themeModule = require(resolved);
-        const theme = themeModule.lightTheme || themeModule.theme || themeModule.default;
-
-        if (theme) {
-            themeKeys = extractThemeKeys(theme);
-            console.log('[idealyst-plugin] Loaded theme keys:', {
-                intents: themeKeys.intents,
-                sizeComponents: Object.keys(themeKeys.sizes),
-            });
-        }
-    } catch (err) {
-        themeKeys = {
-            intents: ['primary', 'success', 'error', 'warning', 'info', 'neutral'],
-            sizes: {
-                button: ['xs', 'sm', 'md', 'lg', 'xl'],
-                text: ['xs', 'sm', 'md', 'lg', 'xl'],
-                view: ['xs', 'sm', 'md', 'lg', 'xl'],
-                typography: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2', 'body1', 'body2', 'caption'],
-            },
-            radii: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
-            shadows: ['none', 'sm', 'md', 'lg', 'xl'],
-        };
-    }
-
-    return themeKeys;
 }
 
 // ============================================================================
@@ -295,11 +221,58 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
             );
         }
 
+        // Handle TSAsExpression (e.g., { ... } as const)
+        if (t.isTSAsExpression(node)) {
+            const processedExpr = processNode(node.expression, depth + 1);
+            return t.tsAsExpression(processedExpr, node.typeAnnotation);
+        }
+
+        // Handle ParenthesizedExpression
+        if (t.isParenthesizedExpression(node)) {
+            const processedExpr = processNode(node.expression, depth + 1);
+            return t.parenthesizedExpression(processedExpr);
+        }
+
+        // Handle BlockStatement (for nested arrow functions with block bodies)
+        if (t.isBlockStatement(node)) {
+            const newBody = node.body.map(stmt => {
+                if (t.isReturnStatement(stmt) && stmt.argument) {
+                    return t.returnStatement(processNode(stmt.argument, depth + 1));
+                }
+                // Handle variable declarations that might contain style objects
+                if (t.isVariableDeclaration(stmt)) {
+                    return t.variableDeclaration(
+                        stmt.kind,
+                        stmt.declarations.map(decl => {
+                            if (decl.init) {
+                                return t.variableDeclarator(decl.id, processNode(decl.init, depth + 1));
+                            }
+                            return decl;
+                        })
+                    );
+                }
+                return stmt;
+            });
+            return t.blockStatement(newBody);
+        }
+
         return node;
     }
 
-    if (t.isObjectExpression(cloned.body)) {
-        cloned.body = processNode(cloned.body);
+    // Handle the callback body - may be ObjectExpression, TSAsExpression, ParenthesizedExpression, or BlockStatement
+    let bodyToProcess = cloned.body;
+
+    // Unwrap ParenthesizedExpression
+    if (t.isParenthesizedExpression(bodyToProcess)) {
+        bodyToProcess = bodyToProcess.expression;
+    }
+
+    // Unwrap TSAsExpression
+    if (t.isTSAsExpression(bodyToProcess)) {
+        const processedExpr = processNode(bodyToProcess.expression);
+        cloned.body = t.tsAsExpression(processedExpr, bodyToProcess.typeAnnotation);
+    } else if (t.isObjectExpression(bodyToProcess)) {
+        cloned.body = processNode(bodyToProcess);
     } else if (t.isBlockStatement(cloned.body)) {
         cloned.body.body = cloned.body.body.map(stmt => {
             if (t.isReturnStatement(stmt) && stmt.argument) {
@@ -314,6 +287,8 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
 
 function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expandedVariants) {
     const newProperties = [];
+
+    verbose(`    expandVariantsObject: processing ${variantsObj.properties?.length || 0} properties`);
 
     for (const prop of variantsObj.properties) {
         if (!t.isObjectProperty(prop)) {
@@ -331,10 +306,13 @@ function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expande
             continue;
         }
 
+        verbose(`      Checking variant: ${variantName}`);
         const iteratorInfo = findIteratorPattern(t, prop.value, themeParam);
+        verbose(`      Iterator info for ${variantName}: ${JSON.stringify(iteratorInfo)}`);
 
         if (iteratorInfo) {
             verbose(`      Expanding ${variantName} variant with ${iteratorInfo.type} iterator`);
+            verbose(`      Keys available: ${JSON.stringify(keys?.sizes?.[iteratorInfo.componentName] || keys?.intents || [])}`);
             const expanded = expandVariantWithIterator(t, prop.value, themeParam, keys, iteratorInfo, verbose);
             newProperties.push(t.objectProperty(prop.key, expanded));
 
@@ -350,10 +328,10 @@ function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expande
     return t.objectExpression(newProperties);
 }
 
-function findIteratorPattern(t, node, themeParam) {
+function findIteratorPattern(t, node, themeParam, debugLog = () => {}) {
     let result = null;
 
-    function walk(n) {
+    function walk(n, path = '') {
         if (!n || typeof n !== 'object' || result) return;
 
         if (t.isMemberExpression(n)) {
@@ -539,6 +517,9 @@ function buildMemberExpression(t, base, chain) {
 // ============================================================================
 
 module.exports = function idealystStylesPlugin({ types: t }) {
+    // Store babel types for use in extractThemeKeysFromAST
+    babelTypes = t;
+
     let debugMode = false;
     let verboseMode = false;
 
@@ -555,7 +536,7 @@ module.exports = function idealystStylesPlugin({ types: t }) {
     }
 
     // Log plugin initialization
-    console.log('[idealyst-plugin] Plugin loaded (build-time merge version)');
+    console.log('[idealyst-plugin] Plugin loaded (AST-based theme analysis)');
 
     return {
         name: 'idealyst-styles',
@@ -570,7 +551,7 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     const shouldProcess =
                         opts.processAll ||
                         (opts.autoProcessPaths?.some(p => filename.includes(p)));
-                        
+
                     state.needsStyleSheetImport = false;
                     state.hasStyleSheetImport = false;
 
@@ -589,13 +570,12 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     });
                 },
                 exit(path, state) {
-                    const filename = state.filename || '';
-
-                    // Always ensure StyleSheet import when needed
+                    // Always ensure StyleSheet import and marker when needed
                     // (existing import might have been removed by tree-shaking)
                     if (state.needsStyleSheetImport) {
                         // Check if StyleSheet is currently in the AST
                         let hasStyleSheet = false;
+                        let hasVoidMarker = false;
                         let unistylesImport = null;
 
                         path.traverse({
@@ -608,6 +588,13 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                                             hasStyleSheet = true;
                                         }
                                     }
+                                }
+                            },
+                            // Check for existing void StyleSheet; marker
+                            ExpressionStatement(exprPath) {
+                                if (t.isUnaryExpression(exprPath.node.expression, { operator: 'void' }) &&
+                                    t.isIdentifier(exprPath.node.expression.argument, { name: 'StyleSheet' })) {
+                                    hasVoidMarker = true;
                                 }
                             }
                         });
@@ -626,6 +613,25 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                                 );
                                 path.unshiftContainer('body', importDecl);
                             }
+                        }
+
+                        // Add void StyleSheet; marker so Unistyles detects the file
+                        // This must be present for Unistyles to process the file
+                        if (!hasVoidMarker) {
+                            const voidMarker = t.expressionStatement(
+                                t.unaryExpression('void', t.identifier('StyleSheet'))
+                            );
+                            // Insert after imports (find first non-import statement)
+                            const body = path.node.body;
+                            let insertIndex = 0;
+                            for (let i = 0; i < body.length; i++) {
+                                if (!t.isImportDeclaration(body[i])) {
+                                    insertIndex = i;
+                                    break;
+                                }
+                                insertIndex = i + 1;
+                            }
+                            body.splice(insertIndex, 0, voidMarker);
                         }
                     }
                 }
@@ -674,8 +680,7 @@ module.exports = function idealystStylesPlugin({ types: t }) {
 
                     // Load theme keys and expand iterators
                     const rootDir = opts.rootDir || state.cwd || process.cwd();
-                    const themePath = opts.themePath || '@idealyst/theme';
-                    const keys = loadThemeKeys(themePath, rootDir);
+                    const keys = loadThemeKeys(opts, rootDir, t, verboseMode);
                     const expandedVariants = [];
                     const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
 
@@ -719,8 +724,7 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     }
 
                     const rootDir = opts.rootDir || state.cwd || process.cwd();
-                    const themePath = opts.themePath || '@idealyst/theme';
-                    const keys = loadThemeKeys(themePath, rootDir);
+                    const keys = loadThemeKeys(opts, rootDir, t, verboseMode);
                     const expandedVariants = [];
                     const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
 
@@ -764,9 +768,17 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     }
 
                     const rootDir = opts.rootDir || state.cwd || process.cwd();
-                    const themePath = opts.themePath || '@idealyst/theme';
-                    const keys = loadThemeKeys(themePath, rootDir);
+                    const keys = loadThemeKeys(opts, rootDir, t, verboseMode);
                     const expandedVariants = [];
+
+                    // Debug for View only
+                    if (componentName === 'View') {
+                        console.log(`\n========== VIEW KEYS DEBUG ==========`);
+                        console.log(`rootDir: ${rootDir}`);
+                        console.log(`keys.sizes.view: ${JSON.stringify(keys?.sizes?.view)}`);
+                        console.log(`keys.intents: ${JSON.stringify(keys?.intents)}`);
+                        console.log(`======================================\n`);
+                    }
 
                     try {
                         // Expand iterators in the base callback
@@ -809,6 +821,14 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                         if (expandedVariants.length > 0) {
                             debug(`     Expanded: ${expandedVariants.map(v => `${v.variant}(${v.iterator})`).join(', ')}`);
                         }
+
+                        // Output generated code when verbose
+                        if (verboseMode) {
+                            const generate = require('@babel/generator').default;
+                            const output = generate(newCall);
+                            console.log(`[idealyst-plugin] Generated code for ${componentName}:`);
+                            console.log(output.code.substring(0, 2000) + (output.code.length > 2000 ? '...' : ''));
+                        }
                     } catch (err) {
                         console.error(`[idealyst-plugin] ERROR transforming defineStyle('${componentName}'):`, err);
                     }
@@ -835,8 +855,7 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     }
 
                     const rootDir = opts.rootDir || state.cwd || process.cwd();
-                    const themePath = opts.themePath || '@idealyst/theme';
-                    const keys = loadThemeKeys(themePath, rootDir);
+                    const keys = loadThemeKeys(opts, rootDir, t, verboseMode);
                     const expandedVariants = [];
 
                     const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);

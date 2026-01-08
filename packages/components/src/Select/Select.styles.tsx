@@ -1,157 +1,162 @@
+/**
+ * Select styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles, Intent, Size } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import {
-  buildMarginVariants,
-  buildMarginVerticalVariants,
-  buildMarginHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
-import { SelectIntentVariant } from './types';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
 
-// Type definitions
-type SelectSize = Size;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
 type SelectType = 'outlined' | 'filled';
 
-type SelectTriggerVariants = {
-    type: SelectType;
-    size: SelectSize;
-    intent: SelectIntentVariant;
-    disabled: boolean;
-    error: boolean;
-    focused: boolean;
-}
+export type SelectDynamicProps = {
+    size?: Size;
+    intent?: Intent;
+    type?: SelectType;
+    disabled?: boolean;
+    error?: boolean;
+    focused?: boolean;
+    margin?: ViewStyleSize;
+    marginVertical?: ViewStyleSize;
+    marginHorizontal?: ViewStyleSize;
+};
 
-
-export type ExpandedSelectTriggerStyles = StylesheetStyles<keyof SelectTriggerVariants>;
-export type ExpandedSelectStyles = StylesheetStyles<never>;
-
-function createTriggerTypeVariants(theme: Theme) {
-    return {
-        outlined: {
-            backgroundColor: theme.colors.surface.primary,
-            borderColor: theme.colors.border.primary,
-            _web: {
-                border: `1px solid ${theme.colors.border.primary}`,
+/**
+ * Select styles with type/intent/error/focused handling.
+ */
+export const selectStyles = defineStyle('Select', (theme: Theme) => ({
+    container: (_props: SelectDynamicProps) => ({
+        position: 'relative' as const,
+        variants: {
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
             },
         },
-        filled: {
-            backgroundColor: theme.colors.surface.secondary,
-            borderColor: 'transparent',
-            _web: {
-                border: '1px solid transparent',
-            },
-        },
-    } as const;
-}
+    }),
 
-function createTriggerSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'select', (size) => ({
-        paddingHorizontal: size.paddingHorizontal,
-        minHeight: size.minHeight,
-    }));
-}
+    label: (_props: SelectDynamicProps) => ({
+        fontSize: 14,
+        fontWeight: '500' as const,
+        color: theme.colors.text.primary,
+        marginBottom: 4,
+    }),
 
-function createIntentVariants(theme: Theme, type: SelectType, intent: SelectIntentVariant) {
-    if (intent === 'neutral') {
-        return {};
-    }
+    trigger: ({ type = 'outlined', intent = 'neutral', disabled = false, error = false, focused = false }: SelectDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const primaryIntent = theme.intents.primary;
+        const errorColor = theme.intents.error.primary;
 
-    const intentValue = (theme.intents as any)[intent];
+        // Background based on type
+        const backgroundColor = type === 'filled'
+            ? theme.colors.surface.secondary
+            : theme.colors.surface.primary;
 
-    if (type === 'outlined') {
-        return {
-            borderColor: intentValue.primary,
-            _web: {
-                border: `1px solid ${intentValue.primary}`,
-            },
-        } as const;
-    }
-
-    return {} as const;
-}
-
-function buildDynamicTriggerStyles(theme: Theme) {
-    return ({ type, intent }: Partial<SelectTriggerVariants>) => {
-        const intentStyles = createIntentVariants(theme, type, intent);
+        // Border color based on state
+        let borderColor = type === 'filled' ? 'transparent' : theme.colors.border.primary;
+        if (error) {
+            borderColor = errorColor;
+        } else if (focused) {
+            borderColor = primaryIntent.primary;
+        } else if (intent !== 'neutral') {
+            borderColor = intentValue.primary;
+        }
 
         return {
-            position: 'relative',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
+            position: 'relative' as const,
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'space-between' as const,
             borderRadius: 8,
             borderWidth: 1,
-            borderStyle: 'solid',
-            ...intentStyles,
+            borderStyle: 'solid' as const,
+            backgroundColor,
+            borderColor,
+            opacity: disabled ? 0.6 : 1,
             variants: {
-                type: createTriggerTypeVariants(theme),
-                size: createTriggerSizeVariants(theme),
-                disabled: {
-                    true: {
-                        opacity: 0.6,
-                        _web: {
-                            cursor: 'not-allowed',
-                        },
-                    },
-                    false: {
-                        _web: {
-                            cursor: 'pointer',
-                            _hover: {
-                                opacity: 0.9,
-                            },
-                            _active: {
-                                opacity: 0.8,
-                            },
-                        },
-                    },
-                },
-                error: {
-                    true: {
-                        borderColor: theme.intents.error.primary,
-                        _web: {
-                            border: `1px solid ${theme.intents.error.primary}`,
-                        },
-                    },
-                    false: {},
-                },
-                focused: {
-                    true: {
-                        borderColor: theme.intents.primary.primary,
-                        _web: {
-                            border: `1px solid ${theme.intents.primary.primary}`,
-                            boxShadow: `0 0 0 2px ${theme.intents.primary.primary}20`,
-                            outline: 'none',
-                        },
-                    },
-                    false: {},
+                size: {
+                    paddingHorizontal: theme.sizes.$select.paddingHorizontal,
+                    minHeight: theme.sizes.$select.minHeight,
                 },
             },
             _web: {
                 display: 'flex',
                 boxSizing: 'border-box',
-                _focus: {
-                    outline: 'none',
-                },
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                border: `1px solid ${borderColor}`,
+                boxShadow: focused ? `0 0 0 2px ${primaryIntent.primary}20` : 'none',
+                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                _hover: disabled ? {} : { opacity: 0.9 },
+                _active: disabled ? {} : { opacity: 0.8 },
+                _focus: { outline: 'none' },
             },
         } as const;
-    }
-}
+    },
 
-// Main element style creators (wrapped for extension support)
-function createContainerStyles(theme: Theme) {
-    return () => ({
-        position: 'relative' as const,
+    triggerContent: (_props: SelectDynamicProps) => ({
+        flex: 1,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+    }),
+
+    triggerText: (_props: SelectDynamicProps) => ({
+        color: theme.colors.text.primary,
+        flex: 1,
         variants: {
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
+            size: {
+                fontSize: theme.sizes.$select.fontSize,
+            },
         },
-    });
-}
+    }),
 
-function createDropdownStyles(theme: Theme) {
-    return () => ({
+    placeholder: (_props: SelectDynamicProps) => ({
+        color: theme.colors.text.secondary,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$select.fontSize,
+            },
+        },
+    }),
+
+    icon: (_props: SelectDynamicProps) => ({
+        marginLeft: 4,
+        color: theme.colors.text.secondary,
+    }),
+
+    chevron: (_props: SelectDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        marginLeft: 4,
+        color: theme.colors.text.secondary,
+        variants: {
+            size: {
+                width: theme.sizes.$select.iconSize,
+                height: theme.sizes.$select.iconSize,
+            },
+        },
+        _web: {
+            transition: 'transform 0.2s ease',
+        },
+    }),
+
+    chevronOpen: (_props: SelectDynamicProps) => ({
+        _web: {
+            transform: 'rotate(180deg)',
+        },
+    }),
+
+    dropdown: (_props: SelectDynamicProps) => ({
         position: 'absolute' as const,
         top: '100%',
         left: 0,
@@ -175,179 +180,111 @@ function createDropdownStyles(theme: Theme) {
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06)',
             overflowY: 'auto',
         },
-    });
-}
+    }),
 
-function createOptionStyles(theme: Theme) {
-    return () => ({
+    searchContainer: (_props: SelectDynamicProps) => ({
+        padding: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: theme.colors.border.primary,
+        _web: {
+            borderBottom: `1px solid ${theme.colors.border.primary}`,
+        },
+    }),
+
+    searchInput: (_props: SelectDynamicProps) => ({
+        padding: 4,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+        borderColor: theme.colors.border.primary,
+        backgroundColor: theme.colors.surface.primary,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$select.fontSize,
+            },
+        },
+        _web: {
+            border: `1px solid ${theme.colors.border.primary}`,
+            outline: 'none',
+            _focus: {
+                borderColor: theme.intents.primary.primary,
+            },
+        },
+    }),
+
+    optionsList: (_props: SelectDynamicProps) => ({
+        paddingVertical: 4,
+    }),
+
+    option: ({ disabled = false }: SelectDynamicProps) => ({
         paddingHorizontal: 8,
         paddingVertical: 4,
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         minHeight: 36,
+        opacity: disabled ? theme.interaction.opacity.disabled : 1,
         _web: {
             display: 'flex',
-            cursor: 'pointer',
-            _hover: {
-                backgroundColor: theme.colors.surface.secondary,
-            },
-            _active: {
-                opacity: 0.8,
-            },
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            _hover: disabled ? {} : { backgroundColor: theme.colors.surface.secondary },
+            _active: disabled ? {} : { opacity: 0.8 },
         },
-    });
-}
+    }),
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const selectStyles = StyleSheet.create((theme: Theme) => {
-    return applyExtensions('Select', theme, {
-        container: createContainerStyles(theme),
-        trigger: buildDynamicTriggerStyles(theme),
-        dropdown: createDropdownStyles(theme),
-        option: createOptionStyles(theme),
-        // Minor utility styles
-        label: {
-            fontSize: 14,
-            fontWeight: '500',
-            color: theme.colors.text.primary,
-            marginBottom: 4,
+    optionFocused: (_props: SelectDynamicProps) => ({
+        backgroundColor: theme.interaction.focusedBackground,
+        _web: {
+            outline: `1px solid ${theme.interaction.focusBorder}`,
+            outlineOffset: -1,
         },
-        triggerContent: {
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
+    }),
+
+    optionDisabled: (_props: SelectDynamicProps) => ({
+        opacity: theme.interaction.opacity.disabled,
+        _web: {
+            cursor: 'not-allowed',
         },
-        triggerText: {
-            color: theme.colors.text.primary,
-            flex: 1,
-            variants: {
-                size: buildSizeVariants(theme, 'select', (size: any) => ({
-                    fontSize: size.fontSize,
-                })),
+    }),
+
+    optionContent: (_props: SelectDynamicProps) => ({
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        flex: 1,
+    }),
+
+    optionIcon: (_props: SelectDynamicProps) => ({
+        marginRight: 4,
+    }),
+
+    optionText: (_props: SelectDynamicProps) => ({
+        color: theme.colors.text.primary,
+        flex: 1,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$select.fontSize,
             },
         },
-        placeholder: {
-            color: theme.colors.text.secondary,
-            variants: {
-                size: buildSizeVariants(theme, 'select', (size: any) => ({
-                    fontSize: size.fontSize,
-                })),
-            },
+    }),
+
+    optionTextDisabled: (_props: SelectDynamicProps) => ({
+        color: theme.colors.text.secondary,
+    }),
+
+    helperText: ({ error = false }: SelectDynamicProps) => ({
+        fontSize: 12,
+        marginTop: 4,
+        color: error ? theme.intents.error.primary : theme.colors.text.secondary,
+    }),
+
+    overlay: (_props: SelectDynamicProps) => ({
+        position: 'absolute' as const,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 999,
+        _web: {
+            position: 'fixed',
         },
-        icon: {
-            marginLeft: 4,
-            color: theme.colors.text.secondary,
-        },
-        chevron: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginLeft: 4,
-            color: theme.colors.text.secondary,
-            variants: {
-                size: buildSizeVariants(theme, 'select', (size: any) => ({
-                    width: size.iconSize,
-                    height: size.iconSize,
-                })),
-            },
-            _web: {
-                transition: 'transform 0.2s ease',
-            },
-        },
-        chevronOpen: {
-            _web: {
-                transform: 'rotate(180deg)',
-            }
-        },
-        searchContainer: {
-            padding: 8,
-            borderBottomWidth: 1,
-            borderBottomStyle: 'solid',
-            borderBottomColor: theme.colors.border.primary,
-            _web: {
-                borderBottom: `1px solid ${theme.colors.border.primary}`,
-            },
-        },
-        searchInput: {
-            padding: 4,
-            borderRadius: 4,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: theme.colors.border.primary,
-            backgroundColor: theme.colors.surface.primary,
-            variants: {
-                size: buildSizeVariants(theme, 'select', (size: any) => ({
-                    fontSize: size.fontSize,
-                })),
-            },
-            _web: {
-                border: `1px solid ${theme.colors.border.primary}`,
-                outline: 'none',
-                _focus: {
-                    borderColor: theme.intents.primary.primary,
-                },
-            },
-        },
-        optionsList: {
-            paddingVertical: 4,
-        },
-        optionFocused: {
-            backgroundColor: theme.interaction.focusedBackground,
-            _web: {
-                outline: `1px solid ${theme.interaction.focusBorder}`,
-                outlineOffset: -1,
-            },
-        },
-        optionDisabled: {
-            opacity: theme.interaction.opacity.disabled,
-            _web: {
-                cursor: 'not-allowed',
-            },
-        },
-        optionContent: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            flex: 1,
-        },
-        optionIcon: {
-            marginRight: 4,
-        },
-        optionText: {
-            color: theme.colors.text.primary,
-            flex: 1,
-            variants: {
-                size: buildSizeVariants(theme, 'select', (size: any) => ({
-                    fontSize: size.fontSize,
-                })),
-            },
-        },
-        optionTextDisabled: {
-            color: theme.colors.text.secondary,
-        },
-        helperText: {
-            fontSize: 12,
-            marginTop: 4,
-            color: theme.colors.text.secondary,
-            variants: {
-                error: {
-                    true: {
-                        color: theme.intents.error.primary,
-                    },
-                    false: {},
-                },
-            },
-        },
-        overlay: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 999,
-            _web: {
-                position: 'fixed',
-            },
-        },
-    });
-});
+    }),
+}));

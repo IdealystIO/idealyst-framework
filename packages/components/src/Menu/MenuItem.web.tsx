@@ -20,11 +20,14 @@ const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ item, onPress, 
     disabled: Boolean(item.disabled),
   });
 
-  // Compute dynamic item style with intent
+  // Compute dynamic styles - call as functions for theme reactivity
   const itemStyle = (menuItemStyles.item as any)({ intent: item.intent || 'neutral' });
+  const iconStyle = (menuItemStyles.icon as any)({});
+  const labelStyle = (menuItemStyles.label as any)({});
+
   const itemProps = getWebProps([itemStyle]);
-  const iconProps = getWebProps([menuItemStyles.icon]);
-  const labelProps = getWebProps([menuItemStyles.label]);
+  const iconProps = getWebProps([iconStyle]);
+  const labelProps = getWebProps([labelStyle]);
 
   const renderIcon = () => {
     if (!item.icon) return null;
@@ -32,9 +35,11 @@ const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ item, onPress, 
     if (isIconName(item.icon)) {
       // Resolve icon name to path and render with IconSvg
       const iconPath = resolveIconPath(item.icon);
+      // IconSvg uses size="1em" by default, sized by container's fontSize from styles
       return (
         <IconSvg
           path={iconPath}
+          color="currentColor"
           aria-label={item.icon}
         />
       );

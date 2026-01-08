@@ -1,7 +1,7 @@
 import { forwardRef, useMemo } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IconProps } from './types';
-import { iconStyles, buildIconSize } from './Icon.styles';
+import { iconStyles } from './Icon.styles';
 import { useUnistyles } from 'react-native-unistyles';
 
 const Icon = forwardRef<any, IconProps>(({
@@ -14,18 +14,17 @@ const Icon = forwardRef<any, IconProps>(({
   accessibilityLabel,
   id,
 }: IconProps, ref) => {
-
-
-  // Call dynamic style with variants
-  const iconStyle = (iconStyles.icon as any)({ color, intent, size });
-
   const { theme } = useUnistyles();
 
-  const iconSize = useMemo(() => {
-    return buildIconSize(theme, size).width;
-  }, [theme, size]);
+  // Call dynamic style with variants - includes theme-reactive color
+  const iconStyle = (iconStyles.icon as any)({ color, intent, size });
 
-  // Get fontSize from styles for numeric size prop
+  const iconSize = useMemo(() => {
+    return iconStyle.width;
+  }, [iconStyle]);
+
+  // Extract color from iconStyle for explicit color prop (RN vector icons need this)
+  const iconColor = iconStyle.color;
 
   return (
     <MaterialCommunityIcons
@@ -33,6 +32,7 @@ const Icon = forwardRef<any, IconProps>(({
       nativeID={id}
       size={iconSize}
       name={name}
+      color={iconColor}
       style={[iconStyle, style]}
       testID={testID}
       accessibilityLabel={accessibilityLabel}

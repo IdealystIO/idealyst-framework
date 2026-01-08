@@ -1,343 +1,213 @@
+/**
+ * TabBar styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import {
-  buildGapVariants,
-  buildPaddingVariants,
-  buildPaddingVerticalVariants,
-  buildPaddingHorizontalVariants,
-  buildMarginVariants,
-  buildMarginVerticalVariants,
-  buildMarginHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
-import { TabBarPillMode, TabBarSizeVariant, TabBarType, TabBarIconPosition, TabBarJustify } from './types';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Size } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
 
-type ContainerDynamicProps = {
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+type TabBarType = 'standard' | 'underline' | 'pills';
+type TabBarPillMode = 'light' | 'dark';
+type TabBarIconPosition = 'left' | 'top';
+type TabBarJustify = 'start' | 'center' | 'equal' | 'space-between';
+
+export type TabBarDynamicProps = {
+    size?: Size;
     type?: TabBarType;
     pillMode?: TabBarPillMode;
-};
-
-type TabDynamicProps = {
-    type?: TabBarType;
-    size?: TabBarSizeVariant;
     active?: boolean;
-    pillMode?: TabBarPillMode;
+    disabled?: boolean;
+    iconPosition?: TabBarIconPosition;
+    justify?: TabBarJustify;
+    gap?: ViewStyleSize;
+    padding?: ViewStyleSize;
+    paddingVertical?: ViewStyleSize;
+    paddingHorizontal?: ViewStyleSize;
+    margin?: ViewStyleSize;
+    marginVertical?: ViewStyleSize;
+    marginHorizontal?: ViewStyleSize;
 };
 
-type LabelDynamicProps = {
-    type?: TabBarType;
-    active?: boolean;
-    pillMode?: TabBarPillMode;
-};
-
-type IndicatorDynamicProps = {
-    type?: TabBarType;
-    pillMode?: TabBarPillMode;
-};
-
 /**
- * Get container background color based on type and pillMode
+ * TabBar styles with type/pillMode/active handling.
  */
-function getContainerBackgroundColor(theme: Theme, type: TabBarType, pillMode: TabBarPillMode): string | undefined {
-    if (type === 'pills') {
-        return pillMode === 'dark' ? theme.colors.surface.inverse : theme.colors.surface.secondary;
-    }
-    return undefined;
-}
+export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
+    container: ({ type = 'standard', pillMode = 'light', justify = 'start' }: TabBarDynamicProps) => {
+        const backgroundColor = type === 'pills'
+            ? (pillMode === 'dark' ? theme.colors.surface.inverse : theme.colors.surface.secondary)
+            : undefined;
 
-/**
- * Get tab padding based on type and size (pills have compact padding)
- */
-function getTabPadding(type: TabBarType, size: TabBarSizeVariant): { paddingVertical?: number; paddingHorizontal?: number } {
-    if (type !== 'pills') return {};
-
-    const paddingMap: Record<TabBarSizeVariant, { paddingVertical: number; paddingHorizontal: number }> = {
-        xs: { paddingVertical: 2, paddingHorizontal: 10 },
-        sm: { paddingVertical: 4, paddingHorizontal: 12 },
-        md: { paddingVertical: 6, paddingHorizontal: 16 },
-        lg: { paddingVertical: 8, paddingHorizontal: 20 },
-        xl: { paddingVertical: 10, paddingHorizontal: 24 },
-    };
-    return paddingMap[size] || paddingMap.md;
-}
-
-/**
- * Get tab text color based on type and active state
- */
-function getTabColor(theme: Theme, type: TabBarType, active: boolean): string | undefined {
-    if (!active) return undefined;
-    if (type === 'pills') return theme.intents.primary.contrast;
-    if (type === 'underline') return theme.intents.primary.primary;
-    return theme.colors.text.primary;
-}
-
-/**
- * Get label color based on type, pillMode, and active state
- */
-function getLabelColor(theme: Theme, type: TabBarType, pillMode: TabBarPillMode, active: boolean): string | undefined {
-    if (!active) return undefined;
-    if (type === 'pills') return theme.colors.text.primary;
-    if (type === 'underline') return theme.intents.primary.primary;
-    return theme.colors.text.primary;
-}
-
-/**
- * Get indicator background color based on type and pillMode
- */
-function getIndicatorBackgroundColor(theme: Theme, type: TabBarType, pillMode: TabBarPillMode): string | undefined {
-    if (type === 'pills') {
-        return pillMode === 'dark' ? theme.colors.surface.secondary : theme.colors.surface.tertiary;
-    }
-    return undefined;
-}
-
-/**
- * Create size variants for tab
- */
-function createTabSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'tabBar', (size) => ({
-        fontSize: size.fontSize,
-        padding: size.padding,
-        lineHeight: size.lineHeight,
-    }));
-}
-
-/**
- * Create size variants for label
- */
-function createLabelSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'tabBar', (size) => ({
-        fontSize: size.fontSize,
-        lineHeight: size.lineHeight,
-    }));
-}
-
-/**
- * Create size variants for icon
- */
-function createIconSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'tabBar', (size) => ({
-        width: size.fontSize,
-        height: size.fontSize,
-    }));
-}
-
-/**
- * Create dynamic container styles
- */
-function createContainerStyles(theme: Theme) {
-    return ({ type = 'standard', pillMode = 'light' }: ContainerDynamicProps) => {
-        const bgColor = getContainerBackgroundColor(theme, type, pillMode);
+        const justifyContent = {
+            start: 'flex-start',
+            center: 'center',
+            equal: 'stretch',
+            'space-between': 'space-between',
+        }[justify];
 
         return {
-            display: 'flex',
-            flexDirection: 'row',
+            display: 'flex' as const,
+            flexDirection: 'row' as const,
             gap: type === 'pills' ? 4 : 0,
-            position: 'relative',
+            position: 'relative' as const,
             borderBottomWidth: type === 'pills' ? 0 : 1,
             borderBottomStyle: 'solid' as const,
             borderBottomColor: theme.colors.border.primary,
             padding: type === 'pills' ? 4 : undefined,
-            backgroundColor: bgColor || (type === 'pills' ? theme.colors.surface.secondary : undefined),
-            overflow: type === 'pills' ? 'hidden' as const : undefined,
-            alignSelf: type === 'pills' ? 'flex-start' as const : undefined,
+            backgroundColor: backgroundColor || (type === 'pills' ? theme.colors.surface.secondary : undefined),
+            overflow: type === 'pills' ? ('hidden' as const) : undefined,
+            alignSelf: type === 'pills' ? ('flex-start' as const) : undefined,
             width: type === 'pills' ? undefined : '100%',
             borderRadius: type === 'pills' ? 9999 : undefined,
+            justifyContent: justifyContent as any,
             variants: {
-                justify: {
-                    start: { justifyContent: 'flex-start' },
-                    center: { justifyContent: 'center' },
-                    equal: { justifyContent: 'stretch', width: '100%' },
-                    'space-between': { justifyContent: 'space-between', width: '100%' },
+                gap: {
+                    gap: theme.sizes.$view.padding,
                 },
-                // Spacing variants from ContainerStyleProps
-                gap: buildGapVariants(theme),
-                padding: buildPaddingVariants(theme),
-                paddingVertical: buildPaddingVerticalVariants(theme),
-                paddingHorizontal: buildPaddingHorizontalVariants(theme),
-                margin: buildMarginVariants(theme),
-                marginVertical: buildMarginVerticalVariants(theme),
-                marginHorizontal: buildMarginHorizontalVariants(theme),
-            } as const,
+                padding: {
+                    padding: theme.sizes.$view.padding,
+                },
+                paddingVertical: {
+                    paddingVertical: theme.sizes.$view.padding,
+                },
+                paddingHorizontal: {
+                    paddingHorizontal: theme.sizes.$view.padding,
+                },
+                margin: {
+                    margin: theme.sizes.$view.padding,
+                },
+                marginVertical: {
+                    marginVertical: theme.sizes.$view.padding,
+                },
+                marginHorizontal: {
+                    marginHorizontal: theme.sizes.$view.padding,
+                },
+            },
         } as const;
-    };
-}
+    },
 
-/**
- * Create dynamic tab styles
- */
-function createTabStyles(theme: Theme) {
-    return ({ type = 'standard', size = 'md', active = false, pillMode = 'light', justify = 'start' }: TabDynamicProps) => {
-        const tabPadding = getTabPadding(type, size);
-        const color = getTabColor(theme, type, active);
+    tab: ({ type = 'standard', size = 'md', active = false, pillMode = 'light', disabled = false, iconPosition = 'left', justify = 'start' }: TabBarDynamicProps) => {
+        // Tab padding for pills
+        const paddingMap: Record<Size, { paddingVertical: number; paddingHorizontal: number }> = {
+            xs: { paddingVertical: 2, paddingHorizontal: 10 },
+            sm: { paddingVertical: 4, paddingHorizontal: 12 },
+            md: { paddingVertical: 6, paddingHorizontal: 16 },
+            lg: { paddingVertical: 8, paddingHorizontal: 20 },
+            xl: { paddingVertical: 10, paddingHorizontal: 24 },
+        };
+        const tabPadding = type === 'pills' ? paddingMap[size] : {};
+
+        // Color based on type and active state
+        let color = active ? theme.colors.text.primary : theme.colors.text.secondary;
+        if (active) {
+            if (type === 'pills') color = theme.intents.primary.contrast;
+            else if (type === 'underline') color = theme.intents.primary.primary;
+        }
 
         return {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: '500',
+            display: 'flex' as const,
+            flexDirection: iconPosition === 'top' ? ('column' as const) : ('row' as const),
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
+            fontWeight: '500' as const,
             flex: justify === 'equal' ? 1 : undefined,
-            color: color || (active ? theme.colors.text.primary : theme.colors.text.secondary),
-            position: 'relative',
+            color,
+            position: 'relative' as const,
             zIndex: 2,
-            backgroundColor: 'transparent',
+            backgroundColor: 'transparent' as const,
             gap: 6,
             borderRadius: type === 'pills' ? 9999 : undefined,
+            opacity: disabled ? 0.5 : 1,
             ...tabPadding,
             variants: {
-                size: createTabSizeVariants(theme),
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                        _web: { cursor: 'not-allowed' },
-                    },
-                    false: {
-                        _web: { _hover: { color: theme.colors.text.primary } },
-                    },
+                size: {
+                    fontSize: theme.sizes.$tabBar.fontSize,
+                    padding: theme.sizes.$tabBar.padding,
+                    lineHeight: theme.sizes.$tabBar.lineHeight,
                 },
-                iconPosition: {
-                    left: { flexDirection: 'row' },
-                    top: { flexDirection: 'column' },
-                },
-                justify: {
-                    start: {},
-                    center: {},
-                    equal: { flex: 1 },
-                    'space-between': {},
-                },
-            } as const,
+            },
             _web: {
                 border: 'none',
-                cursor: 'pointer',
+                cursor: disabled ? 'not-allowed' : 'pointer',
                 outline: 'none',
                 transition: 'color 0.2s ease',
+                _hover: disabled ? {} : { color: theme.colors.text.primary },
             },
         } as const;
-    };
-}
+    },
 
-/**
- * Create dynamic tab label styles
- */
-function createTabLabelStyles(theme: Theme) {
-    return ({ type = 'standard', active = false, pillMode = 'light' }: LabelDynamicProps) => {
-        const color = getLabelColor(theme, type, pillMode, active);
+    tabLabel: ({ type = 'standard', active = false, pillMode = 'light', disabled = false }: TabBarDynamicProps) => {
+        let color = active ? theme.colors.text.primary : theme.colors.text.secondary;
+        if (active) {
+            if (type === 'pills') color = theme.colors.text.primary;
+            else if (type === 'underline') color = theme.intents.primary.primary;
+        }
 
         return {
-            position: 'relative',
+            position: 'relative' as const,
             zIndex: 3,
-            fontWeight: '500',
-            color: color || (active ? theme.colors.text.primary : theme.colors.text.secondary),
+            fontWeight: '500' as const,
+            color,
+            opacity: disabled ? 0.5 : 1,
             variants: {
-                size: createLabelSizeVariants(theme),
-                disabled: {
-                    true: { opacity: 0.5 },
-                    false: {},
+                size: {
+                    fontSize: theme.sizes.$tabBar.fontSize,
+                    lineHeight: theme.sizes.$tabBar.lineHeight,
                 },
             },
         } as const;
-    };
-}
+    },
 
-/**
- * Create dynamic indicator styles
- */
-function createIndicatorStyles(theme: Theme) {
-    return ({ type = 'standard', pillMode = 'light' }: IndicatorDynamicProps) => {
-        const bgColor = getIndicatorBackgroundColor(theme, type, pillMode);
+    tabIcon: ({ active = false, disabled = false, iconPosition = 'left' }: TabBarDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        opacity: disabled ? 0.5 : 1,
+        marginBottom: iconPosition === 'top' ? 2 : 0,
+        variants: {
+            size: {
+                width: theme.sizes.$tabBar.fontSize,
+                height: theme.sizes.$tabBar.fontSize,
+            },
+        },
+    }),
+
+    indicator: ({ type = 'standard', pillMode = 'light' }: TabBarDynamicProps) => {
+        const backgroundColor = type === 'pills'
+            ? (pillMode === 'dark' ? theme.colors.surface.secondary : theme.colors.surface.tertiary)
+            : theme.intents.primary.primary;
 
         const typeStyles = type === 'pills' ? {
             borderRadius: 9999,
             bottom: 4,
             top: 4,
             left: 0,
-            backgroundColor: bgColor,
         } : {
             bottom: -1,
             height: 2,
-            backgroundColor: theme.intents.primary.primary,
         };
 
         return {
-            position: 'absolute',
-            pointerEvents: 'none',
+            position: 'absolute' as const,
+            pointerEvents: 'none' as const,
             zIndex: 1,
+            backgroundColor,
             ...typeStyles,
             _web: {
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             },
         } as const;
-    };
-}
-
-/**
- * Create icon styles (static, no compound variants)
- */
-function createIconStyles(theme: Theme) {
-    return {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        variants: {
-            size: createIconSizeVariants(theme),
-            active: {
-                true: {},
-                false: {},
-            },
-            disabled: {
-                true: { opacity: 0.5 },
-                false: {},
-            },
-            iconPosition: {
-                left: {},
-                top: { marginBottom: 2 },
-            },
-        } as const,
-    } as const;
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const tabBarStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-
-    return applyExtensions('TabBar', theme, {container: createContainerStyles(theme),
-        tab: createTabStyles(theme),
-        indicator: createIndicatorStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        tabLabel: createTabLabelStyles(theme),
-        tabIcon: createIconStyles(theme)});
-});
+    },
+}));
 
 // Export individual style sheets for backwards compatibility
-export const tabBarContainerStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        container: createContainerStyles(theme),
-    } as const;
-});
-
-export const tabBarTabStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        tab: createTabStyles(theme),
-    } as const;
-});
-
-export const tabBarLabelStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        tabLabel: createTabLabelStyles(theme),
-    } as const;
-});
-
-export const tabBarIndicatorStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        indicator: createIndicatorStyles(theme),
-    } as const;
-});
-
-export const tabBarIconStyles = StyleSheet.create((theme: Theme) => {
-    return {
-        tabIcon: createIconStyles(theme),
-    } as const;
-});
+export const tabBarContainerStyles = tabBarStyles;
+export const tabBarTabStyles = tabBarStyles;
+export const tabBarLabelStyles = tabBarStyles;
+export const tabBarIndicatorStyles = tabBarStyles;
+export const tabBarIconStyles = tabBarStyles;

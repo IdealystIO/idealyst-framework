@@ -40,13 +40,19 @@ const ListItem: React.FC<ListItemProps> = ({
     disabled,
   });
 
-  // Get dynamic item style with type, disabled, and clickable props
+  // Get dynamic styles - call as functions for theme reactivity
   const itemStyle = (listStyles.item as any)({ type: effectiveVariant, disabled, clickable: isClickable });
+  const labelStyle = (listStyles.label as any)({ disabled, selected });
+  const leadingStyle = (listStyles.leading as any)({});
+  const trailingStyle = (listStyles.trailing as any)({});
+  const trailingIconStyle = (listStyles.trailingIcon as any)({});
+  const labelContainerStyle = (listStyles.labelContainer as any)({});
+
   const itemProps = getWebProps([itemStyle, style]);
-  const labelProps = getWebProps([listStyles.label]);
-  const leadingProps = getWebProps([listStyles.leading]);
-  const trailingProps = getWebProps([listStyles.trailing]);
-  const trailingIconProps = getWebProps([listStyles.trailing, listStyles.trailingIcon]);
+  const labelProps = getWebProps([labelStyle]);
+  const leadingProps = getWebProps([leadingStyle]);
+  const trailingProps = getWebProps([trailingStyle]);
+  const trailingIconProps = getWebProps([trailingStyle, trailingIconStyle]);
 
   const handleClick = () => {
     if (!disabled && onPress) {
@@ -66,18 +72,16 @@ const ListItem: React.FC<ListItemProps> = ({
   })();
 
   // Helper to render leading/trailing icons
-  const renderElement = (element: typeof leading | typeof trailing, props: any, isTrailing = false) => {
+  // IconSvg uses size="1em" by default, sized by container's fontSize from styles
+  const renderElement = (element: typeof leading | typeof trailing, isTrailing = false) => {
     if (!element) return null;
 
     if (isIconName(element)) {
       const iconPath = resolveIconPath(element);
-      // Use trailingIconProps for trailing icons to apply size constraints
-      const iconPropsToUse = isTrailing ? trailingIconProps : props;
       return (
         <IconSvg
           path={iconPath}
-          {...iconPropsToUse}
-          color={resolvedIconColor}
+          color={resolvedIconColor || 'currentColor'}
           aria-label={element}
         />
       );
@@ -88,11 +92,17 @@ const ListItem: React.FC<ListItemProps> = ({
     return null;
   };
 
+  const labelContainerProps = getWebProps([labelContainerStyle]);
+
   const content = (
     <>
-      {leading && renderElement(leading, leadingProps)}
+      {leading && (
+        <span {...leadingProps}>
+          {renderElement(leading)}
+        </span>
+      )}
 
-      <div {...getWebProps([listStyles.labelContainer])}>
+      <div {...labelContainerProps}>
         {label && (
           <span {...labelProps}>{label}</span>
         )}
@@ -101,7 +111,7 @@ const ListItem: React.FC<ListItemProps> = ({
 
       {trailing && (
         <div {...trailingProps}>
-          {renderElement(trailing, trailingIconProps, true)}
+          {renderElement(trailing, true)}
         </div>
       )}
     </>

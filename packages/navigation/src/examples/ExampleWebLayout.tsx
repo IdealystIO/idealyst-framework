@@ -13,10 +13,11 @@ export const ExampleWebLayout: React.FC = () => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [showSearch, setShowSearch] = useState(false);
     const currentTheme = UnistylesRuntime.themeName || 'light';
-    const { theme } = useUnistyles();
 
+    const { theme } = useUnistyles();
+    
     const cycleTheme = () => {
-        const nextTheme = getNextTheme(currentTheme);
+        const nextTheme = UnistylesRuntime.themeName === 'light' ? 'dark' : 'light';
         UnistylesRuntime.setTheme(nextTheme as any);
     };
 

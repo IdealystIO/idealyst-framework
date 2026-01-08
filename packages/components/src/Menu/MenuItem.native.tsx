@@ -19,8 +19,10 @@ const MenuItem = forwardRef<ComponentRef<typeof Pressable>, MenuItemProps>(({ it
     disabled: Boolean(item.disabled),
   });
 
-  // Compute dynamic item style with intent
+  // Call styles as functions to get theme-reactive styles
   const itemStyle = (menuItemStyles.item as any)({ intent: item.intent || 'neutral' });
+  const iconStyle = (menuItemStyles.icon as any)({});
+  const labelStyle = (menuItemStyles.label as any)({});
 
   const renderIcon = () => {
     if (!item.icon) return null;
@@ -29,7 +31,7 @@ const MenuItem = forwardRef<ComponentRef<typeof Pressable>, MenuItemProps>(({ it
       return (
         <MaterialDesignIcons
           name={item.icon as any}
-          style={menuItemStyles.icon}
+          style={iconStyle}
         />
       );
     } else if (isValidElement(item.icon)) {
@@ -56,7 +58,7 @@ const MenuItem = forwardRef<ComponentRef<typeof Pressable>, MenuItemProps>(({ it
           {renderIcon()}
         </View>
       )}
-      <Text style={menuItemStyles.label}>
+      <Text style={labelStyle}>
         {item.label}
       </Text>
     </Pressable>

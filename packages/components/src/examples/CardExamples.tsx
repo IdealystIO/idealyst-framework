@@ -17,12 +17,6 @@ export const CardExamples = () => {
       <View gap="md">
         <Text typography="subtitle1">Variants</Text>
         <View gap="sm" style={{ gap: 10 }}>
-          <Card type="default" padding="md">
-            <Text>Default Card</Text>
-            <Text typography="caption" color="secondary">
-              This is a default card with standard styling
-            </Text>
-          </Card>
           
           <Card type="outlined" padding="md">
             <Text>Outlined Card</Text>

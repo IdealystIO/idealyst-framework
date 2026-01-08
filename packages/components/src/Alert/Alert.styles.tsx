@@ -1,169 +1,111 @@
+/**
+ * Alert styles using defineStyle with dynamic intent/type handling.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent } from '@idealyst/theme';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent } from '@idealyst/theme';
+
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
 
 type AlertType = 'filled' | 'outlined' | 'soft';
-type AlertIntent = Intent;
 
-export type AlertVariants = {
-    type: AlertType;
-    intent: AlertIntent;
-}
-
-type AlertDynamicProps = {
-    intent?: AlertIntent;
+export type AlertDynamicProps = {
+    intent?: Intent;
     type?: AlertType;
 };
 
 /**
- * Get the intent value, mapping 'info' to 'primary' for backwards compatibility
+ * Alert styles with intent/type combination handling.
  */
-function getIntentValue(theme: Theme, intent: AlertIntent) {
-    return theme.intents[intent];
-}
+export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
+    container: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        const intentValue = theme.intents[intent];
 
-/**
- * Get container background color based on intent and type
- */
-function getContainerBackgroundColor(theme: Theme, intent: AlertIntent, type: AlertType): string {
-    const intentValue = getIntentValue(theme, intent);
-    if (type === 'filled') {
-        return intentValue.primary;
-    }
-    if (type === 'soft') {
-        return intentValue.light;
-    }
-    return 'transparent'; // outlined
-}
+        // Background color based on type
+        const backgroundColor = type === 'filled'
+            ? intentValue.primary
+            : type === 'soft'
+                ? intentValue.light
+                : 'transparent';
 
-/**
- * Get container border color based on intent and type
- */
-function getContainerBorderColor(theme: Theme, intent: AlertIntent, type: AlertType): string {
-    const intentValue = getIntentValue(theme, intent);
-    if (type === 'filled' || type === 'outlined') {
-        return intentValue.primary;
-    }
-    return intentValue.light; // soft
-}
+        // Border color based on type
+        const borderColor = (type === 'filled' || type === 'outlined')
+            ? intentValue.primary
+            : intentValue.light;
 
-/**
- * Get icon/title color based on intent and type
- */
-function getIconTitleColor(theme: Theme, intent: AlertIntent, type: AlertType): string {
-    const intentValue = getIntentValue(theme, intent);
-    if (type === 'filled') {
-        return intentValue.contrast;
-    }
-    return intentValue.primary; // outlined, soft
-}
-
-/**
- * Get message color based on intent and type
- */
-function getMessageColor(theme: Theme, intent: AlertIntent, type: AlertType): string {
-    const intentValue = getIntentValue(theme, intent);
-    if (type === 'filled') {
-        return intentValue.contrast;
-    }
-    return theme.colors.text.primary; // outlined, soft
-}
-
-/**
- * Create dynamic container styles
- */
-function createContainerStyles(theme: Theme) {
-    return ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
         return {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-start',
+            display: 'flex' as const,
+            flexDirection: 'row' as const,
+            alignItems: 'flex-start' as const,
             gap: 8,
             padding: 16,
             borderRadius: 8,
             borderWidth: 1,
             borderStyle: 'solid' as const,
-            backgroundColor: getContainerBackgroundColor(theme, intent, type),
-            borderColor: getContainerBorderColor(theme, intent, type),
+            backgroundColor,
+            borderColor,
         } as const;
-    };
-}
+    },
 
-/**
- * Create dynamic icon container styles
- */
-function createIconContainerStyles(theme: Theme) {
-    return ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+    iconContainer: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const color = type === 'filled' ? intentValue.contrast : intentValue.primary;
+
         return {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            display: 'flex' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
             flexShrink: 0,
             width: 24,
             height: 24,
-            color: getIconTitleColor(theme, intent, type),
+            color,
         } as const;
-    };
-}
+    },
 
-/**
- * Create dynamic title styles
- */
-function createTitleStyles(theme: Theme) {
-    return ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+    title: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const color = type === 'filled' ? intentValue.contrast : intentValue.primary;
+
         return {
             fontSize: 16,
             lineHeight: 24,
-            fontWeight: '600',
-            color: getIconTitleColor(theme, intent, type),
+            fontWeight: '600' as const,
+            color,
         } as const;
-    };
-}
+    },
 
-/**
- * Create dynamic message styles
- */
-function createMessageStyles(theme: Theme) {
-    return ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+    message: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const color = type === 'filled' ? intentValue.contrast : theme.colors.text.primary;
+
         return {
             fontSize: 14,
             lineHeight: 20,
-            color: getMessageColor(theme, intent, type),
+            color,
         } as const;
-    };
-}
+    },
 
-/**
- * Create content styles
- */
-function createContentStyles() {
-    return () => ({
+    content: (_props: AlertDynamicProps) => ({
         flex: 1,
         display: 'flex' as const,
         flexDirection: 'column' as const,
         gap: 4,
-    });
-}
+    }),
 
-/**
- * Create actions styles
- */
-function createActionsStyles() {
-    return () => ({
+    actions: (_props: AlertDynamicProps) => ({
         marginTop: 4,
         display: 'flex' as const,
         flexDirection: 'row' as const,
         gap: 8,
-    });
-}
+    }),
 
-/**
- * Create close button styles
- */
-function createCloseButtonStyles() {
-    return () => ({
+    closeButton: (_props: AlertDynamicProps) => ({
         padding: 4,
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent' as const,
         borderRadius: 4,
         display: 'flex' as const,
         alignItems: 'center' as const,
@@ -177,33 +119,13 @@ function createCloseButtonStyles() {
                 backgroundColor: 'rgba(0, 0, 0, 0.1)',
             },
         },
-    });
-}
+    }),
 
-/**
- * Create close icon styles
- */
-function createCloseIconStyles() {
-    return () => ({
+    closeIcon: (_props: AlertDynamicProps) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         width: 16,
         height: 16,
-    });
-}
-
-export const alertStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-
-    return applyExtensions('Alert', theme, {container: createContainerStyles(theme),
-        iconContainer: createIconContainerStyles(theme),
-        title: createTitleStyles(theme),
-        message: createMessageStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        content: createContentStyles()(),
-        actions: createActionsStyles()(),
-        closeButton: createCloseButtonStyles()(),
-        closeIcon: createCloseIconStyles()()});
-});
+    }),
+}));

@@ -4,13 +4,14 @@ import { UnistylesRuntime } from 'react-native-unistyles';
 import ExampleSearchDialog from './ExampleSearchDialog';
 
 export default function HeaderRight() {
-    const [isDark, setIsDark] = useState(false);
+    // const [isDark, setIsDark] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
+    const isDark = false
 
     const toggleTheme = () => {
-        const newTheme = isDark ? 'light' : 'dark';
+        const newTheme = UnistylesRuntime.themeName === 'light' ? 'dark' : 'light';
         UnistylesRuntime.setTheme(newTheme);
-        setIsDark(!isDark);
+        // setIsDark(!isDark);
     };
 
     return (

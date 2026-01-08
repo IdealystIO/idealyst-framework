@@ -21,9 +21,6 @@ export function BasicCard() {
 export function CardTypes() {
   return (
     <>
-      <Card type="default">
-        <Text>Default Card</Text>
-      </Card>
       <Card type="outlined">
         <Text>Outlined Card</Text>
       </Card>

@@ -115,10 +115,13 @@ const Dialog = forwardRef<View, DialogProps>(({
     };
   });
 
-  // Get dynamic styles
+  // Get dynamic styles - call as functions for theme reactivity
   const backdropStyle = (dialogStyles.backdrop as any)({});
   const containerStyle = (dialogStyles.container as any)({});
   const headerStyle = (dialogStyles.header as any)({});
+  const titleStyle = (dialogStyles.title as any)({});
+  const closeButtonStyle = (dialogStyles.closeButton as any)({});
+  const closeButtonTextStyle = (dialogStyles.closeButtonText as any)({});
   const contentStyle = (dialogStyles.content as any)({});
 
   return (
@@ -137,18 +140,18 @@ const Dialog = forwardRef<View, DialogProps>(({
               {(title || showCloseButton) && (
                 <View style={headerStyle}>
                   {title && (
-                    <Text style={dialogStyles.title}>
+                    <Text style={titleStyle}>
                       {title}
                     </Text>
                   )}
                   {showCloseButton && (
                     <TouchableOpacity
-                      style={dialogStyles.closeButton}
+                      style={closeButtonStyle}
                       onPress={handleClosePress}
                       accessibilityLabel="Close dialog"
                       accessibilityRole="button"
                     >
-                      <Text style={dialogStyles.closeButtonText}>×</Text>
+                      <Text style={closeButtonTextStyle}>×</Text>
                     </TouchableOpacity>
                   )}
                 </View>

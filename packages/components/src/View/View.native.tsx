@@ -54,7 +54,7 @@ const View = forwardRef<RNView | RNScrollView, ViewProps>(({
     return (
       <RNScrollView
         ref={ref as any}
-        style={[{ flex: 1 }, style]}
+        style={[viewStyle, { flex: 1 }, overrideStyles, style]}
         contentContainerStyle={[viewStyle, overrideStyles]}
         testID={testID}
         nativeID={id}

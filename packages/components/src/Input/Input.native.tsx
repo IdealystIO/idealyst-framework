@@ -208,8 +208,11 @@ const Input = React.forwardRef<TextInput, InputProps>(({
     marginHorizontal,
   });
 
-  // Compute dynamic container styles
+  // Compute dynamic styles - call as functions for theme reactivity
   const containerStyle = (inputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
+  const leftIconContainerStyle = (inputStyles.leftIconContainer as any)({});
+  const rightIconContainerStyle = (inputStyles.rightIconContainer as any)({});
+  const passwordToggleStyle = (inputStyles.passwordToggle as any)({});
 
   // Helper to render left icon
   const renderLeftIcon = () => {
@@ -253,7 +256,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
     <View style={[containerStyle, style]} testID={testID} nativeID={id}>
       {/* Left Icon */}
       {leftIcon && (
-        <View style={inputStyles.leftIconContainer}>
+        <View style={leftIconContainerStyle}>
           {renderLeftIcon()}
         </View>
       )}
@@ -271,7 +274,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
       {/* Right Icon or Password Toggle */}
       {shouldShowPasswordToggle ? (
         <TouchableOpacity
-          style={inputStyles.passwordToggle}
+          style={passwordToggleStyle}
           onPress={togglePasswordVisibility}
           disabled={disabled}
           accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
@@ -283,7 +286,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
           />
         </TouchableOpacity>
       ) : rightIcon ? (
-        <View style={inputStyles.rightIconContainer}>
+        <View style={rightIconContainerStyle}>
           {renderRightIcon()}
         </View>
       ) : null}

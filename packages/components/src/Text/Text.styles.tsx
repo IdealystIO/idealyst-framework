@@ -4,8 +4,7 @@
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
 
-// Reference StyleSheet so Unistyles detects this file for processing
-// Our Babel plugin transforms defineStyle to StyleSheet.create
+// Required: Unistyles must see StyleSheet usage in original source to process this file
 void StyleSheet;
 import type { Theme as BaseTheme } from '@idealyst/theme';
 import type { TextStyle, ViewStyle } from 'react-native';

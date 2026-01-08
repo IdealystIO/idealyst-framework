@@ -28,14 +28,11 @@ const Text = forwardRef<RNText, TextProps>(({
     paddingHorizontal,
   });
 
-  // Pass all style-affecting props to dynamic style function
-  const textStyle = (textStyles.text as any)({ color, typography, weight, align });
-
   return (
     <RNText
       ref={ref}
       nativeID={id}
-      style={[textStyle, style]}
+      style={[textStyles.text({ color, typography, weight, align }), style]}
       testID={testID}
     >
       {children}

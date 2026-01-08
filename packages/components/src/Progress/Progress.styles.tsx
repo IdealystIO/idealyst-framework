@@ -1,200 +1,115 @@
+/**
+ * Progress styles using defineStyle with $iterator expansion.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent, Size } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 
-type ProgressSize = Size;
-type ProgressIntent = Intent;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
 
-export type ProgressVariants = {
-    size: ProgressSize;
-    intent: ProgressIntent;
-    rounded: boolean;
-}
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
 
-type ProgressDynamicProps = {
-    intent?: ProgressIntent;
+export type ProgressDynamicProps = {
+    size?: Size;
+    intent?: Intent;
+    rounded?: boolean;
 };
 
-function createLinearTrackSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'progress', (size) => ({
-        height: size.linearHeight,
-    }));
-}
-
-function createCircularContainerSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'progress', (size) => ({
-        width: size.circularSize,
-        height: size.circularSize,
-    }));
-}
-
-function createLabelSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'progress', (size) => ({
-        fontSize: size.labelFontSize,
-    }));
-}
-
-function createCircularLabelSizeVariants(theme: Theme) {
-    return buildSizeVariants(theme, 'progress', (size) => ({
-        fontSize: size.circularLabelFontSize,
-    }));
-}
-
 /**
- * Get bar background color based on intent
+ * Progress styles with intent-based coloring.
  */
-function getBarBackgroundColor(theme: Theme, intent: ProgressIntent): string {
-    return theme.intents[intent].primary;
-}
-
-/**
- * Create dynamic linear bar styles
- */
-function createLinearBarStyles(theme: Theme) {
-    return ({ intent = 'primary' }: ProgressDynamicProps) => {
-        return {
-            height: '100%' as const,
-            backgroundColor: getBarBackgroundColor(theme, intent),
-            variants: {
-                rounded: {
-                    true: { borderRadius: 9999 },
-                    false: { borderRadius: 0 },
-                },
-            },
-            _web: {
-                transition: 'width 0.3s ease' as const,
-            },
-        } as const;
-    };
-}
-
-/**
- * Create dynamic indeterminate bar styles
- */
-function createIndeterminateBarStyles(theme: Theme) {
-    return ({ intent = 'primary' }: ProgressDynamicProps) => {
-        return {
-            position: 'absolute' as const,
-            height: '100%' as const,
-            width: '40%' as const,
-            backgroundColor: getBarBackgroundColor(theme, intent),
-            variants: {
-                rounded: {
-                    true: { borderRadius: 9999 },
-                    false: { borderRadius: 0 },
-                },
-            },
-        } as const;
-    };
-}
-
-/**
- * Create dynamic circular bar styles
- */
-function createCircularBarStyles(theme: Theme) {
-    return ({ intent = 'primary' }: ProgressDynamicProps) => {
-        return {
-            _web: {
-                stroke: getBarBackgroundColor(theme, intent),
-            },
-        } as const;
-    };
-}
-
-/**
- * Create container styles
- */
-function createContainerStyles() {
-    return () => ({
+export const progressStyles = defineStyle('Progress', (theme: Theme) => ({
+    container: (_props: ProgressDynamicProps) => ({
         gap: 4 as const,
-    });
-}
+    }),
 
-/**
- * Create linear track styles
- */
-function createLinearTrackStyles(theme: Theme) {
-    return () => ({
+    linearTrack: (_props: ProgressDynamicProps) => ({
         backgroundColor: theme.colors.border.secondary,
         overflow: 'hidden' as const,
         position: 'relative' as const,
         variants: {
-            size: createLinearTrackSizeVariants(theme),
+            // $iterator expands for each progress size
+            size: {
+                height: theme.sizes.$progress.linearHeight,
+            },
             rounded: {
                 true: { borderRadius: 9999 },
                 false: { borderRadius: 0 },
             },
         },
-    });
-}
+    }),
 
-/**
- * Create circular container styles
- */
-function createCircularContainerStyles(theme: Theme) {
-    return () => ({
+    linearBar: ({ intent = 'primary' }: ProgressDynamicProps) => ({
+        height: '100%' as const,
+        backgroundColor: theme.intents[intent].primary,
+        variants: {
+            rounded: {
+                true: { borderRadius: 9999 },
+                false: { borderRadius: 0 },
+            },
+        },
+        _web: {
+            transition: 'width 0.3s ease' as const,
+        },
+    }),
+
+    indeterminateBar: ({ intent = 'primary' }: ProgressDynamicProps) => ({
+        position: 'absolute' as const,
+        height: '100%' as const,
+        width: '40%' as const,
+        backgroundColor: theme.intents[intent].primary,
+        variants: {
+            rounded: {
+                true: { borderRadius: 9999 },
+                false: { borderRadius: 0 },
+            },
+        },
+    }),
+
+    circularContainer: (_props: ProgressDynamicProps) => ({
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         position: 'relative' as const,
         variants: {
-            size: createCircularContainerSizeVariants(theme),
-        } as const,
-    });
-}
+            size: {
+                width: theme.sizes.$progress.circularSize,
+                height: theme.sizes.$progress.circularSize,
+            },
+        },
+    }),
 
-/**
- * Create circular track styles
- */
-function createCircularTrackStyles(theme: Theme) {
-    return () => ({
+    circularTrack: (_props: ProgressDynamicProps) => ({
         _web: {
             stroke: theme.colors.border.secondary,
         },
-    });
-}
+    }),
 
-/**
- * Create label styles
- */
-function createLabelStyles(theme: Theme) {
-    return () => ({
+    circularBar: ({ intent = 'primary' }: ProgressDynamicProps) => ({
+        _web: {
+            stroke: theme.intents[intent].primary,
+        },
+    }),
+
+    label: (_props: ProgressDynamicProps) => ({
         color: theme.colors.text.primary,
         textAlign: 'center' as const,
         variants: {
-            size: createLabelSizeVariants(theme),
+            size: {
+                fontSize: theme.sizes.$progress.labelFontSize,
+            },
         },
-    });
-}
+    }),
 
-/**
- * Create circular label styles
- */
-function createCircularLabelStyles(theme: Theme) {
-    return () => ({
+    circularLabel: (_props: ProgressDynamicProps) => ({
         position: 'absolute' as const,
         fontWeight: '600' as const,
         color: theme.colors.text.primary,
         variants: {
-            size: createCircularLabelSizeVariants(theme),
+            size: {
+                fontSize: theme.sizes.$progress.circularLabelFontSize,
+            },
         },
-    });
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const progressStyles = StyleSheet.create((theme: Theme) => {
-  // Apply extensions to main visual elements
-
-  return applyExtensions('Progress', theme, {container: createContainerStyles(),
-    linearTrack: createLinearTrackStyles(theme),
-    linearBar: createLinearBarStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-    indeterminateBar: createIndeterminateBarStyles(theme),
-    circularContainer: createCircularContainerStyles(theme)(),
-    circularTrack: createCircularTrackStyles(theme)(),
-    circularBar: createCircularBarStyles(theme),
-    label: createLabelStyles(theme)(),
-    circularLabel: createCircularLabelStyles(theme)()});
-});
+    }),
+}));

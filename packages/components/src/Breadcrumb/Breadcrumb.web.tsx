@@ -1,12 +1,6 @@
-import React, { isValidElement, useState, useRef, useEffect } from 'react';
+import React, { isValidElement, useState } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import {
-  breadcrumbContainerStyles,
-  breadcrumbItemStyles,
-  breadcrumbSeparatorStyles,
-  breadcrumbEllipsisStyles,
-  breadcrumbMenuButtonStyles
-} from './Breadcrumb.styles';
+import { breadcrumbStyles } from './Breadcrumb.styles';
 import type { BreadcrumbProps, BreadcrumbItem as BreadcrumbItemType } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
@@ -26,21 +20,23 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
   const isDisabled = item.disabled || false;
 
   // Apply size variant
-  breadcrumbItemStyles.useVariants({
+  breadcrumbStyles.useVariants({
     size,
   });
 
-  // Get dynamic item text style
-  const itemTextStyle = (breadcrumbItemStyles.itemText as any)({
+  // Get dynamic styles - call as functions for theme reactivity
+  const itemStyle_ = (breadcrumbStyles.item as any)({});
+  const itemTextStyle = (breadcrumbStyles.itemText as any)({
     intent,
     isLast,
     disabled: isDisabled,
     clickable: isClickable,
   });
+  const iconStyle = (breadcrumbStyles.icon as any)({});
 
-  const itemProps = getWebProps([breadcrumbItemStyles.item]);
+  const itemProps = getWebProps([itemStyle_]);
   const itemTextProps = getWebProps([itemTextStyle, itemStyle]);
-  const iconProps = getWebProps([breadcrumbItemStyles.icon]);
+  const iconProps = getWebProps([iconStyle]);
 
   const handleClick = () => {
     if (!item.disabled && item.onPress) {
@@ -53,10 +49,10 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
 
     if (isIconName(item.icon)) {
       const iconPath = resolveIconPath(item.icon);
+      // IconSvg uses size="1em" by default, sized by container's fontSize from styles
       return (
         <IconSvg
           path={iconPath}
-          {...iconProps}
           aria-label={item.icon}
         />
       );
@@ -120,8 +116,9 @@ interface BreadcrumbSeparatorProps {
 }
 
 const BreadcrumbSeparator: React.FC<BreadcrumbSeparatorProps> = ({ separator, size, separatorStyle }) => {
-  breadcrumbSeparatorStyles.useVariants({ size });
-  const separatorProps = getWebProps([breadcrumbSeparatorStyles.separator, separatorStyle]);
+  breadcrumbStyles.useVariants({ size });
+  const separatorStyle_ = (breadcrumbStyles.separator as any)({});
+  const separatorProps = getWebProps([separatorStyle_, separatorStyle]);
 
   return (
     <span {...separatorProps} aria-hidden="true">
@@ -136,9 +133,11 @@ interface BreadcrumbEllipsisProps {
 }
 
 const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent }) => {
-  breadcrumbEllipsisStyles.useVariants({ size });
-  const ellipsisProps = getWebProps([breadcrumbEllipsisStyles.ellipsis]);
-  const iconProps = getWebProps([breadcrumbEllipsisStyles.icon({ intent })]);
+  breadcrumbStyles.useVariants({ size });
+  const ellipsisStyle = (breadcrumbStyles.ellipsis as any)({});
+  const ellipsisIconStyle = (breadcrumbStyles.ellipsisIcon as any)({ intent });
+  const ellipsisProps = getWebProps([ellipsisStyle]);
+  const iconProps = getWebProps([ellipsisIconStyle]);
   const ellipsisIconPath = resolveIconPath('dots-horizontal');
 
   return (
@@ -167,13 +166,19 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   id,
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const containerProps = getWebProps([breadcrumbContainerStyles.container, style as any]);
+
+  // Get dynamic styles - call as functions for theme reactivity
+  const containerStyle = (breadcrumbStyles.container as any)({});
+  const menuButtonStyle = (breadcrumbStyles.menuButton as any)({});
+  const menuButtonIconStyle = (breadcrumbStyles.menuButtonIcon as any)({ intent });
+
+  const containerProps = getWebProps([containerStyle, style as any]);
   const menuIconPath = resolveIconPath('dots-horizontal');
 
   // Apply variants for menu button
-  breadcrumbMenuButtonStyles.useVariants({ size });
-  const menuButtonProps = getWebProps([breadcrumbMenuButtonStyles.button]);
-  const menuIconProps = getWebProps([breadcrumbMenuButtonStyles.icon({ intent })]);
+  breadcrumbStyles.useVariants({ size });
+  const menuButtonProps = getWebProps([menuButtonStyle]);
+  const menuIconProps = getWebProps([menuButtonIconStyle]);
 
   // Handle responsive collapsing
   let displayItems = items;

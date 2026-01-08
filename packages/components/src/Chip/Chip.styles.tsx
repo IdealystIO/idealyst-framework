@@ -1,28 +1,31 @@
+/**
+ * Chip styles using defineStyle with dynamic size/intent/type/selected handling.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent } from '@idealyst/theme';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 
-type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
 type ChipType = 'filled' | 'outlined' | 'soft';
-type ChipIntent = Intent;
 
-type ChipDynamicProps = {
-    size: ChipSize;
-    intent: ChipIntent;
-    type: ChipType;
-    selected: boolean;
+export type ChipDynamicProps = {
+    size?: Size;
+    intent?: Intent;
+    type?: ChipType;
+    selected?: boolean;
     disabled?: boolean;
 };
 
-type ChipDeleteButtonProps = {
-    size: ChipSize;
-};
-
 /**
- * Create container styles
+ * Chip styles with size/intent/type/selected handling.
  */
-function createContainerStyles(theme: Theme) {
-    return ({ size, intent, type, selected, disabled = false }: ChipDynamicProps) => {
+export const chipStyles = defineStyle('Chip', (theme: Theme) => ({
+    container: ({ size = 'md', intent = 'primary', type = 'filled', selected = false, disabled = false }: ChipDynamicProps) => {
         const intentValue = theme.intents[intent];
         const sizeValue = theme.sizes.chip[size];
 
@@ -61,20 +64,14 @@ function createContainerStyles(theme: Theme) {
             borderStyle: borderWidth > 0 ? ('solid' as const) : undefined,
             opacity: disabled ? 0.5 : 1,
         } as const;
-    };
-}
+    },
 
-/**
- * Create label styles
- */
-function createLabelStyles(theme: Theme) {
-    return ({ size, intent, type, selected }: ChipDynamicProps) => {
+    label: ({ size = 'md', intent = 'primary', type = 'filled', selected = false }: ChipDynamicProps) => {
         const intentValue = theme.intents[intent];
         const sizeValue = theme.sizes.chip[size];
 
         // Compute color based on type and selected state
         let color: string;
-
         if (type === 'filled') {
             color = selected ? intentValue.primary : intentValue.contrast;
         } else if (type === 'outlined') {
@@ -84,31 +81,25 @@ function createLabelStyles(theme: Theme) {
         }
 
         return {
-            fontFamily: 'inherit',
+            fontFamily: 'inherit' as const,
             fontWeight: '500' as const,
             fontSize: sizeValue.fontSize as number,
             lineHeight: sizeValue.lineHeight as number,
             color,
         } as const;
-    };
-}
+    },
 
-/**
- * Create icon styles
- */
-function createIconStyles(theme: Theme) {
-    return ({ size, intent, type, selected }: ChipDynamicProps) => {
+    icon: ({ size = 'md', intent = 'primary', type = 'filled', selected = false }: ChipDynamicProps) => {
         const intentValue = theme.intents[intent];
         const sizeValue = theme.sizes.chip[size];
 
-        // Compute color based on type and selected state (same logic as label)
+        // Same color logic as label
         let color: string;
-
         if (type === 'filled') {
             color = selected ? intentValue.primary : intentValue.contrast;
         } else if (type === 'outlined') {
             color = selected ? theme.colors.text.inverse : intentValue.primary;
-        } else { // soft
+        } else {
             color = selected ? theme.colors.text.inverse : intentValue.dark;
         }
 
@@ -120,14 +111,9 @@ function createIconStyles(theme: Theme) {
             height: sizeValue.iconSize as number,
             color,
         } as const;
-    };
-}
+    },
 
-/**
- * Create delete button styles
- */
-function createDeleteButtonStyles(theme: Theme) {
-    return ({ size }: ChipDeleteButtonProps) => {
+    deleteButton: ({ size = 'md' }: ChipDynamicProps) => {
         const sizeValue = theme.sizes.chip[size];
 
         return {
@@ -140,25 +126,19 @@ function createDeleteButtonStyles(theme: Theme) {
             width: sizeValue.iconSize as number,
             height: sizeValue.iconSize as number,
         } as const;
-    };
-}
+    },
 
-/**
- * Create delete icon styles
- */
-function createDeleteIconStyles(theme: Theme) {
-    return ({ size, intent, type, selected }: ChipDynamicProps) => {
+    deleteIcon: ({ size = 'md', intent = 'primary', type = 'filled', selected = false }: ChipDynamicProps) => {
         const intentValue = theme.intents[intent];
         const sizeValue = theme.sizes.chip[size];
 
-        // Compute color based on type and selected state (same logic as label/icon)
+        // Same color logic as label/icon
         let color: string;
-
         if (type === 'filled') {
             color = selected ? intentValue.primary : intentValue.contrast;
         } else if (type === 'outlined') {
             color = selected ? theme.colors.text.inverse : intentValue.primary;
-        } else { // soft
+        } else {
             color = selected ? theme.colors.text.inverse : intentValue.dark;
         }
 
@@ -166,19 +146,5 @@ function createDeleteIconStyles(theme: Theme) {
             fontSize: sizeValue.iconSize as number,
             color,
         } as const;
-    };
-}
-
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-export const chipStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-
-    return applyExtensions('Chip', theme, {container: createContainerStyles(theme),
-        label: createLabelStyles(theme),
-        icon: createIconStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        deleteButton: createDeleteButtonStyles(theme),
-        deleteIcon: createDeleteIconStyles(theme)});
-});
+    },
+}));

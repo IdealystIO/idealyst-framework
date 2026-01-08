@@ -99,12 +99,16 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   const labelContent = children || label;
   const displayHelperText = error || helperText;
 
+  // Get dynamic styles - call as functions for theme reactivity
+  const wrapperStyle = (checkboxStyles.wrapper as any)({});
   const containerStyle = (checkboxStyles.container as any)({});
-  const checkboxStyle = (checkboxStyles.checkbox as any)({ intent });
-  const checkmarkStyle = (checkboxStyles.checkmark as any)({});
+  const checkboxStyle = (checkboxStyles.checkbox as any)({ intent, checked: internalChecked, disabled, type: variant });
+  const checkmarkStyle = (checkboxStyles.checkmark as any)({ checked: internalChecked });
+  const labelStyle = (checkboxStyles.label as any)({ disabled });
+  const helperTextStyle = (checkboxStyles.helperText as any)({ error: !!error });
 
   return (
-    <View ref={ref} nativeID={id} style={[checkboxStyles.wrapper, style]}>
+    <View ref={ref} nativeID={id} style={[wrapperStyle, style]}>
       <Pressable
         onPress={handlePress}
         disabled={disabled}
@@ -123,13 +127,13 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
           )}
         </View>
         {labelContent && (
-          <Text style={checkboxStyles.label}>
+          <Text style={labelStyle}>
             {labelContent}
           </Text>
         )}
       </Pressable>
       {displayHelperText && (
-        <Text style={checkboxStyles.helperText}>
+        <Text style={helperTextStyle}>
           {error || helperText}
         </Text>
       )}

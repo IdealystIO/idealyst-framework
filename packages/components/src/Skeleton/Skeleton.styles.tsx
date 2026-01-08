@@ -1,67 +1,47 @@
+/**
+ * Skeleton styles using defineStyle.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, StylesheetStyles } from '@idealyst/theme';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
+
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
 
 type SkeletonShape = 'rectangle' | 'rounded' | 'circle';
 type SkeletonAnimation = 'pulse' | 'wave' | 'none';
 
-type SkeletonVariants = {
-    shape: SkeletonShape;
-    animation: SkeletonAnimation;
-}
-
-export type ExpandedSkeletonStyles = StylesheetStyles<keyof SkeletonVariants>;
-export type ExpandedSkeletonGroupStyles = StylesheetStyles<never>;
-
-export type SkeletonStylesheet = {
-    skeleton: ExpandedSkeletonStyles;
-    group: ExpandedSkeletonGroupStyles;
-}
+export type SkeletonDynamicProps = {
+    shape?: SkeletonShape;
+    animation?: SkeletonAnimation;
+};
 
 /**
- * Create shape variants for skeleton
+ * Skeleton styles with shape and animation variants.
  */
-function createShapeVariants(theme: Theme) {
-    return {
-        rectangle: {
-            borderRadius: 0,
-        },
-        rounded: {
-            borderRadius: 8,
-        },
-        circle: {
-            borderRadius: 9999,
-        },
-    } as const;
-}
-
-// Style creators for extension support
-function createSkeletonStyles(theme: Theme) {
-    return () => ({
+export const skeletonStyles = defineStyle('Skeleton', (theme: Theme) => ({
+    skeleton: (_props: SkeletonDynamicProps) => ({
         backgroundColor: theme.colors.surface.tertiary,
         overflow: 'hidden' as const,
         variants: {
-            shape: createShapeVariants(theme),
+            shape: {
+                rectangle: { borderRadius: 0 },
+                rounded: { borderRadius: 8 },
+                circle: { borderRadius: 9999 },
+            },
             animation: {
                 pulse: {},
                 wave: {},
                 none: {},
             },
         },
-    });
-}
+    }),
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel
-// transform on native cannot resolve function calls to extract variant structures.
-// @ts-ignore - TS language server needs restart to pick up theme structure changes
-export const skeletonStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-
-    return applyExtensions('Skeleton', theme, {skeleton: createSkeletonStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        group: {
-            display: 'flex',
-            flexDirection: 'column',
-        }});
-});
+    group: (_props: {}) => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+    }),
+}));

@@ -124,13 +124,13 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
     marginHorizontal,
   });
 
-  // Create style arrays
-  const wrapperStyleArray = [checkboxStyles.wrapper, style as any];
+  // Create style arrays - call as functions with required props for theme reactivity
+  const wrapperStyleArray = [(checkboxStyles.wrapper as any)({}), style as any];
   const containerStyleArray = [(checkboxStyles.container as any)({})];
-  const checkboxStyleArray = [(checkboxStyles.checkbox as any)({ intent })];
-  const labelStyleArray = [checkboxStyles.label];
-  const helperTextStyleArray = [checkboxStyles.helperText];
-  const checkmarkStyleArray = [(checkboxStyles.checkmark as any)({})];
+  const checkboxStyleArray = [(checkboxStyles.checkbox as any)({ intent, checked: internalChecked, disabled, type: variant })];
+  const labelStyleArray = [(checkboxStyles.label as any)({ disabled })];
+  const helperTextStyleArray = [(checkboxStyles.helperText as any)({ error: !!error })];
+  const checkmarkStyleArray = [(checkboxStyles.checkmark as any)({ checked: internalChecked })];
 
   // Generate web props
   const wrapperProps = getWebProps(wrapperStyleArray);

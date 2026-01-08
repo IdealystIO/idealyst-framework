@@ -1,114 +1,86 @@
+/**
+ * MenuItem styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme, Intent } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 
-type MenuItemDynamicProps = {
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+export type MenuItemDynamicProps = {
+    size?: Size;
     intent?: Intent;
+    disabled?: boolean;
 };
 
 /**
- * Get hover styles for menu item based on intent
+ * MenuItem styles with intent/disabled handling.
  */
-function getItemHoverStyles(theme: Theme, intent: Intent) {
-    if (intent === 'neutral') {
-        return {
-            _web: {
-                _hover: {
-                    backgroundColor: theme.colors.surface.secondary,
-                },
-            },
-        } as const;
-    }
-    const intentValue = theme.intents[intent];
-    return {
-        _web: {
-            _hover: {
-                backgroundColor: intentValue.light,
-                color: intentValue.primary,
-            },
-        },
-    } as const;
-}
+export const menuItemStyles = defineStyle('MenuItem', (theme: Theme) => ({
+    item: ({ intent = 'neutral', disabled = false }: MenuItemDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const hoverStyles = intent !== 'neutral' ? {
+            backgroundColor: intentValue.light,
+            color: intentValue.primary,
+        } : {
+            backgroundColor: theme.colors.surface.secondary,
+        };
 
-/**
- * Create dynamic item styles
- */
-function createItemStyles(theme: Theme) {
-    return ({ intent = 'neutral' }: MenuItemDynamicProps) => {
-        const hoverStyles = getItemHoverStyles(theme, intent);
         return {
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'transparent',
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            backgroundColor: 'transparent' as const,
             borderRadius: 4,
             minHeight: 44,
+            opacity: disabled ? 0.5 : 1,
             variants: {
-                size: buildSizeVariants(theme, 'menu', (size) => ({
-                    paddingVertical: size.paddingVertical,
-                    paddingHorizontal: size.paddingHorizontal,
-                })),
-                disabled: {
-                    true: {
-                        opacity: 0.5,
-                        _web: {
-                            cursor: 'not-allowed',
-                            _hover: {
-                                backgroundColor: 'transparent',
-                            },
-                        },
-                    },
-                    false: {},
+                size: {
+                    paddingVertical: theme.sizes.$menu.paddingVertical,
+                    paddingHorizontal: theme.sizes.$menu.paddingHorizontal,
                 },
             },
             _web: {
                 display: 'flex',
                 width: '100%',
-                cursor: 'pointer',
+                cursor: disabled ? 'not-allowed' : 'pointer',
                 border: 'none',
                 borderWidth: 0,
                 outline: 'none',
                 transition: 'background-color 0.2s ease',
                 textAlign: 'left',
-                _hover: {
-                    backgroundColor: theme.colors.surface.secondary,
-                },
+                _hover: disabled ? { backgroundColor: 'transparent' } : hoverStyles,
             },
-            ...hoverStyles,
         } as const;
-    };
-}
+    },
 
-// Styles are inlined here instead of in @idealyst/theme because Unistyles' Babel transform on native cannot resolve function calls to extract variant structures.
-export const menuItemStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-
-    return applyExtensions('MenuItem', theme, {item: createItemStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        icon: {
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            marginRight: 12,
-            variants: {
-                size: buildSizeVariants(theme, 'menu', (size) => ({
-                    width: size.iconSize,
-                    height: size.iconSize,
-                    fontSize: size.iconSize,
-                }))
-            },
-            _web: {
-                display: 'flex',
+    icon: (_props: MenuItemDynamicProps) => ({
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        flexShrink: 0,
+        marginRight: 12,
+        variants: {
+            size: {
+                width: theme.sizes.$menu.iconSize,
+                height: theme.sizes.$menu.iconSize,
+                fontSize: theme.sizes.$menu.iconSize,
             },
         },
-        label: {
-            flex: 1,
-            color: theme.colors.text.primary,
-            variants: {
-                size: buildSizeVariants(theme, 'menu', (size) => ({
-                    fontSize: size.labelFontSize,
-                })),
+        _web: {
+            display: 'flex',
+        },
+    }),
+
+    label: (_props: MenuItemDynamicProps) => ({
+        flex: 1,
+        color: theme.colors.text.primary,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$menu.labelFontSize,
             },
-        }});
-});
+        },
+    }),
+}));

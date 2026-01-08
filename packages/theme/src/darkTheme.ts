@@ -85,30 +85,30 @@ export const darkTheme = createTheme()
         shadowRadius: 16,
         boxShadow: '0px 12px 32px rgba(0, 0, 0, 0.25)',
     })
-    // Colors
+    // Colors (neutral grays, not blue-tinted)
     .setColors({
         pallet: generateDarkColorPallette(),
         surface: {
-            primary: '#0f172a',
-            secondary: '#1e293b',
-            tertiary: '#334155',
+            primary: '#121212',
+            secondary: '#1e1e1e',
+            tertiary: '#2a2a2a',
             inverse: '#ffffff',
             'inverse-secondary': 'rgba(255, 255, 255, 0.9)',
             'inverse-tertiary': 'rgba(255, 255, 255, 0.7)',
         },
         text: {
-            primary: '#f1f5f9',
-            secondary: '#cbd5e1',
-            tertiary: '#94a3b8',
-            inverse: '#0f172a',
-            'inverse-secondary': 'rgba(15, 23, 42, 0.9)',
-            'inverse-tertiary': 'rgba(15, 23, 42, 0.7)',
+            primary: '#f5f5f5',
+            secondary: '#a3a3a3',
+            tertiary: '#737373',
+            inverse: '#121212',
+            'inverse-secondary': 'rgba(18, 18, 18, 0.9)',
+            'inverse-tertiary': 'rgba(18, 18, 18, 0.7)',
         },
         border: {
-            primary: '#334155',
-            secondary: '#475569',
-            tertiary: '#64748b',
-            disabled: '#1e293b',
+            primary: '#333333',
+            secondary: '#404040',
+            tertiary: '#525252',
+            disabled: '#1e1e1e',
         },
     })
     // Sizes (reuse from light theme)

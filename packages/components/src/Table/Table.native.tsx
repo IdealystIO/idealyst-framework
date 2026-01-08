@@ -50,6 +50,15 @@ function TableInner<T = any>({
     marginHorizontal,
   });
 
+  // Call styles as functions to get theme-reactive styles
+  const containerStyle = (tableStyles.container as any)({});
+  const tableStyle = (tableStyles.table as any)({});
+  const theadStyle = (tableStyles.thead as any)({});
+  const tbodyStyle = (tableStyles.tbody as any)({});
+  const rowStyle = (tableStyles.row as any)({});
+  const headerCellStyle = (tableStyles.headerCell as any)({});
+  const cellStyle = (tableStyles.cell as any)({});
+
   // Helper to get cell value
   const getCellValue = (column: TableColumn<T>, row: T, rowIndex: number) => {
     if (column.render) {
@@ -57,7 +66,7 @@ function TableInner<T = any>({
       return column.render(value, row, rowIndex);
     }
     const value = column.dataIndex ? (row as any)[column.dataIndex] : '';
-    return <Text style={tableStyles.cell}>{String(value)}</Text>;
+    return <Text style={cellStyle}>{String(value)}</Text>;
   };
 
   const isClickable = !!onRowPress;
@@ -67,13 +76,13 @@ function TableInner<T = any>({
       ref={ref}
       nativeID={id}
       horizontal
-      style={[(tableStyles.container as any)({}), style]}
+      style={[containerStyle, style]}
       testID={testID}
       {...nativeA11yProps}
     >
-      <View style={tableStyles.table}>
+      <View style={tableStyle}>
         {/* Header */}
-        <View style={tableStyles.thead}>
+        <View style={theadStyle}>
           <View style={{ flexDirection: 'row' }}>
             {columns.map((column) => {
               tableStyles.useVariants({
@@ -86,11 +95,11 @@ function TableInner<T = any>({
                 <View
                   key={column.key}
                   style={[
-                    tableStyles.headerCell,
+                    headerCellStyle,
                     { width: column.width, flex: column.width ? undefined : 1 },
                   ]}
                 >
-                  <Text style={tableStyles.headerCell}>
+                  <Text style={headerCellStyle}>
                     {column.title}
                   </Text>
                 </View>
@@ -100,7 +109,7 @@ function TableInner<T = any>({
         </View>
 
         {/* Body */}
-        <View style={tableStyles.tbody}>
+        <View style={tbodyStyle}>
           {data.map((row, rowIndex) => {
             tableStyles.useVariants({
               type,
@@ -112,7 +121,7 @@ function TableInner<T = any>({
             return (
               <RowComponent
                 key={rowIndex}
-                style={tableStyles.row}
+                style={rowStyle}
                 onPress={isClickable ? () => onRowPress?.(row, rowIndex) : undefined}
                 testID={`${testID}-row-${rowIndex}`}
               >
@@ -128,7 +137,7 @@ function TableInner<T = any>({
                       <View
                         key={column.key}
                         style={[
-                          tableStyles.cell,
+                          cellStyle,
                           { width: column.width, flex: column.width ? undefined : 1 },
                         ]}
                       >

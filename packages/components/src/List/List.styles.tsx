@@ -1,242 +1,212 @@
+/**
+ * List styles using defineStyle with dynamic props.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme } from '@idealyst/theme';
-import { buildSizeVariants } from '../utils/buildSizeVariants';
-import {
-  buildGapVariants,
-  buildPaddingVariants,
-  buildPaddingVerticalVariants,
-  buildPaddingHorizontalVariants,
-  buildMarginVariants,
-  buildMarginVerticalVariants,
-  buildMarginHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
-import { ListSizeVariant, ListType } from './types';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme, Size } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
 
-type ListVariants = {
-    type: ListType;
-    size: ListSizeVariant;
-    scrollable: boolean;
-    active: boolean;
-    selected: boolean;
-    disabled: boolean;
-    clickable: boolean;
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+type ListType = 'default' | 'bordered' | 'divided';
+
+export type ListDynamicProps = {
+    size?: Size;
+    type?: ListType;
+    scrollable?: boolean;
+    active?: boolean;
+    selected?: boolean;
+    disabled?: boolean;
+    clickable?: boolean;
+    gap?: ViewStyleSize;
+    padding?: ViewStyleSize;
+    paddingVertical?: ViewStyleSize;
+    paddingHorizontal?: ViewStyleSize;
+    margin?: ViewStyleSize;
+    marginVertical?: ViewStyleSize;
+    marginHorizontal?: ViewStyleSize;
 };
 
 /**
- * Create type variants for container
+ * List styles with type/state handling.
  */
-function createContainerTypeVariants(theme: Theme) {
-    return {
-        default: {
-            backgroundColor: 'transparent',
-        },
-        bordered: {
+export const listStyles = defineStyle('List', (theme: Theme) => ({
+    container: ({ type = 'default', scrollable = false }: ListDynamicProps) => {
+        const typeStyles = type === 'bordered' ? {
             backgroundColor: theme.colors.surface.primary,
             borderWidth: 1,
             borderColor: theme.colors.border.primary,
             borderRadius: 8,
-            _web: {
-                overflow: 'hidden',
-                border: `1px solid ${theme.colors.border.primary}`,
-            },
-        },
-        divided: {
+        } : {
             backgroundColor: 'transparent',
-        },
-    };
-}
-
-type ItemDynamicProps = {
-    type?: ListType;
-    disabled?: boolean;
-    clickable?: boolean;
-};
-
-/**
- * Get item hover styles based on disabled and clickable state
- */
-function getItemHoverStyles(theme: Theme, disabled: boolean, clickable: boolean) {
-    if (disabled || !clickable) {
-        return {
-            backgroundColor: 'transparent',
-            borderRadius: 0,
         };
-    }
-    return {
-        backgroundColor: theme.colors.surface.secondary,
-        borderRadius: 4,
-    };
-}
 
-// Container style creator for extension support
-function createContainerStyles(theme: Theme) {
-    return () => ({
-        display: 'flex' as const,
-        flexDirection: 'column' as const,
-        width: '100%',
-        variants: {
-            type: createContainerTypeVariants(theme),
-            scrollable: {
-                true: {
-                    _web: {
-                        overflow: 'auto',
-                    },
-                },
-                false: {},
-            },
-            // Spacing variants from ContainerStyleProps
-            gap: buildGapVariants(theme),
-            padding: buildPaddingVariants(theme),
-            paddingVertical: buildPaddingVerticalVariants(theme),
-            paddingHorizontal: buildPaddingHorizontalVariants(theme),
-            margin: buildMarginVariants(theme),
-            marginVertical: buildMarginVerticalVariants(theme),
-            marginHorizontal: buildMarginHorizontalVariants(theme),
-        },
-    });
-}
-
-// Item style creator for extension support
-function createItemStyles(theme: Theme) {
-    return ({ type = 'default', disabled = false, clickable = true }: ItemDynamicProps) => {
-        const hoverStyles = getItemHoverStyles(theme, disabled, clickable);
         return {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'transparent',
-            textAlign: 'left',
-            borderBottomWidth: type === 'divided' ? 1 : 0,
-            borderBottomStyle: type === 'divided' ? 'solid' as const : undefined,
-            borderBottomColor: type === 'divided' ? theme.colors.border.primary : undefined,
+            display: 'flex' as const,
+            flexDirection: 'column' as const,
+            width: '100%',
+            ...typeStyles,
             variants: {
-                size: buildSizeVariants(theme, 'list', (size) => ({
-                    paddingVertical: size.paddingVertical,
-                    paddingHorizontal: size.paddingHorizontal,
-                    minHeight: size.minHeight,
-                })),
-                active: {
-                    true: {
-                        backgroundColor: theme.colors.surface.secondary,
-                    },
-                    false: {},
+                gap: {
+                    gap: theme.sizes.$view.padding,
                 },
-                selected: {
-                    true: {
-                        backgroundColor: theme.intents.primary.light + '20',
-                        borderLeftWidth: 3,
-                        borderLeftColor: theme.intents.primary.primary,
-                        _web: {
-                            borderLeft: `3px solid ${theme.intents.primary.primary}`,
-                        },
-                    },
-                    false: {},
+                padding: {
+                    padding: theme.sizes.$view.padding,
                 },
-            } as const,
+                paddingVertical: {
+                    paddingVertical: theme.sizes.$view.padding,
+                },
+                paddingHorizontal: {
+                    paddingHorizontal: theme.sizes.$view.padding,
+                },
+                margin: {
+                    margin: theme.sizes.$view.padding,
+                },
+                marginVertical: {
+                    marginVertical: theme.sizes.$view.padding,
+                },
+                marginHorizontal: {
+                    marginHorizontal: theme.sizes.$view.padding,
+                },
+            },
+            _web: {
+                overflow: type === 'bordered' ? 'hidden' : (scrollable ? 'auto' : undefined),
+                border: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
+            },
+        } as const;
+    },
+
+    item: ({ type = 'default', active = false, selected = false, disabled = false, clickable = true }: ListDynamicProps) => {
+        const baseStyles = {
+            display: 'flex' as const,
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            backgroundColor: active ? theme.colors.surface.secondary : 'transparent',
+            textAlign: 'left' as const,
             opacity: disabled ? 0.5 : 1,
+        };
+
+        const dividerStyles = type === 'divided' ? {
+            borderBottomWidth: 1,
+            borderBottomColor: theme.colors.border.primary,
+        } : {};
+
+        const selectedStyles = selected ? {
+            backgroundColor: theme.intents.primary.light + '20',
+            borderLeftWidth: 3,
+            borderLeftColor: theme.intents.primary.primary,
+        } : {};
+
+        return {
+            ...baseStyles,
+            ...dividerStyles,
+            ...selectedStyles,
+            variants: {
+                size: {
+                    paddingVertical: theme.sizes.$list.paddingVertical,
+                    paddingHorizontal: theme.sizes.$list.paddingHorizontal,
+                    minHeight: theme.sizes.$list.minHeight,
+                },
+            },
             _web: {
                 border: 'none',
                 cursor: disabled ? 'not-allowed' : (clickable ? 'pointer' : 'default'),
                 outline: 'none',
                 transition: 'background-color 0.2s ease, border-color 0.2s ease',
                 borderBottom: type === 'divided' ? `1px solid ${theme.colors.border.primary}` : undefined,
-                _hover: hoverStyles,
+                borderLeft: selected ? `3px solid ${theme.intents.primary.primary}` : undefined,
+                _hover: (disabled || !clickable) ? {} : {
+                    backgroundColor: theme.colors.surface.secondary,
+                    borderRadius: 4,
+                },
             },
         } as const;
-    };
-}
+    },
 
-export const listStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
+    itemContent: (_props: ListDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        flex: 1,
+        gap: 8,
+    }),
 
-    return applyExtensions('List', theme, {container: createContainerStyles(theme),
-        item: createItemStyles(theme),
-        // Additional styles (merged from return)
-        // Minor utility styles (not extended)
-        itemContent: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            flex: 1,
-            gap: 8,
-        },
-        leading: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginRight: 8,
-            color: theme.colors.text.secondary,
-            variants: {
-                size: buildSizeVariants(theme, 'list', (size) => ({
-                    width: size.iconSize,
-                    height: size.iconSize,
-                })),
-            } as const,
-        } as const,
-        labelContainer: {
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        label: {
-            fontWeight: '500',
-            color: theme.colors.text.primary,
-            variants: {
-                size: buildSizeVariants(theme, 'list', (size) => ({
-                    fontSize: size.labelFontSize,
-                    lineHeight: size.labelLineHeight,
-                })),
-                disabled: {
-                    true: {
-                        color: theme.colors.text.secondary,
-                    },
-                    false: {},
-                },
-                selected: {
-                    true: {
-                        color: theme.intents.primary.primary,
-                        fontWeight: '600',
-                    },
-                    false: {},
-                },
+    leading: (_props: ListDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        marginRight: 8,
+        color: theme.colors.text.secondary,
+        variants: {
+            size: {
+                width: theme.sizes.$list.iconSize,
+                height: theme.sizes.$list.iconSize,
+                fontSize: theme.sizes.$list.iconSize,
             },
         },
-        trailing: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginLeft: 8,
-            color: theme.colors.text.secondary,
-            flexShrink: 0,
-        },
-        trailingIcon: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            variants: {
-                size: buildSizeVariants(theme, 'list', (size) => ({
-                    width: size.iconSize,
-                    height: size.iconSize,
-                })),
+    }),
+
+    labelContainer: (_props: ListDynamicProps) => ({
+        flex: 1,
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+    }),
+
+    label: ({ disabled = false, selected = false }: ListDynamicProps) => ({
+        fontWeight: selected ? ('600' as const) : ('500' as const),
+        color: selected ? theme.intents.primary.primary : (disabled ? theme.colors.text.secondary : theme.colors.text.primary),
+        variants: {
+            size: {
+                fontSize: theme.sizes.$list.labelFontSize,
+                lineHeight: theme.sizes.$list.labelLineHeight,
             },
         },
-        section: {
-            display: 'flex',
-            flexDirection: 'column',
+    }),
+
+    trailing: (_props: ListDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        marginLeft: 8,
+        color: theme.colors.text.secondary,
+        flexShrink: 0,
+    }),
+
+    trailingIcon: (_props: ListDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        variants: {
+            size: {
+                width: theme.sizes.$list.iconSize,
+                height: theme.sizes.$list.iconSize,
+                fontSize: theme.sizes.$list.iconSize,
+            },
         },
-        sectionTitle: {
-            fontWeight: '600',
-            fontSize: 12,
-            lineHeight: 16,
-            textTransform: 'uppercase',
-            letterSpacing: 0.5,
-            color: theme.colors.text.secondary,
-            padding: 8,
-            paddingBottom: 4,
-        },
-        sectionContent: {
-            display: 'flex',
-            flexDirection: 'column',
-        }});
-});
+    }),
+
+    section: (_props: ListDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+    }),
+
+    sectionTitle: (_props: ListDynamicProps) => ({
+        fontWeight: '600' as const,
+        fontSize: 12,
+        lineHeight: 16,
+        textTransform: 'uppercase' as const,
+        letterSpacing: 0.5,
+        color: theme.colors.text.secondary,
+        padding: 8,
+        paddingBottom: 4,
+    }),
+
+    sectionContent: (_props: ListDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+    }),
+}));

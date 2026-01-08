@@ -37,11 +37,13 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     disabled: Boolean(item.disabled),
   });
 
-  // Get dynamic styles
+  // Get dynamic styles - call as functions to get theme-reactive styles
   const itemStyle = (accordionStyles.item as any)({ type, isLast });
   const headerStyle = (accordionStyles.header as any)({});
   const iconStyle = (accordionStyles.icon as any)({});
   const contentStyle = (accordionStyles.content as any)({});
+  const titleStyle = (accordionStyles.title as any)({});
+  const contentInnerStyle = (contentInnerStyle as any)({});
 
   // Animate height and icon rotation when expanded state changes
   useEffect(() => {
@@ -88,7 +90,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         accessibilityLabel={item.title}
         accessibilityState={{ expanded: isExpanded, disabled: item.disabled }}
       >
-        <View style={accordionStyles.title}>
+        <View style={titleStyle}>
           <Text style={headerStyle}>
             {item.title}
           </Text>
@@ -107,9 +109,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         style={{ position: 'absolute', opacity: 0, zIndex: -1 }}
         onLayout={handleContentLayout}
       >
-        <View style={accordionStyles.contentInner}>
+        <View style={contentInnerStyle}>
           {typeof item.content === 'string' ? (
-            <Text style={accordionStyles.contentInner}>
+            <Text style={contentInnerStyle}>
               {item.content}
             </Text>
           ) : (
@@ -120,9 +122,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
       {/* Animated visible content */}
       <Animated.View style={animatedContentStyle}>
-        <View style={accordionStyles.contentInner}>
+        <View style={contentInnerStyle}>
           {typeof item.content === 'string' ? (
-            <Text style={accordionStyles.contentInner}>
+            <Text style={contentInnerStyle}>
               {item.content}
             </Text>
           ) : (

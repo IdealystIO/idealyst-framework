@@ -1,27 +1,39 @@
+/**
+ * Pressable styles using defineStyle with $iterator expansion.
+ */
 import { StyleSheet } from 'react-native-unistyles';
-import { Theme } from '@idealyst/theme';
-import {
-  buildPaddingVariants,
-  buildPaddingVerticalVariants,
-  buildPaddingHorizontalVariants,
-} from '../utils/buildViewStyleVariants';
-import { applyExtensions } from '../extensions/applyExtension';
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
 
-// Style creators for extension support
-function createPressableStyles(theme: Theme) {
-    return () => ({
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+export type PressableDynamicProps = {
+    padding?: ViewStyleSize;
+    paddingVertical?: ViewStyleSize;
+    paddingHorizontal?: ViewStyleSize;
+};
+
+/**
+ * Pressable styles with spacing variants.
+ */
+export const pressableStyles = defineStyle('Pressable', (theme: Theme) => ({
+    pressable: (_props: PressableDynamicProps) => ({
         variants: {
-            // Spacing variants from PressableSpacingStyleProps
-            padding: buildPaddingVariants(theme),
-            paddingVertical: buildPaddingVerticalVariants(theme),
-            paddingHorizontal: buildPaddingHorizontalVariants(theme),
+            // $iterator expands for each view size
+            padding: {
+                padding: theme.sizes.$view.padding,
+            },
+            paddingVertical: {
+                paddingVertical: theme.sizes.$view.padding,
+            },
+            paddingHorizontal: {
+                paddingHorizontal: theme.sizes.$view.padding,
+            },
         },
-    });
-}
-
-export const pressableStyles = StyleSheet.create((theme: Theme) => {
-    // Apply extensions to main visual elements
-    return applyExtensions('Pressable', theme, {
-        pressable: createPressableStyles(theme),
-    });
-});
+    }),
+}));

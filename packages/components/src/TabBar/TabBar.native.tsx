@@ -177,9 +177,10 @@ const TabBar = forwardRef<View, TabBarProps>(({
               iconPosition,
             });
 
-            // Compute dynamic styles for this tab
+            // Compute dynamic styles for this tab - call as functions for theme reactivity
             const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode, justify });
             const labelStyle = (tabBarLabelStyles.tabLabel as any)({ type, active: isActive, pillMode });
+            const iconContainerStyle = (tabBarIconStyles.tabIcon as any)({});
 
             const icon = renderIcon(item.icon, isActive, iconSize);
 
@@ -199,7 +200,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
                 accessibilityLabel={item.label}
                 accessibilityState={{ selected: isActive, disabled: item.disabled }}
               >
-                {icon && <View style={tabBarIconStyles.tabIcon as any}>{icon}</View>}
+                {icon && <View style={iconContainerStyle}>{icon}</View>}
                 <Text style={labelStyle}>{item.label}</Text>
               </TouchableOpacity>
             );

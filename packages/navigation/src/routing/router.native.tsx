@@ -7,73 +7,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { DrawerContentWrapper } from './DrawerContentWrapper.native';
 import { HeaderWrapper } from './HeaderWrapper.native';
 import React from 'react';
-import { useUnistyles } from 'react-native-unistyles';
-import { useIsFocused } from '@react-navigation/native';
 
-/**
- * Wrapper that makes screen components reactive to theme changes
- * Only updates when the screen is focused
- */
-const ThemeAwareScreenWrapper: React.FC<{
-    Component: React.ComponentType<any>;
-    [key: string]: any;
-}> = ({ Component, ...props }) => {
-    const isFocused = useIsFocused();
-
-    // Force update mechanism
-    const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
-
-    // Subscribe to theme changes
-    const { rt } = useUnistyles();
-
-    // Force re-render when theme changes (only when focused)
-    React.useEffect(() => {
-        if (isFocused) {
-            console.log('[ThemeAwareScreenWrapper] Theme changed, forcing update. New theme:', rt.themeName);
-            forceUpdate();
-        }
-    }, [rt.themeName, isFocused]);
-
-    // Log when component renders
-    React.useEffect(() => {
-        if (isFocused) {
-            console.log('[ThemeAwareScreenWrapper] Screen rendered with theme:', rt.themeName);
-        }
-    });
-
-    // Only render when focused to optimize performance
-    if (!isFocused) {
-        return null;
-    }
-
-    return <Component {...props} />;
-};
-
-/**
- * Cache for wrapped components to maintain stable references across renders
- */
-const wrappedComponentCache = new WeakMap<React.ComponentType<any>, React.ComponentType<any>>();
-
-/**
- * Creates a theme-aware component wrapper with a stable reference
- * This prevents React Navigation warnings about inline components
- */
-const createThemeAwareComponent = (OriginalComponent: React.ComponentType<any>) => {
-    // Check cache first to return the same wrapped component reference
-    if (wrappedComponentCache.has(OriginalComponent)) {
-        return wrappedComponentCache.get(OriginalComponent)!;
-    }
-
-    const Wrapped = React.memo((props: any) => (
-        <ThemeAwareScreenWrapper Component={OriginalComponent} {...props} />
-    ));
-    Wrapped.displayName = `ThemeAware(${OriginalComponent.displayName || OriginalComponent.name || 'Component'})`;
-
-    // Store in cache for future lookups
-    wrappedComponentCache.set(OriginalComponent, Wrapped);
-
-    return Wrapped;
-};
 
 /**
  * Internal screen name for 404 pages
@@ -208,7 +142,7 @@ const buildScreen = (params: RouteParam, Navigator: TypedNavigator, parentPath =
     // Determine the component - wrap screens with ThemeAwareScreenWrapper
     let component: React.ComponentType<any>;
     if (params.type === 'screen') {
-        component = createThemeAwareComponent(params.component);
+        component = params.component
     } else {
         component = buildNavigator(params, fullPath);
     }

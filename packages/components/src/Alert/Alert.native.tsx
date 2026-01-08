@@ -30,12 +30,16 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
   testID,
   id,
 }, ref) => {
-  // Compute dynamic styles with intent and type
+  // Call all styles as functions to get theme-reactive styles
   const dynamicProps = { intent, type };
   const containerStyle = (alertStyles.container as any)(dynamicProps);
   const iconContainerStyle = (alertStyles.iconContainer as any)(dynamicProps);
   const titleStyle = (alertStyles.title as any)(dynamicProps);
   const messageStyle = (alertStyles.message as any)(dynamicProps);
+  const contentStyle = (alertStyles.content as any)({});
+  const actionsStyle = (alertStyles.actions as any)({});
+  const closeButtonStyle = (alertStyles.closeButton as any)({});
+  const closeIconStyle = (alertStyles.closeIcon as any)(dynamicProps);
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
 
@@ -71,7 +75,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
         </View>
       )}
 
-      <View style={alertStyles.content}>
+      <View style={contentStyle}>
         {title && (
           <Text style={titleStyle}>
             {title}
@@ -93,7 +97,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
         )}
 
         {actions && (
-          <View style={alertStyles.actions}>
+          <View style={actionsStyle}>
             {actions}
           </View>
         )}
@@ -101,7 +105,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
 
       {dismissible && onDismiss && (
         <TouchableOpacity
-          style={alertStyles.closeButton}
+          style={closeButtonStyle}
           onPress={onDismiss}
           accessibilityLabel="Dismiss alert"
           accessibilityRole="button"
@@ -109,7 +113,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
           <MaterialCommunityIcons
             name="close"
             size={16}
-            style={alertStyles.closeIcon}
+            style={closeIconStyle}
           />
         </TouchableOpacity>
       )}

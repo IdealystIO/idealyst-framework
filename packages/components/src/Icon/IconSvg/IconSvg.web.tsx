@@ -19,6 +19,7 @@ interface IconSvgProps {
 
 export const IconSvg: React.FC<IconSvgProps> = ({
   path,
+  size = '1em',
   color = 'currentColor',
   style,
   'aria-label': ariaLabel,
@@ -29,6 +30,7 @@ export const IconSvg: React.FC<IconSvgProps> = ({
     <MdiIcon
       style={style}
       path={path}
+      size={size}
       color={color}
       aria-label={ariaLabel}
       data-testid={testID}

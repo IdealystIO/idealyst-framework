@@ -37,7 +37,7 @@ const List = forwardRef<View, ListProps>(({
       accessibilityHidden,
     });
   }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
-  // Apply types
+  // Apply variants
   listStyles.useVariants({
     size,
     scrollable,
@@ -50,8 +50,11 @@ const List = forwardRef<View, ListProps>(({
     marginHorizontal,
   });
 
+  // Call container style as function to get theme-reactive styles
+  const containerBaseStyle = (listStyles.container as any)({ type, scrollable });
+
   const containerStyle = [
-    listStyles.container,
+    containerBaseStyle,
     maxHeight ? { maxHeight } : undefined,
     style,
   ];

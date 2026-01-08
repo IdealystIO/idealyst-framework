@@ -1,25 +1,15 @@
-import { StyleSheet } from 'react-native-unistyles';
-import { darkTheme } from './darkTheme';
-import { lightTheme } from './lightTheme';
 import { Theme } from './theme';
 
 // Unistyles v3 themes declaration
+// Apps should configure their own themes via StyleSheet.configure()
 declare module 'react-native-unistyles' {
   export interface UnistylesThemes {
     light: Theme;
     dark: Theme;
+    // Apps can add more themes via module augmentation
+    [key: string]: Theme;
   }
 }
 
-// Export something to ensure this module is included in compilation
-export const unistylesConfigured = true;
-
-StyleSheet.configure({
-    settings: {
-        initialTheme: 'light',
-    },
-    themes: {
-      light: lightTheme,
-      dark: darkTheme,
-    }
-})
+// Export for type checking
+export const THEME_TYPES_DECLARED = true;
