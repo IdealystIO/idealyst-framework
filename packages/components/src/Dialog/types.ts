@@ -5,7 +5,7 @@ import { InteractiveAccessibilityProps } from '../utils/accessibility';
 
 // Component-specific type aliases for future extensibility
 export type DialogSizeVariant = 'sm' | 'md' | 'lg' | 'fullscreen';
-export type DialogType = 'standard' | 'alert' | 'confirmation';
+export type DialogType = 'default' | 'alert' | 'confirmation';
 export type DialogAnimationType = 'slide' | 'fade' | 'none';
 
 export interface DialogProps extends BaseProps, InteractiveAccessibilityProps {

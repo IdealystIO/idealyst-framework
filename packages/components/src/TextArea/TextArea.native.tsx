@@ -129,20 +129,33 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
 
   const showFooter = (error || helperText) || (showCharacterCount && maxLength);
 
+  // Get dynamic styles - call as functions for theme reactivity
+  const containerStyleComputed = (textAreaStyles.container as any)({});
+  const labelStyleComputed = (textAreaStyles.label as any)({ disabled });
+  const textareaContainerStyleComputed = (textAreaStyles.textareaContainer as any)({});
+  const textareaStyleComputed = (textAreaStyles.textarea as any)({ intent, disabled, hasError });
+  const footerStyleComputed = (textAreaStyles.footer as any)({});
+  const helperTextStyleComputed = (textAreaStyles.helperText as any)({ hasError });
+  const characterCountStyleComputed = (textAreaStyles.characterCount as any)({
+    isNearLimit: maxLength ? value.length >= maxLength * 0.9 : false,
+    isAtLimit: maxLength ? value.length >= maxLength : false,
+  });
+
   return (
-    <View nativeID={id} style={[textAreaStyles.container, style]} testID={testID}>
+    <View nativeID={id} style={[containerStyleComputed, style]} testID={testID}>
       {label && (
-        <Text style={textAreaStyles.label}>{label}</Text>
+        <Text style={labelStyleComputed}>{label}</Text>
       )}
 
-      <View style={textAreaStyles.textareaContainer}>
+      <View style={textareaContainerStyleComputed}>
         <TextInput
           ref={ref}
           {...nativeA11yProps}
           style={[
-            textAreaStyles.textarea({ intent, disabled, hasError }),
+            textareaStyleComputed,
             {
               textAlignVertical: 'top',
+              backgroundColor: 'transparent',
             },
             maxHeight && { maxHeight },
             { height: autoGrow ? contentHeight : rows * 24 },
@@ -161,22 +174,22 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
       </View>
 
       {showFooter && (
-        <View style={textAreaStyles.footer}>
+        <View style={footerStyleComputed}>
           <View style={{ flex: 1 }}>
             {error && (
-              <Text style={textAreaStyles.helperText}>
+              <Text style={helperTextStyleComputed}>
                 {error}
               </Text>
             )}
             {!error && helperText && (
-              <Text style={textAreaStyles.helperText}>
+              <Text style={helperTextStyleComputed}>
                 {helperText}
               </Text>
             )}
           </View>
 
           {showCharacterCount && maxLength && (
-            <Text style={textAreaStyles.characterCount}>
+            <Text style={characterCountStyleComputed}>
               {value.length}/{maxLength}
             </Text>
           )}

@@ -54,15 +54,15 @@ export const darkTheme = createTheme()
     // Shadows (higher opacity for dark backgrounds)
     .addShadow('none', {})
     .addShadow('sm', {
-        elevation: 1,
+        elevation: 2,
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.18,
-        shadowRadius: 1,
+        shadowRadius: 2,
         boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.18)',
     })
     .addShadow('md', {
-        elevation: 3,
+        elevation: 4,
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.2,
@@ -70,7 +70,7 @@ export const darkTheme = createTheme()
         boxShadow: '0px 3px 9.3px rgba(0, 0, 0, 0.2)',
     })
     .addShadow('lg', {
-        elevation: 6,
+        elevation: 8,
         shadowColor: '#000000',
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.23,
@@ -89,7 +89,8 @@ export const darkTheme = createTheme()
     .setColors({
         pallet: generateDarkColorPallette(),
         surface: {
-            primary: '#121212',
+            screen: '#121212',
+            primary: '#1e1e1e',
             secondary: '#1e1e1e',
             tertiary: '#2a2a2a',
             inverse: '#ffffff',

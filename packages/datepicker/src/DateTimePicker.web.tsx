@@ -1,9 +1,8 @@
 import React from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import { Text } from '@idealyst/components';
 import { DateInput } from './DateInput';
 import { TimeInput } from './TimeInput';
-import { datePickerStyles } from './styles';
+import { dateTimePickerStyles } from './DateTimePicker.styles';
 import type { DateTimePickerProps } from './types';
 
 export const DateTimePicker: React.FC<DateTimePickerProps> = ({
@@ -18,6 +17,13 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   error,
   style,
 }) => {
+  const styles = dateTimePickerStyles;
+
+  // Get dynamic styles
+  const inputRowStyle = (styles.inputRow as any)({});
+  const labelTextStyle = (styles.labelText as any)({});
+  const inputColumnStyle = (styles.inputColumn as any)({});
+
   const handleDateChange = (date: Date | null) => {
     if (!date) {
       onChange(null);
@@ -55,18 +61,16 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     onChange(updated);
   };
 
-  // Get web props for styled elements
-  const inputRowProps = getWebProps([datePickerStyles.inputRow]);
+  // Get web props
+  const inputRowProps = getWebProps([inputRowStyle]);
 
   return (
     <div style={style as React.CSSProperties}>
       {label && (
-        <Text typography="body2" weight="medium" style={{ marginBottom: 4 }}>
-          {label}
-        </Text>
+        <span style={labelTextStyle}>{label}</span>
       )}
       <div {...inputRowProps}>
-        <div style={{ flex: 1 }}>
+        <div style={inputColumnStyle}>
           <DateInput
             value={value ?? undefined}
             onChange={handleDateChange}
@@ -77,7 +81,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             error={error}
           />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={inputColumnStyle}>
           <TimeInput
             value={value ?? undefined}
             onChange={handleTimeChange}

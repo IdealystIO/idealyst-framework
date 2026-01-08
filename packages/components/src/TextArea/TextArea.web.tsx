@@ -127,12 +127,23 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
     marginHorizontal,
   });
 
-  const containerProps = getWebProps([textAreaStyles.container, style as any]);
-  const labelProps = getWebProps([textAreaStyles.label]);
-  const textareaContainerProps = getWebProps([textAreaStyles.textareaContainer]);
-  const footerProps = getWebProps([textAreaStyles.footer]);
-  const helperTextProps = getWebProps([textAreaStyles.helperText]);
-  const characterCountProps = getWebProps([textAreaStyles.characterCount]);
+  // Get dynamic styles - call as functions for theme reactivity
+  const containerStyle = (textAreaStyles.container as any)({});
+  const labelStyle = (textAreaStyles.label as any)({ disabled });
+  const textareaContainerStyle = (textAreaStyles.textareaContainer as any)({});
+  const footerStyle = (textAreaStyles.footer as any)({});
+  const helperTextStyle = (textAreaStyles.helperText as any)({ hasError });
+  const characterCountStyle = (textAreaStyles.characterCount as any)({
+    isNearLimit: maxLength ? value.length >= maxLength * 0.9 : false,
+    isAtLimit: maxLength ? value.length >= maxLength : false,
+  });
+
+  const containerProps = getWebProps([containerStyle, style as any]);
+  const labelProps = getWebProps([labelStyle]);
+  const textareaContainerProps = getWebProps([textareaContainerStyle]);
+  const footerProps = getWebProps([footerStyle]);
+  const helperTextProps = getWebProps([helperTextStyle]);
+  const characterCountProps = getWebProps([characterCountStyle]);
 
   const adjustHeight = () => {
     if (!autoGrow || !textareaRef.current) return;

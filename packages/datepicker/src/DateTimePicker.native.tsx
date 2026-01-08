@@ -1,9 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Text } from '@idealyst/components';
+import { View, Text } from 'react-native';
 import { DateInput } from './DateInput';
 import { TimeInput } from './TimeInput';
-import { datePickerStyles } from './styles';
+import { dateTimePickerStyles } from './DateTimePicker.styles';
 import type { DateTimePickerProps } from './types';
 
 export const DateTimePicker: React.FC<DateTimePickerProps> = ({
@@ -18,6 +17,12 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   error,
   style,
 }) => {
+  // Get dynamic styles - call as functions for theme reactivity
+  const styles = dateTimePickerStyles;
+  const inputRowStyle = (styles.inputRow as any)({});
+  const labelTextStyle = (styles.labelText as any)({});
+  const inputColumnStyle = (styles.inputColumn as any)({});
+
   const handleDateChange = (date: Date | null) => {
     if (!date) {
       onChange(null);
@@ -58,12 +63,12 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   return (
     <View style={style}>
       {label && (
-        <Text typography="body2" weight="medium" style={{ marginBottom: 4 }}>
+        <Text style={labelTextStyle}>
           {label}
         </Text>
       )}
-      <View style={datePickerStyles.inputRow}>
-        <View style={{ flex: 1 }}>
+      <View style={inputRowStyle}>
+        <View style={inputColumnStyle}>
           <DateInput
             value={value ?? undefined}
             onChange={handleDateChange}
@@ -74,7 +79,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             error={error}
           />
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={inputColumnStyle}>
           <TimeInput
             value={value ?? undefined}
             onChange={handleTimeChange}

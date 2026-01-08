@@ -6,7 +6,7 @@ import useMergeRefs from '../hooks/useMergeRefs';
 
 const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
   children,
-  background = 'primary',
+  background = 'screen',
   safeArea = false,
   // Spacing variants from ContainerStyleProps
   gap,

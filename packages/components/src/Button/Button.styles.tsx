@@ -68,6 +68,21 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
         },
         variants: {
             // $iterator expands for each button size
+            type: {
+                contained: {
+                    backgroundColor: theme.intents[intent].primary,
+                    borderColor: 'transparent',
+                },
+                outlined: {
+                    backgroundColor: 'transparent',
+                    borderColor: theme.intents[intent].primary,
+                },
+                text: {
+                    backgroundColor: 'transparent',
+                    borderColor: 'transparent',
+                    borderWidth: 0,
+                }
+            },
             size: {
                 paddingVertical: theme.sizes.$button.paddingVertical,
                 paddingHorizontal: theme.sizes.$button.paddingHorizontal,

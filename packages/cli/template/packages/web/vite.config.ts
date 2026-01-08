@@ -24,6 +24,21 @@ export default defineConfig({
           ],
         ],
         plugins: [
+          // Idealyst StyleBuilder plugin - expands $iterator patterns
+          // Must run BEFORE react-native-unistyles/plugin
+          [
+            "@idealyst/theme/plugin",
+            {
+              autoProcessPaths: [
+                "@idealyst/components",
+                "@idealyst/navigation",
+                "@idealyst/theme",
+              ],
+              // Path to your theme configuration file (relative to project root)
+              themePath: "../shared/src/unistyles.ts",
+            },
+          ],
+          // Unistyles plugin - processes StyleSheet.create calls
           [
             "react-native-unistyles/plugin",
             {
@@ -35,6 +50,7 @@ export default defineConfig({
               ],
             },
           ],
+          // Web-specific component plugin
           ["@idealyst/components/plugin/web", { root: "src" }],
         ],
       },
@@ -76,7 +92,7 @@ export default defineConfig({
       "@idealyst/components",
       "@idealyst/navigation",
       "@idealyst/theme",
-      "@test/shared",
+      "@{{projectName}}/shared",
     ],
     esbuildOptions: {
       loader: {

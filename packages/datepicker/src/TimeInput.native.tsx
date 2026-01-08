@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, TextInput as RNTextInput } from 'react-native';
-import { View, Text, Button, Icon } from '@idealyst/components';
+import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TimePicker } from './TimePicker';
-import { datePickerStyles } from './styles';
+import { dateTimeInputStyles } from './InputStyles';
 import type { TimeInputProps } from './types';
 
 export const TimeInput: React.FC<TimeInputProps> = ({
@@ -18,6 +18,19 @@ export const TimeInput: React.FC<TimeInputProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
+
+  // Get dynamic styles - call as functions for theme reactivity
+  const styles = dateTimeInputStyles;
+  const labelTextStyle = (styles.labelText as any)({});
+  const inputContainerStyle = (styles.inputContainer as any)({ disabled, error: !!error });
+  const textInputStyle = (styles.textInput as any)({ disabled });
+  const iconButtonStyle = (styles.iconButton as any)({ disabled });
+  const errorTextStyle = (styles.errorText as any)({});
+  const modalBackdropStyle = (styles.modalBackdrop as any)({});
+  const popoverContentStyle = (styles.popoverContent as any)({});
+  const closeButtonStyle = (styles.closeButton as any)({ disabled: false });
+  const closeButtonTextStyle = (styles.closeButtonText as any)({});
+  const iconStyle = (styles.iconColor as any)({ disabled });
 
   // Format time to string
   const formatTime = (date: Date | undefined): string => {
@@ -89,40 +102,32 @@ export const TimeInput: React.FC<TimeInputProps> = ({
     onChange(date);
   };
 
-  // Apply variants for input container
-  datePickerStyles.useVariants({
-    disabled,
-    error: !!error,
-  });
-
   return (
     <View style={style}>
       {label && (
-        <Text typography="body2" weight="medium" style={datePickerStyles.labelText}>
+        <Text style={labelTextStyle}>
           {label}
         </Text>
       )}
-      <View style={datePickerStyles.inputContainer}>
-        <RNTextInput
+      <View style={inputContainerStyle}>
+        <TextInput
           value={inputValue}
           onChangeText={handleInputChange}
           onBlur={handleInputBlur}
           placeholder={placeholder}
           editable={!disabled}
-          style={datePickerStyles.textInput}
+          style={textInputStyle}
         />
-        <Button
-          type="text"
-          size="sm"
+        <TouchableOpacity
+          style={iconButtonStyle}
           onPress={() => !disabled && setOpen(true)}
           disabled={disabled}
-          style={{ marginRight: 4 }}
         >
-          <Icon name="clock-outline" size={18} />
-        </Button>
+          <MaterialCommunityIcons name="clock-outline" size={18} style={iconStyle} />
+        </TouchableOpacity>
       </View>
       {error && (
-        <Text typography="caption" style={datePickerStyles.errorText}>
+        <Text style={errorTextStyle}>
           {error}
         </Text>
       )}
@@ -133,8 +138,8 @@ export const TimeInput: React.FC<TimeInputProps> = ({
         animationType="fade"
         onRequestClose={() => setOpen(false)}
       >
-        <View style={datePickerStyles.modalBackdrop}>
-          <View style={datePickerStyles.popoverContent}>
+        <View style={modalBackdropStyle}>
+          <View style={popoverContentStyle}>
             <TimePicker
               value={value ?? undefined}
               onChange={handleTimeChange}
@@ -142,13 +147,12 @@ export const TimeInput: React.FC<TimeInputProps> = ({
               minuteStep={minuteStep}
               disabled={disabled}
             />
-            <Button
-              type="text"
+            <TouchableOpacity
+              style={closeButtonStyle}
               onPress={() => setOpen(false)}
-              style={{ marginTop: 8 }}
             >
-              Close
-            </Button>
+              <Text style={closeButtonTextStyle}>Close</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

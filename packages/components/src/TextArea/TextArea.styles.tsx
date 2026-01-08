@@ -35,6 +35,9 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
         display: 'flex' as const,
         flexDirection: 'column' as const,
         gap: 4,
+        borderWidth: 1,
+        borderColor: theme.colors.border.primary,
+        borderRadius: theme.radii.md,
         variants: {
             margin: {
                 margin: theme.sizes.$view.padding,
@@ -52,38 +55,25 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
         fontSize: 14,
         fontWeight: '500' as const,
         color: theme.colors.text.primary,
-        opacity: disabled ? 0.5 : 1,
     }),
 
     textareaContainer: (_props: TextAreaDynamicProps) => ({
         position: 'relative' as const,
+        variants: {
+            disabled: {
+                true: {
+                    opacity: 1,
+                },
+                false: {
+                    opacity: 0.8,
+                },
+            },
+        }
     }),
 
-    textarea: ({ intent = 'primary', disabled = false, hasError = false, resize = 'none' }: TextAreaDynamicProps) => {
-        const intentValue = theme.intents[intent];
-        const errorColor = theme.intents.error.primary;
-
-        // Get border color based on state
-        let borderColor = theme.colors.border.primary;
-        if (hasError) {
-            borderColor = errorColor;
-        } else if (intent === 'success' || intent === 'warning') {
-            borderColor = intentValue.primary;
-        }
-
-        // Get web-specific styles
-        const webFocusStyles = hasError
-            ? { borderColor: errorColor, boxShadow: `0 0 0 2px ${errorColor}33` }
-            : { borderColor: intentValue.primary, boxShadow: `0 0 0 2px ${intentValue.primary}33` };
-
-        return {
+    textarea: ({ disabled = false, resize = 'none' }: TextAreaDynamicProps) => ({
             width: '100%',
             color: theme.colors.text.primary,
-            backgroundColor: disabled ? theme.colors.surface.secondary : theme.colors.surface.primary,
-            borderWidth: 1,
-            borderStyle: 'solid' as const,
-            borderColor,
-            borderRadius: 8,
             opacity: disabled ? 0.5 : 1,
             variants: {
                 size: {
@@ -101,10 +91,8 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
                 overflowY: 'hidden',
                 cursor: disabled ? 'not-allowed' : 'text',
                 resize: resize,
-                _focus: disabled ? {} : webFocusStyles,
             },
-        } as const;
-    },
+    }),
 
     helperText: ({ hasError = false }: TextAreaDynamicProps) => ({
         fontSize: 12,

@@ -207,7 +207,7 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
             switch (method) {
                 case 'addIntent': {
                     const name = getStringValue(args[0]);
-                    if (name) {
+                    if (name && !keys.intents.includes(name)) {
                         keys.intents.push(name);
                         log('  Found intent:', name);
                     }
@@ -215,7 +215,7 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
                 }
                 case 'addRadius': {
                     const name = getStringValue(args[0]);
-                    if (name) {
+                    if (name && !keys.radii.includes(name)) {
                         keys.radii.push(name);
                         log('  Found radius:', name);
                     }
@@ -223,7 +223,7 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
                 }
                 case 'addShadow': {
                     const name = getStringValue(args[0]);
-                    if (name) {
+                    if (name && !keys.shadows.includes(name)) {
                         keys.shadows.push(name);
                         log('  Found shadow:', name);
                     }

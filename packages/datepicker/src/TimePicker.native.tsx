@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Text, Button, Icon } from '@idealyst/components';
-import { datePickerStyles } from './styles';
+import { View, Text, TouchableOpacity } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { timePickerStyles } from './TimePicker.styles';
 import type { TimePickerProps } from './types';
 
 export const TimePicker: React.FC<TimePickerProps> = ({
@@ -12,7 +12,18 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   disabled = false,
   style,
 }) => {
-  datePickerStyles.useVariants({ disabled });
+  // Get dynamic styles - call as functions for theme reactivity
+  const styles = timePickerStyles;
+  const timePickerStyle = (styles.timePicker as any)({ disabled });
+  const timeColumnsStyle = (styles.timeColumns as any)({});
+  const timeColumnStyle = (styles.timeColumn as any)({});
+  const timeSeparatorStyle = (styles.timeSeparator as any)({});
+  const separatorTextStyle = (styles.separatorText as any)({});
+  const timeValueStyle = (styles.timeValue as any)({});
+  const arrowButtonStyle = (styles.arrowButton as any)({ disabled });
+  const periodButtonStyle = (styles.periodButton as any)({ disabled });
+  const periodButtonTextStyle = (styles.periodButtonText as any)({});
+  const iconStyle = (styles.iconColor as any)({});
 
   const currentDate = value || new Date();
   const hours = currentDate.getHours();
@@ -55,50 +66,67 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   };
 
   return (
-    <View style={[datePickerStyles.timePicker, style]}>
-      <View style={datePickerStyles.timeColumns}>
+    <View style={[timePickerStyle, style]}>
+      <View style={timeColumnsStyle}>
         {/* Hours column */}
-        <View style={datePickerStyles.timeColumn}>
-          <Button type="text" size="sm" onPress={incrementHours} disabled={disabled}>
-            <Icon name="chevron-up" size={20} />
-          </Button>
-          <Text typography="h3" weight="semibold">
+        <View style={timeColumnStyle}>
+          <TouchableOpacity
+            style={arrowButtonStyle}
+            onPress={incrementHours}
+            disabled={disabled}
+          >
+            <MaterialCommunityIcons name="chevron-up" size={20} style={iconStyle} />
+          </TouchableOpacity>
+          <Text style={timeValueStyle}>
             {String(displayHours).padStart(2, '0')}
           </Text>
-          <Button type="text" size="sm" onPress={decrementHours} disabled={disabled}>
-            <Icon name="chevron-down" size={20} />
-          </Button>
+          <TouchableOpacity
+            style={arrowButtonStyle}
+            onPress={decrementHours}
+            disabled={disabled}
+          >
+            <MaterialCommunityIcons name="chevron-down" size={20} style={iconStyle} />
+          </TouchableOpacity>
         </View>
 
         {/* Separator */}
-        <View style={datePickerStyles.timeSeparator}>
-          <Text typography="h3" weight="semibold">:</Text>
+        <View style={timeSeparatorStyle}>
+          <Text style={separatorTextStyle}>:</Text>
         </View>
 
         {/* Minutes column */}
-        <View style={datePickerStyles.timeColumn}>
-          <Button type="text" size="sm" onPress={incrementMinutes} disabled={disabled}>
-            <Icon name="chevron-up" size={20} />
-          </Button>
-          <Text typography="h3" weight="semibold">
+        <View style={timeColumnStyle}>
+          <TouchableOpacity
+            style={arrowButtonStyle}
+            onPress={incrementMinutes}
+            disabled={disabled}
+          >
+            <MaterialCommunityIcons name="chevron-up" size={20} style={iconStyle} />
+          </TouchableOpacity>
+          <Text style={timeValueStyle}>
             {String(minutes).padStart(2, '0')}
           </Text>
-          <Button type="text" size="sm" onPress={decrementMinutes} disabled={disabled}>
-            <Icon name="chevron-down" size={20} />
-          </Button>
+          <TouchableOpacity
+            style={arrowButtonStyle}
+            onPress={decrementMinutes}
+            disabled={disabled}
+          >
+            <MaterialCommunityIcons name="chevron-down" size={20} style={iconStyle} />
+          </TouchableOpacity>
         </View>
 
         {/* AM/PM toggle for 12-hour mode */}
         {is12Hour && (
-          <View style={datePickerStyles.timeColumn}>
-            <Button
-              type="outlined"
-              size="sm"
+          <View style={timeColumnStyle}>
+            <TouchableOpacity
+              style={periodButtonStyle}
               onPress={togglePeriod}
               disabled={disabled}
             >
-              {isPM ? 'PM' : 'AM'}
-            </Button>
+              <Text style={periodButtonTextStyle}>
+                {isPM ? 'PM' : 'AM'}
+              </Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>

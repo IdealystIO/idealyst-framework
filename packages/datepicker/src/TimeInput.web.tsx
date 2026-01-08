@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import { View, Text, Button, Icon } from '@idealyst/components';
+import { mdiClockOutline } from '@mdi/js';
 import { PositionedPortal } from '@idealyst/components/internal';
+import { IconSvg } from './IconSvg.web';
 import { TimePicker } from './TimePicker';
-import { datePickerStyles } from './styles';
+import { dateTimeInputStyles } from './InputStyles';
 import type { TimeInputProps } from './types';
 
 export const TimeInput: React.FC<TimeInputProps> = ({
@@ -20,6 +21,17 @@ export const TimeInput: React.FC<TimeInputProps> = ({
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const triggerRef = useRef<HTMLDivElement>(null);
+
+  const styles = dateTimeInputStyles;
+
+  // Get dynamic styles
+  const labelTextStyle = (styles.labelText as any)({});
+  const inputContainerStyle = (styles.inputContainer as any)({ disabled, error: !!error });
+  const textInputStyle = (styles.textInput as any)({ disabled });
+  const iconButtonStyle = (styles.iconButton as any)({ disabled });
+  const errorTextStyle = (styles.errorText as any)({});
+  const popoverContentStyle = (styles.popoverContent as any)({});
+  const iconColorStyle = (styles.iconColor as any)({ disabled });
 
   // Format time to string
   const formatTime = (date: Date | undefined): string => {
@@ -97,22 +109,13 @@ export const TimeInput: React.FC<TimeInputProps> = ({
     onChange(date);
   };
 
-  // Apply variants for input container
-  datePickerStyles.useVariants({
-    disabled,
-    error: !!error,
-  });
-
-  // Get web props for styled elements
-  const containerProps = getWebProps([datePickerStyles.inputContainer]);
-  const inputProps = getWebProps([datePickerStyles.textInput]);
+  // Get web props
+  const containerProps = getWebProps([inputContainerStyle]);
 
   return (
-    <View style={style}>
+    <div style={style as React.CSSProperties}>
       {label && (
-        <Text typography="body2" weight="medium" style={datePickerStyles.labelText}>
-          {label}
-        </Text>
+        <span style={labelTextStyle}>{label}</span>
       )}
       <div ref={triggerRef} {...containerProps}>
         <input
@@ -122,22 +125,18 @@ export const TimeInput: React.FC<TimeInputProps> = ({
           onBlur={handleInputBlur}
           placeholder={placeholder}
           disabled={disabled}
-          {...inputProps}
+          style={textInputStyle}
         />
-        <Button
-          type="text"
-          size="sm"
-          onPress={() => !disabled && setOpen(!open)}
+        <button
+          style={iconButtonStyle}
+          onClick={() => !disabled && setOpen(!open)}
           disabled={disabled}
-          style={{ marginRight: 4 }}
         >
-          <Icon name="clock-outline" size={18} />
-        </Button>
+          <IconSvg path={mdiClockOutline} size={18} color={iconColorStyle.color} />
+        </button>
       </div>
       {error && (
-        <Text typography="caption" style={datePickerStyles.errorText}>
-          {error}
-        </Text>
+        <span style={errorTextStyle}>{error}</span>
       )}
 
       <PositionedPortal
@@ -149,7 +148,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
         onEscapeKey={() => setOpen(false)}
         zIndex={9999}
       >
-        <View style={datePickerStyles.popoverContent}>
+        <div style={popoverContentStyle}>
           <TimePicker
             value={value ?? undefined}
             onChange={handleTimeChange}
@@ -157,8 +156,8 @@ export const TimeInput: React.FC<TimeInputProps> = ({
             minuteStep={minuteStep}
             disabled={disabled}
           />
-        </View>
+        </div>
       </PositionedPortal>
-    </View>
+    </div>
   );
 };

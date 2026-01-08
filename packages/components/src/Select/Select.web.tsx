@@ -175,14 +175,31 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
     setFocusedIndex(0);
   };
 
-  const containerWebProps = getWebProps([
-    (selectStyles.container as any)({}),
-    style as any
-  ]);
+  // Get dynamic styles - call as functions for theme reactivity
+  const containerStyle = (selectStyles.container as any)({});
+  const labelStyle = (selectStyles.label as any)({});
+  const triggerStyle = (selectStyles.trigger as any)({ type, intent, disabled, error, focused: isOpen });
+  const triggerContentStyle = (selectStyles.triggerContent as any)({});
+  const triggerTextStyle = (selectStyles.triggerText as any)({});
+  const placeholderStyle = (selectStyles.placeholder as any)({});
+  const iconStyle = (selectStyles.icon as any)({});
+  const chevronStyle = (selectStyles.chevron as any)({});
+  const chevronOpenStyle = (selectStyles.chevronOpen as any)({});
+  const dropdownStyle = (selectStyles.dropdown as any)({});
+  const searchContainerStyle = (selectStyles.searchContainer as any)({});
+  const searchInputStyle = (selectStyles.searchInput as any)({});
+  const optionsListStyle = (selectStyles.optionsList as any)({});
+  const optionStyle = (selectStyles.option as any)({});
+  const optionFocusedStyle = (selectStyles.optionFocused as any)({});
+  const optionDisabledStyle = (selectStyles.optionDisabled as any)({});
+  const optionContentStyle = (selectStyles.optionContent as any)({});
+  const optionIconStyle = (selectStyles.optionIcon as any)({});
+  const optionTextStyle = (selectStyles.optionText as any)({});
+  const optionTextDisabledStyle = (selectStyles.optionTextDisabled as any)({});
+  const helperTextStyle = (selectStyles.helperText as any)({ error });
 
-  const triggerWebProps = getWebProps([
-    (selectStyles.trigger as any)({ type, intent }),
-  ]);
+  const containerWebProps = getWebProps([containerStyle, style as any]);
+  const triggerWebProps = getWebProps([triggerStyle]);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -194,7 +211,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
   return (
     <div {...containerWebProps} ref={mergedRef} id={id} data-testid={testID}>
       {label && (
-        <label {...getWebProps([selectStyles.label])}>
+        <label {...getWebProps([labelStyle])}>
           {label}
         </label>
       )}
@@ -211,15 +228,15 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
           aria-haspopup="listbox"
           type="button"
         >
-          <div {...getWebProps([selectStyles.triggerContent])}>
+          <div {...getWebProps([triggerContentStyle])}>
             {selectedOption?.icon && (
-              <span {...getWebProps([selectStyles.icon])}>
+              <span {...getWebProps([iconStyle])}>
                 {selectedOption.icon}
               </span>
             )}
             <span
               {...getWebProps([
-                selectedOption ? selectStyles.triggerText : selectStyles.placeholder
+                selectedOption ? triggerTextStyle : placeholderStyle
               ])}
             >
               {selectedOption ? selectedOption.label : placeholder}
@@ -229,8 +246,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
           <IconSvg
             path={resolveIconPath('chevron-down')}
             {...getWebProps([
-              selectStyles.chevron,
-              isOpen && selectStyles.chevronOpen
+              chevronStyle,
+              isOpen && chevronOpenStyle
             ])}
             aria-label="chevron-down"
           />
@@ -247,7 +264,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
         zIndex={1000}
       >
         <div
-          {...getWebProps([(selectStyles.dropdown as any)({})])}
+          {...getWebProps([dropdownStyle])}
           style={{
             maxHeight: maxHeight,
             position: 'relative',
@@ -258,19 +275,19 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
           role="listbox"
         >
             {searchable && (
-              <div {...getWebProps([selectStyles.searchContainer])}>
+              <div {...getWebProps([searchContainerStyle])}>
                 <input
                   ref={searchInputRef}
                   type="text"
                   placeholder="Search options..."
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  {...getWebProps([selectStyles.searchInput])}
+                  {...getWebProps([searchInputStyle])}
                 />
               </div>
             )}
 
-            <div {...getWebProps([selectStyles.optionsList])}>
+            <div {...getWebProps([optionsListStyle])}>
               {filteredOptions.map((option, index) => {
                 const isFocused = index === focusedIndex;
 
@@ -282,20 +299,20 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     aria-selected={option.value === value}
                     onMouseEnter={() => setFocusedIndex(index)}
                     {...getWebProps([
-                      (selectStyles.option as any)({}),
-                      isFocused && selectStyles.optionFocused,
-                      option.disabled && selectStyles.optionDisabled,
+                      optionStyle,
+                      isFocused && optionFocusedStyle,
+                      option.disabled && optionDisabledStyle,
                     ])}
                   >
-                    <div {...getWebProps([selectStyles.optionContent])}>
+                    <div {...getWebProps([optionContentStyle])}>
                       {option.icon && (
-                        <span {...getWebProps([selectStyles.optionIcon])}>
+                        <span {...getWebProps([optionIconStyle])}>
                           {option.icon}
                         </span>
                       )}
                       <span {...getWebProps([
-                        selectStyles.optionText,
-                        option.disabled && selectStyles.optionTextDisabled
+                        optionTextStyle,
+                        option.disabled && optionTextDisabledStyle
                       ])}>
                         {option.label}
                       </span>
@@ -305,8 +322,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
               })}
 
               {filteredOptions.length === 0 && (
-                <div {...getWebProps([(selectStyles.option as any)({})])} style={{ cursor: 'default' }}>
-                  <span {...getWebProps([selectStyles.optionText])}>
+                <div {...getWebProps([optionStyle])} style={{ cursor: 'default' }}>
+                  <span {...getWebProps([optionTextStyle])}>
                     No options found
                   </span>
                 </div>
@@ -316,11 +333,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
       </PositionedPortal>
 
       {helperText && (
-        <div
-          {...getWebProps([
-            selectStyles.helperText,
-          ])}
-        >
+        <div {...getWebProps([helperTextStyle])}>
           {helperText}
         </div>
       )}

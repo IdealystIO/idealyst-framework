@@ -6,7 +6,7 @@ import { screenStyles } from './Screen.styles';
 
 const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
   children,
-  background = 'primary',
+  background = 'screen',
   safeArea = true,
   scrollable = true,
   contentInset,

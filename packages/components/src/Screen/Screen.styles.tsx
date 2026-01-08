@@ -12,7 +12,7 @@ void StyleSheet;
 // Wrap theme for $iterator support
 type Theme = ThemeStyleWrapper<BaseTheme>;
 
-type ScreenBackground = 'primary' | 'secondary' | 'tertiary' | 'inverse' | 'inverse-secondary' | 'inverse-tertiary' | 'transparent';
+type ScreenBackground = 'screen' | 'primary' | 'secondary' | 'tertiary' | 'inverse' | 'inverse-secondary' | 'inverse-tertiary' | 'transparent';
 
 export type ScreenDynamicProps = {
     background?: ScreenBackground;
@@ -34,10 +34,9 @@ export type ScreenDynamicProps = {
 export const screenStyles = defineStyle('Screen', (theme: Theme) => ({
     screen: (_props: ScreenDynamicProps) => ({
         flex: 1,
-        // Theme marker for Unistyles reactivity
-        backgroundColor: theme.colors.surface.primary,
         variants: {
             background: {
+                screen: { backgroundColor: theme.colors.surface.screen },
                 primary: { backgroundColor: theme.colors.surface.primary },
                 secondary: { backgroundColor: theme.colors.surface.secondary },
                 tertiary: { backgroundColor: theme.colors.surface.tertiary },
@@ -83,10 +82,9 @@ export const screenStyles = defineStyle('Screen', (theme: Theme) => ({
     }),
 
     screenContent: (_props: ScreenDynamicProps) => ({
-        // Theme marker for Unistyles reactivity
-        backgroundColor: theme.colors.surface.primary,
         variants: {
             background: {
+                screen: { backgroundColor: theme.colors.surface.screen },
                 primary: { backgroundColor: theme.colors.surface.primary },
                 secondary: { backgroundColor: theme.colors.surface.secondary },
                 tertiary: { backgroundColor: theme.colors.surface.tertiary },

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { View } from 'react-native';
-import { Text, Button, Icon } from '@idealyst/components';
-import { datePickerStyles } from './styles';
+import { View, Text, TouchableOpacity } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { datePickerCalendarStyles } from './DatePicker.styles';
 import type { DatePickerProps } from './types';
 
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -20,7 +20,30 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const [currentMonth, setCurrentMonth] = useState(() => value || new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('calendar');
 
-  datePickerStyles.useVariants({ disabled });
+  // Get dynamic styles - call as functions for theme reactivity
+  const styles = datePickerCalendarStyles;
+  const calendarStyle = (styles.calendar as any)({ disabled });
+  const calendarHeaderStyle = (styles.calendarHeader as any)({});
+  const weekdayRowStyle = (styles.weekdayRow as any)({});
+  const weekdayCellStyle = (styles.weekdayCell as any)({});
+  const calendarGridStyle = (styles.calendarGrid as any)({});
+  const monthGridStyle = (styles.monthGrid as any)({});
+  const yearGridStyle = (styles.yearGrid as any)({});
+  const dayCellStyle = (styles.dayCell as any)({});
+  const selectedDayStyle = (styles.selectedDay as any)({});
+  const selectedDayTextStyle = (styles.selectedDayText as any)({});
+  const todayDayStyle = (styles.todayDay as any)({});
+  const navButtonStyle = (styles.navButton as any)({ disabled });
+  const titleButtonStyle = (styles.titleButton as any)({ disabled });
+  const titleTextStyle = (styles.titleText as any)({});
+  const dayButtonStyle = (styles.dayButton as any)({ disabled: false });
+  const dayTextStyle = (styles.dayText as any)({});
+  const weekdayTextStyle = (styles.weekdayText as any)({});
+  const selectorItemStyle = (styles.selectorItem as any)({ disabled });
+  const selectorItemSelectedStyle = (styles.selectorItemSelected as any)({});
+  const selectorItemTextStyle = (styles.selectorItemText as any)({});
+  const selectorItemTextSelectedStyle = (styles.selectorItemTextSelected as any)({});
+  const iconStyle = (styles.iconColor as any)({});
 
   const { days, monthShort, year } = useMemo(() => {
     const year = currentMonth.getFullYear();
@@ -124,32 +147,46 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   // Render month selector
   if (viewMode === 'months') {
     return (
-      <View style={[datePickerStyles.calendar, style]}>
-        <View style={datePickerStyles.calendarHeader}>
-          <Button type="text" size="sm" onPress={() => setViewMode('calendar')} disabled={disabled}>
-            <Icon name="chevron-left" size={16} />
-          </Button>
-          <Button type="text" size="sm" onPress={() => setViewMode('years')} disabled={disabled}>
-            <Text typography="body2" weight="semibold">{year}</Text>
-          </Button>
+      <View style={[calendarStyle, style]}>
+        <View style={calendarHeaderStyle}>
+          <TouchableOpacity
+            style={navButtonStyle}
+            onPress={() => setViewMode('calendar')}
+            disabled={disabled}
+          >
+            <MaterialCommunityIcons name="chevron-left" size={16} style={iconStyle} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={titleButtonStyle}
+            onPress={() => setViewMode('years')}
+            disabled={disabled}
+          >
+            <Text style={titleTextStyle}>{year}</Text>
+          </TouchableOpacity>
           <View style={{ width: 28 }} />
         </View>
-        <View style={datePickerStyles.monthGrid}>
+        <View style={monthGridStyle}>
           {MONTHS.map((month, index) => {
             const isCurrentMonth = index === currentMonth.getMonth();
             return (
-              <Button
+              <TouchableOpacity
                 key={month}
-                type={isCurrentMonth ? 'contained' : 'text'}
-                size="sm"
+                style={[
+                  selectorItemStyle,
+                  isCurrentMonth && selectorItemSelectedStyle,
+                ]}
                 onPress={() => handleMonthSelect(index)}
                 disabled={disabled}
-                style={{ minWidth: 48, margin: 2 }}
               >
-                <Text typography="caption" color={isCurrentMonth ? 'inverse' : 'primary'}>
+                <Text
+                  style={[
+                    selectorItemTextStyle,
+                    isCurrentMonth && selectorItemTextSelectedStyle,
+                  ]}
+                >
                   {month}
                 </Text>
-              </Button>
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -160,34 +197,48 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   // Render year selector
   if (viewMode === 'years') {
     return (
-      <View style={[datePickerStyles.calendar, style]}>
-        <View style={datePickerStyles.calendarHeader}>
-          <Button type="text" size="sm" onPress={goToPrevYearRange} disabled={disabled}>
-            <Icon name="chevron-left" size={16} />
-          </Button>
-          <Text typography="body2" weight="semibold">
+      <View style={[calendarStyle, style]}>
+        <View style={calendarHeaderStyle}>
+          <TouchableOpacity
+            style={navButtonStyle}
+            onPress={goToPrevYearRange}
+            disabled={disabled}
+          >
+            <MaterialCommunityIcons name="chevron-left" size={16} style={iconStyle} />
+          </TouchableOpacity>
+          <Text style={titleTextStyle}>
             {yearRange[0]} - {yearRange[yearRange.length - 1]}
           </Text>
-          <Button type="text" size="sm" onPress={goToNextYearRange} disabled={disabled}>
-            <Icon name="chevron-right" size={16} />
-          </Button>
+          <TouchableOpacity
+            style={navButtonStyle}
+            onPress={goToNextYearRange}
+            disabled={disabled}
+          >
+            <MaterialCommunityIcons name="chevron-right" size={16} style={iconStyle} />
+          </TouchableOpacity>
         </View>
-        <View style={datePickerStyles.yearGrid}>
+        <View style={yearGridStyle}>
           {yearRange.map((yr) => {
             const isCurrentYear = yr === currentMonth.getFullYear();
             return (
-              <Button
+              <TouchableOpacity
                 key={yr}
-                type={isCurrentYear ? 'contained' : 'text'}
-                size="sm"
+                style={[
+                  selectorItemStyle,
+                  isCurrentYear && selectorItemSelectedStyle,
+                ]}
                 onPress={() => handleYearSelect(yr)}
                 disabled={disabled}
-                style={{ minWidth: 48, margin: 2 }}
               >
-                <Text typography="caption" color={isCurrentYear ? 'inverse' : 'primary'}>
+                <Text
+                  style={[
+                    selectorItemTextStyle,
+                    isCurrentYear && selectorItemTextSelectedStyle,
+                  ]}
+                >
                   {yr}
                 </Text>
-              </Button>
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -197,65 +248,76 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   // Render calendar (default)
   return (
-    <View style={[datePickerStyles.calendar, style]}>
+    <View style={[calendarStyle, style]}>
       {/* Header */}
-      <View style={datePickerStyles.calendarHeader}>
-        <Button type="text" size="sm" onPress={goToPrevMonth} disabled={disabled}>
-          <Icon name="chevron-left" size={16} />
-        </Button>
-        <Button type="text" size="sm" onPress={() => setViewMode('months')} disabled={disabled}>
-          <Text typography="body2" weight="semibold">
+      <View style={calendarHeaderStyle}>
+        <TouchableOpacity
+          style={navButtonStyle}
+          onPress={goToPrevMonth}
+          disabled={disabled}
+        >
+          <MaterialCommunityIcons name="chevron-left" size={16} style={iconStyle} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={titleButtonStyle}
+          onPress={() => setViewMode('months')}
+          disabled={disabled}
+        >
+          <Text style={titleTextStyle}>
             {monthShort} {year}
           </Text>
-        </Button>
-        <Button type="text" size="sm" onPress={goToNextMonth} disabled={disabled}>
-          <Icon name="chevron-right" size={16} />
-        </Button>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={navButtonStyle}
+          onPress={goToNextMonth}
+          disabled={disabled}
+        >
+          <MaterialCommunityIcons name="chevron-right" size={16} style={iconStyle} />
+        </TouchableOpacity>
       </View>
 
       {/* Weekday headers */}
-      <View style={datePickerStyles.weekdayRow}>
+      <View style={weekdayRowStyle}>
         {WEEKDAYS.map((day, i) => (
-          <View key={i} style={datePickerStyles.weekdayCell}>
-            <Text typography="caption" color="secondary">
-              {day}
-            </Text>
+          <View key={i} style={weekdayCellStyle}>
+            <Text style={weekdayTextStyle}>{day}</Text>
           </View>
         ))}
       </View>
 
       {/* Calendar grid */}
-      <View style={datePickerStyles.calendarGrid}>
+      <View style={calendarGridStyle}>
         {days.map(({ date, isCurrentMonth }, index) => {
           const selected = isSelected(date);
           const today = isToday(date);
           const dayDisabled = isDisabled(date);
+          const disabledDayButtonStyle = (styles.dayButton as any)({ disabled: dayDisabled });
 
           return (
             <View
               key={index}
               style={[
-                datePickerStyles.dayCell,
-                selected && datePickerStyles.selectedDay,
+                dayCellStyle,
+                selected && selectedDayStyle,
                 !isCurrentMonth && { opacity: 0.3 },
-                today && !selected && datePickerStyles.todayDay,
+                today && !selected && todayDayStyle,
                 dayDisabled && { opacity: 0.3 },
               ]}
             >
-              <Button
-                type="text"
-                size="sm"
+              <TouchableOpacity
+                style={[dayButtonStyle, dayDisabled && disabledDayButtonStyle]}
                 onPress={() => handleDayPress(date)}
                 disabled={dayDisabled}
-                style={{ minWidth: 24, minHeight: 24, padding: 0 }}
               >
                 <Text
-                  typography="caption"
-                  color={selected ? 'inverse' : 'primary'}
+                  style={[
+                    dayTextStyle,
+                    selected && selectedDayTextStyle,
+                  ]}
                 >
                   {date.getDate()}
                 </Text>
-              </Button>
+              </TouchableOpacity>
             </View>
           );
         })}

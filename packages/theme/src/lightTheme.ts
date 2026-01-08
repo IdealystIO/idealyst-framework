@@ -88,6 +88,7 @@ export const lightTheme = createTheme()
     .setColors({
         pallet: generateColorPallette(),
         surface: {
+            screen: '#ffffff',
             primary: '#ffffff',
             secondary: '#f5f5f5',
             tertiary: '#e0e0e0',

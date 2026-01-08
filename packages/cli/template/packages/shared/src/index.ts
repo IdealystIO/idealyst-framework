@@ -1,3 +1,6 @@
+// Configure Unistyles theme BEFORE any component imports
+import './unistyles';
+
 // Export the unified App component
 export { App } from './components';
 

@@ -214,7 +214,19 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
         }
 
         if (t.isArrowFunctionExpression(node) || t.isFunctionExpression(node)) {
-            const processedBody = processNode(node.body, depth + 1);
+            let processedBody = processNode(node.body, depth + 1);
+
+            // Convert block body with single return to arrow notation for Unistyles compatibility
+            // This transforms: (props) => { return { ... } }
+            // Into:            (props) => ({ ... })
+            if (t.isBlockStatement(processedBody) && processedBody.body.length === 1) {
+                const singleStmt = processedBody.body[0];
+                if (t.isReturnStatement(singleStmt) && singleStmt.argument) {
+                    // Use the return argument directly as the arrow function body
+                    processedBody = singleStmt.argument;
+                }
+            }
+
             return t.arrowFunctionExpression(
                 node.params,
                 processedBody

@@ -1,4 +1,6 @@
-import '@idealyst/navigation/examples/unistyles';
+// Import shared unistyles configuration FIRST
+// This ensures the theme is registered before any component stylesheets
+import '@{{projectName}}/shared';
 
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';

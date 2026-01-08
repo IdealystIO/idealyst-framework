@@ -66,31 +66,18 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
   const trailingStyle = (listStyles.trailing as any)({});
   const trailingIconStyle = (listStyles.trailingIcon as any)({});
   const labelContainerStyle = (listStyles.labelContainer as any)({});
-  const itemContentStyle = (listStyles.itemContent as any)({});
-
-  // Resolve icon color - check intents first, then color palette
-  const resolvedIconColor = (() => {
-    if (!iconColor) return undefined;
-    // Check if it's an intent name
-    if (iconColor in theme.intents) {
-      return theme.intents[iconColor as Intent]?.primary;
-    }
-    // Otherwise try color palette
-    return getColorFromString(theme, iconColor as Color);
-  })();
-
+  
   // Helper to render leading/trailing icons
   const renderElement = (element: typeof leading | typeof trailing, styleKey: 'leading' | 'trailingIcon') => {
     if (!element) return null;
 
     // If it's a string, treat it as an icon name
     if (typeof element === 'string') {
-      const iconStyle = styleKey === 'leading' ? leadingStyle : trailingIconStyle;
       return (
         <MaterialCommunityIcons
           name={element}
-          size={iconStyle.width}
-          color={resolvedIconColor ?? iconStyle.color}
+          size={trailingIconStyle.width}
+          style={trailingIconStyle}
         />
       );
     } else if (isValidElement(element)) {

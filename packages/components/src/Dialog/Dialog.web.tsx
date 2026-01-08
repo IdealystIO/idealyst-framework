@@ -13,7 +13,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   title,
   children,
   size = 'md',
-  type = 'standard',
+  type = 'default',
   showCloseButton = true,
   closeOnBackdropClick = true,
   closeOnEscapeKey = true,

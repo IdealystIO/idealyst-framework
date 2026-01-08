@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import { View, Text, Button, Icon } from '@idealyst/components';
+import { mdiCalendar } from '@mdi/js';
 import { PositionedPortal } from '@idealyst/components/internal';
+import { IconSvg } from './IconSvg.web';
 import { DatePicker } from './DatePicker';
-import { datePickerStyles } from './styles';
+import { dateTimeInputStyles } from './InputStyles';
 import type { DateInputProps } from './types';
 
 export const DateInput: React.FC<DateInputProps> = ({
@@ -20,6 +21,17 @@ export const DateInput: React.FC<DateInputProps> = ({
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const triggerRef = useRef<HTMLDivElement>(null);
+
+  const styles = dateTimeInputStyles;
+
+  // Get dynamic styles
+  const labelTextStyle = (styles.labelText as any)({});
+  const inputContainerStyle = (styles.inputContainer as any)({ disabled, error: !!error });
+  const textInputStyle = (styles.textInput as any)({ disabled });
+  const iconButtonStyle = (styles.iconButton as any)({ disabled });
+  const errorTextStyle = (styles.errorText as any)({});
+  const popoverContentStyle = (styles.popoverContent as any)({});
+  const iconColorStyle = (styles.iconColor as any)({ disabled });
 
   // Format date to string
   const formatDate = (date: Date | undefined): string => {
@@ -72,22 +84,13 @@ export const DateInput: React.FC<DateInputProps> = ({
     setOpen(false);
   };
 
-  // Apply variants for input container
-  datePickerStyles.useVariants({
-    disabled,
-    error: !!error,
-  });
-
-  // Get web props for styled elements
-  const containerProps = getWebProps([datePickerStyles.inputContainer]);
-  const inputProps = getWebProps([datePickerStyles.textInput]);
+  // Get web props
+  const containerProps = getWebProps([inputContainerStyle]);
 
   return (
-    <View style={style}>
+    <div style={style as React.CSSProperties}>
       {label && (
-        <Text typography="body2" weight="medium" style={datePickerStyles.labelText}>
-          {label}
-        </Text>
+        <span style={labelTextStyle}>{label}</span>
       )}
       <div ref={triggerRef} {...containerProps}>
         <input
@@ -97,22 +100,18 @@ export const DateInput: React.FC<DateInputProps> = ({
           onBlur={handleInputBlur}
           placeholder={placeholder}
           disabled={disabled}
-          {...inputProps}
+          style={textInputStyle}
         />
-        <Button
-          type="text"
-          size="sm"
-          onPress={() => !disabled && setOpen(!open)}
+        <button
+          style={iconButtonStyle}
+          onClick={() => !disabled && setOpen(!open)}
           disabled={disabled}
-          style={{ marginRight: 4 }}
         >
-          <Icon name="calendar" size={18} />
-        </Button>
+          <IconSvg path={mdiCalendar} size={18} color={iconColorStyle.color} />
+        </button>
       </div>
       {error && (
-        <Text typography="caption" style={datePickerStyles.errorText}>
-          {error}
-        </Text>
+        <span style={errorTextStyle}>{error}</span>
       )}
 
       <PositionedPortal
@@ -124,7 +123,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         onEscapeKey={() => setOpen(false)}
         zIndex={9999}
       >
-        <View style={datePickerStyles.popoverContent}>
+        <div style={popoverContentStyle}>
           <DatePicker
             value={value ?? undefined}
             onChange={handleDateSelect}
@@ -132,8 +131,8 @@ export const DateInput: React.FC<DateInputProps> = ({
             maxDate={maxDate}
             disabled={disabled}
           />
-        </View>
+        </div>
       </PositionedPortal>
-    </View>
+    </div>
   );
 };

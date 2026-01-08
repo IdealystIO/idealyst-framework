@@ -27,6 +27,9 @@ export type ComponentName =
   | 'Card'
   | 'Checkbox'
   | 'Chip'
+  | 'DatePickerCalendar'
+  | 'DateTimeInput'
+  | 'DateTimePicker'
   | 'Dialog'
   | 'Divider'
   | 'Icon'
@@ -49,6 +52,7 @@ export type ComponentName =
   | 'Table'
   | 'Text'
   | 'TextArea'
+  | 'TimePicker'
   | 'Tooltip'
   | 'Video'
   | 'View';

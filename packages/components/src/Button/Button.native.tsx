@@ -5,6 +5,7 @@ import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { buttonStyles } from './Button.styles';
 import { ButtonProps } from './types';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
+import { useUnistyles } from 'react-native-unistyles';
 
 const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((props, ref) => {
   const {
@@ -71,24 +72,6 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   } as const;
   const iconSize = iconSizeMap[size];
 
-  // Helper to render icon - uses the icon styles from buttonStyles
-  const renderIcon = (icon: string | React.ReactNode) => {
-    if (typeof icon === 'string') {
-      // Render MaterialCommunityIcons with explicit size prop
-      // The icon styles provide the correct color based on dynamic styles
-      return (
-        <MaterialCommunityIcons
-          name={icon}
-          size={iconSize}
-          style={iconStyle}
-        />
-      );
-    } else if (isValidElement(icon)) {
-      // Render custom component as-is
-      return icon;
-    }
-    return null;
-  };
 
   // Use children if available, otherwise use title
   const buttonContent = children || title;
@@ -199,12 +182,22 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     <TouchableOpacity {...touchableProps as any}>
       {renderGradientLayer()}
       {hasIcons ? (
-        <View style={iconContainerStyle}>
-          {leftIcon && renderIcon(leftIcon)}
+        <View  style={iconContainerStyle}>
+          {leftIcon && 
+          <MaterialCommunityIcons
+            name={leftIcon}
+            size={iconSize}
+            style={iconStyle}
+        />}
           <Text style={textStyle}>
             {buttonContent}
           </Text>
-          {rightIcon && renderIcon(rightIcon)}
+          {rightIcon &&    
+          <MaterialCommunityIcons
+            name={rightIcon}
+            size={iconSize}
+            style={iconStyle}
+        />}
         </View>
       ) : (
         <Text style={textStyle}>

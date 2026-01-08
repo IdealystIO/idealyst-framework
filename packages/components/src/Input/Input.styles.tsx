@@ -28,95 +28,68 @@ export type InputDynamicProps = {
  * Input styles with type/state handling.
  */
 export const inputStyles = defineStyle('Input', (theme: Theme) => ({
-    container: ({ type = 'outlined', focused = false, hasError = false, disabled = false }: InputDynamicProps) => {
-        const focusColor = theme.intents.primary.primary;
-        const errorColor = theme.intents.error.primary;
-
-        // Base styles by type
-        let backgroundColor = 'transparent';
-        let borderWidth = 1;
-        let borderColor = theme.colors.border.primary;
-
-        if (type === 'filled') {
-            backgroundColor = theme.colors.surface.secondary;
-            borderWidth = 0;
-        } else if (type === 'bare') {
-            backgroundColor = 'transparent';
-            borderWidth = 0;
-        }
-
-        // Error state takes precedence
-        if (hasError) {
-            borderColor = errorColor;
-            borderWidth = 1;
-        }
-
-        // Focus state (error still takes precedence for color)
-        if (focused && !hasError) {
-            borderColor = focusColor;
-            borderWidth = 1;
-        }
-
-        // Disabled state
-        if (disabled) {
-            backgroundColor = theme.colors.surface.secondary;
-        }
-
-        // Web-specific border and shadow
-        let webBorder = `1px solid ${borderColor}`;
-        let webBoxShadow = 'none';
-
-        if (type === 'filled' || type === 'bare') {
-            webBorder = 'none';
-        }
-
-        if (hasError) {
-            webBorder = `1px solid ${errorColor}`;
-            if (focused) {
-                webBoxShadow = `0 0 0 2px ${errorColor}20`;
-            }
-        } else if (focused) {
-            webBorder = `1px solid ${focusColor}`;
-            webBoxShadow = `0 0 0 2px ${focusColor}20`;
-        }
-
-        return {
-            display: 'flex' as const,
-            flexDirection: 'row' as const,
-            alignItems: 'center' as const,
-            width: '100%',
-            minWidth: 0,
-            borderRadius: 8,
-            backgroundColor,
-            borderWidth,
-            borderColor,
-            borderStyle: 'solid' as const,
-            opacity: disabled ? 0.6 : 1,
-            variants: {
-                // $iterator expands for each input size
-                size: {
-                    height: theme.sizes.$input.height,
-                    paddingHorizontal: theme.sizes.$input.paddingHorizontal,
+    container: ({ type = 'outlined', focused = false, hasError = false, disabled = false }: InputDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        width: '100%',
+        minWidth: 0,
+        borderRadius: theme.radii.md,
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+        borderColor: theme.colors.border.primary,
+        variants: {
+            type: {
+                outlined: {
+                    backgroundColor: theme.colors.surface.primary,
+                    borderColor: theme.colors.border.primary,
                 },
-                margin: {
-                    margin: theme.sizes.$view.padding,
+                filled: {
+                    backgroundColor: theme.colors.surface.secondary,
+                    borderColor: 'transparent',
                 },
-                marginVertical: {
-                    marginVertical: theme.sizes.$view.padding,
-                },
-                marginHorizontal: {
-                    marginHorizontal: theme.sizes.$view.padding,
+                bare: {
+                    backgroundColor: 'transparent',
+                    borderWidth: 0,
+                    borderColor: 'transparent',
                 },
             },
-            _web: {
-                boxSizing: 'border-box',
-                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-                border: webBorder,
-                boxShadow: webBoxShadow,
-                cursor: disabled ? 'not-allowed' : 'text',
+            focused: {
+                true: {
+                    borderColor: theme.intents.primary.primary,
+                },
+                false: {
+                    
+                },
             },
-        } as const;
-    },
+            disabled: {
+                true: { opacity: 0.8, _web: { cursor: 'not-allowed' } },
+                false: { opacity: 1 }
+            },
+            hasError: {
+                true: { borderColor: theme.intents.error.primary },
+                false: { borderColor: theme.colors.border.primary },
+            },
+            // $iterator expands for each input size
+            size: {
+                height: theme.sizes.$input.height,
+                paddingHorizontal: theme.sizes.$input.paddingHorizontal,
+            },
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
+        },
+        _web: {
+            boxSizing: 'border-box',
+            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+        }
+    }),
 
     input: (_props: InputDynamicProps) => ({
         flex: 1,

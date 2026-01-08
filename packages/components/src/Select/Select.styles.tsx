@@ -52,56 +52,43 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
         marginBottom: 4,
     }),
 
-    trigger: ({ type = 'outlined', intent = 'neutral', disabled = false, error = false, focused = false }: SelectDynamicProps) => {
-        const intentValue = theme.intents[intent];
-        const primaryIntent = theme.intents.primary;
-        const errorColor = theme.intents.error.primary;
-
-        // Background based on type
-        const backgroundColor = type === 'filled'
-            ? theme.colors.surface.secondary
-            : theme.colors.surface.primary;
-
-        // Border color based on state
-        let borderColor = type === 'filled' ? 'transparent' : theme.colors.border.primary;
-        if (error) {
-            borderColor = errorColor;
-        } else if (focused) {
-            borderColor = primaryIntent.primary;
-        } else if (intent !== 'neutral') {
-            borderColor = intentValue.primary;
-        }
-
-        return {
-            position: 'relative' as const,
-            flexDirection: 'row' as const,
-            alignItems: 'center' as const,
-            justifyContent: 'space-between' as const,
-            borderRadius: 8,
-            borderWidth: 1,
-            borderStyle: 'solid' as const,
-            backgroundColor,
-            borderColor,
-            opacity: disabled ? 0.6 : 1,
-            variants: {
-                size: {
-                    paddingHorizontal: theme.sizes.$select.paddingHorizontal,
-                    minHeight: theme.sizes.$select.minHeight,
+    trigger: ({ type = 'outlined', intent = 'neutral', disabled = false, error = false, focused = false }: SelectDynamicProps) => ({
+        position: 'relative' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'space-between' as const,
+        borderRadius: theme.radii.md,
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+        opacity: disabled ? 0.6 : 1,
+        variants: {
+            type: {
+                filled: {
+                    backgroundColor: theme.colors.surface.secondary,
+                    borderColor: 'transparent',
                 },
+                outlined: {
+                    backgroundColor: theme.colors.surface.primary,
+                    borderWidth: 1,
+                    borderColor: theme.colors.border.primary,
+                }
             },
-            _web: {
-                display: 'flex',
-                boxSizing: 'border-box',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                border: `1px solid ${borderColor}`,
-                boxShadow: focused ? `0 0 0 2px ${primaryIntent.primary}20` : 'none',
-                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-                _hover: disabled ? {} : { opacity: 0.9 },
-                _active: disabled ? {} : { opacity: 0.8 },
-                _focus: { outline: 'none' },
+            size: {
+                paddingHorizontal: theme.sizes.$select.paddingHorizontal,
+                minHeight: theme.sizes.$select.minHeight,
             },
-        } as const;
-    },
+        },
+        _web: {
+            display: 'flex',
+            boxSizing: 'border-box',
+            cursor: disabled ? 'not-allowed' : 'pointer',
+            border: `1px solid`,
+            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+            _hover: disabled ? {} : { opacity: 0.9 },
+            _active: disabled ? {} : { opacity: 0.8 },
+            _focus: { outline: 'none' },
+        },
+    }),
 
     triggerContent: (_props: SelectDynamicProps) => ({
         flex: 1,

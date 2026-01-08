@@ -44,8 +44,8 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
 
   React.useEffect(() => {
     progress.value = withSpring(checked ? 1 : 0, {
-      damping: 15,
-      stiffness: 150,
+      damping: 40,
+      stiffness: 200,
     });
   }, [checked, progress]);
 

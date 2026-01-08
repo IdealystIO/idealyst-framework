@@ -1,7 +1,8 @@
 import React from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import { Text, Button, Icon } from '@idealyst/components';
-import { datePickerStyles } from './styles';
+import { mdiChevronUp, mdiChevronDown } from '@mdi/js';
+import { IconSvg } from './IconSvg.web';
+import { timePickerStyles } from './TimePicker.styles';
 import type { TimePickerProps } from './types';
 
 export const TimePicker: React.FC<TimePickerProps> = ({
@@ -12,7 +13,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   disabled = false,
   style,
 }) => {
-  datePickerStyles.useVariants({ disabled });
+  const styles = timePickerStyles;
 
   const currentDate = value || new Date();
   const hours = currentDate.getHours();
@@ -54,57 +55,85 @@ export const TimePicker: React.FC<TimePickerProps> = ({
     updateTime(newHours, minutes);
   };
 
-  // Get web props for styled elements
-  const timePickerProps = getWebProps([datePickerStyles.timePicker, style as any]);
-  const timeColumnsProps = getWebProps([datePickerStyles.timeColumns]);
-  const timeColumnProps = getWebProps([datePickerStyles.timeColumn]);
-  const timeSeparatorProps = getWebProps([datePickerStyles.timeSeparator]);
+  // Get dynamic styles
+  const timePickerStyle = (styles.timePicker as any)({ disabled });
+  const timeColumnsStyle = (styles.timeColumns as any)({});
+  const timeColumnStyle = (styles.timeColumn as any)({});
+  const timeSeparatorStyle = (styles.timeSeparator as any)({});
+  const separatorTextStyle = (styles.separatorText as any)({});
+  const timeValueStyle = (styles.timeValue as any)({});
+  const arrowButtonStyle = (styles.arrowButton as any)({ disabled });
+  const periodButtonStyle = (styles.periodButton as any)({ disabled });
+  const periodButtonTextStyle = (styles.periodButtonText as any)({});
+  const iconColorStyle = (styles.iconColor as any)({});
+
+  // Get web props
+  const timePickerProps = getWebProps([timePickerStyle, style as any]);
+  const timeColumnsProps = getWebProps([timeColumnsStyle]);
+  const timeColumnProps = getWebProps([timeColumnStyle]);
 
   return (
     <div {...timePickerProps}>
       <div {...timeColumnsProps}>
         {/* Hours column */}
         <div {...timeColumnProps}>
-          <Button type="text" size="sm" onPress={incrementHours} disabled={disabled}>
-            <Icon name="chevron-up" size={20} />
-          </Button>
-          <Text typography="h3" weight="semibold">
+          <button
+            style={arrowButtonStyle}
+            onClick={incrementHours}
+            disabled={disabled}
+          >
+            <IconSvg path={mdiChevronUp} size={20} color={iconColorStyle.color} />
+          </button>
+          <span style={timeValueStyle}>
             {String(displayHours).padStart(2, '0')}
-          </Text>
-          <Button type="text" size="sm" onPress={decrementHours} disabled={disabled}>
-            <Icon name="chevron-down" size={20} />
-          </Button>
+          </span>
+          <button
+            style={arrowButtonStyle}
+            onClick={decrementHours}
+            disabled={disabled}
+          >
+            <IconSvg path={mdiChevronDown} size={20} color={iconColorStyle.color} />
+          </button>
         </div>
 
         {/* Separator */}
-        <div {...timeSeparatorProps}>
-          <Text typography="h3" weight="semibold">:</Text>
+        <div style={timeSeparatorStyle}>
+          <span style={separatorTextStyle}>:</span>
         </div>
 
         {/* Minutes column */}
         <div {...timeColumnProps}>
-          <Button type="text" size="sm" onPress={incrementMinutes} disabled={disabled}>
-            <Icon name="chevron-up" size={20} />
-          </Button>
-          <Text typography="h3" weight="semibold">
+          <button
+            style={arrowButtonStyle}
+            onClick={incrementMinutes}
+            disabled={disabled}
+          >
+            <IconSvg path={mdiChevronUp} size={20} color={iconColorStyle.color} />
+          </button>
+          <span style={timeValueStyle}>
             {String(minutes).padStart(2, '0')}
-          </Text>
-          <Button type="text" size="sm" onPress={decrementMinutes} disabled={disabled}>
-            <Icon name="chevron-down" size={20} />
-          </Button>
+          </span>
+          <button
+            style={arrowButtonStyle}
+            onClick={decrementMinutes}
+            disabled={disabled}
+          >
+            <IconSvg path={mdiChevronDown} size={20} color={iconColorStyle.color} />
+          </button>
         </div>
 
         {/* AM/PM toggle for 12-hour mode */}
         {is12Hour && (
           <div {...timeColumnProps}>
-            <Button
-              type="outlined"
-              size="sm"
-              onPress={togglePeriod}
+            <button
+              style={periodButtonStyle}
+              onClick={togglePeriod}
               disabled={disabled}
             >
-              {isPM ? 'PM' : 'AM'}
-            </Button>
+              <span style={periodButtonTextStyle}>
+                {isPM ? 'PM' : 'AM'}
+              </span>
+            </button>
           </div>
         )}
       </div>
