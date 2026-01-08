@@ -1,0 +1,39 @@
+{
+  "name": "@idealyst-docs/shared",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+   "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./styles": {
+      "import": "./src/styles.ts",
+      "require": "./src/styles.ts",
+      "types": "./src/styles.ts"
+    }
+  },
+  "peerDependencies": {
+    "@idealyst/components": "^1.1.8",
+    "@idealyst/navigation": "^1.1.8",
+    "@idealyst/theme": "^1.1.8",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1"
+  },
+  "devDependencies": {
+    "@idealyst/components": "^1.1.8",
+    "@idealyst/navigation": "^1.1.8",
+    "@idealyst/theme": "^1.1.8",
+    "@types/react": "^19.1.2",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "react-native-unistyles": "^3.0.0",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "react-router-dom": "^7.12.0"
+  }
+}

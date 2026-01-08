@@ -1,0 +1,18 @@
+{
+  "name": "@idealyst/docs",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "web:dev": "yarn workspace @idealyst-docs/web dev",
+    "web:build": "yarn workspace @idealyst-docs/web build",
+    "mobile:start": "yarn workspace @idealyst-docs/mobile start",
+    "mobile:ios": "yarn workspace @idealyst-docs/mobile ios",
+    "mobile:android": "yarn workspace @idealyst-docs/mobile android"
+  },
+  "packageManager": "yarn@3.6.4",
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

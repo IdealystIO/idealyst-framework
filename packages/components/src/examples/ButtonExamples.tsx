@@ -1,10 +1,13 @@
 import React from 'react';
 import { Screen, View, Button, Text } from '@idealyst/components';
+import { useUnistyles } from 'react-native-unistyles';
 
 export const ButtonExamples = () => {
   const handlePress = (buttonType: string) => {
     console.log(`Button pressed: ${buttonType}`);
   };
+
+  const { theme } = useUnistyles()
 
   return (
     <Screen background="primary">
@@ -38,6 +41,23 @@ export const ButtonExamples = () => {
           >
             Text
           </Button>
+        </View>
+      </View>
+
+       {/* Show all intents in theme (including extended intents) */}
+      <View gap="md">
+        <Text typography="subtitle1">All Intents</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+          { (Object.keys(theme.intents) as Array<keyof typeof theme.intents>).map((intent) => (
+            <Button 
+              key={intent}
+              type="contained" 
+              intent={intent}
+              onPress={() => handlePress(`intent-${intent}`)}
+            >
+              {intent.charAt(0).toUpperCase() + intent.slice(1)}
+            </Button>
+          )) }
         </View>
       </View>
 

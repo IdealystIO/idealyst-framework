@@ -12,45 +12,49 @@ npx @idealyst/cli init my-app
 cd my-app
 \`\`\`
 
-This creates a monorepo workspace with:
+This single command creates a **complete monorepo workspace** with all 5 packages:
+- \`packages/web/\` - React web app (Vite)
+- \`packages/native/\` - React Native mobile app
+- \`packages/api/\` - tRPC API server with GraphQL
+- \`packages/database/\` - Prisma database layer
+- \`packages/shared/\` - Shared utilities and tRPC client
+
+Plus:
 - Yarn 3 workspace setup
 - TypeScript configuration
 - Jest testing setup
 - Git repository
 - Dev container configuration
 
-### 2. Create Packages
-
-Create a web app:
-\`\`\`bash
-npx @idealyst/cli create web --type web --with-trpc
-\`\`\`
-
-Create a native app:
-\`\`\`bash
-npx @idealyst/cli create mobile --type native --app-name "My App" --with-trpc
-\`\`\`
-
-Create an API server:
-\`\`\`bash
-npx @idealyst/cli create api --type api
-\`\`\`
-
-Create a database layer:
-\`\`\`bash
-npx @idealyst/cli create database --type database
-\`\`\`
-
-### 3. Start Development
+### 2. Start Development
 
 \`\`\`bash
 # Start web dev server
 cd packages/web
 yarn dev
 
-# Start native dev
-cd packages/mobile
+# Start native dev (in another terminal)
+cd packages/native
+yarn start
+
+# Start API server (in another terminal)
+cd packages/api
 yarn dev
+\`\`\`
+
+### 3. Configure Babel (Required for Styling)
+
+Add the Idealyst plugin to your babel.config.js:
+
+\`\`\`javascript
+module.exports = {
+  presets: ['module:@react-native/babel-preset'],
+  plugins: [
+    ['@idealyst/theme/plugin', {
+      themePath: './src/theme/styles.ts', // Path to your theme file
+    }],
+  ],
+};
 \`\`\`
 
 ## Project Structure
@@ -59,11 +63,12 @@ yarn dev
 my-app/
 ├── packages/
 │   ├── web/          # React web app (Vite)
-│   ├── mobile/       # React Native app
-│   ├── api/          # tRPC API server
+│   ├── native/       # React Native app
+│   ├── api/          # tRPC + GraphQL API server
 │   ├── database/     # Prisma database layer
-│   └── shared/       # Shared utilities
+│   └── shared/       # Shared utilities & tRPC client
 ├── package.json
+├── tsconfig.json
 └── yarn.lock
 \`\`\`
 
@@ -74,14 +79,16 @@ my-app/
 - **Modern Tooling**: Vite, TypeScript, Jest, Prisma
 - **Monorepo Structure**: Share code across packages
 - **Theme System**: Consistent styling with react-native-unistyles
+- **Style Extensions**: Customize component styles at build time
 - **Navigation**: Unified navigation for web and native
 
 ## Next Steps
 
 1. Explore the component library: \`@idealyst/components\`
-2. Set up your database schema in \`packages/database\`
-3. Define your API routes in \`packages/api\`
-4. Build your UI in \`packages/web\` or \`packages/mobile\`
+2. Learn the style system: \`idealyst://framework/style-system\`
+3. Set up your database schema in \`packages/database\`
+4. Define your API routes in \`packages/api\`
+5. Build your UI using Idealyst components
 `,
 
   "idealyst://framework/components-overview": `# Idealyst Components Overview
@@ -188,127 +195,145 @@ import { Button, Card, Text, View } from '@idealyst/components';
 
   "idealyst://framework/theming": `# Theming Guide
 
-Idealyst uses react-native-unistyles for cross-platform theming with full TypeScript support.
+Idealyst uses react-native-unistyles for cross-platform theming with full TypeScript support. Themes are created using a fluent builder pattern.
 
-## Theme Structure
+## Theme Builder API
 
-Themes are defined with:
-- **Colors**: Text, surface, border, intent colors
-- **Typography**: Font families, sizes, weights
-- **Spacing**: Consistent spacing scale
-- **Border Radius**: Rounded corner sizes
-- **Breakpoints**: Responsive design breakpoints
-
-## Default Theme
+Create themes using the builder pattern:
 
 \`\`\`typescript
-{
-  colors: {
-    text: {
-      primary: '#000000',
-      secondary: '#666666',
-      inverse: '#FFFFFF',
-      disabled: '#999999',
-    },
+import { createTheme } from '@idealyst/theme';
+
+export const myTheme = createTheme()
+  // Add semantic intents
+  .addIntent('primary', {
+    primary: '#3b82f6',    // Main color
+    contrast: '#ffffff',   // Text on primary background
+    light: '#bfdbfe',      // Lighter variant
+    dark: '#1e40af',       // Darker variant
+  })
+  .addIntent('success', {
+    primary: '#22c55e',
+    contrast: '#ffffff',
+    light: '#a7f3d0',
+    dark: '#165e29',
+  })
+  .addIntent('error', {
+    primary: '#ef4444',
+    contrast: '#ffffff',
+    light: '#fca5a1',
+    dark: '#9b2222',
+  })
+
+  // Add border radii
+  .addRadius('none', 0)
+  .addRadius('sm', 4)
+  .addRadius('md', 8)
+  .addRadius('lg', 12)
+
+  // Add shadows (cross-platform)
+  .addShadow('sm', {
+    elevation: 1,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 1,
+    boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.1)', // web-only
+  })
+
+  // Set colors
+  .setColors({
+    pallet: { /* color palette */ },
     surface: {
-      primary: '#FFFFFF',
-      secondary: '#F5F5F5',
-      tertiary: '#EEEEEE',
+      screen: '#ffffff',
+      primary: '#ffffff',
+      secondary: '#f5f5f5',
       inverse: '#000000',
     },
+    text: {
+      primary: '#000000',
+      secondary: '#333333',
+      inverse: '#ffffff',
+    },
     border: {
-      primary: '#E0E0E0',
-      secondary: '#CCCCCC',
+      primary: '#e0e0e0',
+      disabled: '#f0f0f0',
     },
-  },
-  intents: {
-    primary: {
-      main: '#3B82F6',
-      container: '#DBEAFE',
-      onContainer: '#1E40AF',
+  })
+
+  // Set component sizes (xs, sm, md, lg, xl)
+  .setSizes({
+    button: {
+      xs: { paddingVertical: 4, paddingHorizontal: 8, minHeight: 24, fontSize: 12 },
+      sm: { paddingVertical: 6, paddingHorizontal: 12, minHeight: 32, fontSize: 14 },
+      md: { paddingVertical: 8, paddingHorizontal: 16, minHeight: 40, fontSize: 16 },
+      lg: { paddingVertical: 10, paddingHorizontal: 20, minHeight: 48, fontSize: 18 },
+      xl: { paddingVertical: 12, paddingHorizontal: 24, minHeight: 56, fontSize: 20 },
     },
-    success: {
-      main: '#10B981',
-      container: '#D1FAE5',
-      onContainer: '#065F46',
-    },
-    error: {
-      main: '#EF4444',
-      container: '#FEE2E2',
-      onContainer: '#991B1B',
-    },
-    warning: {
-      main: '#F59E0B',
-      container: '#FEF3C7',
-      onContainer: '#92400E',
-    },
-  },
-  spacing: {
-    xs: 4,
-    sm: 8,
-    md: 16,
-    lg: 24,
-    xl: 32,
-    xxl: 48,
-  },
-  borderRadius: {
-    sm: 4,
-    md: 8,
-    lg: 12,
-    xl: 16,
-  },
-  typography: {
-    fontFamily: {
-      sans: 'System',
-      mono: 'Monospace',
-    },
-    fontSize: {
-      xs: 12,
-      sm: 14,
-      md: 16,
-      lg: 18,
-      xl: 20,
-    },
-    fontWeight: {
-      light: '300',
-      normal: '400',
-      medium: '500',
-      semibold: '600',
-      bold: '700',
-    },
-  },
+    // ... other components (chip, badge, icon, input, etc.)
+  })
+
+  // Set interaction styles
+  .setInteraction({
+    focusedBackground: 'rgba(59, 130, 246, 0.08)',
+    focusBorder: 'rgba(59, 130, 246, 0.3)',
+    opacity: { hover: 0.9, active: 0.75, disabled: 0.5 },
+  })
+
+  .build();
+\`\`\`
+
+## Intent Structure
+
+Each intent defines four color values:
+
+| Property   | Purpose                           |
+|------------|-----------------------------------|
+| \`primary\`  | Main color used for backgrounds   |
+| \`contrast\` | Text color on primary background  |
+| \`light\`    | Lighter tint for subtle states    |
+| \`dark\`     | Darker shade for pressed states   |
+
+## Extending an Existing Theme
+
+Use \`fromTheme()\` to extend a base theme:
+
+\`\`\`typescript
+import { fromTheme, lightTheme } from '@idealyst/theme';
+
+export const brandTheme = fromTheme(lightTheme)
+  .addIntent('brand', {
+    primary: '#6366f1',
+    contrast: '#ffffff',
+    light: '#818cf8',
+    dark: '#4f46e5',
+  })
+  .build();
+\`\`\`
+
+## Registering Your Theme
+
+For full TypeScript inference:
+
+\`\`\`typescript
+// src/theme/styles.ts
+export const myTheme = createTheme()
+  // ... builder chain
+  .build();
+
+// Register the theme type
+declare module '@idealyst/theme' {
+  interface RegisteredTheme {
+    theme: typeof myTheme;
+  }
 }
 \`\`\`
 
-## Custom Themes
-
-Create custom themes in your app:
-
-\`\`\`typescript
-// theme.ts
-export const customTheme = {
-  colors: {
-    // Override colors
-    text: {
-      primary: '#1A1A1A',
-      // ...
-    },
-  },
-  intents: {
-    primary: {
-      main: '#6366F1', // Custom brand color
-      // ...
-    },
-  },
-  // ... rest of theme
-};
-\`\`\`
-
-## Using Themes
+## Using Themes with Unistyles
 
 \`\`\`typescript
 import { UnistylesRegistry } from 'react-native-unistyles';
-import { lightTheme, darkTheme } from './themes';
+import { lightTheme, darkTheme } from '@idealyst/theme';
 
 UnistylesRegistry
   .addThemes({
@@ -320,56 +345,18 @@ UnistylesRegistry
   });
 \`\`\`
 
-## Dark Mode
-
-Toggle between themes:
-
-\`\`\`typescript
-import { useStyles } from 'react-native-unistyles';
-
-function ThemeToggle() {
-  const { theme } = useStyles();
-
-  const toggleTheme = () => {
-    theme.setTheme(theme.name === 'light' ? 'dark' : 'light');
-  };
-
-  return <Button onPress={toggleTheme}>Toggle Theme</Button>;
-}
-\`\`\`
-
-## Responsive Design
-
-Use breakpoints for responsive layouts:
-
-\`\`\`typescript
-const styles = StyleSheet.create(theme => ({
-  container: {
-    padding: theme.spacing.md,
-
-    variants: {
-      breakpoint: {
-        sm: { maxWidth: 640 },
-        md: { maxWidth: 768 },
-        lg: { maxWidth: 1024 },
-      },
-    },
-  },
-}));
-\`\`\`
-
 ## Platform-Specific Styles
 
 \`\`\`typescript
-const styles = StyleSheet.create(theme => ({
+const styles = StyleSheet.create((theme) => ({
   button: {
-    padding: theme.spacing.md,
+    padding: 16,
 
     _web: {
       cursor: 'pointer',
-      ':hover': {
-        backgroundColor: theme.colors.surface.secondary,
-      },
+      transition: 'all 0.1s ease',
+      _hover: { opacity: 0.9 },
+      _active: { opacity: 0.75 },
     },
 
     _native: {
@@ -378,6 +365,11 @@ const styles = StyleSheet.create(theme => ({
   },
 }));
 \`\`\`
+
+## See Also
+
+- \`idealyst://framework/style-system\` - Style definition APIs (defineStyle, extendStyle)
+- \`idealyst://framework/babel-plugin\` - Babel plugin configuration
 `,
 
   "idealyst://framework/cli": `# Idealyst CLI Reference
@@ -1051,5 +1043,432 @@ Features:
 3. **Error Handling**: Use Pothos error types
 4. **Authorization**: Add auth checks in resolvers
 5. **N+1 Prevention**: Use Prisma's query optimization
+`,
+
+  "idealyst://framework/style-system": `# Style Definition System
+
+Idealyst provides a powerful style definition system with build-time transformations via Babel plugin.
+
+## Overview
+
+The style system provides:
+- **defineStyle()**: Define base styles for components
+- **extendStyle()**: Merge additional styles with base styles
+- **overrideStyle()**: Completely replace component styles
+- **$iterator pattern**: Expand styles for all theme keys
+
+## defineStyle()
+
+Define base styles for a component:
+
+\`\`\`typescript
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
+
+// Wrap theme for $iterator support
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
+  button: {
+    borderRadius: theme.radii.md,
+    backgroundColor: theme.intents.primary.primary,
+
+    variants: {
+      size: {
+        // $iterator expands to all size keys (xs, sm, md, lg, xl)
+        paddingVertical: theme.sizes.$button.paddingVertical,
+        paddingHorizontal: theme.sizes.$button.paddingHorizontal,
+      },
+      disabled: {
+        true: { opacity: 0.5 },
+        false: { opacity: 1 },
+      },
+    },
+  },
+  text: {
+    color: theme.intents.primary.contrast,
+    variants: {
+      size: {
+        fontSize: theme.sizes.$button.fontSize,
+      },
+    },
+  },
+}));
+\`\`\`
+
+## Dynamic Style Functions
+
+For styles depending on runtime props:
+
+\`\`\`typescript
+export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
+  button: ({ intent = 'primary', type = 'contained' }: ButtonDynamicProps) => ({
+    backgroundColor: type === 'contained'
+      ? theme.intents[intent].primary
+      : 'transparent',
+    borderColor: type === 'outlined'
+      ? theme.intents[intent].primary
+      : 'transparent',
+  }),
+}));
+\`\`\`
+
+## Using Styles in Components
+
+\`\`\`typescript
+import { buttonStyles } from './Button.styles';
+
+const Button = ({ size = 'md', disabled = false, intent, type }) => {
+  // Apply variants
+  buttonStyles.useVariants({ size, disabled });
+
+  // Static styles - no function call
+  const staticStyle = buttonStyles.button;
+
+  // Dynamic styles - function call with props
+  const dynamicStyle = (buttonStyles.button as any)({ intent, type });
+
+  return (
+    <TouchableOpacity style={dynamicStyle}>
+      <Text style={buttonStyles.text}>Click me</Text>
+    </TouchableOpacity>
+  );
+};
+\`\`\`
+
+## extendStyle()
+
+Merge additional styles with base component styles:
+
+\`\`\`typescript
+// style-extensions.ts
+import { extendStyle } from '@idealyst/theme';
+
+extendStyle('Button', (theme) => ({
+  button: {
+    borderRadius: 9999, // Make all buttons pill-shaped
+  },
+  text: {
+    fontFamily: 'CustomFont',
+  },
+}));
+\`\`\`
+
+## overrideStyle()
+
+Completely replace component styles:
+
+\`\`\`typescript
+import { overrideStyle } from '@idealyst/theme';
+
+overrideStyle('Button', (theme) => ({
+  button: {
+    backgroundColor: theme.colors.surface.primary,
+    borderWidth: 2,
+    borderColor: theme.intents.primary.primary,
+  },
+  text: {
+    color: theme.intents.primary.primary,
+  },
+}));
+\`\`\`
+
+## Import Order Matters
+
+Extensions must be imported **before** components:
+
+\`\`\`typescript
+// App.tsx
+import './style-extensions';           // FIRST - registers extensions
+import { Button } from '@idealyst/components';  // SECOND - uses extensions
+\`\`\`
+
+## When to Use Each
+
+| API | Use When |
+|-----|----------|
+| \`defineStyle()\` | Creating component library styles |
+| \`extendStyle()\` | Adding/modifying specific properties |
+| \`overrideStyle()\` | Completely custom styling |
+
+## See Also
+
+- \`idealyst://framework/theming\` - Theme builder API
+- \`idealyst://framework/babel-plugin\` - Plugin configuration
+- \`idealyst://framework/iterator-pattern\` - $iterator expansion
+`,
+
+  "idealyst://framework/babel-plugin": `# Idealyst Babel Plugin
+
+The Idealyst Babel plugin transforms style definitions at build time.
+
+## Installation
+
+The plugin is included with \`@idealyst/theme\`.
+
+## Configuration
+
+\`\`\`javascript
+// babel.config.js
+module.exports = {
+  presets: ['module:@react-native/babel-preset'],
+  plugins: [
+    ['@idealyst/theme/plugin', {
+      // REQUIRED: Path to your theme file
+      themePath: './src/theme/styles.ts',
+
+      // Optional: Enable debug logging
+      debug: false,
+      verbose: false,
+
+      // Optional: Paths to auto-process
+      autoProcessPaths: [
+        '@idealyst/components',
+        '@idealyst/datepicker',
+        'src/',
+      ],
+    }],
+  ],
+};
+\`\`\`
+
+## What the Plugin Does
+
+### 1. Transforms defineStyle() to StyleSheet.create()
+
+**Input:**
+\`\`\`typescript
+defineStyle('Button', (theme) => ({
+  button: { backgroundColor: theme.intents.primary.primary }
+}));
+\`\`\`
+
+**Output:**
+\`\`\`typescript
+StyleSheet.create((theme) => ({
+  button: { backgroundColor: theme.intents.primary.primary }
+}));
+\`\`\`
+
+### 2. Expands $iterator Patterns
+
+**Input:**
+\`\`\`typescript
+defineStyle('Button', (theme) => ({
+  button: {
+    variants: {
+      size: {
+        paddingVertical: theme.sizes.$button.paddingVertical,
+      },
+    },
+  },
+}));
+\`\`\`
+
+**Output:**
+\`\`\`typescript
+StyleSheet.create((theme) => ({
+  button: {
+    variants: {
+      size: {
+        xs: { paddingVertical: theme.sizes.button.xs.paddingVertical },
+        sm: { paddingVertical: theme.sizes.button.sm.paddingVertical },
+        md: { paddingVertical: theme.sizes.button.md.paddingVertical },
+        lg: { paddingVertical: theme.sizes.button.lg.paddingVertical },
+        xl: { paddingVertical: theme.sizes.button.xl.paddingVertical },
+      },
+    },
+  },
+}));
+\`\`\`
+
+### 3. Merges Extensions at Build Time
+
+\`\`\`typescript
+// Extension (processed first)
+extendStyle('Button', (theme) => ({
+  button: { borderRadius: 9999 },
+}));
+
+// Base (merges with extension)
+defineStyle('Button', (theme) => ({
+  button: { padding: 16 },
+}));
+
+// Result: { padding: 16, borderRadius: 9999 }
+\`\`\`
+
+### 4. Removes extendStyle/overrideStyle Calls
+
+After capturing extension definitions, the plugin removes the calls from the output since all merging happens at build time.
+
+## Theme Analysis
+
+The plugin statically analyzes your theme file to extract:
+- Intent names (primary, success, error, etc.)
+- Size keys (xs, sm, md, lg, xl)
+- Radius names (none, sm, md, lg)
+- Shadow names (none, sm, md, lg, xl)
+
+This enables $iterator expansion without runtime overhead.
+
+## Troubleshooting
+
+### Styles Not Applying
+
+1. Verify \`themePath\` points to your theme file
+2. Clear bundler cache: \`yarn start --reset-cache\`
+3. Check \`void StyleSheet;\` marker exists in style files
+
+### Theme Changes Not Detected
+
+1. Restart Metro bundler (theme is analyzed once)
+2. Verify theme exports correctly
+
+### Debug Mode
+
+Enable verbose logging:
+
+\`\`\`javascript
+['@idealyst/theme/plugin', {
+  themePath: './src/theme/styles.ts',
+  verbose: true,
+}],
+\`\`\`
+`,
+
+  "idealyst://framework/iterator-pattern": `# The $iterator Pattern
+
+The \`$iterator\` pattern allows defining styles once that expand to all keys of a theme object.
+
+## ThemeStyleWrapper
+
+Wrap your theme type to enable $iterator properties:
+
+\`\`\`typescript
+import { ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
+
+type Theme = ThemeStyleWrapper<BaseTheme>;
+\`\`\`
+
+This adds \`$property\` versions of iterable theme properties:
+
+| Original Path            | $iterator Path            |
+|--------------------------|---------------------------|
+| \`theme.intents.primary\`  | \`theme.$intents.primary\`  |
+| \`theme.sizes.button.md\`  | \`theme.sizes.$button.md\`  |
+
+## Usage Examples
+
+### Expand Intents
+
+\`\`\`typescript
+// Single definition
+variants: {
+  intent: {
+    backgroundColor: theme.$intents.light,
+    borderColor: theme.$intents.primary,
+  },
+}
+
+// Expands to all intent keys (primary, success, error, warning, etc.)
+// Result:
+// intent: {
+//   primary: { backgroundColor: theme.intents.primary.light, borderColor: theme.intents.primary.primary },
+//   success: { backgroundColor: theme.intents.success.light, borderColor: theme.intents.success.primary },
+//   error: { ... },
+//   ...
+// }
+\`\`\`
+
+### Expand Sizes
+
+\`\`\`typescript
+// Single definition
+variants: {
+  size: {
+    paddingVertical: theme.sizes.$button.paddingVertical,
+    fontSize: theme.sizes.$button.fontSize,
+  },
+}
+
+// Expands to all size keys (xs, sm, md, lg, xl)
+// Result:
+// size: {
+//   xs: { paddingVertical: theme.sizes.button.xs.paddingVertical, fontSize: theme.sizes.button.xs.fontSize },
+//   sm: { paddingVertical: theme.sizes.button.sm.paddingVertical, fontSize: theme.sizes.button.sm.fontSize },
+//   md: { ... },
+//   ...
+// }
+\`\`\`
+
+## Complete Example
+
+\`\`\`typescript
+import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
+
+type Theme = ThemeStyleWrapper<BaseTheme>;
+
+export const chipStyles = defineStyle('Chip', (theme: Theme) => ({
+  chip: {
+    borderRadius: 999,
+
+    variants: {
+      // Expand for all sizes
+      size: {
+        paddingVertical: theme.sizes.$chip.paddingVertical,
+        paddingHorizontal: theme.sizes.$chip.paddingHorizontal,
+        minHeight: theme.sizes.$chip.minHeight,
+      },
+
+      // Expand for all intents
+      intent: {
+        backgroundColor: theme.$intents.light,
+        borderColor: theme.$intents.primary,
+      },
+    },
+  },
+
+  text: {
+    variants: {
+      size: {
+        fontSize: theme.sizes.$chip.fontSize,
+        lineHeight: theme.sizes.$chip.lineHeight,
+      },
+
+      intent: {
+        color: theme.$intents.dark,
+      },
+    },
+  },
+}));
+\`\`\`
+
+## createIteratorStyles()
+
+Alternative to defineStyle for custom components:
+
+\`\`\`typescript
+import { createIteratorStyles } from '@idealyst/theme';
+
+export const styles = createIteratorStyles((theme) => ({
+  box: {
+    variants: {
+      intent: {
+        backgroundColor: theme.$intents.light,
+      },
+    },
+  },
+}));
+\`\`\`
+
+## Benefits
+
+1. **DRY Code**: Define once, expand to many
+2. **Type Safety**: TypeScript validates iterator properties
+3. **Maintainable**: Adding new sizes/intents to theme auto-expands
+4. **Zero Runtime Cost**: Expansion happens at build time
 `,
 };
