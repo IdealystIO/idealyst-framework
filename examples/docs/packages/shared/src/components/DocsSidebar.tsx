@@ -14,13 +14,6 @@ export function DocsSidebar({ insets }: DrawerSidebarProps) {
       }}
       contentInset={insets}
     >
-      <Text
-        weight="bold"
-        size="lg"
-        style={{ marginBottom: 24, color: '#3b82f6' }}
-      >
-        Idealyst Docs
-      </Text>
 
       {navigationSections.map((section, sectionIndex) => (
         <List key={section.title}>

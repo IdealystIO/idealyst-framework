@@ -73,7 +73,6 @@ export const screenStyles = defineStyle('Screen', (theme: Theme) => ({
             },
         },
         _web: {
-            overflow: 'auto',
             display: 'flex',
             flexDirection: 'column',
             minHeight: '100%',

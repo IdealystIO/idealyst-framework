@@ -80,7 +80,7 @@ export const DocsLayout: React.FC = () => {
 
         {/* Content Area */}
         <View style={{ flex: 1, overflowY: 'auto' }}>
-          <View style={{ padding: 24, maxWidth: 900, margin: '0 auto', width: '100%' }}>
+          <View style={{ padding: 24, width: '100%' }}>
             <Outlet />
           </View>
         </View>

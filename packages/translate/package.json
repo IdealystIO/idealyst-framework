@@ -1,0 +1,77 @@
+{
+  "name": "@idealyst/translate",
+  "version": "1.1.8",
+  "description": "Cross-platform internationalization for Idealyst Framework",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/translate"
+  },
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./plugin": {
+      "import": "./src/babel/plugin.js",
+      "require": "./src/babel/plugin.js"
+    },
+    "./config": {
+      "import": "./src/config/index.ts",
+      "require": "./src/config/index.ts",
+      "types": "./src/config/index.ts"
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "i18next": ">=23.0.0",
+    "react": ">=16.8.0",
+    "react-i18next": ">=13.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
+    "@babel/types": "^7.28.5",
+    "@types/babel__core": "^7.20.0",
+    "@types/glob": "^8.0.0",
+    "@types/react": "^19.1.0",
+    "glob": "^10.0.0",
+    "i18next": ">=23.0.0",
+    "react-i18next": ">=13.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "CLAUDE.md"
+  ],
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "translate",
+    "react",
+    "react-native",
+    "cross-platform",
+    "babel-plugin"
+  ]
+}

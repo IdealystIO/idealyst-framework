@@ -14,13 +14,12 @@ category: "form",
 - \`rightIcon\`: IconName | React.ReactNode - Icon to display on the right side. Can be an icon name or custom component (ReactNode)
 `,
     features: [
-      "Three variants: contained, outlined, text",
-      "Five intent colors for semantic meaning",
-      "Three sizes: sm, md, lg",
+      "Three type variants: contained, outlined, text",
+      "Five intent colors: primary, neutral, success, error, warning",
+      "Five sizes: xs, sm, md, lg, xl",
       "Gradient overlay effects (darken/lighten) for contained buttons",
-      "Icon support with string names or custom React elements",
-      "Loading and disabled states",
-      "Full width option",
+      "Left and right icon support with MDI icons or custom React elements",
+      "Disabled states with visual feedback",
       "Cross-platform (React & React Native)",
     ],
     bestPractices: [
