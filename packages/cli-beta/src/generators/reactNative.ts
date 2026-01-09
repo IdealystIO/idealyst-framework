@@ -52,8 +52,8 @@ export async function initializeReactNative(
       projectName
     );
 
-    // Configure Android Vector Icons
-    await configureAndroidVectorIcons(path.join(directory, projectName));
+    // Fix Android gradle files for monorepo node_modules paths
+    await fixMonorepoGradlePaths(path.join(directory, projectName));
 
     return { success: true };
 
@@ -100,46 +100,126 @@ async function updateIosBundleId(
 }
 
 /**
- * Configure Android Vector Icons in build.gradle
+ * Fix Android gradle files for monorepo structure
+ *
+ * In a Yarn workspace monorepo, dependencies are hoisted to the root node_modules.
+ * The React Native CLI generates paths assuming node_modules is in the package directory,
+ * but we need to point to the monorepo root instead.
+ *
+ * Directory structure:
+ *   monorepo-root/
+ *     node_modules/           <- hoisted dependencies here
+ *     packages/
+ *       mobile/
+ *         android/
+ *           settings.gradle   <- needs ../../../node_modules (3 levels up)
+ *           app/
+ *             build.gradle    <- needs ../../../../node_modules (4 levels up)
  */
-async function configureAndroidVectorIcons(projectPath: string): Promise<void> {
+async function fixMonorepoGradlePaths(projectPath: string): Promise<void> {
+  await fixSettingsGradle(projectPath);
+  await fixAppBuildGradle(projectPath);
+}
+
+/**
+ * Fix settings.gradle for monorepo paths
+ */
+async function fixSettingsGradle(projectPath: string): Promise<void> {
+  const settingsPath = path.join(projectPath, 'android', 'settings.gradle');
+
+  if (!await fs.pathExists(settingsPath)) {
+    return;
+  }
+
+  let content = await fs.readFile(settingsPath, 'utf8');
+
+  // Add monorepo comment at the top if not already present
+  if (!content.includes('MONOREPO NOTE')) {
+    const monorepoComment = `// MONOREPO NOTE: In a Yarn workspace monorepo, dependencies are hoisted to the root node_modules.
+// Paths must point to the monorepo root (../../../node_modules) not the package's node_modules.
+`;
+    content = monorepoComment + content;
+  }
+
+  // Fix pluginManagement includeBuild path
+  content = content.replace(
+    /includeBuild\s*\(\s*["']\.\.\/node_modules\/@react-native\/gradle-plugin["']\s*\)/g,
+    'includeBuild("../../../node_modules/@react-native/gradle-plugin")'
+  );
+
+  // Fix any other includeBuild paths for @react-native/gradle-plugin at the end of the file
+  content = content.replace(
+    /includeBuild\s*\(\s*["']\.\.\/node_modules\/@react-native\/gradle-plugin["']\s*\)(?!.*pluginManagement)/g,
+    'includeBuild(\'../../../node_modules/@react-native/gradle-plugin\')'
+  );
+
+  await fs.writeFile(settingsPath, content);
+  logger.success('Fixed settings.gradle monorepo paths');
+}
+
+/**
+ * Fix app/build.gradle for monorepo paths and add vector icons
+ */
+async function fixAppBuildGradle(projectPath: string): Promise<void> {
   const buildGradlePath = path.join(projectPath, 'android', 'app', 'build.gradle');
 
-  if (await fs.pathExists(buildGradlePath)) {
-    let content = await fs.readFile(buildGradlePath, 'utf8');
-
-    // Check if vector icons is already configured
-    if (content.includes('react-native-vector-icons')) {
-      return;
-    }
-
-    // Add vector icons configuration after the android block
-    const vectorIconsLine = 'apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")';
-
-    // Find a good place to add it (after the last apply statement or at the end)
-    if (content.includes('apply plugin:')) {
-      // Add after the last apply plugin line
-      const lines = content.split('\n');
-      let lastApplyIndex = -1;
-
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i].includes('apply plugin:') || lines[i].includes('apply from:')) {
-          lastApplyIndex = i;
-        }
-      }
-
-      if (lastApplyIndex !== -1) {
-        lines.splice(lastApplyIndex + 1, 0, vectorIconsLine);
-        content = lines.join('\n');
-      }
-    } else {
-      // Append at the end
-      content += '\n' + vectorIconsLine + '\n';
-    }
-
-    await fs.writeFile(buildGradlePath, content);
-    logger.success('Configured Android vector icons');
+  if (!await fs.pathExists(buildGradlePath)) {
+    return;
   }
+
+  let content = await fs.readFile(buildGradlePath, 'utf8');
+
+  // Add vector icons configuration if not present
+  if (!content.includes('react-native-vector-icons')) {
+    // Add after the apply plugin lines with monorepo comment
+    const vectorIconsBlock = `
+// MONOREPO NOTE: In a Yarn workspace monorepo, dependencies are hoisted to the root node_modules.
+// Paths must point to the monorepo root (../../../../node_modules from android/app) not the package's node_modules.
+apply from: file("../../../../node_modules/react-native-vector-icons/fonts.gradle")
+`;
+
+    // Find the last apply plugin/from line and insert after it
+    const lines = content.split('\n');
+    let lastApplyIndex = -1;
+
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].includes('apply plugin:') || lines[i].includes('apply from:')) {
+        lastApplyIndex = i;
+      }
+    }
+
+    if (lastApplyIndex !== -1) {
+      lines.splice(lastApplyIndex + 1, 0, vectorIconsBlock);
+      content = lines.join('\n');
+    }
+  }
+
+  // Fix the react block to use monorepo paths
+  // We need to uncomment and update the root, reactNativeDir, codegenDir, and cliFile paths
+
+  // First, check if the react block exists
+  if (content.includes('react {')) {
+    // Update or add the monorepo paths in the react block
+    const reactBlockRegex = /(react\s*\{[\s\S]*?)(\/\*\s*Folders\s*\*\/[\s\S]*?)(\/\*\s*Variants\s*\*\/)/;
+    const match = content.match(reactBlockRegex);
+
+    if (match) {
+      const newFoldersSection = `/* Folders */
+    // MONOREPO: Point to monorepo root where package.json and node_modules live
+    root = file("../../../..")
+    // MONOREPO: Point to hoisted node_modules
+    reactNativeDir = file("../../../../node_modules/react-native")
+    codegenDir = file("../../../../node_modules/@react-native/codegen")
+    cliFile = file("../../../../node_modules/react-native/cli.js")
+
+    `;
+
+      content = content.replace(reactBlockRegex, `$1${newFoldersSection}$3`);
+    }
+  }
+
+  await fs.writeFile(buildGradlePath, content);
+  logger.success('Fixed app/build.gradle monorepo paths and added vector icons');
 }
 
 /**

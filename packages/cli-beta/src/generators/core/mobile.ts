@@ -93,7 +93,7 @@ async function generateMobileFiles(
   // Create babel.config.js
   await fs.writeFile(
     path.join(mobileDir, 'babel.config.js'),
-    createBabelConfig()
+    createBabelConfig(data)
   );
 
   // Create tsconfig.json
@@ -106,7 +106,7 @@ async function generateMobileFiles(
   // Create index.js (entry point)
   await fs.writeFile(
     path.join(mobileDir, 'index.js'),
-    createIndexJs()
+    createIndexJs(data)
   );
 
   // Create src/App.tsx
@@ -161,6 +161,7 @@ function createMobilePackageJson(data: MobileGeneratorOptions): Record<string, u
       '@babel/core': '^7.24.0',
       '@babel/preset-env': '^7.24.0',
       '@babel/runtime': '^7.24.0',
+      '@react-native-community/cli': '^18.0.0',
       '@react-native/babel-preset': '^0.83.0',
       '@react-native/eslint-config': '^0.83.0',
       '@react-native/metro-config': '^0.83.0',
@@ -210,11 +211,25 @@ module.exports = mergeConfig(getDefaultConfig(__dirname), config);
 /**
  * Create babel.config.js
  */
-function createBabelConfig(): string {
+function createBabelConfig(data: MobileGeneratorOptions): string {
   return `module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
-    'react-native-reanimated/plugin',
+    ['@idealyst/theme/plugin', {
+      themePath: '../shared/src/theme.ts',
+      autoProcessPaths: [
+        '@idealyst/components',
+        '@${data.workspaceScope}/shared',
+      ],
+    }],
+    ['react-native-unistyles/plugin', {
+      root: 'src',
+      autoProcessPaths: [
+        '@idealyst/components',
+        '@${data.workspaceScope}/shared',
+      ],
+    }],
+    'react-native-worklets/plugin',
   ],
 };
 `;
@@ -239,13 +254,13 @@ function createMobileTsConfig(): Record<string, unknown> {
 /**
  * Create index.js (entry point)
  */
-function createIndexJs(): string {
-  return `import { AppRegistry } from 'react-native';
+function createIndexJs(data: MobileGeneratorOptions): string {
+  return `// Import shared theme configuration FIRST (initializes unistyles before any StyleSheet.create)
+import '@${data.workspaceScope}/shared/theme';
+
+import { AppRegistry } from 'react-native';
 import App from './src/App';
 import { name as appName } from './app.json';
-
-// Import shared unistyles configuration
-import '@${'{'}workspaceScope{'}'}/shared/unistyles';
 
 AppRegistry.registerComponent(appName, () => App);
 `;

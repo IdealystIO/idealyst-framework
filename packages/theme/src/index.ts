@@ -19,3 +19,8 @@ export * from './helpers';
 export * from './styleBuilder';
 export * from './extensions';
 export * from './componentStyles';
+
+// Responsive utilities
+export * from './responsive';
+export * from './breakpoints';
+export * from './useResponsiveStyle';

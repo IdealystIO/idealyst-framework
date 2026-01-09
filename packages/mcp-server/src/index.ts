@@ -12,6 +12,7 @@ import { components } from "./data/components/index.js";
 import { cliCommands } from "./data/cli-commands.js";
 import { frameworkGuides } from "./data/framework-guides.js";
 import { navigationGuides } from "./data/navigation-guides.js";
+import { translateGuides } from "./data/translate-guides.js";
 import { iconGuide } from "./data/icon-guide.js";
 import iconsData from "./data/icons.json" with { type: "json" };
 import {
@@ -188,6 +189,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ["component"],
+        },
+      },
+      {
+        name: "get_translate_guide",
+        description: "Get documentation for @idealyst/translate internationalization package. Covers runtime API, Babel plugin, translation files, and examples.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            topic: {
+              type: "string",
+              description: "Topic to get docs for: 'overview', 'runtime-api', 'babel-plugin', 'translation-files', 'examples'",
+              enum: ["overview", "runtime-api", "babel-plugin", "translation-files", "examples"],
+            },
+          },
+          required: ["topic"],
         },
       },
     ],
@@ -533,6 +549,32 @@ ${command.examples.map((ex: string) => `\`\`\`bash\n${ex}\n\`\`\``).join("\n\n")
       }
     }
 
+    case "get_translate_guide": {
+      const topic = args?.topic as string;
+      const uri = `idealyst://translate/${topic}`;
+      const guide = translateGuides[uri];
+
+      if (!guide) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Topic "${topic}" not found. Available topics: overview, runtime-api, babel-plugin, translation-files, examples`,
+            },
+          ],
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: guide,
+          },
+        ],
+      };
+    }
+
     default:
       return {
         content: [
@@ -609,6 +651,36 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
         description: "Complete guide to Material Design Icons with 7,447 available icons, common icons by category, and usage examples",
         mimeType: "text/markdown",
       },
+      {
+        uri: "idealyst://translate/overview",
+        name: "Translation Overview",
+        description: "Overview of @idealyst/translate internationalization package",
+        mimeType: "text/markdown",
+      },
+      {
+        uri: "idealyst://translate/runtime-api",
+        name: "Translation Runtime API",
+        description: "Complete reference for TranslateProvider, useTranslation, useLanguage, and Trans component",
+        mimeType: "text/markdown",
+      },
+      {
+        uri: "idealyst://translate/babel-plugin",
+        name: "Translation Babel Plugin",
+        description: "Guide to the Babel plugin for static key extraction and missing translation detection",
+        mimeType: "text/markdown",
+      },
+      {
+        uri: "idealyst://translate/translation-files",
+        name: "Translation File Format",
+        description: "Guide to organizing and formatting translation JSON files",
+        mimeType: "text/markdown",
+      },
+      {
+        uri: "idealyst://translate/examples",
+        name: "Translation Examples",
+        description: "Complete code examples for common translation patterns",
+        mimeType: "text/markdown",
+      },
     ],
   };
 });
@@ -617,8 +689,8 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   const { uri } = request.params;
 
-  // Check framework guides first, then navigation guides, then icon guide
-  let guide = frameworkGuides[uri] || navigationGuides[uri];
+  // Check all guide sources
+  let guide = frameworkGuides[uri] || navigationGuides[uri] || translateGuides[uri];
 
   // Handle icon reference
   if (uri === "idealyst://icons/reference") {

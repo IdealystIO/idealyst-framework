@@ -10,6 +10,7 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
   weight,
   color = 'primary',
   align = 'left',
+  pre = false,
   // Spacing variants from TextSpacingStyleProps
   gap,
   padding,

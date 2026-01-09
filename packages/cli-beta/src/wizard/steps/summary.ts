@@ -4,7 +4,7 @@
 
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { WizardStep, ProjectConfig } from '../../types';
+import { WizardStep, ProjectConfig, DevcontainerConfig } from '../../types';
 import { generateIdentifiers } from '../../identifiers';
 
 export const summaryStep: WizardStep<boolean> = {
@@ -42,13 +42,14 @@ export const summaryStep: WizardStep<boolean> = {
     console.log('');
 
     // Extensions
-    const extensions = currentConfig.extensions || { api: false, prisma: false, trpc: false, graphql: false };
+    const extensions = currentConfig.extensions || { api: false, prisma: false, trpc: false, graphql: false, devcontainer: false };
     const enabledExtensions: string[] = [];
 
     if (extensions.api) enabledExtensions.push('api');
     if (extensions.prisma) enabledExtensions.push('prisma');
     if (extensions.trpc) enabledExtensions.push('trpc');
     if (extensions.graphql) enabledExtensions.push('graphql');
+    if (extensions.devcontainer) enabledExtensions.push('devcontainer');
 
     console.log(chalk.cyan('  Extensions:'));
     if (enabledExtensions.length === 0) {
@@ -65,6 +66,25 @@ export const summaryStep: WizardStep<boolean> = {
       }
       if (extensions.graphql) {
         console.log(`    ${chalk.green('✓')} GraphQL   ${chalk.dim('- GraphQL API')}`);
+      }
+      if (extensions.devcontainer) {
+        const devConfig = typeof extensions.devcontainer === 'object'
+          ? extensions.devcontainer as DevcontainerConfig
+          : null;
+
+        if (devConfig) {
+          // Show detailed devcontainer config
+          const services: string[] = [];
+          if (devConfig.postgres) services.push('PostgreSQL');
+          if (devConfig.redis) services.push('Redis');
+          if (devConfig.chrome) services.push('Chrome');
+          if (devConfig.claudeCode) services.push('Claude Code');
+
+          const serviceList = services.length > 0 ? services.join(', ') : 'Base only';
+          console.log(`    ${chalk.green('✓')} devcontainer ${chalk.dim(`- Docker dev environment (${serviceList})`)}`);
+        } else {
+          console.log(`    ${chalk.green('✓')} devcontainer ${chalk.dim('- Docker dev environment (all services)')}`);
+        }
       }
     }
     console.log('');

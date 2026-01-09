@@ -2,7 +2,6 @@ import React, { forwardRef, useEffect, useRef, useState } from 'react';
 // @ts-ignore - web-specific import
 import { getWebProps } from 'react-native-unistyles/web';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import { selectStyles } from './Select.styles';
@@ -244,7 +243,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
           </div>
 
           <IconSvg
-            path={resolveIconPath('chevron-down')}
+            name="chevron-down"
             {...getWebProps([
               chevronStyle,
               isOpen && chevronOpenStyle

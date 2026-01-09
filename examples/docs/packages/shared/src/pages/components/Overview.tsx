@@ -36,16 +36,16 @@ export function ComponentsOverviewPage() {
   return (
     <Screen>
       <View style={{ maxWidth: 900 }}>
-        <Text size="xl" weight="bold" style={{ marginBottom: 16 }}>
+        <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
           Components Overview
         </Text>
 
-        <Text style={{ marginBottom: 32, lineHeight: 26, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 32, lineHeight: 26 }}>
           Idealyst provides a comprehensive library of cross-platform components.
           All components work identically on web and native with platform-specific optimizations.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 16 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 16 }}>
           Component Preview
         </Text>
 
@@ -59,7 +59,7 @@ export function ComponentsOverviewPage() {
           </View>
         </LivePreview>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 16 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 16 }}>
           Component Categories
         </Text>
 
@@ -82,49 +82,41 @@ export function ComponentsOverviewPage() {
           </View>
         ))}
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Common Props
         </Text>
 
         <Card variant="outlined" style={{ padding: 20 }}>
           <Text weight="semibold" style={{ marginBottom: 8 }}>Intent Colors</Text>
-          <Text size="sm" style={{ color: '#666666', marginBottom: 16 }}>
+          <Text typography="body2" color="tertiary" style={{ marginBottom: 16 }}>
             Components support intent-based colors: primary, neutral, success, error, warning
           </Text>
 
           <Text weight="semibold" style={{ marginBottom: 8 }}>Variants</Text>
-          <Text size="sm" style={{ color: '#666666', marginBottom: 16 }}>
+          <Text typography="body2" color="tertiary" style={{ marginBottom: 16 }}>
             Many components offer visual variants like contained, outlined, text (buttons) or
             filled, outlined, soft (chips)
           </Text>
 
           <Text weight="semibold" style={{ marginBottom: 8 }}>Sizes</Text>
-          <Text size="sm" style={{ color: '#666666' }}>
+          <Text typography="body2" color="tertiary">
             Most components support size variants: xs, sm, md, lg, xl
           </Text>
         </Card>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Import Pattern
         </Text>
 
-        <Card
-          variant="outlined"
-          style={{
-            padding: 16,
-            backgroundColor: '#1e1e1e',
-          }}
-        >
+        <View background="inverse" style={{ padding: 16, borderRadius: 8 }}>
           <Text
-            style={{
-              fontFamily: 'monospace',
-              fontSize: 14,
-              color: '#d4d4d4',
-            }}
+            typography="body2"
+            color="inverse"
+            style={{ fontFamily: 'monospace' }}
           >
             {`import { Button, Card, Text, View } from '@idealyst/components';`}
           </Text>
-        </Card>
+        </View>
       </View>
     </Screen>
   );

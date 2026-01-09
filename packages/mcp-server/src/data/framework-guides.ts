@@ -280,6 +280,15 @@ export const myTheme = createTheme()
     opacity: { hover: 0.9, active: 0.75, disabled: 0.5 },
   })
 
+  // Set responsive breakpoints
+  .setBreakpoints({
+    xs: 0,      // Portrait phones
+    sm: 576,    // Landscape phones
+    md: 768,    // Tablets
+    lg: 992,    // Desktops
+    xl: 1200,   // Large desktops
+  })
+
   .build();
 \`\`\`
 
@@ -370,6 +379,7 @@ const styles = StyleSheet.create((theme) => ({
 
 - \`idealyst://framework/style-system\` - Style definition APIs (defineStyle, extendStyle)
 - \`idealyst://framework/babel-plugin\` - Babel plugin configuration
+- \`idealyst://framework/breakpoints\` - Responsive breakpoint system
 `,
 
   "idealyst://framework/cli": `# Idealyst CLI Reference
@@ -1335,6 +1345,249 @@ Enable verbose logging:
   verbose: true,
 }],
 \`\`\`
+`,
+
+  "idealyst://framework/breakpoints": `# Responsive Breakpoints
+
+Idealyst provides a responsive breakpoint system built on Unistyles v3, enabling width-based responsive styling across web and native platforms.
+
+## Default Breakpoints
+
+The default themes include 5 breakpoints:
+
+| Breakpoint | Min Width | Target Devices |
+|------------|-----------|----------------|
+| \`xs\` | 0px | Portrait phones |
+| \`sm\` | 576px | Landscape phones |
+| \`md\` | 768px | Tablets |
+| \`lg\` | 992px | Desktops |
+| \`xl\` | 1200px | Large desktops |
+
+## Defining Breakpoints
+
+### Using setBreakpoints()
+
+Set all breakpoints at once:
+
+\`\`\`typescript
+import { createTheme } from '@idealyst/theme';
+
+const theme = createTheme()
+  // ... other theme config
+  .setBreakpoints({
+    xs: 0,      // Must have one breakpoint at 0
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200,
+  })
+  .build();
+\`\`\`
+
+### Using addBreakpoint()
+
+Add breakpoints individually:
+
+\`\`\`typescript
+import { fromTheme, lightTheme } from '@idealyst/theme';
+
+const theme = fromTheme(lightTheme)
+  .addBreakpoint('xxl', 1400)  // Add extra large breakpoint
+  .addBreakpoint('xxxl', 1800) // Add even larger
+  .build();
+\`\`\`
+
+## Using Breakpoints in Styles
+
+### In StyleSheet.create()
+
+Use object notation for responsive values:
+
+\`\`\`typescript
+import { StyleSheet } from 'react-native-unistyles';
+
+const styles = StyleSheet.create((theme) => ({
+  container: {
+    // Responsive padding
+    padding: {
+      xs: 8,
+      md: 16,
+      xl: 24,
+    },
+
+    // Responsive flex direction
+    flexDirection: {
+      xs: 'column',
+      md: 'row',
+    },
+
+    // Responsive gap
+    gap: {
+      xs: 8,
+      sm: 12,
+      lg: 16,
+    },
+  },
+
+  text: {
+    fontSize: {
+      xs: 14,
+      md: 16,
+      lg: 18,
+    },
+  },
+}));
+\`\`\`
+
+### Cascading Behavior
+
+Values cascade up - if a breakpoint isn't defined, it uses the nearest smaller one:
+
+\`\`\`typescript
+padding: {
+  xs: 8,   // Used for xs, sm (no sm defined)
+  md: 16,  // Used for md, lg (no lg defined)
+  xl: 24,  // Used for xl
+}
+\`\`\`
+
+## Runtime Utilities
+
+### getCurrentBreakpoint()
+
+Get the current active breakpoint:
+
+\`\`\`typescript
+import { getCurrentBreakpoint } from '@idealyst/theme';
+
+const current = getCurrentBreakpoint();
+console.log(current); // 'md'
+\`\`\`
+
+### getBreakpoints()
+
+Get all registered breakpoints:
+
+\`\`\`typescript
+import { getBreakpoints } from '@idealyst/theme';
+
+const breakpoints = getBreakpoints();
+// { xs: 0, sm: 576, md: 768, lg: 992, xl: 1200 }
+\`\`\`
+
+### isBreakpointUp() / isBreakpointDown()
+
+Check viewport against breakpoints:
+
+\`\`\`typescript
+import { isBreakpointUp, isBreakpointDown } from '@idealyst/theme';
+
+if (isBreakpointUp('md')) {
+  // Tablet or larger
+}
+
+if (isBreakpointDown('md')) {
+  // Mobile only (below tablet)
+}
+\`\`\`
+
+### resolveResponsive()
+
+Resolve a responsive value for the current breakpoint:
+
+\`\`\`typescript
+import { resolveResponsive } from '@idealyst/theme';
+
+const padding = resolveResponsive({ xs: 8, md: 16, xl: 24 });
+// Returns 8 on mobile, 16 on tablet, 24 on desktop
+\`\`\`
+
+## Responsive Type
+
+The \`Responsive<T>\` type makes any value responsive:
+
+\`\`\`typescript
+import { Responsive, Size } from '@idealyst/theme';
+
+// Can be either a direct value or breakpoint map
+type Props = {
+  size: Responsive<Size>;
+};
+
+// Both are valid:
+<Component size="md" />
+<Component size={{ xs: 'sm', md: 'lg' }} />
+\`\`\`
+
+### Type Guard
+
+Check if a value is responsive:
+
+\`\`\`typescript
+import { isResponsiveValue, Responsive, Size } from '@idealyst/theme';
+
+function handleSize(size: Responsive<Size>) {
+  if (isResponsiveValue(size)) {
+    // size is Partial<Record<Breakpoint, Size>>
+    console.log(size.xs, size.md);
+  } else {
+    // size is Size
+    console.log(size);
+  }
+}
+\`\`\`
+
+## TypeScript Support
+
+Custom breakpoints are fully typed:
+
+\`\`\`typescript
+const theme = createTheme()
+  .setBreakpoints({
+    mobile: 0,
+    tablet: 768,
+    desktop: 1024,
+  })
+  .build();
+
+// Register for type inference
+declare module '@idealyst/theme' {
+  interface CustomThemeRegistry {
+    theme: typeof theme;
+  }
+}
+
+// Now Breakpoint = 'mobile' | 'tablet' | 'desktop'
+import { Breakpoint } from '@idealyst/theme';
+\`\`\`
+
+## Unistyles Integration
+
+Breakpoints are automatically registered with Unistyles:
+
+\`\`\`typescript
+import { UnistylesRegistry } from 'react-native-unistyles';
+import { lightTheme, darkTheme } from '@idealyst/theme';
+
+UnistylesRegistry
+  .addThemes({ light: lightTheme, dark: darkTheme })
+  .addBreakpoints(lightTheme.breakpoints)  // Register breakpoints
+  .addConfig({ initialTheme: 'light' });
+\`\`\`
+
+## Cross-Platform Behavior
+
+- **Web**: Breakpoints convert to CSS media queries automatically
+- **Native**: Uses device screen width (works with tablets, phones, etc.)
+- **Same API**: Write once, works everywhere
+
+## Best Practices
+
+1. **Mobile-first**: Start with \`xs\` and add larger breakpoints as needed
+2. **Use cascading**: Don't define every breakpoint - let values cascade
+3. **Consistent breakpoints**: Use the same breakpoints across themes
+4. **Test on devices**: Verify layouts on actual device widths
+5. **Avoid over-responsiveness**: Not everything needs to change per breakpoint
 `,
 
   "idealyst://framework/iterator-pattern": `# The $iterator Pattern

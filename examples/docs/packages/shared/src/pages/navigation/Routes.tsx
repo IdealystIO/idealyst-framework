@@ -6,16 +6,16 @@ export function NavigationRoutesPage() {
   return (
     <Screen>
       <View style={{ maxWidth: 900 }}>
-        <Text size="xl" weight="bold" style={{ marginBottom: 16 }}>
+        <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
           Route Configuration
         </Text>
 
-        <Text style={{ marginBottom: 32, lineHeight: 26, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 32, lineHeight: 26 }}>
           Routes in Idealyst are defined using TypeScript types that provide full type safety
           and autocomplete. Learn how to configure NavigatorParam and RouteParam.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           NavigatorParam Types
         </Text>
 
@@ -33,11 +33,11 @@ type BaseNavigatorParam = {
 };`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Stack Navigator
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Traditional push/pop navigation with a navigation stack. Each new screen
           is pushed onto the stack and can be popped with a back action.
         </Text>
@@ -70,11 +70,11 @@ const StackRouter: NavigatorParam = {
 };`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Tab Navigator
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Bottom tab bar navigation. Screens persist in memory when switching tabs.
           Each tab can have its own icon and label.
         </Text>
@@ -130,11 +130,11 @@ const TabRouter: NavigatorParam = {
 };`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Drawer Navigator
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Side menu navigation with a custom sidebar component. Perfect for documentation
           sites, admin panels, and apps with many top-level sections.
         </Text>
@@ -175,11 +175,11 @@ const DrawerRouter: NavigatorParam = {
 };`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Nested Navigation
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Routes can be nested to create complex navigation hierarchies. Each nested
           navigator maintains its own navigation state.
         </Text>
@@ -216,76 +216,76 @@ const DrawerRouter: NavigatorParam = {
 };`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Screen Options
         </Text>
 
         <Card variant="outlined" style={{ padding: 20, marginBottom: 24 }}>
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>title</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Screen title displayed in the header. Also used for document title on web.
             </Text>
           </View>
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>headerShown</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Whether to show the navigation header. Set to false for custom headers.
             </Text>
           </View>
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>headerTitle</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Custom header title. Can be a string, component, or React element.
             </Text>
           </View>
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>headerLeft / headerRight</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Custom components for left/right header slots. HeaderLeft overrides back button.
             </Text>
           </View>
 
           <View>
             <Text weight="semibold" style={{ marginBottom: 4 }}>headerBackVisible</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Whether to show the back button in the header. Defaults to true when applicable.
             </Text>
           </View>
         </Card>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Tab Bar Options
         </Text>
 
         <Card variant="outlined" style={{ padding: 20 }}>
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>tabBarLabel</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Label displayed below the tab icon. Defaults to screen title.
             </Text>
           </View>
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>tabBarIcon</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Function that returns an icon component. Receives focused, color, and size props.
             </Text>
           </View>
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>tabBarBadge</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Badge to display on the tab icon. Can be a string or number.
             </Text>
           </View>
 
           <View>
             <Text weight="semibold" style={{ marginBottom: 4 }}>tabBarVisible</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Whether to show this screen in the tab bar. Set to false to hide.
             </Text>
           </View>

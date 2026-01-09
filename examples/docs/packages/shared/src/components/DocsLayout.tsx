@@ -41,7 +41,7 @@ export const DocsLayout: React.FC = () => {
             style={{ padding: 8 }}
           />
           <Button type="text" size="lg" onPress={() => navigate({ path: '/' })}>
-            <Text weight="bold" size="lg">
+            <Text weight="bold" typography="h5">
               Idealyst Docs
             </Text>
           </Button>

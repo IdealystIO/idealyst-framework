@@ -3,7 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { chipStyles } from './Chip.styles';
 import type { ChipProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 const Chip = forwardRef<HTMLDivElement, ChipProps>(({
@@ -56,10 +56,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
     if (!icon) return null;
 
     if (isIconName(icon)) {
-      const iconPath = resolveIconPath(icon);
       return (
         <IconSvg
-          path={iconPath}
+          name={icon}
           {...iconProps}
           aria-label={icon}
         />
@@ -74,10 +73,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(({
   // Helper to render delete icon
   const renderDeleteIcon = () => {
     if (isIconName(deleteIcon)) {
-      const iconPath = resolveIconPath(deleteIcon);
       return (
         <IconSvg
-          path={iconPath}
+          name={deleteIcon}
           {...deleteIconProps}
           aria-label={deleteIcon}
         />

@@ -1,8 +1,139 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useMemo, ReactNode } from 'react';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { tableStyles } from './Table.styles';
-import type { TableProps, TableColumn } from './types';
+import type { TableProps, TableColumn, TableType, TableSizeVariant, TableAlignVariant } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+
+// ============================================================================
+// Sub-component Props
+// ============================================================================
+
+interface TRProps {
+  children: ReactNode;
+  size?: TableSizeVariant;
+  type?: TableType;
+  clickable?: boolean;
+  onPress?: () => void;
+  testID?: string;
+}
+
+interface THProps {
+  children: ReactNode;
+  size?: TableSizeVariant;
+  type?: TableType;
+  align?: TableAlignVariant;
+  width?: number | string;
+}
+
+interface TDProps {
+  children: ReactNode;
+  size?: TableSizeVariant;
+  type?: TableType;
+  align?: TableAlignVariant;
+  width?: number | string;
+}
+
+// ============================================================================
+// TR Component
+// ============================================================================
+
+function TR({
+  children,
+  size = 'md',
+  type = 'standard',
+  clickable = false,
+  onPress,
+  testID,
+}: TRProps) {
+  tableStyles.useVariants({
+    size,
+    type,
+    clickable,
+  });
+
+  const rowStyle = (tableStyles.row as any)({});
+  const RowComponent = clickable ? TouchableOpacity : View;
+
+  return (
+    <RowComponent
+      style={rowStyle}
+      onPress={clickable ? onPress : undefined}
+      testID={testID}
+    >
+      <View style={{ flexDirection: 'row' }}>
+        {children}
+      </View>
+    </RowComponent>
+  );
+}
+
+// ============================================================================
+// TH Component
+// ============================================================================
+
+function TH({
+  children,
+  size = 'md',
+  type = 'standard',
+  align = 'left',
+  width,
+}: THProps) {
+  tableStyles.useVariants({
+    size,
+    type,
+    align,
+  });
+
+  const headerCellStyle = (tableStyles.headerCell as any)({});
+
+  return (
+    <View
+      style={[
+        headerCellStyle,
+        { width, flex: width ? undefined : 1 },
+      ]}
+    >
+      <Text style={headerCellStyle}>
+        {children}
+      </Text>
+    </View>
+  );
+}
+
+// ============================================================================
+// TD Component
+// ============================================================================
+
+function TD({
+  children,
+  size = 'md',
+  type = 'standard',
+  align = 'left',
+  width,
+}: TDProps) {
+  tableStyles.useVariants({
+    size,
+    type,
+    align,
+  });
+
+  const cellStyle = (tableStyles.cell as any)({});
+
+  return (
+    <View
+      style={[
+        cellStyle,
+        { width, flex: width ? undefined : 1 },
+      ]}
+    >
+      {children}
+    </View>
+  );
+}
+
+// ============================================================================
+// Main Table Component
+// ============================================================================
 
 function TableInner<T = any>({
   columns,
@@ -37,7 +168,8 @@ function TableInner<T = any>({
       accessibilityHidden,
     });
   }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
-  // Apply variants
+
+  // Apply variants for container
   tableStyles.useVariants({
     type,
     size,
@@ -55,8 +187,6 @@ function TableInner<T = any>({
   const tableStyle = (tableStyles.table as any)({});
   const theadStyle = (tableStyles.thead as any)({});
   const tbodyStyle = (tableStyles.tbody as any)({});
-  const rowStyle = (tableStyles.row as any)({});
-  const headerCellStyle = (tableStyles.headerCell as any)({});
   const cellStyle = (tableStyles.cell as any)({});
 
   // Helper to get cell value
@@ -84,71 +214,44 @@ function TableInner<T = any>({
         {/* Header */}
         <View style={theadStyle}>
           <View style={{ flexDirection: 'row' }}>
-            {columns.map((column) => {
-              tableStyles.useVariants({
-                size,
-                align: column.align || 'left',
-                type,
-              });
-
-              return (
-                <View
-                  key={column.key}
-                  style={[
-                    headerCellStyle,
-                    { width: column.width, flex: column.width ? undefined : 1 },
-                  ]}
-                >
-                  <Text style={headerCellStyle}>
-                    {column.title}
-                  </Text>
-                </View>
-              );
-            })}
+            {columns.map((column) => (
+              <TH
+                key={column.key}
+                size={size}
+                type={type}
+                align={column.align}
+                width={column.width}
+              >
+                {column.title}
+              </TH>
+            ))}
           </View>
         </View>
 
         {/* Body */}
         <View style={tbodyStyle}>
-          {data.map((row, rowIndex) => {
-            tableStyles.useVariants({
-              type,
-              clickable: isClickable,
-            });
-
-            const RowComponent = isClickable ? TouchableOpacity : View;
-
-            return (
-              <RowComponent
-                key={rowIndex}
-                style={rowStyle}
-                onPress={isClickable ? () => onRowPress?.(row, rowIndex) : undefined}
-                testID={`${testID}-row-${rowIndex}`}
-              >
-                <View style={{ flexDirection: 'row' }}>
-                  {columns.map((column) => {
-                    tableStyles.useVariants({
-                      size,
-                      align: column.align || 'left',
-                      type,
-                    });
-
-                    return (
-                      <View
-                        key={column.key}
-                        style={[
-                          cellStyle,
-                          { width: column.width, flex: column.width ? undefined : 1 },
-                        ]}
-                      >
-                        {getCellValue(column, row, rowIndex)}
-                      </View>
-                    );
-                  })}
-                </View>
-              </RowComponent>
-            );
-          })}
+          {data.map((row, rowIndex) => (
+            <TR
+              key={rowIndex}
+              size={size}
+              type={type}
+              clickable={isClickable}
+              onPress={() => onRowPress?.(row, rowIndex)}
+              testID={testID ? `${testID}-row-${rowIndex}` : undefined}
+            >
+              {columns.map((column) => (
+                <TD
+                  key={column.key}
+                  size={size}
+                  type={type}
+                  align={column.align}
+                  width={column.width}
+                >
+                  {getCellValue(column, row, rowIndex)}
+                </TD>
+              ))}
+            </TR>
+          ))}
         </View>
       </View>
     </ScrollView>

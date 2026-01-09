@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text } from '@idealyst/components';
+import { View, Text, Card } from '@idealyst/components';
+import { useUnistyles } from 'react-native-unistyles';
 
 interface PropDefinition {
   name: string;
@@ -14,25 +15,26 @@ interface PropsTableProps {
 }
 
 export function PropsTable({ props }: PropsTableProps) {
+  const { theme } = useUnistyles();
+
   return (
-    <View
+    <Card
+      type="outlined"
       style={{
-        borderWidth: 1,
-        borderColor: '#e0e0e0',
-        borderRadius: 8,
+        padding: 0,
         overflow: 'hidden',
         marginVertical: 16,
       }}
     >
       {/* Header */}
       <View
+        background="secondary"
         style={{
           flexDirection: 'row',
-          backgroundColor: '#f5f5f5',
           paddingVertical: 12,
           paddingHorizontal: 16,
           borderBottomWidth: 1,
-          borderBottomColor: '#e0e0e0',
+          borderBottomColor: theme.colors.border.primary,
         }}
       >
         <Text weight="semibold" style={{ width: 150 }}>Prop</Text>
@@ -50,48 +52,48 @@ export function PropsTable({ props }: PropsTableProps) {
             paddingVertical: 12,
             paddingHorizontal: 16,
             borderBottomWidth: index < props.length - 1 ? 1 : 0,
-            borderBottomColor: '#e0e0e0',
+            borderBottomColor: theme.colors.border.primary,
           }}
         >
           <View style={{ width: 150, flexDirection: 'row', alignItems: 'center' }}>
             <Text
+              color="link"
               style={{
                 fontFamily: 'monospace',
                 fontSize: 14,
-                color: '#3b82f6',
               }}
             >
               {prop.name}
             </Text>
             {prop.required && (
-              <Text style={{ color: '#ef4444', marginLeft: 4 }}>*</Text>
+              <Text intent="error" style={{ marginLeft: 4 }}>*</Text>
             )}
           </View>
           <Text
+            typography="body2"
+            color="tertiary"
             style={{
               width: 200,
               fontFamily: 'monospace',
-              fontSize: 13,
-              color: '#666666',
             }}
           >
             {prop.type}
           </Text>
           <Text
+            typography="body2"
+            color="secondary"
             style={{
               width: 100,
               fontFamily: 'monospace',
-              fontSize: 13,
-              color: '#888888',
             }}
           >
             {prop.default || '-'}
           </Text>
-          <Text size="sm" style={{ flex: 1, color: '#333333' }}>
+          <Text typography="body2" style={{ flex: 1 }}>
             {prop.description}
           </Text>
         </View>
       ))}
-    </View>
+    </Card>
   );
 }

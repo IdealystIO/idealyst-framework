@@ -44,6 +44,11 @@ export interface DefaultTheme {
     };
     interaction: InteractionConfig;
     /**
+     * Responsive breakpoints for width-based styling.
+     * First breakpoint MUST have value 0.
+     */
+    breakpoints: Record<string, number>;
+    /**
      * Component style extensions.
      * Populated by the extension system when extendComponent is called.
      * Used by the Babel plugin to merge extensions into component styles.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, List, ListItem, Divider, Screen } from '@idealyst/components';
+import { View, Text, List, ListItem, Divider } from '@idealyst/components';
 import { useNavigator, DrawerSidebarProps } from '@idealyst/navigation';
 import { navigationSections } from '../navigation/DocsRouter';
 
@@ -7,18 +7,20 @@ export function DocsSidebar({ insets }: DrawerSidebarProps) {
   const { navigate } = useNavigator();
 
   return (
-    <Screen
+    <View
       style={{
         height: '100%',
-        padding: 16,
+        overflow: 'auto',
+        paddingTop: insets?.top || 16,
+        paddingBottom: insets?.bottom || 16,
+        paddingLeft: 16,
+        paddingRight: 16,
       }}
-      contentInset={insets}
     >
-
       {navigationSections.map((section, sectionIndex) => (
         <List key={section.title}>
           <Text
-            size="sm"
+            typography="caption"
             weight="bold"
             color="secondary"
             style={{ marginBottom: 8, marginLeft: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}
@@ -38,6 +40,6 @@ export function DocsSidebar({ insets }: DrawerSidebarProps) {
           )}
         </List>
       ))}
-    </Screen>
+    </View>
   );
 }

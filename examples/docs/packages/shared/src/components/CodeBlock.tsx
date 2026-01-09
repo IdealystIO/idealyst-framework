@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from '@idealyst/components';
+import { useUnistyles } from 'react-native-unistyles';
 
 interface CodeBlockProps {
   code: string;
@@ -8,37 +9,39 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({ code, language = 'typescript', title }: CodeBlockProps) {
+  const { theme } = useUnistyles();
+
   return (
     <View
+      background="inverse"
+      radius="md"
       style={{
-        backgroundColor: '#1e1e1e',
-        borderRadius: 8,
         marginVertical: 16,
         overflow: 'hidden',
       }}
     >
       {title && (
         <View
+          background="inverse-secondary"
+          padding="sm"
           style={{
-            backgroundColor: '#2d2d2d',
-            paddingVertical: 8,
-            paddingHorizontal: 16,
             borderBottomWidth: 1,
-            borderBottomColor: '#3d3d3d',
+            borderBottomColor: theme.colors.border.secondary,
           }}
         >
-          <Text size="sm" style={{ color: '#a0a0a0' }}>
+          <Text typography="caption" color="inverse-tertiary">
             {title}
           </Text>
         </View>
       )}
-      <View style={{ padding: 16 }}>
+      <View padding="md">
         <Text
+          typography="body2"
+          color="inverse"
           style={{
             fontFamily: 'monospace',
-            fontSize: 14,
+            whiteSpace: 'pre-wrap',
             lineHeight: 22,
-            color: '#d4d4d4',
           }}
         >
           {code}

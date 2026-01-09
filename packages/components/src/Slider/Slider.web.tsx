@@ -3,7 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { sliderStyles } from './Slider.styles';
 import type { SliderProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebRangeAriaProps, generateAccessibilityId, SLIDER_KEYS } from '../utils/accessibility';
 
@@ -223,11 +223,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
     if (!icon) return null;
 
     if (isIconName(icon)) {
-      // Resolve icon name to path and render with IconSvg
-      const iconPath = resolveIconPath(icon);
       return (
         <IconSvg
-          path={iconPath}
+          name={icon}
           {...thumbIconProps}
           aria-label={icon}
         />

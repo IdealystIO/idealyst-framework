@@ -13,6 +13,7 @@ StyleSheet.configure({
     light: customLightTheme,
     dark: customDarkTheme,
   },
+  breakpoints: lightTheme.breakpoints,
   settings: {
     initialTheme: 'light',
   },

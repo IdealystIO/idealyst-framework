@@ -6,21 +6,21 @@ export function StyleExtensionsPage() {
   return (
     <Screen>
       <View style={{ maxWidth: 900 }}>
-        <Text size="xl" weight="bold" style={{ marginBottom: 16 }}>
+        <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
           Style Extensions
         </Text>
 
-        <Text style={{ marginBottom: 32, lineHeight: 26, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 32, lineHeight: 26 }}>
           Idealyst allows you to customize component styles without modifying the source code.
           Use <Text weight="semibold">extendStyle()</Text> to merge additional styles with the base,
           or <Text weight="semibold">overrideStyle()</Text> to completely replace styles.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           extendStyle()
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Merges your custom styles with the existing component styles. Base styles are preserved
           and your additions are applied on top.
         </Text>
@@ -47,11 +47,11 @@ extendStyle(buttonStyles, (theme) => ({
 }));`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           overrideStyle()
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Completely replaces the style definition. Use when you need full control over a component's
           appearance. The base styles are discarded.
         </Text>
@@ -79,15 +79,15 @@ overrideStyle(cardStyles, (theme) => ({
 }));`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Import Order Matters
         </Text>
 
-        <Card variant="outlined" style={{ padding: 20, marginBottom: 24, backgroundColor: '#fff8e6', borderColor: '#f59e0b' }}>
-          <Text weight="semibold" style={{ marginBottom: 8, color: '#92400e' }}>
+        <Card variant="outlined" intent="warning" style={{ padding: 20, marginBottom: 24 }}>
+          <Text weight="semibold" style={{ marginBottom: 8 }}>
             Important: Style extensions must be imported before the component is used
           </Text>
-          <Text size="sm" style={{ color: '#78350f', lineHeight: 22 }}>
+          <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
             Style extensions work by mutating the style registry at import time.
             Import your style extension file early in your app (typically in App.tsx or a styles/index.ts barrel file).
           </Text>
@@ -109,11 +109,11 @@ function App() {
 }`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Extending with Variants
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           You can add new variants or modify existing variant behavior:
         </Text>
 
@@ -156,11 +156,11 @@ extendStyle(buttonStyles, (theme) => ({
 }));`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Platform-Specific Extensions
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Use <Text weight="semibold">_web</Text> and <Text weight="semibold">_native</Text> prefixes
           to apply platform-specific style extensions:
         </Text>
@@ -192,7 +192,7 @@ extendStyle(buttonStyles, (theme) => ({
 }));`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           When to Use Each
         </Text>
 
@@ -201,7 +201,7 @@ extendStyle(buttonStyles, (theme) => ({
             <Text weight="semibold" intent="success" style={{ marginBottom: 8 }}>
               Use extendStyle() when:
             </Text>
-            <Text size="sm" style={{ color: '#666666', lineHeight: 22 }}>
+            <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
               {`• Adding shadows, borders, or effects
 • Tweaking spacing or sizing
 • Adding new variants
@@ -214,7 +214,7 @@ extendStyle(buttonStyles, (theme) => ({
             <Text weight="semibold" intent="warning" style={{ marginBottom: 8 }}>
               Use overrideStyle() when:
             </Text>
-            <Text size="sm" style={{ color: '#666666', lineHeight: 22 }}>
+            <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
               {`• Completely redesigning a component
 • Creating a unique brand aesthetic
 • Removing default behaviors

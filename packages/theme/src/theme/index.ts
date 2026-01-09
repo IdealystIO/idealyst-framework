@@ -16,6 +16,7 @@ export * from "./intent";
 export * from "./size";
 export * from "./color";
 export * from "./shadow";
+export * from "./breakpoint";
 
 // Re-export structures except IntentValue and ShadowValue (those are re-exported with extensions from intent.ts and shadow.ts)
 export type {
@@ -23,6 +24,7 @@ export type {
     ColorValue,
     Shade,
     SizeValue,
+    BreakpointValue,
     Typography,
     TypographyValue,
     ButtonSizeValue,

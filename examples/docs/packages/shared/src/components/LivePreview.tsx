@@ -1,5 +1,6 @@
 import React, { useState, ReactNode } from 'react';
-import { View, Text, Button } from '@idealyst/components';
+import { View, Text, Button, Card } from '@idealyst/components';
+import { useUnistyles } from 'react-native-unistyles';
 
 interface LivePreviewProps {
   /** The component to preview */
@@ -12,31 +13,31 @@ interface LivePreviewProps {
 
 export function LivePreview({ children, code, title }: LivePreviewProps) {
   const [showCode, setShowCode] = useState(false);
+  const { theme } = useUnistyles();
 
   return (
-    <View
+    <Card
+      type="outlined"
       style={{
-        borderWidth: 1,
-        borderColor: '#e0e0e0',
-        borderRadius: 8,
-        overflow: 'hidden',
+        padding: 0,
         marginVertical: 16,
+        overflow: 'hidden',
       }}
     >
       {/* Preview Header */}
       <View
+        background="secondary"
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          backgroundColor: '#f5f5f5',
           paddingVertical: 8,
           paddingHorizontal: 16,
           borderBottomWidth: 1,
-          borderBottomColor: '#e0e0e0',
+          borderBottomColor: theme.colors.border.primary,
         }}
       >
-        <Text weight="semibold" size="sm">
+        <Text weight="semibold" typography="caption">
           {title || 'Preview'}
         </Text>
         {code && (
@@ -52,9 +53,9 @@ export function LivePreview({ children, code, title }: LivePreviewProps) {
 
       {/* Preview Area */}
       <View
+        background="primary"
+        padding="lg"
         style={{
-          padding: 24,
-          backgroundColor: '#ffffff',
           alignItems: 'center',
         }}
       >
@@ -64,25 +65,25 @@ export function LivePreview({ children, code, title }: LivePreviewProps) {
       {/* Code Area */}
       {showCode && code && (
         <View
+          background="inverse"
+          padding="md"
           style={{
-            backgroundColor: '#1e1e1e',
-            padding: 16,
             borderTopWidth: 1,
-            borderTopColor: '#3d3d3d',
+            borderTopColor: theme.colors.border.secondary,
           }}
         >
           <Text
+            typography="body2"
+            color="inverse"
             style={{
               fontFamily: 'monospace',
-              fontSize: 13,
               lineHeight: 20,
-              color: '#d4d4d4',
             }}
           >
             {code}
           </Text>
         </View>
       )}
-    </View>
+    </Card>
   );
 }

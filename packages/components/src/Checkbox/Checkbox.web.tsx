@@ -3,7 +3,6 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { CheckboxProps } from './types';
 import { checkboxStyles } from './Checkbox.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebSelectionAriaProps, generateAccessibilityId, combineIds } from '../utils/accessibility';
 
@@ -177,7 +176,7 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
           <div {...checkboxProps}>
             {(internalChecked || indeterminate) && (
               <IconSvg
-                path={resolveIconPath(indeterminate ? 'minus' : 'check')}
+                name={indeterminate ? 'minus' : 'check'}
                 {...checkmarkProps}
                 aria-label={indeterminate ? 'minus' : 'check'}
               />

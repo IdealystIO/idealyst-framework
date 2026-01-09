@@ -42,6 +42,7 @@ export type BuiltTheme<
     TText extends string,
     TBorder extends string,
     TSize extends string,
+    TBreakpoints extends string = never,
 > = {
     intents: Record<TIntents, IntentValue>;
     radii: Record<TRadii, number>;
@@ -78,6 +79,7 @@ export type BuiltTheme<
         typography: Record<Typography, TypographyValue>;
     };
     interaction: InteractionConfig;
+    breakpoints: Record<TBreakpoints, number>;
 };
 
 /**
@@ -92,7 +94,8 @@ type ThemeConfig<
     TText extends string,
     TBorder extends string,
     TSize extends string,
-> = BuiltTheme<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize>;
+    TBreakpoints extends string,
+> = BuiltTheme<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>;
 
 /**
  * Fluent builder for creating themes with full TypeScript inference.
@@ -127,8 +130,9 @@ export class ThemeBuilder<
     TText extends string = never,
     TBorder extends string = never,
     TSize extends string = never,
+    TBreakpoints extends string = never,
 > {
-    private config: ThemeConfig<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize>;
+    private config: ThemeConfig<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>;
 
     constructor() {
         this.config = {
@@ -143,6 +147,7 @@ export class ThemeBuilder<
             },
             sizes: {} as any,
             interaction: {} as any,
+            breakpoints: {} as any,
         };
     }
 
@@ -152,8 +157,8 @@ export class ThemeBuilder<
     addIntent<K extends string>(
         name: K,
         value: IntentValue
-    ): ThemeBuilder<TIntents | K, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize> {
-        const newBuilder = new ThemeBuilder<TIntents | K, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize>();
+    ): ThemeBuilder<TIntents | K, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents | K, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             intents: {
@@ -170,8 +175,8 @@ export class ThemeBuilder<
     addRadius<K extends string>(
         name: K,
         value: number
-    ): ThemeBuilder<TIntents, TRadii | K, TShadows, TPallet, TSurface, TText, TBorder, TSize> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii | K, TShadows, TPallet, TSurface, TText, TBorder, TSize>();
+    ): ThemeBuilder<TIntents, TRadii | K, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii | K, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             radii: {
@@ -188,8 +193,8 @@ export class ThemeBuilder<
     addShadow<K extends string>(
         name: K,
         value: ShadowValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows | K, TPallet, TSurface, TText, TBorder, TSize> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows | K, TPallet, TSurface, TText, TBorder, TSize>();
+    ): ThemeBuilder<TIntents, TRadii, TShadows | K, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows | K, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             shadows: {
@@ -205,8 +210,8 @@ export class ThemeBuilder<
      */
     setInteraction(
         interaction: InteractionConfig
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize>();
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             interaction,
@@ -227,8 +232,8 @@ export class ThemeBuilder<
         surface: Record<S, ColorValue>;
         text: Record<T, ColorValue>;
         border: Record<B, ColorValue>;
-    }): ThemeBuilder<TIntents, TRadii, TShadows, P, S, T, B, TSize> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, P, S, T, B, TSize>();
+    }): ThemeBuilder<TIntents, TRadii, TShadows, P, S, T, B, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, P, S, T, B, TSize, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             colors,
@@ -263,8 +268,8 @@ export class ThemeBuilder<
         tooltip: Record<S, TooltipSizeValue>;
         view: Record<S, ViewSizeValue>;
         typography: Record<Typography, TypographyValue>;
-    }): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, S> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, S>();
+    }): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, S, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, S, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             sizes,
@@ -273,9 +278,74 @@ export class ThemeBuilder<
     }
 
     /**
+     * Add a single breakpoint to the theme.
+     *
+     * IMPORTANT: At least one breakpoint must have value 0 (typically 'xs').
+     * This simulates CSS cascading behavior in Unistyles.
+     *
+     * @param name - The breakpoint name (e.g., 'xs', 'sm', 'md')
+     * @param value - The minimum width in pixels for this breakpoint
+     *
+     * @example
+     * ```typescript
+     * createTheme()
+     *   .addBreakpoint('xs', 0)
+     *   .addBreakpoint('sm', 576)
+     *   .addBreakpoint('md', 768)
+     *   .build();
+     * ```
+     */
+    addBreakpoint<K extends string>(
+        name: K,
+        value: number
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints | K> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints | K>();
+        newBuilder.config = {
+            ...this.config,
+            breakpoints: {
+                ...this.config.breakpoints,
+                [name]: value,
+            } as any,
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Set all breakpoints at once.
+     *
+     * IMPORTANT: At least one breakpoint must have value 0.
+     * Breakpoints define responsive behavior based on viewport width.
+     *
+     * @param breakpoints - Object mapping breakpoint names to pixel values
+     *
+     * @example
+     * ```typescript
+     * createTheme()
+     *   .setBreakpoints({
+     *     xs: 0,    // Required: starts at 0
+     *     sm: 576,
+     *     md: 768,
+     *     lg: 992,
+     *     xl: 1200,
+     *   })
+     *   .build();
+     * ```
+     */
+    setBreakpoints<B extends Record<string, number>>(
+        breakpoints: B
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, keyof B & string> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, keyof B & string>();
+        newBuilder.config = {
+            ...this.config,
+            breakpoints,
+        } as any;
+        return newBuilder;
+    }
+
+    /**
      * Build the final theme object.
      */
-    build(): BuiltTheme<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize> {
+    build(): BuiltTheme<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
         return this.config;
     }
 }
@@ -290,7 +360,7 @@ export function createTheme(): ThemeBuilder {
 /**
  * Create a builder from an existing theme to add more values.
  */
-export function fromTheme<T extends BuiltTheme<any, any, any, any, any, any, any, any>>(
+export function fromTheme<T extends BuiltTheme<any, any, any, any, any, any, any, any, any>>(
     base: T
 ): ThemeBuilder<
     keyof T['intents'] & string,
@@ -300,7 +370,8 @@ export function fromTheme<T extends BuiltTheme<any, any, any, any, any, any, any
     keyof T['colors']['surface'] & string,
     keyof T['colors']['text'] & string,
     keyof T['colors']['border'] & string,
-    keyof T['sizes']['button'] & string
+    keyof T['sizes']['button'] & string,
+    keyof T['breakpoints'] & string
 > {
     const builder = new ThemeBuilder<
         keyof T['intents'] & string,
@@ -310,7 +381,8 @@ export function fromTheme<T extends BuiltTheme<any, any, any, any, any, any, any
         keyof T['colors']['surface'] & string,
         keyof T['colors']['text'] & string,
         keyof T['colors']['border'] & string,
-        keyof T['sizes']['button'] & string
+        keyof T['sizes']['button'] & string,
+        keyof T['breakpoints'] & string
     >();
     (builder as any).config = { ...base };
     return builder;

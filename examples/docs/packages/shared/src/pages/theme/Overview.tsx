@@ -6,27 +6,24 @@ export function ThemeOverviewPage() {
   return (
     <Screen>
       <View style={{ maxWidth: 800 }}>
-        <Text size="xl" weight="bold" style={{ marginBottom: 16 }}>
+        <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
           Theme System Overview
         </Text>
 
-        <Text style={{ marginBottom: 24, lineHeight: 26, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 24, lineHeight: 26 }}>
           Idealyst provides a powerful theming system built on react-native-unistyles.
           Themes are created using a fluent builder API with full TypeScript inference.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Architecture
         </Text>
 
-        <Card variant="outlined" style={{ padding: 20, marginBottom: 24 }}>
+        <View background="inverse" style={{ padding: 20, marginBottom: 24, borderRadius: 8 }}>
           <Text
-            style={{
-              fontFamily: 'monospace',
-              fontSize: 13,
-              lineHeight: 24,
-              color: '#333333',
-            }}
+            typography="body2"
+            color="inverse"
+            style={{ fontFamily: 'monospace', lineHeight: 24 }}
           >
 {`┌─────────────────────────────────────────────────────┐
 │  Theme Layer (builder.ts)                           │
@@ -45,9 +42,9 @@ export function ThemeOverviewPage() {
 │  Transforms → StyleSheet.create(), expands $iter    │
 └─────────────────────────────────────────────────────┘`}
           </Text>
-        </Card>
+        </View>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Core Concepts
         </Text>
 
@@ -70,7 +67,7 @@ export function ThemeOverviewPage() {
           />
         </View>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Quick Example
         </Text>
 
@@ -116,7 +113,7 @@ function ConceptCard({ title, description }: { title: string; description: strin
       <Text weight="semibold" style={{ marginBottom: 4 }}>
         {title}
       </Text>
-      <Text size="sm" style={{ color: '#666666' }}>
+      <Text typography="body2" color="tertiary">
         {description}
       </Text>
     </Card>

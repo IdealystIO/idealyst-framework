@@ -144,8 +144,8 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
       : { opacity: 0, transform: 'scale(0.96) translateY(-4px)' }
   ]);
   const headerProps = getWebProps([(dialogStyles.header as any)({})]);
-  const titleProps = getWebProps([dialogStyles.title]);
-  const closeButtonProps = getWebProps([dialogStyles.closeButton]);
+  const titleProps = getWebProps([(dialogStyles.title as any)({})]);
+  const closeButtonProps = getWebProps([(dialogStyles.closeButton as any)({})]);
   const contentProps = getWebProps([(dialogStyles.content as any)({})]);
 
   const mergedBackdropRef = useMergeRefs(ref, backdropProps.ref);

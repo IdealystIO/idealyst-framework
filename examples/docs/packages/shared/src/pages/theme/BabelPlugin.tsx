@@ -1,26 +1,26 @@
 import React from 'react';
-import { View, Text, Card, Screen } from '@idealyst/components';
+import { View, Text, Card, Alert, Screen } from '@idealyst/components';
 import { CodeBlock } from '../../components/CodeBlock';
 
 export function BabelPluginPage() {
   return (
     <Screen>
       <View style={{ maxWidth: 900 }}>
-        <Text size="xl" weight="bold" style={{ marginBottom: 16 }}>
+        <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
           Babel Plugin Configuration
         </Text>
 
-        <Text style={{ marginBottom: 32, lineHeight: 26, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 32, lineHeight: 26 }}>
           The Idealyst Babel plugin transforms <Text weight="semibold">defineStyle()</Text> calls
           into optimized <Text weight="semibold">StyleSheet.create()</Text> at build time.
           It also expands the <Text weight="semibold">$iterator</Text> pattern for variant generation.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Installation
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           The Babel plugin is included with <Text weight="semibold">@idealyst/theme</Text>.
           Configure it in your babel.config.js:
         </Text>
@@ -95,14 +95,14 @@ export default defineConfig({
 });`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Plugin Options
         </Text>
 
         <Card variant="outlined" style={{ padding: 20, marginBottom: 24 }}>
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>themePath</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Required. Path to your theme file that exports the built theme. The plugin reads
               theme keys to expand $iterator patterns.
             </Text>
@@ -110,7 +110,7 @@ export default defineConfig({
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>autoProcessPaths</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Optional. Array of paths to automatically process. Files in these paths will have
               defineStyle() calls transformed without explicit configuration.
             </Text>
@@ -118,18 +118,18 @@ export default defineConfig({
 
           <View>
             <Text weight="semibold" style={{ marginBottom: 4 }}>debug</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Optional. When true, logs transformation details to console. Useful for
               troubleshooting style expansion issues.
             </Text>
           </View>
         </Card>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           The $iterator Pattern
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           The <Text weight="semibold">$iterator</Text> pattern allows you to define styles once
           that automatically expand to all keys of a theme object. This is used extensively
           for intent colors and sizes.
@@ -179,11 +179,11 @@ export const buttonStyles = StyleSheet.create((theme) => ({
 }));`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           ThemeStyleWrapper Type
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           To get TypeScript support for $iterator patterns, wrap your theme type with
           <Text weight="semibold"> ThemeStyleWrapper</Text>:
         </Text>
@@ -208,42 +208,37 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
 }));`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Plugin Order
         </Text>
 
-        <Card variant="outlined" style={{ padding: 20, marginBottom: 24, backgroundColor: '#fff8e6', borderColor: '#f59e0b' }}>
-          <Text weight="semibold" style={{ marginBottom: 8, color: '#92400e' }}>
-            Critical: Plugin order matters!
-          </Text>
-          <Text size="sm" style={{ color: '#78350f', lineHeight: 22 }}>
-            The Idealyst plugin MUST run BEFORE the Unistyles plugin. Idealyst expands $iterator
-            patterns and transforms defineStyle() calls. Then Unistyles processes the resulting
-            StyleSheet.create() calls for runtime optimization.
-          </Text>
-        </Card>
+        <Alert intent="warning" title="Critical: Plugin order matters!" style={{ marginBottom: 24 }}>
+          The Idealyst plugin MUST run BEFORE the Unistyles plugin. Idealyst expands $iterator
+          patterns and transforms defineStyle() calls. Then Unistyles processes the resulting
+          StyleSheet.create() calls for runtime optimization.
+        </Alert>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Correct plugin order:
         </Text>
 
         <View style={{ marginLeft: 16, marginBottom: 24 }}>
-          <Text style={{ marginBottom: 8, color: '#333333' }}>
+          <Text typography="body1" style={{ marginBottom: 8 }}>
             1. <Text weight="semibold">@idealyst/theme/babel</Text> - Expands $iterator, transforms defineStyle()
           </Text>
-          <Text style={{ marginBottom: 8, color: '#333333' }}>
+          <Text typography="body1" style={{ marginBottom: 8 }}>
             2. <Text weight="semibold">react-native-unistyles/plugin</Text> - Runtime optimization
           </Text>
-          <Text style={{ color: '#333333' }}>
+          <Text typography="body1">
             3. <Text weight="semibold">Other plugins</Text> - React, etc.
           </Text>
         </View>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Debugging Transformations
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           Enable debug mode to see what the plugin is doing:
         </Text>
 
@@ -262,14 +257,14 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
 // - Any transformation errors`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Troubleshooting
         </Text>
 
         <Card variant="outlined" style={{ padding: 20 }}>
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>Styles not applying?</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Check that your file path is included in autoProcessPaths and the file extension
               matches the filter.
             </Text>
@@ -277,7 +272,7 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>$iterator not expanding?</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Verify themePath points to a valid theme file. Enable debug mode to see if
               the plugin is reading theme keys correctly.
             </Text>
@@ -285,7 +280,7 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>TypeScript errors with $iterator?</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Make sure to use ThemeStyleWrapper to wrap your theme type. This adds the
               $-prefixed iterator types.
             </Text>
@@ -293,7 +288,7 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
 
           <View>
             <Text weight="semibold" style={{ marginBottom: 4 }}>Build errors after adding plugin?</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Clear your build cache (metro: --reset-cache, vite: rm -rf node_modules/.vite)
               and restart the bundler.
             </Text>

@@ -60,6 +60,10 @@ async function generateWorkspaceFiles(
   // Generate README.md
   const readme = createReadme(data);
   await fs.writeFile(path.join(projectPath, 'README.md'), readme);
+
+  // Generate react-native.config.js for monorepo setup
+  const rnConfig = createReactNativeConfig(data);
+  await fs.writeFile(path.join(projectPath, 'react-native.config.js'), rnConfig);
 }
 
 /**
@@ -286,5 +290,34 @@ ${data.projectName}/
 ├── package.json
 └── README.md
 \`\`\`
+`;
+}
+
+/**
+ * Create react-native.config.js for monorepo setup
+ *
+ * This file tells the React Native CLI where to find the mobile project
+ * and its dependencies in a Yarn workspace monorepo structure.
+ */
+function createReactNativeConfig(data: TemplateData): string {
+  return `/**
+ * React Native configuration for monorepo setup
+ *
+ * This file tells the React Native CLI where to find the mobile project
+ * and its dependencies in a Yarn workspace monorepo structure.
+ */
+module.exports = {
+  project: {
+    android: {
+      sourceDir: './packages/mobile/android',
+      appName: 'app',
+      packageName: '${data.androidPackageName}',
+    },
+    ios: {
+      sourceDir: './packages/mobile/ios',
+    },
+  },
+  // Dependencies are auto-detected from node_modules
+};
 `;
 }

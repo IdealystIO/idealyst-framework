@@ -59,8 +59,14 @@ export default defineConfig({
         ],
       },
     }),
-    // Then process everything else with React plugin
-    react(),
+    // React plugin with React Compiler enabled
+    react({
+      babel: {
+        plugins: [
+          ["babel-plugin-react-compiler", {}],
+        ],
+      },
+    }),
   ],
   resolve: {
     alias: {

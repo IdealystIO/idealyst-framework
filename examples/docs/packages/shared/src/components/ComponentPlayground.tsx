@@ -1,5 +1,7 @@
 import React, { useState, useMemo, ReactNode } from 'react';
-import { View, Text, Card, Select, Icon, Button, Dialog } from '@idealyst/components';
+import { View, Text, Card, Select, Icon, Button, Dialog, Table } from '@idealyst/components';
+import type { TableColumn } from '@idealyst/components/Table/types';
+import { useUnistyles } from 'react-native-unistyles';
 
 // Force Babel to bundle these icons for playground use
 function IconPreloader() {
@@ -23,6 +25,7 @@ function IconPreloader() {
       <Icon name="send" />
       <Icon name="fullscreen" />
       <Icon name="help-circle-outline" />
+      <Icon name="content-copy" />
     </View>
   );
 }
@@ -112,6 +115,8 @@ export function ComponentPlayground({
   defaultChildren = 'Example',
   showChildren = true,
 }: PlaygroundProps) {
+  const { theme } = useUnistyles();
+
   // Initialize state from defaults
   const initialState = useMemo(() => {
     const state: Record<string, any> = {};
@@ -159,17 +164,115 @@ export function ComponentPlayground({
   // Check if any props are theme-extensible
   const hasThemeExtensible = propConfig.some((p) => p.themeExtensible);
 
+  // Build table data from propConfig
+  const tableData = useMemo(() => {
+    const data = propConfig.map((prop) => ({
+      ...prop,
+      id: prop.name,
+    }));
+    // Add children row if applicable
+    if (showChildren) {
+      data.push({
+        id: 'children',
+        name: 'children',
+        type: 'select' as const,
+        typeSignature: 'ReactNode',
+        options: ['Click Me', 'Submit', 'Save', 'Cancel', 'Delete'],
+        default: typeof defaultChildren === 'string' ? defaultChildren : 'Example',
+      });
+    }
+    return data;
+  }, [propConfig, showChildren, defaultChildren]);
+
+  // Table columns
+  const tableColumns: TableColumn<typeof tableData[0]>[] = useMemo(() => [
+    {
+      key: 'name',
+      title: 'Prop',
+      width: 100,
+      align: 'left',
+      render: (_: any, row: typeof tableData[0]) => (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <Text typography="body2" weight="medium" style={{ fontFamily: 'monospace' }}>
+            {row.name}
+          </Text>
+          {row.themeExtensible && (
+            <Text typography="caption" color="tertiary">*</Text>
+          )}
+        </View>
+      ),
+    },
+    {
+      key: 'type',
+      title: 'Type',
+      width: 300,
+      align: 'left',
+      render: (_: any, row: typeof tableData[0]) => (
+        <View>
+          <Text typography="caption" color="link" style={{ fontFamily: 'monospace' }}>
+            {row.typeSignature || (row.type === 'boolean' ? 'boolean' : 'string')}
+          </Text>
+          {row.options && row.options.length <= 5 && (
+            <Text typography="caption" color="tertiary" style={{ marginTop: 2 }}>
+              {row.options.filter((o: string) => o !== 'none').slice(0, 4).join(', ')}
+              {row.options.filter((o: string) => o !== 'none').length > 4 ? '...' : ''}
+            </Text>
+          )}
+        </View>
+      ),
+    },
+    {
+      key: 'value',
+      title: 'Value',
+      width: 150,
+      align: 'left',
+      render: (_: any, row: typeof tableData[0]) => {
+        // Special handling for children row
+        if (row.name === 'children') {
+          return (
+            <Select
+              size="xs"
+              value={children}
+              onValueChange={setChildren}
+              options={row.options?.map((opt: string) => ({ label: opt, value: opt })) || []}
+            />
+          );
+        }
+        if (row.type === 'select' && row.options) {
+          return (
+            <Select
+              size="xs"
+              value={props[row.name]}
+              onValueChange={(value) => updateProp(row.name, value)}
+              options={row.options.map((opt: string) => ({ label: opt, value: opt }))}
+            />
+          );
+        }
+        if (row.type === 'boolean') {
+          return (
+            <Select
+              size="xs"
+              value={props[row.name] ? 'true' : 'false'}
+              onValueChange={(value) => updateProp(row.name, value === 'true')}
+              options={[
+                { label: 'true', value: 'true' },
+                { label: 'false', value: 'false' },
+              ]}
+            />
+          );
+        }
+        return null;
+      },
+    },
+  ], [props, children, setChildren, updateProp]);
+
   // Convert icon string names to Icon components for rendering
   const getComponentProps = () => {
     const componentProps: Record<string, any> = {};
     Object.entries(props).forEach(([key, value]) => {
       if (value === 'none' || value === undefined) return;
       // Convert icon props to actual Icon components
-      if ((key === 'leftIcon' || key === 'rightIcon') && typeof value === 'string') {
-        componentProps[key] = <Icon name={value as any} />;
-      } else {
-        componentProps[key] = value;
-      }
+      componentProps[key] = value;
     });
     return componentProps;
   };
@@ -178,256 +281,212 @@ export function ComponentPlayground({
     <View style={{ gap: 16 }}>
       <IconPreloader />
 
-      {/* Main layout: Props table + Preview side by side */}
-      <View style={{ flexDirection: 'row', gap: 16, alignItems: 'stretch' }}>
-        {/* Props Table */}
-        <Card variant="outlined" style={{ flex: 1, padding: 0, overflow: 'hidden' }}>
-          {/* Header */}
-          <View
-            style={{
-              flexDirection: 'row',
-              backgroundColor: '#f8f9fa',
-              borderBottomWidth: 1,
-              borderBottomColor: '#e9ecef',
-              padding: 8,
-              paddingHorizontal: 12,
-            }}
-          >
-            <View style={{ flex: 3 }}>
-              <Text typography="body2" weight="semibold">Prop</Text>
-            </View>
-            <View style={{ flex: 3 }}>
-              <Text typography="body2" weight="semibold">Type</Text>
-            </View>
-            <View style={{ flex: 2 }}>
-              <Text typography="body2" weight="semibold">Value</Text>
-            </View>
-          </View>
+      {/* Single card with Props table + Preview side by side */}
+      <Card type="outlined" style={{ padding: 0, overflow: 'hidden' }}>
+        <View style={{ flexDirection: 'row' }}>
+          {/* Props Table */}
+          <View style={{ flex: 1 }}>
+            <Table
+              type="striped"
+              columns={tableColumns}
+              data={tableData}
+              size="sm"
+            />
 
-          {/* Prop Rows */}
-          {propConfig.map((prop, index) => (
-            <View
-              key={prop.name}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                padding: 8,
-                paddingHorizontal: 12,
-                borderBottomWidth: index < propConfig.length - 1 ? 1 : 0,
-                borderBottomColor: '#e9ecef',
-              }}
-            >
-              <View style={{ flex: 3, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Text typography="body2" weight="medium" style={{ fontFamily: 'monospace' }}>
-                  {prop.name}
-                </Text>
-                {prop.themeExtensible && (
-                  <Text typography="caption" style={{ color: '#868e96' }}>*</Text>
-                )}
-              </View>
-              <View style={{ flex: 3 }}>
-                <Text typography="caption" style={{ fontFamily: 'monospace', color: '#6741d9' }}>
-                  {prop.typeSignature || (prop.type === 'boolean' ? 'boolean' : 'string')}
-                </Text>
-                {prop.options && prop.options.length <= 5 && (
-                  <Text typography="caption" style={{ color: '#868e96', marginTop: 2 }}>
-                    {prop.options.filter(o => o !== 'none').slice(0, 4).join(', ')}
-                    {prop.options.filter(o => o !== 'none').length > 4 ? '...' : ''}
-                  </Text>
-                )}
-              </View>
-              <View style={{ flex: 2 }}>
-                {prop.type === 'select' && prop.options && (
-                  <Select
-                    size="sm"
-                    value={props[prop.name]}
-                    onValueChange={(value) => updateProp(prop.name, value)}
-                    options={prop.options.map((opt) => ({ label: opt, value: opt }))}
-                  />
-                )}
-                {prop.type === 'boolean' && (
-                  <Select
-                    size="sm"
-                    value={props[prop.name] ? 'true' : 'false'}
-                    onValueChange={(value) => updateProp(prop.name, value === 'true')}
-                    options={[
-                      { label: 'true', value: 'true' },
-                      { label: 'false', value: 'false' },
-                    ]}
-                  />
-                )}
-              </View>
-            </View>
-          ))}
-
-          {/* Children row if applicable */}
-          {showChildren && (
+            {/* Footer with reset */}
             <View
               style={{
                 flexDirection: 'row',
+                justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: 8,
-                paddingHorizontal: 12,
+                backgroundColor: theme.colors.surface.secondary,
                 borderTopWidth: 1,
-                borderTopColor: '#e9ecef',
+                borderTopColor: theme.colors.border.primary,
+                padding: 8,
+                paddingHorizontal: 12,
               }}
             >
-              <View style={{ flex: 3 }}>
-                <Text typography="body2" weight="medium" style={{ fontFamily: 'monospace' }}>
-                  children
+              {hasThemeExtensible ? (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Text typography="caption" style={{ color: theme.colors.text.tertiary }}>
+                    * Theme-extensible
+                  </Text>
+                  <div onClick={() => setHelpDialogOpen(true)} style={{ cursor: 'pointer' }}>
+                    <Icon name="help-circle-outline" size={14} color={theme.colors.text.tertiary} />
+                  </div>
+                </View>
+              ) : <View />}
+              <div onClick={resetToDefaults} style={{ cursor: 'pointer' }}>
+                <Text typography="body2" color="link">
+                  Reset
                 </Text>
-              </View>
-              <View style={{ flex: 3 }}>
-                <Text typography="caption" style={{ fontFamily: 'monospace', color: '#6741d9' }}>
-                  ReactNode
-                </Text>
-              </View>
-              <View style={{ flex: 2 }}>
-                <Select
-                  size="sm"
-                  value={children}
-                  onValueChange={setChildren}
-                  options={[
-                    { label: 'Click Me', value: 'Click Me' },
-                    { label: 'Submit', value: 'Submit' },
-                    { label: 'Save', value: 'Save' },
-                    { label: 'Cancel', value: 'Cancel' },
-                    { label: 'Delete', value: 'Delete' },
-                  ]}
-                />
-              </View>
-            </View>
-          )}
-
-          {/* Footer with reset */}
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              backgroundColor: '#f8f9fa',
-              borderTopWidth: 1,
-              borderTopColor: '#e9ecef',
-              padding: 8,
-              paddingHorizontal: 12,
-            }}
-          >
-            {hasThemeExtensible ? (
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Text typography="caption" style={{ color: '#868e96' }}>
-                  * Theme-extensible
-                </Text>
-                <div onClick={() => setHelpDialogOpen(true)} style={{ cursor: 'pointer' }}>
-                  <Icon name="help-circle-outline" size={14} color="#868e96" />
-                </div>
-              </View>
-            ) : <View />}
-            <div onClick={resetToDefaults} style={{ cursor: 'pointer' }}>
-              <Text typography="body2" style={{ color: '#228be6' }}>
-                Reset
-              </Text>
-            </div>
-          </View>
-        </Card>
-
-        {/* Preview Panel with Code below */}
-        <Card variant="outlined" style={{ flex: 1, padding: 0, overflow: 'hidden', minWidth: 280, display: 'flex', flexDirection: 'column' }}>
-          <View
-            style={{
-              backgroundColor: '#f8f9fa',
-              borderBottomWidth: 1,
-              borderBottomColor: '#e9ecef',
-              padding: 8,
-              paddingHorizontal: 12,
-            }}
-          >
-            <Text typography="body2" weight="semibold">Preview</Text>
-          </View>
-          <View
-            style={{
-              flex: 1,
-              padding: 24,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#ffffff',
-            }}
-          >
-            <Component {...getComponentProps()}>
-              {showChildren ? children : defaultChildren}
-            </Component>
-          </View>
-          {/* Code below preview - static height */}
-          <View
-            style={{
-              backgroundColor: '#1e1e1e',
-              padding: 12,
-              borderTopWidth: 1,
-              borderTopColor: '#e9ecef',
-              height: 100,
-              overflow: 'hidden',
-            }}
-          >
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <Text
-                typography="body2"
-                style={{
-                  fontFamily: 'monospace',
-                  color: '#d4d4d4',
-                  whiteSpace: 'pre',
-                  lineHeight: 18,
-                  flex: 1,
-                  overflow: 'hidden',
-                }}
-              >
-                {codeString}
-              </Text>
-              <div
-                onClick={() => setCodeDialogOpen(true)}
-                style={{ cursor: 'pointer', marginLeft: 8 }}
-              >
-                <Icon name="fullscreen" color="#888" />
               </div>
             </View>
           </View>
-        </Card>
-      </View>
+
+          {/* Preview Panel with Code below */}
+          <View style={{ flex: 1, display: 'flex', flexDirection: 'column', borderLeftWidth: 1, borderLeftColor: theme.colors.border.primary }}>
+            <View
+              style={{
+                backgroundColor: theme.colors.surface.secondary,
+                borderBottomWidth: 1,
+                borderBottomColor: theme.colors.border.primary,
+                padding: 8,
+                paddingHorizontal: 12,
+              }}
+            >
+              <Text typography="body2" weight="semibold">Preview</Text>
+            </View>
+            <View
+              backgroundColor='screen'
+              style={{
+                flex: 1,
+                padding: 24,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Component {...getComponentProps()}>
+                {showChildren ? children : defaultChildren}
+              </Component>
+            </View>
+            {/* Code section with import and usage */}
+            <View
+              scrollable
+              background="inverse-secondary"
+              style={{
+                borderTopWidth: 1,
+                borderTopColor: theme.colors.border.primary,
+              }}
+            >
+              {/* Import line */}
+              <View
+                padding="sm"
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderBottomWidth: 1,
+                  borderBottomColor: 'rgba(255,255,255,0.1)',
+                }}
+              >
+                <Text
+                  typography="body2"
+                  color="inverse"
+                  style={{ fontFamily: 'monospace' }}
+                >
+                  {`import { ${componentName} } from '@idealyst/components';`}
+                </Text>
+              </View>
+              {/* Code usage */}
+              <View
+                padding="sm"
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  height: 150,
+                  overflow: 'hidden',
+                }}
+              >
+                <Text
+                  typography="body2"
+                  color="inverse"
+                  style={{
+                    fontFamily: 'monospace',
+                    whiteSpace: 'pre',
+                    lineHeight: 18,
+                    flex: 1,
+                    overflow: 'hidden',
+                  }}
+                >
+                  {codeString}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Card>
 
       {/* Fullscreen Code Dialog */}
       <Dialog
         open={codeDialogOpen}
-        onClose={() => setCodeDialogOpen(false)}
+        onOpenChange={setCodeDialogOpen}
         title="Generated Code"
       >
         <View
+          background="inverse-secondary"
+          radius="md"
           style={{
-            backgroundColor: '#1e1e1e',
-            padding: 20,
-            borderRadius: 8,
             minWidth: 400,
             maxWidth: 600,
+            overflow: 'hidden',
           }}
         >
-          <Text
-            typography="body2"
+          {/* Import line */}
+          <View
+            padding="sm"
             style={{
-              fontFamily: 'monospace',
-              color: '#d4d4d4',
-              whiteSpace: 'pre',
-              lineHeight: 20,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              borderBottomWidth: 1,
+              borderBottomColor: 'rgba(255,255,255,0.1)',
             }}
           >
-            {codeString}
-          </Text>
+            <Text
+              typography="body2"
+              color="inverse"
+              style={{ fontFamily: 'monospace' }}
+            >
+              {`import { ${componentName} } from '@idealyst/components';`}
+            </Text>
+            <div
+              onClick={() => navigator.clipboard.writeText(`import { ${componentName} } from '@idealyst/components';`)}
+              style={{ cursor: 'pointer', marginLeft: 8 }}
+            >
+              <Icon name="content-copy" size={16} color="inverse" />
+            </div>
+          </View>
+          {/* Code usage */}
+          <View
+            padding="md"
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+            }}
+          >
+            <Text
+              typography="body2"
+              color="inverse"
+              style={{
+                fontFamily: 'monospace',
+                whiteSpace: 'pre',
+                lineHeight: 20,
+                flex: 1,
+              }}
+            >
+              {codeString}
+            </Text>
+            <div
+              onClick={() => navigator.clipboard.writeText(codeString)}
+              style={{ cursor: 'pointer', marginLeft: 8 }}
+            >
+              <Icon name="content-copy" size={16} color="inverse" />
+            </div>
+          </View>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 16, gap: 8 }}>
           <Button
             type="outlined"
             size="sm"
             onPress={() => {
-              navigator.clipboard.writeText(codeString);
+              const fullCode = `import { ${componentName} } from '@idealyst/components';\n\n${codeString}`;
+              navigator.clipboard.writeText(fullCode);
             }}
           >
-            Copy
+            Copy All
           </Button>
           <Button
             size="sm"
@@ -441,7 +500,7 @@ export function ComponentPlayground({
       {/* Help Dialog for Theme-extensible */}
       <Dialog
         open={helpDialogOpen}
-        onClose={() => setHelpDialogOpen(false)}
+        onOpenChange={setHelpDialogOpen}
         title="Theme-extensible Props"
       >
         <View style={{ maxWidth: 400 }}>
@@ -453,7 +512,7 @@ export function ComponentPlayground({
             For example, you can add custom intents (like "brand" or "accent") or
             custom sizes beyond the defaults shown here.
           </Text>
-          <Text typography="body2" style={{ color: '#666666', lineHeight: 20 }}>
+          <Text typography="body2" color="tertiary" style={{ lineHeight: 20 }}>
             See the Theme documentation for details on extending these values.
           </Text>
         </View>
@@ -676,16 +735,600 @@ export const switchPropConfig: PropConfig[] = [
     type: 'select',
     options: ['primary', 'neutral', 'success', 'error', 'warning'],
     default: 'primary',
+    description: 'Color when switch is on',
+    typeSignature: 'Intent',
+    themeExtensible: true,
   },
   {
     name: 'size',
     type: 'select',
     options: ['xs', 'sm', 'md', 'lg', 'xl'],
     default: 'md',
+    description: 'Switch size',
+    typeSignature: 'Size',
+    themeExtensible: true,
   },
   {
     name: 'disabled',
     type: 'boolean',
     default: false,
+    description: 'Disables interaction',
+  },
+];
+
+export const checkboxPropConfig: PropConfig[] = [
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['primary', 'neutral', 'success', 'error', 'warning'],
+    default: 'primary',
+    description: 'Color when checked',
+    typeSignature: 'Intent',
+    themeExtensible: true,
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Checkbox size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'checked',
+    type: 'boolean',
+    default: false,
+    description: 'Whether the checkbox is checked',
+  },
+  {
+    name: 'disabled',
+    type: 'boolean',
+    default: false,
+    description: 'Disables interaction',
+  },
+];
+
+export const selectPropConfig: PropConfig[] = [
+  {
+    name: 'type',
+    type: 'select',
+    options: ['outlined', 'filled'],
+    default: 'outlined',
+    description: 'Visual style variant',
+    typeSignature: 'SelectType',
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Select size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['neutral', 'primary', 'success', 'error', 'warning'],
+    default: 'neutral',
+    description: 'Focus/validation color',
+    typeSignature: 'Intent',
+    themeExtensible: true,
+  },
+  {
+    name: 'disabled',
+    type: 'boolean',
+    default: false,
+    description: 'Disables interaction',
+  },
+  {
+    name: 'hasError',
+    type: 'boolean',
+    default: false,
+    description: 'Show error state',
+  },
+];
+
+export const sliderPropConfig: PropConfig[] = [
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['primary', 'neutral', 'success', 'error', 'warning'],
+    default: 'primary',
+    description: 'Slider track color',
+    typeSignature: 'Intent',
+    themeExtensible: true,
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Slider size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'disabled',
+    type: 'boolean',
+    default: false,
+    description: 'Disables interaction',
+  },
+];
+
+export const progressPropConfig: PropConfig[] = [
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['primary', 'neutral', 'success', 'error', 'warning'],
+    default: 'primary',
+    description: 'Progress bar color',
+    typeSignature: 'Intent',
+    themeExtensible: true,
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Progress bar height',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'value',
+    type: 'select',
+    options: ['0', '25', '50', '75', '100'],
+    default: '50',
+    description: 'Progress percentage (0-100)',
+    typeSignature: 'number',
+  },
+];
+
+export const textPropConfig: PropConfig[] = [
+  {
+    name: 'typography',
+    type: 'select',
+    options: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'body1', 'body2', 'caption', 'overline'],
+    default: 'body1',
+    description: 'Typography variant',
+    typeSignature: 'Typography',
+    themeExtensible: true,
+  },
+  {
+    name: 'weight',
+    type: 'select',
+    options: ['light', 'normal', 'medium', 'semibold', 'bold'],
+    default: 'normal',
+    description: 'Font weight',
+    typeSignature: 'TextWeightVariant',
+  },
+  {
+    name: 'color',
+    type: 'select',
+    options: ['primary', 'secondary', 'tertiary', 'inverse', 'link', 'error', 'success', 'warning'],
+    default: 'primary',
+    description: 'Text color',
+    typeSignature: 'Text',
+    themeExtensible: true,
+  },
+  {
+    name: 'align',
+    type: 'select',
+    options: ['left', 'center', 'right'],
+    default: 'left',
+    description: 'Text alignment',
+    typeSignature: 'TextAlignVariant',
+  },
+];
+
+export const iconPropConfig: PropConfig[] = [
+  {
+    name: 'name',
+    type: 'select',
+    options: ['home', 'cog', 'account', 'bell', 'heart', 'star', 'check', 'close', 'plus', 'minus', 'magnify', 'email', 'lock', 'send'],
+    default: 'home',
+    description: 'Icon name',
+    typeSignature: 'IconName',
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Icon size',
+    typeSignature: 'Size | number',
+    themeExtensible: true,
+  },
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['none', 'primary', 'neutral', 'success', 'error', 'warning'],
+    default: 'none',
+    description: 'Icon color intent',
+    typeSignature: 'Intent',
+    themeExtensible: true,
+  },
+];
+
+export const avatarPropConfig: PropConfig[] = [
+  {
+    name: 'size',
+    type: 'select',
+    options: ['sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Avatar size',
+    typeSignature: 'AvatarSizeVariant',
+  },
+  {
+    name: 'shape',
+    type: 'select',
+    options: ['circle', 'square'],
+    default: 'circle',
+    description: 'Avatar shape',
+    typeSignature: 'AvatarShapeVariant',
+  },
+  {
+    name: 'fallback',
+    type: 'select',
+    options: ['JD', 'AB', 'XY', 'MN'],
+    default: 'JD',
+    description: 'Fallback initials',
+    typeSignature: 'string',
+  },
+];
+
+export const dividerPropConfig: PropConfig[] = [
+  {
+    name: 'orientation',
+    type: 'select',
+    options: ['horizontal', 'vertical'],
+    default: 'horizontal',
+    description: 'Divider orientation',
+    typeSignature: 'DividerOrientationVariant',
+  },
+  {
+    name: 'type',
+    type: 'select',
+    options: ['solid', 'dashed', 'dotted'],
+    default: 'solid',
+    description: 'Line style',
+    typeSignature: 'DividerType',
+  },
+  {
+    name: 'thickness',
+    type: 'select',
+    options: ['thin', 'md', 'thick'],
+    default: 'thin',
+    description: 'Line thickness',
+    typeSignature: 'DividerThicknessVariant',
+  },
+  {
+    name: 'spacing',
+    type: 'select',
+    options: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Spacing around divider',
+    typeSignature: 'DividerSpacingVariant',
+    themeExtensible: true,
+  },
+];
+
+export const textAreaPropConfig: PropConfig[] = [
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Text area size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['neutral', 'primary', 'success', 'error', 'warning'],
+    default: 'neutral',
+    description: 'Intent color',
+    typeSignature: 'Intent',
+    themeExtensible: true,
+  },
+  {
+    name: 'placeholder',
+    type: 'select',
+    options: ['Enter description...', 'Write your message...', 'Add notes...'],
+    default: 'Enter description...',
+    description: 'Placeholder text',
+    typeSignature: 'string',
+  },
+  {
+    name: 'rows',
+    type: 'select',
+    options: ['2', '3', '4', '5'],
+    default: '3',
+    description: 'Number of visible rows',
+    typeSignature: 'number',
+  },
+  {
+    name: 'disabled',
+    type: 'boolean',
+    default: false,
+    description: 'Disables interaction',
+  },
+];
+
+export const radioButtonPropConfig: PropConfig[] = [
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['primary', 'neutral', 'success', 'error', 'warning'],
+    default: 'primary',
+    description: 'Color when selected',
+    typeSignature: 'Intent',
+    themeExtensible: true,
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Radio button size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'checked',
+    type: 'boolean',
+    default: false,
+    description: 'Whether the radio is selected',
+  },
+  {
+    name: 'disabled',
+    type: 'boolean',
+    default: false,
+    description: 'Disables interaction',
+  },
+];
+
+export const dialogPropConfig: PropConfig[] = [
+  {
+    name: 'size',
+    type: 'select',
+    options: ['sm', 'md', 'lg', 'fullscreen'],
+    default: 'md',
+    description: 'Dialog size',
+    typeSignature: 'DialogSizeVariant',
+  },
+  {
+    name: 'type',
+    type: 'select',
+    options: ['default', 'alert', 'confirmation'],
+    default: 'default',
+    description: 'Dialog type',
+    typeSignature: 'DialogType',
+  },
+  {
+    name: 'showCloseButton',
+    type: 'boolean',
+    default: true,
+    description: 'Show close button',
+  },
+  {
+    name: 'closeOnBackdropClick',
+    type: 'boolean',
+    default: true,
+    description: 'Close on backdrop click',
+  },
+];
+
+export const tooltipPropConfig: PropConfig[] = [
+  {
+    name: 'placement',
+    type: 'select',
+    options: ['top', 'bottom', 'left', 'right'],
+    default: 'top',
+    description: 'Tooltip placement',
+    typeSignature: 'TooltipPlacement',
+  },
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['primary', 'neutral', 'success', 'error', 'warning'],
+    default: 'neutral',
+    description: 'Tooltip color',
+    typeSignature: 'Intent',
+    themeExtensible: true,
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Tooltip size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+];
+
+export const skeletonPropConfig: PropConfig[] = [
+  {
+    name: 'shape',
+    type: 'select',
+    options: ['rectangle', 'circle', 'rounded'],
+    default: 'rectangle',
+    description: 'Skeleton shape',
+    typeSignature: 'SkeletonShape',
+  },
+  {
+    name: 'animation',
+    type: 'select',
+    options: ['pulse', 'wave', 'none'],
+    default: 'pulse',
+    description: 'Animation type',
+    typeSignature: 'SkeletonAnimation',
+  },
+  {
+    name: 'width',
+    type: 'select',
+    options: ['50', '100', '150', '200'],
+    default: '100',
+    description: 'Width in pixels',
+    typeSignature: 'number | string',
+  },
+  {
+    name: 'height',
+    type: 'select',
+    options: ['20', '40', '60', '80'],
+    default: '20',
+    description: 'Height in pixels',
+    typeSignature: 'number | string',
+  },
+];
+
+export const tablePropConfig: PropConfig[] = [
+  {
+    name: 'type',
+    type: 'select',
+    options: ['standard', 'bordered', 'striped'],
+    default: 'standard',
+    description: 'Table style type',
+    typeSignature: 'TableType',
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Table size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'stickyHeader',
+    type: 'boolean',
+    default: false,
+    description: 'Keep header fixed when scrolling',
+  },
+];
+
+export const listPropConfig: PropConfig[] = [
+  {
+    name: 'type',
+    type: 'select',
+    options: ['default', 'bordered', 'divided'],
+    default: 'default',
+    description: 'List style type',
+    typeSignature: 'ListType',
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'List item size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'scrollable',
+    type: 'boolean',
+    default: false,
+    description: 'Enable scroll on overflow',
+  },
+];
+
+export const menuPropConfig: PropConfig[] = [
+  {
+    name: 'placement',
+    type: 'select',
+    options: ['top', 'bottom', 'left', 'right', 'bottom-start', 'bottom-end'],
+    default: 'bottom-start',
+    description: 'Menu placement',
+    typeSignature: 'MenuPlacement',
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Menu size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'closeOnSelection',
+    type: 'boolean',
+    default: true,
+    description: 'Close menu on item selection',
+  },
+];
+
+export const breadcrumbPropConfig: PropConfig[] = [
+  {
+    name: 'intent',
+    type: 'select',
+    options: ['primary', 'neutral'],
+    default: 'primary',
+    description: 'Link color intent',
+    typeSignature: 'BreadcrumbIntentVariant',
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Breadcrumb text size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'responsive',
+    type: 'boolean',
+    default: false,
+    description: 'Enable responsive collapsing',
+  },
+];
+
+export const accordionPropConfig: PropConfig[] = [
+  {
+    name: 'type',
+    type: 'select',
+    options: ['standard', 'separated', 'bordered'],
+    default: 'standard',
+    description: 'Accordion style type',
+    typeSignature: 'AccordionType',
+  },
+  {
+    name: 'size',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Accordion size',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'allowMultiple',
+    type: 'boolean',
+    default: false,
+    description: 'Allow multiple items expanded',
+  },
+];
+
+export const linkPropConfig: PropConfig[] = [
+  {
+    name: 'to',
+    type: 'select',
+    options: ['/home', '/about', '/contact', '/settings'],
+    default: '/home',
+    description: 'Navigation destination',
+    typeSignature: 'string',
+  },
+  {
+    name: 'disabled',
+    type: 'boolean',
+    default: false,
+    description: 'Disables the link',
   },
 ];

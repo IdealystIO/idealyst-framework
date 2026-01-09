@@ -124,6 +124,14 @@ export const darkTheme = createTheme()
             disabled: 0.4,
         },
     })
+    // Breakpoints (same as light theme)
+    .setBreakpoints({
+        xs: 0,      // Extra small devices (portrait phones)
+        sm: 576,    // Small devices (landscape phones)
+        md: 768,    // Medium devices (tablets)
+        lg: 992,    // Large devices (desktops)
+        xl: 1200,   // Extra large devices (large desktops)
+    })
     .build();
 
 // =============================================================================

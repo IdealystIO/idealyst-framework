@@ -9,7 +9,7 @@ export function HomePage() {
     <Screen>
       <View style={{ maxWidth: 800 }}>
         <Text
-          size="xl"
+          typography="h2"
           weight="bold"
           style={{ marginBottom: 16 }}
         >
@@ -17,8 +17,9 @@ export function HomePage() {
         </Text>
 
         <Text
-          size="md"
-          style={{ color: '#666666', marginBottom: 32, lineHeight: 28 }}
+          typography="body1"
+          color="secondary"
+          style={{ marginBottom: 32, lineHeight: 28 }}
         >
           Idealyst is a modern, cross-platform framework for building React and React Native
           applications. It provides a powerful component library, type-safe APIs, and unified
@@ -45,7 +46,7 @@ export function HomePage() {
 
         <Text
           weight="semibold"
-          size="lg"
+          typography="h4"
           style={{ marginBottom: 16 }}
         >
           Key Features
@@ -87,7 +88,7 @@ function FeatureCard({ title, description }: { title: string; description: strin
       <Text weight="semibold" style={{ marginBottom: 8 }}>
         {title}
       </Text>
-      <Text size="sm" style={{ color: '#666666', lineHeight: 22 }}>
+      <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
         {description}
       </Text>
     </Card>

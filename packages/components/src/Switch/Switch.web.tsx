@@ -3,7 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { switchStyles } from './Switch.styles';
 import type { SwitchProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebSelectionAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
@@ -93,10 +93,9 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
     if (!iconToRender) return null;
 
     if (isIconName(iconToRender)) {
-      const iconPath = resolveIconPath(iconToRender);
       return (
         <IconSvg
-          path={iconPath}
+          name={iconToRender}
           {...thumbIconProps}
           aria-label={iconToRender}
         />

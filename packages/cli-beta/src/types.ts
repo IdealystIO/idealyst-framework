@@ -36,6 +36,19 @@ export interface ExtensionConfig {
   prisma: boolean;               // Enable Prisma database
   trpc: boolean;                 // Enable tRPC (requires api)
   graphql: boolean;              // Enable GraphQL (requires api)
+  devcontainer: boolean | DevcontainerConfig;  // Enable devcontainer setup
+}
+
+/**
+ * Devcontainer configuration options
+ */
+export interface DevcontainerConfig {
+  enabled: boolean;
+  // Optional services
+  postgres: boolean;             // Include PostgreSQL database
+  redis: boolean;                // Include Redis cache
+  chrome: boolean;               // Include headless Chrome for Playwright
+  claudeCode: boolean;           // Include Claude Code with MCP servers
 }
 
 /**
@@ -49,6 +62,7 @@ export interface CLIArgs {
   withPrisma?: boolean;
   withTrpc?: boolean;
   withGraphql?: boolean;
+  withDevcontainer?: boolean;
   noInteractive?: boolean;
   skipInstall?: boolean;
   directory?: string;
@@ -110,6 +124,7 @@ export interface TemplateData {
   hasPrisma: boolean;
   hasTrpc: boolean;
   hasGraphql: boolean;
+  hasDevcontainer: boolean;
 }
 
 /**

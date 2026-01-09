@@ -3,7 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { breadcrumbStyles } from './Breadcrumb.styles';
 import type { BreadcrumbProps, BreadcrumbItem as BreadcrumbItemType } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { isIconName } from '../Icon/icon-resolver';
 import Menu from '../Menu/Menu.web';
 import type { MenuItem } from '../Menu/types';
 
@@ -48,11 +48,9 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
     if (!item.icon) return null;
 
     if (isIconName(item.icon)) {
-      const iconPath = resolveIconPath(item.icon);
-      // IconSvg uses size="1em" by default, sized by container's fontSize from styles
       return (
         <IconSvg
-          path={iconPath}
+          name={item.icon}
           aria-label={item.icon}
         />
       );
@@ -138,12 +136,11 @@ const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent })
   const ellipsisIconStyle = (breadcrumbStyles.ellipsisIcon as any)({ intent });
   const ellipsisProps = getWebProps([ellipsisStyle]);
   const iconProps = getWebProps([ellipsisIconStyle]);
-  const ellipsisIconPath = resolveIconPath('dots-horizontal');
 
   return (
     <span {...ellipsisProps}>
       <IconSvg
-        path={ellipsisIconPath}
+        name="dots-horizontal"
         {...iconProps}
         aria-label="more items"
       />
@@ -173,7 +170,6 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
   const menuButtonIconStyle = (breadcrumbStyles.menuButtonIcon as any)({ intent });
 
   const containerProps = getWebProps([containerStyle, style as any]);
-  const menuIconPath = resolveIconPath('dots-horizontal');
 
   // Apply variants for menu button
   breadcrumbStyles.useVariants({ size });
@@ -250,7 +246,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
                     aria-label="Show more breadcrumb items"
                   >
                     <IconSvg
-                      path={menuIconPath}
+                      name="dots-horizontal"
                       {...menuIconProps}
                       aria-label="dots-horizontal"
                     />

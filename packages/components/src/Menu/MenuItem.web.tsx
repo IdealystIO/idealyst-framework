@@ -3,7 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { menuItemStyles } from './MenuItem.styles';
 import type { MenuItem as MenuItemType, MenuSizeVariant } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 interface MenuItemProps {
@@ -33,12 +33,10 @@ const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ item, onPress, 
     if (!item.icon) return null;
 
     if (isIconName(item.icon)) {
-      // Resolve icon name to path and render with IconSvg
-      const iconPath = resolveIconPath(item.icon);
-      // IconSvg uses size="1em" by default, sized by container's fontSize from styles
+      // Use IconSvg with name - registry lookup happens inside
       return (
         <IconSvg
-          path={iconPath}
+          name={item.icon}
           color="currentColor"
           aria-label={item.icon}
         />

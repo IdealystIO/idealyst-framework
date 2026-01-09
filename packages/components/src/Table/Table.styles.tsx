@@ -113,41 +113,34 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         } as const;
     },
 
-    headerCell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => {
-        const alignStyles = {
-            left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
-            center: { textAlign: 'center' as const, justifyContent: 'center' as const },
-            right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
-        }[align];
-
-        const borderStyles = type === 'bordered' ? {
-            borderRightWidth: 1,
-            borderRightColor: theme.colors.border.primary,
-        } : {};
-
-        return {
-            flexDirection: 'row' as const,
-            alignItems: 'center' as const,
-            fontWeight: '600' as const,
-            color: theme.colors.text.primary,
-            borderBottomWidth: 2,
-            borderBottomColor: theme.colors.border.primary,
-            ...alignStyles,
-            ...borderStyles,
-            variants: {
-                size: {
-                    padding: theme.sizes.$table.padding,
-                    fontSize: theme.sizes.$table.fontSize,
-                    lineHeight: theme.sizes.$table.lineHeight,
-                },
+    headerCell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => ({
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        fontWeight: '600' as const,
+        color: theme.colors.text.primary,
+        borderBottomWidth: 2,
+        borderBottomColor: theme.colors.border.primary,
+        variants: {
+            type: {
+                bordered: { borderRightWidth: 1, borderRightColor: theme.colors.border.primary },
             },
-            _web: {
-                borderBottom: `2px solid ${theme.colors.border.primary}`,
-                borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
-                ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},
+            align: {
+                left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
+                center: { textAlign: 'center' as const, justifyContent: 'center' as const },
+                right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
             },
-        } as const;
-    },
+            size: {
+                padding: theme.sizes.$table.padding,
+                fontSize: theme.sizes.$table.fontSize,
+                lineHeight: theme.sizes.$table.lineHeight,
+            },
+        },
+        _web: {
+            borderBottom: `2px solid ${theme.colors.border.primary}`,
+            borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
+            ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},
+        },
+    }),
 
     cell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => {
         const alignStyles = {

@@ -5,19 +5,13 @@ import { badgeStyles } from './Badge.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 
-// Extended props to include path props added by Babel plugin
-interface InternalBadgeProps extends BadgeProps {
-  iconPath?: string;
-}
-
-const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps, ref) => {
+const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props, ref) => {
   const {
     children,
     size = 'md',
     type = 'filled',
     color = 'blue',
     icon,
-    iconPath,
     style,
     testID,
     id,
@@ -27,7 +21,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
     size,
     type,
   });
-  
+
   const badgeStyle = (badgeStyles.badge as any)({ color });
   const contentStyle = badgeStyles.content;
   const textStyle = (badgeStyles.text as any)({ color });
@@ -38,13 +32,12 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
   const iconProps = getWebProps([badgeStyles.icon, textStyle]);
 
   // Helper to render icon
-  const renderIcon = (iconProp: typeof icon, path?: string) => {
-    if (typeof iconProp === 'string' && path) {
-      // Render IconSvg directly with the path from Babel plugin
-      // Don't pass size prop - let the style control the dimensions entirely
+  const renderIcon = (iconProp: typeof icon) => {
+    if (typeof iconProp === 'string') {
+      // Render IconSvg with the icon name - registry lookup happens inside
       return (
         <IconSvg
-          path={path}
+          name={iconProp}
           {...iconProps}
           aria-label={iconProp}
         />
@@ -85,7 +78,7 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
     >
       {hasIcon ? (
         <span {...contentProps}>
-          {renderIcon(icon, iconPath)}
+          {renderIcon(icon)}
           <span {...textProps}>
             {children}
             </span>
@@ -101,4 +94,4 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props: InternalBadgeProps
 
 Badge.displayName = 'Badge';
 
-export default Badge; 
+export default Badge;

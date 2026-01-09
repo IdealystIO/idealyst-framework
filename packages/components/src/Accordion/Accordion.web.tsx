@@ -3,7 +3,6 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { accordionStyles } from './Accordion.styles';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath } from '../Icon/icon-resolver';
 import { getWebAriaProps, generateAccessibilityId, ACCORDION_KEYS } from '../utils/accessibility';
 
 interface AccordionItemProps {
@@ -33,7 +32,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 }) => {
   const contentInnerRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
-  const chevronIconPath = resolveIconPath('chevron-down');
 
   // Apply item-specific variants (for size, expanded, disabled)
   accordionStyles.useVariants({
@@ -86,7 +84,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         <span {...iconProps}>
           <IconSvg
             style={{ width: 12, height: 12 }}
-            path={chevronIconPath}
+            name="chevron-down"
             aria-label="chevron-down"
           />
         </span>

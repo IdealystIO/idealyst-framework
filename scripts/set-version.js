@@ -39,8 +39,10 @@ const packagePaths = [
   'packages/storage/package.json',
   'packages/mcp-server/package.json',
   'packages/microphone/package.json',
+  'packages/translate/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
+  'examples/docs/package.json',
 ];
 
 // Function to update version in package.json

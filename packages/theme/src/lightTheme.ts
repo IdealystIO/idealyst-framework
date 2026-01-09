@@ -156,11 +156,11 @@ export const lightTheme = createTheme()
             xl: { radioSize: 26, radioDotSize: 20, fontSize: 20, gap: 12 },
         },
         select: {
-            xs: { paddingHorizontal: 8, minHeight: 28, fontSize: 12, iconSize: 16 },
-            sm: { paddingHorizontal: 10, minHeight: 36, fontSize: 14, iconSize: 18 },
-            md: { paddingHorizontal: 12, minHeight: 44, fontSize: 16, iconSize: 20 },
-            lg: { paddingHorizontal: 16, minHeight: 52, fontSize: 18, iconSize: 24 },
-            xl: { paddingHorizontal: 20, minHeight: 60, fontSize: 20, iconSize: 28 },
+            xs: { paddingHorizontal: 8, minHeight: 28, fontSize: 12, iconSize: 16, borderRadius: 4 },
+            sm: { paddingHorizontal: 10, minHeight: 36, fontSize: 14, iconSize: 18, borderRadius: 4 },
+            md: { paddingHorizontal: 12, minHeight: 44, fontSize: 16, iconSize: 20, borderRadius: 4 },
+            lg: { paddingHorizontal: 16, minHeight: 52, fontSize: 18, iconSize: 24, borderRadius: 4 },
+            xl: { paddingHorizontal: 20, minHeight: 60, fontSize: 20, iconSize: 28, borderRadius: 4 },
         },
         slider: {
             xs: { trackHeight: 2, thumbSize: 12, thumbIconSize: 8, markHeight: 6, labelFontSize: 10 },
@@ -290,6 +290,14 @@ export const lightTheme = createTheme()
             active: 0.75,
             disabled: 0.5,
         },
+    })
+    // Breakpoints
+    .setBreakpoints({
+        xs: 0,      // Extra small devices (portrait phones)
+        sm: 576,    // Small devices (landscape phones)
+        md: 768,    // Medium devices (tablets)
+        lg: 992,    // Large devices (desktops)
+        xl: 1200,   // Extra large devices (large desktops)
     })
     .build();
 

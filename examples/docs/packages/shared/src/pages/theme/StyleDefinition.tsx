@@ -6,17 +6,17 @@ export function StyleDefinitionPage() {
   return (
     <Screen>
       <View style={{ maxWidth: 800 }}>
-        <Text size="xl" weight="bold" style={{ marginBottom: 16 }}>
+        <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
           Style Definition API
         </Text>
 
-        <Text style={{ marginBottom: 24, lineHeight: 26, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 24, lineHeight: 26 }}>
           The <Text style={{ fontFamily: 'monospace' }}>defineStyle()</Text> function creates
           component styles with theme reactivity and variant support. The Babel plugin transforms
           these to <Text style={{ fontFamily: 'monospace' }}>StyleSheet.create()</Text> calls.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Basic Usage
         </Text>
 
@@ -57,10 +57,10 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
           title="defineStyle() Example"
         />
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Dynamic Style Functions
         </Text>
-        <Text style={{ marginBottom: 16, color: '#666666' }}>
+        <Text typography="body1" color="tertiary" style={{ marginBottom: 16 }}>
           For styles that depend on runtime props, use dynamic functions:
         </Text>
 
@@ -79,7 +79,7 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
           title="Dynamic Styles"
         />
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Using Styles in Components
         </Text>
 
@@ -106,7 +106,7 @@ const Button = ({ size = 'md', disabled = false, intent, type }) => {
           title="Component Usage"
         />
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           When to Use Dynamic vs Static
         </Text>
 
@@ -114,7 +114,7 @@ const Button = ({ size = 'md', disabled = false, intent, type }) => {
           <Text weight="semibold" style={{ marginBottom: 8 }}>
             Use Static Styles (Variants) When:
           </Text>
-          <Text style={{ color: '#666666', marginLeft: 16 }}>
+          <Text typography="body1" color="tertiary" style={{ marginLeft: 16 }}>
             - Boolean toggles (enabled/disabled){'\n'}
             - Enumerated variants (size, type){'\n'}
             - Theme values are fixed
@@ -125,7 +125,7 @@ const Button = ({ size = 'md', disabled = false, intent, type }) => {
           <Text weight="semibold" style={{ marginBottom: 8 }}>
             Use Dynamic Styles When:
           </Text>
-          <Text style={{ color: '#666666', marginLeft: 16 }}>
+          <Text typography="body1" color="tertiary" style={{ marginLeft: 16 }}>
             - Prop-dependent color lookups{'\n'}
             - Complex conditional logic{'\n'}
             - Style depends on multiple props

@@ -1,6 +1,6 @@
 import React, { forwardRef, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
 import { getWebProps } from 'react-native-unistyles/web';
+import { useResponsiveStyle } from '@idealyst/theme';
 import { ViewProps } from './types';
 import { viewStyles } from './View.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
@@ -41,32 +41,15 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
     marginHorizontal,
   });
 
-  // Create dynamic styles based on custom props (overrides variants)
-  const dynamicStyles: any = {};
-
-  if (backgroundColor) dynamicStyles.backgroundColor = backgroundColor;
-  if (borderRadius !== undefined) dynamicStyles.borderRadius = borderRadius;
-  if (borderWidth !== undefined) dynamicStyles.borderWidth = borderWidth;
-  if (borderColor) dynamicStyles.borderColor = borderColor;
-
-  // Flatten style array to object (HTML divs don't support style arrays)
-  const flattenedStyle = useMemo(() => {
-    if (!style) return undefined;
-    if (Array.isArray(style)) {
-      return StyleSheet.flatten(style);
-    }
-    return style;
-  }, [style]);
-
   // Call style as function to get theme-reactive styles
   /** @ts-ignore */
-  const webProps = getWebProps([(viewStyles.view as any)({}), dynamicStyles]);
-
+  const webProps = getWebProps((viewStyles.view as any)({}));
+  
   const mergedRef = useMergeRefs(ref, webProps.ref);
 
   return (
     <div
-      style={flattenedStyle as any}
+      style={style as any}
       {...webProps}
       ref={mergedRef}
       id={id}

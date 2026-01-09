@@ -6,27 +6,27 @@ export function InstallationPage() {
   return (
     <Screen>
       <View style={{ maxWidth: 800 }}>
-        <Text size="xl" weight="bold" style={{ marginBottom: 16 }}>
+        <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
           Installation
         </Text>
 
-        <Text style={{ marginBottom: 24, lineHeight: 26, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 24, lineHeight: 26 }}>
           Get started with Idealyst by creating a new workspace using the CLI.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Prerequisites
         </Text>
-        <Text style={{ marginBottom: 24, color: '#666666' }}>
+        <Text typography="body1" color="tertiary" style={{ marginBottom: 24 }}>
           - Node.js 18 or later{'\n'}
-          - Yarn 3.x (recommended) or npm{'\n'}
+          - Yarn 3 or later (recommended) or npm{'\n'}
           - For mobile development: Xcode (iOS) or Android Studio (Android)
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Create a New Workspace
         </Text>
-        <Text style={{ marginBottom: 8, color: '#666666' }}>
+        <Text typography="body1" color="tertiary" style={{ marginBottom: 8 }}>
           Run the following command to create a new Idealyst workspace:
         </Text>
 
@@ -37,11 +37,11 @@ cd my-app`}
           title="Terminal"
         />
 
-        <Text style={{ marginBottom: 24, color: '#666666' }}>
+        <Text typography="body1" color="tertiary" style={{ marginBottom: 24 }}>
           This creates a complete monorepo with all 5 packages: web, native, api, database, and shared.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Project Structure
         </Text>
 
@@ -60,10 +60,10 @@ cd my-app`}
           title="Project Structure"
         />
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Configure Babel
         </Text>
-        <Text style={{ marginBottom: 8, color: '#666666' }}>
+        <Text typography="body1" color="tertiary" style={{ marginBottom: 8 }}>
           Add the Idealyst Babel plugin to enable the style system:
         </Text>
 
@@ -81,7 +81,7 @@ module.exports = {
           title="babel.config.js"
         />
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Start Development
         </Text>
 

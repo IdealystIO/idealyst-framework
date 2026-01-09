@@ -10,16 +10,16 @@ export function UseNavigatorPage() {
   return (
     <Screen>
       <View style={{ maxWidth: 900 }}>
-        <Text size="xl" weight="bold" style={{ marginBottom: 16 }}>
+        <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
           useNavigator Hook
         </Text>
 
-        <Text style={{ marginBottom: 32, lineHeight: 26, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 32, lineHeight: 26 }}>
           The <Text weight="semibold">useNavigator()</Text> hook provides programmatic
           navigation capabilities. It works identically on web and native platforms.
         </Text>
 
-        <Text weight="semibold" size="lg" style={{ marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Basic Usage
         </Text>
 
@@ -49,7 +49,7 @@ function MyComponent() {
 }`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Live Example
         </Text>
 
@@ -70,45 +70,45 @@ function MyComponent() {
           </View>
         </LivePreview>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Return Values
         </Text>
 
         <Card variant="outlined" style={{ padding: 20, marginBottom: 24 }}>
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>navigate(options)</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Navigate to a new screen. Accepts an object with a <Text weight="semibold">path</Text> property.
             </Text>
           </View>
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>goBack()</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Navigate back to the previous screen in the navigation stack. No-op if at root.
             </Text>
           </View>
 
           <View style={{ marginBottom: 16 }}>
             <Text weight="semibold" style={{ marginBottom: 4 }}>currentPath</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               The current route path as a string. Useful for highlighting active navigation items.
             </Text>
           </View>
 
           <View>
             <Text weight="semibold" style={{ marginBottom: 4 }}>params</Text>
-            <Text size="sm" style={{ color: '#666666' }}>
+            <Text typography="body2" color="tertiary">
               Route parameters extracted from the URL pattern (e.g., :id becomes params.id).
             </Text>
           </View>
         </Card>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Path-Based Navigation
         </Text>
 
-        <Text style={{ marginBottom: 16, lineHeight: 24, color: '#333333' }}>
+        <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
           All navigation in Idealyst uses path-based routing. Paths can include
           parameters and query strings.
         </Text>
@@ -129,7 +129,7 @@ navigate({ path: '/users/123' });
 navigate({ path: '/products/electronics/phones/iphone-15' });`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Accessing Route Parameters
         </Text>
 
@@ -150,7 +150,7 @@ navigate({ path: '/users/42' });
 // -> params.userId === '42'`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Common Patterns
         </Text>
 
@@ -187,7 +187,7 @@ const isActive = currentPath === '/home';
 </Button>`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           TypeScript Types
         </Text>
 
@@ -213,14 +213,14 @@ const {
 }: UseNavigatorReturn = useNavigator();`}
         </CodeBlock>
 
-        <Text weight="semibold" size="lg" style={{ marginTop: 32, marginBottom: 12 }}>
+        <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Platform Behavior
         </Text>
 
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           <Card variant="outlined" style={{ flex: 1, minWidth: 280, padding: 20 }}>
             <Text weight="semibold" style={{ marginBottom: 8 }}>Web</Text>
-            <Text size="sm" style={{ color: '#666666', lineHeight: 22 }}>
+            <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
               {`• Updates browser URL
 • Supports browser back/forward
 • Deep linking works automatically
@@ -231,7 +231,7 @@ const {
 
           <Card variant="outlined" style={{ flex: 1, minWidth: 280, padding: 20 }}>
             <Text weight="semibold" style={{ marginBottom: 8 }}>Native</Text>
-            <Text size="sm" style={{ color: '#666666', lineHeight: 22 }}>
+            <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
               {`• Native navigation gestures
 • Platform-specific transitions
 • Deep link handling

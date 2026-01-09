@@ -11,10 +11,11 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "declaration": true,
     "declarationDir": "./dist/types",
     "sourceMap": true,
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
   "include": [
     "src/**/*"

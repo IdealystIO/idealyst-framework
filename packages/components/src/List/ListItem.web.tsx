@@ -5,7 +5,7 @@ import { getColorFromString, Intent, Theme, Color } from '@idealyst/theme';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { isIconName } from '../Icon/icon-resolver';
 import { useListContext } from './ListContext';
 
 const ListItem: React.FC<ListItemProps> = ({
@@ -77,10 +77,10 @@ const ListItem: React.FC<ListItemProps> = ({
     if (!element) return null;
 
     if (isIconName(element)) {
-      const iconPath = resolveIconPath(element);
+      // Use IconSvg with name - registry lookup happens inside
       return (
         <IconSvg
-          path={iconPath}
+          name={element}
           color={resolvedIconColor || 'currentColor'}
           aria-label={element}
         />

@@ -1,62 +1,31 @@
 /**
  * Runtime utility for resolving MDI icon names to their SVG paths.
- * This is used when icon names are passed dynamically (e.g., in arrays)
- * and cannot be transformed by the Babel plugin at build time.
+ *
+ * Icons are looked up from the IconRegistry, which is populated at build time
+ * by the Babel plugin. This replaces the previous approach of importing all
+ * 7,447 icons from @mdi/js.
  */
 
-import * as mdiIcons from '@mdi/js';
+import { IconRegistry } from './IconRegistry';
 
 /**
- * Formats an icon name from kebab-case to the MDI export name format.
- * Examples:
- *   "home" -> "mdiHome"
- *   "account-circle" -> "mdiAccountCircle"
- *   "star-outline" -> "mdiStarOutline"
- */
-function formatIconName(name: string): string {
-  if (!name || typeof name !== 'string') {
-    return 'mdiHelpCircle';
-  }
-
-  // Remove mdi: prefix if present
-  const cleanName = name.startsWith('mdi:') ? name.substring(4) : name;
-
-  // Check if the name contains only valid characters
-  if (!/^[a-zA-Z0-9-_]+$/.test(cleanName)) {
-    console.warn(
-      `[icon-resolver] Invalid icon name "${name}" (contains special characters), using "help-circle" as fallback`
-    );
-    return 'mdiHelpCircle';
-  }
-
-  // Convert kebab-case to PascalCase
-  const pascalCase = cleanName
-    .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('');
-
-  return `mdi${pascalCase}`;
-}
-
-/**
- * Resolves an icon name to its SVG path data.
- * Returns undefined if the icon is not found.
+ * Resolves an icon name to its SVG path data from the registry.
+ * Returns undefined if the icon is not registered.
  *
  * @param iconName - The icon name in kebab-case (e.g., "home", "account-circle")
  * @returns The SVG path string or undefined if not found
  */
 export function resolveIconPath(iconName: string): string | undefined {
-  const mdiIconName = formatIconName(iconName);
-  const iconPath = (mdiIcons as any)[mdiIconName];
+  const path = IconRegistry.get(iconName);
 
-  if (!iconPath) {
+  if (!path && process.env.NODE_ENV !== 'production') {
     console.warn(
-      `[icon-resolver] Icon "${iconName}" (${mdiIconName}) not found in @mdi/js, using help-circle as fallback`
+      `[icon-resolver] Icon "${iconName}" is not registered. ` +
+      `Add it to the 'icons' array in your babel config.`
     );
-    return (mdiIcons as any).mdiHelpCircle;
   }
 
-  return iconPath;
+  return path;
 }
 
 /**

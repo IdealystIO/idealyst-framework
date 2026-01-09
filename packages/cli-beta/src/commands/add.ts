@@ -60,6 +60,7 @@ export async function addCommand(
         prisma: false,
         trpc: options.withTrpc ?? false,
         graphql: options.withGraphql ?? false,
+        devcontainer: false,
       },
     }, IDEALYST_VERSION);
 

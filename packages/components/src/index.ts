@@ -40,7 +40,7 @@ export * from './Avatar/types';
 export { default as Screen } from './Screen';
 export * from './Screen/types';
 
-export { default as Icon } from './Icon';
+export { default as Icon, IconRegistry } from './Icon';
 export * from './Icon/types';
 
 export { default as SVGImage } from './SVGImage';

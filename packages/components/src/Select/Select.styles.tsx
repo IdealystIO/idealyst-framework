@@ -57,7 +57,6 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         justifyContent: 'space-between' as const,
-        borderRadius: theme.radii.md,
         borderWidth: 1,
         borderStyle: 'solid' as const,
         opacity: disabled ? 0.6 : 1,
@@ -73,10 +72,7 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
                     borderColor: theme.colors.border.primary,
                 }
             },
-            size: {
-                paddingHorizontal: theme.sizes.$select.paddingHorizontal,
-                minHeight: theme.sizes.$select.minHeight,
-            },
+            size: theme.sizes.$select,
         },
         _web: {
             display: 'flex',

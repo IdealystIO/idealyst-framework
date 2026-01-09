@@ -10,6 +10,7 @@ import { applyApiExtension } from './extensions/api';
 import { applyPrismaExtension } from './extensions/prisma';
 import { applyTrpcExtension } from './extensions/trpc';
 import { applyGraphqlExtension } from './extensions/graphql';
+import { applyDevcontainerExtension } from './extensions/devcontainer';
 import { installDependencies } from '../utils/shell';
 import { logger } from '../utils/logger';
 import { IDEALYST_VERSION } from '../constants';
@@ -81,6 +82,13 @@ export async function generateProject(config: ProjectConfig): Promise<GeneratorR
     logger.step('Configuring GraphQL...');
     await applyGraphqlExtension(projectPath, templateData);
     extensionsEnabled.push('graphql');
+  }
+
+  if (config.extensions.devcontainer) {
+    logger.step('Setting up devcontainer...');
+    await applyDevcontainerExtension(projectPath, templateData, config.extensions.devcontainer);
+    extensionsEnabled.push('devcontainer');
+    nextSteps.push('Open in VS Code and select "Reopen in Container" to use devcontainer');
   }
 
   // Step 5: Install dependencies

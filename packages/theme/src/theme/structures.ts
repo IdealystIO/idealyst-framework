@@ -45,6 +45,12 @@ export type Shade = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 export type SizeValue = number | string;
 
 /**
+ * Breakpoint value - must be a non-negative number representing pixels.
+ * The first breakpoint in a set MUST be 0 (simulates CSS cascading behavior).
+ */
+export type BreakpointValue = number;
+
+/**
  * Interaction state configuration for hover, focus, active states
  */
 export type InteractionConfig = {
@@ -137,6 +143,7 @@ export type SelectSizeValue = {
     minHeight: SizeValue;
     fontSize: SizeValue;
     iconSize: SizeValue;
+    borderRadius: SizeValue;
 };
 
 export type SliderSizeValue = {

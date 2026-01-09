@@ -66,10 +66,10 @@ async function generateSharedFiles(
     createSharedIndex()
   );
 
-  // Create src/unistyles.ts
+  // Create src/theme.ts
   await fs.writeFile(
-    path.join(sharedDir, 'src', 'unistyles.ts'),
-    createUnistylesConfig()
+    path.join(sharedDir, 'src', 'theme.ts'),
+    createThemeConfig()
   );
 
   // Create src/components/HelloWorld.tsx
@@ -113,7 +113,7 @@ function createSharedPackageJson(data: TemplateData): Record<string, unknown> {
     types: 'src/index.ts',
     exports: {
       '.': './src/index.ts',
-      './unistyles': './src/unistyles.ts',
+      './theme': './src/theme.ts',
     },
     scripts: {
       'build': 'tsc',
@@ -161,31 +161,22 @@ export * from '@idealyst/theme';
 }
 
 /**
- * Create unistyles configuration
+ * Create theme configuration
  */
-function createUnistylesConfig(): string {
+function createThemeConfig(): string {
   return `/**
- * Unistyles theme configuration
+ * Theme configuration for the application
  */
 
 import { StyleSheet } from 'react-native-unistyles';
-import { fromTheme } from '@idealyst/theme';
+import { fromTheme, lightTheme, darkTheme } from '@idealyst/theme';
 
-// Configure custom theme extensions
+// Configure unistyles with the Idealyst themes
+// fromTheme().build() is required for babel transpilation
 StyleSheet.configure({
   themes: {
-    light: fromTheme('light', {
-      colors: {
-        brand: '#007AFF',
-        accent: '#FF9500',
-      },
-    }),
-    dark: fromTheme('dark', {
-      colors: {
-        brand: '#0A84FF',
-        accent: '#FF9F0A',
-      },
-    }),
+    light: fromTheme(lightTheme).build(),
+    dark: fromTheme(darkTheme).build(),
   },
   settings: {
     initialTheme: 'light',
@@ -206,7 +197,7 @@ function createHelloWorldComponent(): string {
 
 import React from 'react';
 import { View, Text, Button } from '@idealyst/components';
-import { StyleSheet } from 'react-native-unistyles';
+import { useUnistyles } from 'react-native-unistyles';
 
 export interface HelloWorldProps {
   name?: string;
@@ -214,12 +205,35 @@ export interface HelloWorldProps {
 }
 
 export function HelloWorld({ name = 'World', onPress }: HelloWorldProps) {
-  const { styles } = useStyles();
+  const { theme } = useUnistyles();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Hello, {name}!</Text>
-      <Text style={styles.subtitle}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 24,
+        backgroundColor: theme.colors.surface.primary,
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 24,
+          fontWeight: 'bold',
+          color: theme.colors.text.primary,
+          marginBottom: 8,
+        }}
+      >
+        Hello, {name}!
+      </Text>
+      <Text
+        style={{
+          fontSize: 16,
+          color: theme.colors.text.secondary,
+          marginBottom: 24,
+        }}
+      >
         Built with Idealyst Framework
       </Text>
       {onPress && (
@@ -230,26 +244,5 @@ export function HelloWorld({ name = 'World', onPress }: HelloWorldProps) {
     </View>
   );
 }
-
-const useStyles = StyleSheet.create((theme) => ({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: theme.spacing.lg,
-    backgroundColor: theme.colors.background,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.lg,
-  },
-}));
 `;
 }

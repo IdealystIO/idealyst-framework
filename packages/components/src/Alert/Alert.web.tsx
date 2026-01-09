@@ -3,7 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { alertStyles } from './Alert.styles';
 import type { AlertProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { resolveIconPath, isIconName } from '../Icon/icon-resolver';
+import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 // Default icons for each intent
@@ -49,10 +49,9 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
     if (!iconProp) return null;
 
     if (isIconName(iconProp)) {
-      const iconPath = resolveIconPath(iconProp);
       return (
         <IconSvg
-          path={iconPath}
+          name={iconProp}
           {...iconContainerProps}
           aria-label={iconProp}
         />
@@ -106,7 +105,7 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
           type="button"
         >
           <IconSvg
-            path={resolveIconPath('close')}
+            name="close"
             {...closeIconProps}
             aria-label="close"
           />

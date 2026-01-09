@@ -28,6 +28,7 @@ program
   .option('--with-prisma', 'Enable Prisma database')
   .option('--with-trpc', 'Enable tRPC (requires --with-api)')
   .option('--with-graphql', 'Enable GraphQL (requires --with-api)')
+  .option('--with-devcontainer', 'Enable devcontainer setup (Docker, PostgreSQL, Redis, Claude Code)')
   .option('--no-interactive', 'Disable interactive mode (requires all options)')
   .option('--skip-install', 'Skip dependency installation')
   .action(initCommand);

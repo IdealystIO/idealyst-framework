@@ -62,8 +62,21 @@ const globalRegistry = {
     return Array.from(new Set(this.getStaticKeys().map((k) => k.key)));
   },
 
+  getKeyUsages(key) {
+    return this.keys.get(key) || [];
+  },
+
+  hasKey(key) {
+    return this.keys.has(key);
+  },
+
+  getKeyCount() {
+    return this.keys.size;
+  },
+
   clear() {
     this.keys.clear();
+    this.options = null;
     this.initialized = false;
   },
 };

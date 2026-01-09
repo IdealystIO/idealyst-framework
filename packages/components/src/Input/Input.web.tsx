@@ -1,7 +1,7 @@
 import React, { isValidElement, useState, useMemo, useRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
-import { isIconName, resolveIconPath } from '../Icon/icon-resolver';
+import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { inputStyles } from './Input.styles';
 import { InputProps } from './types';
@@ -184,10 +184,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     if (!leftIcon) return null;
 
     if (isIconName(leftIcon)) {
-      const iconPath = resolveIconPath(leftIcon);
       return (
         <IconSvg
-          path={iconPath}
+          name={leftIcon}
           {...leftIconProps}
           aria-label={leftIcon}
         />
@@ -204,10 +203,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     if (!rightIcon) return null;
 
     if (isIconName(rightIcon)) {
-      const iconPath = resolveIconPath(rightIcon);
       return (
         <IconSvg
-          path={iconPath}
+          name={rightIcon}
           {...rightIconProps}
           aria-label={rightIcon}
         />
@@ -222,10 +220,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   // Helper to render password toggle icon
   const renderPasswordToggleIcon = () => {
     const iconName = isPasswordVisible ? 'eye-off' : 'eye';
-    const iconPath = resolveIconPath(iconName);
     return (
       <IconSvg
-        path={iconPath}
+        name={iconName}
         {...passwordToggleIconProps}
         aria-label={iconName}
       />
@@ -290,4 +287,4 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
 
 Input.displayName = 'Input';
 
-export default Input; 
+export default Input;

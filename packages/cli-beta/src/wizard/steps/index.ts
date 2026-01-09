@@ -9,4 +9,5 @@ export { apiExtensionStep } from './apiExtension';
 export { trpcExtensionStep } from './trpcExtension';
 export { graphqlExtensionStep } from './graphqlExtension';
 export { prismaExtensionStep } from './prismaExtension';
+export { devcontainerExtensionStep } from './devcontainerExtension';
 export { summaryStep } from './summary';

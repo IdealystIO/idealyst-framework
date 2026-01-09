@@ -260,6 +260,11 @@ function createTrpcClient(data: TemplateData, platform: 'web' | 'mobile'): strin
     ? 'http://10.0.2.2:3000/trpc' // Android emulator localhost
     : 'http://localhost:3000/trpc';
 
+  // Web uses import.meta.env (Vite), mobile uses process.env
+  const envAccess = platform === 'web'
+    ? 'import.meta.env.VITE_API_URL'
+    : 'process.env.API_URL';
+
   return `/**
  * tRPC client for ${platform}
  */
@@ -273,7 +278,7 @@ export const trpc = createTRPCReact<AppRouter>();
 export const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: process.env.${platform === 'web' ? 'VITE_' : ''}API_URL || '${apiUrl}',
+      url: ${envAccess} || '${apiUrl}',
     }),
   ],
 });

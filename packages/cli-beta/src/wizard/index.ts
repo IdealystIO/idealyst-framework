@@ -13,6 +13,7 @@ import {
   trpcExtensionStep,
   graphqlExtensionStep,
   prismaExtensionStep,
+  devcontainerExtensionStep,
   summaryStep,
 } from './steps';
 
@@ -35,6 +36,7 @@ export async function runWizard(
       prisma: prefilledArgs.withPrisma ?? false,
       trpc: prefilledArgs.withTrpc ?? false,
       graphql: prefilledArgs.withGraphql ?? false,
+      devcontainer: prefilledArgs.withDevcontainer ?? false,
     },
   };
 
@@ -92,6 +94,13 @@ export async function runWizard(
     config.extensions!.prisma = await prismaExtensionStep.prompt(config);
   }
 
+  // Step 8: Devcontainer extension
+  if (prefilledArgs.withDevcontainer !== undefined) {
+    console.log(chalk.gray(`✓ Devcontainer: ${prefilledArgs.withDevcontainer ? 'enabled' : 'disabled'} (from arguments)`));
+  } else {
+    config.extensions!.devcontainer = await devcontainerExtensionStep.prompt(config);
+  }
+
   // Summary and confirmation
   const confirmed = await summaryStep.prompt(config);
 
@@ -146,6 +155,31 @@ export function validateNonInteractiveArgs(args: CLIArgs): {
   }
 
   return { valid: missing.length === 0, missing };
+}
+
+/**
+ * Build a ProjectConfig from CLI arguments (for non-interactive mode)
+ */
+export function buildConfigFromArgs(args: CLIArgs): ProjectConfig {
+  const identifiers = generateIdentifiers(args.orgDomain!, args.projectName!);
+
+  return {
+    projectName: args.projectName!,
+    orgDomain: args.orgDomain!,
+    appDisplayName: args.appDisplayName!,
+    iosBundleId: identifiers.iosBundleId,
+    androidPackageName: identifiers.androidPackageName,
+    extensions: {
+      api: args.withApi ?? false,
+      prisma: args.withPrisma ?? false,
+      trpc: args.withTrpc ?? false,
+      graphql: args.withGraphql ?? false,
+      devcontainer: args.withDevcontainer ?? false,
+    },
+    directory: args.directory ?? '.',
+    skipInstall: args.skipInstall ?? false,
+    isInteractive: false,
+  };
 }
 
 export * from './validators';

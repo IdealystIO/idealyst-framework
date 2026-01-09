@@ -6,14 +6,7 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
-// Extended props to include path props added by Babel plugin
-interface InternalButtonProps extends ButtonProps {
-  leftIconPath?: string;
-  rightIconPath?: string;
-}
-
-const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButtonProps, ref) => {
-
+const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
     title,
     children,
@@ -25,8 +18,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     gradient,
     leftIcon,
     rightIcon,
-    leftIconPath,
-    rightIconPath,
     style,
     testID,
     id,
@@ -124,14 +115,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
   const iconStyleArray = [(buttonStyles.icon as any)(dynamicProps)];
   const iconProps = getWebProps(iconStyleArray);
 
-  // Helper to render icon
-  const renderIcon = (icon: string | React.ReactNode, iconPath?: string) => {
-    if (typeof icon === 'string' && iconPath) {
-      // Render IconSvg directly with the path from Babel plugin
-      // Don't pass size - let the style control the dimensions
+  // Helper to render icon - now uses icon name directly
+  const renderIcon = (icon: string | React.ReactNode) => {
+    if (typeof icon === 'string') {
+      // Render IconSvg with the icon name - registry lookup happens inside
       return (
         <IconSvg
-          path={iconPath}
+          name={icon}
           {...iconProps}
           aria-label={icon}
         />
@@ -164,9 +154,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
     >
       {hasIcons ? (
         <div {...iconContainerProps}>
-          {leftIcon && renderIcon(leftIcon, leftIconPath)}
+          {leftIcon && renderIcon(leftIcon)}
           {buttonContent}
-          {rightIcon && renderIcon(rightIcon, rightIconPath)}
+          {rightIcon && renderIcon(rightIcon)}
         </div>
       ) : (
         buttonContent
@@ -177,4 +167,4 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props: InternalButton
 
 Button.displayName = 'Button';
 
-export default Button; 
+export default Button;

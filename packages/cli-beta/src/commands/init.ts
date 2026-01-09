@@ -23,6 +23,7 @@ export interface InitOptions {
   withPrisma?: boolean;
   withTrpc?: boolean;
   withGraphql?: boolean;
+  withDevcontainer?: boolean;
   interactive?: boolean; // Commander converts --no-interactive to interactive: false
   skipInstall?: boolean;
 }
@@ -43,6 +44,7 @@ export async function initCommand(
       withPrisma: options.withPrisma,
       withTrpc: options.withTrpc,
       withGraphql: options.withGraphql,
+      withDevcontainer: options.withDevcontainer,
       noInteractive: options.interactive === false,
       skipInstall: options.skipInstall,
       directory: options.directory,
@@ -87,6 +89,7 @@ export async function initCommand(
           prisma: args.withPrisma ?? false,
           trpc: args.withTrpc ?? false,
           graphql: args.withGraphql ?? false,
+          devcontainer: args.withDevcontainer ?? false,
         },
         directory: args.directory ?? '.',
         skipInstall: args.skipInstall ?? false,
