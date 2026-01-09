@@ -9,6 +9,10 @@ export type CheckboxIntentVariant = Intent;
 export type CheckboxSizeVariant = Size;
 export type CheckboxVariant = 'default' | 'outlined';
 
+/**
+ * Checkbox component for multiple selection inputs.
+ * Supports checked, unchecked, and indeterminate states with optional labels.
+ */
 export interface CheckboxProps extends FormInputStyleProps, SelectionAccessibilityProps {
   /**
    * Whether the checkbox is checked

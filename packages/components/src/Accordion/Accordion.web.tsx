@@ -107,6 +107,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   );
 };
 
+/**
+ * Expandable sections for organizing content into collapsible panels.
+ * Supports single or multiple expanded sections with keyboard navigation.
+ */
 const Accordion: React.FC<AccordionProps> = ({
   items,
   allowMultiple = false,

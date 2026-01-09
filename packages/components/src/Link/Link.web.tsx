@@ -3,6 +3,10 @@ import { useNavigator } from '@idealyst/navigation';
 import { Pressable } from '../Pressable';
 import type { LinkProps } from './types';
 
+/**
+ * Navigation component for routing to other screens within the application.
+ * Integrates with the navigation system for seamless page transitions.
+ */
 const Link: React.FC<LinkProps> = ({
   to,
   vars,

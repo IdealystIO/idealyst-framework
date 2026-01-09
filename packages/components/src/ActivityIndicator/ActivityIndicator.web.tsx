@@ -5,6 +5,10 @@ import { activityIndicatorStyles } from './ActivityIndicator.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebLiveRegionAriaProps } from '../utils/accessibility';
 
+/**
+ * Spinning loading indicator for async operations and content loading.
+ * Supports intent-based coloring and automatic hiding when stopped.
+ */
 const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   animating = true,
   size = 'md',

@@ -1,0 +1,34 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "installation": "Installation",
+    "components": "Composants",
+    "theme": "Theme",
+    "navigation": "Navigation"
+  },
+  "actions": {
+    "getStarted": "Commencer",
+    "viewDocs": "Voir la Documentation",
+    "learnMore": "En Savoir Plus",
+    "copy": "Copier",
+    "copied": "Copie !",
+    "expand": "Developper",
+    "collapse": "Reduire"
+  },
+  "labels": {
+    "example": "Exemple",
+    "props": "Props",
+    "playground": "Bac a Sable",
+    "preview": "Apercu",
+    "code": "Code",
+    "required": "Requis",
+    "optional": "Optionnel",
+    "default": "Defaut",
+    "type": "Type",
+    "description": "Description"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Francais"
+  }
+}

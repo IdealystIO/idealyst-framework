@@ -40,6 +40,7 @@ const packagePaths = [
   'packages/mcp-server/package.json',
   'packages/microphone/package.json',
   'packages/translate/package.json',
+  "packages/tooling/package.json",
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',
@@ -79,5 +80,25 @@ function updatePackageVersion(packagePath) {
 // Update all packages
 packagePaths.forEach(updatePackageVersion);
 
-console.log(`Version ${newVersion} set successfully across all packages!`);
+// Update CLI constants.ts with the new IDEALYST_VERSION
+const cliConstantsPath = 'packages/cli/src/constants.ts';
+if (fs.existsSync(cliConstantsPath)) {
+  let constantsContent = fs.readFileSync(cliConstantsPath, 'utf8');
+  const versionRegex = /export const IDEALYST_VERSION = '[^']+';/;
+
+  if (versionRegex.test(constantsContent)) {
+    constantsContent = constantsContent.replace(
+      versionRegex,
+      `export const IDEALYST_VERSION = '${newVersion}';`
+    );
+    fs.writeFileSync(cliConstantsPath, constantsContent);
+    console.log(`Updated CLI IDEALYST_VERSION to ${newVersion}`);
+  } else {
+    console.log('Warning: Could not find IDEALYST_VERSION in CLI constants.ts');
+  }
+} else {
+  console.log(`Skipping ${cliConstantsPath} - file not found`);
+}
+
+console.log(`\nVersion ${newVersion} set successfully across all packages!`);
 console.log('You can now commit these changes and publish the packages.'); 

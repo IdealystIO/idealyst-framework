@@ -5,6 +5,10 @@ import type { TextAreaProps } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebFormAriaProps, combineIds, generateAccessibilityId } from '../utils/accessibility';
 
+/**
+ * Multi-line text input with auto-grow, character counting, and validation support.
+ * Includes label, helper text, and error message display.
+ */
 const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',

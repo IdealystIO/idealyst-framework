@@ -2,37 +2,32 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  roots: ['<rootDir>/src', '<rootDir>/__tests__'],
   testMatch: [
     '**/__tests__/**/*.test.ts',
-  ],
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.d.ts',
-    '!src/index.ts', // CLI entry point, tested via integration
-  ],
-  coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov', 'html'],
-  testTimeout: 60000, // 60 seconds for CLI operations
-  maxWorkers: 1, // Run tests serially to avoid file system conflicts
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/templates/',
-    '/dist/',
+    '**/*.test.ts',
   ],
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
-      tsconfig: './tsconfig.test.json'
+      tsconfig: 'tsconfig.json',
     }],
   },
-  modulePathIgnorePatterns: ['<rootDir>/templates/'],
-  transformIgnorePatterns: [
-    'node_modules/(?!(chalk|inquirer|ora|fs-extra|ansi-styles|supports-color|strip-ansi|ansi-regex|string-width|wrap-ansi|cliui|yargs|is-fullwidth-code-point|validate-npm-package-name)/)'
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.d.ts',
+    '!src/index.ts',
   ],
-  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
+  verbose: true,
+  testTimeout: 30000,
+  // Handle ESM modules like chalk
+  transformIgnorePatterns: [
+    'node_modules/(?!(chalk|#ansi-styles|#supports-color)/)',
+  ],
   moduleNameMapper: {
-    '^chalk$': '<rootDir>/__tests__/__mocks__/chalk.js',
-    '^inquirer$': '<rootDir>/__tests__/__mocks__/inquirer.js',
-    '^ora$': '<rootDir>/__tests__/__mocks__/ora.js',
+    '#ansi-styles': '<rootDir>/node_modules/chalk/source/vendor/ansi-styles/index.js',
+    '#supports-color': '<rootDir>/node_modules/chalk/source/vendor/supports-color/index.js',
   },
 };

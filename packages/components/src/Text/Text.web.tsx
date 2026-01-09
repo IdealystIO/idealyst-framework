@@ -4,6 +4,10 @@ import { TextProps } from './types';
 import { textStyles } from './Text.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 
+/**
+ * Typography component for displaying text with predefined styles and semantic variants.
+ * Supports multiple typography scales, colors, weights, and alignments.
+ */
 const Text = forwardRef<HTMLSpanElement, TextProps>(({
   children,
   typography = 'body1',

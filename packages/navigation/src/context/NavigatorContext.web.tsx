@@ -14,7 +14,28 @@ const NavigatorContext = createContext<NavigatorContextValue>({
 /**
  * Normalize a path and substitute variables
  */
-function normalizePath(path: string, vars?: Record<string, string>): string {
+function normalizePath(path: string | undefined | null, vars?: Record<string, string>): string {
+    // Handle invalid path input
+    if (path === undefined || path === null) {
+        console.error(
+            'Navigation Error: navigate() was called with an invalid path.\n' +
+            'Expected: navigate({ path: "/your-route" })\n' +
+            'Received: path is ' + String(path) + '\n' +
+            'Make sure you are passing an object with a "path" property, not a string directly.'
+        );
+        return '/';
+    }
+
+    if (typeof path !== 'string') {
+        console.error(
+            'Navigation Error: navigate() path must be a string.\n' +
+            'Expected: navigate({ path: "/your-route" })\n' +
+            'Received: ' + typeof path + '\n' +
+            'Make sure you are passing an object with a "path" property, not a string directly.'
+        );
+        return '/';
+    }
+
     let normalizedPath = path;
 
     // Convert empty string to '/'

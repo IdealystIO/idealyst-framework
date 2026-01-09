@@ -2,6 +2,7 @@
  * Get Types Tool
  *
  * Returns TypeScript type definitions for Idealyst components, theme, and navigation.
+ * Now enhanced with @idealyst/tooling registry data for authoritative prop values.
  */
 
 import * as fs from 'fs';
@@ -17,6 +18,11 @@ interface TypesData {
   components: Record<string, any>;
   theme: Record<string, any>;
   navigation: Record<string, any>;
+  // New: Registry data from @idealyst/tooling (single source of truth)
+  registry?: {
+    components: Record<string, any>;
+    themeValues: any;
+  };
 }
 
 let cachedTypes: TypesData | null = null;
@@ -70,6 +76,11 @@ export function getComponentTypes(componentName: string, format: 'typescript' | 
       props: component.props,
       relatedTypes: component.relatedTypes,
     };
+
+    // Include registry data if available (authoritative prop values)
+    if (component.registry) {
+      result.registry = component.registry;
+    }
   }
 
   return result;
@@ -94,6 +105,11 @@ export function getThemeTypes(format: 'typescript' | 'json' | 'both' = 'both') {
 
   if (format === 'json' || format === 'both') {
     result.schema = types.theme;
+
+    // Include authoritative theme values from registry if available
+    if (types.registry?.themeValues) {
+      result.themeValues = types.registry.themeValues;
+    }
   }
 
   return result;
@@ -166,4 +182,22 @@ export function getComponentExamples(componentName: string): string | null {
   }
 
   return fs.readFileSync(examplesPath, 'utf-8');
+}
+
+/**
+ * Get the full component registry from @idealyst/tooling
+ * This is the single source of truth for component props and values
+ */
+export function getComponentRegistry() {
+  const types = loadTypes();
+  return types.registry?.components || {};
+}
+
+/**
+ * Get theme values from the registry
+ * This is the single source of truth for available intents, sizes, etc.
+ */
+export function getRegistryThemeValues() {
+  const types = loadTypes();
+  return types.registry?.themeValues || null;
 }

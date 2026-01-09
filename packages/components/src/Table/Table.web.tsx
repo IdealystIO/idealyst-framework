@@ -130,6 +130,10 @@ function TD({
 // Main Table Component
 // ============================================================================
 
+/**
+ * Data display component for structured tabular content with columns and rows.
+ * Supports custom cell rendering, sticky headers, and row click handling.
+ */
 function Table<T = any>({
   columns,
   data,

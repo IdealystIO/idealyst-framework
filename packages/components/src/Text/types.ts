@@ -9,6 +9,10 @@ export type TextWeightVariant = 'light' | 'normal' | 'medium' | 'semibold' | 'bo
 export type TextAlignVariant = 'left' | 'center' | 'right';
 export type TextTypographyVariant = Typography;
 
+/**
+ * Typography component for rendering text with consistent styling.
+ * Supports semantic typography variants, custom weights, and theme-aware colors.
+ */
 export interface TextProps extends TextSpacingStyleProps {
   /**
    * The text content to display

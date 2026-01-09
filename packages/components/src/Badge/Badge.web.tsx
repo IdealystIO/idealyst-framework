@@ -5,6 +5,10 @@ import { badgeStyles } from './Badge.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 
+/**
+ * Small status indicator for counts, labels, or notifications.
+ * Available in filled, outlined, and dot variants with customizable colors.
+ */
 const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props, ref) => {
   const {
     children,

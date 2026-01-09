@@ -5,6 +5,10 @@ import { avatarStyles } from './Avatar.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebAriaProps } from '../utils/accessibility';
 
+/**
+ * User or entity representation with image support and fallback initials.
+ * Available in circle or square shapes with multiple sizes.
+ */
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
   src,
   alt,

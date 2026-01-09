@@ -7,6 +7,10 @@ import { inputStyles } from './Input.styles';
 import { InputProps } from './types';
 import { getWebFormAriaProps, generateAccessibilityId, combineIds } from '../utils/accessibility';
 
+/**
+ * Text input field with support for icons, password visibility toggle, and validation states.
+ * Available in outlined and filled variants with multiple sizes.
+ */
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   value,
   onChangeText,

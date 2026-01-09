@@ -8,6 +8,10 @@ export type ChipSize = Size;
 export type ChipType = 'filled' | 'outlined' | 'soft';
 export type ChipIntent = Intent;
 
+/**
+ * Compact element for tags, filters, or selections.
+ * Supports deletable and selectable modes with icon customization.
+ */
 export interface ChipProps extends BaseProps, SelectionAccessibilityProps {
   /** The text content of the chip */
   label: string;

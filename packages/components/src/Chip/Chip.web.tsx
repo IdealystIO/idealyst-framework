@@ -6,6 +6,10 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 
+/**
+ * Compact interactive element for tags, filters, or selections.
+ * Supports icons, selection state, and delete functionality.
+ */
 const Chip = forwardRef<HTMLDivElement, ChipProps>(({
   label,
   type = 'filled',

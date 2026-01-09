@@ -32,6 +32,10 @@ export type SelectDynamicProps = {
 export const selectStyles = defineStyle('Select', (theme: Theme) => ({
     container: (_props: SelectDynamicProps) => ({
         position: 'relative' as const,
+        _web: {
+            display: 'inline-flex',
+            flexDirection: 'column',
+        },
         variants: {
             margin: {
                 margin: theme.sizes.$view.padding,

@@ -16,6 +16,10 @@ const defaultIcons = {
   neutral: 'record-circle',
 };
 
+/**
+ * Notification banner for displaying important messages, warnings, or status updates.
+ * Supports multiple intents, dismissibility, and custom actions.
+ */
 const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   title,
   message,

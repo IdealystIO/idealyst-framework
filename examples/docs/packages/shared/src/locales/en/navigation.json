@@ -1,0 +1,97 @@
+{
+  "overview": {
+    "title": "Navigation Overview",
+    "description": "Idealyst provides a unified navigation system that works identically on web and native. Define your routes once with full TypeScript support, and get platform-optimized navigation automatically.",
+    "architecture": {
+      "title": "Architecture"
+    },
+    "keyConcepts": {
+      "title": "Key Concepts",
+      "navigatorProvider": {
+        "title": "NavigatorProvider",
+        "description": "Root component that wraps your app and provides navigation context. Pass your route configuration via the route prop."
+      },
+      "navigatorParam": {
+        "title": "NavigatorParam",
+        "description": "Type for route configuration objects. Supports three layouts: stack, tab, and drawer. Routes can be nested to create complex navigation hierarchies."
+      },
+      "useNavigator": {
+        "title": "useNavigator()",
+        "description": "Hook for programmatic navigation. Provides navigate(), goBack(), and current route information. Works identically on all platforms."
+      }
+    },
+    "quickStart": {
+      "title": "Quick Start",
+      "codeTitle": "Basic Navigation Setup"
+    },
+    "layoutTypes": {
+      "title": "Layout Types",
+      "stack": {
+        "title": "Stack",
+        "description": "Push/pop navigation with back button. Default for most apps."
+      },
+      "tab": {
+        "title": "Tab",
+        "description": "Bottom tab bar navigation. Great for main app sections."
+      },
+      "drawer": {
+        "title": "Drawer",
+        "description": "Side menu navigation. Perfect for docs and admin panels."
+      }
+    },
+    "example": {
+      "title": "Navigation Example",
+      "codeTitle": "Using useNavigator()"
+    },
+    "platformDifferences": {
+      "title": "Platform Differences",
+      "web": {
+        "title": "Web",
+        "description": "Uses react-router-dom under the hood. URLs are real browser URLs with proper history management and deep linking."
+      },
+      "native": {
+        "title": "Native",
+        "description": "Uses @react-navigation/native with platform-specific transitions, gestures, and native navigation patterns."
+      }
+    }
+  },
+  "routes": {
+    "title": "Routes Configuration",
+    "description": "Learn how to define and configure routes for your application.",
+    "basicRoutes": {
+      "title": "Basic Routes",
+      "description": "Define simple routes with path and component."
+    },
+    "nestedRoutes": {
+      "title": "Nested Routes",
+      "description": "Create hierarchical navigation structures with nested routes."
+    },
+    "routeParams": {
+      "title": "Route Parameters",
+      "description": "Pass and receive parameters between routes."
+    }
+  },
+  "useNavigator": {
+    "title": "useNavigator Hook",
+    "description": "Programmatic navigation using the useNavigator hook.",
+    "methods": {
+      "title": "Methods",
+      "navigate": {
+        "title": "navigate()",
+        "description": "Navigate to a specific route by path or name."
+      },
+      "goBack": {
+        "title": "goBack()",
+        "description": "Go back to the previous route in the stack."
+      },
+      "replace": {
+        "title": "replace()",
+        "description": "Replace the current route without adding to history."
+      }
+    },
+    "currentRoute": {
+      "title": "Current Route",
+      "description": "Access information about the current route."
+    }
+  }
+}

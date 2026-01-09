@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, Button, Card, Screen } from '@idealyst/components';
 import { useNavigator } from '@idealyst/navigation';
+import { useTranslation } from '@idealyst/translate';
 
 export function HomePage() {
   const { navigate } = useNavigator();
+  const { t } = useTranslation('home');
 
   return (
     <Screen>
@@ -13,7 +15,7 @@ export function HomePage() {
           weight="bold"
           style={{ marginBottom: 16 }}
         >
-          Idealyst Documentation
+          {t('title')}
         </Text>
 
         <Text
@@ -21,9 +23,7 @@ export function HomePage() {
           color="secondary"
           style={{ marginBottom: 32, lineHeight: 28 }}
         >
-          Idealyst is a modern, cross-platform framework for building React and React Native
-          applications. It provides a powerful component library, type-safe APIs, and unified
-          theming system that works seamlessly across web and mobile.
+          {t('description')}
         </Text>
 
         <View style={{ flexDirection: 'row', gap: 16, marginBottom: 48 }}>
@@ -32,7 +32,7 @@ export function HomePage() {
             size="lg"
             onPress={() => navigate({ path: '/installation' })}
           >
-            Get Started
+            {t('getStarted')}
           </Button>
           <Button
             intent="neutral"
@@ -40,7 +40,7 @@ export function HomePage() {
             size="lg"
             onPress={() => navigate({ path: '/components/overview' })}
           >
-            View Components
+            {t('viewComponents')}
           </Button>
         </View>
 
@@ -49,29 +49,29 @@ export function HomePage() {
           typography="h4"
           style={{ marginBottom: 16 }}
         >
-          Key Features
+          {t('keyFeatures')}
         </Text>
 
         <View style={{ gap: 16 }}>
           <FeatureCard
-            title="Cross-Platform Components"
-            description="Build once, run everywhere. Components work identically on web and native with platform-specific optimizations."
+            title={t('features.crossPlatform.title')}
+            description={t('features.crossPlatform.description')}
           />
           <FeatureCard
-            title="Powerful Theme System"
-            description="Define themes using a fluent builder API with full TypeScript inference. Customize colors, typography, and component sizes."
+            title={t('features.theme.title')}
+            description={t('features.theme.description')}
           />
           <FeatureCard
-            title="Style Extensions"
-            description="Extend or override component styles at build time without modifying source code."
+            title={t('features.styleExtensions.title')}
+            description={t('features.styleExtensions.description')}
           />
           <FeatureCard
-            title="Type-Safe APIs"
-            description="End-to-end type safety with tRPC and GraphQL support, including automatic TypeScript inference."
+            title={t('features.typeSafe.title')}
+            description={t('features.typeSafe.description')}
           />
           <FeatureCard
-            title="Unified Navigation"
-            description="Single navigation API for both web and mobile with type-safe routes and deep linking."
+            title={t('features.navigation.title')}
+            description={t('features.navigation.description')}
           />
         </View>
       </View>

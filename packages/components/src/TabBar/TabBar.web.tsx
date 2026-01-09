@@ -111,6 +111,10 @@ const Tab: React.FC<TabProps> = ({
   );
 };
 
+/**
+ * Horizontal tab navigation for switching between views or content sections.
+ * Supports standard underline and pill styles with animated indicator.
+ */
 const TabBar: React.FC<TabBarProps> = ({
   items,
   value: controlledValue,

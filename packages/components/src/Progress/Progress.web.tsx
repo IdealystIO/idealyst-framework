@@ -3,6 +3,10 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { progressStyles } from './Progress.styles';
 import type { ProgressProps } from './types';
 
+/**
+ * Visual indicator for task completion or loading status.
+ * Supports linear and circular variants with determinate or indeterminate states.
+ */
 const Progress: React.FC<ProgressProps> = ({
   value = 0,
   max = 100,

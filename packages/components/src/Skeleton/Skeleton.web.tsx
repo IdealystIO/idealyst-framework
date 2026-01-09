@@ -4,6 +4,10 @@ import { skeletonStyles } from './Skeleton.styles';
 import type { SkeletonProps, SkeletonGroupProps } from './types';
 import { getWebLiveRegionAriaProps } from '../utils/accessibility';
 
+/**
+ * Placeholder animation for loading content with customizable shapes and animations.
+ * Available in pulse and wave animation styles.
+ */
 const Skeleton: React.FC<SkeletonProps> = ({
   width = '100%',
   height = 20,

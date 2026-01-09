@@ -148,6 +148,10 @@ const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent })
   );
 };
 
+/**
+ * Navigation trail showing the current page location within a hierarchy.
+ * Supports custom separators, responsive collapsing, and icon prefixes.
+ */
 const Breadcrumb: React.FC<BreadcrumbProps> = ({
   items,
   separator = '/',

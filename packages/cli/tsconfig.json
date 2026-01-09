@@ -11,10 +11,11 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "declaration": true,
     "declarationDir": "./dist/types",
     "sourceMap": true,
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
   "include": [
     "src/**/*"
@@ -23,15 +24,6 @@
     "node_modules",
     "dist",
     "templates",
-    "templates.old",
-    "template",
-    "__tests__",
-    "src/generators/api.ts",
-    "src/generators/database.ts",
-    "src/generators/fullstack.ts",
-    "src/generators/native.ts",
-    "src/generators/shared.ts",
-    "src/generators/web.ts",
-    "src/generators/workspace.ts"
+    "__tests__"
   ]
-} 
+}

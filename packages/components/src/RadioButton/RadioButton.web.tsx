@@ -5,6 +5,10 @@ import type { RadioButtonProps } from './types';
 import { useRadioGroup } from './RadioGroup.web';
 import { getWebSelectionAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
+/**
+ * Single-select option within a radio button group.
+ * Works with RadioGroup for managing exclusive selection state.
+ */
 const RadioButton: React.FC<RadioButtonProps> = ({
   value,
   checked: checkedProp,

@@ -6,6 +6,10 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
+/**
+ * Floating content panel anchored to an element for contextual information or actions.
+ * Supports multiple placements and automatic dismissal behaviors.
+ */
 const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
   open,
   onOpenChange,

@@ -8,7 +8,14 @@ import { RangeAccessibilityProps } from '../utils/accessibility';
 export type SliderIntentVariant = Intent;
 export type SliderSizeVariant = Size;
 
+/**
+ * Range input component for selecting numeric values within a defined range.
+ * Supports step intervals, marks, and real-time value display.
+ */
 export interface SliderProps extends FormInputStyleProps, RangeAccessibilityProps {
+  /**
+   * Current slider value
+   */
   value?: number;
   defaultValue?: number;
   min?: number;

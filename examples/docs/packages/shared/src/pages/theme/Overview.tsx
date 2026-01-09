@@ -1,22 +1,24 @@
 import React from 'react';
 import { View, Text, Card, Screen } from '@idealyst/components';
+import { useTranslation } from '@idealyst/translate';
 import { CodeBlock } from '../../components/CodeBlock';
 
 export function ThemeOverviewPage() {
+  const { t } = useTranslation('theme');
+
   return (
     <Screen>
       <View style={{ maxWidth: 800 }}>
         <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
-          Theme System Overview
+          {t('overview.title')}
         </Text>
 
         <Text typography="body1" color="secondary" style={{ marginBottom: 24, lineHeight: 26 }}>
-          Idealyst provides a powerful theming system built on react-native-unistyles.
-          Themes are created using a fluent builder API with full TypeScript inference.
+          {t('overview.description')}
         </Text>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
-          Architecture
+          {t('overview.architecture.title')}
         </Text>
 
         <View background="inverse" style={{ padding: 20, marginBottom: 24, borderRadius: 8 }}>
@@ -45,30 +47,30 @@ export function ThemeOverviewPage() {
         </View>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
-          Core Concepts
+          {t('overview.coreConcepts.title')}
         </Text>
 
         <View style={{ gap: 16, marginBottom: 32 }}>
           <ConceptCard
-            title="Theme Builder"
-            description="Create themes using a fluent builder pattern. Define intents, radii, shadows, colors, and component sizes."
+            title={t('overview.coreConcepts.themeBuilder.title')}
+            description={t('overview.coreConcepts.themeBuilder.description')}
           />
           <ConceptCard
-            title="Style Definition"
-            description="Use defineStyle() to create component styles with theme reactivity and variant support."
+            title={t('overview.coreConcepts.styleDefinition.title')}
+            description={t('overview.coreConcepts.styleDefinition.description')}
           />
           <ConceptCard
-            title="Style Extensions"
-            description="Customize component styles using extendStyle() or overrideStyle() without modifying source code."
+            title={t('overview.coreConcepts.styleExtensions.title')}
+            description={t('overview.coreConcepts.styleExtensions.description')}
           />
           <ConceptCard
-            title="$iterator Pattern"
-            description="Define styles once that automatically expand to all keys of a theme object (intents, sizes, etc.)"
+            title={t('overview.coreConcepts.iteratorPattern.title')}
+            description={t('overview.coreConcepts.iteratorPattern.description')}
           />
         </View>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
-          Quick Example
+          {t('overview.quickExample.title')}
         </Text>
 
         <CodeBlock
@@ -100,7 +102,7 @@ export const myTheme = createTheme()
   })
   .build();`}
           language="typescript"
-          title="Creating a Theme"
+          title={t('overview.quickExample.codeTitle')}
         />
       </View>
     </Screen>

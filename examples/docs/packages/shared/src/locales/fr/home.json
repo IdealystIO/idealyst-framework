@@ -1,0 +1,29 @@
+{
+  "title": "Documentation Idealyst",
+  "description": "Idealyst est un framework moderne et multiplateforme pour construire des applications React et React Native. Il fournit une bibliotheque de composants puissante, des APIs typees, et un systeme de themes unifie qui fonctionne parfaitement sur le web et le mobile.",
+  "getStarted": "Commencer",
+  "viewComponents": "Voir les Composants",
+  "keyFeatures": "Fonctionnalites Cles",
+  "features": {
+    "crossPlatform": {
+      "title": "Composants Multiplateformes",
+      "description": "Construisez une fois, executez partout. Les composants fonctionnent de maniere identique sur le web et le natif avec des optimisations specifiques a chaque plateforme."
+    },
+    "theme": {
+      "title": "Systeme de Themes Puissant",
+      "description": "Definissez des themes avec une API fluide et une inference TypeScript complete. Personnalisez les couleurs, la typographie et les tailles des composants."
+    },
+    "styleExtensions": {
+      "title": "Extensions de Styles",
+      "description": "Etendez ou remplacez les styles des composants au moment de la compilation sans modifier le code source."
+    },
+    "typeSafe": {
+      "title": "APIs Typees",
+      "description": "Securite de type de bout en bout avec le support tRPC et GraphQL, incluant l'inference TypeScript automatique."
+    },
+    "navigation": {
+      "title": "Navigation Unifiee",
+      "description": "Une seule API de navigation pour le web et le mobile avec des routes typees et le deep linking."
+    }
+  }
+}

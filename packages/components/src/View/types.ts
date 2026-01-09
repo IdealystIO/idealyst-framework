@@ -28,6 +28,10 @@ export type ViewBackgroundVariant = Surface | 'transparent';
 export type ViewRadiusVariant = Size | 'none';
 export type ViewBorderVariant = 'none' | 'thin' | 'thick';
 
+/**
+ * Fundamental layout building block with responsive styling support.
+ * Supports theme-aware backgrounds, borders, and breakpoint-based style values.
+ */
 export interface ViewProps extends ContainerStyleProps {
   /**
    * The content to display inside the view

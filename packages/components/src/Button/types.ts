@@ -18,6 +18,10 @@ export type ButtonSizeVariant = Size;
  */
 export type ButtonGradient = 'darken' | 'lighten';
 
+/**
+ * Interactive button component with multiple visual variants, sizes, and icon support.
+ * Supports contained, outlined, and text styles with customizable intent colors.
+ */
 export interface ButtonProps extends BaseProps, InteractiveAccessibilityProps {
   /**
    * The text or content to display inside the button

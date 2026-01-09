@@ -8,6 +8,10 @@ export type AvatarColorVariant = Color;
 export type AvatarSizeVariant = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarShapeVariant = 'circle' | 'square';
 
+/**
+ * User or entity representation with image, initials fallback, or icon.
+ * Supports circular and square shapes with multiple size options.
+ */
 export interface AvatarProps extends BaseProps, AccessibilityProps {
   /**
    * Image source (URL or require())

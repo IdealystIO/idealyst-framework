@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Badge } from '@idealyst/components';
+import { View, Text, Button, Badge, Select } from '@idealyst/components';
 import { useNavigator } from '@idealyst/navigation';
+import { useLanguage } from '@idealyst/translate';
 import { Outlet } from 'react-router-dom';
 import { useUnistyles, UnistylesRuntime } from 'react-native-unistyles';
 import { DocsSidebar } from './DocsSidebar';
@@ -10,6 +11,7 @@ export const DocsLayout: React.FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { theme } = useUnistyles();
   const currentTheme = UnistylesRuntime.themeName || 'light';
+  const { language, setLanguage } = useLanguage();
 
   const cycleTheme = () => {
     const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
@@ -49,6 +51,15 @@ export const DocsLayout: React.FC = () => {
         </View>
 
         <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+          <Select
+            size="sm"
+            value={language}
+            onValueChange={(value) => setLanguage(value)}
+            options={[
+              { value: 'en', label: 'English' },
+              { value: 'fr', label: 'Français' },
+            ]}
+          />
           <Button
             type="outlined"
             intent="primary"

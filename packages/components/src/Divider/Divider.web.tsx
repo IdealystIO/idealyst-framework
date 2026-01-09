@@ -4,6 +4,10 @@ import { DividerProps } from './types';
 import { dividerStyles } from './Divider.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 
+/**
+ * Visual separator for dividing content sections horizontally or vertically.
+ * Supports solid, dashed, and dotted styles with optional text content.
+ */
 const Divider = forwardRef<HTMLDivElement, DividerProps>(({
   orientation = 'horizontal',
   type = 'solid',

@@ -92,7 +92,28 @@ function hasNotFoundComponent(route: NavigatorParam): boolean {
 /**
  * Normalize a path and substitute variables
  */
-function normalizePath(path: string, vars?: Record<string, string>): string {
+function normalizePath(path: string | undefined | null, vars?: Record<string, string>): string {
+    // Handle invalid path input
+    if (path === undefined || path === null) {
+        console.error(
+            'Navigation Error: navigate() was called with an invalid path.\n' +
+            'Expected: navigate({ path: "/your-route" })\n' +
+            'Received: path is ' + String(path) + '\n' +
+            'Make sure you are passing an object with a "path" property, not a string directly.'
+        );
+        return '/';
+    }
+
+    if (typeof path !== 'string') {
+        console.error(
+            'Navigation Error: navigate() path must be a string.\n' +
+            'Expected: navigate({ path: "/your-route" })\n' +
+            'Received: ' + typeof path + '\n' +
+            'Make sure you are passing an object with a "path" property, not a string directly.'
+        );
+        return '/';
+    }
+
     let normalizedPath = path;
 
     // Convert empty string to '/'
@@ -188,6 +209,25 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
     const navigation = useNavigation();
 
     const navigate = (params: NavigateParams, _redirectCount = 0) => {
+        // Validate params - catch common mistake of passing string directly
+        if (typeof params === 'string') {
+            console.error(
+                'Navigation Error: navigate() expects an object, not a string.\n' +
+                'Expected: navigate({ path: "' + params + '" })\n' +
+                'Received: navigate("' + params + '")\n' +
+                'Please pass an object with a "path" property.'
+            );
+            return;
+        }
+
+        if (!params || typeof params !== 'object') {
+            console.error(
+                'Navigation Error: navigate() expects an object with a "path" property.\n' +
+                'Received: ' + typeof params
+            );
+            return;
+        }
+
         // Prevent infinite redirect loops
         if (_redirectCount > 10) {
             console.error('Navigation: Maximum redirect count exceeded. Check onInvalidRoute handlers.');
@@ -310,6 +350,25 @@ const NavigatorProvider = ({ route }: NavigatorProviderProps) => {
 const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: any, route: any, children: React.ReactNode }) => {
 
     const navigate = (params: NavigateParams, _redirectCount = 0) => {
+        // Validate params - catch common mistake of passing string directly
+        if (typeof params === 'string') {
+            console.error(
+                'Navigation Error: navigate() expects an object, not a string.\n' +
+                'Expected: navigate({ path: "' + params + '" })\n' +
+                'Received: navigate("' + params + '")\n' +
+                'Please pass an object with a "path" property.'
+            );
+            return;
+        }
+
+        if (!params || typeof params !== 'object') {
+            console.error(
+                'Navigation Error: navigate() expects an object with a "path" property.\n' +
+                'Received: ' + typeof params
+            );
+            return;
+        }
+
         // Prevent infinite redirect loops
         if (_redirectCount > 10) {
             console.error('Navigation: Maximum redirect count exceeded. Check onInvalidRoute handlers.');

@@ -18,7 +18,14 @@ export interface TableColumn<T = any> extends SortableAccessibilityProps {
   align?: TableAlignVariant;
 }
 
+/**
+ * Data display component for rendering tabular information with columns and rows.
+ * Supports sticky headers, row selection, and custom cell rendering.
+ */
 export interface TableProps<T = any> extends ContainerStyleProps, AccessibilityProps {
+  /**
+   * Column definitions for the table
+   */
   columns: TableColumn<T>[];
   data: T[];
   type?: TableType;

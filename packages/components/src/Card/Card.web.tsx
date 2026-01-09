@@ -5,6 +5,10 @@ import { cardStyles } from './Card.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps } from '../utils/accessibility';
 
+/**
+ * Container component for grouping related content with elevation and styling options.
+ * Supports elevated, outlined, and filled variants with optional click interaction.
+ */
 const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   children,
   type = 'elevated',

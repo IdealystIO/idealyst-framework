@@ -1,0 +1,29 @@
+{
+  "title": "Idealyst Documentation",
+  "description": "Idealyst is a modern, cross-platform framework for building React and React Native applications. It provides a powerful component library, type-safe APIs, and unified theming system that works seamlessly across web and mobile.",
+  "getStarted": "Get Started",
+  "viewComponents": "View Components",
+  "keyFeatures": "Key Features",
+  "features": {
+    "crossPlatform": {
+      "title": "Cross-Platform Components",
+      "description": "Build once, run everywhere. Components work identically on web and native with platform-specific optimizations."
+    },
+    "theme": {
+      "title": "Powerful Theme System",
+      "description": "Define themes using a fluent builder API with full TypeScript inference. Customize colors, typography, and component sizes."
+    },
+    "styleExtensions": {
+      "title": "Style Extensions",
+      "description": "Extend or override component styles at build time without modifying source code."
+    },
+    "typeSafe": {
+      "title": "Type-Safe APIs",
+      "description": "End-to-end type safety with tRPC and GraphQL support, including automatic TypeScript inference."
+    },
+    "navigation": {
+      "title": "Unified Navigation",
+      "description": "Single navigation API for both web and mobile with type-safe routes and deep linking."
+    }
+  }
+}

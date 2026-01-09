@@ -8,7 +8,14 @@ import { SelectionAccessibilityProps } from '../utils/accessibility';
 export type SwitchIntentVariant = Intent;
 export type SwitchSizeVariant = Size;
 
+/**
+ * Toggle switch component for binary on/off states.
+ * Supports custom icons for enabled/disabled states and optional label positioning.
+ */
 export interface SwitchProps extends FormInputStyleProps, SelectionAccessibilityProps {
+  /**
+   * Whether the switch is on
+   */
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   disabled?: boolean;

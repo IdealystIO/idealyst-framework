@@ -6,6 +6,10 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
+/**
+ * Interactive button component with multiple visual variants, sizes, and icon support.
+ * Supports contained, outlined, and text styles with customizable intent colors.
+ */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
     title,

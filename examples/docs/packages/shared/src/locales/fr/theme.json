@@ -1,0 +1,103 @@
+{
+  "overview": {
+    "title": "Apercu du Systeme de Themes",
+    "description": "Idealyst fournit un systeme de themes puissant base sur react-native-unistyles. Les themes sont crees en utilisant une API fluide avec une inference TypeScript complete.",
+    "architecture": {
+      "title": "Architecture"
+    },
+    "coreConcepts": {
+      "title": "Concepts Cles",
+      "themeBuilder": {
+        "title": "Theme Builder",
+        "description": "Creez des themes en utilisant un pattern builder fluide. Definissez les intentions, rayons, ombres, couleurs et tailles de composants."
+      },
+      "styleDefinition": {
+        "title": "Definition de Style",
+        "description": "Utilisez defineStyle() pour creer des styles de composants avec reactivite au theme et support des variantes."
+      },
+      "styleExtensions": {
+        "title": "Extensions de Styles",
+        "description": "Personnalisez les styles des composants en utilisant extendStyle() ou overrideStyle() sans modifier le code source."
+      },
+      "iteratorPattern": {
+        "title": "Pattern $iterator",
+        "description": "Definissez des styles une fois qui s'etendent automatiquement a toutes les cles d'un objet theme (intentions, tailles, etc.)"
+      }
+    },
+    "quickExample": {
+      "title": "Exemple Rapide",
+      "codeTitle": "Creer un Theme"
+    }
+  },
+  "styleDefinition": {
+    "title": "Definition de Style",
+    "description": "Apprenez a definir des styles de composants en utilisant la fonction defineStyle() avec integration complete du theme et support des variantes.",
+    "basicUsage": {
+      "title": "Utilisation de Base",
+      "description": "La fonction defineStyle() cree des styles reactifs qui se mettent a jour automatiquement quand le theme change."
+    },
+    "variants": {
+      "title": "Variantes",
+      "description": "Definissez plusieurs variantes de style qui peuvent etre selectionnees via les props."
+    },
+    "compoundVariants": {
+      "title": "Variantes Composees",
+      "description": "Appliquez des styles quand plusieurs conditions de variantes sont remplies."
+    }
+  },
+  "styleExtensions": {
+    "title": "Extensions de Styles",
+    "description": "Personnalisez les styles des composants sans modifier le code source en utilisant extendStyle() et overrideStyle().",
+    "extendStyle": {
+      "title": "Etendre un Style",
+      "description": "Ajoutez des styles supplementaires aux styles de composants existants tout en preservant les definitions originales."
+    },
+    "overrideStyle": {
+      "title": "Remplacer un Style",
+      "description": "Remplacez completement des proprietes de style specifiques tout en gardant les autres intactes."
+    },
+    "usage": {
+      "title": "Utilisation dans le Theme",
+      "description": "Enregistrez les extensions de style dans votre configuration de theme."
+    }
+  },
+  "breakpoints": {
+    "title": "Points de Rupture",
+    "description": "Definissez des points de rupture responsifs pour adapter les mises en page aux differentes tailles d'ecran.",
+    "defaultBreakpoints": {
+      "title": "Points de Rupture par Defaut",
+      "description": "Idealyst fournit des points de rupture par defaut sensibles qui fonctionnent bien pour la plupart des applications."
+    },
+    "customBreakpoints": {
+      "title": "Points de Rupture Personnalises",
+      "description": "Remplacez les points de rupture par defaut avec vos propres valeurs dans le theme builder."
+    },
+    "responsiveStyles": {
+      "title": "Styles Responsifs",
+      "description": "Utilisez les points de rupture dans vos definitions de style pour des mises en page responsives."
+    }
+  },
+  "babelPlugin": {
+    "title": "Plugin Babel",
+    "description": "Le plugin Babel Idealyst permet le traitement des styles au moment de la compilation pour des performances optimales.",
+    "installation": {
+      "title": "Installation",
+      "description": "Ajoutez le plugin a votre configuration Babel."
+    },
+    "options": {
+      "title": "Options du Plugin",
+      "themePath": {
+        "title": "themePath",
+        "description": "Chemin vers votre fichier de definition de theme."
+      },
+      "debug": {
+        "title": "debug",
+        "description": "Activer la journalisation de debogage pendant la compilation."
+      }
+    },
+    "howItWorks": {
+      "title": "Comment Ca Marche",
+      "description": "Le plugin analyse vos definitions de style au moment de la compilation et les optimise pour les performances a l'execution."
+    }
+  }
+}

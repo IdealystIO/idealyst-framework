@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/theme",
-  "version": "1.1.9",
+  "version": "1.2.4",
   "description": "Theming system for Idealyst Framework",
   "readme": "README.md",
   "main": "src/index.ts",
@@ -55,6 +55,9 @@
   "scripts": {
     "prepublishOnly": "echo 'Publishing TypeScript source directly'",
     "publish:npm": "npm publish"
+  },
+  "dependencies": {
+    "@idealyst/tooling": "^1.2.3"
   },
   "peerDependencies": {
     "react-native-unistyles": ">=3.0.0"

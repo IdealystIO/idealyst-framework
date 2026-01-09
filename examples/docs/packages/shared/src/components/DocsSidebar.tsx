@@ -1,10 +1,71 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, List, ListItem, Divider } from '@idealyst/components';
 import { useNavigator, DrawerSidebarProps } from '@idealyst/navigation';
-import { navigationSections } from '../navigation/DocsRouter';
+import { componentRegistry } from '@idealyst/tooling';
+
+// Static navigation sections (non-component pages)
+const staticSections = [
+  {
+    title: 'Getting Started',
+    items: [
+      { label: 'Introduction', path: '/' },
+      { label: 'Installation', path: '/installation' },
+    ],
+  },
+  {
+    title: 'Theme',
+    items: [
+      { label: 'Overview', path: '/theme/overview' },
+      { label: 'Style Definition', path: '/theme/style-definition' },
+      { label: 'Style Extensions', path: '/theme/style-extensions' },
+      { label: 'Breakpoints', path: '/theme/breakpoints' },
+      { label: 'Babel Plugin', path: '/theme/babel-plugin' },
+    ],
+  },
+];
+
+const navigationSection = {
+  title: 'Navigation',
+  items: [
+    { label: 'Overview', path: '/navigation/overview' },
+    { label: 'Routes', path: '/navigation/routes' },
+    { label: 'useNavigator', path: '/navigation/use-navigator' },
+  ],
+};
+
+// Component category order and grouping
+const categoryOrder = ['layout', 'form', 'display', 'navigation', 'overlay', 'data', 'other'];
 
 export function DocsSidebar({ insets }: DrawerSidebarProps) {
   const { navigate } = useNavigator();
+
+  // Generate component navigation items from registry
+  const componentItems = useMemo(() => {
+    const items = Object.entries(componentRegistry)
+      .map(([name, def]) => ({
+        label: name,
+        path: `/components/${name.toLowerCase()}`,
+        category: def.category || 'other',
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+
+    return items;
+  }, []);
+
+  // Build full navigation sections
+  const navigationSections = useMemo(() => {
+    return [
+      ...staticSections,
+      {
+        title: 'Components',
+        items: [
+          { label: 'Overview', path: '/components/overview' },
+          ...componentItems,
+        ],
+      },
+      navigationSection,
+    ];
+  }, [componentItems]);
 
   return (
     <View

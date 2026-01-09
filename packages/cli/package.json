@@ -1,34 +1,28 @@
 {
   "name": "@idealyst/cli",
-  "version": "1.1.9",
+  "version": "1.2.4",
   "description": "CLI tool for generating Idealyst Framework projects",
   "readme": "README.md",
   "main": "dist/index.js",
   "bin": {
-    "idealyst": "dist/index.js",
-    "idealyst-cli": "dist/index.js"
+    "idealyst": "dist/index.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/IdealystIO/idealyst-framework.git",
     "directory": "packages/cli"
   },
-  "author": "Your Name <your.email@example.com>",
+  "author": "Idealyst Team",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "build:bash": "scripts/build.sh",
-    "build:tsc": "npm run clean && tsc && npm run copy-templates",
-    "build:validate": "npm run build && npm run validate",
-    "copy-templates": "npm run clean-templates && cp -r templates dist/",
-    "clean-templates": "rm -rf dist/templates",
-    "validate": "node scripts/validate-build.js",
+    "build:tsc": "tsc",
+    "dev": "tsc --watch",
     "test": "jest",
     "test:integration": "jest __tests__/integration.test.ts",
-    "dev": "tsc --watch",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -46,18 +40,11 @@
     "@types/node": "^20.0.0",
     "@types/validate-npm-package-name": "^4.0.0",
     "jest": "^29.7.0",
-    "rollup": "^3.20.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.34.0",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.0"
   },
   "files": [
-    "dist",
-    "template",
-    "docs"
+    "dist"
   ],
   "keywords": [
     "cli",

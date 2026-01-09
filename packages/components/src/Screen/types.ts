@@ -3,6 +3,10 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import { Surface } from '@idealyst/theme';
 import { ContainerStyleProps } from '../utils/viewStyleProps';
 
+/**
+ * Full-screen container component with safe area support.
+ * Provides consistent page-level layout with optional scrolling and safe area insets.
+ */
 export interface ScreenProps extends ContainerStyleProps {
   /**
    * The content to display inside the screen

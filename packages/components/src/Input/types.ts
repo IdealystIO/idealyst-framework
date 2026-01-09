@@ -10,6 +10,10 @@ export type InputSize = Size;
 export type InputType = 'outlined' | 'filled' | 'bare';
 export type InputInputType = 'text' | 'email' | 'password' | 'number';
 
+/**
+ * Text input field with support for icons, validation states, and multiple visual styles.
+ * Includes built-in password visibility toggle and platform-specific keyboard handling.
+ */
 export interface InputProps extends FormInputStyleProps, FormAccessibilityProps {
   /**
    * The current value of the input

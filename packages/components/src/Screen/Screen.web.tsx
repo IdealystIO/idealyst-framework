@@ -4,6 +4,10 @@ import { ScreenProps } from './types';
 import { screenStyles } from './Screen.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 
+/**
+ * Full-screen container for page layouts with background color and safe area support.
+ * Provides the outermost wrapper for screen-level content.
+ */
 const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
   children,
   background = 'screen',

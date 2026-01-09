@@ -2,10 +2,18 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import babel from 'vite-plugin-babel'
 import path from 'path'
+// Note: Config imports must use relative path; runtime code uses @idealyst/tooling with alias
+import { idealystDocsPlugin } from '../../../../packages/tooling/src/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    // Idealyst docs plugin generates component registry
+    idealystDocsPlugin({
+      componentPaths: [path.resolve(__dirname, '../../../../packages/components/src')],
+      themePath: path.resolve(__dirname, '../shared/src/styles.ts'),
+      debug: true,
+    }),
     babel({
       filter: (id) =>
         id.includes("node_modules/@idealyst/") ||
@@ -36,7 +44,6 @@ export default defineConfig({
                 '@idealyst/theme',
               ],
               themePath: '../shared/src/styles.ts',
-              debug: true,
             }
           ],
           // Unistyles plugin runs SECOND to process expanded StyleSheet.create
@@ -55,7 +62,7 @@ export default defineConfig({
               ],
             },
           ],
-          [path.resolve(__dirname, "../../../../packages/components/plugin/web.js"), { root: "src" }],
+          [path.resolve(__dirname, "../../../../packages/components/plugin/web.js")],
         ],
       },
     }),
@@ -82,6 +89,8 @@ export default defineConfig({
       '@idealyst/theme': path.resolve(__dirname, '../../../../packages/theme/src'),
       '@idealyst/datagrid': path.resolve(__dirname, '../../../../packages/datagrid/src'),
       '@idealyst/datepicker': path.resolve(__dirname, '../../../../packages/datepicker/src'),
+      '@idealyst/translate': path.resolve(__dirname, '../../../../packages/translate/src'),
+      '@idealyst/tooling': path.resolve(__dirname, '../../../../packages/tooling/src'),
     },
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
@@ -101,6 +110,8 @@ export default defineConfig({
       '@idealyst/theme',
       '@idealyst/datagrid',
       '@idealyst/datepicker',
+      '@idealyst/translate',
+      '@idealyst/tooling',
       '@test-select-demo/shared',
     ],
     esbuildOptions: {

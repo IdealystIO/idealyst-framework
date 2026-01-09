@@ -20,6 +20,7 @@
     "@idealyst/components": "^1.1.8",
     "@idealyst/navigation": "^1.1.8",
     "@idealyst/theme": "^1.1.8",
+    "@idealyst/translate": "^1.1.8",
     "react": "^19.1.0",
     "react-native": "^0.80.1"
   },
@@ -27,6 +28,7 @@
     "@idealyst/components": "^1.1.8",
     "@idealyst/navigation": "^1.1.8",
     "@idealyst/theme": "^1.1.8",
+    "@idealyst/translate": "^1.1.8",
     "@types/react": "^19.1.2",
     "react": "^19.1.0",
     "react-native": "^0.80.1",

@@ -31,6 +31,10 @@ export interface SelectOption {
   icon?: ReactNode;
 }
 
+/**
+ * Dropdown selection component for choosing from a list of options.
+ * Supports searchable filtering on web and native presentation modes on iOS.
+ */
 export interface SelectProps extends FormInputStyleProps, FormAccessibilityProps {
   /**
    * Array of options to display in the select

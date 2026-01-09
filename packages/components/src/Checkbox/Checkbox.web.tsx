@@ -6,6 +6,10 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebSelectionAriaProps, generateAccessibilityId, combineIds } from '../utils/accessibility';
 
+/**
+ * Checkbox input for boolean selection with support for indeterminate state.
+ * Includes label, helper text, and error display options.
+ */
 const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
   checked = false,
   indeterminate = false,

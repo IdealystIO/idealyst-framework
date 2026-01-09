@@ -7,6 +7,10 @@ import { PositionedPortal } from '../internal/PositionedPortal';
 import { selectStyles } from './Select.styles';
 import { SelectOption, SelectProps } from './types';
 
+/**
+ * Dropdown selection component with search, keyboard navigation, and custom option rendering.
+ * Supports single selection with filterable options list.
+ */
 const Select = forwardRef<HTMLDivElement, SelectProps>(({
   options,
   value,

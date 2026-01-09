@@ -7,6 +7,10 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import { getWebInteractiveAriaProps, generateAccessibilityId, MENU_KEYS } from '../utils/accessibility';
 
+/**
+ * Dropdown menu for actions and navigation triggered by a button or element.
+ * Includes keyboard navigation, icons, and separator support.
+ */
 const Menu = forwardRef<HTMLDivElement, MenuProps>(({
   children,
   items,

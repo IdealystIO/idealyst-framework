@@ -9,6 +9,10 @@ export type BadgeColorVariant = Color;
 export type BadgeSizeVariant = Size;
 export type BadgeType = 'filled' | 'outlined' | 'dot';
 
+/**
+ * Small status indicator component for counts, labels, or status dots.
+ * Supports filled, outlined, and dot variants with customizable colors.
+ */
 export interface BadgeProps extends BaseProps {
   /**
    * The content to display inside the badge

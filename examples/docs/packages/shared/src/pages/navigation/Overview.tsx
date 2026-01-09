@@ -1,23 +1,24 @@
 import React from 'react';
 import { View, Text, Card, Screen } from '@idealyst/components';
+import { useTranslation } from '@idealyst/translate';
 import { CodeBlock } from '../../components/CodeBlock';
 
 export function NavigationOverviewPage() {
+  const { t } = useTranslation('navigation');
+
   return (
     <Screen>
       <View style={{ maxWidth: 900 }}>
         <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
-          Navigation Overview
+          {t('overview.title')}
         </Text>
 
         <Text typography="body1" color="secondary" style={{ marginBottom: 32, lineHeight: 26 }}>
-          Idealyst provides a unified navigation system that works identically on web and native.
-          Define your routes once with full TypeScript support, and get platform-optimized
-          navigation automatically.
+          {t('overview.description')}
         </Text>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
-          Architecture
+          {t('overview.architecture.title')}
         </Text>
 
         <View
@@ -56,40 +57,43 @@ export function NavigationOverviewPage() {
         </View>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
-          Key Concepts
+          {t('overview.keyConcepts.title')}
         </Text>
 
         <View style={{ gap: 16, marginBottom: 32 }}>
           <Card variant="outlined" style={{ padding: 20 }}>
-            <Text weight="semibold" style={{ marginBottom: 8 }}>NavigatorProvider</Text>
+            <Text weight="semibold" style={{ marginBottom: 8 }}>
+              {t('overview.keyConcepts.navigatorProvider.title')}
+            </Text>
             <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
-              Root component that wraps your app and provides navigation context.
-              Pass your route configuration via the <Text weight="semibold">route</Text> prop.
+              {t('overview.keyConcepts.navigatorProvider.description')}
             </Text>
           </Card>
 
           <Card variant="outlined" style={{ padding: 20 }}>
-            <Text weight="semibold" style={{ marginBottom: 8 }}>NavigatorParam</Text>
+            <Text weight="semibold" style={{ marginBottom: 8 }}>
+              {t('overview.keyConcepts.navigatorParam.title')}
+            </Text>
             <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
-              Type for route configuration objects. Supports three layouts: stack, tab, and drawer.
-              Routes can be nested to create complex navigation hierarchies.
+              {t('overview.keyConcepts.navigatorParam.description')}
             </Text>
           </Card>
 
           <Card variant="outlined" style={{ padding: 20 }}>
-            <Text weight="semibold" style={{ marginBottom: 8 }}>useNavigator()</Text>
+            <Text weight="semibold" style={{ marginBottom: 8 }}>
+              {t('overview.keyConcepts.useNavigator.title')}
+            </Text>
             <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
-              Hook for programmatic navigation. Provides navigate(), goBack(), and current
-              route information. Works identically on all platforms.
+              {t('overview.keyConcepts.useNavigator.description')}
             </Text>
           </Card>
         </View>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
-          Quick Start
+          {t('overview.quickStart.title')}
         </Text>
 
-        <CodeBlock title="Basic Navigation Setup">
+        <CodeBlock title={t('overview.quickStart.codeTitle')}>
 {`import { NavigatorProvider, NavigatorParam } from '@idealyst/navigation';
 import { HomeScreen } from './screens/Home';
 import { ProfileScreen } from './screens/Profile';
@@ -114,37 +118,43 @@ export function App() {
         </CodeBlock>
 
         <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
-          Layout Types
+          {t('overview.layoutTypes.title')}
         </Text>
 
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', marginBottom: 32 }}>
           <Card variant="outlined" style={{ flex: 1, minWidth: 200, padding: 20 }}>
-            <Text weight="semibold" style={{ marginBottom: 8 }}>Stack</Text>
+            <Text weight="semibold" style={{ marginBottom: 8 }}>
+              {t('overview.layoutTypes.stack.title')}
+            </Text>
             <Text typography="body2" color="tertiary">
-              Push/pop navigation with back button. Default for most apps.
+              {t('overview.layoutTypes.stack.description')}
             </Text>
           </Card>
 
           <Card variant="outlined" style={{ flex: 1, minWidth: 200, padding: 20 }}>
-            <Text weight="semibold" style={{ marginBottom: 8 }}>Tab</Text>
+            <Text weight="semibold" style={{ marginBottom: 8 }}>
+              {t('overview.layoutTypes.tab.title')}
+            </Text>
             <Text typography="body2" color="tertiary">
-              Bottom tab bar navigation. Great for main app sections.
+              {t('overview.layoutTypes.tab.description')}
             </Text>
           </Card>
 
           <Card variant="outlined" style={{ flex: 1, minWidth: 200, padding: 20 }}>
-            <Text weight="semibold" style={{ marginBottom: 8 }}>Drawer</Text>
+            <Text weight="semibold" style={{ marginBottom: 8 }}>
+              {t('overview.layoutTypes.drawer.title')}
+            </Text>
             <Text typography="body2" color="tertiary">
-              Side menu navigation. Perfect for docs and admin panels.
+              {t('overview.layoutTypes.drawer.description')}
             </Text>
           </Card>
         </View>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
-          Navigation Example
+          {t('overview.example.title')}
         </Text>
 
-        <CodeBlock title="Using useNavigator()">
+        <CodeBlock title={t('overview.example.codeTitle')}>
 {`import { useNavigator } from '@idealyst/navigation';
 import { Button } from '@idealyst/components';
 
@@ -173,23 +183,25 @@ function HomeScreen() {
         </CodeBlock>
 
         <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
-          Platform Differences
+          {t('overview.platformDifferences.title')}
         </Text>
 
         <Card variant="outlined" style={{ padding: 20 }}>
           <View style={{ marginBottom: 16 }}>
-            <Text weight="semibold" style={{ marginBottom: 4 }}>Web</Text>
+            <Text weight="semibold" style={{ marginBottom: 4 }}>
+              {t('overview.platformDifferences.web.title')}
+            </Text>
             <Text typography="body2" color="tertiary">
-              Uses react-router-dom under the hood. URLs are real browser URLs
-              with proper history management and deep linking.
+              {t('overview.platformDifferences.web.description')}
             </Text>
           </View>
 
           <View>
-            <Text weight="semibold" style={{ marginBottom: 4 }}>Native</Text>
+            <Text weight="semibold" style={{ marginBottom: 4 }}>
+              {t('overview.platformDifferences.native.title')}
+            </Text>
             <Text typography="body2" color="tertiary">
-              Uses @react-navigation/native with platform-specific transitions,
-              gestures, and native navigation patterns.
+              {t('overview.platformDifferences.native.description')}
             </Text>
           </View>
         </Card>

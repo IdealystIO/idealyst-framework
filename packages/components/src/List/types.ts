@@ -27,7 +27,14 @@ export interface ListItemProps extends SelectableAccessibilityProps {
   testID?: string;
 }
 
+/**
+ * Container for organizing related items in a vertical list format.
+ * Supports bordered, divided, and default visual styles with optional scrolling.
+ */
 export interface ListProps extends ContainerStyleProps, AccessibilityProps {
+  /**
+   * List items to display
+   */
   children: ReactNode;
   type?: ListType;
   size?: ListSizeVariant;

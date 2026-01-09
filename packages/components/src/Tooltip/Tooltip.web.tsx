@@ -5,6 +5,10 @@ import type { TooltipProps } from './types';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import { getWebAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
+/**
+ * Contextual popup for displaying additional information on hover or focus.
+ * Supports multiple placements, delays, and keyboard accessibility.
+ */
 const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,

@@ -1,0 +1,97 @@
+{
+  "overview": {
+    "title": "Apercu de la Navigation",
+    "description": "Idealyst fournit un systeme de navigation unifie qui fonctionne de maniere identique sur le web et le natif. Definissez vos routes une fois avec un support TypeScript complet, et obtenez une navigation optimisee pour la plateforme automatiquement.",
+    "architecture": {
+      "title": "Architecture"
+    },
+    "keyConcepts": {
+      "title": "Concepts Cles",
+      "navigatorProvider": {
+        "title": "NavigatorProvider",
+        "description": "Composant racine qui enveloppe votre application et fournit le contexte de navigation. Passez votre configuration de routes via la prop route."
+      },
+      "navigatorParam": {
+        "title": "NavigatorParam",
+        "description": "Type pour les objets de configuration de routes. Supporte trois mises en page : stack, tab et drawer. Les routes peuvent etre imbriquees pour creer des hierarchies de navigation complexes."
+      },
+      "useNavigator": {
+        "title": "useNavigator()",
+        "description": "Hook pour la navigation programmatique. Fournit navigate(), goBack(), et les informations sur la route actuelle. Fonctionne de maniere identique sur toutes les plateformes."
+      }
+    },
+    "quickStart": {
+      "title": "Demarrage Rapide",
+      "codeTitle": "Configuration de Navigation de Base"
+    },
+    "layoutTypes": {
+      "title": "Types de Mise en Page",
+      "stack": {
+        "title": "Stack",
+        "description": "Navigation push/pop avec bouton retour. Par defaut pour la plupart des applications."
+      },
+      "tab": {
+        "title": "Tab",
+        "description": "Navigation par barre d'onglets en bas. Ideal pour les sections principales de l'application."
+      },
+      "drawer": {
+        "title": "Drawer",
+        "description": "Navigation par menu lateral. Parfait pour la documentation et les panneaux d'administration."
+      }
+    },
+    "example": {
+      "title": "Exemple de Navigation",
+      "codeTitle": "Utiliser useNavigator()"
+    },
+    "platformDifferences": {
+      "title": "Differences de Plateforme",
+      "web": {
+        "title": "Web",
+        "description": "Utilise react-router-dom en interne. Les URLs sont de vraies URLs de navigateur avec une gestion correcte de l'historique et le deep linking."
+      },
+      "native": {
+        "title": "Natif",
+        "description": "Utilise @react-navigation/native avec des transitions specifiques a la plateforme, des gestes et des patterns de navigation natifs."
+      }
+    }
+  },
+  "routes": {
+    "title": "Configuration des Routes",
+    "description": "Apprenez a definir et configurer les routes pour votre application.",
+    "basicRoutes": {
+      "title": "Routes de Base",
+      "description": "Definissez des routes simples avec chemin et composant."
+    },
+    "nestedRoutes": {
+      "title": "Routes Imbriquees",
+      "description": "Creez des structures de navigation hierarchiques avec des routes imbriquees."
+    },
+    "routeParams": {
+      "title": "Parametres de Route",
+      "description": "Passez et recevez des parametres entre les routes."
+    }
+  },
+  "useNavigator": {
+    "title": "Hook useNavigator",
+    "description": "Navigation programmatique en utilisant le hook useNavigator.",
+    "methods": {
+      "title": "Methodes",
+      "navigate": {
+        "title": "navigate()",
+        "description": "Naviguez vers une route specifique par chemin ou nom."
+      },
+      "goBack": {
+        "title": "goBack()",
+        "description": "Retournez a la route precedente dans la pile."
+      },
+      "replace": {
+        "title": "replace()",
+        "description": "Remplacez la route actuelle sans l'ajouter a l'historique."
+      }
+    },
+    "currentRoute": {
+      "title": "Route Actuelle",
+      "description": "Accedez aux informations sur la route actuelle."
+    }
+  }
+}

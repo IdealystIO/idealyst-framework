@@ -20,8 +20,9 @@ PACKAGES=(
   "storage"
   "mcp-server"
   "oauth-client"
-  "microphone",
-  "translate",
+  "microphone"
+  "translate"
+  "tooling"
 )
 
 for pkg in "${PACKAGES[@]}"; do

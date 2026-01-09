@@ -5,6 +5,10 @@ import { ViewProps } from './types';
 import { viewStyles } from './View.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 
+/**
+ * Fundamental layout container with background, border, and spacing options.
+ * The base building block for composing UI layouts.
+ */
 const View = forwardRef<HTMLDivElement, ViewProps>(({
   children,
   background = 'transparent',

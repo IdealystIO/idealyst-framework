@@ -7,6 +7,10 @@ import Icon from '../Icon';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
+/**
+ * Modal overlay dialog for focused user interactions and confirmations.
+ * Handles focus trapping, escape key, and backdrop click dismissal.
+ */
 const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   open,
   onOpenChange,

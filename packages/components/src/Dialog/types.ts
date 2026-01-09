@@ -8,6 +8,10 @@ export type DialogSizeVariant = 'sm' | 'md' | 'lg' | 'fullscreen';
 export type DialogType = 'default' | 'alert' | 'confirmation';
 export type DialogAnimationType = 'slide' | 'fade' | 'none';
 
+/**
+ * Modal dialog component for focused interactions requiring user attention.
+ * Supports multiple sizes, animation types, and configurable close behaviors.
+ */
 export interface DialogProps extends BaseProps, InteractiveAccessibilityProps {
   /**
    * Whether the dialog is open/visible

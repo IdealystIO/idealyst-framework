@@ -1,0 +1,143 @@
+{
+  "overview": {
+    "title": "Apercu des Composants",
+    "description": "Idealyst fournit une bibliotheque complete de composants multiplateformes. Tous les composants fonctionnent de maniere identique sur le web et le natif avec des optimisations specifiques a chaque plateforme.",
+    "preview": "Apercu des Composants",
+    "interactiveComponents": "Composants Interactifs",
+    "categories": "Categories de Composants",
+    "categoryNames": {
+      "layout": "Mise en Page",
+      "form": "Formulaire",
+      "display": "Affichage",
+      "navigation": "Navigation",
+      "overlay": "Superposition",
+      "data": "Donnees"
+    },
+    "commonProps": {
+      "title": "Props Communes",
+      "intentColors": {
+        "title": "Couleurs d'Intention",
+        "description": "Les composants supportent des couleurs basees sur l'intention : primary, neutral, success, error, warning"
+      },
+      "variants": {
+        "title": "Variantes",
+        "description": "De nombreux composants offrent des variantes visuelles comme contained, outlined, text (boutons) ou filled, outlined, soft (chips)"
+      },
+      "sizes": {
+        "title": "Tailles",
+        "description": "La plupart des composants supportent des variantes de taille : xs, sm, md, lg, xl"
+      }
+    },
+    "importPattern": "Pattern d'Import"
+  },
+  "button": {
+    "title": "Bouton",
+    "description": "Composant bouton interactif avec plusieurs variantes, tailles et support d'icones. Supporte les couleurs d'intention pour une signification semantique et fonctionne de maniere identique sur le web et le natif.",
+    "playground": {
+      "clickMe": "Cliquez-moi"
+    }
+  },
+  "card": {
+    "title": "Carte",
+    "description": "Composant conteneur pour regrouper du contenu lie. Les cartes supportent differentes variantes visuelles incluant les styles eleve, contour et rempli.",
+    "playground": {
+      "content": "Contenu de la Carte"
+    }
+  },
+  "accordion": {
+    "title": "Accordeon",
+    "description": "Section de contenu extensible qui peut afficher ou masquer le contenu au clic. Utile pour les FAQs, menus repliables et divulgation progressive."
+  },
+  "alert": {
+    "title": "Alerte",
+    "description": "Messages de retour contextuel pour les actions utilisateur. Supporte differentes intentions pour les messages de succes, erreur, avertissement et information."
+  },
+  "avatar": {
+    "title": "Avatar",
+    "description": "Composant image circulaire pour afficher les photos de profil, icones ou initiales. Supporte differentes tailles et contenu de repli."
+  },
+  "badge": {
+    "title": "Badge",
+    "description": "Petit indicateur de compteur ou de statut qui peut etre attache a d'autres elements. Couramment utilise pour les compteurs de notifications ou indicateurs de statut."
+  },
+  "breadcrumb": {
+    "title": "Fil d'Ariane",
+    "description": "Composant de navigation qui montre l'emplacement de la page actuelle dans une hierarchie. Aide les utilisateurs a comprendre ou ils sont et a naviguer en arriere."
+  },
+  "checkbox": {
+    "title": "Case a Cocher",
+    "description": "Controle de formulaire pour les selections booleennes. Supporte les etats coche, non coche et indetermine avec un style personnalisable."
+  },
+  "chip": {
+    "title": "Chip",
+    "description": "Element compact representant une entree, un attribut ou une action. Utile pour les tags, filtres et selections."
+  },
+  "dialog": {
+    "title": "Dialogue",
+    "description": "Superposition modale qui necessite une interaction utilisateur. Utilise pour les confirmations, formulaires et notifications importantes necessitant de l'attention."
+  },
+  "divider": {
+    "title": "Diviseur",
+    "description": "Separateur visuel qui peut etre utilise pour diviser les sections de contenu. Supporte les orientations horizontale et verticale."
+  },
+  "icon": {
+    "title": "Icone",
+    "description": "Composant d'icone vectorielle redimensionnable avec support des icones Material Design. Taille et couleur personnalisables."
+  },
+  "input": {
+    "title": "Champ de Saisie",
+    "description": "Champ de saisie texte pour les formulaires. Supporte differents types, etats de validation, labels et texte d'aide."
+  },
+  "link": {
+    "title": "Lien",
+    "description": "Composant de navigation pour creer des hyperliens. S'integre avec le systeme de navigation pour le routage interne."
+  },
+  "list": {
+    "title": "Liste",
+    "description": "Affichage vertical continu d'elements. Supporte la selection simple et multiple, les icones et le contenu personnalise."
+  },
+  "menu": {
+    "title": "Menu",
+    "description": "Composant menu deroulant pour afficher une liste d'actions ou d'options. Supporte la navigation clavier et les menus imbriques."
+  },
+  "progress": {
+    "title": "Progression",
+    "description": "Indicateur visuel de progression ou d'etat de chargement. Supporte les variantes lineaire et circulaire avec les modes determine et indetermine."
+  },
+  "radioButton": {
+    "title": "Bouton Radio",
+    "description": "Controle de formulaire pour selectionner une option parmi un groupe. Un seul bouton radio dans un groupe peut etre selectionne a la fois."
+  },
+  "select": {
+    "title": "Selection",
+    "description": "Composant de selection deroulante pour choisir parmi une liste d'options. Supporte les modes de selection simple et multiple."
+  },
+  "skeleton": {
+    "title": "Squelette",
+    "description": "Composant de chargement placeholder qui imite la forme du contenu pendant le chargement des donnees. Ameliore la performance percue."
+  },
+  "slider": {
+    "title": "Curseur",
+    "description": "Composant d'entree de plage pour selectionner des valeurs dans une plage. Supporte la selection simple et de plage avec des increments de pas."
+  },
+  "switch": {
+    "title": "Interrupteur",
+    "description": "Controle de basculement pour les parametres binaires on/off. Fournit un retour visuel immediat de l'etat actuel."
+  },
+  "table": {
+    "title": "Tableau",
+    "description": "Composant d'affichage de donnees tabulaires avec support du tri, de la pagination et de la selection. Optimise pour les grands ensembles de donnees."
+  },
+  "text": {
+    "title": "Texte",
+    "description": "Composant de typographie pour afficher le contenu textuel. Supporte differents styles, epaisseurs et elements HTML semantiques."
+  },
+  "textArea": {
+    "title": "Zone de Texte",
+    "description": "Entree de texte multi-lignes pour le contenu de formulaire plus long. Supporte le redimensionnement automatique, les limites de caracteres et la validation."
+  },
+  "tooltip": {
+    "title": "Info-bulle",
+    "description": "Popup qui affiche des informations relatives a un element au survol ou au focus. Supporte differents placements."
+  }
+}

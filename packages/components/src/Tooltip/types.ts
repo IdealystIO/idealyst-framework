@@ -8,7 +8,14 @@ export type TooltipIntentVariant = Intent;
 export type TooltipSizeVariant = Size;
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
+/**
+ * Contextual popup that displays helpful information on hover or focus.
+ * Supports configurable placement and delay timing.
+ */
 export interface TooltipProps extends BaseProps, AccessibilityProps {
+  /**
+   * Content to display in the tooltip
+   */
   content: string | React.ReactNode;
   children: React.ReactNode;
   placement?: TooltipPlacement;

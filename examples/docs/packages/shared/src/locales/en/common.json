@@ -1,0 +1,34 @@
+{
+  "nav": {
+    "home": "Home",
+    "installation": "Installation",
+    "components": "Components",
+    "theme": "Theme",
+    "navigation": "Navigation"
+  },
+  "actions": {
+    "getStarted": "Get Started",
+    "viewDocs": "View Documentation",
+    "learnMore": "Learn More",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "expand": "Expand",
+    "collapse": "Collapse"
+  },
+  "labels": {
+    "example": "Example",
+    "props": "Props",
+    "playground": "Playground",
+    "preview": "Preview",
+    "code": "Code",
+    "required": "Required",
+    "optional": "Optional",
+    "default": "Default",
+    "type": "Type",
+    "description": "Description"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Francais"
+  }
+}

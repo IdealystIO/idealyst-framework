@@ -9,6 +9,10 @@ export type CardIntentVariant = Intent;
 export type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
 export type CardRadiusVariant = 'none' | Size;
 
+/**
+ * Container component for grouping related content with visual separation.
+ * Supports multiple visual styles including outlined, elevated, and filled variants.
+ */
 export interface CardProps extends ContainerStyleProps, InteractiveAccessibilityProps {
   /**
    * The content to display inside the card

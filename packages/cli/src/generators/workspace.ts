@@ -1,56 +1,323 @@
-import path from 'path';
-import * as fs from 'fs-extra';
-import chalk from 'chalk';
-import { GenerateProjectOptions } from '../types';
-import { validateProjectName, copyTemplate, installDependencies, getTemplateData, getTemplatePath } from './utils';
+/**
+ * Workspace root generator
+ */
 
-export async function generateWorkspace(options: GenerateProjectOptions): Promise<void> {
-  const { name, directory, skipInstall, figmaToken } = options;
-  
-  if (!validateProjectName(name)) {
-    throw new Error(`Invalid project name: ${name}`);
-  }
-  
-  console.log(chalk.blue(`🏗️ Creating Idealyst workspace: ${name}`));
-  
-  const projectPath = path.join(directory, name);
-  const templatePath = getTemplatePath('workspace');
-  
-  const templateData = getTemplateData(name, `Idealyst Framework monorepo workspace`);
-  
-  await copyTemplate(templatePath, projectPath, templateData);
-  
-  // Make figma-mcp.sh executable
-  const figmaMcpScript = path.join(projectPath, '.devcontainer', 'figma-mcp.sh');
-  if (await fs.pathExists(figmaMcpScript)) {
-    await fs.chmod(figmaMcpScript, '755');
-  }
-  
-  // Always create .devcontainer/.env file (even if no token provided)
-  const devcontainerDir = path.join(projectPath, '.devcontainer');
-  await fs.ensureDir(devcontainerDir);
-  
-  const envPath = path.join(devcontainerDir, '.env');
-  const envContent = figmaToken 
-    ? `# Figma Integration\nFIGMA_ACCESS_TOKEN=${figmaToken.trim()}\n`
-    : `# Figma Integration\nFIGMA_ACCESS_TOKEN=\n`;
-  
-  await fs.writeFile(envPath, envContent);
-  
-  await installDependencies(projectPath, skipInstall);
-  
-  console.log(chalk.green('✅ Workspace created successfully!'));
-  console.log(chalk.blue('📋 Workspace includes:'));
-  console.log(chalk.white('  • Yarn workspace configuration'));
-  console.log(chalk.white('  • Idealyst packages (theme, components, navigation)'));
-  console.log(chalk.white('  • TypeScript configuration'));
-  console.log(chalk.white('  • Build scripts'));
-  console.log(chalk.white('  • Version management scripts'));
-  
-  if (figmaToken) {
-    console.log(chalk.green('🎨 Figma MCP server configured and ready!'));
-    console.log(chalk.blue('   Server will be available at http://localhost:3333'));
+import fs from 'fs-extra';
+import path from 'path';
+import { TemplateData } from '../types';
+import { copyTemplateDirectory, getTemplatePath, templateHasContent } from '../templates/copier';
+import { logger } from '../utils/logger';
+
+/**
+ * Generate workspace root structure
+ */
+export async function generateWorkspace(
+  projectPath: string,
+  data: TemplateData
+): Promise<void> {
+  logger.info(`Creating workspace at ${projectPath}...`);
+
+  // Ensure project directory exists
+  await fs.ensureDir(projectPath);
+
+  // Copy workspace template or generate programmatically
+  const templatePath = getTemplatePath('core', 'workspace');
+
+  if (await templateHasContent(templatePath)) {
+    await copyTemplateDirectory(templatePath, projectPath, data);
   } else {
-    console.log(chalk.yellow('💡 Tip: Add Figma integration later by editing .devcontainer/.env'));
+    // Generate workspace files programmatically if no template exists
+    await generateWorkspaceFiles(projectPath, data);
   }
-} 
+}
+
+/**
+ * Generate workspace files programmatically
+ */
+async function generateWorkspaceFiles(
+  projectPath: string,
+  data: TemplateData
+): Promise<void> {
+  // Create packages directory
+  await fs.ensureDir(path.join(projectPath, 'packages'));
+
+  // Generate root package.json
+  const packageJson = createRootPackageJson(data);
+  await fs.writeJson(path.join(projectPath, 'package.json'), packageJson, { spaces: 2 });
+
+  // Generate tsconfig.json
+  const tsconfig = createRootTsConfig();
+  await fs.writeJson(path.join(projectPath, 'tsconfig.json'), tsconfig, { spaces: 2 });
+
+  // Generate .gitignore
+  const gitignore = createGitignore();
+  await fs.writeFile(path.join(projectPath, '.gitignore'), gitignore);
+
+  // Generate .yarnrc.yml
+  const yarnrc = createYarnrc();
+  await fs.writeFile(path.join(projectPath, '.yarnrc.yml'), yarnrc);
+
+  // Generate README.md
+  const readme = createReadme(data);
+  await fs.writeFile(path.join(projectPath, 'README.md'), readme);
+
+  // Generate react-native.config.js for monorepo setup
+  const rnConfig = createReactNativeConfig(data);
+  await fs.writeFile(path.join(projectPath, 'react-native.config.js'), rnConfig);
+}
+
+/**
+ * Create root package.json content
+ */
+function createRootPackageJson(data: TemplateData): Record<string, unknown> {
+  const scripts: Record<string, string> = {
+    'dev': 'concurrently "yarn web:dev" "yarn mobile:start"',
+    'build': 'yarn build:packages && yarn web:build',
+    'build:packages': 'yarn workspace @' + data.workspaceScope + '/shared build',
+    'test': 'jest',
+    'test:watch': 'jest --watch',
+    'test:coverage': 'jest --coverage',
+    'web:dev': 'yarn workspace @' + data.workspaceScope + '/web dev',
+    'web:build': 'yarn workspace @' + data.workspaceScope + '/web build',
+    'web:preview': 'yarn workspace @' + data.workspaceScope + '/web preview',
+    'mobile:start': 'yarn workspace @' + data.workspaceScope + '/mobile start',
+    'mobile:android': 'yarn workspace @' + data.workspaceScope + '/mobile android',
+    'mobile:ios': 'yarn workspace @' + data.workspaceScope + '/mobile ios',
+  };
+
+  // Add API scripts if API is enabled
+  if (data.hasApi) {
+    scripts['api:dev'] = 'yarn workspace @' + data.workspaceScope + '/api dev';
+    scripts['api:build'] = 'yarn workspace @' + data.workspaceScope + '/api build';
+    scripts['dev'] = 'concurrently "yarn api:dev" "yarn web:dev" "yarn mobile:start"';
+  }
+
+  // Add database scripts if Prisma is enabled
+  if (data.hasPrisma) {
+    scripts['db:generate'] = 'yarn workspace @' + data.workspaceScope + '/database db:generate';
+    scripts['db:push'] = 'yarn workspace @' + data.workspaceScope + '/database db:push';
+    scripts['db:migrate'] = 'yarn workspace @' + data.workspaceScope + '/database db:migrate';
+    scripts['db:studio'] = 'yarn workspace @' + data.workspaceScope + '/database db:studio';
+    scripts['db:seed'] = 'yarn workspace @' + data.workspaceScope + '/database db:seed';
+    scripts['build:packages'] = 'yarn db:generate && yarn workspace @' + data.workspaceScope + '/shared build';
+  }
+
+  return {
+    name: `@${data.workspaceScope}/${data.projectName}`,
+    version: data.version,
+    private: true,
+    packageManager: 'yarn@4.1.0',
+    workspaces: ['packages/*'],
+    scripts,
+    devDependencies: {
+      'concurrently': '^9.0.0',
+      'jest': '^29.7.0',
+      '@types/jest': '^29.5.0',
+      'ts-jest': '^29.1.0',
+      'typescript': '^5.0.0',
+    },
+  };
+}
+
+/**
+ * Create root tsconfig.json
+ */
+function createRootTsConfig(): Record<string, unknown> {
+  return {
+    compilerOptions: {
+      target: 'ES2020',
+      module: 'commonjs',
+      declaration: true,
+      declarationMap: true,
+      sourceMap: true,
+      strict: true,
+      esModuleInterop: true,
+      skipLibCheck: true,
+      forceConsistentCasingInFileNames: true,
+      moduleResolution: 'node',
+      resolveJsonModule: true,
+    },
+    include: ['packages/*/src/**/*'],
+    exclude: ['node_modules', 'dist', 'build'],
+  };
+}
+
+/**
+ * Create .gitignore content
+ */
+function createGitignore(): string {
+  return `# Dependencies
+node_modules/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Build outputs
+dist/
+build/
+.cache/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.jest/
+
+# Mobile
+ios/Pods/
+android/.gradle/
+android/app/build/
+*.keystore
+*.jks
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+*.tmp
+*.bak
+`;
+}
+
+/**
+ * Create .yarnrc.yml content
+ */
+function createYarnrc(): string {
+  return `nodeLinker: node-modules
+
+enableGlobalCache: true
+`;
+}
+
+/**
+ * Create README.md content
+ */
+function createReadme(data: TemplateData): string {
+  return `# ${data.appDisplayName}
+
+${data.description}
+
+Built with [Idealyst Framework](https://github.com/IdealystIO/idealyst-framework).
+
+## Getting Started
+
+### Install Dependencies
+
+\`\`\`bash
+yarn install
+\`\`\`
+
+### Development
+
+Start all development servers:
+
+\`\`\`bash
+yarn dev
+\`\`\`
+
+Or run individually:
+
+\`\`\`bash
+# Web
+yarn web:dev
+
+# Mobile
+yarn mobile:start
+yarn mobile:android  # or yarn mobile:ios
+${data.hasApi ? `
+# API
+yarn api:dev
+` : ''}
+\`\`\`
+${data.hasPrisma ? `
+### Database
+
+\`\`\`bash
+# Generate Prisma client
+yarn db:generate
+
+# Push schema to database
+yarn db:push
+
+# Open Prisma Studio
+yarn db:studio
+\`\`\`
+` : ''}
+### Build
+
+\`\`\`bash
+yarn build
+\`\`\`
+
+### Testing
+
+\`\`\`bash
+yarn test
+yarn test:watch
+yarn test:coverage
+\`\`\`
+
+## Project Structure
+
+\`\`\`
+${data.projectName}/
+├── packages/
+│   ├── shared/     # Shared components and utilities
+│   ├── web/        # React web application
+│   └── mobile/     # React Native mobile application${data.hasApi ? `
+│   └── api/        # API server` : ''}${data.hasPrisma ? `
+│   └── database/   # Database layer (Prisma)` : ''}
+├── package.json
+└── README.md
+\`\`\`
+`;
+}
+
+/**
+ * Create react-native.config.js for monorepo setup
+ *
+ * This file tells the React Native CLI where to find the mobile project
+ * and its dependencies in a Yarn workspace monorepo structure.
+ */
+function createReactNativeConfig(data: TemplateData): string {
+  return `/**
+ * React Native configuration for monorepo setup
+ *
+ * This file tells the React Native CLI where to find the mobile project
+ * and its dependencies in a Yarn workspace monorepo structure.
+ */
+module.exports = {
+  project: {
+    android: {
+      sourceDir: './packages/mobile/android',
+      appName: 'app',
+      packageName: '${data.androidPackageName}',
+    },
+    ios: {
+      sourceDir: './packages/mobile/ios',
+    },
+  },
+  // Dependencies are auto-detected from node_modules
+};
+`;
+}

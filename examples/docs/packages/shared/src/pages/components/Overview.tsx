@@ -1,55 +1,56 @@
 import React from 'react';
 import { View, Text, Card, Button, Chip, Badge, Switch, Screen } from '@idealyst/components';
 import { useNavigator } from '@idealyst/navigation';
+import { useTranslation } from '@idealyst/translate';
 import { LivePreview } from '../../components/LivePreview';
 
 const componentCategories = [
   {
-    title: 'Layout',
+    key: 'layout',
     components: ['View', 'Screen', 'Divider'],
   },
   {
-    title: 'Form',
+    key: 'form',
     components: ['Button', 'Input', 'Checkbox', 'Select', 'Switch', 'RadioButton', 'Slider', 'TextArea'],
   },
   {
-    title: 'Display',
+    key: 'display',
     components: ['Text', 'Card', 'Badge', 'Chip', 'Avatar', 'Icon', 'Skeleton', 'Alert'],
   },
   {
-    title: 'Navigation',
+    key: 'navigation',
     components: ['TabBar', 'Breadcrumb', 'Menu', 'List'],
   },
   {
-    title: 'Overlay',
+    key: 'overlay',
     components: ['Dialog', 'Popover', 'Tooltip'],
   },
   {
-    title: 'Data',
+    key: 'data',
     components: ['Table', 'Progress'],
   },
 ];
 
 export function ComponentsOverviewPage() {
   const { navigate } = useNavigator();
+  const { t } = useTranslation('components');
 
   return (
     <Screen>
       <View style={{ maxWidth: 900 }}>
         <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
-          Components Overview
+          {t('overview.title')}
         </Text>
 
         <Text typography="body1" color="secondary" style={{ marginBottom: 32, lineHeight: 26 }}>
-          Idealyst provides a comprehensive library of cross-platform components.
-          All components work identically on web and native with platform-specific optimizations.
+          {t('overview.description')}
         </Text>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 16 }}>
-          Component Preview
+          {t('overview.preview')}
         </Text>
 
-        <LivePreview title="Interactive Components">
+        <LivePreview title={t('overview.interactiveComponents')}>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
             <Button>Primary Button</Button>
             <Button intent="success" type="outlined">Success</Button>
@@ -60,13 +61,13 @@ export function ComponentsOverviewPage() {
         </LivePreview>
 
         <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 16 }}>
-          Component Categories
+          {t('overview.categories')}
         </Text>
 
         {componentCategories.map((category) => (
-          <View key={category.title} style={{ marginBottom: 24 }}>
+          <View key={category.key} style={{ marginBottom: 24 }}>
             <Text weight="semibold" style={{ marginBottom: 12 }}>
-              {category.title}
+              {t(`overview.categoryNames.${category.key}`)}
             </Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {category.components.map((component) => (
@@ -83,29 +84,34 @@ export function ComponentsOverviewPage() {
         ))}
 
         <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
-          Common Props
+          {t('overview.commonProps.title')}
         </Text>
 
         <Card variant="outlined" style={{ padding: 20 }}>
-          <Text weight="semibold" style={{ marginBottom: 8 }}>Intent Colors</Text>
+          <Text weight="semibold" style={{ marginBottom: 8 }}>
+            {t('overview.commonProps.intentColors.title')}
+          </Text>
           <Text typography="body2" color="tertiary" style={{ marginBottom: 16 }}>
-            Components support intent-based colors: primary, neutral, success, error, warning
+            {t('overview.commonProps.intentColors.description')}
           </Text>
 
-          <Text weight="semibold" style={{ marginBottom: 8 }}>Variants</Text>
+          <Text weight="semibold" style={{ marginBottom: 8 }}>
+            {t('overview.commonProps.variants.title')}
+          </Text>
           <Text typography="body2" color="tertiary" style={{ marginBottom: 16 }}>
-            Many components offer visual variants like contained, outlined, text (buttons) or
-            filled, outlined, soft (chips)
+            {t('overview.commonProps.variants.description')}
           </Text>
 
-          <Text weight="semibold" style={{ marginBottom: 8 }}>Sizes</Text>
+          <Text weight="semibold" style={{ marginBottom: 8 }}>
+            {t('overview.commonProps.sizes.title')}
+          </Text>
           <Text typography="body2" color="tertiary">
-            Most components support size variants: xs, sm, md, lg, xl
+            {t('overview.commonProps.sizes.description')}
           </Text>
         </Card>
 
         <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
-          Import Pattern
+          {t('overview.importPattern')}
         </Text>
 
         <View background="inverse" style={{ padding: 16, borderRadius: 8 }}>

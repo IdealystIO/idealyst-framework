@@ -1,5 +1,5 @@
 // Navigation
-export { navigationSections } from './navigation/DocsRouter';
+export { DocsRouter } from './navigation/DocsRouter';
 
 // Components
 export * from './components';

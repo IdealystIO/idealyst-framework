@@ -11,6 +11,10 @@ export type DividerThicknessVariant = 'thin' | 'md' | 'thick';
 export type DividerLengthVariant = 'full' | 'auto' | number;
 export type DividerSpacingVariant = 'none' | Size;
 
+/**
+ * Visual separator for grouping or dividing content sections.
+ * Supports horizontal and vertical orientations with optional centered content.
+ */
 export interface DividerProps extends BaseProps {
   /**
    * The orientation of the divider

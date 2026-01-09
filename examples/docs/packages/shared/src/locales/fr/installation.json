@@ -1,0 +1,35 @@
+{
+  "title": "Installation",
+  "description": "Commencez avec Idealyst en creant un nouvel espace de travail avec le CLI.",
+  "prerequisites": {
+    "title": "Prerequis",
+    "items": "- Node.js 18 ou ulterieur\n- Yarn 3 ou ulterieur (recommande) ou npm\n- Pour le developpement mobile : Xcode (iOS) ou Android Studio (Android)"
+  },
+  "createWorkspace": {
+    "title": "Creer un Nouvel Espace de Travail",
+    "description": "Executez la commande suivante pour creer un nouvel espace de travail Idealyst :",
+    "result": "Cela cree un monorepo complet avec les 5 packages : web, native, api, database et shared."
+  },
+  "projectStructure": {
+    "title": "Structure du Projet",
+    "comments": {
+      "web": "Application web React (Vite)",
+      "native": "Application React Native",
+      "api": "Serveur tRPC + GraphQL",
+      "database": "Couche base de donnees Prisma",
+      "shared": "Utilitaires partages & client tRPC"
+    }
+  },
+  "configureBabel": {
+    "title": "Configurer Babel",
+    "description": "Ajoutez le plugin Babel Idealyst pour activer le systeme de styles :"
+  },
+  "startDevelopment": {
+    "title": "Demarrer le Developpement",
+    "comments": {
+      "web": "Demarrer le serveur de dev web",
+      "native": "Dans un autre terminal, demarrer native",
+      "api": "Dans un autre terminal, demarrer l'API"
+    }
+  }
+}

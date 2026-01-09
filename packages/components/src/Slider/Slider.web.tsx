@@ -7,6 +7,10 @@ import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebRangeAriaProps, generateAccessibilityId, SLIDER_KEYS } from '../utils/accessibility';
 
+/**
+ * Range slider for selecting numeric values within a min/max range.
+ * Supports marks, value labels, keyboard navigation, and custom step increments.
+ */
 const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   value: controlledValue,
   defaultValue = 0,

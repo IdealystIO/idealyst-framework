@@ -1,210 +1,189 @@
 #!/usr/bin/env node
 
+/**
+ * Build script for @idealyst/cli
+ *
+ * 1. Cleans dist directory
+ * 2. Compiles TypeScript
+ * 3. Copies templates to dist
+ * 4. Renames dotfiles (.template suffix)
+ */
+
 const fs = require('fs-extra');
 const path = require('path');
 const { execSync } = require('child_process');
 
-// Load ignore patterns from .templateignore file
-function loadIgnorePatterns() {
-  const ignoreFile = path.join(__dirname, '..', '.templateignore');
-  
-  try {
-    const content = fs.readFileSync(ignoreFile, 'utf8');
-    return content
-      .split('\n')
-      .map(line => line.trim())
-      .filter(line => line && !line.startsWith('#'))
-      .map(pattern => pattern.replace(/\/$/, '')); // Remove trailing slashes
-  } catch (error) {
-    console.log('⚠️  No .templateignore file found, using default patterns');
-    return [
-      '.DS_Store',
-      'Thumbs.db',
-      '*.tmp',
-      '*.temp',
-      '*.log',
-      'node_modules/',
-      '.git/',
-      '.vscode/',
-      '.idea/',
-      'dist/',
-      'build/',
-      '*.swp',
-      '*.swo',
-      '*~'
-    ];
-  }
-}
+const ROOT_DIR = path.resolve(__dirname, '..');
+const MONOREPO_ROOT = path.resolve(ROOT_DIR, '../..');
+const DIST_DIR = path.join(ROOT_DIR, 'dist');
+const TEMPLATES_DIR = path.join(ROOT_DIR, 'templates');
+const DIST_TEMPLATES_DIR = path.join(DIST_DIR, 'templates');
+const CONSTANTS_FILE = path.join(ROOT_DIR, 'src', 'constants.ts');
+const COMPONENTS_PACKAGE = path.join(MONOREPO_ROOT, 'packages', 'components', 'package.json');
 
-function shouldExclude(filePath, patterns) {
-  const fileName = path.basename(filePath);
-  const relativePath = path.relative(process.cwd(), filePath);
-  
-  return patterns.some(pattern => {
-    // Handle glob patterns
+// Files/directories to ignore when copying templates
+const IGNORE_PATTERNS = [
+  'node_modules',
+  '.git',
+  'dist',
+  'build',
+  '.cache',
+  '.DS_Store',
+  'Thumbs.db',
+  '*.log',
+  '*.tmp',
+  '*.bak',
+];
+
+/**
+ * Check if a path matches any ignore patterns
+ */
+function shouldIgnore(basename) {
+  for (const pattern of IGNORE_PATTERNS) {
     if (pattern.includes('*')) {
-      const regex = new RegExp(pattern.replace(/\*/g, '.*').replace(/\//g, '\\/'));
-      return regex.test(fileName) || regex.test(relativePath);
+      const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
+      if (regex.test(basename)) {
+        return true;
+      }
+    } else if (basename === pattern) {
+      return true;
     }
-    
-    // Handle directory patterns - check if the file is inside the directory
-    if (pattern.endsWith('/')) {
-      const dirPattern = pattern.slice(0, -1); // Remove trailing slash
-      // Check if any part of the path contains this directory
-      const pathParts = relativePath.split(path.sep);
-      return pathParts.includes(dirPattern);
-    }
-    
-    if (pattern === '.git') {
-      // Special case: .git directory, but allow .gitignore files
-      return relativePath.includes('.git' + path.sep) && !fileName.includes('.gitignore');
-    }
-    
-    if (pattern === 'node_modules') {
-      // Special case: node_modules directory
-      const pathParts = relativePath.split(path.sep);
-      return pathParts.includes('node_modules');
-    }
-    
-    // Handle exact matches
-    return fileName === pattern || relativePath === pattern;
-  });
+  }
+  return false;
 }
 
-async function copyTemplatesWithFilter(source, target, patterns) {
-  await fs.ensureDir(target);
-  
-  const items = await fs.readdir(source);
-  
-  for (const item of items) {
-    const sourcePath = path.join(source, item);
-    const targetPath = path.join(target, item);
-    
-    if (shouldExclude(sourcePath, patterns)) {
-      console.log(`   ⚠️  Excluding: ${path.relative(source, sourcePath)}`);
+/**
+ * Copy directory recursively, handling dotfiles
+ */
+async function copyTemplateDir(source, dest) {
+  await fs.ensureDir(dest);
+
+  const entries = await fs.readdir(source, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const sourcePath = path.join(source, entry.name);
+    let destName = entry.name;
+
+    // Skip ignored files
+    if (shouldIgnore(entry.name)) {
       continue;
     }
-    
-    const stat = await fs.stat(sourcePath);
-    
-    if (stat.isDirectory()) {
-      await copyTemplatesWithFilter(sourcePath, targetPath, patterns);
+
+    // Rename dotfiles to .template suffix
+    if (entry.name.startsWith('.') && !entry.name.endsWith('.template')) {
+      destName = entry.name.slice(1) + '.template';
+    }
+
+    const destPath = path.join(dest, destName);
+
+    if (entry.isDirectory()) {
+      await copyTemplateDir(sourcePath, destPath);
     } else {
-      await fs.copy(sourcePath, targetPath);
+      await fs.copy(sourcePath, destPath);
     }
   }
 }
 
+/**
+ * Update IDEALYST_VERSION in constants.ts from packages/components/package.json
+ */
+async function updateIdealystVersion() {
+  if (!await fs.pathExists(COMPONENTS_PACKAGE)) {
+    console.log('   Warning: Could not find components package.json, using existing version');
+    return;
+  }
+
+  const pkg = await fs.readJson(COMPONENTS_PACKAGE);
+  const version = pkg.version;
+
+  let constants = await fs.readFile(CONSTANTS_FILE, 'utf8');
+  const versionRegex = /export const IDEALYST_VERSION = '[^']+';/;
+
+  if (versionRegex.test(constants)) {
+    constants = constants.replace(versionRegex, `export const IDEALYST_VERSION = '${version}';`);
+    await fs.writeFile(CONSTANTS_FILE, constants);
+    console.log(`   Updated IDEALYST_VERSION to ${version}`);
+  } else {
+    console.log('   Warning: Could not find IDEALYST_VERSION in constants.ts');
+  }
+}
+
+/**
+ * Main build function
+ */
 async function build() {
-  console.log('🧹 Cleaning previous build...');
-  
-  // Clean dist directory completely
-  await fs.remove('dist');
-  
-  console.log('🏗️  Building TypeScript...');
-  
+  console.log('Building @idealyst/cli...\n');
+
+  // Step 1: Clean dist directory
+  console.log('1. Cleaning dist directory...');
+  await fs.remove(DIST_DIR);
+
+  // Step 2: Update Idealyst version from components package
+  console.log('2. Updating Idealyst version...');
+  await updateIdealystVersion();
+
+  // Step 3: Compile TypeScript
+  console.log('3. Compiling TypeScript...');
   try {
-    execSync('npx tsc', { stdio: 'inherit' });
+    execSync('npx tsc', { cwd: ROOT_DIR, stdio: 'inherit' });
   } catch (error) {
-    console.error('❌ TypeScript build failed!');
+    console.error('TypeScript compilation failed');
     process.exit(1);
   }
-  
-  console.log('📁 Loading ignore patterns...');
-  const ignorePatterns = loadIgnorePatterns();
-  console.log(`   Found ${ignorePatterns.length} ignore patterns`);
-  
-  console.log('📁 Copying fresh template (with filtering)...');
 
-  const templatesSource = path.join(__dirname, '..', 'template');
-  const templatesTarget = path.join(__dirname, '..', 'dist', 'template');
-  
-  // Copy docs directory if it exists
-  const docsSource = path.join(__dirname, '..', 'docs');
-  const docsTarget = path.join(__dirname, '..', 'dist', 'docs');
-  
-  // Ensure target directories don't exist before copying
-  await fs.remove(templatesTarget);
-  await fs.remove(docsTarget);
-  
-  try {
-    await copyTemplatesWithFilter(templatesSource, templatesTarget, ignorePatterns);
+  // Step 4: Copy templates
+  console.log('4. Copying templates...');
+  if (await fs.pathExists(TEMPLATES_DIR)) {
+    await copyTemplateDir(TEMPLATES_DIR, DIST_TEMPLATES_DIR);
 
-    // Rename dotfiles to prevent npm from ignoring them
-    // npm strips dotfiles during pack, so we rename them with a .template suffix
-    console.log('   🔄 Renaming dotfiles to prevent npm filtering...');
-    await renameDotfiles(templatesTarget);
+    // Count files
+    const countFiles = async (dir) => {
+      let count = 0;
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        if (entry.isDirectory()) {
+          count += await countFiles(path.join(dir, entry.name));
+        } else {
+          count++;
+        }
+      }
+      return count;
+    };
 
-    // Copy docs if they exist
-    if (await fs.pathExists(docsSource)) {
-      await fs.copy(docsSource, docsTarget);
-      console.log('   📚 Copied documentation files');
-    }
-  } catch (error) {
-    console.error('❌ Template copy failed:', error.message);
-    process.exit(1);
-  }
-  
-  console.log('🔍 Verifying template structure...');
-
-  try {
-    const packagesDir = path.join(templatesTarget, 'packages');
-    const packageDirs = await fs.readdir(packagesDir);
-    console.log('✅ Template copied successfully:');
-    console.log('   Template includes packages:');
-    packageDirs.sort().forEach(dir => {
-      console.log(`   - ${dir}`);
-    });
-
-    // Count total files copied
-    const totalFiles = await countFiles(templatesTarget);
-    console.log(`   📄 Total files: ${totalFiles}`);
-
-  } catch (error) {
-    console.error('❌ Template verification failed!');
-    process.exit(1);
-  }
-  
-  console.log('🎉 Build completed successfully!');
-}
-
-async function countFiles(dir) {
-  let count = 0;
-  const items = await fs.readdir(dir);
-
-  for (const item of items) {
-    const itemPath = path.join(dir, item);
-    const stat = await fs.stat(itemPath);
-
-    if (stat.isDirectory()) {
-      count += await countFiles(itemPath);
-    } else {
-      count++;
-    }
+    const fileCount = await countFiles(DIST_TEMPLATES_DIR);
+    console.log(`   Copied ${fileCount} template files`);
+  } else {
+    console.log('   No templates directory found (templates will be generated programmatically)');
   }
 
-  return count;
-}
-
-async function renameDotfiles(dir) {
-  const items = await fs.readdir(dir, { withFileTypes: true });
-
-  for (const item of items) {
-    const itemPath = path.join(dir, item.name);
-
-    if (item.isDirectory()) {
-      await renameDotfiles(itemPath);
-    } else if (item.name.startsWith('.') && !item.name.startsWith('..')) {
-      // Rename dotfiles to .template format (e.g., .gitignore -> gitignore.template)
-      const newName = item.name.substring(1) + '.template';
-      const newPath = path.join(dir, newName);
-      await fs.rename(itemPath, newPath);
-      console.log(`      Renamed: ${item.name} -> ${newName}`);
+  // Step 5: Make CLI executable
+  console.log('5. Making CLI executable...');
+  const cliPath = path.join(DIST_DIR, 'index.js');
+  if (await fs.pathExists(cliPath)) {
+    // Add shebang if not present
+    let content = await fs.readFile(cliPath, 'utf8');
+    if (!content.startsWith('#!')) {
+      content = '#!/usr/bin/env node\n' + content;
+      await fs.writeFile(cliPath, content);
     }
+    await fs.chmod(cliPath, 0o755);
+  }
+
+  // Done!
+  console.log('\n✓ Build complete!\n');
+  console.log('Output directory:', DIST_DIR);
+
+  // List dist contents
+  const distContents = await fs.readdir(DIST_DIR);
+  console.log('\nDist contents:');
+  for (const item of distContents) {
+    const stat = await fs.stat(path.join(DIST_DIR, item));
+    console.log(`  ${stat.isDirectory() ? '📁' : '📄'} ${item}`);
   }
 }
 
-build().catch(error => {
-  console.error('❌ Build failed:', error.message);
+// Run build
+build().catch((error) => {
+  console.error('Build failed:', error);
   process.exit(1);
 });

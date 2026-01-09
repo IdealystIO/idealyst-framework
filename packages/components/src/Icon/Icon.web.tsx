@@ -8,6 +8,10 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import { getColorFromString, Intent, Color } from '@idealyst/theme';
 import { IconRegistry } from './IconRegistry';
 
+/**
+ * Vector icon display from the Material Design Icons library.
+ * Supports intent-based coloring and theme-aware sizing.
+ */
 const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
   const {
     name,

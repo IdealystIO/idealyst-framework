@@ -29,7 +29,19 @@
  *   }))
  */
 
-const { loadThemeKeys } = require('./theme-analyzer');
+// Theme analysis is provided by @idealyst/tooling (single source of truth)
+// This uses the TypeScript Compiler API for accurate theme extraction
+let loadThemeKeys;
+try {
+  // Try to load from @idealyst/tooling (TypeScript-based analyzer)
+  // This is the preferred path as it's the single source of truth
+  const tooling = require('@idealyst/tooling');
+  loadThemeKeys = tooling.loadThemeKeys;
+} catch (e) {
+  // Fallback to local implementation if tooling can't be loaded
+  // (e.g., when TypeScript runtime is not available)
+  loadThemeKeys = require('./theme-analyzer').loadThemeKeys;
+}
 
 // ============================================================================
 // Global Extension Registry - Persists across files during build
@@ -547,8 +559,7 @@ module.exports = function idealystStylesPlugin({ types: t }) {
         }
     }
 
-    // Log plugin initialization
-    console.log('[idealyst-plugin] Plugin loaded (AST-based theme analysis)');
+    // Plugin initialization logged in debug mode only
 
     return {
         name: 'idealyst-styles',
@@ -783,13 +794,13 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     const keys = loadThemeKeys(opts, rootDir, t, verboseMode);
                     const expandedVariants = [];
 
-                    // Debug for View only
-                    if (componentName === 'View') {
-                        console.log(`\n========== VIEW KEYS DEBUG ==========`);
-                        console.log(`rootDir: ${rootDir}`);
-                        console.log(`keys.sizes.view: ${JSON.stringify(keys?.sizes?.view)}`);
-                        console.log(`keys.intents: ${JSON.stringify(keys?.intents)}`);
-                        console.log(`======================================\n`);
+                    // Debug for View only (verbose mode)
+                    if (verboseMode && componentName === 'View') {
+                        verbose(`\n========== VIEW KEYS DEBUG ==========`);
+                        verbose(`rootDir: ${rootDir}`);
+                        verbose(`keys.sizes.view: ${JSON.stringify(keys?.sizes?.view)}`);
+                        verbose(`keys.intents: ${JSON.stringify(keys?.intents)}`);
+                        verbose(`======================================\n`);
                     }
 
                     try {

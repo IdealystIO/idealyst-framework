@@ -6,7 +6,14 @@ import { BaseProps } from '../utils/viewStyleProps';
 export type AlertIntentVariant = Intent;
 export type AlertType= 'filled' | 'outlined' | 'soft';
 
+/**
+ * Feedback message component for displaying important information to users.
+ * Supports multiple intent colors, dismissible behavior, and custom actions.
+ */
 export interface AlertProps extends BaseProps {
+  /**
+   * The title of the alert
+   */
   title?: string;
   message?: string;
   children?: React.ReactNode;

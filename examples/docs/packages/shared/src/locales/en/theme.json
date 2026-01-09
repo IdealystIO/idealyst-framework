@@ -1,0 +1,103 @@
+{
+  "overview": {
+    "title": "Theme System Overview",
+    "description": "Idealyst provides a powerful theming system built on react-native-unistyles. Themes are created using a fluent builder API with full TypeScript inference.",
+    "architecture": {
+      "title": "Architecture"
+    },
+    "coreConcepts": {
+      "title": "Core Concepts",
+      "themeBuilder": {
+        "title": "Theme Builder",
+        "description": "Create themes using a fluent builder pattern. Define intents, radii, shadows, colors, and component sizes."
+      },
+      "styleDefinition": {
+        "title": "Style Definition",
+        "description": "Use defineStyle() to create component styles with theme reactivity and variant support."
+      },
+      "styleExtensions": {
+        "title": "Style Extensions",
+        "description": "Customize component styles using extendStyle() or overrideStyle() without modifying source code."
+      },
+      "iteratorPattern": {
+        "title": "$iterator Pattern",
+        "description": "Define styles once that automatically expand to all keys of a theme object (intents, sizes, etc.)"
+      }
+    },
+    "quickExample": {
+      "title": "Quick Example",
+      "codeTitle": "Creating a Theme"
+    }
+  },
+  "styleDefinition": {
+    "title": "Style Definition",
+    "description": "Learn how to define component styles using the defineStyle() function with full theme integration and variant support.",
+    "basicUsage": {
+      "title": "Basic Usage",
+      "description": "The defineStyle() function creates reactive styles that automatically update when the theme changes."
+    },
+    "variants": {
+      "title": "Variants",
+      "description": "Define multiple style variants that can be selected via props."
+    },
+    "compoundVariants": {
+      "title": "Compound Variants",
+      "description": "Apply styles when multiple variant conditions are met."
+    }
+  },
+  "styleExtensions": {
+    "title": "Style Extensions",
+    "description": "Customize component styles without modifying source code using extendStyle() and overrideStyle().",
+    "extendStyle": {
+      "title": "Extend Style",
+      "description": "Add additional styles to existing component styles while preserving the original definitions."
+    },
+    "overrideStyle": {
+      "title": "Override Style",
+      "description": "Completely replace specific style properties while keeping others intact."
+    },
+    "usage": {
+      "title": "Usage in Theme",
+      "description": "Register style extensions in your theme configuration."
+    }
+  },
+  "breakpoints": {
+    "title": "Breakpoints",
+    "description": "Define responsive breakpoints for adapting layouts across different screen sizes.",
+    "defaultBreakpoints": {
+      "title": "Default Breakpoints",
+      "description": "Idealyst provides sensible default breakpoints that work well for most applications."
+    },
+    "customBreakpoints": {
+      "title": "Custom Breakpoints",
+      "description": "Override the default breakpoints with your own values in the theme builder."
+    },
+    "responsiveStyles": {
+      "title": "Responsive Styles",
+      "description": "Use breakpoints in your style definitions for responsive layouts."
+    }
+  },
+  "babelPlugin": {
+    "title": "Babel Plugin",
+    "description": "The Idealyst Babel plugin enables build-time style processing for optimal performance.",
+    "installation": {
+      "title": "Installation",
+      "description": "Add the plugin to your Babel configuration."
+    },
+    "options": {
+      "title": "Plugin Options",
+      "themePath": {
+        "title": "themePath",
+        "description": "Path to your theme definition file."
+      },
+      "debug": {
+        "title": "debug",
+        "description": "Enable debug logging during build."
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "description": "The plugin analyzes your style definitions at build time and optimizes them for runtime performance."
+    }
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "overview": {
+    "title": "Components Overview",
+    "description": "Idealyst provides a comprehensive library of cross-platform components. All components work identically on web and native with platform-specific optimizations.",
+    "preview": "Component Preview",
+    "interactiveComponents": "Interactive Components",
+    "categories": "Component Categories",
+    "categoryNames": {
+      "layout": "Layout",
+      "form": "Form",
+      "display": "Display",
+      "navigation": "Navigation",
+      "overlay": "Overlay",
+      "data": "Data"
+    },
+    "commonProps": {
+      "title": "Common Props",
+      "intentColors": {
+        "title": "Intent Colors",
+        "description": "Components support intent-based colors: primary, neutral, success, error, warning"
+      },
+      "variants": {
+        "title": "Variants",
+        "description": "Many components offer visual variants like contained, outlined, text (buttons) or filled, outlined, soft (chips)"
+      },
+      "sizes": {
+        "title": "Sizes",
+        "description": "Most components support size variants: xs, sm, md, lg, xl"
+      }
+    },
+    "importPattern": "Import Pattern"
+  },
+  "button": {
+    "title": "Button",
+    "description": "Interactive button component with multiple variants, sizes, and icon support. Supports intent colors for semantic meaning and works identically on web and native.",
+    "playground": {
+      "clickMe": "Click Me"
+    }
+  },
+  "card": {
+    "title": "Card",
+    "description": "Container component for grouping related content. Cards support different visual variants including elevated, outlined, and filled styles.",
+    "playground": {
+      "content": "Card Content"
+    }
+  },
+  "accordion": {
+    "title": "Accordion",
+    "description": "Expandable content section that can show or hide content when clicked. Useful for FAQs, collapsible menus, and progressive disclosure."
+  },
+  "alert": {
+    "title": "Alert",
+    "description": "Contextual feedback messages for user actions. Supports different intents for success, error, warning, and informational messages."
+  },
+  "avatar": {
+    "title": "Avatar",
+    "description": "Circular image component for displaying user profile pictures, icons, or initials. Supports different sizes and fallback content."
+  },
+  "badge": {
+    "title": "Badge",
+    "description": "Small count or status indicator that can be attached to other elements. Commonly used for notification counts or status indicators."
+  },
+  "breadcrumb": {
+    "title": "Breadcrumb",
+    "description": "Navigation component that shows the current page location within a hierarchy. Helps users understand where they are and navigate back."
+  },
+  "checkbox": {
+    "title": "Checkbox",
+    "description": "Form control for boolean selections. Supports checked, unchecked, and indeterminate states with customizable styling."
+  },
+  "chip": {
+    "title": "Chip",
+    "description": "Compact element representing an input, attribute, or action. Useful for tags, filters, and selections."
+  },
+  "dialog": {
+    "title": "Dialog",
+    "description": "Modal overlay that requires user interaction. Used for confirmations, forms, and important notifications that need attention."
+  },
+  "divider": {
+    "title": "Divider",
+    "description": "Visual separator that can be used to divide content sections. Supports horizontal and vertical orientations."
+  },
+  "icon": {
+    "title": "Icon",
+    "description": "Scalable vector icon component with support for Material Design icons. Customizable size and color."
+  },
+  "input": {
+    "title": "Input",
+    "description": "Text input field for forms. Supports different types, validation states, labels, and helper text."
+  },
+  "link": {
+    "title": "Link",
+    "description": "Navigation component for creating hyperlinks. Integrates with the navigation system for internal routing."
+  },
+  "list": {
+    "title": "List",
+    "description": "Continuous vertical display of items. Supports single and multi-selection, icons, and custom content."
+  },
+  "menu": {
+    "title": "Menu",
+    "description": "Dropdown menu component for displaying a list of actions or options. Supports keyboard navigation and nested menus."
+  },
+  "progress": {
+    "title": "Progress",
+    "description": "Visual indicator of progress or loading state. Supports linear and circular variants with determinate and indeterminate modes."
+  },
+  "radioButton": {
+    "title": "Radio Button",
+    "description": "Form control for selecting one option from a group. Only one radio button in a group can be selected at a time."
+  },
+  "select": {
+    "title": "Select",
+    "description": "Dropdown selection component for choosing from a list of options. Supports single and multi-select modes."
+  },
+  "skeleton": {
+    "title": "Skeleton",
+    "description": "Placeholder loading component that mimics content shape while data is loading. Improves perceived performance."
+  },
+  "slider": {
+    "title": "Slider",
+    "description": "Range input component for selecting values within a range. Supports single and range selection with step increments."
+  },
+  "switch": {
+    "title": "Switch",
+    "description": "Toggle control for binary on/off settings. Provides immediate visual feedback of the current state."
+  },
+  "table": {
+    "title": "Table",
+    "description": "Tabular data display component with sorting, pagination, and selection support. Optimized for large datasets."
+  },
+  "text": {
+    "title": "Text",
+    "description": "Typography component for rendering text content. Supports different styles, weights, and semantic HTML elements."
+  },
+  "textArea": {
+    "title": "Text Area",
+    "description": "Multi-line text input for longer form content. Supports auto-resizing, character limits, and validation."
+  },
+  "tooltip": {
+    "title": "Tooltip",
+    "description": "Popup that displays information related to an element when hovered or focused. Supports different placements."
+  }
+}

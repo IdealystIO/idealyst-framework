@@ -14,7 +14,14 @@ export interface AccordionItem {
   disabled?: boolean;
 }
 
+/**
+ * Expandable content panels for organizing information in collapsible sections.
+ * Supports single or multiple expanded items simultaneously.
+ */
 export interface AccordionProps extends ContainerStyleProps, AccessibilityProps {
+  /**
+   * Array of accordion items to display
+   */
   items: AccordionItem[];
   allowMultiple?: boolean;
   defaultExpanded?: string[];

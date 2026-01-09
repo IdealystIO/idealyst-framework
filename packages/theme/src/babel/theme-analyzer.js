@@ -252,6 +252,25 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
         }
     }
 
+    /**
+     * Process a builder chain that ends with .build() - extracts theme keys.
+     * Can be called on any node that is a .build() call expression.
+     */
+    function processBuilderChainNode(node) {
+        if (!t.isCallExpression(node)) return;
+        if (!t.isMemberExpression(node.callee)) return;
+        if (!t.isIdentifier(node.callee.property, { name: 'build' })) return;
+
+        const { calls, baseThemeVar } = traceBuilderChain(node);
+
+        if (baseThemeVar) {
+            log('Found fromTheme with base:', baseThemeVar);
+            analyzeBaseTheme(baseThemeVar);
+        }
+
+        processBuilderCalls(calls);
+    }
+
     // Second pass: find theme builder chains
     traverse(ast, {
         VariableDeclarator(path) {
@@ -262,14 +281,7 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
                 t.isMemberExpression(init.callee) &&
                 t.isIdentifier(init.callee.property, { name: 'build' })) {
 
-                const { calls, baseThemeVar } = traceBuilderChain(init);
-
-                if (baseThemeVar) {
-                    log('Found fromTheme with base:', baseThemeVar);
-                    analyzeBaseTheme(baseThemeVar);
-                }
-
-                processBuilderCalls(calls);
+                processBuilderChainNode(init);
             }
         },
 
@@ -285,14 +297,62 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
                     t.isMemberExpression(init.callee) &&
                     t.isIdentifier(init.callee.property, { name: 'build' })) {
 
-                    const { calls, baseThemeVar } = traceBuilderChain(init);
+                    processBuilderChainNode(init);
+                }
+            }
+        },
 
-                    if (baseThemeVar) {
-                        log('Found fromTheme with base:', baseThemeVar);
-                        analyzeBaseTheme(baseThemeVar);
+        // Handle StyleSheet.configure({ themes: { light: ..., dark: ... } })
+        CallExpression(path) {
+            const { node } = path;
+
+            // Check for StyleSheet.configure(...)
+            if (!t.isMemberExpression(node.callee)) return;
+            if (!t.isIdentifier(node.callee.object, { name: 'StyleSheet' })) return;
+            if (!t.isIdentifier(node.callee.property, { name: 'configure' })) return;
+
+            log('Found StyleSheet.configure call');
+
+            const configArg = node.arguments[0];
+            if (!t.isObjectExpression(configArg)) return;
+
+            // Find the 'themes' property
+            for (const prop of configArg.properties) {
+                if (!t.isObjectProperty(prop)) continue;
+
+                const keyName = t.isIdentifier(prop.key) ? prop.key.name :
+                               t.isStringLiteral(prop.key) ? prop.key.value : null;
+
+                if (keyName !== 'themes') continue;
+                if (!t.isObjectExpression(prop.value)) continue;
+
+                log('Found themes object in StyleSheet.configure');
+
+                // Process each theme definition
+                for (const themeProp of prop.value.properties) {
+                    if (!t.isObjectProperty(themeProp)) continue;
+
+                    const themeName = t.isIdentifier(themeProp.key) ? themeProp.key.name :
+                                     t.isStringLiteral(themeProp.key) ? themeProp.key.value : null;
+
+                    if (!themeName) continue;
+
+                    const themeValue = themeProp.value;
+                    log(`  Processing theme '${themeName}'`);
+
+                    // Case 1: Inline builder chain - fromTheme(x).build() or createTheme().build()
+                    if (t.isCallExpression(themeValue) &&
+                        t.isMemberExpression(themeValue.callee) &&
+                        t.isIdentifier(themeValue.callee.property, { name: 'build' })) {
+
+                        log(`    Found inline builder chain for '${themeName}'`);
+                        processBuilderChainNode(themeValue);
                     }
-
-                    processBuilderCalls(calls);
+                    // Case 2: Variable reference - analyze the referenced variable's file
+                    else if (t.isIdentifier(themeValue)) {
+                        log(`    Found variable reference '${themeValue.name}' for '${themeName}'`);
+                        analyzeBaseTheme(themeValue.name);
+                    }
                 }
             }
         }
@@ -325,18 +385,22 @@ function loadThemeKeys(opts, rootDir, babelTypes, verboseMode) {
         ? nodePath.resolve(rootDir, themePath)
         : require.resolve(themePath, { paths: [rootDir] });
 
-    console.log('[idealyst-plugin] Analyzing theme file:', resolvedPath);
+    if (verboseMode) {
+        console.log('[idealyst-plugin] Analyzing theme file:', resolvedPath);
+    }
 
     themeKeys = extractThemeKeysFromAST(resolvedPath, babelTypes, verboseMode);
 
-    // Always log the extracted keys
-    console.log('[idealyst-plugin] Extracted theme keys:');
-    console.log('  intents:', themeKeys.intents);
-    console.log('  radii:', themeKeys.radii);
-    console.log('  shadows:', themeKeys.shadows);
-    console.log('  sizes:');
-    for (const [component, sizes] of Object.entries(themeKeys.sizes)) {
-        console.log(`    ${component}:`, sizes);
+    // Log extracted keys in verbose mode
+    if (verboseMode) {
+        console.log('[idealyst-plugin] Extracted theme keys:');
+        console.log('  intents:', themeKeys.intents);
+        console.log('  radii:', themeKeys.radii);
+        console.log('  shadows:', themeKeys.shadows);
+        console.log('  sizes:');
+        for (const [component, sizes] of Object.entries(themeKeys.sizes)) {
+            console.log(`    ${component}:`, sizes);
+        }
     }
 
     return themeKeys;

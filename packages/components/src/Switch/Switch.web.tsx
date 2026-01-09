@@ -7,6 +7,10 @@ import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebSelectionAriaProps, generateAccessibilityId } from '../utils/accessibility';
 
+/**
+ * Toggle switch for binary on/off states with optional label and icons.
+ * Supports custom enabled/disabled icons and multiple sizes.
+ */
 const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   checked = false,
   onCheckedChange,

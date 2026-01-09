@@ -1,0 +1,35 @@
+{
+  "title": "Installation",
+  "description": "Get started with Idealyst by creating a new workspace using the CLI.",
+  "prerequisites": {
+    "title": "Prerequisites",
+    "items": "- Node.js 18 or later\n- Yarn 3 or later (recommended) or npm\n- For mobile development: Xcode (iOS) or Android Studio (Android)"
+  },
+  "createWorkspace": {
+    "title": "Create a New Workspace",
+    "description": "Run the following command to create a new Idealyst workspace:",
+    "result": "This creates a complete monorepo with all 5 packages: web, native, api, database, and shared."
+  },
+  "projectStructure": {
+    "title": "Project Structure",
+    "comments": {
+      "web": "React web app (Vite)",
+      "native": "React Native app",
+      "api": "tRPC + GraphQL server",
+      "database": "Prisma database layer",
+      "shared": "Shared utilities & tRPC client"
+    }
+  },
+  "configureBabel": {
+    "title": "Configure Babel",
+    "description": "Add the Idealyst Babel plugin to enable the style system:"
+  },
+  "startDevelopment": {
+    "title": "Start Development",
+    "comments": {
+      "web": "Start web dev server",
+      "native": "In another terminal, start native",
+      "api": "In another terminal, start API"
+    }
+  }
+}
