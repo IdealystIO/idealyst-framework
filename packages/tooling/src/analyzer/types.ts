@@ -29,6 +29,30 @@ export interface PropDefinition {
 }
 
 /**
+ * Configuration for a controlled state binding
+ */
+export interface ControlledState {
+  /** Initial value for the state */
+  initial: any;
+  /** The prop name that receives the onChange callback */
+  onChangeProp: string;
+  /** If true, the callback toggles a boolean value instead of receiving a new value */
+  toggle?: boolean;
+}
+
+/**
+ * Sample props for rendering the component in documentation
+ */
+export interface SampleProps {
+  /** Props needed to render the component (required props, sample data) */
+  props?: Record<string, any>;
+  /** Default children for the component */
+  children?: any;
+  /** Controlled state bindings - key is the prop name, value is the state config */
+  state?: Record<string, ControlledState>;
+}
+
+/**
  * Definition of a component in the registry
  */
 export interface ComponentDefinition {
@@ -46,6 +70,9 @@ export interface ComponentDefinition {
 
   /** Path to the component file (relative) */
   filePath?: string;
+
+  /** Sample props for rendering in documentation (from docs.ts) */
+  sampleProps?: SampleProps;
 }
 
 /**

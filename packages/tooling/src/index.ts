@@ -27,6 +27,8 @@ export {
   type PropDefinition,
   type ThemeValues,
   type ComponentAnalyzerOptions,
+  type SampleProps,
+  type ControlledState,
 } from './analyzer';
 
 // Vite Plugin (also available via @idealyst/tooling/vite)

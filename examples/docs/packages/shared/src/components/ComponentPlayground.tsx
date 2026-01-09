@@ -46,6 +46,18 @@ export type PropConfig = {
   themeExtensible?: boolean;
 };
 
+/**
+ * Configuration for controlled state bindings
+ */
+export type StateConfig = Record<string, {
+  /** Initial value for the state */
+  initial: any;
+  /** The prop name that receives the onChange callback */
+  onChangeProp: string;
+  /** If true, the callback toggles a boolean value instead of receiving a new value */
+  toggle?: boolean;
+}>;
+
 type PlaygroundProps = {
   /** Component to render */
   component: React.ComponentType<any>;
@@ -57,6 +69,10 @@ type PlaygroundProps = {
   defaultChildren?: ReactNode;
   /** Whether to show children input */
   showChildren?: boolean;
+  /** Fixed props that are always passed to the component (not editable in playground) */
+  fixedProps?: Record<string, any>;
+  /** Controlled state configuration from docs.ts */
+  stateConfig?: StateConfig;
 };
 
 /**
@@ -114,6 +130,8 @@ export function ComponentPlayground({
   propConfig,
   defaultChildren = 'Example',
   showChildren = true,
+  fixedProps = {},
+  stateConfig,
 }: PlaygroundProps) {
   const { theme } = useUnistyles();
 
@@ -125,6 +143,39 @@ export function ComponentPlayground({
     });
     return state;
   }, [propConfig]);
+
+  // Initialize controlled state from stateConfig
+  const initialControlledState = useMemo(() => {
+    if (!stateConfig) return {};
+    const state: Record<string, any> = {};
+    Object.entries(stateConfig).forEach(([propName, config]) => {
+      state[propName] = config.initial;
+    });
+    return state;
+  }, [stateConfig]);
+
+  // Controlled state for interactive demos (e.g., Switch checked, Dialog open)
+  const [controlledState, setControlledState] = useState<Record<string, any>>(initialControlledState);
+
+  // Generate callbacks for controlled state
+  const stateCallbacks = useMemo(() => {
+    if (!stateConfig) return {};
+    const callbacks: Record<string, (value?: any) => void> = {};
+    Object.entries(stateConfig).forEach(([propName, config]) => {
+      if (config.toggle) {
+        // Toggle mode: callback takes no arguments, toggles boolean state
+        callbacks[config.onChangeProp] = () => {
+          setControlledState(prev => ({ ...prev, [propName]: !prev[propName] }));
+        };
+      } else {
+        // Normal mode: callback receives new value
+        callbacks[config.onChangeProp] = (value: any) => {
+          setControlledState(prev => ({ ...prev, [propName]: value }));
+        };
+      }
+    });
+    return callbacks;
+  }, [stateConfig]);
 
   const [props, setProps] = useState<Record<string, any>>(initialState);
   const [children, setChildren] = useState(
@@ -140,6 +191,7 @@ export function ComponentPlayground({
   const resetToDefaults = () => {
     setProps(initialState);
     setChildren(typeof defaultChildren === 'string' ? defaultChildren : '');
+    setControlledState(initialControlledState);
   };
 
   // Build defaults map from propConfig
@@ -346,7 +398,7 @@ export function ComponentPlayground({
                 justifyContent: 'center',
               }}
             >
-              <Component {...getComponentProps()}>
+              <Component {...fixedProps} {...controlledState} {...stateCallbacks} {...getComponentProps()}>
                 {showChildren ? children : defaultChildren}
               </Component>
             </View>

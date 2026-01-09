@@ -55,14 +55,14 @@ claude mcp add idealyst -s user -- npx -y @idealyst/mcp-server@latest 2>/dev/nul
       case 'serena':
         commands.push(`
 # Serena MCP (code navigation and semantic search)
-claude mcp add serena -s user -- npx -y @anthropic-ai/mcp-serena@latest 2>/dev/null || true`);
+claude mcp add serena -s user -- uvx --from git+https://github.com/oraios/serena serena start-mcp-server --project-from-cwd 2>/dev/null || true`);
         break;
 
       case 'playwright':
         if (config.chrome) {
           commands.push(`
 # Playwright MCP (connects to browserless chrome)
-claude mcp add playwright -s user -- npx -y @anthropic-ai/mcp-playwright@latest --browser-ws-endpoint ws://chrome:3000 2>/dev/null || true`);
+claude mcp add playwright -s user -- npx -y @playwright/mcp@latest --cdp-endpoint ws://chrome:3000 2>/dev/null || true`);
         }
         break;
 
@@ -150,6 +150,15 @@ RUN mkdir -p /home/node/.claude-code
 `
     : '';
 
+  // Install uv (Python package manager) if serena MCP is enabled
+  const uvSetup = config.mcpServers?.includes('serena')
+    ? `
+# Install uv (Python package manager) for Serena MCP
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/home/node/.local/bin:$PATH"
+`
+    : '';
+
   const content = `FROM node:20-bullseye
 
 # Install additional tools
@@ -176,7 +185,7 @@ WORKDIR /workspace
 
 # Switch to node user
 USER node
-${claudeCodeSetup}`;
+${uvSetup}${claudeCodeSetup}`;
 
   await fs.writeFile(path.join(devcontainerDir, 'Dockerfile'), content);
 }
@@ -576,6 +585,10 @@ ${generateMcpSetupCommands(config.mcpServers, config)}
 # Generate Prisma client
 echo "🗄️ Generating Prisma client..."
 yarn db:generate
+
+# Push schema to database (creates tables if needed)
+echo "🗄️ Pushing schema to database..."
+yarn db:push
 
 # Run database migrations (if any exist)
 if [ -d "packages/database/prisma/migrations" ]; then

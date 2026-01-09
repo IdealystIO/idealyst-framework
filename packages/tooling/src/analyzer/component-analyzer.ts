@@ -18,6 +18,7 @@ import type {
   ComponentAnalyzerOptions,
   ThemeValues,
   ComponentCategory,
+  SampleProps,
 } from './types';
 import { analyzeTheme } from './theme-analyzer';
 
@@ -191,13 +192,151 @@ function analyzeComponentDir(
   // Determine category
   const category = inferCategory(componentName);
 
+  // Look for docs.ts to extract sample props
+  const sampleProps = extractSampleProps(dir);
+
   return {
     name: componentName,
     description,
     props,
     category,
     filePath: path.relative(process.cwd(), dir),
+    sampleProps,
   };
+}
+
+/**
+ * Extract sample props from docs.ts file if it exists.
+ * The docs.ts file should export a `sampleProps` object.
+ */
+function extractSampleProps(dir: string): SampleProps | undefined {
+  const docsPath = path.join(dir, 'docs.ts');
+
+  if (!fs.existsSync(docsPath)) {
+    return undefined;
+  }
+
+  try {
+    const content = fs.readFileSync(docsPath, 'utf-8');
+
+    // Create a simple TypeScript program to extract the sampleProps export
+    const sourceFile = ts.createSourceFile(
+      'docs.ts',
+      content,
+      ts.ScriptTarget.ES2020,
+      true,
+      ts.ScriptKind.TS
+    );
+
+    let samplePropsNode: ts.ObjectLiteralExpression | null = null;
+
+    // Find the sampleProps export
+    ts.forEachChild(sourceFile, (node) => {
+      // Handle: export const sampleProps = { ... }
+      if (ts.isVariableStatement(node)) {
+        const isExported = node.modifiers?.some(m => m.kind === ts.SyntaxKind.ExportKeyword);
+        if (isExported) {
+          for (const decl of node.declarationList.declarations) {
+            if (ts.isIdentifier(decl.name) && decl.name.text === 'sampleProps' && decl.initializer) {
+              if (ts.isObjectLiteralExpression(decl.initializer)) {
+                samplePropsNode = decl.initializer;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!samplePropsNode) {
+      return undefined;
+    }
+
+    // Extract the object literal as JSON-compatible structure
+    // This is a simplified extraction - it handles basic literals
+    const result: SampleProps = {};
+
+    for (const prop of samplePropsNode.properties) {
+      if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name)) {
+        const propName = prop.name.text;
+
+        if (propName === 'props' && ts.isObjectLiteralExpression(prop.initializer)) {
+          result.props = extractObjectLiteral(prop.initializer, content);
+        } else if (propName === 'children') {
+          // For children, we store the raw source text
+          result.children = prop.initializer.getText(sourceFile);
+        } else if (propName === 'state' && ts.isObjectLiteralExpression(prop.initializer)) {
+          // Extract state configuration for controlled components
+          result.state = extractObjectLiteral(prop.initializer, content);
+        }
+      }
+    }
+
+    return Object.keys(result).length > 0 ? result : undefined;
+  } catch (e) {
+    console.warn(`[component-analyzer] Error reading docs.ts in ${dir}:`, e);
+    return undefined;
+  }
+}
+
+/**
+ * Extract an object literal to a plain object (for simple literal values).
+ */
+function extractObjectLiteral(node: ts.ObjectLiteralExpression, sourceContent: string): Record<string, any> {
+  const result: Record<string, any> = {};
+
+  for (const prop of node.properties) {
+    if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name)) {
+      const key = prop.name.text;
+      const init = prop.initializer;
+
+      if (ts.isStringLiteral(init)) {
+        result[key] = init.text;
+      } else if (ts.isNumericLiteral(init)) {
+        result[key] = Number(init.text);
+      } else if (init.kind === ts.SyntaxKind.TrueKeyword) {
+        result[key] = true;
+      } else if (init.kind === ts.SyntaxKind.FalseKeyword) {
+        result[key] = false;
+      } else if (ts.isArrayLiteralExpression(init)) {
+        result[key] = extractArrayLiteral(init, sourceContent);
+      } else if (ts.isObjectLiteralExpression(init)) {
+        result[key] = extractObjectLiteral(init, sourceContent);
+      } else {
+        // For complex expressions (JSX, functions), store the raw source
+        result[key] = init.getText();
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Extract an array literal to a plain array.
+ */
+function extractArrayLiteral(node: ts.ArrayLiteralExpression, sourceContent: string): any[] {
+  const result: any[] = [];
+
+  for (const element of node.elements) {
+    if (ts.isStringLiteral(element)) {
+      result.push(element.text);
+    } else if (ts.isNumericLiteral(element)) {
+      result.push(Number(element.text));
+    } else if (element.kind === ts.SyntaxKind.TrueKeyword) {
+      result.push(true);
+    } else if (element.kind === ts.SyntaxKind.FalseKeyword) {
+      result.push(false);
+    } else if (ts.isObjectLiteralExpression(element)) {
+      result.push(extractObjectLiteral(element, sourceContent));
+    } else if (ts.isArrayLiteralExpression(element)) {
+      result.push(extractArrayLiteral(element, sourceContent));
+    } else {
+      // For complex expressions, store raw source
+      result.push(element.getText());
+    }
+  }
+
+  return result;
 }
 
 /**
