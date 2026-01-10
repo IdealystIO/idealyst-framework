@@ -121,24 +121,36 @@ Idealyst provides a comprehensive library of cross-platform React components org
 - **Icon**: MDI icon with theming
 - **Skeleton**: Loading placeholder
 - **Alert**: Notification message
+- **Accordion**: Collapsible content sections
+- **Image**: Cross-platform image component
+- **SVGImage**: SVG image renderer
+- **Video**: Video player component
 
 ### Navigation Components
 - **Tabs**: Tab navigation
 - **TabBar**: Bottom tab bar
 - **Breadcrumb**: Breadcrumb navigation
 - **Menu**: Dropdown menu
+- **MenuItem**: Individual menu item
 - **List**: Vertical list with sections
+- **ListItem**: Individual list item
+- **Link**: Navigation link component
 
 ### Overlay Components
 - **Dialog**: Modal dialog
 - **Popover**: Contextual overlay
 - **Tooltip**: Hover tooltip
 
+### Feedback Components
+- **Progress**: Progress indicator (linear/circular)
+- **ActivityIndicator**: Loading spinner
+
 ### Data Components
 - **Table**: Data table with sorting and filtering
 - **DataGrid**: Advanced data grid
 - **DatePicker**: Date selection component
-- **Progress**: Progress indicator
+- **TimePicker**: Time selection component
+- **DateTimePicker**: Combined date and time picker
 
 ## Common Props
 
@@ -155,11 +167,12 @@ Components support intent-based colors:
 - \`error\`: Destructive actions
 - \`warning\`: Caution actions
 
-### Variants
-Many components offer visual variants:
-- Buttons: \`contained\`, \`outlined\`, \`text\`
-- Cards: \`default\`, \`outlined\`, \`elevated\`, \`filled\`
-- Chips: \`filled\`, \`outlined\`, \`soft\`
+### Type/Variant Props
+Many components offer visual type or variant options:
+- Button \`type\`: \`contained\`, \`outlined\`, \`text\`
+- Card \`type\`: \`default\`, \`outlined\`, \`elevated\`, \`filled\`
+- Chip \`type\`: \`filled\`, \`outlined\`, \`soft\`
+- Progress \`variant\`: \`linear\`, \`circular\`
 
 ### Sizes
 Most components support size variants:
@@ -174,8 +187,9 @@ Components with icon support accept:
 
 Example:
 \`\`\`tsx
-<Button icon="check">Save</Button>
-<Button icon={<CustomIcon />}>Save</Button>
+<Button leftIcon="check">Save</Button>
+<Button leftIcon={<CustomIcon />}>Save</Button>
+<Button rightIcon="arrow-right">Next</Button>
 \`\`\`
 
 ## Theming
@@ -441,31 +455,29 @@ idealyst create <name> --type <type> [options]
 **Options:**
 - \`--type <type>\`: Package type (required)
   - \`web\`: React web app with Vite
-  - \`native\`: React Native app
+  - \`mobile\`: React Native mobile app
   - \`api\`: tRPC API server
-  - \`database\`: Prisma database layer
   - \`shared\`: Shared utilities library
-- \`--app-name <name>\`: Display name for native apps (required for native)
-- \`--with-trpc\`: Include tRPC setup (web/native)
-- \`--no-trpc\`: Exclude tRPC setup (web/native)
+- \`--app-name <name>\`: Display name for mobile apps (required for mobile)
+- \`--with-trpc\`: Include tRPC setup (web/mobile)
+- \`--no-trpc\`: Exclude tRPC setup (web/mobile)
 
 **Examples:**
 \`\`\`bash
 # Web app
 idealyst create web --type web --with-trpc
 
-# Native app
-idealyst create mobile --type native --app-name "My App" --with-trpc
+# Mobile app
+idealyst create mobile --type mobile --app-name "My App" --with-trpc
 
 # API server
 idealyst create api --type api
 
-# Database
-idealyst create database --type database
-
 # Shared library
 idealyst create shared --type shared
 \`\`\`
+
+**Note:** The database package is automatically created during workspace initialization. Use the \`init\` command to create a new workspace with all packages including database.
 
 ## Package Types
 
@@ -477,7 +489,7 @@ idealyst create shared --type shared
 - @idealyst/components
 - @idealyst/theme
 
-### Native Package
+### Mobile Package
 - React Native 0.80
 - TypeScript
 - React Navigation

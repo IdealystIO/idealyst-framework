@@ -110,7 +110,7 @@ function Example() {
         {options.map((option) => (
           <Card
             key={option.value}
-            variant={shipping === option.value ? 'outlined' : 'default'}
+            type={shipping === option.value ? 'outlined' : 'elevated'}
             padding="sm"
             clickable
             onPress={() => setShipping(option.value)}

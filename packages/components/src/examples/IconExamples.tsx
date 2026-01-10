@@ -122,6 +122,44 @@ export const IconExamples = () => {
           </View>
         </View>
 
+        {/* Text Colors */}
+        <View gap="md">
+          <Text typography="subtitle1">Text Colors</Text>
+          <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+            <View style={{ alignItems: 'center', gap: 4 }}>
+              <Icon name="account" size="md" textColor="primary" />
+              <Text typography="body2">Primary</Text>
+            </View>
+            <View style={{ alignItems: 'center', gap: 4 }}>
+              <Icon name="account" size="md" textColor="secondary" />
+              <Text typography="body2">Secondary</Text>
+            </View>
+            <View style={{ alignItems: 'center', gap: 4 }}>
+              <Icon name="account" size="md" textColor="tertiary" />
+              <Text typography="body2">Tertiary</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Inverse Text Colors */}
+        <View gap="md">
+          <Text typography="subtitle1">Inverse Text Colors</Text>
+          <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', alignItems: 'center', backgroundColor: '#333', padding: 12, borderRadius: 8 }}>
+            <View style={{ alignItems: 'center', gap: 4 }}>
+              <Icon name="account" size="md" textColor="inverse" />
+              <Text typography="body2" color="inverse">Inverse</Text>
+            </View>
+            <View style={{ alignItems: 'center', gap: 4 }}>
+              <Icon name="account" size="md" textColor="inverse-secondary" />
+              <Text typography="body2" color="inverse-secondary">Inverse Secondary</Text>
+            </View>
+            <View style={{ alignItems: 'center', gap: 4 }}>
+              <Icon name="account" size="md" textColor="inverse-tertiary" />
+              <Text typography="body2" color="inverse-tertiary">Inverse Tertiary</Text>
+            </View>
+          </View>
+        </View>
+
         {/* Color Shades */}
         <View gap="md">
           <Text typography="subtitle1">Color Shades</Text>

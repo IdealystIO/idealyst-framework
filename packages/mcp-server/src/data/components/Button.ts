@@ -6,6 +6,7 @@ category: "form",
 - \`title\`: string - The text title to display inside the button (for web)
 - \`onPress\`: function - Called when the button is pressed
 - \`disabled\`: boolean - Whether the button is disabled
+- \`loading\`: boolean - Whether the button is in a loading state. Shows a spinner and disables interaction.
 - \`type\`: ButtonType - The visual style type of the button ('contained' | 'outlined' | 'text')
 - \`intent\`: ButtonIntentVariant - The intent/color scheme of the button
 - \`size\`: ButtonSizeVariant - The size of the button
@@ -17,6 +18,7 @@ category: "form",
       "Three type variants: contained, outlined, text",
       "Five intent colors: primary, neutral, success, error, warning",
       "Five sizes: xs, sm, md, lg, xl",
+      "Loading state with spinner (matches text color)",
       "Gradient overlay effects (darken/lighten) for contained buttons",
       "Left and right icon support with MDI icons or custom React elements",
       "Disabled states with visual feedback",
@@ -35,7 +37,7 @@ import { Button } from '@idealyst/components';
 <Button
   type="contained"
   intent="primary"
-  icon="check"
+  leftIcon="check"
   onPress={() => console.log('Pressed')}
 >
   Save Changes
@@ -56,13 +58,20 @@ import { Button } from '@idealyst/components';
 <Button type="text" intent="primary">Text</Button>`,
       "with-icons": `import { Button } from '@idealyst/components';
 
-// Button with icon
-<Button icon="check" iconPosition="left">
+// Button with left icon
+<Button leftIcon="check">
   Confirm
 </Button>
 
-// Icon-only button
-<Button icon="close" />`,
+// Button with right icon
+<Button rightIcon="arrow-right">
+  Next
+</Button>
+
+// Button with both icons
+<Button leftIcon="check" rightIcon="arrow-right">
+  Continue
+</Button>`,
       interactive: `import { Button } from '@idealyst/components';
 import { useState } from 'react';
 

@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef, useMemo, Children, isValidElement, cloneElement } from 'react';
 import { View, ScrollView } from 'react-native';
 import { listStyles } from './List.styles';
 import type { ListProps } from './types';
@@ -59,9 +59,21 @@ const List = forwardRef<View, ListProps>(({
     style,
   ];
 
+  // Process children to add isLast prop to the last child
+  const childArray = Children.toArray(children);
+  const processedChildren = childArray.map((child, index) => {
+    if (isValidElement(child)) {
+      return cloneElement(child, {
+        ...child.props,
+        isLast: index === childArray.length - 1,
+      });
+    }
+    return child;
+  });
+
   const content = (
     <ListProvider value={{ type, size }}>
-      {children}
+      {processedChildren}
     </ListProvider>
   );
 

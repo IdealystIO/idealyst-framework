@@ -56,18 +56,18 @@ function App() {
 
 ### Quick Start with Examples
 
-Use pre-built example routers for instant working navigation:
+Use the pre-built example router for instant working navigation:
 
 \`\`\`tsx
-import { ExampleStackRouter } from '@idealyst/navigation/examples';
+import { ExampleNavigationRouter } from '@idealyst/navigation/examples';
 
-<NavigatorProvider route={ExampleStackRouter} />
+<NavigatorProvider route={ExampleNavigationRouter} />
 \`\`\`
 
-Available example routers:
-- **ExampleStackRouter**: Desktop/web with header and sidebar
-- **ExampleTabRouter**: Mobile with tab navigation
-- **ExampleDrawerRouter**: Desktop with drawer menu
+The example router demonstrates:
+- Stack-based navigation structure
+- Custom web layouts with header and sidebar
+- Tab navigation for nested sections
 
 ## Platform Differences
 
@@ -162,8 +162,10 @@ navigator.navigate({
 });
 
 // Access in component:
-const navigator = useNavigator();
-const userId = navigator.vars.id;
+import { useParams } from '@idealyst/navigation';
+
+const params = useParams();
+const userId = params.id;
 \`\`\`
 
 ### Optional Parameters
@@ -926,25 +928,68 @@ navigator.navigate({ path: '/new-location', replace: true });
 - URL canonicalization/normalization
 - Redirect from deprecated routes
 
-### navigator.vars
+## useParams Hook
 
-Access current route variables:
+Access current route path parameters:
 
 \`\`\`tsx
-const navigator = useNavigator();
-const userId = navigator.vars.id;        // Path param
-const searchQuery = navigator.vars.q;    // Query param
+import { useParams } from '@idealyst/navigation';
+
+function UserScreen() {
+  const params = useParams();
+  const userId = params.id;        // Path param from /user/:id
+
+  return <Text>User ID: {userId}</Text>;
+}
 \`\`\`
 
-### navigator.currentPath
+## useNavigationState Hook
 
-Get the current route path:
+Access navigation state passed via the \`state\` property:
 
 \`\`\`tsx
-const navigator = useNavigator();
-const path = navigator.currentPath;
+import { useNavigationState } from '@idealyst/navigation';
 
-console.log(path); // "/user/123"
+// When navigating:
+navigator.navigate({
+  path: '/recording',
+  state: { autostart: true, source: 'home' }
+});
+
+// In destination screen:
+function RecordingScreen() {
+  const { autostart, source } = useNavigationState<{
+    autostart?: boolean;
+    source?: string;
+  }>();
+
+  // autostart = true, source = 'home'
+}
+\`\`\`
+
+### Consuming State (Web)
+
+Remove state from URL after reading:
+
+\`\`\`tsx
+// URL: /recording?autostart=true
+const { autostart } = useNavigationState<{ autostart?: boolean }>({
+  consume: ['autostart']
+});
+// autostart = true, URL becomes: /recording (param removed)
+\`\`\`
+
+## useLocation (React Router)
+
+Get the current route path on web:
+
+\`\`\`tsx
+import { useLocation } from '@idealyst/navigation';
+
+function MyComponent() {
+  const location = useLocation();
+  console.log(location.pathname); // "/user/123"
+}
 \`\`\`
 
 ### navigator.canGoBack()
@@ -996,9 +1041,11 @@ In route configuration:
 
 In the screen component:
 \`\`\`tsx
+import { useParams } from '@idealyst/navigation';
+
 function UserScreen() {
-  const navigator = useNavigator();
-  const userId = navigator.vars.id;
+  const params = useParams();
+  const userId = params.id;
 
   return <Text>User ID: {userId}</Text>;
 }
@@ -1007,6 +1054,8 @@ function UserScreen() {
 ### Multiple Parameters
 
 \`\`\`tsx
+import { useParams } from '@idealyst/navigation';
+
 // Route: "post/:postId/comment/:commentId"
 
 // Navigate:
@@ -1016,8 +1065,9 @@ navigator.navigate({
 });
 
 // Access:
-const postId = navigator.vars.postId;
-const commentId = navigator.vars.commentId;
+const params = useParams();
+const postId = params.postId;
+const commentId = params.commentId;
 \`\`\`
 
 ## Query Parameters
@@ -1040,12 +1090,15 @@ navigator.navigate({
 ### Reading Query Params
 
 \`\`\`tsx
-function SearchScreen() {
-  const navigator = useNavigator();
+import { useNavigationState } from '@idealyst/navigation';
 
-  const query = navigator.vars.q;
-  const category = navigator.vars.category;
-  const sort = navigator.vars.sort;
+function SearchScreen() {
+  // Query params are accessed via useNavigationState on web
+  const { q, category, sort } = useNavigationState<{
+    q?: string;
+    category?: string;
+    sort?: string;
+  }>();
 
   // Use params...
 }
@@ -1090,8 +1143,8 @@ Pass data through navigation:
 
 // Detail screen
 function ProductScreen() {
-  const navigator = useNavigator();
-  const productId = navigator.vars.id;
+  const params = useParams();
+  const productId = params.id;
 
   const product = useProduct(productId);
   // Render product...
@@ -1122,15 +1175,18 @@ function ProtectedScreen() {
 ### Navigation Guards
 
 \`\`\`tsx
+import { useNavigator, useLocation } from '@idealyst/navigation';
+
 function useAuthGuard() {
-  const navigator = useNavigator();
+  const { navigate } = useNavigator();
+  const location = useLocation();
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated && navigator.currentPath !== '/login') {
-      navigator.navigate({ path: '/login', vars: {} });
+    if (!isAuthenticated && location.pathname !== '/login') {
+      navigate({ path: '/login' });
     }
-  }, [isAuthenticated, navigator.currentPath]);
+  }, [isAuthenticated, location.pathname]);
 }
 
 function App() {
@@ -1165,13 +1221,15 @@ useEffect(() => {
 Track navigation history:
 
 \`\`\`tsx
+import { useLocation } from '@idealyst/navigation';
+
 function useNavigationHistory() {
-  const navigator = useNavigator();
+  const location = useLocation();
   const [history, setHistory] = useState<string[]>([]);
 
   useEffect(() => {
-    setHistory(prev => [...prev, navigator.currentPath]);
-  }, [navigator.currentPath]);
+    setHistory(prev => [...prev, location.pathname]);
+  }, [location.pathname]);
 
   return history;
 }
@@ -1247,19 +1305,28 @@ const { canGoBack, goBack } = useNavigator();
 ### Tab Navigation
 
 \`\`\`tsx
+import { useNavigator, useLocation } from '@idealyst/navigation';
+
 const tabs = ['feed', 'search', 'profile'];
 
-<View>
-  {tabs.map(tab => (
-    <Button
-      key={tab}
-      onPress={() => navigator.navigate({ path: \`/\${tab}\`, vars: {} })}
-      variant={navigator.currentPath === \`/\${tab}\` ? 'contained' : 'outlined'}
-    >
-      {tab}
-    </Button>
-  ))}
-</View>
+function TabBar() {
+  const { navigate } = useNavigator();
+  const location = useLocation();
+
+  return (
+    <View>
+      {tabs.map(tab => (
+        <Button
+          key={tab}
+          onPress={() => navigate({ path: \`/\${tab}\` })}
+          type={location.pathname === \`/\${tab}\` ? 'contained' : 'outlined'}
+        >
+          {tab}
+        </Button>
+      ))}
+    </View>
+  );
+}
 \`\`\`
 
 ### Modal Navigation

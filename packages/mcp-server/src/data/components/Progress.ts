@@ -33,7 +33,7 @@ import { Progress } from '@idealyst/components';
 
 <Progress
   value={65}
-  type="linear"
+  variant="linear"
   intent="primary"
   showLabel
 />
@@ -46,9 +46,9 @@ import { Progress } from '@idealyst/components';
     variants: `import { Progress, View } from '@idealyst/components';
 
 <View spacing="md">
-  <Progress value={30} type="linear" intent="primary" />
-  <Progress value={60} type="linear" intent="success" />
-  <Progress value={value} type="circular" size="lg" showLabel />
+  <Progress value={30} variant="linear" intent="primary" />
+  <Progress value={60} variant="linear" intent="success" />
+  <Progress value={value} variant="circular" size="lg" showLabel />
 </View>`,
 
     "with-icons": `import { Progress, View, Text } from '@idealyst/components';

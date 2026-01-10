@@ -8,7 +8,7 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import { useListContext } from './ListContext';
 
-const ListItem: React.FC<ListItemProps> = ({
+const ListItem: React.FC<ListItemProps & { isLast?: boolean }> = ({
   id,
   label,
   children,
@@ -23,6 +23,7 @@ const ListItem: React.FC<ListItemProps> = ({
   onPress,
   style,
   testID,
+  isLast = false,
 }) => {
   const { theme } = useUnistyles() as { theme: Theme };
   const listContext = useListContext();
@@ -41,7 +42,7 @@ const ListItem: React.FC<ListItemProps> = ({
   });
 
   // Get dynamic styles - call as functions for theme reactivity
-  const itemStyle = (listStyles.item as any)({ type: effectiveVariant, disabled, clickable: isClickable });
+  const itemStyle = (listStyles.item as any)({ type: effectiveVariant, disabled, clickable: isClickable, isLast });
   const labelStyle = (listStyles.label as any)({ disabled, selected });
   const leadingStyle = (listStyles.leading as any)({});
   const trailingStyle = (listStyles.trailing as any)({});

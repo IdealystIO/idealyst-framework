@@ -16,6 +16,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     children,
     onPress,
     disabled = false,
+    loading = false,
     type = 'contained',
     intent = 'primary',
     size = 'md',
@@ -40,10 +41,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     accessibilityHasPopup,
   } = props;
 
+  // Button is effectively disabled when loading
+  const isDisabled = disabled || loading;
+
   // Apply variants for size, disabled, gradient
   buttonStyles.useVariants({
     size,
-    disabled,
+    disabled: isDisabled,
     gradient,
   });
 
@@ -51,7 +55,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     e.preventDefault();
     // Only stop propagation if we have an onPress handler
     // Otherwise, let clicks bubble up to parent handlers (e.g., Menu triggers)
-    if (!disabled && onPress) {
+    if (!isDisabled && onPress) {
       e.stopPropagation();
       onPress();
     }
@@ -70,7 +74,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     return getWebInteractiveAriaProps({
       accessibilityLabel: computedLabel,
       accessibilityHint,
-      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityDisabled: accessibilityDisabled ?? isDisabled,
       accessibilityHidden,
       accessibilityRole: accessibilityRole ?? 'button',
       accessibilityLabelledBy,
@@ -89,7 +93,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     rightIcon,
     accessibilityHint,
     accessibilityDisabled,
-    disabled,
+    isDisabled,
     accessibilityHidden,
     accessibilityRole,
     accessibilityLabelledBy,
@@ -102,7 +106,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   ]);
 
   // Compute dynamic styles with all props for full flexibility
-  const dynamicProps = { intent, type, size, disabled, gradient };
+  const dynamicProps = { intent, type, size, disabled: isDisabled, gradient };
   const buttonStyleArray = [
     (buttonStyles.button as any)(dynamicProps),
     (buttonStyles.text as any)(dynamicProps),
@@ -118,6 +122,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   // Icon styles with dynamic function
   const iconStyleArray = [(buttonStyles.icon as any)(dynamicProps)];
   const iconProps = getWebProps(iconStyleArray);
+
+  // Spinner styles that match the text color
+  const spinnerStyleArray = [(buttonStyles.spinner as any)(dynamicProps)];
+  const spinnerProps = getWebProps(spinnerStyleArray);
 
   // Helper to render icon - now uses icon name directly
   const renderIcon = (icon: string | React.ReactNode) => {
@@ -143,8 +151,40 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   // Determine if we need to wrap content in icon container
   const hasIcons = leftIcon || rightIcon;
 
+  // Render spinner with inline CSS animation (absolutely centered)
+  const renderSpinner = () => (
+    <>
+      <style>
+        {`
+          @keyframes button-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+      <span
+        {...spinnerProps}
+        style={{
+          position: 'absolute',
+          display: 'inline-block',
+          width: '1em',
+          height: '1em',
+          border: '2px solid currentColor',
+          borderTopColor: 'transparent',
+          borderRadius: '50%',
+          animation: 'button-spin 0.8s linear infinite',
+        }}
+        role="status"
+        aria-label="Loading"
+      />
+    </>
+  );
+
   // Merge unistyles web ref with forwarded ref
   const mergedRef = useMergeRefs(ref, webProps.ref);
+
+  // Content opacity - hide when loading but keep for sizing
+  const contentStyle = loading ? { opacity: 0 } : undefined;
 
   return (
     <button
@@ -153,17 +193,20 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
       ref={mergedRef}
       id={buttonId}
       onClick={handleClick}
-      disabled={disabled}
+      disabled={isDisabled}
       data-testid={testID}
+      aria-busy={loading ? 'true' : undefined}
+      style={{ position: 'relative' }}
     >
+      {loading && renderSpinner()}
       {hasIcons ? (
-        <div {...iconContainerProps}>
+        <div {...iconContainerProps} style={contentStyle}>
           {leftIcon && renderIcon(leftIcon)}
           {buttonContent}
           {rightIcon && renderIcon(rightIcon)}
         </div>
       ) : (
-        buttonContent
+        <span style={contentStyle}>{buttonContent}</span>
       )}
     </button>
   );

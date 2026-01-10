@@ -28,4 +28,8 @@ module.exports = {
     'node_modules/(?!(chalk|ora|inquirer|validate-npm-package-name)/)',
   ],
   testTimeout: 30000, // CLI operations can take time
+  // Memory management settings
+  maxWorkers: 4, // Limit parallel workers to prevent memory issues
+  workerIdleMemoryLimit: '512MB', // Kill workers that exceed memory threshold
+  forceExit: true, // Ensure Jest exits after all tests complete
 }; 

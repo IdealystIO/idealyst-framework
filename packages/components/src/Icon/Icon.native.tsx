@@ -8,6 +8,7 @@ const Icon = forwardRef<any, IconProps>(({
   name,
   size = 'md',
   color,
+  textColor,
   intent,
   style,
   testID,
@@ -17,7 +18,7 @@ const Icon = forwardRef<any, IconProps>(({
   const { theme } = useUnistyles();
 
   // Call dynamic style with variants - includes theme-reactive color
-  const iconStyle = (iconStyles.icon as any)({ color, intent, size });
+  const iconStyle = (iconStyles.icon as any)({ color, textColor, intent, size });
 
   const iconSize = useMemo(() => {
     return iconStyle.width;

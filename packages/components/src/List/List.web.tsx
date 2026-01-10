@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children, isValidElement, cloneElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { listStyles } from './List.styles';
 import type { ListProps } from './types';
@@ -47,6 +47,18 @@ const List: React.FC<ListProps> = ({
 
   const containerProps = getWebProps(containerStyle);
 
+  // Process children to add isLast prop to the last child
+  const childArray = Children.toArray(children);
+  const processedChildren = childArray.map((child, index) => {
+    if (isValidElement(child)) {
+      return cloneElement(child, {
+        ...child.props,
+        isLast: index === childArray.length - 1,
+      });
+    }
+    return child;
+  });
+
   return (
     <ListProvider value={{ type, size }}>
       <div
@@ -55,7 +67,7 @@ const List: React.FC<ListProps> = ({
         id={id}
         data-testid={testID}
       >
-        {children}
+        {processedChildren}
       </div>
     </ListProvider>
   );

@@ -13,6 +13,7 @@ import { cliCommands } from "./data/cli-commands.js";
 import { frameworkGuides } from "./data/framework-guides.js";
 import { navigationGuides } from "./data/navigation-guides.js";
 import { translateGuides } from "./data/translate-guides.js";
+import { storageGuides } from "./data/storage-guides.js";
 import { iconGuide } from "./data/icon-guide.js";
 import iconsData from "./data/icons.json" with { type: "json" };
 import {
@@ -26,7 +27,7 @@ import {
 const server = new Server(
   {
     name: "@idealyst/mcp-server",
-    version: "1.0.93",
+    version: "1.0.94",
   },
   {
     capabilities: {
@@ -201,6 +202,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "string",
               description: "Topic to get docs for: 'overview', 'runtime-api', 'babel-plugin', 'translation-files', 'examples'",
               enum: ["overview", "runtime-api", "babel-plugin", "translation-files", "examples"],
+            },
+          },
+          required: ["topic"],
+        },
+      },
+      {
+        name: "get_storage_guide",
+        description: "Get documentation for @idealyst/storage cross-platform storage package. Covers API reference and usage examples.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            topic: {
+              type: "string",
+              description: "Topic to get docs for: 'overview', 'api', 'examples'",
+              enum: ["overview", "api", "examples"],
             },
           },
           required: ["topic"],
@@ -575,6 +591,32 @@ ${command.examples.map((ex: string) => `\`\`\`bash\n${ex}\n\`\`\``).join("\n\n")
       };
     }
 
+    case "get_storage_guide": {
+      const topic = args?.topic as string;
+      const uri = `idealyst://storage/${topic}`;
+      const guide = storageGuides[uri];
+
+      if (!guide) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Topic "${topic}" not found. Available topics: overview, api, examples`,
+            },
+          ],
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: guide,
+          },
+        ],
+      };
+    }
+
     default:
       return {
         content: [
@@ -681,6 +723,24 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
         description: "Complete code examples for common translation patterns",
         mimeType: "text/markdown",
       },
+      {
+        uri: "idealyst://storage/overview",
+        name: "Storage Overview",
+        description: "Overview of @idealyst/storage cross-platform storage package",
+        mimeType: "text/markdown",
+      },
+      {
+        uri: "idealyst://storage/api",
+        name: "Storage API Reference",
+        description: "Complete API reference for @idealyst/storage",
+        mimeType: "text/markdown",
+      },
+      {
+        uri: "idealyst://storage/examples",
+        name: "Storage Examples",
+        description: "Complete code examples for common storage patterns",
+        mimeType: "text/markdown",
+      },
     ],
   };
 });
@@ -690,7 +750,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   const { uri } = request.params;
 
   // Check all guide sources
-  let guide = frameworkGuides[uri] || navigationGuides[uri] || translateGuides[uri];
+  let guide = frameworkGuides[uri] || navigationGuides[uri] || translateGuides[uri] || storageGuides[uri];
 
   // Handle icon reference
   if (uri === "idealyst://icons/reference") {

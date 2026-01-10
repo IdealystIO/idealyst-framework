@@ -76,6 +76,13 @@ export interface ButtonProps extends BaseProps, InteractiveAccessibilityProps {
   rightIcon?: IconName | ReactNode;
 
   /**
+   * Whether the button is in a loading state.
+   * When true, shows a spinner and disables interaction.
+   * The spinner color matches the button text color.
+   */
+  loading?: boolean;
+
+  /**
    * Additional styles (platform-specific)
    */
   style?: StyleProp<ViewStyle>;

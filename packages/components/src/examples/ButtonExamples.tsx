@@ -403,7 +403,117 @@ export const ButtonExamples = () => {
           </Button>
         </View>
       </View>
+
+      {/* Loading State */}
+      <View gap="md">
+        <Text typography="subtitle1">Loading State</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+          <Button
+            type="contained"
+            intent="primary"
+            loading
+            onPress={() => handlePress('loading-contained')}
+          >
+            Loading
+          </Button>
+          <Button
+            type="outlined"
+            intent="primary"
+            loading
+            onPress={() => handlePress('loading-outlined')}
+          >
+            Loading
+          </Button>
+          <Button
+            type="text"
+            intent="primary"
+            loading
+            onPress={() => handlePress('loading-text')}
+          >
+            Loading
+          </Button>
+        </View>
+      </View>
+
+      {/* Loading with Different Intents */}
+      <View gap="md">
+        <Text typography="subtitle1">Loading Intents</Text>
+        <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+          <Button
+            type="contained"
+            intent="primary"
+            loading
+            onPress={() => handlePress('loading-primary')}
+          >
+            Primary
+          </Button>
+          <Button
+            type="contained"
+            intent="success"
+            loading
+            onPress={() => handlePress('loading-success')}
+          >
+            Success
+          </Button>
+          <Button
+            type="contained"
+            intent="error"
+            loading
+            onPress={() => handlePress('loading-error')}
+          >
+            Error
+          </Button>
+          <Button
+            type="contained"
+            intent="warning"
+            loading
+            onPress={() => handlePress('loading-warning')}
+          >
+            Warning
+          </Button>
+        </View>
+      </View>
+
+      {/* Interactive Loading Example */}
+      <View gap="md">
+        <Text typography="subtitle1">Interactive Loading</Text>
+        <InteractiveLoadingButton />
+      </View>
     </View>
     </Screen>
+  );
+};
+
+// Interactive loading button component
+const InteractiveLoadingButton = () => {
+  const [loading, setLoading] = React.useState(false);
+
+  const handlePress = async () => {
+    setLoading(true);
+    // Simulate async operation
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setLoading(false);
+  };
+
+  return (
+    <View style={{ flexDirection: 'row', gap: 12, flexWrap: 'wrap' }}>
+      <Button
+        type="contained"
+        intent="primary"
+        loading={loading}
+        onPress={handlePress}
+      >
+        {loading ? 'Saving...' : 'Save'}
+      </Button>
+      <Button
+        type="outlined"
+        intent="success"
+        loading={loading}
+        leftIcon="check"
+        onPress={handlePress}
+      >
+        {loading ? 'Processing...' : 'Submit'}
+      </Button>
+    </View>
   );
 }; 

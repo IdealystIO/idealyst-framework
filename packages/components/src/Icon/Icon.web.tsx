@@ -5,7 +5,7 @@ import { iconStyles } from './Icon.styles';
 import { getWebProps } from 'react-native-unistyles/web';
 import { useUnistyles } from 'react-native-unistyles';
 import useMergeRefs from '../hooks/useMergeRefs';
-import { getColorFromString, Intent, Color } from '@idealyst/theme';
+import { getColorFromString, Intent, Color, Text } from '@idealyst/theme';
 import { IconRegistry } from './IconRegistry';
 
 /**
@@ -17,6 +17,7 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
     name,
     size = 'md',
     color,
+    textColor,
     intent,
     style,
     testID,
@@ -47,15 +48,18 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
     iconSize = typeof themeSize === 'number' ? themeSize : (themeSize?.width ?? 24);
   }
 
-  // Compute color from intent or color prop or default
+  // Compute color - priority: intent > color > textColor > default
+  // color takes precedence over textColor (as per design)
   const iconColor = intent
     ? theme.intents[intent as Intent]?.primary
     : color
       ? getColorFromString(theme, color as Color)
-      : theme.colors.text.primary;
+      : textColor
+        ? theme.colors.text[textColor as Text]
+        : theme.colors.text.primary;
 
   // Use getWebProps for className generation but override with computed values
-  const iconStyle = (iconStyles.icon as any)({ intent, color, size });
+  const iconStyle = (iconStyles.icon as any)({ intent, color, textColor, size });
   const iconProps = getWebProps([iconStyle, style]);
 
   const mergedRef = useMergeRefs(ref, iconProps.ref);

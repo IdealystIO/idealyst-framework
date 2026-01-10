@@ -8,7 +8,7 @@ import type { ListItemProps } from './types';
 import { useListContext } from './ListContext';
 import { getNativeSelectableAccessibilityProps } from '../utils/accessibility';
 
-const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, ListItemProps>(({
+const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, ListItemProps & { isLast?: boolean }>(({
   id,
   label,
   children,
@@ -23,6 +23,7 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
   onPress,
   style,
   testID,
+  isLast = false,
   // Accessibility props
   accessibilityLabel,
   accessibilityHint,
@@ -60,7 +61,7 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
   });
 
   // Get dynamic styles - call as functions to get theme-reactive styles
-  const itemStyle = (listStyles.item as any)({ type: effectiveVariant, disabled, clickable: isClickable });
+  const itemStyle = (listStyles.item as any)({ type: effectiveVariant, disabled, clickable: isClickable, isLast });
   const labelStyle = (listStyles.label as any)({ disabled, selected });
   const leadingStyle = (listStyles.leading as any)({});
   const trailingStyle = (listStyles.trailing as any)({});

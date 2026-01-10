@@ -146,7 +146,12 @@ function createRootTsConfig(): Record<string, unknown> {
  * Create .gitignore content
  */
 function createGitignore(): string {
-  return `# Dependencies
+  return `# AI/Tool configs
+.claude/
+.serena/
+.playwright/
+
+# Dependencies
 node_modules/
 .yarn/*
 !.yarn/patches
@@ -196,6 +201,29 @@ yarn-error.log*
 # Misc
 *.tmp
 *.bak
+
+# Turborepo
+.turbo/
+
+# Linting
+.eslintcache
+
+# SSL
+*.pem
+
+# Deployment
+.vercel/
+.netlify/
+
+# Expo
+.expo/
+.expo-shared/
+
+# Metro
+.metro-health-check*
+
+# Watchman
+.watchman-*
 `;
 }
 

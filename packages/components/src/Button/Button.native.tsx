@@ -1,5 +1,5 @@
 import React, { ComponentRef, forwardRef, isValidElement, useMemo } from 'react';
-import { StyleSheet as RNStyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet as RNStyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { buttonStyles } from './Button.styles';
@@ -13,6 +13,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     title,
     onPress,
     disabled = false,
+    loading = false,
     type = 'contained',
     intent = 'primary',
     size = 'md',
@@ -35,19 +36,23 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     accessibilityPressed,
   } = props;
 
+  // Button is effectively disabled when loading
+  const isDisabled = disabled || loading;
+
   // Apply variants for size, disabled, gradient
   buttonStyles.useVariants({
     size,
-    disabled,
+    disabled: isDisabled,
     gradient,
   });
 
   // Compute dynamic styles with all props for full flexibility
-  const dynamicProps = { intent, type, size, disabled, gradient };
+  const dynamicProps = { intent, type, size, disabled: isDisabled, gradient };
   const buttonStyle = (buttonStyles.button as any)(dynamicProps);
   const textStyle = (buttonStyles.text as any)(dynamicProps);
   const iconStyle = (buttonStyles.icon as any)(dynamicProps);
   const iconContainerStyle = (buttonStyles.iconContainer as any)(dynamicProps);
+  const spinnerStyle = (buttonStyles.spinner as any)(dynamicProps);
 
   // Gradient is only applicable to contained buttons
   const showGradient = gradient && type === 'contained';
@@ -87,7 +92,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     return getNativeInteractiveAccessibilityProps({
       accessibilityLabel: computedLabel,
       accessibilityHint,
-      accessibilityDisabled: accessibilityDisabled ?? disabled,
+      accessibilityDisabled: accessibilityDisabled ?? isDisabled,
       accessibilityHidden,
       accessibilityRole: accessibilityRole ?? 'button',
       accessibilityLabelledBy,
@@ -103,7 +108,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
     rightIcon,
     accessibilityHint,
     accessibilityDisabled,
-    disabled,
+    isDisabled,
     accessibilityHidden,
     accessibilityRole,
     accessibilityLabelledBy,
@@ -166,7 +171,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   const touchableProps = {
     ref,
     onPress,
-    disabled,
+    disabled: isDisabled,
     testID,
     nativeID: id,
     activeOpacity: 0.7,
@@ -175,32 +180,53 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
       showGradient && { overflow: 'hidden' },
       style,
     ],
+    accessibilityState: loading ? { busy: true } : undefined,
     ...nativeA11yProps,
   };
+
+  // Get spinner color from the spinner style (matches text color)
+  const spinnerColor = spinnerStyle?.color || (type === 'contained' ? '#fff' : undefined);
+
+  // Content opacity - hide when loading but keep for sizing
+  const contentOpacity = loading ? 0 : 1;
 
   return (
     <TouchableOpacity {...touchableProps as any}>
       {renderGradientLayer()}
+      {/* Centered spinner overlay */}
+      {loading && (
+        <View style={RNStyleSheet.absoluteFill}>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator
+              size="small"
+              color={spinnerColor}
+            />
+          </View>
+        </View>
+      )}
+      {/* Content with opacity 0 when loading to maintain size */}
       {hasIcons ? (
-        <View  style={iconContainerStyle}>
-          {leftIcon && 
-          <MaterialCommunityIcons
-            name={leftIcon}
-            size={iconSize}
-            style={iconStyle}
-        />}
+        <View style={[iconContainerStyle, { opacity: contentOpacity }]}>
+          {leftIcon && (
+            <MaterialCommunityIcons
+              name={leftIcon}
+              size={iconSize}
+              style={iconStyle}
+            />
+          )}
           <Text style={textStyle}>
             {buttonContent}
           </Text>
-          {rightIcon &&    
-          <MaterialCommunityIcons
-            name={rightIcon}
-            size={iconSize}
-            style={iconStyle}
-        />}
+          {rightIcon && (
+            <MaterialCommunityIcons
+              name={rightIcon}
+              size={iconSize}
+              style={iconStyle}
+            />
+          )}
         </View>
       ) : (
-        <Text style={textStyle}>
+        <Text style={[textStyle, { opacity: contentOpacity }]}>
           {buttonContent}
         </Text>
       )}

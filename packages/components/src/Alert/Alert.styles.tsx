@@ -59,9 +59,11 @@ export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
             display: 'flex' as const,
             alignItems: 'center' as const,
             justifyContent: 'center' as const,
+            alignSelf: 'flex-start' as const,
             flexShrink: 0,
             width: 24,
             height: 24,
+            marginTop: 2,
             color,
         } as const;
     },
@@ -105,27 +107,38 @@ export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
 
     closeButton: (_props: AlertDynamicProps) => ({
         padding: 4,
-        backgroundColor: 'transparent' as const,
         borderRadius: 4,
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         flexShrink: 0,
+        alignSelf: 'flex-start' as const,
+        marginTop: 2,
         _web: {
+            appearance: 'none',
+            background: 'none',
+            backgroundColor: 'transparent',
             border: 'none',
             cursor: 'pointer',
             outline: 'none',
+            margin: 0,
             _hover: {
                 backgroundColor: 'rgba(0, 0, 0, 0.1)',
             },
         },
     }),
 
-    closeIcon: (_props: AlertDynamicProps) => ({
-        display: 'flex' as const,
-        alignItems: 'center' as const,
-        justifyContent: 'center' as const,
-        width: 16,
-        height: 16,
-    }),
+    closeIcon: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const color = type === 'filled' ? intentValue.contrast : intentValue.primary;
+
+        return {
+            display: 'flex' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
+            width: 16,
+            height: 16,
+            color,
+        } as const;
+    },
 }));

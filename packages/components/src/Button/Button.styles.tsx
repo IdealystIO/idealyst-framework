@@ -137,4 +137,19 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
         justifyContent: 'center' as const,
         gap: 4,
     }),
+    spinner: ({ intent = 'primary', type = 'contained' }: ButtonDynamicProps) => ({
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        // Match the text color based on button type
+        color: type === 'contained'
+            ? theme.intents[intent].contrast
+            : theme.intents[intent].primary,
+        variants: {
+            size: {
+                width: theme.sizes.$button.iconSize,
+                height: theme.sizes.$button.iconSize,
+            },
+        },
+    }),
 }));

@@ -43,7 +43,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const iconStyle = (accordionStyles.icon as any)({});
   const contentStyle = (accordionStyles.content as any)({});
   const titleStyle = (accordionStyles.title as any)({});
-  const contentInnerStyle = (contentInnerStyle as any)({});
+  const contentInnerStyle = (accordionStyles.contentInner as any)({});
 
   // Animate height and icon rotation when expanded state changes
   useEffect(() => {

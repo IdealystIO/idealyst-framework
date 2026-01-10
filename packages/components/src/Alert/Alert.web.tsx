@@ -39,12 +39,12 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   const dynamicProps = { intent, type };
   const containerProps = getWebProps([(alertStyles.container as any)(dynamicProps), style as any]);
   const iconContainerProps = getWebProps([(alertStyles.iconContainer as any)(dynamicProps)]);
-  const contentProps = getWebProps([alertStyles.content]);
+  const contentProps = getWebProps([(alertStyles.content as any)({})]);
   const titleProps = getWebProps([(alertStyles.title as any)(dynamicProps)]);
   const messageProps = getWebProps([(alertStyles.message as any)(dynamicProps)]);
-  const actionsProps = getWebProps([alertStyles.actions]);
-  const closeButtonProps = getWebProps([alertStyles.closeButton]);
-  const closeIconProps = getWebProps([alertStyles.closeIcon]);
+  const actionsProps = getWebProps([(alertStyles.actions as any)({})]);
+  const closeButtonProps = getWebProps([(alertStyles.closeButton as any)(dynamicProps)]);
+  const closeIconProps = getWebProps([(alertStyles.closeIcon as any)(dynamicProps)]);
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
 

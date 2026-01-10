@@ -10,7 +10,7 @@ export const Select = {
 - \`error\`: boolean - Whether the select shows an error state
 - \`helperText\`: string - Helper text to display below the select
 - \`label\`: string - Label text to display above the select
-- \`intent\`: SelectIntentVariant - The visual type of the select The intent/color scheme of the select
+- \`intent\`: SelectIntentVariant - The intent/color scheme of the select
 - \`size\`: SelectSizeVariant - The size of the select
 - \`margin\`: Size - Margin on all sides ('xs' | 'sm' | 'md' | 'lg' | 'xl')
 - \`marginVertical\`: Size - Top and bottom margin

@@ -22,6 +22,7 @@ export type ListDynamicProps = {
     selected?: boolean;
     disabled?: boolean;
     clickable?: boolean;
+    isLast?: boolean;
     gap?: ViewStyleSize;
     padding?: ViewStyleSize;
     paddingVertical?: ViewStyleSize;
@@ -80,7 +81,7 @@ export const listStyles = defineStyle('List', (theme: Theme) => ({
         } as const;
     },
 
-    item: ({ type = 'default', active = false, selected = false, disabled = false, clickable = true }: ListDynamicProps) => {
+    item: ({ type = 'default', active = false, selected = false, disabled = false, clickable = true, isLast = false }: ListDynamicProps) => {
         const baseStyles = {
             display: 'flex' as const,
             flexDirection: 'row' as const,
@@ -90,7 +91,8 @@ export const listStyles = defineStyle('List', (theme: Theme) => ({
             opacity: disabled ? 0.5 : 1,
         };
 
-        const dividerStyles = type === 'divided' ? {
+        // Don't add divider on last item
+        const dividerStyles = (type === 'divided' && !isLast) ? {
             borderBottomWidth: 1,
             borderBottomColor: theme.colors.border.primary,
         } : {};
@@ -117,7 +119,8 @@ export const listStyles = defineStyle('List', (theme: Theme) => ({
                 cursor: disabled ? 'not-allowed' : (clickable ? 'pointer' : 'default'),
                 outline: 'none',
                 transition: 'background-color 0.2s ease, border-color 0.2s ease',
-                borderBottom: type === 'divided' ? `1px solid ${theme.colors.border.primary}` : undefined,
+                // Don't add divider on last item
+                borderBottom: (type === 'divided' && !isLast) ? `1px solid ${theme.colors.border.primary}` : undefined,
                 borderLeft: selected ? `3px solid ${theme.intents.primary.primary}` : undefined,
                 _hover: (disabled || !clickable) ? {} : {
                     backgroundColor: theme.colors.surface.secondary,

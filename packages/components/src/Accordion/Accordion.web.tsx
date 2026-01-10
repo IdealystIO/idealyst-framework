@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
+import { useUnistyles } from 'react-native-unistyles';
 import { accordionStyles } from './Accordion.styles';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
@@ -23,15 +24,17 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   isExpanded,
   onToggle,
   type,
-  size,
+  size = 'md',
   isLast,
   testID,
   headerId,
   panelId,
   onKeyDown,
 }) => {
-  const contentInnerRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState(0);
+  // Get theme for icon size
+  const { theme } = useUnistyles();
+  const iconSize = theme.sizes.accordion[size].iconSize;
+  const iconColor = theme.intents.primary.primary;
 
   // Apply item-specific variants (for size, expanded, disabled)
   accordionStyles.useVariants({
@@ -46,22 +49,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const headerProps = getWebProps([(accordionStyles.header as any)({})]);
   const titleProps = getWebProps([accordionStyles.title]);
   const iconProps = getWebProps([(accordionStyles.icon as any)({})]);
-  const contentProps = getWebProps([
-    (accordionStyles.content as any)({}),
-    {
-      height: isExpanded ? contentHeight : 0,
-      overflow: 'hidden' as const,
-    }
-  ]);
-  const contentInnerProps = getWebProps([accordionStyles.contentInner]);
-
-  useEffect(() => {
-    if (isExpanded) {
-      setContentHeight(contentInnerRef.current.getBoundingClientRect().height);
-    } else {
-      setContentHeight(0);
-    }
-  }, [isExpanded]);
+  // Pass expanded state to get correct maxHeight from styles
+  const contentProps = getWebProps([(accordionStyles.content as any)({ expanded: isExpanded })]);
+  const contentInnerProps = getWebProps([(accordionStyles.contentInner as any)({})]);
 
   return (
     <div
@@ -83,8 +73,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         </span>
         <span {...iconProps}>
           <IconSvg
-            style={{ width: 12, height: 12 }}
             name="chevron-down"
+            size={iconSize}
+            color={iconColor}
             aria-label="chevron-down"
           />
         </span>
@@ -97,10 +88,8 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         aria-labelledby={headerId}
         aria-hidden={!isExpanded}
       >
-        <div ref={contentInnerRef}>
-          <div {...contentInnerProps}>
-            {item.content}
-          </div>
+        <div {...contentInnerProps}>
+          {item.content}
         </div>
       </div>
     </div>
@@ -154,16 +143,18 @@ const Accordion: React.FC<AccordionProps> = ({
     const currentIndex = enabledItems.findIndex(item => item.id === itemId);
     let nextIndex = -1;
 
-    if (ACCORDION_KEYS.next.includes(key)) {
+    // ArrowDown moves to next item
+    if (key === 'ArrowDown') {
       e.preventDefault();
       nextIndex = currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
-    } else if (ACCORDION_KEYS.prev.includes(key)) {
+    // ArrowUp moves to previous item
+    } else if (key === 'ArrowUp') {
       e.preventDefault();
       nextIndex = currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
-    } else if (ACCORDION_KEYS.first.includes(key)) {
+    } else if (ACCORDION_KEYS.first.includes(key as 'Home')) {
       e.preventDefault();
       nextIndex = 0;
-    } else if (ACCORDION_KEYS.last.includes(key)) {
+    } else if (ACCORDION_KEYS.last.includes(key as 'End')) {
       e.preventDefault();
       nextIndex = enabledItems.length - 1;
     }
@@ -199,7 +190,7 @@ const Accordion: React.FC<AccordionProps> = ({
     marginHorizontal,
   });
 
-  const containerProps = getWebProps([(accordionStyles.container as any)({}), style as any]);
+  const containerProps = getWebProps([(accordionStyles.container as any)({ type }), style as any]);
 
   const toggleItem = (itemId: string, disabled?: boolean) => {
     if (disabled) return;

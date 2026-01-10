@@ -3,7 +3,7 @@
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper, getColorFromString } from '@idealyst/theme';
-import type { Theme as BaseTheme, Intent, Color } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Color, Text } from '@idealyst/theme';
 import { IconSizeVariant } from './types';
 
 // Required: Unistyles must see StyleSheet usage in original source to process this file
@@ -16,6 +16,7 @@ export type IconVariants = {
     size: IconSizeVariant;
     intent?: Intent;
     color?: Color;
+    textColor?: Text;
 };
 
 export type IconDynamicProps = Partial<IconVariants>;
@@ -24,7 +25,7 @@ export type IconDynamicProps = Partial<IconVariants>;
  * Icon styles with dynamic color/size handling.
  */
 export const iconStyles = defineStyle('Icon', (theme: Theme) => ({
-    icon: ({ color, intent, size = 'md' }: IconDynamicProps) => {
+    icon: ({ color, textColor, intent, size = 'md' }: IconDynamicProps) => {
         // Handle size - can be a named size or number
         let iconWidth: number;
         let iconHeight: number;
@@ -44,12 +45,15 @@ export const iconStyles = defineStyle('Icon', (theme: Theme) => ({
             }
         }
 
-        // Get color - intent takes priority, then color prop, then default
+        // Get color - priority: intent > color > textColor > default
+        // color takes precedence over textColor (as per design)
         const iconColor = intent
             ? theme.intents[intent]?.primary
             : color
                 ? getColorFromString(theme as unknown as BaseTheme, color)
-                : theme.colors.text.primary;
+                : textColor
+                    ? theme.colors.text[textColor]
+                    : theme.colors.text.primary;
 
         return {
             width: iconWidth,

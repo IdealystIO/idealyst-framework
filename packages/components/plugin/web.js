@@ -335,6 +335,36 @@ module.exports = function ({ types: t }, options = {}) {
                     }
                   }
                 }
+                // Handle ternary expression in variable: const iconName = cond ? 'eye' : 'eye-off'
+                else if (t.isConditionalExpression(init)) {
+                  [init.consequent, init.alternate].forEach(branch => {
+                    if (t.isStringLiteral(branch)) {
+                      const iconName = extractIconName(branch.value);
+                      if (iconName) {
+                        const normalized = normalizeIconName(iconName);
+                        if (normalized) {
+                          state.iconNames.add(normalized);
+                          debugLog(`Found icon via variable ternary ${expr.name}: ${normalized}`);
+                        }
+                      }
+                    }
+                  });
+                }
+                // Handle logical expression in variable: const iconName = hasIcon && 'home'
+                else if (t.isLogicalExpression(init)) {
+                  [init.left, init.right].forEach(side => {
+                    if (t.isStringLiteral(side)) {
+                      const iconName = extractIconName(side.value);
+                      if (iconName) {
+                        const normalized = normalizeIconName(iconName);
+                        if (normalized) {
+                          state.iconNames.add(normalized);
+                          debugLog(`Found icon via variable logical ${expr.name}: ${normalized}`);
+                        }
+                      }
+                    }
+                  });
+                }
               }
             }
           }

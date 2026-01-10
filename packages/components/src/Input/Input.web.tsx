@@ -1,5 +1,6 @@
 import React, { isValidElement, useState, useMemo, useRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
+import { useUnistyles } from 'react-native-unistyles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
@@ -58,6 +59,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   // Determine if we should show password toggle
   const isPasswordField = inputType === 'password' || secureTextEntry;
   const shouldShowPasswordToggle = isPasswordField && (showPasswordToggle !== false);
+
+  // Get theme for icon sizes and colors
+  const { theme } = useUnistyles();
+  const iconSize = theme.sizes.input[size].iconSize;
+  const iconColor = theme.colors.text.secondary;
 
   const [isFocused, setIsFocused] = useState(false);
 
@@ -123,15 +129,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     marginHorizontal,
   });
 
-  // Get web props for all styled elements (container uses dynamic function)
+  // Get web props for all styled elements (all styles are dynamic functions)
   const dynamicContainerStyle = (inputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
   const {ref: containerStyleRef, ...containerProps} = getWebProps([dynamicContainerStyle, style]);
-  const leftIconContainerProps = getWebProps([inputStyles.leftIconContainer]);
-  const rightIconContainerProps = getWebProps([inputStyles.rightIconContainer]);
-  const leftIconProps = getWebProps([inputStyles.leftIcon]);
-  const rightIconProps = getWebProps([inputStyles.rightIcon]);
-  const passwordToggleProps = getWebProps([inputStyles.passwordToggle]);
-  const passwordToggleIconProps = getWebProps([inputStyles.passwordToggleIcon]);
+  const leftIconContainerProps = getWebProps([(inputStyles.leftIconContainer as any)({})]);
+  const rightIconContainerProps = getWebProps([(inputStyles.rightIconContainer as any)({})]);
+  const passwordToggleProps = getWebProps([(inputStyles.passwordToggle as any)({})]);
 
   // Get input props
   const inputWebProps = getWebProps([(inputStyles.input as any)({})]);
@@ -191,12 +194,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
       return (
         <IconSvg
           name={leftIcon}
-          {...leftIconProps}
+          size={iconSize}
+          color={iconColor}
           aria-label={leftIcon}
         />
       );
     } else if (isValidElement(leftIcon)) {
-      return <span {...leftIconProps}>{leftIcon}</span>;
+      return <span {...leftIconContainerProps}>{leftIcon}</span>;
     }
 
     return null;
@@ -210,12 +214,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
       return (
         <IconSvg
           name={rightIcon}
-          {...rightIconProps}
+          size={iconSize}
+          color={iconColor}
           aria-label={rightIcon}
         />
       );
     } else if (isValidElement(rightIcon)) {
-      return <span {...rightIconProps}>{rightIcon}</span>;
+      return <span {...rightIconContainerProps}>{rightIcon}</span>;
     }
 
     return null;
@@ -227,7 +232,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({
     return (
       <IconSvg
         name={iconName}
-        {...passwordToggleIconProps}
+        size={iconSize}
+        color={iconColor}
         aria-label={iconName}
       />
     );

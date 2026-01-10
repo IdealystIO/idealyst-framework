@@ -1,12 +1,15 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from "./icon-types";
-import type { Size } from '@idealyst/theme';
+import type { Size, Text } from '@idealyst/theme';
 import { Color, Intent } from '@idealyst/theme';
 import { BaseProps } from '../utils/viewStyleProps';
 
 export type IconSizeVariant = Size | number;
 
-export interface IconProps extends BaseProps {
+/**
+ * Base props shared by all Icon variants
+ */
+interface IconBaseProps extends BaseProps {
   /**
    * The name of the icon to display
    */
@@ -17,10 +20,6 @@ export interface IconProps extends BaseProps {
    */
   size?: IconSizeVariant;
 
-  /**
-   * Predefined color variant based on theme
-   */
-  color?: Color;
   /**
    * Intent variant for the icon
    */
@@ -41,3 +40,31 @@ export interface IconProps extends BaseProps {
    */
   accessibilityLabel?: string;
 }
+
+/**
+ * Icon props with palette color (e.g., 'blue.500', 'red.100')
+ */
+interface IconWithColor extends IconBaseProps {
+  /**
+   * Predefined color variant based on theme palette
+   */
+  color?: Color;
+  textColor?: never;
+}
+
+/**
+ * Icon props with text color (e.g., 'primary', 'secondary')
+ */
+interface IconWithTextColor extends IconBaseProps {
+  color?: never;
+  /**
+   * Text color variant from theme (e.g., 'primary', 'secondary')
+   * Cannot be used together with `color` prop
+   */
+  textColor?: Text;
+}
+
+/**
+ * Icon component props - accepts either `color` (palette) or `textColor` (text colors), but not both
+ */
+export type IconProps = IconWithColor | IconWithTextColor;

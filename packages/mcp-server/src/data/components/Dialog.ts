@@ -7,7 +7,7 @@ category: "overlay",
 - \`title\`: string - Optional title for the dialog
 - \`children\`: React.ReactNode - The content to display inside the dialog
 - \`size\`: DialogSizeVariant - The size of the dialog
-- \`showCloseButton\`: boolean - The visual style variant of the dialog Whether to show the close button in the header
+- \`showCloseButton\`: boolean - Whether to show the close button in the header
 - \`closeOnBackdropClick\`: boolean - Whether clicking the backdrop should close the dialog
 - \`closeOnEscapeKey\`: boolean - Whether pressing escape key should close the dialog (web only)
 - \`animationType\`: DialogAnimationType - Animation type for the dialog (native only)

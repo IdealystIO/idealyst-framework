@@ -117,8 +117,11 @@ export const accordionStyles = defineStyle('Accordion', (theme: Theme) => ({
             },
         },
         _web: {
+            appearance: 'none',
+            background: 'none',
             border: 'none',
             outline: 'none',
+            margin: 0,
             cursor: disabled ? 'not-allowed' : 'pointer',
             transition: 'background-color 0.2s ease',
             _hover: disabled ? {} : { backgroundColor: theme.colors.surface.secondary },

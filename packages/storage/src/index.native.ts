@@ -1,8 +1,8 @@
 import BaseStorage from './storage';
 import NativeStorage from './storage.native';
 
-const Storage = new BaseStorage(new NativeStorage());
+const storage = new BaseStorage(new NativeStorage());
 
-export default Storage;
-export { BaseStorage, NativeStorage };
+export default storage;
+export { storage, BaseStorage, NativeStorage };
 export * from './types';
