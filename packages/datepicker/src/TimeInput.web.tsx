@@ -141,7 +141,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
 
       <PositionedPortal
         open={open}
-        anchor={triggerRef}
+        anchor={triggerRef as React.RefObject<HTMLElement>}
         placement="bottom-start"
         offset={4}
         onClickOutside={() => setOpen(false)}

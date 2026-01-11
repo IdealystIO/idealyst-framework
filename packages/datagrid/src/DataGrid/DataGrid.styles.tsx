@@ -32,7 +32,8 @@ export type DataGridStylesheet = {
 /**
  * Generate DataGrid styles
  */
-export const dataGridStyles = StyleSheet.create((theme: Theme) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const dataGridStyles = StyleSheet.create(((theme: Theme) => {
   return {
     container: {
       borderWidth: 1,
@@ -165,7 +166,7 @@ export const dataGridStyles = StyleSheet.create((theme: Theme) => {
       variants: {
         selected: {
           true: {
-            backgroundColor: theme.intents.primary.hover,
+            backgroundColor: theme.intents.primary.light,
           },
           false: {
             backgroundColor: theme.colors.surface.primary,
@@ -209,4 +210,4 @@ export const dataGridStyles = StyleSheet.create((theme: Theme) => {
       borderWidth: 0,
     },
   };
-});
+}) as any);

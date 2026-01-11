@@ -86,6 +86,10 @@ class ArrayBufferBlob implements Blob {
       },
     });
   }
+
+  async bytes(): Promise<Uint8Array> {
+    return new Uint8Array(this.buffer);
+  }
 }
 
 /**

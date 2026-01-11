@@ -19,6 +19,7 @@
       "@/*": ["packages/*/src"],
       "@idealyst/theme": ["packages/theme/src"],
       "@idealyst/components": ["packages/components/src"],
+      "@idealyst/components/internal": ["packages/components/src/internal"],
       "@idealyst/navigation": ["packages/navigation/src"]
     }
   },

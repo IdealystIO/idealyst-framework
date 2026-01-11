@@ -24,6 +24,7 @@ export type ComponentName =
   | 'Badge'
   | 'Breadcrumb'
   | 'Button'
+  | 'CameraPreview'
   | 'Card'
   | 'Checkbox'
   | 'Chip'

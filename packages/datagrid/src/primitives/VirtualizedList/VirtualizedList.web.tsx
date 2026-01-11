@@ -1,5 +1,5 @@
 import React from 'react';
-import { VariableSizeList, FixedSizeList } from 'react-window';
+import { VariableSizeList, FixedSizeList, ListChildComponentProps } from 'react-window';
 
 interface VirtualizedListProps {
   data: any[];
@@ -21,26 +21,32 @@ export const VirtualizedList: React.FC<VirtualizedListProps> = ({
   onScroll,
 }) => {
   const isVariableSize = typeof itemHeight === 'function';
-  const List = isVariableSize ? VariableSizeList : FixedSizeList;
-  
-  const listProps = {
-    height: horizontal ? '100%' : height,
+
+  const Row = ({ index, style }: ListChildComponentProps) => (
+    <div style={{ ...style, display: 'table-row-group' }}>
+      {renderItem({ item: data[index], index })}
+    </div>
+  );
+
+  const commonProps = {
+    height: horizontal ? '100%' as const : height,
     width: horizontal ? height : width,
     itemCount: data.length,
-    itemSize: itemHeight,
-    layout: horizontal ? 'horizontal' : 'vertical',
+    layout: horizontal ? 'horizontal' as const : 'vertical' as const,
     onScroll,
   };
 
   return (
     <div style={{ display: 'table', width: '100%', tableLayout: 'fixed' }}>
-      <List {...listProps}>
-        {({ index, style }) => (
-          <div style={{ ...style, display: 'table-row-group' }}>
-            {renderItem({ item: data[index], index })}
-          </div>
-        )}
-      </List>
+      {isVariableSize ? (
+        <VariableSizeList {...commonProps} itemSize={itemHeight as (index: number) => number}>
+          {Row}
+        </VariableSizeList>
+      ) : (
+        <FixedSizeList {...commonProps} itemSize={itemHeight as number}>
+          {Row}
+        </FixedSizeList>
+      )}
     </div>
   );
 };

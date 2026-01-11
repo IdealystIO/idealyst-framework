@@ -10,7 +10,7 @@ export const TableBody: React.FC<TableBodyProps> = ({ children, style }) => {
   let resolvedStyle = {};
   if (typeof style === 'function') {
     try {
-      resolvedStyle = style(UnistylesRuntime.theme);
+      resolvedStyle = style((UnistylesRuntime as any).theme);
     } catch (error) {
       resolvedStyle = {};
     }

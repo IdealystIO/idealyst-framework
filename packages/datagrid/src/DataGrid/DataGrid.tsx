@@ -120,7 +120,7 @@ export function DataGrid<T extends Record<string, any>>({
 
   const renderHeader = () => (
     <TableRow style={{
-      ...dataGridStyles.headerRow({ stickyHeader }),
+      ...(dataGridStyles.headerRow as any)({ stickyHeader }),
       minHeight: headerHeight,
       ...headerStyle,
     }}>
@@ -140,7 +140,7 @@ export function DataGrid<T extends Record<string, any>>({
           ) : (
             <Text
               weight="bold"
-              style={dataGridStyles.headerText({ clickable: column.sortable || false })}
+              style={(dataGridStyles.headerText as any)({ clickable: column.sortable || false })}
             >
               {column.header}
               {column.sortable && (
@@ -174,7 +174,7 @@ export function DataGrid<T extends Record<string, any>>({
       <TableRow
         key={actualIndex}
         style={{
-          ...dataGridStyles.row({ selected: isSelected }),
+          ...(dataGridStyles.row as any)({ selected: isSelected }),
           minHeight: rowHeight,
           ...computedRowStyle,
         }}
@@ -236,7 +236,7 @@ export function DataGrid<T extends Record<string, any>>({
           <Table style={{ width: minTableWidth, minWidth: minTableWidth }}>
             {renderColGroup()}
             <TableHeader style={{
-              ...dataGridStyles.header({ stickyHeader: true }),
+              ...(dataGridStyles.header as any)({ stickyHeader: true }),
               position: 'sticky',
               top: 0,
               zIndex: 100,
@@ -298,7 +298,7 @@ export function DataGrid<T extends Record<string, any>>({
         <View style={{ minWidth: minTableWidth }}>
           <Table style={{ width: minTableWidth, ...(virtualized ? { height: totalHeight } : {}) }}>
             {renderColGroup()}
-            <TableHeader style={dataGridStyles.header({ stickyHeader: false })}>
+            <TableHeader style={(dataGridStyles.header as any)({ stickyHeader: false })}>
               {renderHeader()}
             </TableHeader>
             <TableBody>

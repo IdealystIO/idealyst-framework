@@ -12,7 +12,7 @@ export const Row: React.FC<RowProps> = ({ children, style, onPress }) => {
   let resolvedStyle = {};
   if (typeof style === 'function') {
     try {
-      resolvedStyle = style(UnistylesRuntime.theme);
+      resolvedStyle = style((UnistylesRuntime as any).theme);
     } catch (error) {
       console.warn('Error resolving Row style:', error);
       resolvedStyle = {};

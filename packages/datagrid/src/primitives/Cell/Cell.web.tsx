@@ -11,7 +11,7 @@ export const Cell: React.FC<CellProps> = ({ children, style }) => {
   let resolvedStyle = {};
   if (typeof style === 'function') {
     try {
-      resolvedStyle = style(UnistylesRuntime.theme);
+      resolvedStyle = style((UnistylesRuntime as any).theme);
     } catch (error) {
       console.warn('Error resolving Cell style:', error);
       resolvedStyle = {};

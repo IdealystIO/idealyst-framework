@@ -20,6 +20,8 @@ export const IconSvg: React.FC<IconSvgProps> = ({
   style,
   'aria-label': ariaLabel,
 }) => {
+  if (!path) return null;
+
   return (
     <MdiIcon
       style={style}

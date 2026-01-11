@@ -10,6 +10,9 @@ interface ScrollViewProps {
   scrollEventThrottle?: number;
   showsHorizontalScrollIndicator?: boolean;
   showsVerticalScrollIndicator?: boolean;
+  // Native-only props (ignored on web)
+  bounces?: boolean;
+  directionalLockEnabled?: boolean;
 }
 
 export const ScrollView: React.FC<ScrollViewProps> = ({

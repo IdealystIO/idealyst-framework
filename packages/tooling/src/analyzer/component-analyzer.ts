@@ -254,8 +254,9 @@ function extractSampleProps(dir: string): SampleProps | undefined {
     // Extract the object literal as JSON-compatible structure
     // This is a simplified extraction - it handles basic literals
     const result: SampleProps = {};
+    const propsNode = samplePropsNode as ts.ObjectLiteralExpression;
 
-    for (const prop of samplePropsNode.properties) {
+    for (const prop of propsNode.properties) {
       if (ts.isPropertyAssignment(prop) && ts.isIdentifier(prop.name)) {
         const propName = prop.name.text;
 

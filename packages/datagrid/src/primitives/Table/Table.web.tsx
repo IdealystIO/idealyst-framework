@@ -10,7 +10,7 @@ export const Table: React.FC<TableProps> = ({ children, style }) => {
   let resolvedStyle = {};
   if (typeof style === 'function') {
     try {
-      resolvedStyle = style(UnistylesRuntime.theme);
+      resolvedStyle = style((UnistylesRuntime as any).theme);
     } catch (error) {
       resolvedStyle = {};
     }
@@ -43,7 +43,7 @@ export const TableRow: React.FC<TableRowProps> = ({ children, style, onPress }) 
   let resolvedStyle = {};
   if (typeof style === 'function') {
     try {
-      resolvedStyle = style(UnistylesRuntime.theme);
+      resolvedStyle = style((UnistylesRuntime as any).theme);
     } catch (error) {
       resolvedStyle = {};
     }
