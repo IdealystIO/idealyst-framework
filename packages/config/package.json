@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/config",
-  "version": "1.2.12",
+  "version": "1.2.14",
   "description": "Cross-platform configuration and environment variable support for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/config#readme",
   "readme": "README.md",
@@ -35,6 +35,10 @@
         "require": "./src/index.ts"
       }
     },
+    "./plugin": {
+      "require": "./plugin.js",
+      "default": "./plugin.js"
+    },
     "./generate": {
       "types": "./src/cli/generate.ts",
       "import": "./src/cli/generate.ts",
@@ -61,6 +65,7 @@
   "files": [
     "src",
     "bin",
+    "plugin.js",
     "README.md"
   ],
   "keywords": [

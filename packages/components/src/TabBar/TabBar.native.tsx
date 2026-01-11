@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, forwardRef, ReactNode, useMemo } from 'react';
-import { View, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, TouchableOpacity, Text, ScrollView, LayoutChangeEvent } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import {
   tabBarContainerStyles,
@@ -187,7 +187,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
             return (
               <TouchableOpacity
                 key={item.value}
-                onLayout={(event) => {
+                onLayout={(event: LayoutChangeEvent) => {
                   const { x, width } = event.nativeEvent.layout;
                   handleTabLayout(item.value, x, width);
                 }}

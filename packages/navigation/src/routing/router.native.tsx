@@ -1,4 +1,4 @@
-import { NavigatorParam, RouteParam, ScreenOptions, NotFoundComponentProps } from './types'
+import { NavigatorParam, RouteParam, ScreenOptions, NotFoundComponentProps, NOT_FOUND_SCREEN_NAME } from './types'
 
 import { TypedNavigator } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,11 +8,8 @@ import { DrawerContentWrapper } from './DrawerContentWrapper.native';
 import { HeaderWrapper } from './HeaderWrapper.native';
 import React from 'react';
 
-
-/**
- * Internal screen name for 404 pages
- */
-export const NOT_FOUND_SCREEN_NAME = '__notFound__';
+// Re-export for backwards compatibility
+export { NOT_FOUND_SCREEN_NAME };
 
 /**
  * Creates a NotFound screen component that receives path and params from route params

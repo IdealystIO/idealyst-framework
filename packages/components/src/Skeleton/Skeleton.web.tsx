@@ -19,7 +19,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
   id,
   // Accessibility props
   accessibilityLabel,
-  accessibilityLiveRegion,
+  accessibilityLive,
   accessibilityBusy,
   accessibilityAtomic,
   accessibilityRelevant,
@@ -28,12 +28,12 @@ const Skeleton: React.FC<SkeletonProps> = ({
   const ariaProps = useMemo(() => {
     return getWebLiveRegionAriaProps({
       accessibilityLabel: accessibilityLabel ?? 'Loading content',
-      accessibilityLiveRegion: accessibilityLiveRegion ?? 'polite',
+      accessibilityLive: accessibilityLive ?? 'polite',
       accessibilityBusy: accessibilityBusy ?? true,
       accessibilityAtomic,
       accessibilityRelevant,
     });
-  }, [accessibilityLabel, accessibilityLiveRegion, accessibilityBusy, accessibilityAtomic, accessibilityRelevant]);
+  }, [accessibilityLabel, accessibilityLive, accessibilityBusy, accessibilityAtomic, accessibilityRelevant]);
   skeletonStyles.useVariants({
     shape,
     animation,

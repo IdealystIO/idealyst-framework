@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/microphone",
-  "version": "1.2.12",
+  "version": "1.2.14",
   "description": "Cross-platform microphone streaming for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/microphone#readme",
   "readme": "README.md",
@@ -37,7 +37,7 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.2.12",
+    "@idealyst/components": "^1.2.14",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-live-audio-stream": ">=1.1.0"

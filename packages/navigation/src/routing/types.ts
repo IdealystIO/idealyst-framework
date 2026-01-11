@@ -2,6 +2,11 @@ import React from "react";
 import type { NavigateParams } from "../context/types";
 
 /**
+ * Special screen name used for not-found/404 routes
+ */
+export const NOT_FOUND_SCREEN_NAME = '__notFound__';
+
+/**
  * Tab bar specific screen options
  */
 export type TabBarScreenOptions = {

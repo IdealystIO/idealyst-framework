@@ -145,4 +145,4 @@ export type { PlatformAPI, PlatformSystem, PlatformSelectSpec } from './Platform
 // Event utilities
 export * from './utils/events';
 
-export type { AppTheme } from '@idealyst/theme'; 
+export type { Theme as AppTheme } from '@idealyst/theme'; 

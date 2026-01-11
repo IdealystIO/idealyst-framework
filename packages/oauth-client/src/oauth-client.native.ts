@@ -66,7 +66,7 @@ export class NativeOAuthClient<T = OAuthResult> implements OAuthClient<T> {
             return
           }
         }
-      }).catch(error => {
+      }).catch((error: Error) => {
         console.warn('Failed to get initial URL:', error)
       })
 

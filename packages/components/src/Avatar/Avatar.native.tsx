@@ -27,7 +27,7 @@ const Avatar = forwardRef<View, AvatarProps>(({
       accessibilityHint,
       accessibilityDisabled,
       accessibilityHidden,
-      accessibilityRole: accessibilityRole ?? 'image',
+      accessibilityRole: accessibilityRole ?? 'img',
     });
   }, [accessibilityLabel, alt, accessibilityHint, accessibilityDisabled, accessibilityHidden, accessibilityRole]);
   const [hasError, setHasError] = useState(false);

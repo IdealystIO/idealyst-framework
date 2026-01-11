@@ -20,7 +20,7 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   id,
   // Accessibility props
   accessibilityLabel,
-  accessibilityLiveRegion,
+  accessibilityLive,
   accessibilityBusy,
   accessibilityAtomic,
   accessibilityRelevant,
@@ -29,12 +29,12 @@ const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
   const ariaProps = useMemo(() => {
     return getWebLiveRegionAriaProps({
       accessibilityLabel: accessibilityLabel ?? 'Loading',
-      accessibilityLiveRegion: accessibilityLiveRegion ?? 'polite',
+      accessibilityLive: accessibilityLive ?? 'polite',
       accessibilityBusy: accessibilityBusy ?? animating,
       accessibilityAtomic,
       accessibilityRelevant,
     });
-  }, [accessibilityLabel, accessibilityLiveRegion, accessibilityBusy, animating, accessibilityAtomic, accessibilityRelevant]);
+  }, [accessibilityLabel, accessibilityLive, accessibilityBusy, animating, accessibilityAtomic, accessibilityRelevant]);
   // Handle numeric size
   const sizeVariant = typeof size === 'number' ? 'md' : size;
   const customSize = typeof size === 'number' ? size : undefined;

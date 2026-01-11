@@ -2,22 +2,63 @@ import type { IConfig } from './types'
 import { ConfigValidationError } from './types'
 
 /**
- * Web implementation of IConfig using Vite's import.meta.env.
+ * Config store - populated by the generated config module or manually via setConfig().
+ */
+let configStore: Record<string, string> = {}
+
+/**
+ * Set config values. Called automatically when importing from a project that
+ * has generated config, or can be called manually.
  *
- * This implementation automatically handles the VITE_ prefix:
- * - User code uses canonical names: config.get('API_URL')
- * - Internally we look up: import.meta.env.VITE_API_URL
+ * @example
+ * ```typescript
+ * // In your app entry point:
+ * import { setConfig } from '@idealyst/config'
+ * import { generatedConfig } from './config.generated'
  *
- * This allows the same code to work on both web and native platforms.
+ * setConfig(generatedConfig)
+ * ```
+ */
+export function setConfig(config: Record<string, string>): void {
+  configStore = { ...configStore, ...config }
+}
+
+/**
+ * Clear all config values. Useful for testing.
+ */
+export function clearConfig(): void {
+  configStore = {}
+}
+
+/**
+ * Get the raw config store. Useful for debugging.
+ */
+export function getConfigStore(): Record<string, string> {
+  return { ...configStore }
+}
+
+/**
+ * Web implementation of IConfig.
+ *
+ * Config values come from:
+ * 1. Generated config module (via setConfig)
+ * 2. Manual setConfig() calls
+ *
+ * Usage:
+ * ```typescript
+ * import { config, setConfig } from '@idealyst/config'
+ * import { generatedConfig } from './config.generated'
+ *
+ * // Initialize config (do this once at app startup)
+ * setConfig(generatedConfig)
+ *
+ * // Then use anywhere
+ * const apiUrl = config.get('API_URL')
+ * ```
  */
 class WebConfig implements IConfig {
   get(key: string, defaultValue?: string): string | undefined {
-    // Always use VITE_ prefix - this is the Vite convention for exposing
-    // environment variables to client-side code.
-    // User code uses canonical names: config.get('API_URL')
-    // Internally we look up: import.meta.env.VITE_API_URL
-    const value = (import.meta.env as Record<string, string | undefined>)[`VITE_${key}`]
-    return value ?? defaultValue
+    return configStore[key] ?? defaultValue
   }
 
   getRequired(key: string): string {
@@ -25,21 +66,18 @@ class WebConfig implements IConfig {
     if (value === undefined) {
       throw new Error(
         `Required config key "${key}" is not defined. ` +
-        `Make sure VITE_${key} is set in your .env file.`
+        `Make sure you've run "idealyst-config generate" and imported the generated config.`
       )
     }
     return value
   }
 
   has(key: string): boolean {
-    return (import.meta.env as Record<string, string | undefined>)[`VITE_${key}`] !== undefined
+    return configStore[key] !== undefined
   }
 
   keys(): string[] {
-    // Return canonical names (strip VITE_ prefix)
-    return Object.keys(import.meta.env)
-      .filter(k => k.startsWith('VITE_'))
-      .map(k => k.replace(/^VITE_/, ''))
+    return Object.keys(configStore).sort()
   }
 
   validate(requiredKeys: string[]): void {

@@ -15,17 +15,17 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
   id,
   // Accessibility props
   accessibilityLabel,
-  accessibilityLiveRegion,
+  accessibilityLive,
   accessibilityBusy,
 }, ref) => {
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
     return getNativeLiveRegionAccessibilityProps({
       accessibilityLabel: accessibilityLabel ?? 'Loading',
-      accessibilityLiveRegion: accessibilityLiveRegion ?? 'polite',
+      accessibilityLive: accessibilityLive ?? 'polite',
       accessibilityBusy: accessibilityBusy ?? animating,
     });
-  }, [accessibilityLabel, accessibilityLiveRegion, accessibilityBusy, animating]);
+  }, [accessibilityLabel, accessibilityLive, accessibilityBusy, animating]);
   // Handle numeric size
   const sizeVariant = typeof size === 'number' ? 'md' : size;
   const customSize = typeof size === 'number' ? size : undefined;

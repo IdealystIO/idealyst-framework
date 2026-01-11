@@ -1,5 +1,5 @@
 import React, { useState, useCallback, forwardRef, useMemo } from 'react';
-import { View } from 'react-native';
+import { View, LayoutChangeEvent } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, runOnJS, withSpring } from 'react-native-reanimated';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
@@ -222,7 +222,7 @@ const Slider = forwardRef<View, SliderProps>(({
         <GestureDetector gesture={composedGesture}>
           <View
             style={trackStyle}
-            onLayout={(e) => {
+            onLayout={(e: LayoutChangeEvent) => {
               const width = e.nativeEvent.layout.width;
               trackWidth.value = width;
               setTrackWidthState(width);

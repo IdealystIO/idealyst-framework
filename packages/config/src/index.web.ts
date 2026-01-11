@@ -1,24 +1,29 @@
 /**
  * Web entry point for @idealyst/config
  *
- * Uses Vite's import.meta.env for environment variable access.
- * The VITE_ prefix is handled automatically - use canonical names in your code.
+ * Config values come from a generated module created by the CLI.
+ * This approach works with any bundler and supports env inheritance.
  *
  * @example
  * ```typescript
- * import { config } from '@idealyst/config'
+ * // 1. Generate config (run in terminal)
+ * // idealyst-config generate --extends ../shared/.env --env .env
  *
- * // In your .env file: VITE_API_URL=https://api.example.com
- * // In your code: use canonical name without prefix
+ * // 2. Initialize in your app entry point
+ * import { config, setConfig } from '@idealyst/config'
+ * import { generatedConfig } from './config.generated'
+ * setConfig(generatedConfig)
+ *
+ * // 3. Use anywhere
  * const apiUrl = config.get('API_URL')
  * ```
  */
 
-import WebConfig from './config.web'
+import WebConfig, { setConfig, clearConfig, getConfigStore } from './config.web'
 
 // Create singleton instance for web
 const config = new WebConfig()
 
 export default config
-export { config, config as Config, WebConfig }
+export { config, config as Config, WebConfig, setConfig, clearConfig, getConfigStore }
 export * from './types'

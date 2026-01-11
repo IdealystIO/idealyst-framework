@@ -181,4 +181,4 @@ export type {
     SelectStyleableElements,
 } from './extensions';
 
-export type { AppTheme } from '@idealyst/theme';
+export type { Theme as AppTheme } from '@idealyst/theme';

@@ -1,12 +1,6 @@
 import React, { forwardRef, isValidElement, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import {
-  breadcrumbContainerStyles,
-  breadcrumbItemStyles,
-  breadcrumbSeparatorStyles,
-  breadcrumbEllipsisStyles,
-  breadcrumbMenuButtonStyles
-} from './Breadcrumb.styles';
+import { breadcrumbStyles } from './Breadcrumb.styles';
 import type { BreadcrumbProps, BreadcrumbItem as BreadcrumbItemType } from './types';
 import Icon from '../Icon';
 import type { IconName } from '../Icon/icon-types';
@@ -26,19 +20,19 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
   const isDisabled = item.disabled || false;
 
   // Apply size variant
-  breadcrumbItemStyles.useVariants({
+  breadcrumbStyles.useVariants({
     size,
   });
 
   // Get dynamic item text style
-  const itemTextStyle = (breadcrumbItemStyles.itemText as any)({
+  const itemTextStyle = (breadcrumbStyles.itemText as any)({
     intent,
     isLast,
     disabled: isDisabled,
     clickable: isClickable,
   });
 
-  const iconStyle = breadcrumbItemStyles.icon;
+  const iconStyle = (breadcrumbStyles.icon as any)({});
 
   const renderIcon = () => {
     if (!item.icon) return null;
@@ -59,8 +53,10 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
     return null;
   };
 
+  const itemContainerStyle = (breadcrumbStyles.item as any)({});
+
   const content = (
-    <View style={[breadcrumbItemStyles.item, itemStyle]}>
+    <View style={[itemContainerStyle, itemStyle]}>
       {item.icon && <View style={iconStyle}>{renderIcon()}</View>}
       <Text style={itemTextStyle}>{item.label}</Text>
     </View>
@@ -91,8 +87,8 @@ interface BreadcrumbSeparatorProps {
 }
 
 const BreadcrumbSeparator: React.FC<BreadcrumbSeparatorProps> = ({ separator, size, separatorStyle }) => {
-  breadcrumbSeparatorStyles.useVariants({ size });
-  const sepStyle = breadcrumbSeparatorStyles.separator;
+  breadcrumbStyles.useVariants({ size });
+  const sepStyle = (breadcrumbStyles.separator as any)({});
 
   if (typeof separator === 'string') {
     return <Text style={[sepStyle, separatorStyle]}>{separator}</Text>;
@@ -106,11 +102,12 @@ interface BreadcrumbEllipsisProps {
 }
 
 const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent }) => {
-  breadcrumbEllipsisStyles.useVariants({ size });
-  const iconStyle = breadcrumbEllipsisStyles.icon({ intent });
+  breadcrumbStyles.useVariants({ size });
+  const ellipsisStyle = (breadcrumbStyles.ellipsis as any)({});
+  const iconStyle = (breadcrumbStyles.ellipsisIcon as any)({ intent });
 
   return (
-    <View style={breadcrumbEllipsisStyles.ellipsis}>
+    <View style={ellipsisStyle}>
       <Icon name="dots-horizontal" style={iconStyle} />
     </View>
   );
@@ -132,9 +129,11 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
 }, ref) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Apply variants for menu button
-  breadcrumbMenuButtonStyles.useVariants({ size });
-  const menuIconStyle = breadcrumbMenuButtonStyles.icon({ intent });
+  // Apply variants
+  breadcrumbStyles.useVariants({ size });
+  const containerStyle = (breadcrumbStyles.container as any)({});
+  const menuButtonStyle = (breadcrumbStyles.menuButton as any)({});
+  const menuIconStyle = (breadcrumbStyles.menuButtonIcon as any)({ intent });
 
   // Handle responsive collapsing
   let displayItems = items;
@@ -172,7 +171,7 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
     <View
       ref={ref}
       nativeID={id}
-      style={[breadcrumbContainerStyles.container, style]}
+      style={[containerStyle, style]}
       testID={testID}
       accessibilityLabel="Breadcrumb"
     >
@@ -200,7 +199,7 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
                   size={size}
                 >
                   <Pressable
-                    style={breadcrumbMenuButtonStyles.button}
+                    style={menuButtonStyle}
                     accessibilityRole="button"
                     accessibilityLabel="Show more breadcrumb items"
                   >

@@ -4,6 +4,9 @@ import type { Size, Text } from '@idealyst/theme';
 import { Color, Intent } from '@idealyst/theme';
 import { BaseProps } from '../utils/viewStyleProps';
 
+// Re-export IconName for external consumers
+export type { IconName } from './icon-types';
+
 export type IconSizeVariant = Size | number;
 
 /**

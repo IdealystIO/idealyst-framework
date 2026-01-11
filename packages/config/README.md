@@ -1,14 +1,14 @@
 # @idealyst/config
 
-Cross-platform configuration and environment variable support for React and React Native applications.
+Cross-platform configuration for React and React Native with env inheritance support.
 
 ## Features
 
 - **Single API** - Same code works on web and native
-- **Type-safe** - Auto-generated TypeScript declarations for autocomplete
-- **Prefix abstraction** - Use canonical names (`API_URL`), web implementation handles `VITE_` prefix internally
-- **Validation** - Check required config at app startup
-- **Zero runtime dependencies** - Uses platform-native solutions
+- **Env inheritance** - Shared config with platform-specific overrides
+- **Babel plugin** - Config injected at build time, no runtime overhead
+- **Type-safe** - Auto-generated TypeScript declarations
+- **Monorepo friendly** - Designed for shared/web/mobile patterns
 
 ## Installation
 
@@ -22,89 +22,148 @@ cd ios && pod install
 
 ## Quick Start
 
-```typescript
-import { config } from '@idealyst/config'
+### 1. Create your .env files
 
-// Get a config value
-const apiUrl = config.get('API_URL')
-
-// Get with default value
-const port = config.get('PORT', '3000')
-
-// Get required value (throws if missing)
-const secret = config.getRequired('JWT_SECRET')
-
-// Validate required vars at startup
-config.validate(['API_URL', 'AUTH_SECRET'])
+```
+my-app/
+├── packages/
+│   ├── shared/
+│   │   └── .env          # Base config (lowest priority)
+│   ├── web/
+│   │   └── .env          # Web overrides
+│   └── mobile/
+│       └── .env          # Mobile overrides
 ```
 
-## Environment Files
-
-### React Native (.env)
-
+**shared/.env:**
 ```bash
-# No prefix needed
 API_URL=https://api.example.com
 GOOGLE_CLIENT_ID=abc123
-JWT_SECRET=supersecret
+ANALYTICS_ENABLED=true
 ```
 
-### Vite Web (.env)
-
+**web/.env:**
 ```bash
-# Must use VITE_ prefix for client exposure
-VITE_API_URL=https://api.example.com
-VITE_GOOGLE_CLIENT_ID=abc123
-VITE_JWT_SECRET=supersecret
+# Override API for web
+API_URL=https://web-api.example.com
 ```
 
-**Important:** Your code always uses canonical names without the `VITE_` prefix. The web implementation handles this internally:
-
-```typescript
-// Both platforms - same code
-const apiUrl = config.get('API_URL')
-```
-
-## Type Generation
-
-Generate TypeScript declarations for autocomplete support:
-
+**mobile/.env:**
 ```bash
-# Auto-detect .env file
-npx idealyst-config generate
-
-# Specify .env file
-npx idealyst-config generate --env .env.local
-
-# Custom output path
-npx idealyst-config generate --output types/env.d.ts
+# Mobile uses shared API_URL, but different analytics
+ANALYTICS_ENABLED=false
 ```
 
-This creates a declaration file that provides autocomplete for your config keys:
+### 2. Add Babel plugin
 
-```typescript
-// Generated: src/env.d.ts
-declare module '@idealyst/config' {
-  interface ConfigKeys {
-    API_URL: string
-    GOOGLE_CLIENT_ID: string
-    JWT_SECRET: string
-  }
+**babel.config.js:**
+```js
+module.exports = {
+  presets: ['...'],
+  plugins: [
+    ['@idealyst/config/plugin', {
+      extends: ['../shared/.env'],
+      envPath: '.env'
+    }]
+  ]
 }
 ```
 
-Now you get autocomplete when calling `config.get()`:
+### 3. Use in your app
 
 ```typescript
-config.get('API_URL')  // Autocomplete shows available keys
-config.get('INVALID')  // TypeScript error - key not in ConfigKeys
+import { config } from '@idealyst/config'
+
+// Values are injected at build time!
+const apiUrl = config.get('API_URL')
+const analyticsEnabled = config.get('ANALYTICS_ENABLED') === 'true'
+```
+
+That's it! The Babel plugin reads your .env files at compile time and injects the values automatically.
+
+## Babel Plugin Options
+
+```js
+['@idealyst/config/plugin', {
+  // Inherit from these .env files (lowest to highest priority)
+  extends: ['../shared/.env', '../common/.env'],
+
+  // Main .env file (highest priority, default: auto-detect)
+  envPath: '.env',
+
+  // Project root (default: process.cwd())
+  root: '/path/to/project'
+}]
+```
+
+### Auto-detection
+
+If you don't specify options, the plugin will:
+1. Auto-detect `.env.local`, `.env.development`, or `.env` in your project
+2. Auto-detect `../shared/.env` or `../../shared/.env` for inheritance
+
+```js
+// Minimal config - auto-detects everything
+plugins: [
+  '@idealyst/config/plugin'
+]
+```
+
+## Inheritance Priority
+
+Configs are merged in order, with later files overriding earlier ones:
+
+```
+1. extends[0]: ../shared/.env     (lowest priority)
+2. extends[1]: ../common/.env
+3. envPath: .env                  (highest priority)
+```
+
+## Vite Setup
+
+For Vite projects, add to `vite.config.ts`:
+
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: [
+          ['@idealyst/config/plugin', {
+            extends: ['../shared/.env'],
+            envPath: '.env'
+          }]
+        ]
+      }
+    })
+  ]
+})
+```
+
+## React Native / Metro Setup
+
+Add to `babel.config.js`:
+
+```js
+module.exports = {
+  presets: ['module:@react-native/babel-preset'],
+  plugins: [
+    ['@idealyst/config/plugin', {
+      extends: ['../shared/.env'],
+      envPath: '.env'
+    }]
+  ]
+}
 ```
 
 ## API Reference
 
 ### `config.get(key: string): string | undefined`
 
-Get a configuration value by key.
+Get a config value.
 
 ```typescript
 const apiUrl = config.get('API_URL')
@@ -112,7 +171,7 @@ const apiUrl = config.get('API_URL')
 
 ### `config.get(key: string, defaultValue: string): string`
 
-Get a configuration value with a fallback default.
+Get with fallback default.
 
 ```typescript
 const port = config.get('PORT', '3000')
@@ -120,16 +179,15 @@ const port = config.get('PORT', '3000')
 
 ### `config.getRequired(key: string): string`
 
-Get a required configuration value. Throws an error if not defined.
+Get required value. Throws if not defined.
 
 ```typescript
 const secret = config.getRequired('JWT_SECRET')
-// Throws: 'Required config key "JWT_SECRET" is not defined'
 ```
 
 ### `config.has(key: string): boolean`
 
-Check if a configuration key exists.
+Check if key exists.
 
 ```typescript
 if (config.has('DEBUG')) {
@@ -137,54 +195,76 @@ if (config.has('DEBUG')) {
 }
 ```
 
-### `config.keys(): string[]`
-
-Get all available configuration keys.
-
-```typescript
-console.log('Available config:', config.keys())
-```
-
 ### `config.validate(requiredKeys: string[]): void`
 
-Validate that all required keys are present. Throws `ConfigValidationError` if any are missing.
+Validate required keys at startup.
 
 ```typescript
-// At app startup
-try {
-  config.validate(['API_URL', 'AUTH_SECRET', 'DATABASE_URL'])
-} catch (error) {
-  if (error instanceof ConfigValidationError) {
-    console.error('Missing config:', error.missingKeys)
+config.validate(['API_URL', 'AUTH_SECRET'])
+// Throws ConfigValidationError if any are missing
+```
+
+## Type Generation (Optional)
+
+For TypeScript autocomplete, generate type declarations:
+
+```bash
+npx idealyst-config generate --extends ../shared/.env --env .env --types-only
+```
+
+This creates `src/config.generated.d.ts`:
+
+```typescript
+declare module '@idealyst/config' {
+  interface ConfigKeys {
+    API_URL: string
+    GOOGLE_CLIENT_ID: string
+    ANALYTICS_ENABLED: string
   }
 }
 ```
 
-## Platform Implementation Details
+Add to your build script for automatic updates:
 
-### Web (Vite)
+```json
+{
+  "scripts": {
+    "prebuild": "idealyst-config generate --extends ../shared/.env --types-only"
+  }
+}
+```
 
-Uses `import.meta.env` with automatic `VITE_` prefix handling:
-- Your code: `config.get('API_URL')`
-- Internal lookup: `import.meta.env.VITE_API_URL`
+## How It Works
 
-### React Native
+The Babel plugin transforms your code at compile time:
 
-Uses `react-native-config` for native environment variable injection:
-- Your code: `config.get('API_URL')`
-- Internal lookup: `Config.API_URL`
+**Input:**
+```typescript
+import { config } from '@idealyst/config'
 
-Make sure to follow [react-native-config setup](https://github.com/luggit/react-native-config#setup) for your platform.
+const apiUrl = config.get('API_URL')
+```
+
+**Output (after Babel):**
+```typescript
+import { config, setConfig as __idealyst_setConfig } from '@idealyst/config'
+__idealyst_setConfig({ API_URL: "https://api.example.com", GOOGLE_CLIENT_ID: "abc123" })
+
+const apiUrl = config.get('API_URL')
+```
+
+This means:
+- **No runtime .env parsing** - values are baked in at build time
+- **Works with any bundler** - Vite, Webpack, Metro, esbuild
+- **Tree-shakeable** - unused config keys can be eliminated
+- **Secure** - .env files never shipped to client
 
 ## Best Practices
 
-1. **Generate types after .env changes** - Run `idealyst-config generate` whenever you add/remove environment variables
-
-2. **Validate at startup** - Call `config.validate()` early in your app to catch missing config
-
-3. **Use .env.example** - Commit an example file with all required keys (no values)
-
-4. **Don't commit secrets** - Add `.env` and `.env.local` to `.gitignore`
+1. **Gitignore .env files** - Never commit secrets
+2. **Commit .env.example** - Document required keys
+3. **Use shared config** - DRY principle for common values
+4. **Validate at startup** - Catch missing config early
 
 ## License
 

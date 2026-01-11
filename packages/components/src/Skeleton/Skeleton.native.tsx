@@ -23,17 +23,17 @@ const Skeleton = forwardRef<View, SkeletonProps>(({
   id,
   // Accessibility props
   accessibilityLabel,
-  accessibilityLiveRegion,
+  accessibilityLive,
   accessibilityBusy,
 }, ref) => {
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
     return getNativeLiveRegionAccessibilityProps({
       accessibilityLabel: accessibilityLabel ?? 'Loading content',
-      accessibilityLiveRegion: accessibilityLiveRegion ?? 'polite',
+      accessibilityLive: accessibilityLive ?? 'polite',
       accessibilityBusy: accessibilityBusy ?? true,
     });
-  }, [accessibilityLabel, accessibilityLiveRegion, accessibilityBusy]);
+  }, [accessibilityLabel, accessibilityLive, accessibilityBusy]);
   skeletonStyles.useVariants({
     shape,
     animation,

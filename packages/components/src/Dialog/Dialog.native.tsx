@@ -1,5 +1,5 @@
 import React, { useEffect, forwardRef, useMemo } from 'react';
-import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler, GestureResponderEvent } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
@@ -135,7 +135,7 @@ const Dialog = forwardRef<View, DialogProps>(({
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
         <Animated.View style={[backdropStyle, backdropAnimatedStyle]}>
-          <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+          <TouchableWithoutFeedback onPress={(e: GestureResponderEvent) => e.stopPropagation()}>
             <Animated.View ref={ref as any} style={[containerStyle, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
               {(title || showCloseButton) && (
                 <View style={headerStyle}>
