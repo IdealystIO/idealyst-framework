@@ -102,37 +102,36 @@ export default function ExampleSidebar({ insets }: DrawerSidebarProps) {
     const navigator = useNavigator();
 
     return (
-    <Screen
-            style={{
-                height: '100%',
-                padding: 16,
-            }}
+        <Screen
+            style={{ height: '100%' }}
             contentInset={insets}
         >
-        {componentGroups.map((group, groupIndex) => (
-            <List key={group.title}>
-                <Text
-                    size="sm"
-                    weight="bold"
-                    color="secondary"
-                    style={{ marginBottom: 8, marginLeft: 8 }}
-                >
-                    {group.title}
-                </Text>
-                {group.items.map((item) => (
-                    <ListItem
-                        key={item.path}
-                        label={item.label}
-                        leading={item.icon}
-                        size="sm"
-                        onPress={() => navigator.navigate({ path: item.path, vars: {} })}
-                    />
+            <View scrollable padding="md" style={{ height: '100%' }}>
+                {componentGroups.map((group, groupIndex) => (
+                    <List key={group.title}>
+                        <Text
+                            size="sm"
+                            weight="bold"
+                            color="secondary"
+                            style={{ marginBottom: 8, marginLeft: 8 }}
+                        >
+                            {group.title}
+                        </Text>
+                        {group.items.map((item) => (
+                            <ListItem
+                                key={item.path}
+                                label={item.label}
+                                leading={item.icon}
+                                size="sm"
+                                onPress={() => navigator.navigate({ path: item.path, vars: {} })}
+                            />
+                        ))}
+                        {groupIndex < componentGroups.length - 1 && (
+                            <Divider spacing="sm" style={{ marginTop: 8 }} />
+                        )}
+                    </List>
                 ))}
-                {groupIndex < componentGroups.length - 1 && (
-                    <Divider spacing="sm" style={{ marginTop: 8 }} />
-                )}
-            </List>
-        ))}
+            </View>
         </Screen>
-    )
+    );
 }

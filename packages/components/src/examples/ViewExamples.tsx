@@ -131,6 +131,84 @@ export const ViewExamples = () => {
           </View>
         </View>
       </View>
+
+      {/* Scrollable Example */}
+      <View gap="md">
+        <Text typography="subtitle1">Scrollable View</Text>
+        <Text typography="body2" color="secondary">
+          Fixed 200x200px container with scrollable content
+        </Text>
+        <View
+          scrollable
+          background="secondary"
+          padding="md"
+          radius="md"
+          border="thin"
+          style={{ width: 200, height: 200 }}
+        >
+          <View>
+            <Text typography="body2">Line 1: Scroll down to see more content</Text>
+            <Text typography="body2">Line 2</Text>
+            <Text typography="body2">Line 3</Text>
+            <Text typography="body2">Line 4</Text>
+            <Text typography="body2">Line 5</Text>
+            <Text typography="body2">Line 6</Text>
+            <Text typography="body2">Line 7</Text>
+            <Text typography="body2">Line 8</Text>
+            <Text typography="body2">Line 9</Text>
+            <Text typography="body2">Line 10</Text>
+            <Text typography="body2">Line 11</Text>
+            <Text typography="body2">Line 12</Text>
+            <Text typography="body2">Line 13</Text>
+            <Text typography="body2">Line 14</Text>
+            <Text typography="body2">Line 15: End of scrollable content</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Scrollable with Flex Example */}
+      <View gap="md">
+        <Text typography="subtitle1">Scrollable with Flex</Text>
+        <Text typography="body2" color="secondary">
+          200x300px container with 100px header and flex:1 scrollable area
+        </Text>
+        <View
+          border="thin"
+          radius="md"
+          style={{ width: 200, height: 300 }}
+        >
+          {/* Fixed 100px header */}
+          <View
+            background="tertiary"
+            padding="sm"
+            style={{ height: 100, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Text typography="subtitle2">Header (100px)</Text>
+          </View>
+          {/* Flex scrollable content */}
+          <View
+            scrollable
+            background="secondary"
+            padding="md"
+            style={{ flex: 1 }}
+          >
+            <View>
+              <Text typography="body2">Scrollable content below header</Text>
+              <Text typography="body2">Line 2</Text>
+              <Text typography="body2">Line 3</Text>
+              <Text typography="body2">Line 4</Text>
+              <Text typography="body2">Line 5</Text>
+              <Text typography="body2">Line 6</Text>
+              <Text typography="body2">Line 7</Text>
+              <Text typography="body2">Line 8</Text>
+              <Text typography="body2">Line 9</Text>
+              <Text typography="body2">Line 10</Text>
+              <Text typography="body2">Line 11</Text>
+              <Text typography="body2">Line 12: End</Text>
+            </View>
+          </View>
+        </View>
+      </View>
     </View>
     </Screen>
   );

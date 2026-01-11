@@ -87,7 +87,11 @@ export interface ViewProps extends ContainerStyleProps {
   style?: ViewStyleProp;
 
   /**
-   * Enable scrollable content (uses ScrollView on native, overflow:auto on web)
+   * Enable scrollable content.
+   * - Native: Wraps children in a ScrollView
+   * - Web: Renders a wrapper + content structure where the wrapper fills available
+   *   space (or uses explicit dimensions) and content is absolutely positioned with
+   *   overflow:auto. Sizing/margin styles go to wrapper, visual styles to content.
    */
   scrollable?: boolean;
 

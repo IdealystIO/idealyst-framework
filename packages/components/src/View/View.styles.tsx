@@ -92,4 +92,15 @@ export const viewStyles = defineStyle('View', (theme: Theme) => ({
             boxSizing: 'border-box',
         },
     }),
+    // Web-only: Wrapper for scrollable view
+    scrollableWrapper: {
+        _web: {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            position: 'relative',
+            boxSizing: 'border-box',
+            minHeight: 0, // Important for flex children to allow shrinking
+        },
+    },
 }));
