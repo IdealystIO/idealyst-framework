@@ -168,6 +168,8 @@ export const inputStyles = defineStyle('Input', (theme: Theme) => ({
         variants: {
             size: {
                 marginLeft: theme.sizes.$input.iconMargin,
+                width: theme.sizes.$input.iconSize,
+                height: theme.sizes.$input.iconSize,
             },
         },
         _web: {

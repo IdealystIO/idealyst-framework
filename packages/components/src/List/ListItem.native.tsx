@@ -1,7 +1,7 @@
 import React, { isValidElement, forwardRef, ComponentRef, useMemo } from 'react';
 import { View, Pressable, Text } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { getColorFromString, Intent, Theme, Color } from '@idealyst/theme';
 import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
@@ -87,7 +87,7 @@ const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pres
     if (typeof element === 'string') {
       const iconSize = styleKey === 'leading' ? leadingStyle.width : trailingIconStyle.width;
       return (
-        <MaterialCommunityIcons
+        <MaterialDesignIcons
           name={element}
           size={iconSize}
           color={resolvedIconColor}

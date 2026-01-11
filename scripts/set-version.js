@@ -40,6 +40,7 @@ const packagePaths = [
   'packages/mcp-server/package.json',
   'packages/microphone/package.json',
   'packages/translate/package.json',
+  "packages/config/package.json",
   "packages/tooling/package.json",
   'examples/example-native/package.json',
   'examples/example-web/package.json',

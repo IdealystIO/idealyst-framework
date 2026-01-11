@@ -272,7 +272,6 @@ function generateScreenStyles(theme: Theme, extensions?: ComponentExtensions): R
             overflow: 'auto',
             display: 'flex',
             flexDirection: 'column',
-            minHeight: '100%',
             boxSizing: 'border-box',
         },
     };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { TimePicker } from './TimePicker';
 import { dateTimeInputStyles } from './InputStyles';
 import type { TimeInputProps } from './types';
@@ -123,7 +123,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
           onPress={() => !disabled && setOpen(true)}
           disabled={disabled}
         >
-          <MaterialCommunityIcons name="clock-outline" size={18} style={iconStyle} />
+          <MaterialDesignIcons name="clock-outline" size={18} style={iconStyle} />
         </TouchableOpacity>
       </View>
       {error && (

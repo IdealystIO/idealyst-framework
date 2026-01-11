@@ -268,17 +268,18 @@ AppRegistry.registerComponent(appName, () => App);
 
 /**
  * Create App.tsx
- * Mobile just re-exports the shared App (all providers are in shared)
+ * Mobile wraps the shared App with SafeAreaProvider
  */
 function createAppTsx(data: MobileGeneratorOptions): string {
   if (data.hasTrpc) {
     return `/**
  * Mobile App entry point
- * Wraps the shared App with mobile-specific API configuration
+ * Wraps the shared App with SafeAreaProvider and mobile-specific API configuration
  */
 
 import React from 'react';
 import { Platform } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { App } from '@${data.workspaceScope}/shared';
 
 // API base URL for mobile
@@ -292,18 +293,30 @@ const API_BASE_URL = Platform.select({
 });
 
 export default function MobileApp() {
-  return <App apiBaseUrl={API_BASE_URL} />;
+  return (
+    <SafeAreaProvider>
+      <App apiBaseUrl={API_BASE_URL} />
+    </SafeAreaProvider>
+  );
 }
 `;
   }
 
   return `/**
  * Mobile App entry point
- * Re-exports the shared App which includes all providers
+ * Wraps the shared App with SafeAreaProvider
  */
 
+import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { App } from '@${data.workspaceScope}/shared';
 
-export default App;
+export default function MobileApp() {
+  return (
+    <SafeAreaProvider>
+      <App />
+    </SafeAreaProvider>
+  );
+}
 `;
 }

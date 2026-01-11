@@ -1,6 +1,6 @@
 import React, { isValidElement, forwardRef } from 'react';
 import { View, Text } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { BadgeProps } from './types';
 import { badgeStyles } from './Badge.styles';
 import { isIconName } from '../Icon/icon-resolver';
@@ -33,7 +33,7 @@ const Badge = forwardRef<View, BadgeProps>(({
 
     if (typeof icon === 'string' && isIconName(icon)) {
       return (
-        <MaterialCommunityIcons
+        <MaterialDesignIcons
           name={icon}
           size={iconSize}
           color={textStyle.color}

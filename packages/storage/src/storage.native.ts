@@ -1,8 +1,8 @@
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 import { IStorage } from './types';
 
 class NativeStorage implements IStorage {
-  private storage = new MMKV();
+  private storage = createMMKV();
 
   async getItem(key: string): Promise<string | null> {
     try {
@@ -24,7 +24,7 @@ class NativeStorage implements IStorage {
 
   async removeItem(key: string): Promise<void> {
     try {
-      this.storage.delete(key);
+      this.storage.remove(key);
     } catch (error) {
       console.error('Error removing item from MMKV:', error);
       throw error;
@@ -72,7 +72,7 @@ class NativeStorage implements IStorage {
   async multiRemove(keys: string[]): Promise<void> {
     try {
       keys.forEach(key => {
-        this.storage.delete(key);
+        this.storage.remove(key);
       });
     } catch (error) {
       console.error('Error in multiRemove from MMKV:', error);

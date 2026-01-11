@@ -1,6 +1,6 @@
 import React, { useState, useEffect, forwardRef, useMemo } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { CheckboxProps } from './types';
 import { checkboxStyles } from './Checkbox.styles';
 import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
@@ -118,7 +118,7 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
       >
         <View style={checkboxStyle}>
           {(internalChecked || indeterminate) && (
-            <MaterialCommunityIcons
+            <MaterialDesignIcons
               name={indeterminate ? 'minus' : 'check'}
               size={14}
               color="#ffffff"

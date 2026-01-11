@@ -1,6 +1,6 @@
 import React, { ComponentRef, forwardRef, isValidElement, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet as RNStyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { buttonStyles } from './Button.styles';
 import { ButtonProps } from './types';
@@ -208,7 +208,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
       {hasIcons ? (
         <View style={[iconContainerStyle, { opacity: contentOpacity }]}>
           {leftIcon && (
-            <MaterialCommunityIcons
+            <MaterialDesignIcons
               name={leftIcon}
               size={iconSize}
               style={iconStyle}
@@ -218,7 +218,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
             {buttonContent}
           </Text>
           {rightIcon && (
-            <MaterialCommunityIcons
+            <MaterialDesignIcons
               name={rightIcon}
               size={iconSize}
               style={iconStyle}

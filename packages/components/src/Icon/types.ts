@@ -65,6 +65,9 @@ interface IconWithTextColor extends IconBaseProps {
 }
 
 /**
- * Icon component props - accepts either `color` (palette) or `textColor` (text colors), but not both
+ * Icon component props - accepts either `color` (palette) or `textColor` (text colors), but not both.
+ *
+ * Color priority: intent > color > textColor > default (textColor="primary")
+ * When no color prop is specified, the icon defaults to the theme's primary text color.
  */
 export type IconProps = IconWithColor | IconWithTextColor;

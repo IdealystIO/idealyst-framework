@@ -1,59 +1,58 @@
-import type { OAuthClient, OAuthConfig, OAuthResult } from './types'
+import type { OAuthClient, OAuthConfig, OAuthResult, OAuthCallbackParams } from './types'
 
-export class WebOAuthClient implements OAuthClient {
-  private config: OAuthConfig
+export class WebOAuthClient<T = OAuthResult> implements OAuthClient<T> {
+  private config: OAuthConfig<T>
 
-  constructor(config: OAuthConfig) {
+  constructor(config: OAuthConfig<T>) {
     this.config = config
   }
 
-  async authorize(): Promise<OAuthResult> {
+  async authorize(): Promise<T> {
     const state = this.generateState()
 
     // Check if we're already in a callback
-    const callbackData = this.checkForCallback()
-    
-    if (callbackData) {
-      const { code, error, returnedState } = callbackData
-      
-      if (error) {
-        throw new Error(`OAuth error: ${error}`)
+    const callbackParams = this.checkForCallback()
+
+    if (callbackParams) {
+      if (callbackParams.error) {
+        throw new Error(`OAuth error: ${callbackParams.error}`)
       }
 
-      if (code) {
-        // Clean up URL
-        window.history.replaceState({}, document.title, window.location.pathname)
-        
-        return { 
-          code,
-          state: returnedState || undefined
-        }
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname)
+
+      // Transform callback params if transformer provided, otherwise return as-is
+      if (this.config.transformCallback) {
+        return this.config.transformCallback(callbackParams)
       }
+
+      // Default behavior: return all callback params as T
+      return callbackParams as T
     }
 
     // Build OAuth URL and redirect
     const oauthUrl = this.buildOAuthUrl(state)
     window.location.href = oauthUrl
-    
+
     // This won't be reached due to redirect
     throw new Error('Authorization flow initiated')
   }
 
-  private checkForCallback(): { code?: string; error?: string; returnedState?: string } | null {
+  private checkForCallback(): OAuthCallbackParams | null {
     const urlParams = new URLSearchParams(window.location.search)
-    const code = urlParams.get('code')
-    const error = urlParams.get('error')
-    const state = urlParams.get('state')
-    
-    if (code || error) {
-      return {
-        code: code || undefined,
-        error: error || undefined,
-        returnedState: state || undefined,
-      }
+    const params: OAuthCallbackParams = {}
+
+    // Collect all query parameters
+    urlParams.forEach((value, key) => {
+      params[key] = value
+    })
+
+    // Return null if no parameters found
+    if (Object.keys(params).length === 0) {
+      return null
     }
-    
-    return null
+
+    return params
   }
 
   private buildOAuthUrl(state: string): string {

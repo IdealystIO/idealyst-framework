@@ -62,6 +62,16 @@ export async function initializeReactNative(
     );
 
     if (spinner) {
+      spinner.text = 'Configuring iOS fonts...';
+    }
+
+    // Add icon fonts to iOS Info.plist
+    await updateIosInfoPlist(
+      path.join(directory, projectName),
+      projectName
+    );
+
+    if (spinner) {
       spinner.text = 'Configuring Android for monorepo...';
     }
 
@@ -117,6 +127,50 @@ async function updateIosBundleId(
 
     await fs.writeFile(pbxprojPath, content);
   }
+}
+
+/**
+ * Update iOS Info.plist to include icon fonts
+ */
+async function updateIosInfoPlist(
+  projectPath: string,
+  projectName: string
+): Promise<void> {
+  const infoPlistPath = path.join(
+    projectPath,
+    'ios',
+    projectName,
+    'Info.plist'
+  );
+
+  if (!await fs.pathExists(infoPlistPath)) {
+    return;
+  }
+
+  let content = await fs.readFile(infoPlistPath, 'utf8');
+
+  // Check if UIAppFonts already exists
+  if (content.includes('UIAppFonts')) {
+    // Add our font to existing array if not already present
+    if (!content.includes('MaterialDesignIcons.ttf')) {
+      content = content.replace(
+        /<key>UIAppFonts<\/key>\s*<array>/,
+        '<key>UIAppFonts</key>\n\t<array>\n\t\t<string>MaterialDesignIcons.ttf</string>'
+      );
+    }
+  } else {
+    // Add UIAppFonts array before closing </dict>
+    // Find the last </dict> which closes the root plist dictionary
+    const fontEntry = `\t<key>UIAppFonts</key>
+\t<array>
+\t\t<string>MaterialDesignIcons.ttf</string>
+\t</array>
+</dict>`;
+
+    content = content.replace(/<\/dict>\s*<\/plist>/, fontEntry + '\n</plist>');
+  }
+
+  await fs.writeFile(infoPlistPath, content);
 }
 
 /**
@@ -188,30 +242,8 @@ async function fixAppBuildGradle(projectPath: string): Promise<void> {
 
   let content = await fs.readFile(buildGradlePath, 'utf8');
 
-  // Add vector icons configuration if not present
-  if (!content.includes('react-native-vector-icons')) {
-    // Add after the apply plugin lines with monorepo comment
-    const vectorIconsBlock = `
-// MONOREPO NOTE: In a Yarn workspace monorepo, dependencies are hoisted to the root node_modules.
-// Paths must point to the monorepo root (../../../../node_modules from android/app) not the package's node_modules.
-apply from: file("../../../../node_modules/react-native-vector-icons/fonts.gradle")
-`;
-
-    // Find the last apply plugin/from line and insert after it
-    const lines = content.split('\n');
-    let lastApplyIndex = -1;
-
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].includes('apply plugin:') || lines[i].includes('apply from:')) {
-        lastApplyIndex = i;
-      }
-    }
-
-    if (lastApplyIndex !== -1) {
-      lines.splice(lastApplyIndex + 1, 0, vectorIconsBlock);
-      content = lines.join('\n');
-    }
-  }
+  // Note: @react-native-vector-icons/material-design-icons auto-links on Android
+  // No fonts.gradle configuration needed - fonts are bundled with the package
 
   // Fix the react block to use monorepo paths
   // We need to uncomment and update the root, reactNativeDir, codegenDir, and cliFile paths

@@ -10,7 +10,7 @@ import {
   Platform,
   Animated,
 } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { SelectProps, SelectOption } from './types';
 import { selectStyles } from './Select.styles';
 import { BoundedModalContent } from '../internal/BoundedModalContent.native';
@@ -180,7 +180,7 @@ const Select = forwardRef<View, SelectProps>(({
   const renderChevron = () => {
     return (
       <View style={chevronStyle}>
-        <MaterialCommunityIcons
+        <MaterialDesignIcons
           name="chevron-down"
           style={chevronStyle}
         />
@@ -195,7 +195,7 @@ const Select = forwardRef<View, SelectProps>(({
     if (typeof icon === 'string') {
       return (
         <View style={iconStyle}>
-          <MaterialCommunityIcons
+          <MaterialDesignIcons
             style={iconStyle}
             name={icon}
           />
@@ -214,7 +214,7 @@ const Select = forwardRef<View, SelectProps>(({
     if (typeof icon === 'string') {
       return (
         <View style={optionIconStyle}>
-          <MaterialCommunityIcons
+          <MaterialDesignIcons
             style={optionIconStyle}
             name={icon}
           />

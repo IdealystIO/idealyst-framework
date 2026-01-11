@@ -2267,11 +2267,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/components@npm:^1.2.1, @idealyst/components@workspace:packages/components":
+"@idealyst/components@npm:^1.2.11, @idealyst/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.1"
+    "@idealyst/theme": "npm:^1.2.11"
+    "@idealyst/tooling": "npm:^1.2.4"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
@@ -2284,7 +2285,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.3.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.1
+    "@idealyst/theme": ^1.2.11
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.0.0"
     "@react-native-vector-icons/common": ">=12.0.0"
@@ -2323,12 +2324,29 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@idealyst/config@workspace:packages/config":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/config@workspace:packages/config"
+  dependencies:
+    "@types/node": "npm:^20.0.0"
+    react-native-config: "npm:^1.5.0"
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    react-native-config: ">=1.5.0"
+  peerDependenciesMeta:
+    react-native-config:
+      optional: true
+  bin:
+    idealyst-config: ./bin/idealyst-config.js
+  languageName: unknown
+  linkType: soft
+
 "@idealyst/datagrid@npm:^1.0.93, @idealyst/datagrid@workspace:packages/datagrid":
   version: 0.0.0-use.local
   resolution: "@idealyst/datagrid@workspace:packages/datagrid"
   dependencies:
-    "@idealyst/components": "npm:^1.2.1"
-    "@idealyst/theme": "npm:^1.2.1"
+    "@idealyst/components": "npm:^1.2.11"
+    "@idealyst/theme": "npm:^1.2.11"
     "@types/react": "npm:^19.1.0"
     "@types/react-window": "npm:^1.8.8"
     react: "npm:^19.1.0"
@@ -2336,8 +2354,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.1
-    "@idealyst/theme": ^1.2.1
+    "@idealyst/components": ^1.2.11
+    "@idealyst/theme": ^1.2.11
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -2360,7 +2378,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datepicker@workspace:packages/datepicker"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.1"
+    "@idealyst/theme": "npm:^1.2.11"
     "@mdi/js": "npm:^7.4.47"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
@@ -2371,7 +2389,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.2.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.1
+    "@idealyst/theme": ^1.2.11
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.6.0"
     react: ">=16.8.0"
@@ -2401,9 +2419,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/mcp-server@workspace:packages/mcp-server"
   dependencies:
-    "@idealyst/components": "npm:^1.2.1"
-    "@idealyst/navigation": "npm:^1.2.1"
-    "@idealyst/theme": "npm:^1.2.1"
+    "@idealyst/components": "npm:^1.2.11"
+    "@idealyst/navigation": "npm:^1.2.11"
+    "@idealyst/theme": "npm:^1.2.11"
     "@idealyst/tooling": "npm:^1.2.1"
     "@modelcontextprotocol/sdk": "npm:^1.0.4"
     "@types/node": "npm:^20.0.0"
@@ -2428,7 +2446,7 @@ __metadata:
     react-native-live-audio-stream: "npm:^1.1.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.1
+    "@idealyst/components": ^1.2.11
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-live-audio-stream: ">=1.1.0"
@@ -2442,16 +2460,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/navigation@npm:^1.2.1, @idealyst/navigation@workspace:packages/navigation":
+"@idealyst/navigation@npm:^1.2.11, @idealyst/navigation@workspace:packages/navigation":
   version: 0.0.0-use.local
   resolution: "@idealyst/navigation@workspace:packages/navigation"
   dependencies:
     "@idealyst/camera": "npm:^1.1.6"
-    "@idealyst/components": "npm:^1.2.1"
+    "@idealyst/components": "npm:^1.2.11"
     "@idealyst/datagrid": "npm:^1.0.93"
     "@idealyst/datepicker": "npm:^1.0.93"
     "@idealyst/microphone": "npm:^1.1.7"
-    "@idealyst/theme": "npm:^1.2.1"
+    "@idealyst/theme": "npm:^1.2.11"
     "@types/react": "npm:^19.1.8"
     "@types/react-dom": "npm:^19.1.6"
     react: "npm:^19.1.0"
@@ -2462,9 +2480,9 @@ __metadata:
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@idealyst/camera": ^1.1.6
-    "@idealyst/components": ^1.2.1
+    "@idealyst/components": ^1.2.11
     "@idealyst/microphone": ^1.1.7
-    "@idealyst/theme": ^1.2.1
+    "@idealyst/theme": ^1.2.11
     "@react-navigation/bottom-tabs": ">=7.0.0"
     "@react-navigation/drawer": ">=7.0.0"
     "@react-navigation/native": ">=7.0.0"
@@ -2508,28 +2526,32 @@ __metadata:
   resolution: "@idealyst/storage@workspace:packages/storage"
   dependencies:
     "@types/react": "npm:^19.1.0"
-    react-native-mmkv: "npm:^3.3.1"
+    react-native-mmkv: "npm:^4.1.1"
+    react-native-nitro-modules: "npm:^0.32.1"
     typescript: "npm:^5.0.0"
   peerDependencies:
     react: ">=16.8.0"
     react-native: ">=0.60.0"
-    react-native-mmkv: ">=2.0.0"
+    react-native-mmkv: ">=4.0.0"
+    react-native-nitro-modules: ">=0.20.0"
   peerDependenciesMeta:
     react-native:
       optional: true
     react-native-mmkv:
       optional: true
+    react-native-nitro-modules:
+      optional: true
   languageName: unknown
   linkType: soft
 
-"@idealyst/theme@npm:^1.2.1, @idealyst/theme@workspace:packages/theme":
+"@idealyst/theme@npm:^1.2.11, @idealyst/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
     "@babel/core": "npm:^7.28.5"
     "@babel/preset-typescript": "npm:^7.28.5"
     "@babel/types": "npm:^7.28.5"
-    "@idealyst/tooling": "workspace:*"
+    "@idealyst/tooling": "npm:^1.2.3"
     "@types/babel__core": "npm:^7.20.0"
     "@types/react": "npm:^19.1.0"
     "@types/react-native": "npm:^0.73.0"
@@ -2543,7 +2565,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/tooling@npm:^1.2.1, @idealyst/tooling@workspace:*, @idealyst/tooling@workspace:packages/tooling":
+"@idealyst/tooling@npm:^1.2.1, @idealyst/tooling@npm:^1.2.3, @idealyst/tooling@npm:^1.2.4, @idealyst/tooling@workspace:packages/tooling":
   version: 0.0.0-use.local
   resolution: "@idealyst/tooling@workspace:packages/tooling"
   dependencies:
@@ -8248,6 +8270,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-config@npm:^1.5.0":
+  version: 1.6.1
+  resolution: "react-native-config@npm:1.6.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-windows: ">=0.61"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: 10/22ab54833f1066c361d0baa52bebbd29f43d5b5ace45cbd3b4dd191220556f5d031284a39734bb1b12475a4365b50bd24d7ac9b304472e2aa24fa714f4bd12af
+  languageName: node
+  linkType: hard
+
 "react-native-gesture-handler@npm:^2.27.1":
   version: 2.29.0
   resolution: "react-native-gesture-handler@npm:2.29.0"
@@ -8279,13 +8315,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-mmkv@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "react-native-mmkv@npm:3.3.1"
+"react-native-mmkv@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "react-native-mmkv@npm:4.1.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/830c2c6271125a7b9f8f473485cc66d44d0cc592ccd9978f98e3ee0e7081b1d53b94b42736381bfe369dc5132eda4540bfb6d1c4102e7f6a782fd8a7e257af7d
+    react-native-nitro-modules: "*"
+  checksum: 10/d5e77790d8f033e5197e7155a9bd921445da33995af84edf46ee1fddf977651fe67563bcc669d9b924fef90b0b876e4a7d38fd2764846b43ad6dff8d00eb0f80
+  languageName: node
+  linkType: hard
+
+"react-native-nitro-modules@npm:^0.32.1":
+  version: 0.32.1
+  resolution: "react-native-nitro-modules@npm:0.32.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/693b9558f24fb998f0c36338b1da56e2e5fc2777ca20c13dc4796da46cd44ffd8610efae4c245ba7070d0301239bf7b7bb96bb4dcd318522c08bb9a90658695c
   languageName: node
   linkType: hard
 

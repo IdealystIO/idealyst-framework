@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useEffect, useMemo } from 'react';
 import { View, TouchableOpacity, LayoutChangeEvent } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { accordionStyles } from './Accordion.styles';
 import Text from '../Text';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
@@ -96,7 +96,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           </Text>
         </View>
         <Animated.View style={[iconStyle, animatedIconStyle]}>
-          <MaterialCommunityIcons
+          <MaterialDesignIcons
             name="chevron-down"
             size={20}
             style={iconStyle}

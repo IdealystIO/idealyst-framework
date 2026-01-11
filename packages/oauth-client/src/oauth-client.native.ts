@@ -1,38 +1,37 @@
-import type { OAuthClient, OAuthConfig, OAuthResult } from './types'
+import type { OAuthClient, OAuthConfig, OAuthResult, OAuthCallbackParams } from './types'
 import { Linking } from 'react-native'
 
-export class NativeOAuthClient implements OAuthClient {
-  private config: OAuthConfig
+export class NativeOAuthClient<T = OAuthResult> implements OAuthClient<T> {
+  private config: OAuthConfig<T>
 
-  constructor(config: OAuthConfig) {
+  constructor(config: OAuthConfig<T>) {
     this.config = config
   }
 
-  async authorize(): Promise<OAuthResult> {
+  async authorize(): Promise<T> {
     const state = this.generateState()
     const oauthUrl = this.buildOAuthUrl(state)
-    
+
     // Open OAuth URL in system browser
     await Linking.openURL(oauthUrl)
-    
+
     // Wait for deep link callback
-    const callbackData = await this.waitForDeepLinkCallback()
-    
-    if (callbackData.error) {
-      throw new Error(`OAuth error: ${callbackData.error}`)
+    const callbackParams = await this.waitForDeepLinkCallback()
+
+    if (callbackParams.error) {
+      throw new Error(`OAuth error: ${callbackParams.error}`)
     }
-    
-    if (callbackData.code) {
-      return {
-        code: callbackData.code,
-        state: callbackData.state
-      }
+
+    // Transform callback params if transformer provided, otherwise return as-is
+    if (this.config.transformCallback) {
+      return this.config.transformCallback(callbackParams)
     }
-    
-    throw new Error('No authorization code received')
+
+    // Default behavior: return all callback params as T
+    return callbackParams as T
   }
 
-  private async waitForDeepLinkCallback(): Promise<{ code?: string; error?: string; state?: string }> {
+  private async waitForDeepLinkCallback(): Promise<OAuthCallbackParams> {
     return new Promise((resolve, reject) => {
       let subscription: any
       let timeoutId: NodeJS.Timeout | null = null
@@ -82,47 +81,39 @@ export class NativeOAuthClient implements OAuthClient {
     })
   }
 
-  private parseDeepLink(url: string): { code?: string; error?: string; state?: string } | null {
+  private parseDeepLink(url: string): OAuthCallbackParams | null {
     try {
       // Handle custom scheme URLs (e.g., com.myapp://oauth/callback?code=123)
       const parsedUrl = new URL(url)
-      
+
       // Check if this is our OAuth callback
       const expectedScheme = new URL(this.config.redirectUrl).protocol.slice(0, -1)
       if (parsedUrl.protocol.slice(0, -1) !== expectedScheme) {
         return null
       }
 
-      // For custom schemes, parameters are in the query string
-      const code = parsedUrl.searchParams.get('code')
-      const error = parsedUrl.searchParams.get('error')
-      const state = parsedUrl.searchParams.get('state')
+      // Collect all query parameters
+      const params: OAuthCallbackParams = {}
+
+      // Get all parameters from query string
+      parsedUrl.searchParams.forEach((value, key) => {
+        params[key] = value
+      })
 
       // Also check the hash fragment for parameters (some OAuth providers use this)
-      if (!code && !error && parsedUrl.hash) {
+      if (Object.keys(params).length === 0 && parsedUrl.hash) {
         const hashParams = new URLSearchParams(parsedUrl.hash.substring(1))
-        const hashCode = hashParams.get('code')
-        const hashError = hashParams.get('error')
-        const hashState = hashParams.get('state')
-        
-        if (hashCode || hashError) {
-          return {
-            code: hashCode || undefined,
-            error: hashError || undefined,
-            state: hashState || undefined
-          }
-        }
+        hashParams.forEach((value, key) => {
+          params[key] = value
+        })
       }
 
-      if (!code && !error) {
+      // Return null if no parameters found
+      if (Object.keys(params).length === 0) {
         return null
       }
 
-      return { 
-        code: code || undefined, 
-        error: error || undefined, 
-        state: state || undefined 
-      }
+      return params
     } catch (error) {
       console.warn('Failed to parse deep link URL:', url, error)
       return null

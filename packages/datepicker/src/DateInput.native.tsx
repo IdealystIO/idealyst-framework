@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { DatePicker } from './DatePicker';
 import { dateTimeInputStyles } from './InputStyles';
 import type { DateInputProps } from './types';
@@ -103,7 +103,7 @@ export const DateInput: React.FC<DateInputProps> = ({
           onPress={() => !disabled && setOpen(true)}
           disabled={disabled}
         >
-          <MaterialCommunityIcons name="calendar" size={18} style={iconStyle} />
+          <MaterialDesignIcons name="calendar" size={18} style={iconStyle} />
         </TouchableOpacity>
       </View>
       {error && (

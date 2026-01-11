@@ -23,6 +23,7 @@ PACKAGES=(
   "microphone"
   "translate"
   "tooling"
+  "config"
 )
 
 for pkg in "${PACKAGES[@]}"; do

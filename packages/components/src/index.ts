@@ -109,6 +109,9 @@ export * from './Chip/types';
 export { default as Breadcrumb } from './Breadcrumb';
 export * from './Breadcrumb/types';
 
+export { default as Platform } from './Platform';
+export * from './Platform/types';
+
 export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
@@ -142,6 +145,7 @@ export type { AlertProps } from './Alert/types';
 export type { SkeletonProps, SkeletonGroupProps, SkeletonShape, SkeletonAnimation } from './Skeleton/types';
 export type { ChipProps, ChipSize, ChipIntent } from './Chip/types';
 export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
+export type { PlatformAPI, PlatformSystem, PlatformSelectSpec } from './Platform/types';
 
 export { useMergeRefs };
 

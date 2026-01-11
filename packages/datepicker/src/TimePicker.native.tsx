@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { timePickerStyles } from './TimePicker.styles';
 import type { TimePickerProps } from './types';
 
@@ -75,7 +75,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             onPress={incrementHours}
             disabled={disabled}
           >
-            <MaterialCommunityIcons name="chevron-up" size={20} style={iconStyle} />
+            <MaterialDesignIcons name="chevron-up" size={20} style={iconStyle} />
           </TouchableOpacity>
           <Text style={timeValueStyle}>
             {String(displayHours).padStart(2, '0')}
@@ -85,7 +85,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             onPress={decrementHours}
             disabled={disabled}
           >
-            <MaterialCommunityIcons name="chevron-down" size={20} style={iconStyle} />
+            <MaterialDesignIcons name="chevron-down" size={20} style={iconStyle} />
           </TouchableOpacity>
         </View>
 
@@ -101,7 +101,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             onPress={incrementMinutes}
             disabled={disabled}
           >
-            <MaterialCommunityIcons name="chevron-up" size={20} style={iconStyle} />
+            <MaterialDesignIcons name="chevron-up" size={20} style={iconStyle} />
           </TouchableOpacity>
           <Text style={timeValueStyle}>
             {String(minutes).padStart(2, '0')}
@@ -111,7 +111,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
             onPress={decrementMinutes}
             disabled={disabled}
           >
-            <MaterialCommunityIcons name="chevron-down" size={20} style={iconStyle} />
+            <MaterialDesignIcons name="chevron-down" size={20} style={iconStyle} />
           </TouchableOpacity>
         </View>
 

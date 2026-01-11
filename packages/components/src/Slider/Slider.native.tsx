@@ -2,7 +2,7 @@ import React, { useState, useCallback, forwardRef, useMemo } from 'react';
 import { View } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, runOnJS, withSpring } from 'react-native-reanimated';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { sliderStyles } from './Slider.styles';
 import Text from '../Text';
 import type { SliderProps } from './types';
@@ -195,7 +195,7 @@ const Slider = forwardRef<View, SliderProps>(({
     if (typeof icon === 'string' && isIconName(icon)) {
       const iconStyle = (sliderStyles.thumbIcon as any)({ intent });
       return (
-        <MaterialCommunityIcons
+        <MaterialDesignIcons
           name={icon}
           size={iconStyle.width || 16}
           color={iconStyle.color}

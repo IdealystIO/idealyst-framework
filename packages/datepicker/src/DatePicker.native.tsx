@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { datePickerCalendarStyles } from './DatePicker.styles';
 import type { DatePickerProps } from './types';
 
@@ -154,7 +154,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             onPress={() => setViewMode('calendar')}
             disabled={disabled}
           >
-            <MaterialCommunityIcons name="chevron-left" size={16} style={iconStyle} />
+            <MaterialDesignIcons name="chevron-left" size={16} style={iconStyle} />
           </TouchableOpacity>
           <TouchableOpacity
             style={titleButtonStyle}
@@ -204,7 +204,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             onPress={goToPrevYearRange}
             disabled={disabled}
           >
-            <MaterialCommunityIcons name="chevron-left" size={16} style={iconStyle} />
+            <MaterialDesignIcons name="chevron-left" size={16} style={iconStyle} />
           </TouchableOpacity>
           <Text style={titleTextStyle}>
             {yearRange[0]} - {yearRange[yearRange.length - 1]}
@@ -214,7 +214,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             onPress={goToNextYearRange}
             disabled={disabled}
           >
-            <MaterialCommunityIcons name="chevron-right" size={16} style={iconStyle} />
+            <MaterialDesignIcons name="chevron-right" size={16} style={iconStyle} />
           </TouchableOpacity>
         </View>
         <View style={yearGridStyle}>
@@ -256,7 +256,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           onPress={goToPrevMonth}
           disabled={disabled}
         >
-          <MaterialCommunityIcons name="chevron-left" size={16} style={iconStyle} />
+          <MaterialDesignIcons name="chevron-left" size={16} style={iconStyle} />
         </TouchableOpacity>
         <TouchableOpacity
           style={titleButtonStyle}
@@ -272,7 +272,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           onPress={goToNextMonth}
           disabled={disabled}
         >
-          <MaterialCommunityIcons name="chevron-right" size={16} style={iconStyle} />
+          <MaterialDesignIcons name="chevron-right" size={16} style={iconStyle} />
         </TouchableOpacity>
       </View>
 

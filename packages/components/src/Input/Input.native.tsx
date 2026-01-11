@@ -1,6 +1,6 @@
 import React, { useState, isValidElement, useMemo, useEffect, useRef, useCallback } from 'react';
 import { View, TextInput, TouchableOpacity, Platform, TextInputProps } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { useUnistyles } from 'react-native-unistyles';
 import { InputProps } from './types';
 import { inputStyles } from './Input.styles';
@@ -220,7 +220,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
 
     if (typeof leftIcon === 'string') {
       return (
-        <MaterialCommunityIcons
+        <MaterialDesignIcons
           name={leftIcon}
           size={iconSize}
           color={iconColor}
@@ -239,7 +239,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
 
     if (typeof rightIcon === 'string') {
       return (
-        <MaterialCommunityIcons
+        <MaterialDesignIcons
           name={rightIcon}
           size={iconSize}
           color={iconColor}
@@ -279,7 +279,7 @@ const Input = React.forwardRef<TextInput, InputProps>(({
           disabled={disabled}
           accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
         >
-          <MaterialCommunityIcons
+          <MaterialDesignIcons
             name={isPasswordVisible ? 'eye-off' : 'eye'}
             size={iconSize}
             color={iconColor}

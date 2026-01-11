@@ -75,7 +75,6 @@ export const screenStyles = defineStyle('Screen', (theme: Theme) => ({
         _web: {
             display: 'flex',
             flexDirection: 'column',
-            minHeight: '100%',
             boxSizing: 'border-box',
         },
     }),

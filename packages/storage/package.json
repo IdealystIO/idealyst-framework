@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/storage",
-  "version": "1.2.8",
+  "version": "1.2.12",
   "description": "Cross-platform storage abstraction for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/storage#readme",
   "readme": "README.md",
@@ -40,7 +40,8 @@
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
-    "react-native-mmkv": ">=2.0.0"
+    "react-native-mmkv": ">=4.0.0",
+    "react-native-nitro-modules": ">=0.20.0"
   },
   "peerDependenciesMeta": {
     "react-native": {
@@ -48,11 +49,15 @@
     },
     "react-native-mmkv": {
       "optional": true
+    },
+    "react-native-nitro-modules": {
+      "optional": true
     }
   },
   "devDependencies": {
     "@types/react": "^19.1.0",
-    "react-native-mmkv": "^3.3.1",
+    "react-native-mmkv": "^4.1.1",
+    "react-native-nitro-modules": "^0.32.1",
     "typescript": "^5.0.0"
   },
   "files": [

@@ -237,7 +237,7 @@ import lodash from 'lodash';
 import React, { forwardRef, useState, useEffect, useMemo, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import type { ViewProps, TextProps } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { useTheme } from '@idealyst/theme';
 `;
         const imports = parseImports(code, 'Button.native.tsx');
@@ -246,7 +246,7 @@ import { useTheme } from '@idealyst/theme';
         const grouped = groupImportsBySource(imports);
         expect(grouped.get('react')?.length).toBe(6);
         expect(grouped.get('react-native')?.length).toBe(7); // 5 regular + 2 type-only
-        expect(grouped.get('react-native-vector-icons/MaterialCommunityIcons')?.length).toBe(1);
+        expect(grouped.get('@react-native-vector-icons/material-design-icons')?.length).toBe(1);
         expect(grouped.get('@idealyst/theme')?.length).toBe(1);
       });
     });

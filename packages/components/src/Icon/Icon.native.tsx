@@ -1,5 +1,5 @@
 import { forwardRef, useMemo } from 'react';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { IconProps } from './types';
 import { iconStyles } from './Icon.styles';
 import { useUnistyles } from 'react-native-unistyles';
@@ -28,7 +28,7 @@ const Icon = forwardRef<any, IconProps>(({
   const iconColor = iconStyle.color;
 
   return (
-    <MaterialCommunityIcons
+    <MaterialDesignIcons
       ref={ref}
       nativeID={id}
       size={iconSize}

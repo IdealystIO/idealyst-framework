@@ -1,6 +1,6 @@
 import React, { isValidElement, forwardRef, ComponentRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { chipStyles } from './Chip.styles';
 import { isIconName } from '../Icon/icon-resolver';
 import type { ChipProps } from './types';
@@ -59,7 +59,7 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
     if (typeof icon === 'string' && isIconName(icon)) {
       return (
         <View style={iconStyle}>
-          <MaterialCommunityIcons
+          <MaterialDesignIcons
             name={icon}
             size={iconSize}
             style={iconStyle}
@@ -89,7 +89,7 @@ const Chip = forwardRef<ComponentRef<typeof Pressable>, ChipProps>(({
           accessibilityLabel="Delete"
           accessibilityRole="button"
         >
-          <MaterialCommunityIcons
+          <MaterialDesignIcons
             name="close"
             size={deleteIconSize}
             style={deleteIconStyle}

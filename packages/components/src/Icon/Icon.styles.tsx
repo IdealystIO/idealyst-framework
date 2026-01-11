@@ -45,8 +45,8 @@ export const iconStyles = defineStyle('Icon', (theme: Theme) => ({
             }
         }
 
-        // Get color - priority: intent > color > textColor > default
-        // color takes precedence over textColor (as per design)
+        // Get color - priority: intent > color > textColor > default (textColor="primary")
+        // When no color prop is specified, defaults to theme's primary text color
         const iconColor = intent
             ? theme.intents[intent]?.primary
             : color

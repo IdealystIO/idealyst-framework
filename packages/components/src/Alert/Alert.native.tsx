@@ -1,6 +1,6 @@
 import React, { isValidElement, forwardRef, ComponentRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { alertStyles } from './Alert.styles';
 import { isIconName } from '../Icon/icon-resolver';
 import type { AlertProps } from './types';
@@ -49,7 +49,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
 
     if (typeof displayIcon === 'string' && isIconName(displayIcon)) {
       return (
-        <MaterialCommunityIcons
+        <MaterialDesignIcons
           name={displayIcon}
           size={20}
           style={iconContainerStyle}
@@ -110,7 +110,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
           accessibilityLabel="Dismiss alert"
           accessibilityRole="button"
         >
-          <MaterialCommunityIcons
+          <MaterialDesignIcons
             name="close"
             size={16}
             style={closeIconStyle}

@@ -6,7 +6,7 @@
 export const VERSION = '0.1.0';
 
 // Current Idealyst framework version to use in templates
-export const IDEALYST_VERSION = '1.2.8';
+export const IDEALYST_VERSION = '1.2.12';
 
 // React Native version
 export const REACT_NATIVE_VERSION = '0.83.0';
@@ -101,7 +101,6 @@ export const DEPENDENCIES = {
     'react-native-gesture-handler': '^2.20.0',
     'react-native-reanimated': '^4.2.0',
     'react-native-worklets': '^0.7.0',
-    'react-native-vector-icons': '^10.2.0',
     '@react-native-vector-icons/material-design-icons': '^12.0.0',
   },
   trpc: {
