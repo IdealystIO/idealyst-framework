@@ -32,13 +32,6 @@ export interface TextProps extends TextSpacingStyleProps {
   typography?: TextTypographyVariant;
 
   /**
-   * Text size - accepts Typography names or Size shorthand.
-   * Typography: 'h1', 'h2', 'body1', 'caption', etc.
-   * Size: 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'
-   */
-  size?: TextSizeVariant;
-
-  /**
    * The weight of the text.
    * Overrides the weight from typography if both are set.
    */

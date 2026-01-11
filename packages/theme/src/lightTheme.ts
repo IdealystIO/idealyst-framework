@@ -306,7 +306,7 @@ export const lightTheme = createTheme()
 // =============================================================================
 
 // Local types to avoid circular dependency with RegisteredTheme
-type BasePallet = 'red' | 'blue' | 'green' | 'yellow' | 'purple' | 'gray' | 'orange' | 'black' | 'white';
+type BasePallet = 'red' | 'blue' | 'green' | 'yellow' | 'purple' | 'gray' | 'orange' | 'black' | 'white' | 'primary';
 type BaseShade = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 
 function generateColorPallette() {
@@ -322,6 +322,7 @@ function generateColorPallette() {
         orange: '#f97316',
         black: '#000000',
         white: '#ffffff',
+        primary: '#3b82f6',
     };
 
     const hexToRgb = (hex: string): [number, number, number] => {
