@@ -20,7 +20,7 @@ export const videoStyles = defineStyle('Video', (theme: Theme) => ({
     container: (_props: VideoDynamicProps) => ({
         position: 'relative' as const,
         overflow: 'hidden' as const,
-        backgroundColor: theme.colors['black'],
+        backgroundColor: theme.colors.pallet.gray[900],
     }),
 
     video: (_props: VideoDynamicProps) => ({
@@ -37,7 +37,7 @@ export const videoStyles = defineStyle('Video', (theme: Theme) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
-        backgroundColor: theme.colors['gray.300'],
-        color: theme.colors['gray.600'],
+        backgroundColor: theme.colors.pallet.gray[300],
+        color: theme.colors.pallet.gray[600],
     }),
 }));

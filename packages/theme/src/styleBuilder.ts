@@ -38,6 +38,7 @@ export type ComponentName =
   | 'Link'
   | 'List'
   | 'Menu'
+  | 'MenuItem'
   | 'Popover'
   | 'Pressable'
   | 'Progress'
@@ -60,15 +61,35 @@ export type ComponentName =
 export type StyleCallback<TTheme, TStyles> = (theme: TTheme) => TStyles;
 
 /**
+ * Permissive variant type that accepts any variant configuration.
+ * The actual variant names are determined at build time by Unistyles.
+ */
+export type PermissiveVariants = Record<string, string | number | boolean | undefined>;
+
+/**
+ * Return type for defineStyle that preserves style keys and adds useVariants.
+ * Style values are typed as 'any' to allow both static styles and dynamic functions.
+ */
+export type DefineStyleResult<TStyles> = {
+  [K in keyof TStyles]: TStyles[K];
+} & {
+  /**
+   * Apply variant values to the stylesheet.
+   * Variant names are inferred from the 'variants' property in style definitions.
+   */
+  useVariants: (variants: PermissiveVariants) => void;
+};
+
+/**
  * Define base styles for a component.
  * Babel transforms this to StyleSheet.create with merged extensions.
  */
-export function defineStyle<TTheme, TStyles>(
+export function defineStyle<TTheme, TStyles extends Record<string, unknown>>(
   _componentName: ComponentName,
   styles: StyleCallback<TTheme, TStyles>
-): ReturnType<typeof StyleSheet.create> {
+): DefineStyleResult<TStyles> {
   // Babel replaces this - runtime fallback for dev
-  return StyleSheet.create(styles as any);
+  return StyleSheet.create(styles as any) as DefineStyleResult<TStyles>;
 }
 
 /**

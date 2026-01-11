@@ -17,7 +17,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     onPress,
     disabled = false,
     loading = false,
-    type = 'contained',
+    type: typeProp,
+    variant,
     intent = 'primary',
     size = 'md',
     gradient,
@@ -40,6 +41,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     accessibilityOwns,
     accessibilityHasPopup,
   } = props;
+
+  // variant is an alias for type - variant takes precedence if both are set
+  const type = variant ?? typeProp ?? 'contained';
 
   // Button is effectively disabled when loading
   const isDisabled = disabled || loading;

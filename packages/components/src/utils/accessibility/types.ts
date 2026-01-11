@@ -66,7 +66,11 @@ export type AriaRole =
   | 'none'
   | 'presentation'
   | 'heading'
-  | 'group';
+  | 'group'
+  // Additional composite/group roles
+  | 'radiogroup'
+  // React Native specific roles
+  | 'adjustable';
 
 /**
  * Base accessibility props shared across all components.

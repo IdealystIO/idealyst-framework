@@ -1,32 +1,63 @@
 import type { IConfig } from './types'
 import { ConfigValidationError } from './types'
 
-// react-native-config provides a Config object with all env variables
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-let RNConfig: Record<string, string | undefined> = {}
+/**
+ * Config store - initialized from react-native-config, can be overridden via setConfig().
+ */
+let configStore: Record<string, string> = {}
 
-try {
-  // Dynamic import to handle cases where react-native-config is not installed
-  // This allows the package to be used in web-only projects without errors
-  RNConfig = require('react-native-config').default || require('react-native-config')
-} catch {
-  // react-native-config not available - will be empty object
-  // This is expected in web environments or when the native module isn't linked
+/**
+ * Initialize from react-native-config if available.
+ */
+function initFromRNConfig(): void {
+  try {
+    // Dynamic import to handle cases where react-native-config is not installed
+    const RNConfig = require('react-native-config').default || require('react-native-config')
+    if (RNConfig && typeof RNConfig === 'object') {
+      configStore = { ...RNConfig }
+    }
+  } catch {
+    // react-native-config not available - configStore remains empty
+    // Values will be injected by Babel plugin via setConfig()
+  }
+}
+
+// Initialize on module load
+initFromRNConfig()
+
+/**
+ * Set config values. Called by Babel plugin at compile time,
+ * or can be called manually.
+ */
+export function setConfig(config: Record<string, string>): void {
+  configStore = { ...configStore, ...config }
 }
 
 /**
- * Native implementation of IConfig using react-native-config.
+ * Clear all config values. Useful for testing.
+ */
+export function clearConfig(): void {
+  configStore = {}
+}
+
+/**
+ * Get the raw config store. Useful for debugging.
+ */
+export function getConfigStore(): Record<string, string> {
+  return { ...configStore }
+}
+
+/**
+ * Native implementation of IConfig.
  *
- * This implementation provides direct access to .env variables without
- * any prefix transformation, as react-native-config doesn't require prefixes.
- *
- * The .env file should use canonical names:
- * API_URL=https://api.example.com
- * GOOGLE_CLIENT_ID=abc123
+ * Config values come from:
+ * 1. react-native-config (if installed)
+ * 2. Babel plugin injection via setConfig()
+ * 3. Manual setConfig() calls
  */
 class NativeConfig implements IConfig {
   get(key: string, defaultValue?: string): string | undefined {
-    return RNConfig[key] ?? defaultValue
+    return configStore[key] ?? defaultValue
   }
 
   getRequired(key: string): string {
@@ -41,11 +72,11 @@ class NativeConfig implements IConfig {
   }
 
   has(key: string): boolean {
-    return RNConfig[key] !== undefined
+    return configStore[key] !== undefined
   }
 
   keys(): string[] {
-    return Object.keys(RNConfig)
+    return Object.keys(configStore).sort()
   }
 
   validate(requiredKeys: string[]): void {

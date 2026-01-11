@@ -67,7 +67,7 @@ const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ item, onPress, 
     <button
       {...itemProps}
       ref={mergedRef}
-      style={{ ...buttonResetStyles, ...itemProps.style }}
+      style={buttonResetStyles}
       onClick={() => onPress(item)}
       disabled={item.disabled}
       role="menuitem"

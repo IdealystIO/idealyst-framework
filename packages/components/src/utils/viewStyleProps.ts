@@ -20,6 +20,8 @@ export interface BaseProps {
 export interface GapStyleProps {
   /** Gap between children (uses theme.sizes.view[size].spacing) */
   gap?: ViewStyleSize;
+  /** Alias for gap - spacing between children */
+  spacing?: ViewStyleSize;
 }
 
 /**

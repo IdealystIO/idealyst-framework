@@ -77,7 +77,7 @@ export function useAnnounce(options: UseAnnounceOptions = {}): UseAnnounceReturn
 
   const politeRegionRef = useRef<HTMLDivElement | null>(null);
   const assertiveRegionRef = useRef<HTMLDivElement | null>(null);
-  const clearTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const clearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /**
    * Create a live region element.

@@ -52,9 +52,8 @@ const List: React.FC<ListProps> = ({
   const processedChildren = childArray.map((child, index) => {
     if (isValidElement(child)) {
       return cloneElement(child, {
-        ...child.props,
         isLast: index === childArray.length - 1,
-      });
+      } as Record<string, unknown>);
     }
     return child;
   });

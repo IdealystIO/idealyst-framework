@@ -45,7 +45,8 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
     iconSize = size;
   } else {
     const themeSize = theme.sizes.icon[size as keyof typeof theme.sizes.icon];
-    iconSize = typeof themeSize === 'number' ? themeSize : (themeSize?.width ?? 24);
+    const rawSize = typeof themeSize === 'number' ? themeSize : themeSize?.width;
+    iconSize = typeof rawSize === 'number' ? rawSize : 24;
   }
 
   // Compute color - priority: intent > color > textColor > default
@@ -70,7 +71,6 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
       ref={mergedRef}
       id={id}
       style={{
-        ...iconProps.style,
         fontSize: iconSize,
         width: '1em',
         height: '1em',

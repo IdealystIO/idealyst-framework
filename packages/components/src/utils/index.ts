@@ -1,6 +1,3 @@
-// Size variant builder
-export { buildSizeVariants } from './buildSizeVariants';
-
 // View/container style variant builders
 export {
   buildGapVariants,

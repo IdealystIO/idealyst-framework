@@ -35,6 +35,10 @@ export const MENU_KEYS = {
   navigateVertical: ['ArrowUp', 'ArrowDown'] as const,
   /** Keys for navigating horizontal menus/menubars */
   navigateHorizontal: ['ArrowLeft', 'ArrowRight'] as const,
+  /** Keys for moving to next item (down or right) */
+  next: ['ArrowDown', 'ArrowRight'] as const,
+  /** Keys for moving to previous item (up or left) */
+  prev: ['ArrowUp', 'ArrowLeft'] as const,
   /** Keys for selecting an item */
   select: ['Enter', ' '] as const,
   /** Keys for jumping to first item */

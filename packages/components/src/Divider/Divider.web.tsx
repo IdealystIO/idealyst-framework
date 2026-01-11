@@ -45,8 +45,8 @@ const Divider = forwardRef<HTMLDivElement, DividerProps>(({
 
   // Generate web props
   const dividerProps = getWebProps([dividerStyle, style as any]);
-  const containerProps = getWebProps([dividerStyles.container]);
-  const contentProps = getWebProps([dividerStyles.content]);
+  const containerProps = getWebProps([dividerStyles.container as any]);
+  const contentProps = getWebProps([dividerStyles.content as any]);
   const lineProps = getWebProps([lineStyle]);
 
   const mergedDividerRef = useMergeRefs(ref, dividerProps.ref);

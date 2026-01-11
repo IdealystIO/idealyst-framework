@@ -1,8 +1,31 @@
 import React, { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
-import { TextProps } from './types';
+import type { Typography, Size } from '@idealyst/theme';
+import { TextProps, TextSizeVariant } from './types';
 import { textStyles } from './Text.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+
+// Map Size values to Typography values
+const SIZE_TO_TYPOGRAPHY: Record<Size, Typography> = {
+  'xs': 'caption',
+  'sm': 'body2',
+  'md': 'body1',
+  'lg': 'subtitle1',
+  'xl': 'h5',
+  '2xl': 'h4',
+  '3xl': 'h3',
+};
+
+// Convert TextSizeVariant to Typography (handles both Size and Typography values)
+function resolveTypography(value: TextSizeVariant | undefined): Typography {
+  if (!value) return 'body1';
+  // If it's a Size value, map it to Typography
+  if (value in SIZE_TO_TYPOGRAPHY) {
+    return SIZE_TO_TYPOGRAPHY[value as Size];
+  }
+  // Otherwise it's already a Typography value
+  return value as Typography;
+}
 
 /**
  * Typography component for displaying text with predefined styles and semantic variants.
@@ -10,11 +33,11 @@ import useMergeRefs from '../hooks/useMergeRefs';
  */
 const Text = forwardRef<HTMLSpanElement, TextProps>(({
   children,
-  typography = 'body1',
+  typography: typographyProp,
+  size,
   weight,
   color = 'primary',
   align = 'left',
-  pre = false,
   // Spacing variants from TextSpacingStyleProps
   gap,
   padding,
@@ -24,6 +47,9 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(({
   testID,
   id,
 }, ref) => {
+  // size is an alias for typography - size takes precedence if both are set
+  const typography = resolveTypography(size ?? typographyProp);
+
   textStyles.useVariants({
     typography,
     weight,

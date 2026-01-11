@@ -1,31 +1,39 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+import { defineStyle } from '@idealyst/theme';
+
+// Required: Unistyles must see StyleSheet usage in original source to process this file
+void StyleSheet;
+
+export type CameraPreviewDynamicProps = {};
 
 /**
  * Styles for CameraPreview component.
- * Using plain StyleSheet since this is a simple component without theme variants.
  */
-export const styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
+export const cameraPreviewStyles = defineStyle('CameraPreview', () => ({
+  container: (_props: CameraPreviewDynamicProps) => ({
+    overflow: 'hidden' as const,
     backgroundColor: '#000',
-  },
-  camera: {
+  }),
+  camera: (_props: CameraPreviewDynamicProps) => ({
     flex: 1,
-  },
-  video: {
-    width: '100%',
-    height: '100%',
-  },
-  focusIndicator: {
-    position: 'absolute',
+  }),
+  video: (_props: CameraPreviewDynamicProps) => ({
+    width: '100%' as const,
+    height: '100%' as const,
+  }),
+  focusIndicator: (_props: CameraPreviewDynamicProps) => ({
+    position: 'absolute' as const,
     width: 80,
     height: 80,
     borderWidth: 2,
     borderColor: '#fff',
     borderRadius: 40,
     backgroundColor: 'transparent',
-  },
-});
+  }),
+}));
+
+// Keep legacy export for compatibility
+export const styles = cameraPreviewStyles;
 
 /**
  * Web-specific styles (CSS-in-JS for web platform).

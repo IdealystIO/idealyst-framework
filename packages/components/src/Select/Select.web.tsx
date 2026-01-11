@@ -258,7 +258,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
       </div>
       <PositionedPortal
         open={isOpen}
-        anchor={triggerRef}
+        anchor={triggerRef as React.RefObject<HTMLElement>}
         placement="bottom-start"
         offset={4}
         onClickOutside={handleClose}
@@ -280,12 +280,12 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
             {searchable && (
               <div {...getWebProps([searchContainerStyle])}>
                 <input
+                  {...getWebProps([searchInputStyle])}
                   ref={searchInputRef}
                   type="text"
                   placeholder="Search options..."
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  {...getWebProps([searchInputStyle])}
                 />
               </div>
             )}

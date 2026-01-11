@@ -50,15 +50,15 @@ const Image: React.FC<ImageProps> = ({
   ]);
 
   const imageProps = getWebProps([
-    imageStyles.image,
+    imageStyles.image as any,
     {
       objectFit: objectFit,
       borderRadius: borderRadius ? `${borderRadius}px` : undefined,
     }
   ]);
 
-  const placeholderProps = getWebProps([imageStyles.placeholder]);
-  const fallbackProps = getWebProps([imageStyles.fallback]);
+  const placeholderProps = getWebProps([imageStyles.placeholder as any]);
+  const fallbackProps = getWebProps([imageStyles.fallback as any]);
 
   return (
     <div

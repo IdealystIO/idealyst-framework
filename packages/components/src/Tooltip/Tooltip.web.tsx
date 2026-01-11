@@ -27,7 +27,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   accessibilityRole,
 }) => {
   const [visible, setVisible] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const anchorRef = useRef<HTMLDivElement>(null);
 
   // Generate unique ID for tooltip
@@ -105,9 +105,9 @@ const Tooltip: React.FC<TooltipProps> = ({
   return (
     <>
       <div
-        ref={anchorRef}
         {...containerProps}
         {...ariaProps}
+        ref={anchorRef}
         id={triggerId}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -123,7 +123,7 @@ const Tooltip: React.FC<TooltipProps> = ({
 
       <PositionedPortal
         open={visible}
-        anchor={anchorRef}
+        anchor={anchorRef as React.RefObject<HTMLElement>}
         placement={placement}
         offset={8}
         zIndex={1000}

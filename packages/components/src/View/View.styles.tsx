@@ -60,8 +60,8 @@ export const viewStyles = defineStyle('View', (theme: Theme) => ({
             },
             border: {
                 none: { borderWidth: 0 },
-                thin: { borderWidth: 1, borderStyle: 'solid' as const, borderColor: theme.colors['gray.300'] },
-                thick: { borderWidth: 2, borderStyle: 'solid' as const, borderColor: theme.colors['gray.300'] },
+                thin: { borderWidth: 1, borderStyle: 'solid' as const, borderColor: theme.colors.pallet.gray[300] },
+                thick: { borderWidth: 2, borderStyle: 'solid' as const, borderColor: theme.colors.pallet.gray[300] },
             },
             // $iterator expands for each view size
             gap: {

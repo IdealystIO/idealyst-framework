@@ -5,7 +5,7 @@ import type { SliderProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
-import { getWebRangeAriaProps, generateAccessibilityId, SLIDER_KEYS } from '../utils/accessibility';
+import { getWebRangeAriaProps, generateAccessibilityId, SLIDER_KEYS, matchesKey } from '../utils/accessibility';
 
 /**
  * Range slider for selecting numeric values within a min/max range.
@@ -55,20 +55,21 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   // Apply variants
   sliderStyles.useVariants({
     size,
+    intent,
     disabled,
     margin,
     marginVertical,
     marginHorizontal,
   });
 
-  const containerProps = getWebProps([(sliderStyles.container as any)({}), style as any]);
-  const wrapperProps = getWebProps([sliderStyles.sliderWrapper]);
-  const trackProps = getWebProps([(sliderStyles.track as any)({})]);
-  const thumbIconProps = getWebProps([(sliderStyles.thumbIcon as any)({ intent })]);
-  const valueLabelProps = getWebProps([sliderStyles.valueLabel]);
-  const minMaxLabelsProps = getWebProps([sliderStyles.minMaxLabels]);
-  const minMaxLabelProps = getWebProps([sliderStyles.minMaxLabel]);
-  const marksProps = getWebProps([sliderStyles.marks]);
+  const containerProps = getWebProps([sliderStyles.container as any, style as any]);
+  const wrapperProps = getWebProps([sliderStyles.sliderWrapper as any]);
+  const trackProps = getWebProps([sliderStyles.track as any]);
+  const thumbIconProps = getWebProps([sliderStyles.thumbIcon as any]);
+  const valueLabelProps = getWebProps([sliderStyles.valueLabel as any]);
+  const minMaxLabelsProps = getWebProps([sliderStyles.minMaxLabels as any]);
+  const minMaxLabelProps = getWebProps([sliderStyles.minMaxLabel as any]);
+  const marksProps = getWebProps([sliderStyles.marks as any]);
 
   const clampValue = useCallback((val: number) => {
     const clampedValue = Math.min(Math.max(val, min), max);
@@ -138,26 +139,25 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (disabled) return;
 
-    const key = e.key;
     let newValue = value;
     const largeStep = (max - min) / 10; // 10% of range for PageUp/PageDown
 
-    if (SLIDER_KEYS.increase.includes(key)) {
+    if (matchesKey(e, SLIDER_KEYS.increase)) {
       e.preventDefault();
       newValue = clampValue(value + step);
-    } else if (SLIDER_KEYS.decrease.includes(key)) {
+    } else if (matchesKey(e, SLIDER_KEYS.decrease)) {
       e.preventDefault();
       newValue = clampValue(value - step);
-    } else if (SLIDER_KEYS.min.includes(key)) {
+    } else if (matchesKey(e, SLIDER_KEYS.min)) {
       e.preventDefault();
       newValue = min;
-    } else if (SLIDER_KEYS.max.includes(key)) {
+    } else if (matchesKey(e, SLIDER_KEYS.max)) {
       e.preventDefault();
       newValue = max;
-    } else if (key === 'PageUp') {
+    } else if (matchesKey(e, SLIDER_KEYS.increaseLarge)) {
       e.preventDefault();
       newValue = clampValue(value + largeStep);
-    } else if (key === 'PageDown') {
+    } else if (matchesKey(e, SLIDER_KEYS.decreaseLarge)) {
       e.preventDefault();
       newValue = clampValue(value - largeStep);
     }
@@ -215,10 +215,10 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   const percentage = ((value - min) / (max - min)) * 100;
 
   // Dynamic styles with percentage
-  const filledTrackProps = getWebProps([(sliderStyles.filledTrack as any)({ intent }), { width: `${percentage}%` }]);
+  const filledTrackProps = getWebProps([sliderStyles.filledTrack as any, { width: `${percentage}%` }]);
   const thumbProps = getWebProps([
-    (sliderStyles.thumb as any)({ intent, disabled }),
-    isDragging && sliderStyles.thumbActive,
+    sliderStyles.thumb as any,
+    isDragging && (sliderStyles.thumbActive as any),
     { left: `${percentage}%` }
   ]);
 
@@ -269,8 +269,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
             <div {...marksProps}>
               {marks.map((mark) => {
                 const markPercentage = ((mark.value - min) / (max - min)) * 100;
-                const markProps = getWebProps([sliderStyles.mark, { left: `${markPercentage}%` }]);
-                const markLabelProps = getWebProps([sliderStyles.markLabel, { left: `${markPercentage}%` }]);
+                const markProps = getWebProps([sliderStyles.mark as any, { left: `${markPercentage}%` }]);
+                const markLabelProps = getWebProps([sliderStyles.markLabel as any, { left: `${markPercentage}%` }]);
                 return (
                   <div key={mark.value}>
                     <div {...markProps} />
@@ -287,8 +287,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
 
           {/* Thumb */}
           <div
-            ref={thumbRef}
             {...thumbProps}
+            ref={thumbRef}
           >
             {renderIcon()}
           </div>

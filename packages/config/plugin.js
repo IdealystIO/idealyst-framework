@@ -9,7 +9,9 @@
  *   plugins: [
  *     ['@idealyst/config/plugin', {
  *       extends: ['../shared/.env'],
- *       envPath: '.env'
+ *       envPath: '.env',
+ *       required: ['API_URL', 'AUTH_SECRET'],  // Warn if missing
+ *       errorOnMissing: true                    // Fail build if missing
  *     }]
  *   ]
  * }
@@ -18,6 +20,9 @@
 
 const fs = require('fs')
 const path = require('path')
+
+// Track if we've already validated (to avoid duplicate warnings)
+let hasValidated = false
 
 /**
  * Parse a .env file and extract key-value pairs.
@@ -99,6 +104,7 @@ function findSharedEnv(directory) {
  */
 function loadConfig(options, projectRoot) {
   const configs = []
+  const sources = []
 
   // Load inherited configs first (lowest priority)
   if (options.extends) {
@@ -109,6 +115,7 @@ function loadConfig(options, projectRoot) {
 
       if (fs.existsSync(resolvedPath)) {
         configs.push(parseEnvFile(resolvedPath))
+        sources.push(resolvedPath)
       }
     }
   } else {
@@ -116,6 +123,7 @@ function loadConfig(options, projectRoot) {
     const sharedEnv = findSharedEnv(projectRoot)
     if (sharedEnv) {
       configs.push(parseEnvFile(sharedEnv))
+      sources.push(sharedEnv)
     }
   }
 
@@ -131,10 +139,44 @@ function loadConfig(options, projectRoot) {
 
   if (envPath && fs.existsSync(envPath)) {
     configs.push(parseEnvFile(envPath))
+    sources.push(envPath)
   }
 
   // Merge configs (later configs override earlier ones)
-  return Object.assign({}, ...configs)
+  return {
+    config: Object.assign({}, ...configs),
+    sources
+  }
+}
+
+/**
+ * Validate required config keys and emit warnings/errors.
+ */
+function validateConfig(configValues, options, projectRoot) {
+  if (hasValidated) return true
+  hasValidated = true
+
+  const required = options.required || []
+  if (required.length === 0) return true
+
+  const missing = required.filter(key => !(key in configValues))
+
+  if (missing.length === 0) return true
+
+  const errorOnMissing = options.errorOnMissing ?? false
+  const message = `@idealyst/config: Missing required config keys: ${missing.join(', ')}`
+
+  if (errorOnMissing) {
+    console.error('\n\x1b[31m✖ ' + message + '\x1b[0m')
+    console.error('\x1b[90m  Add these keys to your .env file or check your plugin configuration.\x1b[0m\n')
+    throw new Error(message)
+  } else {
+    console.warn('\n\x1b[33m⚠ ' + message + '\x1b[0m')
+    console.warn('\x1b[90m  Add these keys to your .env file to suppress this warning.\x1b[0m')
+    console.warn('\x1b[90m  Set errorOnMissing: true to fail the build instead.\x1b[0m\n')
+  }
+
+  return false
 }
 
 /**
@@ -146,6 +188,9 @@ module.exports = function babelPluginIdealystConfig(babel) {
   // Cache config per project root
   const configCache = new Map()
 
+  // Reset validation state on new compilation
+  hasValidated = false
+
   return {
     name: '@idealyst/config',
 
@@ -156,10 +201,24 @@ module.exports = function babelPluginIdealystConfig(babel) {
           const projectRoot = opts.root || state.cwd || process.cwd()
 
           // Load config (cached per project root)
+          let configValues
           if (!configCache.has(projectRoot)) {
-            configCache.set(projectRoot, loadConfig(opts, projectRoot))
+            const { config, sources } = loadConfig(opts, projectRoot)
+            configCache.set(projectRoot, config)
+            configValues = config
+
+            // Validate required keys (only once per build)
+            validateConfig(config, opts, projectRoot)
+
+            // Log loaded sources in verbose mode
+            if (opts.verbose && sources.length > 0) {
+              console.log('\x1b[36m@idealyst/config loaded:\x1b[0m')
+              sources.forEach(s => console.log('  ← ' + path.relative(projectRoot, s)))
+              console.log('  Keys:', Object.keys(config).join(', '))
+            }
+          } else {
+            configValues = configCache.get(projectRoot)
           }
-          const configValues = configCache.get(projectRoot)
 
           // Track if this file imports from @idealyst/config
           let hasConfigImport = false
@@ -231,3 +290,4 @@ module.exports.parseEnvFile = parseEnvFile
 module.exports.loadConfig = loadConfig
 module.exports.findEnvFile = findEnvFile
 module.exports.findSharedEnv = findSharedEnv
+module.exports.validateConfig = validateConfig

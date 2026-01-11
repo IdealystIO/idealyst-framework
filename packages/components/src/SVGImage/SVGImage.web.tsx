@@ -56,7 +56,7 @@ const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
 
   // Use getWebProps to generate className and ref for web
   const containerWebProps = getWebProps(containerStyleArray);
-  const imageWebProps = getWebProps(svgImageStyles.image);
+  const imageWebProps = getWebProps([svgImageStyles.image as any]);
 
   // Apply custom color if provided
   // Convert React Native resize modes to CSS object-fit values

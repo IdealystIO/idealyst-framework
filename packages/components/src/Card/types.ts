@@ -25,6 +25,11 @@ export interface CardProps extends ContainerStyleProps, InteractiveAccessibility
   type?: CardType;
 
   /**
+   * Alias for type - the visual style variant of the card
+   */
+  variant?: CardType;
+
+  /**
    * The border radius of the card
    */
   radius?: CardRadiusVariant;

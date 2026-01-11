@@ -1,8 +1,8 @@
 /**
- * TextArea styles using defineStyle with dynamic props.
+ * TextArea styles using static styles with variants.
  */
 import { StyleSheet } from 'react-native-unistyles';
-import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import { defineStyle, ThemeStyleWrapper, CompoundVariants } from '@idealyst/theme';
 import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 import { ViewStyleSize } from '../utils/viewStyleProps';
 
@@ -12,26 +12,32 @@ void StyleSheet;
 // Wrap theme for $iterator support
 type Theme = ThemeStyleWrapper<BaseTheme>;
 
-type ResizeMode = 'none' | 'vertical' | 'horizontal' | 'both';
-
-export type TextAreaDynamicProps = {
-    size?: Size;
-    intent?: Intent;
-    disabled?: boolean;
-    hasError?: boolean;
-    resize?: ResizeMode;
-    isNearLimit?: boolean;
-    isAtLimit?: boolean;
+export type TextAreaVariants = {
+    size: Size;
+    intent: Intent;
+    disabled: boolean;
+    hasError: boolean;
+    isNearLimit: boolean;
+    isAtLimit: boolean;
     margin?: ViewStyleSize;
     marginVertical?: ViewStyleSize;
     marginHorizontal?: ViewStyleSize;
 };
 
+// Create intent variants dynamically from theme
+function createIntentVariants(theme: Theme) {
+    const variants: Record<string, object> = {};
+    for (const intent in theme.intents) {
+        variants[intent] = {};
+    }
+    return variants;
+}
+
 /**
- * TextArea styles with intent/disabled/error handling.
+ * TextArea styles with static styles and variants.
  */
 export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
-    container: (_props: TextAreaDynamicProps) => ({
+    container: {
         display: 'flex' as const,
         flexDirection: 'column' as const,
         gap: 4,
@@ -49,70 +55,103 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
                 marginHorizontal: theme.sizes.$view.padding,
             },
         },
-    }),
+    },
 
-    label: ({ disabled = false }: TextAreaDynamicProps) => ({
+    label: {
         fontSize: 14,
         fontWeight: '500' as const,
         color: theme.colors.text.primary,
-    }),
+        variants: {
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
+        },
+    },
 
-    textareaContainer: (_props: TextAreaDynamicProps) => ({
+    textareaContainer: {
         position: 'relative' as const,
         variants: {
             disabled: {
+                true: { opacity: 0.8 },
+                false: { opacity: 1 },
+            },
+        },
+    },
+
+    textarea: {
+        width: '100%',
+        color: theme.colors.text.primary,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$textarea.fontSize,
+                padding: theme.sizes.$textarea.padding,
+                lineHeight: theme.sizes.$textarea.lineHeight,
+                minHeight: theme.sizes.$textarea.minHeight,
+            },
+            disabled: {
                 true: {
-                    opacity: 1,
+                    opacity: 0.5,
+                    _web: {
+                        cursor: 'not-allowed',
+                    },
                 },
                 false: {
-                    opacity: 0.8,
+                    opacity: 1,
+                    _web: {
+                        cursor: 'text',
+                    },
                 },
             },
-        }
-    }),
+        },
+        _web: {
+            fontFamily: 'inherit',
+            outline: 'none',
+            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+            boxSizing: 'border-box',
+            overflowY: 'hidden',
+        },
+    },
 
-    textarea: ({ disabled = false, resize = 'none' }: TextAreaDynamicProps) => ({
-            width: '100%',
-            color: theme.colors.text.primary,
-            opacity: disabled ? 0.5 : 1,
-            variants: {
-                size: {
-                    fontSize: theme.sizes.$textarea.fontSize,
-                    padding: theme.sizes.$textarea.padding,
-                    lineHeight: theme.sizes.$textarea.lineHeight,
-                    minHeight: theme.sizes.$textarea.minHeight,
-                },
-            },
-            _web: {
-                fontFamily: 'inherit',
-                outline: 'none',
-                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-                boxSizing: 'border-box',
-                overflowY: 'hidden',
-                cursor: disabled ? 'not-allowed' : 'text',
-                resize: resize,
-            },
-    }),
-
-    helperText: ({ hasError = false }: TextAreaDynamicProps) => ({
+    helperText: {
         fontSize: 12,
-        color: hasError ? theme.intents.error.primary : theme.colors.text.secondary,
-    }),
+        variants: {
+            hasError: {
+                true: { color: theme.intents.error.primary },
+                false: { color: theme.colors.text.secondary },
+            },
+        },
+    },
 
-    footer: (_props: TextAreaDynamicProps) => ({
+    footer: {
         display: 'flex' as const,
         flexDirection: 'row' as const,
         justifyContent: 'space-between' as const,
         alignItems: 'center' as const,
         gap: 4,
-    }),
+    },
 
-    characterCount: ({ isNearLimit = false, isAtLimit = false }: TextAreaDynamicProps) => ({
+    characterCount: {
         fontSize: 12,
-        color: isAtLimit
-            ? theme.intents.error.primary
-            : isNearLimit
-                ? theme.intents.warning.primary
-                : theme.colors.text.secondary,
-    }),
+        color: theme.colors.text.secondary,
+        variants: {
+            isAtLimit: {
+                true: { color: theme.intents.error.primary },
+                false: {},
+            },
+            isNearLimit: {
+                true: {},
+                false: {},
+            },
+        },
+        compoundVariants: [
+            {
+                isNearLimit: true,
+                isAtLimit: false,
+                styles: {
+                    color: theme.intents.warning.primary,
+                },
+            },
+        ] as CompoundVariants<keyof TextAreaVariants>,
+    },
 }));

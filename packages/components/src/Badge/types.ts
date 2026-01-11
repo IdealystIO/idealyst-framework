@@ -30,6 +30,11 @@ export interface BadgeProps extends BaseProps {
   type?: BadgeType;
 
   /**
+   * Alias for type - the visual style variant of the badge
+   */
+  variant?: BadgeType;
+
+  /**
    * The color scheme of the badge
    */
   color?: BadgeColorVariant;

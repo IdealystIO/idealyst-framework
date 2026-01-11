@@ -11,7 +11,8 @@ import { getWebInteractiveAriaProps } from '../utils/accessibility';
  */
 const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   children,
-  type = 'elevated',
+  type: typeProp,
+  variant,
   radius = 'md',
   intent,
   clickable = false,
@@ -36,6 +37,8 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   accessibilityRole,
   accessibilityPressed,
 }, ref) => {
+  // variant is an alias for type - variant takes precedence if both are set
+  const type = variant ?? typeProp ?? 'elevated';
   // Generate ARIA props
   const ariaProps = useMemo(() => {
     return getWebInteractiveAriaProps({

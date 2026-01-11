@@ -49,13 +49,6 @@ export {
 
 // Internal API (for component stylesheets)
 export { getExtension, getReplacement } from './extendComponent';
-export {
-    withExtension,
-    withSimpleExtension,
-    normalizeStyleFn,
-    normalizeSimpleStyleFn,
-    applyExtensions,
-} from './applyExtension';
 
 // Types
 export type {

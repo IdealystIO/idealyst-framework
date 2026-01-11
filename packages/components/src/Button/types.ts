@@ -49,6 +49,11 @@ export interface ButtonProps extends BaseProps, InteractiveAccessibilityProps {
   type?: ButtonType;
 
   /**
+   * Alias for type - the visual style variant of the button
+   */
+  variant?: ButtonType;
+
+  /**
    * The intent/color scheme of the button
    */
   intent?: ButtonIntentVariant;

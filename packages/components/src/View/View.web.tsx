@@ -15,7 +15,8 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
   radius = 'none',
   border = 'none',
   // Spacing variants from ContainerStyleProps
-  gap,
+  gap: gapProp,
+  spacing,
   padding,
   paddingVertical,
   paddingHorizontal,
@@ -32,6 +33,9 @@ const View = forwardRef<HTMLDivElement, ViewProps>(({
   testID,
   id,
 }, ref) => {
+  // spacing is an alias for gap - spacing takes precedence if both are set
+  const gap = spacing ?? gapProp;
+
   viewStyles.useVariants({
     background,
     radius,

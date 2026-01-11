@@ -1,8 +1,8 @@
 /**
- * Slider styles using defineStyle with dynamic props.
+ * Slider styles using static styles with variants.
  */
 import { StyleSheet } from 'react-native-unistyles';
-import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
+import { defineStyle, ThemeStyleWrapper, CompoundVariants } from '@idealyst/theme';
 import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 import { ViewStyleSize } from '../utils/viewStyleProps';
 
@@ -12,20 +12,47 @@ void StyleSheet;
 // Wrap theme for $iterator support
 type Theme = ThemeStyleWrapper<BaseTheme>;
 
-export type SliderDynamicProps = {
-    size?: Size;
-    intent?: Intent;
-    disabled?: boolean;
+export type SliderVariants = {
+    size: Size;
+    intent: Intent;
+    disabled: boolean;
     margin?: ViewStyleSize;
     marginVertical?: ViewStyleSize;
     marginHorizontal?: ViewStyleSize;
 };
 
+// Create intent variants dynamically from theme
+function createIntentVariants(theme: Theme) {
+    const variants: Record<string, object> = {};
+    for (const intent in theme.intents) {
+        variants[intent] = {};
+    }
+    return variants;
+}
+
+// Create compound variants for intent-specific styles
+function createSliderCompoundVariants(theme: Theme): CompoundVariants<keyof SliderVariants> {
+    const compoundVariants: CompoundVariants<keyof SliderVariants> = [];
+
+    for (const intent in theme.intents) {
+        const intentValue = theme.intents[intent as Intent];
+
+        // filledTrack intent colors are handled inline since they need per-element targeting
+        // thumb border color by intent
+        compoundVariants.push({
+            intent,
+            styles: {},
+        });
+    }
+
+    return compoundVariants;
+}
+
 /**
- * Slider styles with intent/disabled handling.
+ * Slider styles with static styles and variants.
  */
 export const sliderStyles = defineStyle('Slider', (theme: Theme) => ({
-    container: (_props: SliderDynamicProps) => ({
+    container: {
         gap: 4,
         paddingVertical: 8,
         variants: {
@@ -39,44 +66,67 @@ export const sliderStyles = defineStyle('Slider', (theme: Theme) => ({
                 marginHorizontal: theme.sizes.$view.padding,
             },
         },
-    }),
+    },
 
-    sliderWrapper: (_props: SliderDynamicProps) => ({
+    sliderWrapper: {
         position: 'relative' as const,
         paddingVertical: 4,
-    }),
+    },
 
-    track: ({ disabled = false }: SliderDynamicProps) => ({
+    track: {
         backgroundColor: theme.colors.surface.tertiary,
         borderRadius: 9999,
         position: 'relative' as const,
-        opacity: disabled ? 0.5 : 1,
         variants: {
             size: {
                 height: theme.sizes.$slider.trackHeight,
             },
+            disabled: {
+                true: {
+                    opacity: 0.5,
+                    _web: {
+                        cursor: 'not-allowed',
+                    },
+                },
+                false: {
+                    opacity: 1,
+                    _web: {
+                        cursor: 'pointer',
+                    },
+                },
+            },
         },
-        _web: {
-            cursor: disabled ? 'not-allowed' : 'pointer',
-        },
-    }),
+    },
 
-    filledTrack: ({ intent = 'primary' }: SliderDynamicProps) => ({
+    filledTrack: {
         position: 'absolute' as const,
         height: '100%',
         borderRadius: 9999,
         top: 0,
         left: 0,
-        backgroundColor: theme.intents[intent].primary,
-    }),
+        variants: {
+            intent: createIntentVariants(theme),
+        },
+        compoundVariants: (() => {
+            const cv: CompoundVariants<keyof SliderVariants> = [];
+            for (const intent in theme.intents) {
+                cv.push({
+                    intent,
+                    styles: {
+                        backgroundColor: theme.intents[intent as Intent].primary,
+                    },
+                });
+            }
+            return cv;
+        })(),
+    },
 
-    thumb: ({ intent = 'primary', disabled = false }: SliderDynamicProps) => ({
+    thumb: {
         position: 'absolute' as const,
         backgroundColor: theme.colors.surface.primary,
         borderRadius: 9999,
         borderWidth: 2,
         borderStyle: 'solid' as const,
-        borderColor: theme.intents[intent].primary,
         top: '50%',
         display: 'flex' as const,
         alignItems: 'center' as const,
@@ -86,35 +136,59 @@ export const sliderStyles = defineStyle('Slider', (theme: Theme) => ({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 2,
-        opacity: disabled ? 0.6 : 1,
         variants: {
             size: {
                 width: theme.sizes.$slider.thumbSize,
                 height: theme.sizes.$slider.thumbSize,
             },
+            intent: createIntentVariants(theme),
+            disabled: {
+                true: {
+                    opacity: 0.6,
+                    _web: {
+                        cursor: 'not-allowed',
+                    },
+                },
+                false: {
+                    opacity: 1,
+                    _web: {
+                        cursor: 'grab',
+                    },
+                },
+            },
         },
+        compoundVariants: (() => {
+            const cv: CompoundVariants<keyof SliderVariants> = [];
+            for (const intent in theme.intents) {
+                cv.push({
+                    intent,
+                    styles: {
+                        borderColor: theme.intents[intent as Intent].primary,
+                    },
+                });
+            }
+            return cv;
+        })(),
         _web: {
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
             transform: 'translate(-50%, -50%)',
             transition: 'transform 0.15s ease, box-shadow 0.2s ease',
-            cursor: disabled ? 'not-allowed' : 'grab',
-            _hover: disabled ? {} : { transform: 'translate(-50%, -50%) scale(1.05)' },
-            _active: disabled ? {} : { cursor: 'grabbing', transform: 'translate(-50%, -50%) scale(1.1)' },
+            _hover: { transform: 'translate(-50%, -50%) scale(1.05)' },
+            _active: { cursor: 'grabbing', transform: 'translate(-50%, -50%) scale(1.1)' },
         },
-    }),
+    },
 
-    thumbActive: (_props: SliderDynamicProps) => ({
+    thumbActive: {
         _web: {
             transform: 'translate(-50%, -50%) scale(1.1)',
         },
-    }),
+    },
 
-    thumbIcon: ({ intent = 'primary' }: SliderDynamicProps) => ({
+    thumbIcon: {
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         flexShrink: 0,
-        color: theme.intents[intent].primary,
         variants: {
             size: {
                 width: theme.sizes.$slider.thumbIconSize,
@@ -124,36 +198,49 @@ export const sliderStyles = defineStyle('Slider', (theme: Theme) => ({
                 minHeight: theme.sizes.$slider.thumbIconSize,
                 maxHeight: theme.sizes.$slider.thumbIconSize,
             },
+            intent: createIntentVariants(theme),
         },
-    }),
+        compoundVariants: (() => {
+            const cv: CompoundVariants<keyof SliderVariants> = [];
+            for (const intent in theme.intents) {
+                cv.push({
+                    intent,
+                    styles: {
+                        color: theme.intents[intent as Intent].primary,
+                    },
+                });
+            }
+            return cv;
+        })(),
+    },
 
-    valueLabel: (_props: SliderDynamicProps) => ({
+    valueLabel: {
         fontSize: 12,
         fontWeight: '600' as const,
         color: theme.colors.text.primary,
         textAlign: 'center' as const,
-    }),
+    },
 
-    minMaxLabels: (_props: SliderDynamicProps) => ({
+    minMaxLabels: {
         flexDirection: 'row' as const,
         justifyContent: 'space-between' as const,
         marginTop: 4,
-    }),
+    },
 
-    minMaxLabel: (_props: SliderDynamicProps) => ({
+    minMaxLabel: {
         fontSize: 12,
         color: theme.colors.text.secondary,
-    }),
+    },
 
-    marks: (_props: SliderDynamicProps) => ({
+    marks: {
         position: 'absolute' as const,
         width: '100%',
         height: '100%',
         top: 0,
         left: 0,
-    }),
+    },
 
-    mark: (_props: SliderDynamicProps) => ({
+    mark: {
         position: 'absolute' as const,
         width: 2,
         backgroundColor: theme.colors.border.secondary,
@@ -166,9 +253,9 @@ export const sliderStyles = defineStyle('Slider', (theme: Theme) => ({
         _web: {
             transform: 'translate(-50%, -50%)',
         },
-    }),
+    },
 
-    markLabel: (_props: SliderDynamicProps) => ({
+    markLabel: {
         position: 'absolute' as const,
         fontSize: 10,
         color: theme.colors.text.secondary,
@@ -178,5 +265,5 @@ export const sliderStyles = defineStyle('Slider', (theme: Theme) => ({
             transform: 'translateX(-50%)',
             whiteSpace: 'nowrap',
         },
-    }),
+    },
 }));

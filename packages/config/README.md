@@ -91,9 +91,47 @@ That's it! The Babel plugin reads your .env files at compile time and injects th
   // Main .env file (highest priority, default: auto-detect)
   envPath: '.env',
 
+  // Required keys - warn if missing at build time
+  required: ['API_URL', 'AUTH_SECRET'],
+
+  // Fail the build if required keys are missing (default: false = warn only)
+  errorOnMissing: true,
+
+  // Log which .env files were loaded (default: false)
+  verbose: true,
+
   // Project root (default: process.cwd())
   root: '/path/to/project'
 }]
+```
+
+### Build-time Validation
+
+The plugin validates required keys at compile time:
+
+```js
+// babel.config.js
+plugins: [
+  ['@idealyst/config/plugin', {
+    required: ['API_URL', 'DATABASE_URL', 'JWT_SECRET'],
+    errorOnMissing: process.env.NODE_ENV === 'production'  // Fail in prod, warn in dev
+  }]
+]
+```
+
+**Warning output:**
+```
+⚠ @idealyst/config: Missing required config keys: JWT_SECRET
+  Add these keys to your .env file to suppress this warning.
+  Set errorOnMissing: true to fail the build instead.
+```
+
+**Error output (with `errorOnMissing: true`):**
+```
+✖ @idealyst/config: Missing required config keys: JWT_SECRET
+  Add these keys to your .env file or check your plugin configuration.
+
+Error: @idealyst/config: Missing required config keys: JWT_SECRET
 ```
 
 ### Auto-detection

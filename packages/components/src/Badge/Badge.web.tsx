@@ -13,7 +13,8 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props, ref) => {
   const {
     children,
     size = 'md',
-    type = 'filled',
+    type: typeProp,
+    variant,
     color = 'blue',
     icon,
     style,
@@ -21,13 +22,16 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props, ref) => {
     id,
   } = props;
 
+  // variant is an alias for type - variant takes precedence if both are set
+  const type = variant ?? typeProp ?? 'filled';
+
   badgeStyles.useVariants({
     size,
     type,
   });
 
   const badgeStyle = (badgeStyles.badge as any)({ color });
-  const contentStyle = badgeStyles.content;
+  const contentStyle = badgeStyles.content as any;
   const textStyle = (badgeStyles.text as any)({ color });
 
   const badgeProps = getWebProps([badgeStyle]);

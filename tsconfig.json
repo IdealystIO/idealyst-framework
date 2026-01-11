@@ -16,10 +16,14 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["packages/*/src"]
+      "@/*": ["packages/*/src"],
+      "@idealyst/theme": ["packages/theme/src"],
+      "@idealyst/components": ["packages/components/src"],
+      "@idealyst/navigation": ["packages/navigation/src"]
     }
   },
   "include": [
+    "types/**/*",
     "tests/**/*",
     "packages/*/src/**/*"
   ],
@@ -28,6 +32,11 @@
     "dist",
     "packages/*/dist",
     "packages/cli/templates",
-    "**/*.old.tsx"
+    "**/*.old.tsx",
+    "**/*.native.tsx",
+    "**/*.native.ts",
+    "**/examples/**",
+    "**/docs.ts",
+    "tests/**"
   ]
 } 

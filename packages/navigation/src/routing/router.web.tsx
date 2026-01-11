@@ -164,7 +164,7 @@ const buildRoute = (params: RouteParam, index: number, isNested = false, parentP
 
         // Separate fullScreen routes from regular routes
         const regularRoutes = params.routes.filter(route => !isFullScreenRoute(route));
-        const fullScreenRoutes = params.routes.filter(isFullScreenRoute);
+        const fullScreenRoutes = params.routes.filter((route): route is ScreenParam => isFullScreenRoute(route));
 
         // Transform routes to include full paths for layout component (only non-fullScreen)
         const routesWithFullPaths = regularRoutes.map(route => ({
@@ -241,12 +241,14 @@ const buildRoute = (params: RouteParam, index: number, isNested = false, parentP
                 const fullPath = joinPaths(navigatorFullPath, route.path);
                 // Remove leading slash for React Router path (it will be relative to root)
                 const routerPath = fullPath.startsWith('/') ? fullPath.slice(1) : fullPath;
+                // Type assertion: fullScreen routes are always screens with a component
+                const screenRoute = route as ScreenParam;
 
                 return (
                     <Route
                         key={`fullscreen-${route.path}-${fsIndex}`}
                         path={routerPath || '/'}
-                        element={React.createElement(route.component)}
+                        element={React.createElement(screenRoute.component)}
                     />
                 );
             });

@@ -6,7 +6,7 @@ import { isIconName } from '../Icon/icon-resolver';
 import type { AlertProps } from './types';
 
 // Default icon names for each intent
-const defaultIcons = {
+const defaultIcons: Record<string, string> = {
   primary: 'information',
   success: 'check-circle',
   error: 'alert-circle',

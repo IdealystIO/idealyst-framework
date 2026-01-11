@@ -5,7 +5,7 @@ import type { MenuProps } from './types';
 import MenuItem from './MenuItem.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
-import { getWebInteractiveAriaProps, generateAccessibilityId, MENU_KEYS } from '../utils/accessibility';
+import { getWebInteractiveAriaProps, generateAccessibilityId, MENU_KEYS, matchesKey } from '../utils/accessibility';
 
 /**
  * Dropdown menu for actions and navigation triggered by a button or element.
@@ -64,9 +64,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
 
   // Keyboard navigation handler
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    const key = e.key;
-
-    if (MENU_KEYS.close.includes(key)) {
+    if (matchesKey(e, MENU_KEYS.close)) {
       e.preventDefault();
       onOpenChange?.(false);
       // Return focus to trigger
@@ -78,16 +76,16 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
 
     let nextIndex = focusedIndex.current;
 
-    if (MENU_KEYS.next.includes(key)) {
+    if (matchesKey(e, MENU_KEYS.next)) {
       e.preventDefault();
       nextIndex = focusedIndex.current < enabledItems.length - 1 ? focusedIndex.current + 1 : 0;
-    } else if (MENU_KEYS.prev.includes(key)) {
+    } else if (matchesKey(e, MENU_KEYS.prev)) {
       e.preventDefault();
       nextIndex = focusedIndex.current > 0 ? focusedIndex.current - 1 : enabledItems.length - 1;
-    } else if (MENU_KEYS.first.includes(key)) {
+    } else if (matchesKey(e, MENU_KEYS.first)) {
       e.preventDefault();
       nextIndex = 0;
-    } else if (MENU_KEYS.last.includes(key)) {
+    } else if (matchesKey(e, MENU_KEYS.last)) {
       e.preventDefault();
       nextIndex = enabledItems.length - 1;
     }
@@ -119,7 +117,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
 
   const overlayProps = getWebProps([(menuStyles.overlay as any)({})]);
   const menuProps = getWebProps([(menuStyles.menu as any)({}), style as any]);
-  const separatorProps = getWebProps([menuStyles.separator]);
+  const separatorProps = getWebProps([menuStyles.separator as any]);
 
   const handleTriggerClick = () => {
     onOpenChange?.(!open);
@@ -161,7 +159,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(({
 
       <PositionedPortal
         open={open}
-        anchor={triggerRef}
+        anchor={triggerRef as React.RefObject<HTMLElement>}
         placement={placement}
         offset={4}
         onClickOutside={() => onOpenChange?.(false)}

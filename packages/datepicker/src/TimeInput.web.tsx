@@ -117,7 +117,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
       {label && (
         <span style={labelTextStyle}>{label}</span>
       )}
-      <div ref={triggerRef} {...containerProps}>
+      <div {...containerProps} ref={triggerRef}>
         <input
           type="text"
           value={inputValue}

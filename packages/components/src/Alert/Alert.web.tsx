@@ -7,7 +7,7 @@ import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 
 // Default icons for each intent
-const defaultIcons = {
+const defaultIcons: Record<string, string> = {
   primary: 'information',
   success: 'check-circle',
   error: 'alert-circle',

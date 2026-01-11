@@ -20,7 +20,7 @@ export const imageStyles = defineStyle('Image', (theme: Theme) => ({
     container: (_props: ImageDynamicProps) => ({
         position: 'relative' as const,
         overflow: 'hidden' as const,
-        backgroundColor: theme.colors['gray.200'],
+        backgroundColor: theme.colors.pallet.gray?.['200'] ?? theme.colors.surface.secondary,
     }),
 
     image: (_props: ImageDynamicProps) => ({
@@ -37,7 +37,7 @@ export const imageStyles = defineStyle('Image', (theme: Theme) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
-        backgroundColor: theme.colors['gray.200'],
+        backgroundColor: theme.colors.pallet.gray?.['200'] ?? theme.colors.surface.secondary,
     }),
 
     fallback: (_props: ImageDynamicProps) => ({
@@ -49,11 +49,11 @@ export const imageStyles = defineStyle('Image', (theme: Theme) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
-        backgroundColor: theme.colors['gray.300'],
-        color: theme.colors['gray.600'],
+        backgroundColor: theme.colors.pallet.gray?.['300'] ?? theme.colors.surface.tertiary,
+        color: theme.colors.pallet.gray?.['600'] ?? theme.colors.text.secondary,
     }),
 
     loadingIndicator: (_props: ImageDynamicProps) => ({
-        color: theme.colors['gray.600'],
+        color: theme.colors.pallet.gray?.['600'] ?? theme.colors.text.secondary,
     }),
 }));

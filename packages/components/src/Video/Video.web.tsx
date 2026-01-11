@@ -45,7 +45,7 @@ const Video: React.FC<VideoProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const containerProps = getWebProps([videoStyles.container, style as any]);
-  const videoProps = getWebProps([videoStyles.video]);
+  const videoProps = getWebProps([videoStyles.video as any]);
 
   const videoSource = typeof source === 'string'
     ? source

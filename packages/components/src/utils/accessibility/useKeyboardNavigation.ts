@@ -103,7 +103,7 @@ export function useKeyboardNavigation({
 }: UseKeyboardNavigationOptions): UseKeyboardNavigationReturn {
   // Buffer for type-ahead search
   const searchBuffer = useRef('');
-  const searchTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /**
    * Focus a specific item by index.

@@ -117,37 +117,29 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
     accessibilityAutoComplete,
   ]);
 
+  const isNearLimit = maxLength ? value.length >= maxLength * 0.9 : false;
+  const isAtLimit = maxLength ? value.length >= maxLength : false;
+
   // Apply variants
   textAreaStyles.useVariants({
     size,
     intent,
     disabled,
     hasError,
-    resize,
-    isNearLimit: maxLength ? value.length >= maxLength * 0.9 : false,
-    isAtLimit: maxLength ? value.length >= maxLength : false,
+    isNearLimit,
+    isAtLimit,
     margin,
     marginVertical,
     marginHorizontal,
   });
 
-  // Get dynamic styles - call as functions for theme reactivity
-  const containerStyle = (textAreaStyles.container as any)({});
-  const labelStyle = (textAreaStyles.label as any)({ disabled });
-  const textareaContainerStyle = (textAreaStyles.textareaContainer as any)({});
-  const footerStyle = (textAreaStyles.footer as any)({});
-  const helperTextStyle = (textAreaStyles.helperText as any)({ hasError });
-  const characterCountStyle = (textAreaStyles.characterCount as any)({
-    isNearLimit: maxLength ? value.length >= maxLength * 0.9 : false,
-    isAtLimit: maxLength ? value.length >= maxLength : false,
-  });
-
-  const containerProps = getWebProps([containerStyle, style as any]);
-  const labelProps = getWebProps([labelStyle]);
-  const textareaContainerProps = getWebProps([textareaContainerStyle]);
-  const footerProps = getWebProps([footerStyle]);
-  const helperTextProps = getWebProps([helperTextStyle]);
-  const characterCountProps = getWebProps([characterCountStyle]);
+  // Get static styles (cast to any for Unistyles variant compatibility)
+  const containerProps = getWebProps([textAreaStyles.container as any, style as any]);
+  const labelProps = getWebProps([textAreaStyles.label as any]);
+  const textareaContainerProps = getWebProps([textAreaStyles.textareaContainer as any]);
+  const footerProps = getWebProps([textAreaStyles.footer as any]);
+  const helperTextProps = getWebProps([textAreaStyles.helperText as any]);
+  const characterCountProps = getWebProps([textAreaStyles.characterCount as any]);
 
   const adjustHeight = () => {
     if (!autoGrow || !textareaRef.current) return;
@@ -189,16 +181,15 @@ const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
   };
 
   const showFooter = (error || helperText) || (showCharacterCount && maxLength);
-  const isNearLimit = maxLength ? value.length >= maxLength * 0.9 : false;
-  const isAtLimit = maxLength ? value.length >= maxLength : false;
 
   const computedTextareaProps = getWebProps([
-    textAreaStyles.textarea({ intent, disabled, hasError }),
-    textareaStyle,
-    minHeight && { minHeight: `${minHeight}px` },
-    maxHeight && { maxHeight: `${maxHeight}px` },
-    autoGrow && maxHeight && textareaRef.current && textareaRef.current.scrollHeight > maxHeight && { overflowY: 'auto' as const },
-  ]);
+    textAreaStyles.textarea as any,
+    textareaStyle as any,
+    { resize } as any, // Apply resize as inline style since it's CSS-only
+    minHeight ? { minHeight: `${minHeight}px` } : null,
+    maxHeight ? { maxHeight: `${maxHeight}px` } : null,
+    autoGrow && maxHeight && textareaRef.current && textareaRef.current.scrollHeight > maxHeight ? { overflowY: 'auto' as const } : null,
+  ].filter(Boolean));
 
   const mergedRef = useMergeRefs(ref, containerProps.ref);
   const mergedTextareaRef = useMergeRefs(textareaRef, computedTextareaProps.ref);

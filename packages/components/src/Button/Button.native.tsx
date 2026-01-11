@@ -68,14 +68,14 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   };
 
   // Map button size to icon size
-  const iconSizeMap = {
+  const iconSizeMap: Record<string, number> = {
     xs: 12,
     sm: 14,
     md: 16,
     lg: 18,
     xl: 20,
-  } as const;
-  const iconSize = iconSizeMap[size];
+  };
+  const iconSize = iconSizeMap[size] ?? 16;
 
 
   // Use children if available, otherwise use title

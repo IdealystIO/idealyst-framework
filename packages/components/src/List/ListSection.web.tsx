@@ -10,9 +10,9 @@ const ListSection: React.FC<ListSectionProps> = ({
   style,
   testID,
 }) => {
-  const sectionProps = getWebProps([listStyles.section, style as any]);
-  const titleProps = getWebProps([listStyles.sectionTitle]);
-  const contentProps = getWebProps([listStyles.sectionContent]);
+  const sectionProps = getWebProps([listStyles.section as any, style as any]);
+  const titleProps = getWebProps([listStyles.sectionTitle as any]);
+  const contentProps = getWebProps([listStyles.sectionContent as any]);
 
   return (
     <div {...sectionProps} data-testid={testID}>

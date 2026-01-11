@@ -1,4 +1,4 @@
-import { Text, Typography } from '@idealyst/theme';
+import { Text, Typography, Size } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, TextStyle } from 'react-native';
 import { TextSpacingStyleProps } from '../utils/viewStyleProps';
@@ -8,6 +8,12 @@ export type TextColorVariant = Text;
 export type TextWeightVariant = 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
 export type TextAlignVariant = 'left' | 'center' | 'right';
 export type TextTypographyVariant = Typography;
+/**
+ * Text size variant - accepts both Typography values and Size shorthand
+ * Typography: 'h1', 'h2', 'body1', 'caption', etc.
+ * Size: 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'
+ */
+export type TextSizeVariant = Typography | Size;
 
 /**
  * Typography component for rendering text with consistent styling.
@@ -24,6 +30,13 @@ export interface TextProps extends TextSpacingStyleProps {
    * Automatically sets fontSize, lineHeight, and fontWeight.
    */
   typography?: TextTypographyVariant;
+
+  /**
+   * Text size - accepts Typography names or Size shorthand.
+   * Typography: 'h1', 'h2', 'body1', 'caption', etc.
+   * Size: 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'
+   */
+  size?: TextSizeVariant;
 
   /**
    * The weight of the text.

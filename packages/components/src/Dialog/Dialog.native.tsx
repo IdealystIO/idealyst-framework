@@ -11,7 +11,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   title,
   children,
   size = 'md',
-  type = 'standard',
+  type = 'default',
   showCloseButton = true,
   closeOnBackdropClick = true,
   animationType = 'fade',

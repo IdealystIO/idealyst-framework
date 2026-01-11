@@ -23,21 +23,19 @@ const Progress: React.FC<ProgressProps> = ({
 }) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
-  // Apply variants (for size and rounded)
+  // Apply variants (for size, intent, and rounded)
   progressStyles.useVariants({
     size,
+    intent,
     rounded,
   });
 
-  // Compute dynamic styles with intent
-  const dynamicProps = { intent };
-
   // Linear progress
-  const containerProps = getWebProps([(progressStyles.container as any)({}), style as any]);
-  const trackProps = getWebProps([(progressStyles.linearTrack as any)({})]);
-  const barProps = getWebProps([(progressStyles.linearBar as any)(dynamicProps), { width: `${percentage}%` }]);
-  const indeterminateProps = getWebProps([(progressStyles.indeterminateBar as any)(dynamicProps)]);
-  const labelProps = getWebProps([progressStyles.label]);
+  const containerProps = getWebProps([progressStyles.container as any, style as any]);
+  const trackProps = getWebProps([progressStyles.linearTrack as any]);
+  const barProps = getWebProps([progressStyles.linearBar as any, { width: `${percentage}%` }]);
+  const indeterminateProps = getWebProps([progressStyles.indeterminateBar as any]);
+  const labelProps = getWebProps([progressStyles.label as any]);
 
   const getCircularSize = () => {
     if (size === 'sm') return 32;
@@ -53,13 +51,13 @@ const Progress: React.FC<ProgressProps> = ({
     const strokeDashoffset = indeterminate ? circumference * 0.25 : circumference - (percentage / 100) * circumference;
 
     const computedContainerProps = getWebProps([
-      progressStyles.circularContainer,
-      style,
+      progressStyles.circularContainer as any,
+      style as any,
       { display: 'inline-flex' }
     ]);
-    const labelProps = getWebProps([progressStyles.circularLabel]);
-    const trackColorProps = getWebProps([progressStyles.circularTrack]);
-    const barColorProps = getWebProps([(progressStyles.circularBar as any)(dynamicProps)]);
+    const circularLabelProps = getWebProps([progressStyles.circularLabel as any]);
+    const trackColorProps = getWebProps([progressStyles.circularTrack as any]);
+    const barColorProps = getWebProps([progressStyles.circularBar as any]);
 
     return (
       <div {...computedContainerProps} id={id} data-testid={testID}>
@@ -93,7 +91,7 @@ const Progress: React.FC<ProgressProps> = ({
           />
         </svg>
         {showLabel && (
-          <span {...labelProps}>
+          <span {...circularLabelProps}>
             {label || `${Math.round(percentage)}%`}
           </span>
         )}

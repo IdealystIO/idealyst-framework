@@ -47,7 +47,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const itemStyle = (accordionStyles.item as any)({ type, isLast });
   const itemProps = getWebProps([itemStyle]);
   const headerProps = getWebProps([(accordionStyles.header as any)({})]);
-  const titleProps = getWebProps([accordionStyles.title]);
+  const titleProps = getWebProps([accordionStyles.title as any]);
   const iconProps = getWebProps([(accordionStyles.icon as any)({})]);
   // Pass expanded state to get correct maxHeight from styles
   const contentProps = getWebProps([(accordionStyles.content as any)({ expanded: isExpanded })]);
