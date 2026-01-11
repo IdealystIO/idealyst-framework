@@ -116,6 +116,7 @@ export const inputStyles = defineStyle('Input', (theme: Theme) => ({
         flexShrink: 0,
         variants: {
             size: {
+                width: theme.sizes.$input.iconSize,
                 marginRight: theme.sizes.$input.iconMargin,
             },
         },
@@ -128,6 +129,7 @@ export const inputStyles = defineStyle('Input', (theme: Theme) => ({
         flexShrink: 0,
         variants: {
             size: {
+                width: theme.sizes.$input.iconSize,
                 marginLeft: theme.sizes.$input.iconMargin,
             },
         },

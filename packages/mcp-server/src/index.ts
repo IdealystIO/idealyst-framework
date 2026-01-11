@@ -15,6 +15,18 @@ import { navigationGuides } from "./data/navigation-guides.js";
 import { translateGuides } from "./data/translate-guides.js";
 import { storageGuides } from "./data/storage-guides.js";
 import { iconGuide } from "./data/icon-guide.js";
+import {
+  packages,
+  getPackageSummary,
+  getPackagesByCategory,
+  searchPackages,
+} from "./data/packages.js";
+import {
+  recipes,
+  getRecipeSummary,
+  getRecipesByCategory,
+  searchRecipes,
+} from "./data/recipes.js";
 import iconsData from "./data/icons.json" with { type: "json" };
 import {
   getComponentTypes,
@@ -220,6 +232,100 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ["topic"],
+        },
+      },
+      {
+        name: "list_packages",
+        description: "List all available Idealyst packages with descriptions, categories, and documentation status. Use this to discover what packages are available in the framework.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            category: {
+              type: "string",
+              description: "Filter by category (optional)",
+              enum: ["core", "ui", "media", "data", "auth", "utility", "tooling"],
+            },
+          },
+        },
+      },
+      {
+        name: "get_package_docs",
+        description: "Get detailed documentation for a specific Idealyst package including installation, features, quick start, and API highlights.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            package: {
+              type: "string",
+              description: "Package name (e.g., 'camera', 'oauth-client', 'datagrid')",
+            },
+            section: {
+              type: "string",
+              description: "Specific section to retrieve (optional, returns all if not specified)",
+              enum: ["overview", "installation", "features", "quickstart", "api"],
+            },
+          },
+          required: ["package"],
+        },
+      },
+      {
+        name: "search_packages",
+        description: "Search across all Idealyst packages by name, description, or features.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            query: {
+              type: "string",
+              description: "Search query",
+            },
+          },
+          required: ["query"],
+        },
+      },
+      {
+        name: "list_recipes",
+        description: "List all available Idealyst recipes (common UI patterns) with descriptions. Recipes provide ready-to-use code examples for building apps.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            category: {
+              type: "string",
+              description: "Filter by category (optional)",
+              enum: ["forms", "navigation", "data", "layout", "auth", "settings", "media"],
+            },
+            difficulty: {
+              type: "string",
+              description: "Filter by difficulty (optional)",
+              enum: ["beginner", "intermediate", "advanced"],
+            },
+          },
+        },
+      },
+      {
+        name: "get_recipe",
+        description: "Get a complete code recipe for a common UI pattern. Returns ready-to-use code with explanation and tips.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            recipe: {
+              type: "string",
+              description: "Recipe ID (e.g., 'login-form', 'settings-screen', 'tab-navigation')",
+            },
+          },
+          required: ["recipe"],
+        },
+      },
+      {
+        name: "search_recipes",
+        description: "Search for recipes by name, description, category, or required packages.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            query: {
+              type: "string",
+              description: "Search query (e.g., 'auth', 'form', 'navigation')",
+            },
+          },
+          required: ["query"],
         },
       },
     ],
@@ -617,6 +723,345 @@ ${command.examples.map((ex: string) => `\`\`\`bash\n${ex}\n\`\`\``).join("\n\n")
       };
     }
 
+    case "list_packages": {
+      const category = args?.category as string | undefined;
+
+      if (category) {
+        // Filter by specific category
+        const byCategory = getPackagesByCategory();
+        const packageList = (byCategory[category] || []).map((pkg) => ({
+          name: pkg.name,
+          npmName: pkg.npmName,
+          description: pkg.description,
+          platforms: pkg.platforms,
+          documentationStatus: pkg.documentationStatus,
+        }));
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(packageList, null, 2),
+            },
+          ],
+        };
+      }
+
+      // Return all packages grouped by category
+      const allPackages = getPackageSummary();
+      const grouped = allPackages.reduce(
+        (acc, pkg) => {
+          const cat = pkg.category;
+          if (!acc[cat]) acc[cat] = [];
+          acc[cat].push(pkg);
+          return acc;
+        },
+        {} as Record<string, typeof allPackages>
+      );
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(grouped, null, 2),
+          },
+        ],
+      };
+    }
+
+    case "get_package_docs": {
+      const packageName = args?.package as string;
+      const section = args?.section as string | undefined;
+
+      // Handle both formats: "camera" and "@idealyst/camera"
+      const normalizedName = packageName
+        .replace("@idealyst/", "")
+        .toLowerCase();
+      const pkg = packages[normalizedName];
+
+      if (!pkg) {
+        const availablePackages = Object.keys(packages).join(", ");
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Package "${packageName}" not found. Available packages: ${availablePackages}`,
+            },
+          ],
+        };
+      }
+
+      // Build documentation based on section or return all
+      let docs = "";
+
+      if (!section || section === "overview") {
+        docs += `# ${pkg.name} (${pkg.npmName})
+
+${pkg.description}
+
+**Category:** ${pkg.category}
+**Platforms:** ${pkg.platforms.join(", ")}
+**Documentation Status:** ${pkg.documentationStatus}
+
+`;
+      }
+
+      if (!section || section === "installation") {
+        docs += `## Installation
+
+\`\`\`bash
+${pkg.installation}
+\`\`\`
+
+`;
+        if (pkg.peerDependencies && pkg.peerDependencies.length > 0) {
+          docs += `### Peer Dependencies
+${pkg.peerDependencies.map((dep) => `- ${dep}`).join("\n")}
+
+`;
+        }
+      }
+
+      if (!section || section === "features") {
+        docs += `## Features
+
+${pkg.features.map((f) => `- ${f}`).join("\n")}
+
+`;
+      }
+
+      if (!section || section === "quickstart") {
+        docs += `## Quick Start
+
+\`\`\`tsx
+${pkg.quickStart}
+\`\`\`
+
+`;
+      }
+
+      if (!section || section === "api") {
+        if (pkg.apiHighlights && pkg.apiHighlights.length > 0) {
+          docs += `## API Highlights
+
+${pkg.apiHighlights.map((api) => `- \`${api}\``).join("\n")}
+
+`;
+        }
+      }
+
+      if (pkg.relatedPackages && pkg.relatedPackages.length > 0) {
+        docs += `## Related Packages
+
+${pkg.relatedPackages.map((rp) => `- @idealyst/${rp}`).join("\n")}
+`;
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: docs.trim(),
+          },
+        ],
+      };
+    }
+
+    case "search_packages": {
+      const query = args?.query as string;
+
+      if (!query) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Please provide a search query.",
+            },
+          ],
+        };
+      }
+
+      const results = searchPackages(query);
+
+      if (results.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `No packages found matching "${query}". Try searching for: camera, oauth, storage, translate, datagrid, datepicker, navigation, etc.`,
+            },
+          ],
+        };
+      }
+
+      const resultList = results.map((pkg) => ({
+        name: pkg.name,
+        npmName: pkg.npmName,
+        category: pkg.category,
+        description: pkg.description,
+        platforms: pkg.platforms,
+      }));
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(resultList, null, 2),
+          },
+        ],
+      };
+    }
+
+    case "list_recipes": {
+      const category = args?.category as string | undefined;
+      const difficulty = args?.difficulty as string | undefined;
+
+      let recipeList = getRecipeSummary();
+
+      // Filter by category
+      if (category) {
+        recipeList = recipeList.filter((r) => r.category === category);
+      }
+
+      // Filter by difficulty
+      if (difficulty) {
+        recipeList = recipeList.filter((r) => r.difficulty === difficulty);
+      }
+
+      // Group by category for readability
+      if (!category) {
+        const grouped = recipeList.reduce(
+          (acc, recipe) => {
+            if (!acc[recipe.category]) acc[recipe.category] = [];
+            acc[recipe.category].push(recipe);
+            return acc;
+          },
+          {} as Record<string, typeof recipeList>
+        );
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(grouped, null, 2),
+            },
+          ],
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(recipeList, null, 2),
+          },
+        ],
+      };
+    }
+
+    case "get_recipe": {
+      const recipeId = args?.recipe as string;
+
+      // Normalize the recipe ID (handle both "login-form" and "loginForm" etc)
+      const normalizedId = recipeId.toLowerCase().replace(/\s+/g, "-");
+      const recipe = recipes[normalizedId];
+
+      if (!recipe) {
+        const availableRecipes = Object.keys(recipes).join(", ");
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Recipe "${recipeId}" not found.\n\nAvailable recipes: ${availableRecipes}`,
+            },
+          ],
+        };
+      }
+
+      // Format the recipe as markdown
+      const output = `# ${recipe.name}
+
+${recipe.description}
+
+**Category:** ${recipe.category}
+**Difficulty:** ${recipe.difficulty}
+**Required packages:** ${recipe.packages.join(", ")}
+
+## Code
+
+\`\`\`tsx
+${recipe.code}
+\`\`\`
+
+## Explanation
+
+${recipe.explanation}
+
+${recipe.tips && recipe.tips.length > 0 ? `## Tips
+
+${recipe.tips.map((tip) => `- ${tip}`).join("\n")}` : ""}
+
+${recipe.relatedRecipes && recipe.relatedRecipes.length > 0 ? `## Related Recipes
+
+${recipe.relatedRecipes.map((r) => `- ${r}`).join("\n")}` : ""}
+`;
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: output.trim(),
+          },
+        ],
+      };
+    }
+
+    case "search_recipes": {
+      const query = args?.query as string;
+
+      if (!query) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Please provide a search query.",
+            },
+          ],
+        };
+      }
+
+      const results = searchRecipes(query);
+
+      if (results.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: `No recipes found matching "${query}". Try searching for: login, form, navigation, settings, auth, list, modal, etc.`,
+            },
+          ],
+        };
+      }
+
+      const resultList = results.map((recipe) => ({
+        id: Object.entries(recipes).find(([_, r]) => r === recipe)?.[0],
+        name: recipe.name,
+        description: recipe.description,
+        category: recipe.category,
+        difficulty: recipe.difficulty,
+        packages: recipe.packages,
+      }));
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(resultList, null, 2),
+          },
+        ],
+      };
+    }
+
     default:
       return {
         content: [
@@ -633,6 +1078,18 @@ ${command.examples.map((ex: string) => `\`\`\`bash\n${ex}\n\`\`\``).join("\n\n")
 server.setRequestHandler(ListResourcesRequestSchema, async () => {
   return {
     resources: [
+      {
+        uri: "idealyst://packages/overview",
+        name: "Idealyst Packages Overview",
+        description: "Overview of all available @idealyst packages organized by category",
+        mimeType: "text/markdown",
+      },
+      {
+        uri: "idealyst://recipes/overview",
+        name: "Idealyst Recipes Overview",
+        description: "Overview of all available code recipes for common UI patterns",
+        mimeType: "text/markdown",
+      },
       {
         uri: "idealyst://framework/getting-started",
         name: "Getting Started with Idealyst",
@@ -755,6 +1212,85 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   // Handle icon reference
   if (uri === "idealyst://icons/reference") {
     guide = iconGuide;
+  }
+
+  // Handle recipes overview
+  if (uri === "idealyst://recipes/overview") {
+    const byCategory = getRecipesByCategory();
+    const categoryLabels: Record<string, string> = {
+      auth: "Authentication",
+      forms: "Forms & Validation",
+      navigation: "Navigation",
+      data: "Data & Lists",
+      layout: "Layout & Modals",
+      settings: "Settings & Preferences",
+      media: "Media & Uploads",
+    };
+
+    let content = `# Idealyst Recipes
+
+Ready-to-use code examples for common UI patterns in Idealyst apps.
+
+`;
+
+    for (const [category, recipeList] of Object.entries(byCategory)) {
+      content += `## ${categoryLabels[category] || category}\n\n`;
+
+      for (const recipe of recipeList) {
+        const id = Object.entries(recipes).find(([_, r]) => r === recipe)?.[0];
+        content += `### ${recipe.name}
+${recipe.description}
+
+- **Difficulty:** ${recipe.difficulty}
+- **Packages:** ${recipe.packages.join(", ")}
+- **Get recipe:** \`get_recipe({ recipe: "${id}" })\`
+
+`;
+      }
+    }
+
+    guide = content;
+  }
+
+  // Handle packages overview
+  if (uri === "idealyst://packages/overview") {
+    const byCategory = getPackagesByCategory();
+    const categoryOrder = ["core", "ui", "data", "media", "auth", "utility", "tooling"];
+    const categoryLabels: Record<string, string> = {
+      core: "Core Packages",
+      ui: "UI Components",
+      data: "Data & Storage",
+      media: "Media & Hardware",
+      auth: "Authentication",
+      utility: "Utilities",
+      tooling: "Developer Tooling",
+    };
+
+    let content = `# Idealyst Framework Packages
+
+The Idealyst Framework provides a comprehensive set of packages for building cross-platform React applications.
+
+`;
+
+    for (const category of categoryOrder) {
+      const pkgs = byCategory[category];
+      if (!pkgs || pkgs.length === 0) continue;
+
+      content += `## ${categoryLabels[category] || category}\n\n`;
+
+      for (const pkg of pkgs) {
+        const platforms = pkg.platforms.join(", ");
+        content += `### ${pkg.name} (\`${pkg.npmName}\`)
+${pkg.description}
+
+- **Platforms:** ${platforms}
+- **Install:** \`${pkg.installation}\`
+
+`;
+      }
+    }
+
+    guide = content;
   }
 
   if (!guide) {
