@@ -1,4 +1,4 @@
-import React, { isValidElement, forwardRef } from 'react';
+import { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { alertStyles } from './Alert.styles';
 import type { AlertProps } from './types';

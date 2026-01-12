@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Screen, View, Text, Chip, Divider } from '@idealyst/components';
 
 export const ChipExamples = () => {

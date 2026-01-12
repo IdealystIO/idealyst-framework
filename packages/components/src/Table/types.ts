@@ -1,4 +1,4 @@
-import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import { Size } from '@idealyst/theme';
 import { ContainerStyleProps } from '../utils/viewStyleProps';

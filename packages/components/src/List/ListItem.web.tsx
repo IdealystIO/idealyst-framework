@@ -1,4 +1,4 @@
-import React, { isValidElement } from 'react';
+import { isValidElement } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { useUnistyles } from 'react-native-unistyles';
 import { getColorFromString, Intent, Theme, Color } from '@idealyst/theme';
@@ -9,7 +9,7 @@ import { isIconName } from '../Icon/icon-resolver';
 import { useListContext } from './ListContext';
 
 const ListItem: React.FC<ListItemProps & { isLast?: boolean }> = ({
-  id,
+  id: _id,
   label,
   children,
   leading,
@@ -46,14 +46,12 @@ const ListItem: React.FC<ListItemProps & { isLast?: boolean }> = ({
   const labelStyle = (listStyles.label as any)({ disabled, selected });
   const leadingStyle = (listStyles.leading as any)({});
   const trailingStyle = (listStyles.trailing as any)({});
-  const trailingIconStyle = (listStyles.trailingIcon as any)({});
   const labelContainerStyle = (listStyles.labelContainer as any)({});
 
   const itemProps = getWebProps([itemStyle, style]);
   const labelProps = getWebProps([labelStyle]);
   const leadingProps = getWebProps([leadingStyle]);
   const trailingProps = getWebProps([trailingStyle]);
-  const trailingIconProps = getWebProps([trailingStyle, trailingIconStyle]);
 
   const handleClick = () => {
     if (!disabled && onPress) {
@@ -74,7 +72,7 @@ const ListItem: React.FC<ListItemProps & { isLast?: boolean }> = ({
 
   // Helper to render leading/trailing icons
   // IconSvg uses size="1em" by default, sized by container's fontSize from styles
-  const renderElement = (element: typeof leading | typeof trailing, isTrailing = false) => {
+  const renderElement = (element: typeof leading | typeof trailing) => {
     if (!element) return null;
 
     if (isIconName(element)) {
@@ -112,7 +110,7 @@ const ListItem: React.FC<ListItemProps & { isLast?: boolean }> = ({
 
       {trailing && (
         <div {...trailingProps}>
-          {renderElement(trailing, true)}
+          {renderElement(trailing)}
         </div>
       )}
     </>

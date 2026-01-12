@@ -86,7 +86,7 @@ export {
 // Runtime Placeholders - These get replaced by the Vite plugin at build time
 // =============================================================================
 
-import type { ComponentRegistry, ComponentDefinition } from './analyzer/types';
+import type { ComponentRegistry } from './analyzer/types';
 
 /**
  * Component registry placeholder.

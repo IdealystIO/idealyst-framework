@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef } from 'react';
+import { useEffect, forwardRef } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -44,7 +44,6 @@ const Progress = forwardRef<View, ProgressProps>(({
   const dynamicProps = { intent };
   const linearBarStyle = (progressStyles.linearBar as any)(dynamicProps);
   const indeterminateBarStyle = (progressStyles.indeterminateBar as any)(dynamicProps);
-  const circularBarStyle = (progressStyles.circularBar as any)(dynamicProps);
 
   // Animation values
   const animatedValue = useSharedValue(0);

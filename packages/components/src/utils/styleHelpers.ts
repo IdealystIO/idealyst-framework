@@ -35,7 +35,7 @@ export function deepMerge<T extends Record<string, any>, S extends Record<string
   return result as T & S
 }
 
-export function buildSizeVariants<T>(
+export function buildSizeVariants(
   theme: Theme,
   component: string,
   builder: (value: any) => any

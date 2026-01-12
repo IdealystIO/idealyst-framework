@@ -1,4 +1,3 @@
-import React from 'react';
 import { Screen, View, Text, Divider, Card } from '../index';
 
 export const DividerExamples = () => {

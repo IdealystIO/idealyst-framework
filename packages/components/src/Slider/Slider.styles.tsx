@@ -31,11 +31,11 @@ function createIntentVariants(theme: Theme) {
 }
 
 // Create compound variants for intent-specific styles
-function createSliderCompoundVariants(theme: Theme): CompoundVariants<keyof SliderVariants> {
+function _createSliderCompoundVariants(theme: Theme): CompoundVariants<keyof SliderVariants> {
     const compoundVariants: CompoundVariants<keyof SliderVariants> = [];
 
     for (const intent in theme.intents) {
-        const intentValue = theme.intents[intent as Intent];
+        const _intentValue = theme.intents[intent as Intent];
 
         // filledTrack intent colors are handled inline since they need per-element targeting
         // thumb border color by intent

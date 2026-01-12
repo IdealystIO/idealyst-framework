@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, Children, isValidElement, cloneElement } from 'react';
+import { forwardRef, useMemo, Children, isValidElement, cloneElement } from 'react';
 import { View, ScrollView } from 'react-native';
 import { listStyles } from './List.styles';
 import type { ListProps } from './types';

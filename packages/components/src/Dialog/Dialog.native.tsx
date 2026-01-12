@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef, useMemo } from 'react';
+import { useEffect, forwardRef, useMemo } from 'react';
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler, GestureResponderEvent } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { DialogProps } from './types';
@@ -14,7 +14,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   type = 'default',
   showCloseButton = true,
   closeOnBackdropClick = true,
-  animationType = 'fade',
+  animationType: _animationType = 'fade',
   style,
   testID,
   id,

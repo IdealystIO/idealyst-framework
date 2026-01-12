@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { ActivityIndicator as RNActivityIndicator, View } from 'react-native';
 import { ActivityIndicatorProps } from './types';
 import { activityIndicatorStyles } from './ActivityIndicator.styles';

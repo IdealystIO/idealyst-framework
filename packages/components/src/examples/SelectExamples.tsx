@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Screen, View, Text, Select, Card, Button, Icon, Divider } from '../index';
+import { useState } from 'react';
+import { Screen, View, Text, Select, Card, Button, Divider } from '../index';
 
 // Mock data for examples
 const fruitOptions = [
@@ -58,7 +58,6 @@ const statusOptions = [
 export const SelectExamples = () => {
   // State for all select examples
   const [basicSelect, setBasicSelect] = useState('');
-  const [fruitSelect, setFruitSelect] = useState('apple');
   const [countrySelect, setCountrySelect] = useState('');
   const [prioritySelect, setPrioritySelect] = useState('medium');
   const [statusSelect, setStatusSelect] = useState('draft');

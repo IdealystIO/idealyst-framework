@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef, useMemo } from 'react';
+import { useEffect, forwardRef, useMemo } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -13,8 +13,8 @@ import type { SkeletonProps, SkeletonGroupProps } from './types';
 import { getNativeLiveRegionAccessibilityProps } from '../utils/accessibility';
 
 const Skeleton = forwardRef<View, SkeletonProps>(({
-  width = '100%',
-  height = 20,
+  width: _width = '100%',
+  height: _height = 20,
   shape = 'rectangle',
   borderRadius,
   animation = 'pulse',

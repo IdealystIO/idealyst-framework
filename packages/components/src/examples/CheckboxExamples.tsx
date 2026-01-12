@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Screen, View, Text, Checkbox } from '../index';
 
 export const CheckboxExamples = () => {

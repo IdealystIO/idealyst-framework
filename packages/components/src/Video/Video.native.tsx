@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { videoStyles } from './Video.styles';
-import type { VideoProps, VideoSource } from './types';
+import type { VideoProps } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
 
 // Import react-native-video - it's a peer dependency
@@ -17,8 +17,8 @@ try {
 const Video = React.forwardRef<View, VideoProps>(({
   source,
   poster,
-  width,
-  height,
+  width: _width,
+  height: _height,
   aspectRatio,
   controls = true,
   autoPlay = false,
@@ -26,8 +26,8 @@ const Video = React.forwardRef<View, VideoProps>(({
   muted = false,
   onLoad,
   onError,
-  onPlay,
-  onPause,
+  onPlay: _onPlay,
+  onPause: _onPause,
   onEnd,
   onProgress,
   borderRadius,
@@ -73,7 +73,7 @@ const Video = React.forwardRef<View, VideoProps>(({
     style,
   ];
 
-  const handleLoad = (data: any) => {
+  const handleLoad = (_data: any) => {
     onLoad?.();
   };
 

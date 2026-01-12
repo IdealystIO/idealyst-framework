@@ -121,7 +121,6 @@ function analyzeComponentDir(
   const altNames = [`${componentName}ComponentProps`, 'Props'];
   let propsInterface: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | null = null;
   let interfaceDescription: string | undefined;
-  let foundInFile: ts.SourceFile | null = null;
 
   // Search each file for the props interface
   for (const filePath of tsFiles) {
@@ -133,12 +132,10 @@ function analyzeComponentDir(
       if (ts.isInterfaceDeclaration(node) && node.name.text === propsInterfaceName) {
         propsInterface = node;
         interfaceDescription = getJSDocDescription(node);
-        foundInFile = sourceFile;
       }
       if (ts.isTypeAliasDeclaration(node) && node.name.text === propsInterfaceName) {
         propsInterface = node;
         interfaceDescription = getJSDocDescription(node);
-        foundInFile = sourceFile;
       }
     });
 
@@ -156,7 +153,6 @@ function analyzeComponentDir(
           if ((ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) && node.name.text === altName) {
             propsInterface = node;
             interfaceDescription = getJSDocDescription(node);
-            foundInFile = sourceFile;
           }
         });
 
@@ -385,7 +381,7 @@ function analyzeProperty(
 function extractPropValues(
   type: ts.Type,
   typeString: string,
-  typeChecker: ts.TypeChecker,
+  _typeChecker: ts.TypeChecker,
   themeValues: ThemeValues
 ): string[] {
   // Handle theme-derived types

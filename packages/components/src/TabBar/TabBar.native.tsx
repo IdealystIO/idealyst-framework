@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef, ReactNode, useMemo } from 'react';
+import { useState, useRef, useEffect, forwardRef, ReactNode, useMemo } from 'react';
 import { View, TouchableOpacity, Text, ScrollView, LayoutChangeEvent } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import {

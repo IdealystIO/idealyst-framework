@@ -1,11 +1,10 @@
-import React, { ComponentRef, forwardRef, isValidElement, useMemo } from 'react';
+import { ComponentRef, forwardRef, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet as RNStyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { buttonStyles } from './Button.styles';
 import { ButtonProps } from './types';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
-import { useUnistyles } from 'react-native-unistyles';
 
 const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((props, ref) => {
   const {
@@ -56,16 +55,6 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
 
   // Gradient is only applicable to contained buttons
   const showGradient = gradient && type === 'contained';
-
-  // Get gradient overlay colors (transparent to semi-transparent black/white)
-  // Note: Use explicit rgba(0,0,0,0) instead of 'transparent' for RN SVG compatibility
-  const getGradientColors = (): [string, string] => {
-    switch (gradient) {
-      case 'darken': return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.15)'];
-      case 'lighten': return ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.2)'];
-      default: return ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)'];
-    }
-  };
 
   // Map button size to icon size
   const iconSizeMap: Record<string, number> = {

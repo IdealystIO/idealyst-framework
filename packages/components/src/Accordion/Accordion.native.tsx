@@ -41,7 +41,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   const itemStyle = (accordionStyles.item as any)({ type, isLast });
   const headerStyle = (accordionStyles.header as any)({});
   const iconStyle = (accordionStyles.icon as any)({});
-  const contentStyle = (accordionStyles.content as any)({});
   const titleStyle = (accordionStyles.title as any)({});
   const contentInnerStyle = (accordionStyles.contentInner as any)({});
 

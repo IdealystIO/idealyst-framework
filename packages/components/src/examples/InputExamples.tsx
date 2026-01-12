@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Screen, View, Text, Input } from '../index';
 
 export const InputExamples = () => {

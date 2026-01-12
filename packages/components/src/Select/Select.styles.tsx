@@ -56,7 +56,7 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
         marginBottom: 4,
     }),
 
-    trigger: ({ type = 'outlined', intent = 'neutral', disabled = false, error = false, focused = false }: SelectDynamicProps) => ({
+    trigger: ({ type: _type = 'outlined', intent: _intent = 'neutral', disabled = false, error: _error = false, focused: _focused = false }: SelectDynamicProps) => ({
         position: 'relative' as const,
         flexDirection: 'row' as const,
         alignItems: 'center' as const,

@@ -1,4 +1,4 @@
-import React, { useRef, useState, isValidElement, cloneElement, forwardRef, useEffect, useMemo } from 'react';
+import { isValidElement, cloneElement, forwardRef, useEffect, useMemo } from 'react';
 import {
   View,
   Modal,

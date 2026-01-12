@@ -1,6 +1,5 @@
-import React, { forwardRef, ComponentRef, useMemo } from 'react';
+import { forwardRef, ComponentRef, useMemo } from 'react';
 import { View, Pressable } from 'react-native';
-import { useUnistyles } from 'react-native-unistyles';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
@@ -9,7 +8,7 @@ const Card = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressabl
   children,
   type = 'elevated',
   radius = 'md',
-  intent = 'neutral',
+  intent: _intent = 'neutral',
   clickable = false,
   onPress,
   disabled = false,

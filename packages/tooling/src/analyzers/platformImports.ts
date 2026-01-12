@@ -2,7 +2,6 @@ import {
   AnalyzerOptions,
   AnalysisResult,
   FileInput,
-  FileType,
   ImportInfo,
   Severity,
   Violation,
@@ -11,13 +10,10 @@ import {
 import { classifyFile } from '../utils/fileClassifier';
 import { parseImports } from '../utils/importParser';
 import {
-  REACT_NATIVE_PRIMITIVE_NAMES,
   REACT_NATIVE_SOURCES,
   isReactNativePrimitive,
 } from '../rules/reactNativePrimitives';
 import {
-  REACT_DOM_PRIMITIVE_NAMES,
-  REACT_DOM_SOURCES,
   isReactDomPrimitive,
 } from '../rules/reactDomPrimitives';
 

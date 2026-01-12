@@ -140,7 +140,7 @@ function TableInner<T = any>({
   data,
   type = 'standard',
   size = 'md',
-  stickyHeader = false,
+  stickyHeader: _stickyHeader = false,
   onRowPress,
   // Spacing variants from ContainerStyleProps
   gap,

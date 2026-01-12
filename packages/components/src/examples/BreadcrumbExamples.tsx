@@ -1,5 +1,4 @@
-import React from 'react';
-import { Screen, View , Text, Breadcrumb, Divider, Icon, BreadcrumbItem } from '../index';
+import { Screen, View , Text, Breadcrumb, Icon, BreadcrumbItem } from '../index';
 
 export const BreadcrumbExamples = () => {
   const basicItems: BreadcrumbItem[] = [

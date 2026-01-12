@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Text as RNText } from 'react-native';
 import { TextProps } from './types';
 import { textStyles } from './Text.styles';

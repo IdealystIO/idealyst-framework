@@ -6,7 +6,7 @@ import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { inputStyles } from './Input.styles';
 import { InputProps } from './types';
-import { getWebFormAriaProps, generateAccessibilityId, combineIds } from '../utils/accessibility';
+import { getWebFormAriaProps } from '../utils/accessibility';
 
 /**
  * Text input field with support for icons, password visibility toggle, and validation states.

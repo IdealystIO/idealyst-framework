@@ -25,7 +25,7 @@
  * ```
  */
 
-import type { Plugin, ViteDevServer } from 'vite';
+import type { Plugin } from 'vite';
 import * as fs from 'fs';
 import * as path from 'path';
 import { analyzeComponents } from './analyzer';
@@ -36,7 +36,6 @@ import type { IdealystDocsPluginOptions, ComponentRegistry } from './analyzer/ty
  */
 export function idealystDocsPlugin(options: IdealystDocsPluginOptions): Plugin {
   let registry: ComponentRegistry | null = null;
-  let server: ViteDevServer | null = null;
 
   const { debug = false, output, outputPath } = options;
 
@@ -82,10 +81,6 @@ export function idealystDocsPlugin(options: IdealystDocsPluginOptions): Plugin {
 
   return {
     name: 'idealyst-docs',
-
-    configureServer(_server) {
-      server = _server;
-    },
 
     // Transform @idealyst/tooling to inject the actual registry
     transform(code, id) {

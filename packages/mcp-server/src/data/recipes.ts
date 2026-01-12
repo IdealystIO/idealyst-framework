@@ -2186,6 +2186,754 @@ function ProfileScreen() {
     ],
     relatedRecipes: ["form-with-validation"],
   },
+
+  "web-stack-layout": {
+    name: "Web Stack Layout",
+    description: "Stack layout for web that mimics native stack navigator with header, back button, and title",
+    category: "navigation",
+    difficulty: "intermediate",
+    packages: ["@idealyst/components", "@idealyst/navigation"],
+    code: `import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { View, Text, Pressable, Icon } from '@idealyst/components';
+import { useNavigator } from '@idealyst/navigation';
+import type { StackLayoutProps, NavigatorOptions } from '@idealyst/navigation';
+
+/**
+ * Web Stack Layout - mimics native stack navigator header
+ *
+ * Features:
+ * - Header with title (from options.headerTitle)
+ * - Automatic back button when canGoBack() is true
+ * - Left and right header slots
+ * - Hide header with headerShown: false
+ */
+export function WebStackLayout({ options }: StackLayoutProps) {
+  const { canGoBack, goBack } = useNavigator();
+
+  const showHeader = options?.headerShown !== false;
+  const showBackButton = options?.headerBackVisible !== false && canGoBack();
+
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Header bar - like native stack header */}
+      {showHeader && (
+        <View style={{
+          height: 56,
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 8,
+          backgroundColor: '#ffffff',
+          borderBottomWidth: 1,
+          borderBottomColor: '#e0e0e0',
+          // Web shadow
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        }}>
+          {/* Back button */}
+          {showBackButton && (
+            <Pressable
+              onPress={goBack}
+              style={{
+                width: 40,
+                height: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 20,
+              }}
+            >
+              <Icon name="arrow-left" size={24} />
+            </Pressable>
+          )}
+
+          {/* Left header slot */}
+          {options?.headerLeft && (
+            <View style={{ marginLeft: 8 }}>
+              {renderHeaderComponent(options.headerLeft)}
+            </View>
+          )}
+
+          {/* Title */}
+          <View style={{ flex: 1, marginHorizontal: 8 }}>
+            {typeof options?.headerTitle === 'string' ? (
+              <Text variant="title" numberOfLines={1}>
+                {options.headerTitle}
+              </Text>
+            ) : options?.headerTitle ? (
+              renderHeaderComponent(options.headerTitle)
+            ) : null}
+          </View>
+
+          {/* Right header slot */}
+          {options?.headerRight && (
+            <View>
+              {renderHeaderComponent(options.headerRight)}
+            </View>
+          )}
+        </View>
+      )}
+
+      {/* Content area - Outlet renders child routes */}
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+    </View>
+  );
+}
+
+// Helper to render header components (can be React element or function)
+function renderHeaderComponent(
+  component: React.ComponentType | React.ReactElement | undefined
+) {
+  if (!component) return null;
+  if (typeof component === 'function') {
+    const Component = component;
+    return <Component />;
+  }
+  return component;
+}
+
+// Usage in router config:
+// {
+//   path: "/",
+//   type: 'navigator',
+//   layout: 'stack',
+//   layoutComponent: WebStackLayout,
+//   options: {
+//     headerTitle: "My App",
+//     headerRight: <UserMenu />,
+//   },
+//   routes: [...]
+// }`,
+    explanation: `This layout mimics the native stack navigator header:
+
+**What it provides:**
+- Fixed header bar at the top (56px height like native)
+- Automatic back button that appears when canGoBack() returns true
+- headerTitle renders as text or custom component
+- headerLeft and headerRight slots for custom actions
+- headerShown: false hides the entire header
+- headerBackVisible: false hides just the back button
+
+**Key insight:** On web, canGoBack() checks if there's a parent route in the hierarchy, not browser history. This matches the native behavior where back goes "up" the navigation stack.`,
+    tips: [
+      "Use options.headerShown: false for fullscreen content like media players",
+      "The back button appears automatically - no need to manage visibility",
+      "headerRight is great for action buttons, user menus, or search",
+      "Wrap your entire app router with this for consistent headers",
+    ],
+    relatedRecipes: ["web-tab-layout", "web-drawer-layout", "responsive-navigation"],
+  },
+
+  "web-tab-layout": {
+    name: "Web Tab Layout",
+    description: "Tab layout for web that mimics native bottom tab navigator with icons, labels, and badges",
+    category: "navigation",
+    difficulty: "intermediate",
+    packages: ["@idealyst/components", "@idealyst/navigation"],
+    code: `import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { View, Text, Pressable, Icon, Badge } from '@idealyst/components';
+import { useNavigator } from '@idealyst/navigation';
+import type { TabLayoutProps } from '@idealyst/navigation';
+
+/**
+ * Web Tab Layout - mimics native bottom tab navigator
+ *
+ * Features:
+ * - Bottom tab bar (like iOS/Android)
+ * - Icons from tabBarIcon option
+ * - Labels from tabBarLabel option
+ * - Badge counts from tabBarBadge option
+ * - Active state highlighting
+ */
+export function WebTabLayout({ routes, currentPath }: TabLayoutProps) {
+  const { navigate } = useNavigator();
+
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Content area - takes remaining space */}
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+
+      {/* Bottom tab bar */}
+      <View style={{
+        height: 56,
+        flexDirection: 'row',
+        backgroundColor: '#ffffff',
+        borderTopWidth: 1,
+        borderTopColor: '#e0e0e0',
+        // Safe area padding for mobile web
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      }}>
+        {routes.map((route) => {
+          // Check if this tab is active
+          const isActive = currentPath === route.fullPath ||
+            currentPath.startsWith(route.fullPath + '/');
+
+          const tabOptions = route.options;
+          const activeColor = '#007AFF';
+          const inactiveColor = '#8E8E93';
+
+          return (
+            <Pressable
+              key={route.fullPath}
+              onPress={() => navigate({ path: route.fullPath })}
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingVertical: 4,
+              }}
+            >
+              {/* Icon container with badge */}
+              <View style={{ position: 'relative' }}>
+                {tabOptions?.tabBarIcon?.({
+                  focused: isActive,
+                  color: isActive ? activeColor : inactiveColor,
+                  size: 24,
+                })}
+
+                {/* Badge */}
+                {tabOptions?.tabBarBadge != null && (
+                  <View style={{
+                    position: 'absolute',
+                    top: -4,
+                    right: -12,
+                    minWidth: 18,
+                    height: 18,
+                    borderRadius: 9,
+                    backgroundColor: '#FF3B30',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingHorizontal: 4,
+                  }}>
+                    <Text style={{ color: '#fff', fontSize: 10, fontWeight: '600' }}>
+                      {typeof tabOptions.tabBarBadge === 'number' && tabOptions.tabBarBadge > 99
+                        ? '99+'
+                        : tabOptions.tabBarBadge}
+                    </Text>
+                  </View>
+                )}
+              </View>
+
+              {/* Label */}
+              {tabOptions?.tabBarLabel && (
+                <Text
+                  size="xs"
+                  style={{
+                    marginTop: 2,
+                    color: isActive ? activeColor : inactiveColor,
+                    fontWeight: isActive ? '600' : '400',
+                  }}
+                >
+                  {tabOptions.tabBarLabel}
+                </Text>
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+// Usage in router config:
+// {
+//   path: "/main",
+//   type: 'navigator',
+//   layout: 'tab',
+//   layoutComponent: WebTabLayout,
+//   routes: [
+//     {
+//       path: "home",
+//       type: 'screen',
+//       component: HomeScreen,
+//       options: {
+//         tabBarLabel: "Home",
+//         tabBarIcon: ({ focused, color }) => (
+//           <Icon name={focused ? "home" : "home-outline"} color={color} />
+//         ),
+//       },
+//     },
+//     {
+//       path: "notifications",
+//       type: 'screen',
+//       component: NotificationsScreen,
+//       options: {
+//         tabBarLabel: "Notifications",
+//         tabBarIcon: ({ color }) => <Icon name="bell" color={color} />,
+//         tabBarBadge: 5,
+//       },
+//     },
+//   ],
+// }`,
+    explanation: `This layout mimics the native bottom tab bar:
+
+**What routes provide:**
+- \`route.fullPath\` - The complete path for navigation
+- \`route.options.tabBarIcon\` - Function that receives { focused, color, size }
+- \`route.options.tabBarLabel\` - Text label for the tab
+- \`route.options.tabBarBadge\` - Badge count (number or string)
+
+**Active state detection:**
+\`currentPath === route.fullPath\` - Exact match for active state
+Or use \`startsWith\` for nested routes under a tab
+
+**Platform parity:**
+- 56px tab bar height matches iOS/Android
+- Icon + label layout matches native patterns
+- Badge styling matches iOS notification badges
+- Safe area inset for mobile web browsers`,
+    tips: [
+      "Use outlined/filled icon variants for focused state (home-outline vs home)",
+      "Keep tab count to 3-5 for best usability",
+      "Badge counts over 99 should show '99+' to fit",
+      "Consider hiding the tab bar on detail screens with conditional rendering",
+    ],
+    relatedRecipes: ["web-stack-layout", "tab-navigation", "responsive-navigation"],
+  },
+
+  "web-drawer-layout": {
+    name: "Web Drawer/Sidebar Layout",
+    description: "Sidebar layout for web that provides persistent navigation menu with collapsible support",
+    category: "navigation",
+    difficulty: "intermediate",
+    packages: ["@idealyst/components", "@idealyst/navigation"],
+    code: `import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { View, Text, Pressable, Icon, Avatar } from '@idealyst/components';
+import { useNavigator } from '@idealyst/navigation';
+import type { StackLayoutProps } from '@idealyst/navigation';
+
+interface DrawerLayoutOptions {
+  expandedWidth?: number;
+  collapsedWidth?: number;
+  initiallyCollapsed?: boolean;
+}
+
+/**
+ * Web Drawer Layout - persistent sidebar navigation
+ *
+ * Features:
+ * - Collapsible sidebar with smooth animation
+ * - Active route highlighting
+ * - Icon + label navigation items
+ * - User profile section
+ * - Works with any navigator layout type
+ */
+export function WebDrawerLayout({
+  routes,
+  currentPath,
+  options,
+}: StackLayoutProps & { drawerOptions?: DrawerLayoutOptions }) {
+  const { navigate } = useNavigator();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const expandedWidth = 240;
+  const collapsedWidth = 64;
+  const sidebarWidth = isCollapsed ? collapsedWidth : expandedWidth;
+
+  return (
+    <View style={{ flex: 1, flexDirection: 'row' }}>
+      {/* Sidebar */}
+      <View style={{
+        width: sidebarWidth,
+        backgroundColor: '#1a1a2e',
+        transition: 'width 0.2s ease',
+        overflow: 'hidden',
+      }}>
+        {/* Logo / App Header */}
+        <View style={{
+          height: 64,
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 16,
+          borderBottomWidth: 1,
+          borderBottomColor: 'rgba(255,255,255,0.1)',
+        }}>
+          <Icon name="rocket" size={28} color="#fff" />
+          {!isCollapsed && (
+            <Text
+              variant="title"
+              style={{ color: '#fff', marginLeft: 12 }}
+            >
+              {options?.headerTitle || 'My App'}
+            </Text>
+          )}
+        </View>
+
+        {/* Navigation Items */}
+        <View style={{ flex: 1, paddingVertical: 8 }}>
+          {routes.map((route) => {
+            const isActive = currentPath === route.fullPath ||
+              currentPath.startsWith(route.fullPath + '/');
+
+            return (
+              <Pressable
+                key={route.fullPath}
+                onPress={() => navigate({ path: route.fullPath })}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: 12,
+                  paddingHorizontal: 16,
+                  marginHorizontal: 8,
+                  marginVertical: 2,
+                  borderRadius: 8,
+                  backgroundColor: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                }}
+              >
+                <Icon
+                  name={route.options?.icon || 'circle'}
+                  size={24}
+                  color={isActive ? '#fff' : 'rgba(255,255,255,0.6)'}
+                />
+                {!isCollapsed && (
+                  <Text
+                    style={{
+                      marginLeft: 12,
+                      color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
+                      fontWeight: isActive ? '600' : '400',
+                    }}
+                  >
+                    {route.options?.title || route.path}
+                  </Text>
+                )}
+              </Pressable>
+            );
+          })}
+        </View>
+
+        {/* User Section (optional) */}
+        <View style={{
+          padding: 16,
+          borderTopWidth: 1,
+          borderTopColor: 'rgba(255,255,255,0.1)',
+        }}>
+          <Pressable
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+            onPress={() => navigate({ path: '/profile' })}
+          >
+            <Avatar size="sm" />
+            {!isCollapsed && (
+              <View style={{ marginLeft: 12 }}>
+                <Text style={{ color: '#fff', fontWeight: '500' }}>John Doe</Text>
+                <Text size="xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  View profile
+                </Text>
+              </View>
+            )}
+          </Pressable>
+        </View>
+
+        {/* Collapse Toggle */}
+        <Pressable
+          onPress={() => setIsCollapsed(!isCollapsed)}
+          style={{
+            padding: 16,
+            borderTopWidth: 1,
+            borderTopColor: 'rgba(255,255,255,0.1)',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: isCollapsed ? 'center' : 'flex-start',
+          }}
+        >
+          <Icon
+            name={isCollapsed ? 'chevron-right' : 'chevron-left'}
+            size={20}
+            color="rgba(255,255,255,0.6)"
+          />
+          {!isCollapsed && (
+            <Text style={{ marginLeft: 12, color: 'rgba(255,255,255,0.6)' }}>
+              Collapse
+            </Text>
+          )}
+        </Pressable>
+      </View>
+
+      {/* Main Content */}
+      <View style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
+        <Outlet />
+      </View>
+    </View>
+  );
+}
+
+// Usage:
+// {
+//   path: "/",
+//   type: 'navigator',
+//   layout: 'drawer',  // or 'stack' - layout type doesn't matter for web
+//   layoutComponent: WebDrawerLayout,
+//   options: { headerTitle: "Dashboard" },
+//   routes: [
+//     { path: "home", component: Home, options: { title: "Home", icon: "home" } },
+//     { path: "users", component: Users, options: { title: "Users", icon: "account-group" } },
+//     { path: "settings", component: Settings, options: { title: "Settings", icon: "cog" } },
+//   ],
+// }`,
+    explanation: `This sidebar layout is ideal for dashboards and admin panels:
+
+**Route options used:**
+- \`route.options.title\` - Menu item label
+- \`route.options.icon\` - Material Design Icon name
+
+**Features:**
+- Collapsible sidebar with smooth width transition
+- Active state with background highlight
+- User profile section at bottom
+- Collapse toggle button
+- Dark theme (easily customizable)
+
+**Why this differs from mobile:**
+On native, a drawer slides over content. On web, a persistent sidebar is more common and user-friendly. This layout provides the web-appropriate pattern while using the same route configuration.`,
+    tips: [
+      "Add tooltips on collapsed icons using the title attribute",
+      "Consider responsive behavior - hide sidebar on mobile, show bottom tabs instead",
+      "Use the icon option on routes to define sidebar icons",
+      "The collapse state could be persisted to localStorage",
+    ],
+    relatedRecipes: ["web-stack-layout", "responsive-navigation", "drawer-navigation"],
+  },
+
+  "responsive-navigation": {
+    name: "Responsive Navigation Layout",
+    description: "Layout that switches between bottom tabs on mobile and sidebar on desktop",
+    category: "navigation",
+    difficulty: "advanced",
+    packages: ["@idealyst/components", "@idealyst/navigation"],
+    code: `import React, { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import { View, Text, Pressable, Icon } from '@idealyst/components';
+import { useNavigator } from '@idealyst/navigation';
+import type { StackLayoutProps } from '@idealyst/navigation';
+
+// Custom hook for responsive breakpoints
+function useResponsive() {
+  const [width, setWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1024
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return {
+    isMobile: width < 768,
+    isTablet: width >= 768 && width < 1024,
+    isDesktop: width >= 1024,
+    width,
+  };
+}
+
+/**
+ * Responsive Navigation Layout
+ *
+ * - Mobile (<768px): Bottom tab bar
+ * - Desktop (>=768px): Sidebar navigation
+ *
+ * Uses the same route configuration for both!
+ */
+export function ResponsiveNavLayout({ routes, currentPath, options }: StackLayoutProps) {
+  const { isMobile } = useResponsive();
+
+  // Same routes power both layouts
+  return isMobile ? (
+    <MobileTabBar routes={routes} currentPath={currentPath} />
+  ) : (
+    <DesktopSidebar routes={routes} currentPath={currentPath} options={options} />
+  );
+}
+
+// Mobile: Bottom tab bar
+function MobileTabBar({ routes, currentPath }: StackLayoutProps) {
+  const { navigate } = useNavigator();
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+
+      <View style={{
+        flexDirection: 'row',
+        height: 56,
+        backgroundColor: '#fff',
+        borderTopWidth: 1,
+        borderTopColor: '#e0e0e0',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      }}>
+        {routes.slice(0, 5).map((route) => {
+          const isActive = currentPath.startsWith(route.fullPath);
+          return (
+            <Pressable
+              key={route.fullPath}
+              onPress={() => navigate({ path: route.fullPath })}
+              style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+            >
+              <Icon
+                name={route.options?.icon || 'circle'}
+                size={24}
+                color={isActive ? '#007AFF' : '#8E8E93'}
+              />
+              <Text
+                size="xs"
+                style={{
+                  marginTop: 2,
+                  color: isActive ? '#007AFF' : '#8E8E93',
+                }}
+              >
+                {route.options?.tabBarLabel || route.options?.title}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+// Desktop: Sidebar
+function DesktopSidebar({ routes, currentPath, options }: StackLayoutProps) {
+  const { navigate } = useNavigator();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <View style={{ flex: 1, flexDirection: 'row' }}>
+      {/* Sidebar */}
+      <View style={{
+        width: isCollapsed ? 64 : 240,
+        backgroundColor: '#1e1e2d',
+        transition: 'width 0.2s',
+      }}>
+        {/* Header */}
+        <View style={{
+          height: 64,
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 16,
+        }}>
+          <Icon name="rocket" size={28} color="#fff" />
+          {!isCollapsed && (
+            <Text style={{ color: '#fff', marginLeft: 12, fontWeight: '600' }}>
+              {options?.headerTitle || 'App'}
+            </Text>
+          )}
+        </View>
+
+        {/* Nav Items */}
+        <View style={{ flex: 1, paddingTop: 8 }}>
+          {routes.map((route) => {
+            const isActive = currentPath.startsWith(route.fullPath);
+            return (
+              <Pressable
+                key={route.fullPath}
+                onPress={() => navigate({ path: route.fullPath })}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  padding: 12,
+                  marginHorizontal: 8,
+                  marginVertical: 2,
+                  borderRadius: 8,
+                  backgroundColor: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
+                }}
+              >
+                <Icon
+                  name={route.options?.icon || 'circle'}
+                  size={24}
+                  color={isActive ? '#fff' : 'rgba(255,255,255,0.6)'}
+                />
+                {!isCollapsed && (
+                  <Text style={{
+                    marginLeft: 12,
+                    color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
+                  }}>
+                    {route.options?.title}
+                  </Text>
+                )}
+              </Pressable>
+            );
+          })}
+        </View>
+
+        {/* Collapse toggle */}
+        <Pressable
+          onPress={() => setIsCollapsed(!isCollapsed)}
+          style={{ padding: 16 }}
+        >
+          <Icon
+            name={isCollapsed ? 'menu' : 'menu-open'}
+            size={24}
+            color="rgba(255,255,255,0.6)"
+          />
+        </Pressable>
+      </View>
+
+      {/* Content */}
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+    </View>
+  );
+}
+
+// Usage - works with same routes for both mobile and desktop:
+// {
+//   path: "/",
+//   type: 'navigator',
+//   layout: 'stack',
+//   layoutComponent: ResponsiveNavLayout,
+//   options: { headerTitle: "My App" },
+//   routes: [
+//     {
+//       path: "home",
+//       component: HomeScreen,
+//       options: {
+//         title: "Home",          // Used by sidebar
+//         tabBarLabel: "Home",    // Used by tab bar
+//         icon: "home",           // Used by both
+//       },
+//     },
+//     {
+//       path: "search",
+//       component: SearchScreen,
+//       options: { title: "Search", tabBarLabel: "Search", icon: "magnify" },
+//     },
+//     // ... more routes
+//   ],
+// }`,
+    explanation: `This layout automatically adapts to screen size:
+
+**Breakpoint logic:**
+- Mobile (<768px): Bottom tab bar like native apps
+- Desktop (>=768px): Persistent sidebar like web apps
+
+**Key insight:** The same route configuration powers both layouts! Routes define:
+- \`title\` - Used by sidebar menu
+- \`tabBarLabel\` - Used by tab bar (falls back to title)
+- \`icon\` - Used by both
+
+**Why this matters:**
+1. Write routes once, render appropriately per device
+2. Users get the expected pattern for their device
+3. No need for separate mobile/desktop route configs
+4. Smooth transition when resizing browser
+
+**useResponsive hook:**
+Custom hook that tracks window width and provides boolean flags for breakpoints. Could be extended with more breakpoints or use a library like react-responsive.`,
+    tips: [
+      "Limit mobile tabs to 5 items max (slice shown in code)",
+      "Consider adding a 'More' tab that opens a menu for additional items",
+      "Persist sidebar collapsed state to localStorage",
+      "Add transition animation when switching between layouts",
+      "Consider tablet-specific layout (sidebar + different styling)",
+    ],
+    relatedRecipes: ["web-stack-layout", "web-tab-layout", "web-drawer-layout"],
+  },
 };
 
 /**

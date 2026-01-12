@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { SVGImageProps } from './types';

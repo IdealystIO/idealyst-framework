@@ -1,4 +1,4 @@
-import React, { isValidElement, forwardRef, ComponentRef, useMemo } from 'react';
+import { isValidElement, forwardRef, ComponentRef, useMemo } from 'react';
 import { View, Pressable, Text } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';

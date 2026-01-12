@@ -1,4 +1,4 @@
-import { CompoundVariants, StylesheetStyles } from "../styles";
+import { StylesheetStyles } from "../styles";
 import { Intent } from "../theme/intent";
 
 type DividerOrientation = 'horizontal' | 'vertical';

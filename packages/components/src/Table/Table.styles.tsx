@@ -34,7 +34,7 @@ export type TableDynamicProps = {
  * Table styles with type/size handling.
  */
 export const tableStyles = defineStyle('Table', (theme: Theme) => ({
-    container: ({ type = 'standard' }: TableDynamicProps) => ({
+    container: ({ type: _type = 'standard' }: TableDynamicProps) => ({
         width: '100%',
         borderWidth: 1,
         borderStyle: 'solid' as const,
@@ -113,7 +113,7 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         } as const;
     },
 
-    headerCell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => ({
+    headerCell: ({ type = 'standard', align: _align = 'left' }: TableDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         fontWeight: '600' as const,

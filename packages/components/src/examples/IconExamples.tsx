@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Screen, View, Icon, Text, Button } from '../index';
 import type { IconName } from '../Icon/icon-types';
 

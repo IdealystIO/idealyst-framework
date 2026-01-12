@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { View, Text } from 'react-native';
 import { DividerProps } from './types';
 import { dividerStyles } from './Divider.styles';

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { PressableProps } from './types';
 import { pressableStyles } from './Pressable.styles';
@@ -16,7 +16,7 @@ const Pressable = forwardRef<View, PressableProps>(({
   style,
   testID,
   accessibilityLabel,
-  accessibilityRole,
+  accessibilityRole: _accessibilityRole,
   id,
 }, ref) => {
   // Apply spacing variants

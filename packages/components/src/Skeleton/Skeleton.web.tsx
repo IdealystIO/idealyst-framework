@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import { useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { skeletonStyles } from './Skeleton.styles';
 import type { SkeletonProps, SkeletonGroupProps } from './types';

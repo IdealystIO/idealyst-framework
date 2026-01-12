@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useMemo } from 'react';
+import { useState, forwardRef, useMemo } from 'react';
 import { View, TextInput, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from 'react-native';
 import { textAreaStyles } from './TextArea.styles';
 import Text from '../Text';

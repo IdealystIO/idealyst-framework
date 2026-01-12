@@ -16,7 +16,7 @@ const RadioGroup = forwardRef<View, RadioGroupProps>(({
   value,
   onValueChange,
   disabled = false,
-  orientation = 'vertical',
+  orientation: _orientation = 'vertical',
   children,
   style,
   testID,

@@ -2,7 +2,6 @@ import { forwardRef, useMemo } from 'react';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { IconProps } from './types';
 import { iconStyles } from './Icon.styles';
-import { useUnistyles } from 'react-native-unistyles';
 
 const Icon = forwardRef<any, IconProps>(({
   name,
@@ -15,8 +14,6 @@ const Icon = forwardRef<any, IconProps>(({
   accessibilityLabel,
   id,
 }: IconProps, ref) => {
-  const { theme } = useUnistyles();
-
   // Call dynamic style with variants - includes theme-reactive color
   const iconStyle = (iconStyles.icon as any)({ color, textColor, intent, size });
 

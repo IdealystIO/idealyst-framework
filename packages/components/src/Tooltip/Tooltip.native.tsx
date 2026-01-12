@@ -8,7 +8,7 @@ const Tooltip = forwardRef<View, TooltipProps>(({
   content,
   children,
   placement = 'top',
-  delay = 200,
+  delay: _delay = 200,
   intent = 'neutral',
   size = 'md',
   style,

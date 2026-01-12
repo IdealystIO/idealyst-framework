@@ -67,7 +67,7 @@ declare module '@idealyst/theme' {
  */
 // @ts-ignore - $iterator patterns are expanded by Babel
 export const textStyles = defineStyle('Text', (theme: Theme) => ({
-    text: ({ color, typography, weight, align }: TextStyleParams) => ({
+    text: ({ color, typography: _typography, weight: _weight, align: _align }: TextStyleParams) => ({
         margin: 0,
         padding: 0,
         // Base color - can be overridden by extensions using any of the params

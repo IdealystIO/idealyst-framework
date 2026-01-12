@@ -1,4 +1,3 @@
-import React from 'react';
 import { Screen, View, Text, Avatar } from '../index';
 
 export const AvatarExamples = () => {

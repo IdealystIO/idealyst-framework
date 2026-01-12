@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
@@ -14,7 +14,7 @@ const Card = forwardRef<HTMLDivElement | HTMLButtonElement, CardProps>(({
   type: typeProp,
   variant,
   radius = 'md',
-  intent,
+  intent: _intent,
   clickable = false,
   onPress,
   disabled = false,

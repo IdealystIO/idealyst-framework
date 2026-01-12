@@ -4,7 +4,6 @@ import { Intent } from "../theme/intent";
 
 type TooltipSize = Size;
 type TooltipIntent = Intent;
-type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 type TooltipTooltipVariants = {
     size: TooltipSize;

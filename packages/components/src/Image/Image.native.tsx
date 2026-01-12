@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 import { Image as RNImage, View } from 'react-native';
 import { imageStyles } from './Image.styles';
 import type { ImageProps } from './types';

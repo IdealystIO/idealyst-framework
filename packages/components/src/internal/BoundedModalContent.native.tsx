@@ -21,7 +21,7 @@ export const BoundedModalContent: React.FC<BoundedModalContentProps> = ({
   top,
   left,
   width,
-  maxHeight = 500,
+  maxHeight: _maxHeight = 500,
   style,
   onLayout,
 }) => {

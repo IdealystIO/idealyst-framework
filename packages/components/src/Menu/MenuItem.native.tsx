@@ -1,6 +1,5 @@
-import React, { isValidElement, forwardRef, ComponentRef } from 'react';
+import { isValidElement, forwardRef, ComponentRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { Icon } from '../Icon';
 import { menuItemStyles } from './MenuItem.styles';
 import type { MenuItem as MenuItemType, MenuSizeVariant } from './types';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';

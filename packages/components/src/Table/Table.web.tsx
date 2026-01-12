@@ -1,4 +1,4 @@
-import React, { useMemo, ReactNode } from 'react';
+import { useMemo, ReactNode } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { tableStyles } from './Table.styles';
 import type { TableProps, TableColumn, TableType, TableSizeVariant, TableAlignVariant } from './types';
@@ -139,7 +139,7 @@ function Table<T = any>({
   data,
   type = 'standard',
   size = 'md',
-  stickyHeader = false,
+  stickyHeader: _stickyHeader = false,
   onRowPress,
   // Spacing variants from ContainerStyleProps
   gap,

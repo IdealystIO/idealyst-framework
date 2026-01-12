@@ -25,7 +25,7 @@ export type TextAreaVariants = {
 };
 
 // Create intent variants dynamically from theme
-function createIntentVariants(theme: Theme) {
+function _createIntentVariants(theme: Theme) {
     const variants: Record<string, object> = {};
     for (const intent in theme.intents) {
         variants[intent] = {};

@@ -91,7 +91,7 @@ export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
         } as const;
     },
 
-    tab: ({ type = 'standard', size = 'md', active = false, pillMode = 'light', disabled = false, iconPosition = 'left', justify = 'start' }: TabBarDynamicProps) => {
+    tab: ({ type = 'standard', size = 'md', active = false, pillMode: _pillMode = 'light', disabled = false, iconPosition = 'left', justify = 'start' }: TabBarDynamicProps) => {
         // Tab padding for pills
         const paddingMap: Record<Size, { paddingVertical: number; paddingHorizontal: number }> = {
             xs: { paddingVertical: 2, paddingHorizontal: 10 },
@@ -141,7 +141,7 @@ export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
         } as const;
     },
 
-    tabLabel: ({ type = 'standard', active = false, pillMode = 'light', disabled = false }: TabBarDynamicProps) => {
+    tabLabel: ({ type = 'standard', active = false, pillMode: _pillMode = 'light', disabled = false }: TabBarDynamicProps) => {
         let color = active ? theme.colors.text.primary : theme.colors.text.secondary;
         if (active) {
             if (type === 'pills') color = theme.colors.text.primary;
@@ -163,7 +163,7 @@ export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
         } as const;
     },
 
-    tabIcon: ({ active = false, disabled = false, iconPosition = 'left' }: TabBarDynamicProps) => ({
+    tabIcon: ({ active: _active = false, disabled = false, iconPosition = 'left' }: TabBarDynamicProps) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,

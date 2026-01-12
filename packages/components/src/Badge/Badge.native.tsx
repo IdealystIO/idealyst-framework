@@ -1,4 +1,4 @@
-import React, { isValidElement, forwardRef } from 'react';
+import { isValidElement, forwardRef } from 'react';
 import { View, Text } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { BadgeProps } from './types';

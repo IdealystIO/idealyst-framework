@@ -1145,6 +1145,12 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
         mimeType: "text/markdown",
       },
       {
+        uri: "idealyst://navigation/web-mobile-parity",
+        name: "Web/Mobile Navigation Parity",
+        description: "How to achieve native-like navigation UI on web using layout components",
+        mimeType: "text/markdown",
+      },
+      {
         uri: "idealyst://icons/reference",
         name: "Icon Reference Guide",
         description: "Complete guide to Material Design Icons with 7,447 available icons, common icons by category, and usage examples",

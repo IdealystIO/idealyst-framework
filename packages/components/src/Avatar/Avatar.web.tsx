@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useMemo } from 'react';
+import { useState, forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { AvatarProps } from './types';
 import { avatarStyles } from './Avatar.styles';

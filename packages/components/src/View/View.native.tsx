@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { View as RNView, ScrollView as RNScrollView, ViewStyle, StyleSheet } from 'react-native';
 import { useResponsiveStyle, ResponsiveStyle } from '@idealyst/theme';
 import { ViewProps } from './types';

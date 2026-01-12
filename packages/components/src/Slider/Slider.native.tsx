@@ -187,7 +187,7 @@ const Slider = forwardRef<View, SliderProps>(({
     };
   });
 
-  const percentage = ((value - min) / (max - min)) * 100;
+  const _percentage = ((value - min) / (max - min)) * 100;
 
   const renderIcon = () => {
     if (!icon) return null;

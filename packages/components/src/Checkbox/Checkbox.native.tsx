@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useMemo } from 'react';
+import { useState, useEffect, forwardRef, useMemo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { CheckboxProps } from './types';
@@ -21,7 +21,7 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   marginHorizontal,
   style,
   testID,
-  required = false,
+  required: _required = false,
   error,
   helperText,
   id,

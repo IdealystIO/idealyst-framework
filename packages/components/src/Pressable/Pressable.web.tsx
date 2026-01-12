@@ -20,7 +20,7 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
   accessibilityRole = 'button',
   id,
 }, ref) => {
-  const [isPressed, setIsPressed] = useState(false);
+  const [_isPressed, setIsPressed] = useState(false);
 
   const handleMouseDown = useCallback(() => {
     if (disabled) return;

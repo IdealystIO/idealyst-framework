@@ -1700,4 +1700,450 @@ type NavigateParams = {
 };
 \`\`\`
 `,
+
+  "idealyst://navigation/web-mobile-parity": `# Web/Mobile Navigation Parity
+
+Understanding how to achieve the same navigation experience on web that you get for free on mobile.
+
+## The Core Problem
+
+On **React Native**, you get native navigation UI for free:
+- Stack navigator gives you headers with back buttons
+- Tab navigator gives you a bottom tab bar with icons
+- Drawer navigator gives you a slide-out menu
+
+On **Web**, you get nothing but URL routing. No headers, no tab bars, no drawers. You must build these yourself using **layout components**.
+
+## The Solution: Layout Components
+
+The \`layoutComponent\` prop on navigators is how you achieve parity. It wraps your route content and provides the navigation UI.
+
+\`\`\`tsx
+{
+  path: "/",
+  type: 'navigator',
+  layout: 'stack',
+  layoutComponent: MyStackLayout,  // <-- This is the key!
+  routes: [...]
+}
+\`\`\`
+
+## What Layout Components Receive
+
+Every layout component receives these props:
+
+\`\`\`tsx
+type LayoutProps = {
+  children: React.ReactNode;     // The route content (renders via <Outlet />)
+  options?: NavigatorOptions;    // headerTitle, headerLeft, headerRight, etc.
+  routes: RouteWithFullPath[];   // All child routes with their full paths
+  currentPath: string;           // Currently active route path
+};
+\`\`\`
+
+**This gives you everything you need to build any navigation UI:**
+- \`options\` - What to show in headers
+- \`routes\` - What tabs/menu items to render
+- \`currentPath\` - Which one is active
+- \`children\` - Where to render the screen content
+
+## Stack Navigator Parity
+
+### What Native Gives You
+- Header bar with title
+- Back button (automatic)
+- Right-side actions
+- Smooth transitions
+
+### Web Implementation
+
+\`\`\`tsx
+import { Outlet } from 'react-router-dom';
+import { View, Text, IconButton, Pressable } from '@idealyst/components';
+import { useNavigator } from '@idealyst/navigation';
+import type { StackLayoutProps } from '@idealyst/navigation';
+
+export function StackLayout({ options, currentPath }: StackLayoutProps) {
+  const { canGoBack, goBack } = useNavigator();
+
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Header - mimics native stack header */}
+      {options?.headerShown !== false && (
+        <View style={{
+          height: 56,
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 16,
+          borderBottomWidth: 1,
+          borderBottomColor: '#e0e0e0',
+          backgroundColor: '#fff',
+        }}>
+          {/* Back button - like native */}
+          {options?.headerBackVisible !== false && canGoBack() && (
+            <IconButton
+              icon="arrow-left"
+              onPress={goBack}
+              style={{ marginRight: 8 }}
+            />
+          )}
+
+          {/* Left slot */}
+          {options?.headerLeft && (
+            <View style={{ marginRight: 16 }}>
+              {typeof options.headerLeft === 'function'
+                ? options.headerLeft({})
+                : options.headerLeft}
+            </View>
+          )}
+
+          {/* Title - centered or left-aligned */}
+          <View style={{ flex: 1 }}>
+            {typeof options?.headerTitle === 'string' ? (
+              <Text variant="title">{options.headerTitle}</Text>
+            ) : (
+              options?.headerTitle
+            )}
+          </View>
+
+          {/* Right slot */}
+          {options?.headerRight && (
+            <View>
+              {typeof options.headerRight === 'function'
+                ? options.headerRight({})
+                : options.headerRight}
+            </View>
+          )}
+        </View>
+      )}
+
+      {/* Content area */}
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+    </View>
+  );
+}
+\`\`\`
+
+## Tab Navigator Parity
+
+### What Native Gives You
+- Bottom tab bar
+- Icons for each tab
+- Labels
+- Badge counts
+- Active state highlighting
+
+### Web Implementation
+
+\`\`\`tsx
+import { Outlet } from 'react-router-dom';
+import { View, Text, Pressable, Icon, Badge } from '@idealyst/components';
+import { useNavigator } from '@idealyst/navigation';
+import type { TabLayoutProps } from '@idealyst/navigation';
+
+export function TabLayout({ routes, currentPath }: TabLayoutProps) {
+  const { navigate } = useNavigator();
+
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Content area */}
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+
+      {/* Bottom tab bar - mimics native */}
+      <View style={{
+        height: 56,
+        flexDirection: 'row',
+        borderTopWidth: 1,
+        borderTopColor: '#e0e0e0',
+        backgroundColor: '#fff',
+      }}>
+        {routes.map((route) => {
+          const isActive = currentPath === route.fullPath;
+          const options = route.options;
+
+          return (
+            <Pressable
+              key={route.fullPath}
+              onPress={() => navigate({ path: route.fullPath })}
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingVertical: 8,
+              }}
+            >
+              {/* Icon with optional badge */}
+              <View style={{ position: 'relative' }}>
+                {options?.tabBarIcon?.({
+                  focused: isActive,
+                  color: isActive ? '#007AFF' : '#8E8E93',
+                  size: 24,
+                })}
+                {options?.tabBarBadge && (
+                  <Badge
+                    count={options.tabBarBadge}
+                    style={{ position: 'absolute', top: -4, right: -8 }}
+                  />
+                )}
+              </View>
+
+              {/* Label */}
+              {options?.tabBarLabel && (
+                <Text
+                  size="xs"
+                  style={{
+                    marginTop: 4,
+                    color: isActive ? '#007AFF' : '#8E8E93',
+                  }}
+                >
+                  {options.tabBarLabel}
+                </Text>
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+\`\`\`
+
+## Drawer Navigator Parity
+
+### What Native Gives You
+- Slide-out drawer from edge
+- Overlay when open
+- Gesture to open/close
+- Menu items
+
+### Web Implementation
+
+On web, drawers are typically persistent sidebars. Here's how to build both:
+
+\`\`\`tsx
+import { Outlet } from 'react-router-dom';
+import { View, Text, Pressable, Icon } from '@idealyst/components';
+import { useNavigator } from '@idealyst/navigation';
+import type { StackLayoutProps } from '@idealyst/navigation';
+
+export function DrawerLayout({ routes, currentPath, options }: StackLayoutProps) {
+  const { navigate } = useNavigator();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <View style={{ flex: 1, flexDirection: 'row' }}>
+      {/* Sidebar - always visible on web */}
+      <View style={{
+        width: isCollapsed ? 64 : 240,
+        borderRightWidth: 1,
+        borderRightColor: '#e0e0e0',
+        backgroundColor: '#f8f8f8',
+        transition: 'width 0.2s',
+      }}>
+        {/* Logo/Header */}
+        <View style={{ height: 56, justifyContent: 'center', paddingHorizontal: 16 }}>
+          {!isCollapsed && <Text variant="title">My App</Text>}
+        </View>
+
+        {/* Menu Items */}
+        {routes.map((route) => {
+          const isActive = currentPath.startsWith(route.fullPath);
+          return (
+            <Pressable
+              key={route.fullPath}
+              onPress={() => navigate({ path: route.fullPath })}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                padding: 12,
+                backgroundColor: isActive ? 'rgba(0,0,0,0.08)' : 'transparent',
+              }}
+            >
+              <Icon
+                name={route.options?.icon || 'circle'}
+                size={24}
+                color={isActive ? '#007AFF' : '#666'}
+              />
+              {!isCollapsed && (
+                <Text style={{ marginLeft: 12, color: isActive ? '#007AFF' : '#333' }}>
+                  {route.options?.title || route.path}
+                </Text>
+              )}
+            </Pressable>
+          );
+        })}
+
+        {/* Collapse toggle */}
+        <Pressable
+          onPress={() => setIsCollapsed(!isCollapsed)}
+          style={{ padding: 12, marginTop: 'auto' }}
+        >
+          <Icon name={isCollapsed ? 'chevron-right' : 'chevron-left'} size={24} />
+        </Pressable>
+      </View>
+
+      {/* Content */}
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+    </View>
+  );
+}
+\`\`\`
+
+## Using GeneralLayout Helper
+
+The \`GeneralLayout\` component simplifies building layouts:
+
+\`\`\`tsx
+import { GeneralLayout } from '@idealyst/navigation';
+
+export function AppLayout({ options, routes, currentPath, children }: StackLayoutProps) {
+  return (
+    <GeneralLayout
+      header={{
+        enabled: true,
+        height: 56,
+        content: (
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+            <Text variant="title">{options?.headerTitle || 'App'}</Text>
+            <View style={{ marginLeft: 'auto' }}>{options?.headerRight}</View>
+          </View>
+        ),
+      }}
+      sidebar={{
+        enabled: true,
+        collapsible: true,
+        expandedWidth: 240,
+        collapsedWidth: 64,
+        content: <SidebarMenu routes={routes} currentPath={currentPath} />,
+      }}
+    >
+      {children}
+    </GeneralLayout>
+  );
+}
+\`\`\`
+
+## Putting It All Together
+
+Here's a complete router setup with web layouts:
+
+\`\`\`tsx
+import { NavigatorParam } from '@idealyst/navigation';
+import { StackLayout } from './layouts/StackLayout';
+import { TabLayout } from './layouts/TabLayout';
+
+const appRouter: NavigatorParam = {
+  path: "/",
+  type: 'navigator',
+  layout: 'stack',
+  layoutComponent: StackLayout,  // Web header
+  options: {
+    headerTitle: "My App",
+    headerRight: <UserMenu />,
+  },
+  routes: [
+    {
+      path: "main",
+      type: 'navigator',
+      layout: 'tab',
+      layoutComponent: TabLayout,  // Web tab bar
+      routes: [
+        {
+          path: "home",
+          type: 'screen',
+          component: HomeScreen,
+          options: {
+            tabBarLabel: "Home",
+            tabBarIcon: ({ color }) => <Icon name="home" color={color} />,
+          },
+        },
+        {
+          path: "search",
+          type: 'screen',
+          component: SearchScreen,
+          options: {
+            tabBarLabel: "Search",
+            tabBarIcon: ({ color }) => <Icon name="magnify" color={color} />,
+          },
+        },
+      ],
+    },
+    {
+      path: "settings",
+      type: 'screen',
+      component: SettingsScreen,
+    },
+  ],
+};
+\`\`\`
+
+## Key Insights
+
+1. **layoutComponent is web-only** - Native ignores it and uses native navigators
+2. **Same route config, different UI** - Your routes stay the same, layouts differ
+3. **Options are your data source** - headerTitle, tabBarIcon, etc. drive your layout
+4. **routes array is navigation menu** - Use it to build sidebars, tab bars, menus
+5. **currentPath enables active states** - Compare to highlight current item
+6. **Outlet renders children** - From react-router-dom, this is where screen content goes
+
+## Common Patterns
+
+### Responsive Layout
+\`\`\`tsx
+function ResponsiveLayout(props: StackLayoutProps) {
+  const { width } = useWindowDimensions();
+  const isMobile = width < 768;
+
+  // Tabs on mobile, drawer on desktop
+  return isMobile
+    ? <TabLayout {...props} />
+    : <DrawerLayout {...props} />;
+}
+\`\`\`
+
+### Nested Headers
+\`\`\`tsx
+// Parent navigator has app header
+// Child navigator has section header
+{
+  path: "/",
+  layoutComponent: AppHeaderLayout,
+  routes: [{
+    path: "admin",
+    layoutComponent: AdminSectionHeader,  // Adds another header
+    routes: [...]
+  }]
+}
+\`\`\`
+
+### Hiding Navigation
+\`\`\`tsx
+function ConditionalLayout(props: StackLayoutProps) {
+  // Hide navigation on certain routes
+  if (props.currentPath.includes('/fullscreen')) {
+    return <Outlet />;  // No chrome
+  }
+  return <FullLayout {...props} />;
+}
+\`\`\`
+
+## Summary
+
+| Native Gets | Web Needs |
+|-------------|-----------|
+| Stack header | \`layoutComponent\` with header UI |
+| Tab bar | \`layoutComponent\` with tab buttons |
+| Drawer | \`layoutComponent\` with sidebar |
+| Back button | \`canGoBack()\` + \`goBack()\` |
+| Active states | Compare \`currentPath\` to \`route.fullPath\` |
+| Screen options | Access via \`options\` and \`route.options\` |
+
+The key to web/mobile parity is understanding that **layout components give web everything native navigators provide automatically**.
+`,
 };

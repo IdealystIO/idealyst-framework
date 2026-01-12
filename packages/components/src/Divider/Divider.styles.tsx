@@ -16,7 +16,6 @@ type DividerThickness = 'thin' | 'md' | 'thick';
 type DividerType = 'solid' | 'dashed' | 'dotted';
 type DividerIntent = Intent | 'secondary' | 'neutral' | 'info';
 type DividerSpacing = 'none' | 'sm' | 'md' | 'lg';
-type DividerLength = 'full' | 'auto';
 
 export type DividerDynamicProps = {
     orientation?: DividerOrientation;

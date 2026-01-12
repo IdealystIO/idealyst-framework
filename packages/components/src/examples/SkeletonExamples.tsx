@@ -1,4 +1,3 @@
-import React from 'react';
 import { Screen, View, Text, Skeleton, SkeletonGroup, Divider, Card } from '../index';
 
 export const SkeletonExamples = () => {

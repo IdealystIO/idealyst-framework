@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { DividerProps } from './types';
 import { dividerStyles } from './Divider.styles';

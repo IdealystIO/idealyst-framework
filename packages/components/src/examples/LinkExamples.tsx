@@ -1,4 +1,3 @@
-import React from 'react';
 import { Screen, View, Link, Text, Button, Card, Icon } from '@idealyst/components';
 
 export const LinkExamples = () => {

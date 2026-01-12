@@ -1,4 +1,3 @@
-import React from 'react';
 import { Screen, View, Text } from '../index';
 
 export const ScreenExamples = () => {

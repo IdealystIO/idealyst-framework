@@ -1,4 +1,4 @@
-import React, { isValidElement, forwardRef, ComponentRef } from 'react';
+import { isValidElement, forwardRef, ComponentRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { chipStyles } from './Chip.styles';

@@ -5,7 +5,6 @@
  * to ensure accuracy and correctness.
  */
 
-import React from 'react';
 import { Card, Text, View } from '@idealyst/components';
 
 // Example 1: Basic Card
@@ -119,9 +118,9 @@ export function ComplexCard() {
   return (
     <Card type="elevated" padding="lg" radius="md">
       <View spacing="md">
-        <Text size="lg" weight="bold">Card Title</Text>
-        <Text size="md">This is some card content with multiple elements.</Text>
-        <Text size="sm" >Additional information</Text>
+        <Text typography="h3" weight="bold">Card Title</Text>
+        <Text typography="body1">This is some card content with multiple elements.</Text>
+        <Text typography="body2">Additional information</Text>
       </View>
     </Card>
   );

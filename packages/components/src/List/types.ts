@@ -1,4 +1,4 @@
-import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type { ReactNode } from 'react';
 import type { IconName } from '../Icon/icon-types';
 import { Size, Color, Intent } from '@idealyst/theme';

@@ -3,7 +3,7 @@ import { Modal, View, TouchableWithoutFeedback, BackHandler, Dimensions } from '
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PopoverProps } from './types';
 import { popoverStyles } from './Popover.styles';
-import { calculateSmartPosition, calculateAvailableHeight } from '../utils/positionUtils.native';
+import { calculateSmartPosition } from '../utils/positionUtils.native';
 import { BoundedModalContent } from '../internal/BoundedModalContent.native';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 
@@ -24,7 +24,7 @@ const Popover = forwardRef<View, PopoverProps>(({
   accessibilityHint,
   accessibilityRole,
   accessibilityHidden,
-}, ref) => {
+}, _ref) => {
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
     return getNativeInteractiveAccessibilityProps({
@@ -34,7 +34,6 @@ const Popover = forwardRef<View, PopoverProps>(({
       accessibilityHidden,
     });
   }, [accessibilityLabel, accessibilityHint, accessibilityRole, accessibilityHidden]);
-  const popoverRef = useRef<View>(null);
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0, width: 0 });
   const [popoverSize, setPopoverSize] = useState({ width: 0, height: 0 });
   const anchorMeasurements = useRef({ x: 0, y: 0, width: 0, height: 0 });

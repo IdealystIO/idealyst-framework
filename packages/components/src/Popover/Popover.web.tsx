@@ -19,7 +19,7 @@ const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
   offset = 8,
   closeOnClickOutside = true,
   closeOnEscapeKey = true,
-  showArrow = false,
+  showArrow: _showArrow = false,
   testID,
   id,
   // Accessibility props

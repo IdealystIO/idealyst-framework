@@ -1,4 +1,3 @@
-import React from 'react';
 import { Screen, View, Text, Badge, Button } from '../index';
 
 export const BadgeExamples = () => {

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import MdiIcon from '@mdi/react';
 import { IconProps } from './types';
 import { iconStyles } from './Icon.styles';
@@ -23,7 +23,6 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
     testID,
     accessibilityLabel,
     id,
-    ...restProps
   } = props;
 
   const { theme } = useUnistyles();
