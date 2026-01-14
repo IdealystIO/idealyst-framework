@@ -277,7 +277,6 @@ function createAppTsx(data: MobileGeneratorOptions): string {
  * Wraps the shared App with SafeAreaProvider and mobile-specific API configuration
  */
 
-import React from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { App } from '@${data.workspaceScope}/shared';
@@ -307,7 +306,6 @@ export default function MobileApp() {
  * Wraps the shared App with SafeAreaProvider
  */
 
-import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { App } from '@${data.workspaceScope}/shared';
 

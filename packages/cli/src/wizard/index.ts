@@ -120,6 +120,7 @@ export async function runWizard(
     androidPackageName: identifiers.androidPackageName,
     extensions: config.extensions as ExtensionConfig,
     directory: prefilledArgs.directory ?? '.',
+    useCurrentDir: false, // Interactive mode always creates a new folder
     skipInstall: prefilledArgs.skipInstall ?? false,
     isInteractive: true,
   };
@@ -177,6 +178,7 @@ export function buildConfigFromArgs(args: CLIArgs): ProjectConfig {
       devcontainer: args.withDevcontainer ?? false,
     },
     directory: args.directory ?? '.',
+    useCurrentDir: false, // Default to creating new folder
     skipInstall: args.skipInstall ?? false,
     isInteractive: false,
   };

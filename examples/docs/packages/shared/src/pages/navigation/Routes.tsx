@@ -19,8 +19,9 @@ export function NavigationRoutesPage() {
           NavigatorParam Types
         </Text>
 
-        <CodeBlock title="NavigatorParam Union Type">
-{`type NavigatorParam =
+        <CodeBlock
+          title="NavigatorParam Union Type"
+          code={`type NavigatorParam =
   | TabNavigatorParam
   | StackNavigatorParam
   | DrawerNavigatorParam;
@@ -31,7 +32,7 @@ type BaseNavigatorParam = {
   type: 'navigator';         // Identifies as navigator
   options?: NavigatorOptions; // Header/layout options
 };`}
-        </CodeBlock>
+        />
 
         <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Stack Navigator
@@ -42,8 +43,9 @@ type BaseNavigatorParam = {
           is pushed onto the stack and can be popped with a back action.
         </Text>
 
-        <CodeBlock title="Stack Navigator Example">
-{`import { NavigatorParam } from '@idealyst/navigation';
+        <CodeBlock
+          title="Stack Navigator Example"
+          code={`import { NavigatorParam } from '@idealyst/navigation';
 
 const StackRouter: NavigatorParam = {
   path: '/',
@@ -68,7 +70,7 @@ const StackRouter: NavigatorParam = {
     },
   ],
 };`}
-        </CodeBlock>
+        />
 
         <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Tab Navigator
@@ -79,8 +81,9 @@ const StackRouter: NavigatorParam = {
           Each tab can have its own icon and label.
         </Text>
 
-        <CodeBlock title="Tab Navigator Example">
-{`import { NavigatorParam, TabBarScreenOptions } from '@idealyst/navigation';
+        <CodeBlock
+          title="Tab Navigator Example"
+          code={`import { NavigatorParam, TabBarScreenOptions } from '@idealyst/navigation';
 import Icon from '@mdi/react';
 import { mdiHome, mdiAccount, mdiCog } from '@mdi/js';
 
@@ -128,7 +131,7 @@ const TabRouter: NavigatorParam = {
     },
   ],
 };`}
-        </CodeBlock>
+        />
 
         <Text weight="semibold" typography="h4" style={{ marginTop: 32, marginBottom: 12 }}>
           Drawer Navigator

@@ -3,13 +3,15 @@ import { View, Text } from '@idealyst/components';
 import { useUnistyles } from 'react-native-unistyles';
 
 interface CodeBlockProps {
-  code: string;
+  code?: string;
+  children?: string;
   language?: string;
   title?: string;
 }
 
-export function CodeBlock({ code, language = 'typescript', title }: CodeBlockProps) {
+export function CodeBlock({ code, children, language = 'typescript', title }: CodeBlockProps) {
   const { theme } = useUnistyles();
+  const content = code ?? children ?? '';
 
   return (
     <View
@@ -34,17 +36,17 @@ export function CodeBlock({ code, language = 'typescript', title }: CodeBlockPro
           </Text>
         </View>
       )}
-      <View padding="md">
+      <View padding="md" style={{ overflow: 'auto' }}>
         <Text
           typography="body2"
           color="inverse"
           style={{
             fontFamily: 'monospace',
-            whiteSpace: 'pre-wrap',
+            whiteSpace: 'pre',
             lineHeight: 22,
           }}
         >
-          {code}
+          {content}
         </Text>
       </View>
     </View>

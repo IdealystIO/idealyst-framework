@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Card, Screen } from '@idealyst/components';
 import { useBreakpoint, useScreenWidth, useResponsiveStyle } from '@idealyst/theme';
+import { CodeBlock } from '../../components/CodeBlock';
 
 // Separate component for screen width to isolate re-renders
 function ScreenWidthDisplay() {
@@ -118,25 +119,6 @@ function ResponsiveBoxes() {
           {bp === 'xs' || bp === 'sm' ? 'Column layout (xs-sm)' : 'Row layout (md+)'}
         </Text>
       </View>
-    </View>
-  );
-}
-
-// Code example component
-function CodeBlock({ children }: { children: string }) {
-  return (
-    <View
-      background="inverse-secondary"
-      radius="md"
-      style={{ padding: 16, marginVertical: 16 }}
-    >
-      <Text
-        typography="body2"
-        color="inverse"
-        style={{ fontFamily: 'monospace', whiteSpace: 'pre', lineHeight: 22 }}
-      >
-        {children}
-      </Text>
     </View>
   );
 }

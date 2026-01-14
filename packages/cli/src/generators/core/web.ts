@@ -257,6 +257,7 @@ function createWebTsConfig(): Record<string, unknown> {
       noUnusedLocals: true,
       noUnusedParameters: true,
       noFallthroughCasesInSwitch: true,
+      types: ['vite/client'],
       paths: {
         '@/*': ['./src/*'],
       },
@@ -294,12 +295,17 @@ function createIndexHtml(data: TemplateData): string {
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${data.appDisplayName}</title>
+    <!-- Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       html, body, #root {
         margin: 0;
         padding: 0;
         height: 100%;
         width: 100%;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       }
     </style>
   </head>
@@ -341,7 +347,6 @@ function createAppTsx(data: TemplateData): string {
  * Wraps the shared App with BrowserRouter for web routing
  */
 
-import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from '@${data.workspaceScope}/shared';
 
@@ -365,7 +370,6 @@ export default function WebApp() {
  * Wraps the shared App with BrowserRouter for web routing
  */
 
-import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from '@${data.workspaceScope}/shared';
 

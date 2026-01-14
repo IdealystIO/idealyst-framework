@@ -10,6 +10,7 @@ const staticSections = [
     items: [
       { label: 'Introduction', path: '/' },
       { label: 'Installation', path: '/installation' },
+      { label: 'CLI Guide', path: '/cli-guide' },
     ],
   },
   {
@@ -30,6 +31,30 @@ const navigationSection = {
     { label: 'Overview', path: '/navigation/overview' },
     { label: 'Routes', path: '/navigation/routes' },
     { label: 'useNavigator', path: '/navigation/use-navigator' },
+    { label: 'Hooks', path: '/navigation/hooks' },
+    { label: 'Linking', path: '/navigation/linking' },
+  ],
+};
+
+const packagesSection = {
+  title: 'Packages',
+  items: [
+    { label: 'Storage', path: '/packages/storage' },
+    { label: 'Translate', path: '/packages/translate' },
+    { label: 'OAuth Client', path: '/packages/oauth-client' },
+    { label: 'DatePicker', path: '/packages/datepicker' },
+    { label: 'DataGrid', path: '/packages/datagrid' },
+    { label: 'Camera', path: '/packages/camera' },
+    { label: 'Microphone', path: '/packages/microphone' },
+    { label: 'Config', path: '/packages/config' },
+    { label: 'Tooling', path: '/packages/tooling' },
+  ],
+};
+
+const utilitiesSection = {
+  title: 'Utilities',
+  items: [
+    { label: 'Platform', path: '/utilities/platform' },
   ],
 };
 
@@ -64,6 +89,8 @@ export function DocsSidebar({ insets }: DrawerSidebarProps) {
         ],
       },
       navigationSection,
+      packagesSection,
+      utilitiesSection,
     ];
   }, [componentItems]);
 

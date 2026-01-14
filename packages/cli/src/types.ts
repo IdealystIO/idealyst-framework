@@ -24,6 +24,7 @@ export interface ProjectConfig {
 
   // Meta
   directory: string;             // Output directory
+  useCurrentDir: boolean;        // Initialize in current directory instead of creating new folder
   skipInstall: boolean;          // Skip yarn install
   isInteractive: boolean;        // Was wizard used?
 }

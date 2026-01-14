@@ -137,8 +137,8 @@ function createApiTsConfig(): Record<string, unknown> {
   return {
     compilerOptions: {
       target: 'ES2020',
-      module: 'NodeNext',
-      moduleResolution: 'NodeNext',
+      module: 'ESNext',
+      moduleResolution: 'bundler',
       esModuleInterop: true,
       strict: true,
       skipLibCheck: true,

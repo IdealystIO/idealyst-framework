@@ -24,6 +24,7 @@ export interface InitOptions {
   withTrpc?: boolean;
   withGraphql?: boolean;
   withDevcontainer?: boolean;
+  currentDir?: boolean; // Initialize in current directory instead of creating a new folder
   interactive?: boolean; // Commander converts --no-interactive to interactive: false
   skipInstall?: boolean;
 }
@@ -92,6 +93,7 @@ export async function initCommand(
           devcontainer: args.withDevcontainer ?? false,
         },
         directory: args.directory ?? '.',
+        useCurrentDir: options.currentDir ?? false,
         skipInstall: args.skipInstall ?? false,
         isInteractive: false,
       };
@@ -189,7 +191,9 @@ function printResults(
   }
 
   console.log(chalk.cyan('  Next steps:'));
-  console.log(chalk.dim(`    cd ${config.projectName}`));
+  if (!config.useCurrentDir) {
+    console.log(chalk.dim(`    cd ${config.projectName}`));
+  }
   for (const step of result.nextSteps) {
     console.log(chalk.dim(`    ${step}`));
   }

@@ -126,7 +126,7 @@ function createRootTsConfig(): Record<string, unknown> {
   return {
     compilerOptions: {
       target: 'ES2020',
-      module: 'commonjs',
+      module: 'ESNext',
       declaration: true,
       declarationMap: true,
       sourceMap: true,
@@ -134,7 +134,7 @@ function createRootTsConfig(): Record<string, unknown> {
       esModuleInterop: true,
       skipLibCheck: true,
       forceConsistentCasingInFileNames: true,
-      moduleResolution: 'node',
+      moduleResolution: 'bundler',
       resolveJsonModule: true,
     },
     include: ['packages/*/src/**/*'],

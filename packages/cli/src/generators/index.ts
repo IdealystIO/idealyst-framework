@@ -20,7 +20,10 @@ import { buildTemplateData } from '../templates/processor';
  * Main generator function - orchestrates all generation
  */
 export async function generateProject(config: ProjectConfig): Promise<GeneratorResult> {
-  const projectPath = path.join(config.directory, config.projectName);
+  // If useCurrentDir is true, use directory directly; otherwise create a new folder
+  const projectPath = config.useCurrentDir
+    ? path.resolve(config.directory)
+    : path.join(config.directory, config.projectName);
   const warnings: string[] = [];
   const nextSteps: string[] = [];
 

@@ -136,8 +136,8 @@ function createPrismaTsConfig(): Record<string, unknown> {
   return {
     compilerOptions: {
       target: 'ES2020',
-      module: 'commonjs',
-      moduleResolution: 'node',
+      module: 'ESNext',
+      moduleResolution: 'bundler',
       esModuleInterop: true,
       strict: true,
       skipLibCheck: true,

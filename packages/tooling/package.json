@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/tooling",
-  "version": "1.2.20",
+  "version": "1.2.23",
   "description": "Code analysis and validation utilities for Idealyst Framework",
   "readme": "README.md",
   "main": "src/index.ts",

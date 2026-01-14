@@ -243,7 +243,7 @@ const light = fromTheme(lightTheme)
   .build();
 
 // Strongly type dark theme based on light theme - they should match!
-const dark = typeof light fromTheme(darkTheme)
+const dark: typeof light = fromTheme(darkTheme)
   .build();
 
 // Define the themes object for type inference
@@ -289,7 +289,6 @@ function createHelloWorldComponent(): string {
  * Hello World component - demonstrates cross-platform usage
  */
 
-import React from 'react';
 import { View, Text, Button } from '@idealyst/components';
 import { useUnistyles } from 'react-native-unistyles';
 
@@ -349,7 +348,6 @@ function createHomeScreen(data: TemplateData): string {
  * Home screen - shared between web and mobile
  */
 
-import React from 'react';
 import { useNavigator } from '@idealyst/navigation';
 import { HelloWorld } from '../components';
 
@@ -414,7 +412,6 @@ function createAboutScreen(): string {
  * About screen - explains what Idealyst is
  */
 
-import React from 'react';
 import { View, Text, Button } from '@idealyst/components';
 import { useNavigator } from '@idealyst/navigation';
 import { useUnistyles } from 'react-native-unistyles';
@@ -512,7 +509,7 @@ function createAppComponent(data: TemplateData): string {
  * Platform packages wrap this with their specific router (e.g., BrowserRouter for web)
  */
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { NavigatorProvider } from '@idealyst/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppRouter } from './navigation';
@@ -543,7 +540,6 @@ export default function App({ apiBaseUrl }: AppProps) {
  * Platform packages wrap this with their specific router (e.g., BrowserRouter for web)
  */
 
-import React from 'react';
 import { NavigatorProvider } from '@idealyst/navigation';
 import { AppRouter } from './navigation';
 

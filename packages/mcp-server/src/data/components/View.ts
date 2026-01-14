@@ -39,7 +39,7 @@ export const View = {
   usage: `
 import { View, Text, Button } from '@idealyst/components';
 
-<View background="surface" radius="md" padding="md" gap="sm">
+<View background="primary" radius="md" padding="md" gap="sm">
   <Text size="lg" weight="bold">Card Title</Text>
   <Text>Card content with consistent spacing</Text>
   <Button>Action</Button>
@@ -57,26 +57,26 @@ import { View, Text, Button } from '@idealyst/components';
     variants: `import { View, Text } from '@idealyst/components';
 
 <View gap="lg">
-  <View background="surface" radius="sm" padding="sm" gap="xs">
+  <View radius="sm" padding="sm" gap="xs">
     <Text>Small padding container</Text>
     <Text>Second item</Text>
   </View>
 
-  <View background="surface" radius="md" padding="md" gap="sm">
+  <View background="secondary" radius="md" padding="md" gap="sm">
     <Text>Medium padding container</Text>
     <Text>Second item</Text>
   </View>
 
-  <View background="surface" radius="lg" padding="lg" gap="md">
+  <View background="inverted" radius="lg" padding="lg" gap="md">
     <Text>Large padding container</Text>
-    <Text>Second item</Text>
+    <Text color="inverted">Second item</Text>
   </View>
 </View>`,
 
     "with-icons": `import { View, Icon, Text } from '@idealyst/components';
 
 <View
-  background="surface"
+  background="tertiary"
   radius="md"
   border="thin"
   padding="md"
@@ -109,7 +109,7 @@ function Example() {
             {items.map((item, index) => (
               <View
                 key={index}
-                background="surface"
+                background="primary"
                 radius="sm"
                 padding="sm"
               >

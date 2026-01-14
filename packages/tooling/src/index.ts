@@ -37,12 +37,24 @@ export type { IdealystDocsPluginOptions } from './analyzer/types';
 
 // Analyzers
 export {
+  // Platform import analysis
   analyzePlatformImports,
   analyzeFiles,
   summarizeResults,
   formatViolation,
   formatViolations,
   type AnalysisSummary,
+  // Component linting (catches issues TypeScript can't)
+  lintComponent,
+  lintComponents,
+  formatLintIssue,
+  formatLintResults,
+  summarizeLintResults,
+  type LintIssueType,
+  type LintIssue,
+  type LintResult,
+  type LintSummary,
+  type ComponentLinterOptions,
 } from './analyzers';
 
 // Rules

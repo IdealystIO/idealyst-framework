@@ -18,10 +18,12 @@ import {
     Routes,
     Link,
     NavLink
-} from 'react-router-dom'
+} from 'react-router-dom';
 
+// Re-export our cross-platform Location type for consistency
+export type { Location } from './types';
 
-export {   
+export {
     BrowserRouter,
     HashRouter,
     MemoryRouter,
