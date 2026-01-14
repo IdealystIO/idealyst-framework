@@ -1,12 +1,21 @@
 {
   "name": "@idealyst/mcp-server",
-  "version": "1.2.23",
+  "version": "1.2.26",
   "description": "MCP server providing documentation and examples for the Idealyst framework",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "idealyst-mcp": "./dist/index.js"
   },
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "files": [
     "dist/**/*",
     "examples/**/*",
@@ -17,8 +26,8 @@
     "validate-examples": "tsx scripts/validate-examples.ts",
     "test": "tsx scripts/test-examples.ts",
     "prebuild": "yarn extract-types && yarn validate-examples",
-    "build": "tsc && chmod +x dist/index.js && mkdir -p dist/generated && cp -r src/generated/* dist/generated/",
-    "dev": "tsc --watch",
+    "build": "tsup && mkdir -p dist/generated && cp -r src/generated/* dist/generated/",
+    "dev": "tsup --watch",
     "start": "node dist/index.js"
   },
   "publishConfig": {
@@ -35,9 +44,9 @@
   "author": "Idealyst",
   "license": "MIT",
   "dependencies": {
-    "@idealyst/components": "^1.2.23",
-    "@idealyst/navigation": "^1.2.23",
-    "@idealyst/theme": "^1.2.23",
+    "@idealyst/components": "^1.2.26",
+    "@idealyst/navigation": "^1.2.26",
+    "@idealyst/theme": "^1.2.26",
     "@idealyst/tooling": "^1.2.1",
     "@modelcontextprotocol/sdk": "^1.0.4"
   },
@@ -48,6 +57,7 @@
     "react": "^19.1.0",
     "react-native": "^0.80.1",
     "ts-morph": "^21.0.1",
+    "tsup": "^8.5.1",
     "tsx": "^4.7.0",
     "typescript": "^5.0.0"
   }

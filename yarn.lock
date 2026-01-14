@@ -2267,11 +2267,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/components@npm:^1.2.13, @idealyst/components@workspace:packages/components":
+"@idealyst/components@npm:^1.2.25, @idealyst/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.13"
+    "@idealyst/theme": "npm:^1.2.25"
     "@idealyst/tooling": "npm:^1.2.4"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
@@ -2285,7 +2285,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.3.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.13
+    "@idealyst/theme": ^1.2.25
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.0.0"
     "@react-native-vector-icons/common": ">=12.0.0"
@@ -2345,8 +2345,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datagrid@workspace:packages/datagrid"
   dependencies:
-    "@idealyst/components": "npm:^1.2.13"
-    "@idealyst/theme": "npm:^1.2.13"
+    "@idealyst/components": "npm:^1.2.25"
+    "@idealyst/theme": "npm:^1.2.25"
     "@types/react": "npm:^19.1.0"
     "@types/react-window": "npm:^1.8.8"
     react: "npm:^19.1.0"
@@ -2354,8 +2354,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.13
-    "@idealyst/theme": ^1.2.13
+    "@idealyst/components": ^1.2.25
+    "@idealyst/theme": ^1.2.25
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -2378,7 +2378,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datepicker@workspace:packages/datepicker"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.13"
+    "@idealyst/theme": "npm:^1.2.25"
     "@mdi/js": "npm:^7.4.47"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
@@ -2389,7 +2389,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.2.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.13
+    "@idealyst/theme": ^1.2.25
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.6.0"
     react: ">=16.8.0"
@@ -2419,9 +2419,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/mcp-server@workspace:packages/mcp-server"
   dependencies:
-    "@idealyst/components": "npm:^1.2.13"
-    "@idealyst/navigation": "npm:^1.2.13"
-    "@idealyst/theme": "npm:^1.2.13"
+    "@idealyst/components": "npm:^1.2.25"
+    "@idealyst/navigation": "npm:^1.2.25"
+    "@idealyst/theme": "npm:^1.2.25"
     "@idealyst/tooling": "npm:^1.2.1"
     "@modelcontextprotocol/sdk": "npm:^1.0.4"
     "@types/node": "npm:^20.0.0"
@@ -2430,6 +2430,7 @@ __metadata:
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
     ts-morph: "npm:^21.0.1"
+    tsup: "npm:^8.5.1"
     tsx: "npm:^4.7.0"
     typescript: "npm:^5.0.0"
   bin:
@@ -2446,7 +2447,7 @@ __metadata:
     react-native-live-audio-stream: "npm:^1.1.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.13
+    "@idealyst/components": ^1.2.25
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-live-audio-stream: ">=1.1.0"
@@ -2460,16 +2461,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/navigation@npm:^1.2.13, @idealyst/navigation@workspace:packages/navigation":
+"@idealyst/navigation@npm:^1.2.25, @idealyst/navigation@workspace:packages/navigation":
   version: 0.0.0-use.local
   resolution: "@idealyst/navigation@workspace:packages/navigation"
   dependencies:
     "@idealyst/camera": "npm:^1.1.6"
-    "@idealyst/components": "npm:^1.2.13"
+    "@idealyst/components": "npm:^1.2.25"
     "@idealyst/datagrid": "npm:^1.0.93"
     "@idealyst/datepicker": "npm:^1.0.93"
     "@idealyst/microphone": "npm:^1.1.7"
-    "@idealyst/theme": "npm:^1.2.13"
+    "@idealyst/theme": "npm:^1.2.25"
     "@types/react": "npm:^19.1.8"
     "@types/react-dom": "npm:^19.1.6"
     react: "npm:^19.1.0"
@@ -2480,9 +2481,9 @@ __metadata:
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@idealyst/camera": ^1.1.6
-    "@idealyst/components": ^1.2.13
+    "@idealyst/components": ^1.2.25
     "@idealyst/microphone": ^1.1.7
-    "@idealyst/theme": ^1.2.13
+    "@idealyst/theme": ^1.2.25
     "@react-navigation/bottom-tabs": ">=7.0.0"
     "@react-navigation/drawer": ">=7.0.0"
     "@react-navigation/native": ">=7.0.0"
@@ -2544,7 +2545,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/theme@npm:^1.2.13, @idealyst/theme@workspace:packages/theme":
+"@idealyst/theme@npm:^1.2.25, @idealyst/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
@@ -2573,6 +2574,7 @@ __metadata:
     "@types/node": "npm:^20.0.0"
     jest: "npm:^29.0.0"
     ts-jest: "npm:^29.0.0"
+    tsup: "npm:^8.5.1"
     tsx: "npm:^4.21.0"
     typescript: "npm:^5.0.0"
     vite: "npm:^7.3.1"
@@ -9509,6 +9511,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"source-map@npm:^0.7.6":
+  version: 0.7.6
+  resolution: "source-map@npm:0.7.6"
+  checksum: 10/c8d2da7c57c14f3fd7568f764b39ad49bbf9dd7632b86df3542b31fed117d4af2fb74a4f886fc06baf7a510fee68e37998efc3080aacdac951c36211dc29a7a3
+  languageName: node
+  linkType: hard
+
 "split-on-first@npm:^1.0.0":
   version: 1.1.0
   resolution: "split-on-first@npm:1.1.0"
@@ -10059,6 +10068,48 @@ __metadata:
     tsup: dist/cli-default.js
     tsup-node: dist/cli-node.js
   checksum: 10/426f5de085fb7f3321a1d7910af4a56279341e571f9fb0b28be1a44ff0efa7fdd4e886eadd86b00a500696b3a76fc4e8b19567389ac64c345b559f860c3c6f9f
+  languageName: node
+  linkType: hard
+
+"tsup@npm:^8.5.1":
+  version: 8.5.1
+  resolution: "tsup@npm:8.5.1"
+  dependencies:
+    bundle-require: "npm:^5.1.0"
+    cac: "npm:^6.7.14"
+    chokidar: "npm:^4.0.3"
+    consola: "npm:^3.4.0"
+    debug: "npm:^4.4.0"
+    esbuild: "npm:^0.27.0"
+    fix-dts-default-cjs-exports: "npm:^1.0.0"
+    joycon: "npm:^3.1.1"
+    picocolors: "npm:^1.1.1"
+    postcss-load-config: "npm:^6.0.1"
+    resolve-from: "npm:^5.0.0"
+    rollup: "npm:^4.34.8"
+    source-map: "npm:^0.7.6"
+    sucrase: "npm:^3.35.0"
+    tinyexec: "npm:^0.3.2"
+    tinyglobby: "npm:^0.2.11"
+    tree-kill: "npm:^1.2.2"
+  peerDependencies:
+    "@microsoft/api-extractor": ^7.36.0
+    "@swc/core": ^1
+    postcss: ^8.4.12
+    typescript: ">=4.5.0"
+  peerDependenciesMeta:
+    "@microsoft/api-extractor":
+      optional: true
+    "@swc/core":
+      optional: true
+    postcss:
+      optional: true
+    typescript:
+      optional: true
+  bin:
+    tsup: dist/cli-default.js
+    tsup-node: dist/cli-node.js
+  checksum: 10/f1927ec2dda93b218b39cd1cac1040902eef66e026261f5c265197c2f660cb5b9e1fb89353d50de5c6a5616463c02800e87e1daad7620b9c9051221d93c66824
   languageName: node
   linkType: hard
 
