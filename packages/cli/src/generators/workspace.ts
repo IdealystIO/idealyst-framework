@@ -234,6 +234,9 @@ function createYarnrc(): string {
   return `nodeLinker: node-modules
 
 enableGlobalCache: true
+
+# Ensure all packages are hoisted to root node_modules for proper resolution
+nmHoistingLimits: none
 `;
 }
 

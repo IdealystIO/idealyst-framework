@@ -374,6 +374,16 @@ function findIteratorPattern(t, node, themeParam, debugLog = () => {}) {
                             return;
                         }
 
+                        // $typography is a top-level iterator (uses typography keys)
+                        // Pattern: theme.sizes.$typography.fontSize expands to h1, h2, body1, etc.
+                        if (iteratorName === 'typography') {
+                            result = {
+                                type: 'typography',
+                                accessPath: chain.slice(i + 1),
+                            };
+                            return;
+                        }
+
                         if (i > 0 && chain[i - 1] === 'sizes') {
                             result = {
                                 type: 'sizes',
@@ -432,6 +442,9 @@ function expandVariantWithIterator(t, valueNode, themeParam, keys, iteratorInfo,
 
     if (iteratorInfo.type === 'intents') {
         keysToExpand = keys?.intents || [];
+    } else if (iteratorInfo.type === 'typography') {
+        // Typography is a top-level key array (h1, h2, body1, etc.)
+        keysToExpand = keys?.typography || [];
     } else if (iteratorInfo.type === 'sizes' && iteratorInfo.componentName) {
         keysToExpand = keys?.sizes?.[iteratorInfo.componentName] || [];
     }
@@ -479,6 +492,12 @@ function replaceIteratorRefs(t, node, themeParam, iteratorInfo, key) {
                     if (chain[i].startsWith('$')) {
                         const iterName = chain[i].slice(1);
                         if (iteratorInfo.type === 'intents' && iterName === 'intents') {
+                            hasIterator = true;
+                            dollarIndex = i;
+                            break;
+                        }
+                        // Typography iterator: theme.sizes.$typography.X -> theme.sizes.typography.{key}.X
+                        if (iteratorInfo.type === 'typography' && iterName === 'typography') {
                             hasIterator = true;
                             dollarIndex = i;
                             break;

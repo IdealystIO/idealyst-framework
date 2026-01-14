@@ -325,6 +325,8 @@ function getDefaultThemeValues(): ThemeValues {
       table: ['xs', 'sm', 'md', 'lg', 'xl'],
       tooltip: ['xs', 'sm', 'md', 'lg', 'xl'],
       view: ['xs', 'sm', 'md', 'lg', 'xl'],
+      // Typography sizes for Text component's $typography iterator
+      typography: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2', 'body1', 'body2', 'caption'],
     },
     radii: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
     shadows: ['none', 'sm', 'md', 'lg', 'xl'],
@@ -391,6 +393,7 @@ export interface BabelThemeKeys {
   sizes: Record<string, string[]>;
   radii: string[];
   shadows: string[];
+  typography: string[];
 }
 
 // Cache for loadThemeKeys to avoid re-parsing
@@ -448,6 +451,7 @@ export function loadThemeKeys(
     sizes: themeValues.sizes,
     radii: themeValues.radii,
     shadows: themeValues.shadows,
+    typography: themeValues.typography,
   };
 
   if (verboseMode) {

@@ -222,7 +222,7 @@ export default defineConfig({
       '@react-native/normalize-colors',
     ],
     exclude: [
-      '@\${data.workspaceScope}/shared',
+      '@${data.workspaceScope}/shared',
     ],
     esbuildOptions: {
       resolveExtensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.jsx', '.js'],

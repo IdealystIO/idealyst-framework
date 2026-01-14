@@ -146,8 +146,8 @@ function createSharedPackageJson(data: TemplateData): Record<string, unknown> {
   const dependencies: Record<string, string> = {};
   const peerDependencies: Record<string, string> = {
     ...DEPENDENCIES.core,
-    'react': `^${DEPENDENCIES.web.react}`,
-    'react-native': `^${DEPENDENCIES.mobile['react-native']}`,
+    'react': DEPENDENCIES.web.react,
+    'react-native': DEPENDENCIES.mobile['react-native'],
   };
 
   // Add tRPC dependencies if enabled
@@ -176,8 +176,19 @@ function createSharedPackageJson(data: TemplateData): Record<string, unknown> {
     dependencies,
     peerDependencies,
     devDependencies: {
+      // Core dependencies are also devDependencies for TypeScript type-checking
+      ...DEPENDENCIES.core,
+      'react': DEPENDENCIES.web.react,
+      'react-dom': DEPENDENCIES.web['react-dom'],
+      'react-native': DEPENDENCIES.mobile['react-native'],
+      'react-native-unistyles': '^3.0.0',
+      'react-native-svg': '^15.0.0',
+      'react-router-dom': DEPENDENCIES.web['react-router-dom'],
+      '@mdi/react': DEPENDENCIES.web['@mdi/react'],
       'typescript': '^5.0.0',
       '@types/react': '^18.2.0',
+      '@types/react-dom': '^18.2.0',
+      '@types/node': '^20.0.0',
     },
   };
 }
