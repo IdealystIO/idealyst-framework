@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/mcp-server",
-  "version": "1.2.27",
+  "version": "1.2.28",
   "description": "MCP server providing documentation and examples for the Idealyst framework",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -14,6 +14,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./tools": {
+      "types": "./dist/tools/index.d.ts",
+      "import": "./dist/tools/index.js",
+      "require": "./dist/tools/index.cjs"
     }
   },
   "files": [
@@ -44,9 +49,9 @@
   "author": "Idealyst",
   "license": "MIT",
   "dependencies": {
-    "@idealyst/components": "^1.2.27",
-    "@idealyst/navigation": "^1.2.27",
-    "@idealyst/theme": "^1.2.27",
+    "@idealyst/components": "^1.2.28",
+    "@idealyst/navigation": "^1.2.28",
+    "@idealyst/theme": "^1.2.28",
     "@idealyst/tooling": "^1.2.1",
     "@modelcontextprotocol/sdk": "^1.0.4"
   },

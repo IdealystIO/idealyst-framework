@@ -40,8 +40,9 @@ const packagePaths = [
   'packages/mcp-server/package.json',
   'packages/microphone/package.json',
   'packages/translate/package.json',
-  "packages/config/package.json",
-  "packages/tooling/package.json",
+  'packages/config/package.json',
+  'packages/tooling/package.json',
+  'packages/markdown/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',
@@ -60,7 +61,7 @@ function updatePackageVersion(packagePath) {
   packageJson.version = newVersion;
   
   // Update dependencies to use the new version
-  const idealystPackages = ['@idealyst/theme', '@idealyst/components', '@idealyst/navigation', '@idealyst/cli'];
+  const idealystPackages = ['@idealyst/theme', '@idealyst/components', '@idealyst/navigation', '@idealyst/cli', '@idealyst/markdown'];
   
   ['dependencies', 'peerDependencies', 'devDependencies'].forEach(depType => {
     if (packageJson[depType]) {

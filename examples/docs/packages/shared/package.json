@@ -17,18 +17,20 @@
     }
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.1.8",
-    "@idealyst/navigation": "^1.1.8",
-    "@idealyst/theme": "^1.1.8",
-    "@idealyst/translate": "^1.1.8",
+    "@idealyst/components": "^1.2.28",
+    "@idealyst/markdown": "^1.2.28",
+    "@idealyst/navigation": "^1.2.28",
+    "@idealyst/theme": "^1.2.28",
+    "@idealyst/translate": "^1.2.28",
     "react": "^19.1.0",
     "react-native": "^0.80.1"
   },
   "devDependencies": {
-    "@idealyst/components": "^1.1.8",
-    "@idealyst/navigation": "^1.1.8",
-    "@idealyst/theme": "^1.1.8",
-    "@idealyst/translate": "^1.1.8",
+    "@idealyst/components": "^1.2.28",
+    "@idealyst/markdown": "^1.2.28",
+    "@idealyst/navigation": "^1.2.28",
+    "@idealyst/theme": "^1.2.28",
+    "@idealyst/translate": "^1.2.28",
     "@types/react": "^19.1.2",
     "react": "^19.1.0",
     "react-native": "^0.80.1",

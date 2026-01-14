@@ -552,6 +552,57 @@ export default {
     ],
     relatedPackages: ["components", "theme", "navigation"],
   },
+
+  markdown: {
+    name: "Markdown",
+    npmName: "@idealyst/markdown",
+    description:
+      "Cross-platform markdown renderer for React and React Native. Supports GitHub Flavored Markdown with theme integration.",
+    category: "ui",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/markdown @idealyst/theme",
+    peerDependencies: [
+      "@idealyst/theme",
+      "react-markdown (web)",
+      "remark-gfm (web)",
+      "react-native-markdown-display (native)",
+    ],
+    features: [
+      "GitHub Flavored Markdown support",
+      "Tables, strikethrough, task lists",
+      "Theme-integrated styling",
+      "Custom link and image handlers",
+      "Style overrides per element",
+      "Cross-platform consistency",
+    ],
+    quickStart: `import { Markdown } from '@idealyst/markdown';
+
+<Markdown
+  size="md"
+  linkIntent="primary"
+  linkHandler={{
+    onLinkPress: (url) => console.log('Link:', url),
+  }}
+>
+{\`# Hello World
+
+This is **bold** and _italic_ text.
+
+| Column 1 | Column 2 |
+|----------|----------|
+| Data 1   | Data 2   |
+\`}
+</Markdown>`,
+    apiHighlights: [
+      "Markdown component",
+      "size prop (xs-xl)",
+      "linkIntent prop",
+      "styleOverrides prop",
+      "linkHandler / imageHandler",
+    ],
+    relatedPackages: ["components", "theme"],
+  },
 };
 
 /**

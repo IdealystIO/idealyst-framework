@@ -26,6 +26,7 @@ import { CameraPage } from '../pages/packages/Camera';
 import { MicrophonePage } from '../pages/packages/Microphone';
 import { ConfigPage } from '../pages/packages/Config';
 import { ToolingPage } from '../pages/packages/Tooling';
+import { MarkdownPage } from '../pages/packages/Markdown';
 import { PlatformPage } from '../pages/utilities/Platform';
 import { DocsLayout } from '../components/DocsLayout';
 import { DocsSidebar } from '../components/DocsSidebar';
@@ -86,6 +87,7 @@ export const DocsRouter: NavigatorParam = {
     { path: 'packages/microphone', type: 'screen', component: MicrophonePage, options: { title: 'Microphone' } },
     { path: 'packages/config', type: 'screen', component: ConfigPage, options: { title: 'Config' } },
     { path: 'packages/tooling', type: 'screen', component: ToolingPage, options: { title: 'Tooling' } },
+    { path: 'packages/markdown', type: 'screen', component: MarkdownPage, options: { title: 'Markdown' } },
     { path: 'utilities/platform', type: 'screen', component: PlatformPage, options: { title: 'Platform' } },
   ],
 };

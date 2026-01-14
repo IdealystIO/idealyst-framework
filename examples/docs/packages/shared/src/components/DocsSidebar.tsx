@@ -41,6 +41,7 @@ const packagesSection = {
   items: [
     { label: 'Storage', path: '/packages/storage' },
     { label: 'Translate', path: '/packages/translate' },
+    { label: 'Markdown', path: '/packages/markdown' },
     { label: 'OAuth Client', path: '/packages/oauth-client' },
     { label: 'DatePicker', path: '/packages/datepicker' },
     { label: 'DataGrid', path: '/packages/datagrid' },

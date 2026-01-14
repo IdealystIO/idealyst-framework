@@ -24,6 +24,7 @@ PACKAGES=(
   "translate"
   "tooling"
   "config"
+  "markdown"
 )
 
 for pkg in "${PACKAGES[@]}"; do
