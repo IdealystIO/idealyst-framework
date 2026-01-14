@@ -122,7 +122,7 @@ export const markdownStyles = defineStyle('Markdown', (theme: Theme) => ({
 
   // Links
   link: ({ linkIntent = 'primary' }: MarkdownDynamicProps) => ({
-    color: theme.intents[linkIntent].primary,
+    color: theme.intents?.[linkIntent]?.primary ?? theme.colors.text.primary,
     textDecorationLine: 'underline',
     _web: {
       cursor: 'pointer',
@@ -292,7 +292,7 @@ export const markdownStyles = defineStyle('Markdown', (theme: Theme) => ({
   }),
 
   footnoteRef: ({ linkIntent = 'primary' }: MarkdownDynamicProps) => ({
-    color: theme.intents[linkIntent].primary,
+    color: theme.intents?.[linkIntent]?.primary ?? theme.colors.text.primary,
     fontSize: 10,
     _web: {
       verticalAlign: 'super',

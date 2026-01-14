@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Card, Screen } from '@idealyst/components';
+import React, { useState } from 'react';
+import { View, Text, Card, Screen, TextArea } from '@idealyst/components';
 import { Markdown } from '@idealyst/markdown';
 import { CodeBlock } from '../../components/CodeBlock';
 import { LivePreview } from '../../components/LivePreview';
@@ -175,6 +175,17 @@ Check out the [Idealyst documentation](https://github.com/IdealystIO/idealyst-fr
             </Markdown>
           </View>
         </LivePreview>
+
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
+          Interactive Playground
+        </Text>
+
+        <Text typography="body2" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
+          Try out the Markdown component in real-time. Edit the markdown on the left and see the
+          rendered output on the right.
+        </Text>
+
+        <MarkdownPlayground />
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
           Props
@@ -438,6 +449,121 @@ type MarkdownElementType =
         />
       </View>
     </Screen>
+  );
+}
+
+const DEFAULT_PLAYGROUND_MARKDOWN = `# Markdown Playground
+
+Welcome to the **interactive playground**! Edit this text to see changes in real-time.
+
+## Features
+
+You can use all standard markdown features:
+
+- **Bold text** and *italic text*
+- \`Inline code\` snippets
+- [Links](https://example.com)
+
+### Code Blocks
+
+\`\`\`javascript
+function hello(name) {
+  return \`Hello, \${name}!\`;
+}
+\`\`\`
+
+### Tables
+
+| Feature | Supported |
+|---------|-----------|
+| Tables | Yes |
+| Task Lists | Yes |
+| Strikethrough | Yes |
+
+### Task List
+
+- [x] Learn markdown basics
+- [x] Try the playground
+- [ ] Build something awesome
+
+> **Tip:** Try adding your own markdown elements!
+`;
+
+function MarkdownPlayground() {
+  const [markdown, setMarkdown] = useState(DEFAULT_PLAYGROUND_MARKDOWN);
+
+  return (
+    <Card variant="outlined" style={{ overflow: 'hidden', marginBottom: 24 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          minHeight: 500,
+        }}
+      >
+        {/* Editor Panel */}
+        <View
+          style={{
+            flex: 1,
+            borderRightWidth: 1,
+            borderRightColor: '#e5e7eb',
+          }}
+        >
+          <View
+            style={{
+              padding: 12,
+              backgroundColor: '#f9fafb',
+              borderBottomWidth: 1,
+              borderBottomColor: '#e5e7eb',
+            }}
+          >
+            <Text weight="semibold" typography="body2">
+              Markdown Input
+            </Text>
+          </View>
+          <TextArea
+            value={markdown}
+            onChangeText={setMarkdown}
+            style={{
+              flex: 1,
+              padding: 16,
+              fontFamily: 'monospace',
+              fontSize: 14,
+              lineHeight: 22,
+              borderWidth: 0,
+              borderRadius: 0,
+              minHeight: 450,
+              resize: 'none',
+            }}
+            placeholder="Type your markdown here..."
+          />
+        </View>
+
+        {/* Preview Panel */}
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              padding: 12,
+              backgroundColor: '#f9fafb',
+              borderBottomWidth: 1,
+              borderBottomColor: '#e5e7eb',
+            }}
+          >
+            <Text weight="semibold" typography="body2">
+              Preview
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              padding: 16,
+              overflow: 'auto',
+            }}
+          >
+            <Markdown>{markdown}</Markdown>
+          </View>
+        </View>
+      </View>
+    </Card>
   );
 }
 
