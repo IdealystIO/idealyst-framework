@@ -11,4 +11,5 @@ export default defineConfig({
   sourcemap: true,
   target: 'es2022',
   outDir: 'dist',
+  shims: true, // Adds polyfills for import.meta.url in CJS builds
 });
