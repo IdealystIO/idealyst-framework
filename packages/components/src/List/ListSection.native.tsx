@@ -2,8 +2,9 @@ import { forwardRef } from 'react';
 import { View, Text } from 'react-native';
 import { listStyles } from './List.styles';
 import type { ListSectionProps } from './types';
+import type { IdealystElement } from '../utils/refTypes';
 
-const ListSection = forwardRef<View, ListSectionProps>(({
+const ListSection = forwardRef<IdealystElement, ListSectionProps>(({
   title,
   children,
   collapsed = false,
@@ -11,7 +12,7 @@ const ListSection = forwardRef<View, ListSectionProps>(({
   testID,
 }, ref) => {
   return (
-    <View ref={ref} style={[listStyles.section, style]} testID={testID}>
+    <View ref={ref as any} style={[listStyles.section, style]} testID={testID}>
       {title && (
         <Text style={listStyles.sectionTitle}>
           {title}

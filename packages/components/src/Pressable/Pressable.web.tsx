@@ -3,8 +3,9 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { PressableProps } from './types';
 import { pressableStyles } from './Pressable.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
+const Pressable = forwardRef<IdealystElement, PressableProps>(({
   children,
   onPress,
   onPressIn,
@@ -66,10 +67,7 @@ const Pressable = forwardRef<HTMLDivElement, PressableProps>(({
   };
 
   // Merge ref from getWebProps with forwarded ref
-  const mergedRef = useMergeRefs<HTMLDivElement>(
-    ref,
-    webProps.ref as React.Ref<HTMLDivElement>
-  );
+  const mergedRef = useMergeRefs(ref as any, webProps.ref as any);
 
   return (
     <div

@@ -1,4 +1,4 @@
-import { isValidElement, forwardRef, ComponentRef, useMemo } from 'react';
+import { isValidElement, forwardRef, useMemo } from 'react';
 import { View, Pressable, Text } from 'react-native';
 import { useUnistyles } from 'react-native-unistyles';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
@@ -7,8 +7,9 @@ import { listStyles } from './List.styles';
 import type { ListItemProps } from './types';
 import { useListContext } from './ListContext';
 import { getNativeSelectableAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const ListItem = forwardRef<ComponentRef<typeof View> | ComponentRef<typeof Pressable>, ListItemProps & { isLast?: boolean }>(({
+const ListItem = forwardRef<IdealystElement, ListItemProps & { isLast?: boolean }>(({
   id,
   label,
   children,

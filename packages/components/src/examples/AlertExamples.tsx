@@ -26,7 +26,7 @@ export const AlertExamples = () => {
             />
 
             <Alert
-              intent="error"
+              intent="danger"
               title="Error"
               message="There was an error processing your request."
             />
@@ -139,7 +139,7 @@ export const AlertExamples = () => {
             {errorVisible && (
               <Alert
                 type="outlined"
-                intent="error"
+                intent="danger"
                 title="Dismissible Error"
                 message="This outlined alert can also be dismissed."
                 dismissible
@@ -234,7 +234,7 @@ export const AlertExamples = () => {
           <Text typography="h5">All Intent Colors (Soft Variant)</Text>
 
           <View gap="sm">
-            {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
+            {(['primary', 'success', 'danger', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}
                 type="soft"
@@ -249,7 +249,7 @@ export const AlertExamples = () => {
           <Text typography="h5">All Intent Colors (Outlined Variant)</Text>
 
           <View gap="sm">
-            {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
+            {(['primary', 'success', 'danger', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}
                 type="outlined"
@@ -264,7 +264,7 @@ export const AlertExamples = () => {
           <Text typography="h5">All Intent Colors (Filled Variant)</Text>
 
           <View gap="sm">
-            {(['primary', 'success', 'error', 'warning', 'info', 'neutral'] as const).map((intent) => (
+            {(['primary', 'success', 'danger', 'warning', 'info', 'neutral'] as const).map((intent) => (
               <Alert
                 key={intent}
                 type="filled"

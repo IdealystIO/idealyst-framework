@@ -18,3 +18,15 @@ export { deepMerge, isPlainObject } from './styleHelpers';
 
 // Accessibility utilities
 export * from './accessibility';
+
+// Cross-platform ref types
+export type {
+  IdealystElement,
+  AnchorElement,
+  AnchorRef,
+  ComponentElement,
+  WebElement,
+  NativeElement,
+  CrossPlatformElement,
+  CrossPlatformRef,
+} from './refTypes';

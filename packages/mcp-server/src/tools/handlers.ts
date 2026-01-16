@@ -3,16 +3,27 @@
  *
  * Implementation functions for all MCP tools.
  * These handlers can be used directly or through an MCP server.
+ *
+ * Component documentation now uses:
+ * - Types: Dynamically loaded from @idealyst/tooling via generated/types.json
+ * - Examples: Type-checked .examples.tsx files in examples/components/
+ * - Metadata: Minimal static metadata (category, description, features, best practices)
  */
 
-import { components } from "../data/components/index.js";
+import {
+  componentMetadata,
+  getComponentMetadata,
+  getComponentNames,
+  searchComponents as searchComponentsData,
+  getComponentsByCategory,
+} from "../data/component-metadata.js";
 import { cliCommands } from "../data/cli-commands.js";
 import { translateGuides } from "../data/translate-guides.js";
 import { storageGuides } from "../data/storage-guides.js";
 import {
   packages,
   getPackageSummary,
-  getPackagesByCategory,
+  getPackagesByCategory as getPackagesByCat,
   searchPackages as searchPackagesData,
 } from "../data/packages.js";
 import {
@@ -79,46 +90,77 @@ function jsonResponse(data: unknown): ToolResponse {
  * List all available Idealyst components with brief descriptions
  */
 export function listComponents(_args: ListComponentsArgs = {}): ToolResponse {
-  const componentList = Object.entries(components).map(([name, data]) => ({
-    name,
-    category: data.category,
-    description: data.description,
-  }));
+  const componentList = getComponentNames().map((name) => {
+    const meta = getComponentMetadata(name);
+    return {
+      name,
+      category: meta?.category || "unknown",
+      description: meta?.description || "",
+    };
+  });
 
   return jsonResponse(componentList);
 }
 
 /**
  * Get detailed documentation for a specific component
+ *
+ * Returns:
+ * - Description and category from metadata
+ * - TypeScript props from dynamic types
+ * - Features and best practices from metadata
+ * - Type-checked examples from .examples.tsx files
  */
 export function getComponentDocs(args: GetComponentDocsArgs): ToolResponse {
   const componentName = args.component;
-  const component = components[componentName];
+  const meta = getComponentMetadata(componentName);
 
-  if (!component) {
+  if (!meta) {
     return textResponse(
-      `Component "${componentName}" not found. Available components: ${Object.keys(components).join(", ")}`
+      `Component "${componentName}" not found. Available components: ${getComponentNames().join(", ")}`
     );
+  }
+
+  // Get TypeScript types for props documentation
+  let propsSection = "";
+  try {
+    const types = getTypesFromFile(componentName, "typescript");
+    propsSection = `## Props (TypeScript)
+
+\`\`\`typescript
+${types.typescript}
+\`\`\``;
+  } catch {
+    propsSection = "## Props\n\n_Types not available. Run `yarn extract-types` to generate._";
+  }
+
+  // Get type-checked examples
+  let examplesSection = "";
+  const examples = getComponentExamplesFromFile(componentName);
+  if (examples) {
+    examplesSection = `## Examples
+
+\`\`\`tsx
+${examples}
+\`\`\``;
   }
 
   const docs = `# ${componentName}
 
-${component.description}
+${meta.description}
 
 ## Category
-${component.category}
+${meta.category}
 
-## Props
-${component.props}
-
-## Usage Examples
-${component.usage}
+${propsSection}
 
 ## Features
-${component.features.map((f: string) => `- ${f}`).join("\n")}
+${meta.features.map((f) => `- ${f}`).join("\n")}
 
 ## Best Practices
-${component.bestPractices.map((bp: string) => `- ${bp}`).join("\n")}
+${meta.bestPractices.map((bp) => `- ${bp}`).join("\n")}
+
+${examplesSection}
 `;
 
   return textResponse(docs);
@@ -126,48 +168,54 @@ ${component.bestPractices.map((bp: string) => `- ${bp}`).join("\n")}
 
 /**
  * Get a code example for a specific component
+ *
+ * Returns the type-checked example file content.
+ * The example_type parameter is kept for API compatibility but all examples
+ * are now in a single .examples.tsx file.
  */
 export function getComponentExample(args: GetComponentExampleArgs): ToolResponse {
   const componentName = args.component;
-  const exampleType = args.example_type || "basic";
-  const component = components[componentName];
+  const meta = getComponentMetadata(componentName);
 
-  if (!component) {
+  if (!meta) {
     return textResponse(`Component "${componentName}" not found.`);
   }
 
-  const example = component.examples[exampleType] || component.examples.basic;
+  const examples = getComponentExamplesFromFile(componentName);
+  if (!examples) {
+    return textResponse(
+      `No examples found for "${componentName}". Examples are in packages/mcp-server/examples/components/${componentName}.examples.tsx`
+    );
+  }
 
-  return textResponse(example);
+  return textResponse(examples);
 }
 
 /**
  * Search for components by name, category, or feature
  */
 export function searchComponents(args: SearchComponentsArgs = {}): ToolResponse {
-  const query = args.query?.toLowerCase() || "";
+  const query = args.query || "";
   const category = args.category;
 
-  let results = Object.entries(components);
-
-  if (category) {
-    results = results.filter(([_, data]) => data.category === category);
-  }
+  let results: string[];
 
   if (query) {
-    results = results.filter(
-      ([name, data]) =>
-        name.toLowerCase().includes(query) ||
-        data.description.toLowerCase().includes(query) ||
-        data.features.some((f: string) => f.toLowerCase().includes(query))
-    );
+    results = searchComponentsData(query, category);
+  } else if (category) {
+    results = getComponentsByCategory(category);
+  } else {
+    results = getComponentNames();
   }
 
-  const resultList = results.map(([name, data]) => ({
-    name,
-    category: data.category,
-    description: data.description,
-  }));
+  const resultList = results.map((name) => {
+    const meta = getComponentMetadata(name);
+    return {
+      name,
+      category: meta?.category || "unknown",
+      description: meta?.description || "",
+    };
+  });
 
   return jsonResponse(resultList);
 }
@@ -191,6 +239,9 @@ export function getComponentTypes(args: GetComponentTypesArgs): ToolResponse {
 
 /**
  * Get validated TypeScript examples for a component
+ *
+ * These examples are type-checked against the actual component props
+ * to ensure they compile and are correct.
  */
 export function getComponentExamplesTs(args: GetComponentExamplesTsArgs): ToolResponse {
   const componentName = args.component;
@@ -198,8 +249,9 @@ export function getComponentExamplesTs(args: GetComponentExamplesTsArgs): ToolRe
   try {
     const examples = getComponentExamplesFromFile(componentName);
     if (!examples) {
+      const availableComponents = getAvailableComponents();
       return textResponse(
-        `No TypeScript examples found for component "${componentName}". Available components with examples: ${getAvailableComponents().join(", ")}`
+        `No TypeScript examples found for component "${componentName}". Available components with examples: ${availableComponents.join(", ")}`
       );
     }
 
@@ -380,7 +432,7 @@ export function listPackages(args: ListPackagesArgs = {}): ToolResponse {
 
   if (category) {
     // Filter by specific category
-    const byCategory = getPackagesByCategory();
+    const byCategory = getPackagesByCat();
     const packageList = (byCategory[category] || []).map((pkg) => ({
       name: pkg.name,
       npmName: pkg.npmName,

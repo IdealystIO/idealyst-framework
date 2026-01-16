@@ -104,7 +104,7 @@ export const DividerExamples = () => {
           
           <Card type="outlined" padding="md">
             <Text>Error divider</Text>
-            <Divider intent="error" />
+            <Divider intent="danger" />
             <Text>Content below</Text>
           </Card>
           

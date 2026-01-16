@@ -43,7 +43,7 @@ export const ProgressExamples: React.FC = () => {
           <Progress value={70} intent="primary" />
           <Progress value={70} intent="success" />
           <Progress value={70} intent="warning" />
-          <Progress value={70} intent="error" />
+          <Progress value={70} intent="danger" />
           <Progress value={70} intent="neutral" />
         </View>
       </View>

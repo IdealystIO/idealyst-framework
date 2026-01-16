@@ -5,9 +5,9 @@ import { BaseProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type DividerIntentVariant = Intent;
+export type DividerSizeVariant = Size;
 export type DividerOrientationVariant = 'horizontal' | 'vertical';
 export type DividerType = 'solid' | 'dashed' | 'dotted';
-export type DividerThicknessVariant = 'thin' | 'md' | 'thick';
 export type DividerLengthVariant = 'full' | 'auto' | number;
 export type DividerSpacingVariant = 'none' | Size;
 
@@ -27,9 +27,9 @@ export interface DividerProps extends BaseProps {
   type?: DividerType;
 
   /**
-   * The thickness of the divider
+   * The size (thickness) of the divider
    */
-  thickness?: DividerThicknessVariant;
+  size?: DividerSizeVariant;
 
   /**
    * The color intent of the divider

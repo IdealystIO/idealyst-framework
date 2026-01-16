@@ -1,7 +1,11 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, RefObject } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { BaseProps } from '../utils/viewStyleProps';
 import { InteractiveAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
+
+// Re-export for convenience
+export type { IdealystElement };
 
 export type PopoverPlacement =
   | 'top' | 'top-start' | 'top-end'
@@ -21,10 +25,17 @@ export interface PopoverProps extends BaseProps, InteractiveAccessibilityProps {
   onOpenChange: (open: boolean) => void;
 
   /**
-   * The anchor element to position the popover relative to
-   * Can be a React element or a ref to a DOM element
+   * The anchor element to position the popover relative to.
+   * Can be a React element or a ref to any DOM/RN element.
+   *
+   * @example
+   * ```tsx
+   * const anchorRef = React.useRef<AnchorElement>(null);
+   * <Button ref={anchorRef}>Open</Button>
+   * <Popover anchor={anchorRef} ... />
+   * ```
    */
-  anchor: ReactNode | React.RefObject<Element>;
+  anchor: ReactNode | RefObject<IdealystElement>;
 
   /**
    * The content to display inside the popover

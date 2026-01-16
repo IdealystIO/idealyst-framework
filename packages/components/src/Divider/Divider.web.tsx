@@ -3,15 +3,16 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { DividerProps } from './types';
 import { dividerStyles } from './Divider.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Visual separator for dividing content sections horizontally or vertically.
  * Supports solid, dashed, and dotted styles with optional text content.
  */
-const Divider = forwardRef<HTMLDivElement, DividerProps>(({
+const Divider = forwardRef<IdealystElement, DividerProps>(({
   orientation = 'horizontal',
   type = 'solid',
-  thickness = 'thin',
+  size = 'sm',
   intent = 'neutral',
   length = 'full',
   spacing = 'md',
@@ -31,7 +32,7 @@ const Divider = forwardRef<HTMLDivElement, DividerProps>(({
   // Get dynamic divider style
   const dividerStyle = (dividerStyles.divider as any)({
     orientation,
-    thickness,
+    size,
     type,
     intent,
     spacing,
@@ -40,7 +41,7 @@ const Divider = forwardRef<HTMLDivElement, DividerProps>(({
   // Get dynamic line style
   const lineStyle = (dividerStyles.line as any)({
     orientation,
-    thickness,
+    size,
   });
 
   // Generate web props

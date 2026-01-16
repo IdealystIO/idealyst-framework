@@ -24,3 +24,7 @@ export * from './componentStyles';
 export * from './responsive';
 export * from './breakpoints';
 export * from './useResponsiveStyle';
+
+// Animation tokens and utilities
+// Note: Use '@idealyst/theme/animation' for full animation API
+export { durations, easings, presets } from './animation/tokens';

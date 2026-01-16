@@ -96,7 +96,7 @@ export type ComponentRegistry = Record<string, ComponentDefinition>;
  * Theme values extracted from the theme configuration
  */
 export interface ThemeValues {
-  /** Intent names (e.g., ['primary', 'success', 'error', ...]) */
+  /** Intent names (e.g., ['primary', 'success', 'danger', ...]) */
   intents: string[];
 
   /** Size keys per component (e.g., { button: ['xs', 'sm', 'md', ...], ... }) */

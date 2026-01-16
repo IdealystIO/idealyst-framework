@@ -260,7 +260,7 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
     helperText: ({ error = false }: SelectDynamicProps) => ({
         fontSize: 12,
         marginTop: 4,
-        color: error ? theme.intents.error.primary : theme.colors.text.secondary,
+        color: error ? theme.intents.danger.primary : theme.colors.text.secondary,
     }),
 
     overlay: (_props: SelectDynamicProps) => ({

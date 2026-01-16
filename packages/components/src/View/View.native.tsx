@@ -3,6 +3,7 @@ import { View as RNView, ScrollView as RNScrollView, ViewStyle, StyleSheet } fro
 import { useResponsiveStyle, ResponsiveStyle } from '@idealyst/theme';
 import { ViewProps } from './types';
 import { viewStyles } from './View.styles';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Check if a style object contains any responsive values
@@ -22,7 +23,7 @@ function hasResponsiveValues(style: any): style is ResponsiveStyle {
   return false;
 }
 
-const View = forwardRef<RNView | RNScrollView, ViewProps>(({
+const View = forwardRef<IdealystElement, ViewProps>(({
   children,
   background = 'transparent',
   radius = 'none',

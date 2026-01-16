@@ -5,12 +5,12 @@ import type { ProgressProps } from './types';
 
 /**
  * Visual indicator for task completion or loading status.
- * Supports linear and circular variants with determinate or indeterminate states.
+ * Supports linear and circular types with determinate or indeterminate states.
  */
 const Progress: React.FC<ProgressProps> = ({
   value = 0,
   max = 100,
-  variant = 'linear',
+  type = 'linear',
   intent = 'primary',
   size = 'md',
   indeterminate = false,
@@ -43,7 +43,7 @@ const Progress: React.FC<ProgressProps> = ({
     return 48;
   };
 
-  if (variant === 'circular') {
+  if (type === 'circular') {
     const circularSize = getCircularSize();
     const strokeWidth = size === 'sm' ? 3 : size === 'lg' ? 5 : 4;
     const radius = (circularSize - strokeWidth) / 2;

@@ -105,7 +105,7 @@ export type MicrophoneState =
   | 'recording' // Actively capturing
   | 'paused' // Paused (native only - web must stop/start)
   | 'stopping' // Cleaning up
-  | 'error'; // Error state
+  | 'danger'; // Error state
 
 export interface MicrophoneStatus {
   state: MicrophoneState;

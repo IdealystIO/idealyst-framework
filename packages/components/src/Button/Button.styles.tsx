@@ -70,12 +70,12 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
             // $iterator expands for each button size
             type: {
                 contained: {
-                    backgroundColor: theme.intents[intent].primary,
+                    backgroundColor: theme.$intents.primary,
                     borderColor: 'transparent',
                 },
                 outlined: {
                     backgroundColor: 'transparent',
-                    borderColor: theme.intents[intent].primary,
+                    borderColor: theme.$intents.primary,
                 },
                 text: {
                     backgroundColor: 'transparent',

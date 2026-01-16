@@ -14,13 +14,14 @@ import Text from '../Text';
 import { progressStyles } from './Progress.styles';
 import type { ProgressProps } from './types';
 import { Theme } from '@idealyst/theme';
+import type { IdealystElement } from '../utils/refTypes';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const Progress = forwardRef<View, ProgressProps>(({
+const Progress = forwardRef<IdealystElement, ProgressProps>(({
   value = 0,
   max = 100,
-  variant = 'linear',
+  type = 'linear',
   intent = 'primary',
   size = 'md',
   indeterminate = false,
@@ -78,7 +79,7 @@ const Progress = forwardRef<View, ProgressProps>(({
     return 48;
   };
 
-  if (variant === 'circular') {
+  if (type === 'circular') {
     const circularSize = getCircularSize();
     const strokeWidth = size === 'sm' ? 3 : size === 'lg' ? 5 : 4;
     const radius = (circularSize - strokeWidth) / 2;
@@ -166,7 +167,7 @@ const Progress = forwardRef<View, ProgressProps>(({
   const linearTrackStyle = (progressStyles.linearTrack as any)({});
 
   return (
-    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} accessibilityRole="progressbar">
+    <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID} accessibilityRole="progressbar">
       <View style={linearTrackStyle}>
         {indeterminate ? (
           <Animated.View style={[indeterminateBarStyle, indeterminateAnimatedStyle]} />

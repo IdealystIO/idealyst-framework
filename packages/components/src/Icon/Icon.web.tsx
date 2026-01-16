@@ -7,12 +7,13 @@ import { useUnistyles } from 'react-native-unistyles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getColorFromString, Intent, Color, Text } from '@idealyst/theme';
 import { IconRegistry } from './IconRegistry';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Vector icon display from the Material Design Icons library.
  * Supports intent-based coloring and theme-aware sizing.
  */
-const Icon = forwardRef<HTMLSpanElement, IconProps>((props, ref) => {
+const Icon = forwardRef<IdealystElement, IconProps>((props, ref) => {
   const {
     name,
     size = 'md',

@@ -7,7 +7,7 @@ function DemoMenu(props: any) {
   const items = [
     { id: 'edit', label: 'Edit', icon: 'pencil' },
     { id: 'copy', label: 'Copy', icon: 'content-copy' },
-    { id: 'delete', label: 'Delete', icon: 'delete', intent: 'error' },
+    { id: 'delete', label: 'Delete', icon: 'delete', intent: 'danger' },
   ];
   return (
     <Menu {...props} items={items}>

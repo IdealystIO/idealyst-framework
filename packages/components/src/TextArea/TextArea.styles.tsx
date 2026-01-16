@@ -117,7 +117,7 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
         fontSize: 12,
         variants: {
             hasError: {
-                true: { color: theme.intents.error.primary },
+                true: { color: theme.intents.danger.primary },
                 false: { color: theme.colors.text.secondary },
             },
         },
@@ -136,7 +136,7 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
         color: theme.colors.text.secondary,
         variants: {
             isAtLimit: {
-                true: { color: theme.intents.error.primary },
+                true: { color: theme.intents.danger.primary },
                 false: {},
             },
             isNearLimit: {

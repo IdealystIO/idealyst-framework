@@ -67,63 +67,61 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
         },
     }),
 
-    checkbox: ({ intent = 'primary', type = 'default', checked = false, disabled = false }: CheckboxDynamicProps) => {
-        const intentColors = theme.intents[intent];
-
-        // Base border styles based on type
-        const borderWidth = type === 'outlined' ? 2 : 1;
-
-        // Checked state colors
-        const backgroundColor = checked ? intentColors.primary : 'transparent';
-        const borderColor = checked ? intentColors.primary : theme.colors.border.primary;
-
-        return {
-            alignItems: 'center' as const,
-            justifyContent: 'center' as const,
-            borderRadius: 4,
-            position: 'relative' as const,
-            backgroundColor,
-            borderColor,
-            borderWidth,
-            borderStyle: 'solid' as const,
-            opacity: disabled ? 0.5 : 1,
-            variants: {
-                size: {
-                    xs: { width: 14, height: 14 },
-                    sm: { width: 16, height: 16 },
-                    md: { width: 20, height: 20 },
-                    lg: { width: 24, height: 24 },
-                    xl: { width: 28, height: 28 },
+    checkbox: (_props: CheckboxDynamicProps) => ({
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        borderRadius: 4,
+        position: 'relative' as const,
+        borderStyle: 'solid' as const,
+        variants: {
+            size: {
+                xs: { width: 14, height: 14 },
+                sm: { width: 16, height: 16 },
+                md: { width: 20, height: 20 },
+                lg: { width: 24, height: 24 },
+                xl: { width: 28, height: 28 },
+            },
+            type: {
+                default: { borderWidth: 1 },
+                outlined: { borderWidth: 2 },
+            },
+            checked: {
+                true: {
+                    backgroundColor: theme.$intents.primary,
+                    borderColor: theme.$intents.primary,
+                },
+                false: {
+                    backgroundColor: 'transparent',
+                    borderColor: theme.colors.border.primary,
                 },
             },
-            _web: {
-                outline: 'none',
-                display: 'flex',
-                boxSizing: 'border-box',
-                userSelect: 'none',
-                WebkitAppearance: 'none',
-                MozAppearance: 'none',
-                appearance: 'none',
-                transition: 'all 0.2s ease',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                border: `${borderWidth}px solid ${borderColor}`,
-                _focus: {
-                    outline: `2px solid ${theme.intents.primary.primary}`,
-                    outlineOffset: '2px',
-                },
-                _hover: disabled ? {} : { opacity: 0.8 },
-                _active: disabled ? {} : { opacity: 0.6 },
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
             },
-        } as const;
-    },
+        },
+        _web: {
+            outline: 'none',
+            display: 'flex',
+            boxSizing: 'border-box',
+            userSelect: 'none',
+            WebkitAppearance: 'none',
+            MozAppearance: 'none',
+            appearance: 'none',
+            transition: 'all 0.2s ease',
+            _focus: {
+                outline: `2px solid ${theme.intents.primary.primary}`,
+                outlineOffset: '2px',
+            },
+        },
+    }),
 
-    checkmark: ({ checked = false }: CheckboxDynamicProps) => ({
+    checkmark: (_props: CheckboxDynamicProps) => ({
         position: 'absolute' as const,
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         color: '#ffffff',
-        opacity: checked ? 1 : 0,
         variants: {
             size: {
                 xs: { width: 10, height: 10 },
@@ -132,12 +130,15 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
                 lg: { width: 16, height: 16 },
                 xl: { width: 20, height: 20 },
             },
+            checked: {
+                true: { opacity: 1 },
+                false: { opacity: 0 },
+            },
         },
     }),
 
-    label: ({ disabled = false }: CheckboxDynamicProps) => ({
+    label: (_props: CheckboxDynamicProps) => ({
         color: theme.colors.text.primary,
-        opacity: disabled ? 0.5 : 1,
         variants: {
             size: {
                 xs: { fontSize: 12 },
@@ -145,6 +146,10 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
                 md: { fontSize: 16 },
                 lg: { fontSize: 18 },
                 xl: { fontSize: 20 },
+            },
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
             },
         },
         _web: {
@@ -155,9 +160,14 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
         },
     }),
 
-    helperText: ({ error = false }: CheckboxDynamicProps) => ({
+    helperText: (_props: CheckboxDynamicProps) => ({
         fontSize: 14,
-        color: error ? theme.intents.error.primary : theme.colors.text.secondary,
         marginTop: 2,
+        variants: {
+            error: {
+                true: { color: theme.intents.danger.primary },
+                false: { color: theme.colors.text.secondary },
+            },
+        },
     }),
 }));

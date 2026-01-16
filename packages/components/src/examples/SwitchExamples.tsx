@@ -94,7 +94,7 @@ export const SwitchExamples: React.FC = () => {
           <Switch
             checked={intentChecked.error}
             onCheckedChange={(checked) => setIntentChecked(prev => ({ ...prev, error: checked }))}
-            intent="error"
+            intent="danger"
             label="Error"
           />
           <Switch
@@ -152,7 +152,7 @@ export const SwitchExamples: React.FC = () => {
             onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, wifi: checked }))}
             enabledIcon="wifi"
             disabledIcon="wifi-off"
-            intent="error"
+            intent="danger"
             label="WiFi Connection"
             size="sm"
           />

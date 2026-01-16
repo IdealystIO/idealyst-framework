@@ -33,7 +33,7 @@ export function BasicSelect() {
     <Select
       options={fruitOptions}
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       placeholder="Select a fruit"
     />
   );
@@ -49,14 +49,14 @@ export function SelectTypes() {
         type="outlined"
         options={fruitOptions}
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         placeholder="Outlined"
       />
       <Select
         type="filled"
         options={fruitOptions}
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         placeholder="Filled"
       />
     </View>
@@ -73,35 +73,35 @@ export function SelectSizes() {
         size="xs"
         options={fruitOptions}
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         placeholder="Extra Small"
       />
       <Select
         size="sm"
         options={fruitOptions}
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         placeholder="Small"
       />
       <Select
         size="md"
         options={fruitOptions}
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         placeholder="Medium"
       />
       <Select
         size="lg"
         options={fruitOptions}
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         placeholder="Large"
       />
       <Select
         size="xl"
         options={fruitOptions}
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         placeholder="Extra Large"
       />
     </View>
@@ -117,7 +117,7 @@ export function SelectWithLabel() {
       label="Country"
       options={countryOptions}
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       placeholder="Select your country"
     />
   );
@@ -132,7 +132,7 @@ export function SelectWithHelperText() {
       label="Shipping Country"
       options={countryOptions}
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       placeholder="Select country"
       helperText="Choose where you want your order shipped"
     />
@@ -152,7 +152,7 @@ export function SelectWithError() {
         label="Country *"
         options={countryOptions}
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         placeholder="Select country"
         error={hasError}
         helperText={hasError ? 'Please select a country' : 'Required field'}
@@ -167,7 +167,7 @@ export function DisabledSelect() {
     <Select
       options={fruitOptions}
       value="apple"
-      onValueChange={() => {}}
+      onChange={() => {}}
       placeholder="Select a fruit"
       disabled
     />
@@ -205,7 +205,7 @@ export function SearchableSelect() {
       label="Country"
       options={largeOptions}
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       placeholder="Search for a country..."
       searchable
       maxHeight={300}
@@ -230,7 +230,7 @@ export function SelectWithDisabledOptions() {
       label="Select a fruit"
       options={optionsWithDisabled}
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       placeholder="Some options are disabled"
       helperText="Banana and Grape are out of stock"
     />
@@ -257,21 +257,21 @@ export function FormWithSelects() {
         label="Country"
         options={countryOptions}
         value={country}
-        onValueChange={setCountry}
+        onChange={setCountry}
         placeholder="Select country"
       />
       <Select
         label="Favorite Fruit"
         options={fruitOptions}
         value={fruit}
-        onValueChange={setFruit}
+        onChange={setFruit}
         placeholder="Select fruit"
       />
       <Select
         label="Size"
         options={sizeOptions}
         value={size}
-        onValueChange={setSize}
+        onChange={setSize}
         placeholder="Select size"
       />
     </View>

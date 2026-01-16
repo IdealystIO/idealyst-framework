@@ -96,7 +96,7 @@ export const LinkExamples = () => {
             </Link>
             <Link to="/favorites" onPress={() => handlePress('favorites')}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                <Icon name="heart" size={20} intent="error" />
+                <Icon name="heart" size={20} intent="danger" />
                 <Text color="primary">Favorites</Text>
               </View>
             </Link>

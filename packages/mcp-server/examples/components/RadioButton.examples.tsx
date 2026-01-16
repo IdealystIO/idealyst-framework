@@ -102,11 +102,11 @@ export function RadioButtonWithIntent() {
         intent="success"
       />
       <RadioButton
-        value="error"
-        checked={selected === 'error'}
-        onPress={() => setSelected('error')}
-        label="Error"
-        intent="error"
+        value="danger"
+        checked={selected === 'danger'}
+        onPress={() => setSelected('danger')}
+        label="Danger"
+        intent="danger"
       />
       <RadioButton
         value="warning"
@@ -139,7 +139,7 @@ export function RadioButtonGroup() {
 
   return (
     <View spacing="md">
-      <Text weight="bold" size="md">
+      <Text weight="bold" typography="body1">
         Contact Preference
       </Text>
       <View spacing="sm">
@@ -168,7 +168,7 @@ export function RadioButtonGroup() {
           label="Do not contact me"
         />
       </View>
-      <Text size="sm" >
+      <Text typography="body2">
         Selected: {preference}
       </Text>
     </View>
@@ -217,7 +217,7 @@ export function ShippingMethodSelection() {
 
   return (
     <View spacing="lg">
-      <Text weight="bold" size="lg">
+      <Text weight="bold" typography="subtitle1">
         Select Shipping Method
       </Text>
       <View spacing="md">
@@ -239,7 +239,7 @@ export function ShippingMethodSelection() {
               label={option.label}
             />
             <View spacing="xs">
-              <Text size="sm" >
+              <Text typography="body2">
                 {option.price} • {option.duration}
               </Text>
             </View>
@@ -256,7 +256,7 @@ export function PaymentMethodSelection() {
 
   return (
     <View spacing="lg">
-      <Text weight="bold" size="lg">
+      <Text weight="bold" typography="subtitle1">
         Payment Method
       </Text>
       <View spacing="md">
@@ -301,7 +301,7 @@ export function SubscriptionPlanSelection() {
 
   return (
     <View spacing="lg">
-      <Text weight="bold" size="lg">
+      <Text weight="bold" typography="subtitle1">
         Choose Your Plan
       </Text>
       <View spacing="md">
@@ -324,10 +324,10 @@ export function SubscriptionPlanSelection() {
               intent={plan === planOption.value ? 'primary' : 'neutral'}
             />
             <View spacing="xs">
-              <Text weight="bold" size="lg">
+              <Text weight="bold" typography="subtitle1">
                 {planOption.price}
               </Text>
-              <Text size="sm" >
+              <Text typography="body2">
                 {planOption.features}
               </Text>
             </View>
@@ -345,10 +345,10 @@ export function SurveyQuestion() {
   return (
     <View spacing="lg">
       <View spacing="sm">
-        <Text weight="bold" size="md">
+        <Text weight="bold" typography="body1">
           How satisfied are you with our service?
         </Text>
-        <Text size="sm" >
+        <Text typography="body2">
           Please select one option
         </Text>
       </View>
@@ -384,7 +384,7 @@ export function SurveyQuestion() {
           checked={satisfaction === 'very-dissatisfied'}
           onPress={() => setSatisfaction('very-dissatisfied')}
           label="Very Dissatisfied"
-          intent="error"
+          intent="danger"
         />
       </View>
     </View>
@@ -397,7 +397,7 @@ export function NotificationFrequency() {
 
   return (
     <View spacing="lg">
-      <Text weight="bold" size="lg">
+      <Text weight="bold" typography="subtitle1">
         Notification Frequency
       </Text>
       <View spacing="md">
@@ -407,7 +407,7 @@ export function NotificationFrequency() {
           onPress={() => setFrequency('realtime')}
           label="Real-time"
         />
-        <Text size="sm"  style={{ marginLeft: 32 }}>
+        <Text typography="body2" style={{ marginLeft: 32 }}>
           Get notified immediately when something happens
         </Text>
         <RadioButton
@@ -416,7 +416,7 @@ export function NotificationFrequency() {
           onPress={() => setFrequency('daily')}
           label="Daily Digest"
         />
-        <Text size="sm"  style={{ marginLeft: 32 }}>
+        <Text typography="body2" style={{ marginLeft: 32 }}>
           Receive a summary once per day
         </Text>
         <RadioButton
@@ -425,7 +425,7 @@ export function NotificationFrequency() {
           onPress={() => setFrequency('weekly')}
           label="Weekly Digest"
         />
-        <Text size="sm"  style={{ marginLeft: 32 }}>
+        <Text typography="body2" style={{ marginLeft: 32 }}>
           Receive a summary once per week
         </Text>
         <RadioButton
@@ -434,7 +434,7 @@ export function NotificationFrequency() {
           onPress={() => setFrequency('never')}
           label="Never"
         />
-        <Text size="sm"  style={{ marginLeft: 32 }}>
+        <Text typography="body2" style={{ marginLeft: 32 }}>
           Don't send me any notifications
         </Text>
       </View>

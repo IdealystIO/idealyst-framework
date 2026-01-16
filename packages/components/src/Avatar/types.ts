@@ -5,7 +5,7 @@ import { AccessibilityProps } from '../utils/accessibility';
 
 // Component-specific type aliases for future extensibility
 export type AvatarColorVariant = Color;
-export type AvatarSizeVariant = 'sm' | 'md' | 'lg' | 'xl';
+export type AvatarSizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarShapeVariant = 'circle' | 'square';
 
 /**

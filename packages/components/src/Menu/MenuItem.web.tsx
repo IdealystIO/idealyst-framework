@@ -5,6 +5,7 @@ import type { MenuItem as MenuItemType, MenuSizeVariant } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
 interface MenuItemProps {
   item: MenuItemType;
@@ -13,7 +14,7 @@ interface MenuItemProps {
   testID?: string;
 }
 
-const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
+const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
   // Initialize styles with useVariants (for size and disabled)
   menuItemStyles.useVariants({
     size,

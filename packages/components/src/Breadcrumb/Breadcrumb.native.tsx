@@ -6,6 +6,7 @@ import Icon from '../Icon';
 import type { IconName } from '../Icon/icon-types';
 import Menu from '../Menu/Menu.native';
 import type { MenuItem } from '../Menu/types';
+import type { IdealystElement } from '../utils/refTypes';
 
 interface BreadcrumbItemProps {
   item: BreadcrumbItemType;
@@ -113,7 +114,7 @@ const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent })
   );
 };
 
-const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
+const Breadcrumb = forwardRef<IdealystElement, BreadcrumbProps>(({
   items,
   separator = '/',
   maxItems,
@@ -169,7 +170,7 @@ const Breadcrumb = forwardRef<View, BreadcrumbProps>(({
 
   return (
     <View
-      ref={ref}
+      ref={ref as any}
       nativeID={id}
       style={[containerStyle, style]}
       testID={testID}

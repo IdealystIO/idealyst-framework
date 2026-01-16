@@ -12,8 +12,8 @@ import { Progress, View, Text, Button } from '@idealyst/components';
 export function BasicLinearProgress() {
   return (
     <View spacing="md">
-      <Progress value={50} max={100} variant="linear" />
-      <Text size="sm" >
+      <Progress value={50} max={100} type="linear" />
+      <Text typography="body2">
         50% complete
       </Text>
     </View>
@@ -24,8 +24,8 @@ export function BasicLinearProgress() {
 export function BasicCircularProgress() {
   return (
     <View spacing="md">
-      <Progress value={75} max={100} variant="circular" />
-      <Text size="sm" >
+      <Progress value={75} max={100} type="circular" />
+      <Text typography="body2">
         75% complete
       </Text>
     </View>
@@ -38,20 +38,20 @@ export function ProgressSizes() {
     <View spacing="lg">
       <View spacing="sm">
         <Text weight="semibold">Linear Sizes</Text>
-        <Progress value={60} variant="linear" size="xs" />
-        <Progress value={60} variant="linear" size="sm" />
-        <Progress value={60} variant="linear" size="md" />
-        <Progress value={60} variant="linear" size="lg" />
-        <Progress value={60} variant="linear" size="xl" />
+        <Progress value={60} type="linear" size="xs" />
+        <Progress value={60} type="linear" size="sm" />
+        <Progress value={60} type="linear" size="md" />
+        <Progress value={60} type="linear" size="lg" />
+        <Progress value={60} type="linear" size="xl" />
       </View>
       <View spacing="sm">
         <Text weight="semibold">Circular Sizes</Text>
         <View spacing="sm">
-          <Progress value={60} variant="circular" size="xs" />
-          <Progress value={60} variant="circular" size="sm" />
-          <Progress value={60} variant="circular" size="md" />
-          <Progress value={60} variant="circular" size="lg" />
-          <Progress value={60} variant="circular" size="xl" />
+          <Progress value={60} type="circular" size="xs" />
+          <Progress value={60} type="circular" size="sm" />
+          <Progress value={60} type="circular" size="md" />
+          <Progress value={60} type="circular" size="lg" />
+          <Progress value={60} type="circular" size="xl" />
         </View>
       </View>
     </View>
@@ -63,24 +63,24 @@ export function ProgressWithIntent() {
   return (
     <View spacing="md">
       <View spacing="sm">
-        <Text size="sm">Primary</Text>
-        <Progress value={70} intent="primary" variant="linear" />
+        <Text typography="body2">Primary</Text>
+        <Progress value={70} intent="primary" type="linear" />
       </View>
       <View spacing="sm">
-        <Text size="sm">Success</Text>
-        <Progress value={70} intent="success" variant="linear" />
+        <Text typography="body2">Success</Text>
+        <Progress value={70} intent="success" type="linear" />
       </View>
       <View spacing="sm">
-        <Text size="sm">Error</Text>
-        <Progress value={70} intent="error" variant="linear" />
+        <Text typography="body2">Danger</Text>
+        <Progress value={70} intent="danger" type="linear" />
       </View>
       <View spacing="sm">
-        <Text size="sm">Warning</Text>
-        <Progress value={70} intent="warning" variant="linear" />
+        <Text typography="body2">Warning</Text>
+        <Progress value={70} intent="warning" type="linear" />
       </View>
       <View spacing="sm">
-        <Text size="sm">Info</Text>
-        <Progress value={70} intent="info" variant="linear" />
+        <Text typography="body2">Info</Text>
+        <Progress value={70} intent="info" type="linear" />
       </View>
     </View>
   );
@@ -90,9 +90,9 @@ export function ProgressWithIntent() {
 export function ProgressWithLabels() {
   return (
     <View spacing="md">
-      <Progress value={45} showLabel variant="linear" />
-      <Progress value={80} showLabel label="Installing..." variant="linear" intent="info" />
-      <Progress value={100} showLabel label="Complete!" variant="linear" intent="success" />
+      <Progress value={45} showLabel type="linear" />
+      <Progress value={80} showLabel label="Installing..." type="linear" intent="info" />
+      <Progress value={100} showLabel label="Complete!" type="linear" intent="success" />
     </View>
   );
 }
@@ -103,11 +103,11 @@ export function IndeterminateProgress() {
     <View spacing="md">
       <View spacing="sm">
         <Text weight="semibold">Linear Indeterminate</Text>
-        <Progress indeterminate variant="linear" intent="primary" />
+        <Progress indeterminate type="linear" intent="primary" />
       </View>
       <View spacing="sm">
         <Text weight="semibold">Circular Indeterminate</Text>
-        <Progress indeterminate variant="circular" intent="primary" />
+        <Progress indeterminate type="circular" intent="primary" />
       </View>
     </View>
   );
@@ -119,11 +119,11 @@ export function RoundedProgress() {
     <View spacing="md">
       <View spacing="sm">
         <Text>Standard corners</Text>
-        <Progress value={65} variant="linear" rounded={false} />
+        <Progress value={65} type="linear" rounded={false} />
       </View>
       <View spacing="sm">
         <Text>Rounded corners</Text>
-        <Progress value={65} variant="linear" rounded />
+        <Progress value={65} type="linear" rounded />
       </View>
     </View>
   );
@@ -146,8 +146,8 @@ export function AnimatedProgress() {
 
   return (
     <View spacing="md">
-      <Progress value={progress} showLabel variant="linear" intent="success" />
-      <Progress value={progress} showLabel variant="circular" intent="success" />
+      <Progress value={progress} showLabel type="linear" intent="success" />
+      <Progress value={progress} showLabel type="circular" intent="success" />
     </View>
   );
 }
@@ -184,13 +184,13 @@ export function FileUploadProgress() {
             value={progress}
             showLabel
             label="Uploading file..."
-            variant="linear"
+            type="linear"
             intent="info"
           />
         </View>
       )}
       {progress === 100 && !uploading && (
-        <Text size="sm" >
+        <Text typography="body2">
           Upload complete!
         </Text>
       )}
@@ -210,7 +210,7 @@ export function MultiStepProgress() {
         <Text weight="semibold">
           Step {currentStep} of {totalSteps}
         </Text>
-        <Progress value={progress} showLabel variant="linear" intent="primary" />
+        <Progress value={progress} showLabel type="linear" intent="primary" />
       </View>
       <View spacing="sm">
         <Button
@@ -262,8 +262,8 @@ export function DownloadProgress() {
       </Button>
       {downloading && (
         <View spacing="md">
-          <Progress value={progress} variant="linear" intent="success" />
-          <Text size="sm" >
+          <Progress value={progress} type="linear" intent="success" />
+          <Text typography="body2">
             {progress}% downloaded
           </Text>
         </View>
@@ -288,14 +288,14 @@ export function StorageUsageProgress() {
     <View spacing="md">
       <View spacing="xs">
         <Text weight="semibold">Storage Usage</Text>
-        <Text size="sm" >
+        <Text typography="body2">
           {usedStorage} GB of {totalStorage} GB used
         </Text>
       </View>
       <Progress
         value={percentage}
         showLabel
-        variant="linear"
+        type="linear"
         intent={getIntent()}
         rounded
       />
@@ -317,13 +317,13 @@ export function BatteryLevelProgress() {
     <View spacing="md">
       <View spacing="xs">
         <Text weight="semibold">Battery Level</Text>
-        <Text size="sm" >
+        <Text typography="body2">
           {batteryLevel}% remaining
         </Text>
       </View>
       <Progress
         value={batteryLevel}
-        variant="circular"
+        type="circular"
         showLabel
         intent={getIntent()}
       />

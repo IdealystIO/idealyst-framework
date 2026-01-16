@@ -85,7 +85,7 @@ export const CheckboxExamples = () => {
             label="Success checkbox"
           />
           <Checkbox
-            intent="error"
+            intent="danger"
             checked={errorChecked}
             onCheckedChange={setErrorChecked}
             label="Error checkbox"
@@ -200,7 +200,7 @@ export const CheckboxExamples = () => {
             onCheckedChange={() => {}}
             label="Checkbox with error"
             error="This field is required"
-            intent="error"
+            intent="danger"
           />
           <Checkbox
             checked={false}

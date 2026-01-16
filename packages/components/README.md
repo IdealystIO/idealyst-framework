@@ -198,15 +198,15 @@ The library includes a comprehensive theme system with light and dark mode suppo
 All components use a consistent intent-based color system:
 
 - `primary`: Main brand actions
-- `neutral`: Secondary actions  
+- `neutral`: Secondary actions
 - `success`: Positive actions (save, confirm)
-- `error`: Destructive actions (delete, cancel)
+- `danger`: Destructive actions (delete, cancel)
 - `warning`: Caution actions
 
 ```tsx
 <Button variant="contained" intent="primary">Primary Action</Button>
 <Button variant="contained" intent="success">Save</Button>
-<Button variant="contained" intent="error">Delete</Button>
+<Button variant="contained" intent="danger">Delete</Button>
 ```
 
 ### Theme Integration

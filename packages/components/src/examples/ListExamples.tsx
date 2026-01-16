@@ -155,7 +155,7 @@ export const ListExamples: React.FC = () => {
             label="Error Color"
             leading="alert-circle"
             trailing="chevron-right"
-            iconColor="error"
+            iconColor="danger"
             onPress={() => {}}
           />
           <ListItem

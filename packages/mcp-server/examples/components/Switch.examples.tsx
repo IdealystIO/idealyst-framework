@@ -13,7 +13,7 @@ export function BasicSwitch() {
   const [checked, setChecked] = React.useState(false);
 
   return (
-    <Switch checked={checked} onCheckedChange={setChecked} />
+    <Switch checked={checked} onChange={setChecked} />
   );
 }
 
@@ -23,11 +23,11 @@ export function SwitchSizes() {
 
   return (
     <>
-      <Switch checked={checked} onCheckedChange={setChecked} size="xs" />
-      <Switch checked={checked} onCheckedChange={setChecked} size="sm" />
-      <Switch checked={checked} onCheckedChange={setChecked} size="md" />
-      <Switch checked={checked} onCheckedChange={setChecked} size="lg" />
-      <Switch checked={checked} onCheckedChange={setChecked} size="xl" />
+      <Switch checked={checked} onChange={setChecked} size="xs" />
+      <Switch checked={checked} onChange={setChecked} size="sm" />
+      <Switch checked={checked} onChange={setChecked} size="md" />
+      <Switch checked={checked} onChange={setChecked} size="lg" />
+      <Switch checked={checked} onChange={setChecked} size="xl" />
     </>
   );
 }
@@ -38,11 +38,11 @@ export function SwitchIntents() {
 
   return (
     <>
-      <Switch checked={checked} onCheckedChange={setChecked} intent="primary" />
-      <Switch checked={checked} onCheckedChange={setChecked} intent="success" />
-      <Switch checked={checked} onCheckedChange={setChecked} intent="error" />
-      <Switch checked={checked} onCheckedChange={setChecked} intent="warning" />
-      <Switch checked={checked} onCheckedChange={setChecked} intent="info" />
+      <Switch checked={checked} onChange={setChecked} intent="primary" />
+      <Switch checked={checked} onChange={setChecked} intent="success" />
+      <Switch checked={checked} onChange={setChecked} intent="danger" />
+      <Switch checked={checked} onChange={setChecked} intent="warning" />
+      <Switch checked={checked} onChange={setChecked} intent="info" />
     </>
   );
 }
@@ -51,8 +51,8 @@ export function SwitchIntents() {
 export function DisabledSwitch() {
   return (
     <>
-      <Switch checked={false} onCheckedChange={() => {}} disabled />
-      <Switch checked={true} onCheckedChange={() => {}} disabled />
+      <Switch checked={false} onChange={() => {}} disabled />
+      <Switch checked={true} onChange={() => {}} disabled />
     </>
   );
 }
@@ -63,7 +63,7 @@ export function SwitchWithLabel() {
 
   return (
     <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Switch checked={checked} onCheckedChange={setChecked} />
+      <Switch checked={checked} onChange={setChecked} />
       <Text>Enable notifications</Text>
     </View>
   );
@@ -79,15 +79,15 @@ export function FormWithSwitches() {
     <View spacing="md">
       <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text>Push Notifications</Text>
-        <Switch checked={notifications} onCheckedChange={setNotifications} />
+        <Switch checked={notifications} onChange={setNotifications} />
       </View>
       <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text>Email Updates</Text>
-        <Switch checked={emailUpdates} onCheckedChange={setEmailUpdates} />
+        <Switch checked={emailUpdates} onChange={setEmailUpdates} />
       </View>
       <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text>Dark Mode</Text>
-        <Switch checked={darkMode} onCheckedChange={setDarkMode} />
+        <Switch checked={darkMode} onChange={setDarkMode} />
       </View>
     </View>
   );

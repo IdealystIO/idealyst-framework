@@ -6,6 +6,7 @@ import { accordionStyles } from './Accordion.styles';
 import Text from '../Text';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 interface AccordionItemProps {
   item: AccordionItemType;
@@ -135,7 +136,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   );
 };
 
-const Accordion = forwardRef<View, AccordionProps>(({
+const Accordion = forwardRef<IdealystElement, AccordionProps>(({
   items,
   allowMultiple = false,
   defaultExpanded = [],
@@ -204,7 +205,7 @@ const Accordion = forwardRef<View, AccordionProps>(({
   const containerStyle = (accordionStyles.container as any)({});
 
   return (
-    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
+    <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
       {items.map((item, index) => (
         <AccordionItem
           key={item.id}

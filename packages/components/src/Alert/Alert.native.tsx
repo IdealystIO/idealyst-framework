@@ -1,9 +1,10 @@
-import { isValidElement, forwardRef, ComponentRef } from 'react';
+import { isValidElement, forwardRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
-import { alertStyles } from './Alert.styles';
+import { alertStyles, alertSizeConfig } from './Alert.styles';
 import { isIconName } from '../Icon/icon-resolver';
 import type { AlertProps } from './types';
+import type { IdealystElement } from '../utils/refTypes';
 
 // Default icon names for each intent
 const defaultIcons: Record<string, string> = {
@@ -15,12 +16,13 @@ const defaultIcons: Record<string, string> = {
   neutral: 'circle',
 };
 
-const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
+const Alert = forwardRef<IdealystElement, AlertProps>(({
   title,
   message,
   children,
   intent = 'neutral',
   type = 'soft',
+  size = 'md',
   icon,
   showIcon = true,
   dismissible = false,
@@ -30,16 +32,24 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
   testID,
   id,
 }, ref) => {
+  // Apply variants for size
+  alertStyles.useVariants({ size });
+
   // Call all styles as functions to get theme-reactive styles
-  const dynamicProps = { intent, type };
+  const dynamicProps = { intent, type, size };
   const containerStyle = (alertStyles.container as any)(dynamicProps);
   const iconContainerStyle = (alertStyles.iconContainer as any)(dynamicProps);
   const titleStyle = (alertStyles.title as any)(dynamicProps);
   const messageStyle = (alertStyles.message as any)(dynamicProps);
-  const contentStyle = (alertStyles.content as any)({});
-  const actionsStyle = (alertStyles.actions as any)({});
-  const closeButtonStyle = (alertStyles.closeButton as any)({});
+  const contentStyle = (alertStyles.content as any)(dynamicProps);
+  const actionsStyle = (alertStyles.actions as any)(dynamicProps);
+  const closeButtonStyle = (alertStyles.closeButton as any)(dynamicProps);
   const closeIconStyle = (alertStyles.closeIcon as any)(dynamicProps);
+
+  // Get size-specific icon dimensions
+  const sizeConfig = alertSizeConfig[size];
+  const iconSize = sizeConfig.iconSize;
+  const closeIconSize = sizeConfig.closeIconSize;
 
   const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
 
@@ -51,7 +61,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
       return (
         <MaterialDesignIcons
           name={displayIcon}
-          size={20}
+          size={iconSize}
           style={iconContainerStyle}
         />
       );
@@ -63,7 +73,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
 
   return (
     <View
-      ref={ref}
+      ref={ref as any}
       nativeID={id}
       style={[containerStyle, style]}
       testID={testID}
@@ -112,7 +122,7 @@ const Alert = forwardRef<ComponentRef<typeof View>, AlertProps>(({
         >
           <MaterialDesignIcons
             name="close"
-            size={16}
+            size={closeIconSize}
             style={closeIconStyle}
           />
         </TouchableOpacity>

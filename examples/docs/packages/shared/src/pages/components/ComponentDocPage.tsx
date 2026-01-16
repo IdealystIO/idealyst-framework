@@ -122,7 +122,7 @@ export function ComponentDocPage({ componentName }: ComponentDocPageProps) {
       return (
         <Switch
           checked={currentValue ?? false}
-          onCheckedChange={(checked) => setPlaygroundProps(prev => ({ ...prev, [propName]: checked }))}
+          onChange={(checked) => setPlaygroundProps(prev => ({ ...prev, [propName]: checked }))}
           size="sm"
         />
       );
@@ -133,7 +133,7 @@ export function ComponentDocPage({ componentName }: ComponentDocPageProps) {
         <Select
           size="sm"
           value={currentValue ?? prop.values[0]}
-          onValueChange={(value) => setPlaygroundProps(prev => ({ ...prev, [propName]: value }))}
+          onChange={(value) => setPlaygroundProps(prev => ({ ...prev, [propName]: value }))}
           options={prop.values.map(v => ({ value: v, label: v }))}
           style={{ minWidth: 120 }}
         />

@@ -141,7 +141,7 @@ function createSizeVariants(theme: Theme) {
 
 #### Colors
 - **Intents**: `theme.intents[intent].primary`, `.contrast`, `.light`, `.dark`
-  - Available intents: `primary`, `success`, `error`, `warning`, `neutral`, `info`
+  - Available intents: `primary`, `success`, `danger`, `warning`, `neutral`, `info`
 - **Surface**: `theme.colors.surface.primary`, `.secondary`, `.tertiary`, `.inverse`, etc.
 - **Text**: `theme.colors.text.primary`, `.secondary`, `.tertiary`, `.inverse`, etc.
 - **Border**: `theme.colors.border.primary`, `.secondary`, `.tertiary`, `.disabled`

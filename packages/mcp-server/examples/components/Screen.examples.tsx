@@ -22,7 +22,7 @@ export function ScreenWithBackgrounds() {
   return (
     <Screen background="primary">
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Primary Surface Screen
         </Text>
         <Text>This screen has a primary surface background</Text>
@@ -36,7 +36,7 @@ export function ScreenWithPadding() {
   return (
     <Screen padding="md">
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Padded Screen
         </Text>
         <Text>This screen has medium padding around all edges</Text>
@@ -50,7 +50,7 @@ export function ScreenWithSafeArea() {
   return (
     <Screen safeArea padding="md">
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Safe Area Screen
         </Text>
         <Text>
@@ -66,7 +66,7 @@ export function ScrollableScreen() {
   return (
     <Screen scrollable padding="md">
       <View spacing="md">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           Scrollable Content
         </Text>
         {Array.from({ length: 20 }, (_, i) => (
@@ -77,7 +77,7 @@ export function ScrollableScreen() {
             radius="md"
           >
             <Text weight="semibold">Item {i + 1}</Text>
-            <Text size="sm" >
+            <Text typography="body2">
               This is a scrollable item. Add enough items to see scrolling behavior.
             </Text>
           </View>
@@ -95,7 +95,7 @@ export function ScreenWithContentInset() {
       contentInset={{ top: 20, bottom: 20, left: 16, right: 16 }}
     >
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Screen with Content Inset
         </Text>
         <Text>
@@ -122,10 +122,10 @@ export function ProfileScreen() {
     <Screen background="secondary" padding="md" safeArea>
       <View spacing="lg">
         <View spacing="md">
-          <Text size="xl" weight="bold">
+          <Text typography="h5" weight="bold">
             John Doe
           </Text>
-          <Text size="md" >
+          <Text typography="body1">
             john.doe@example.com
           </Text>
         </View>
@@ -137,10 +137,10 @@ export function ProfileScreen() {
         >
           <Text weight="semibold">Account Information</Text>
           <View spacing="sm">
-            <Text size="sm" >
+            <Text typography="body2">
               Member since: January 2024
             </Text>
-            <Text size="sm" >
+            <Text typography="body2">
               Status: Active
             </Text>
           </View>
@@ -153,9 +153,9 @@ export function ProfileScreen() {
         >
           <Text weight="semibold">Settings</Text>
           <View spacing="sm">
-            <Text size="sm">Notifications</Text>
-            <Text size="sm">Privacy</Text>
-            <Text size="sm">Security</Text>
+            <Text typography="body2">Notifications</Text>
+            <Text typography="body2">Privacy</Text>
+            <Text typography="body2">Security</Text>
           </View>
         </View>
       </View>
@@ -168,7 +168,7 @@ export function DashboardScreen() {
   return (
     <Screen background="secondary" padding="lg" safeArea scrollable>
       <View spacing="lg">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           Dashboard
         </Text>
 
@@ -178,23 +178,23 @@ export function DashboardScreen() {
             spacing="lg"
             radius="lg"
           >
-            <Text weight="semibold" size="lg">
+            <Text weight="semibold" typography="subtitle1">
               Stats Overview
             </Text>
             <View spacing="md">
               <View spacing="xs">
-                <Text size="sm" >
+                <Text typography="body2">
                   Total Users
                 </Text>
-                <Text size="xl" weight="bold">
+                <Text typography="h5" weight="bold">
                   1,234
                 </Text>
               </View>
               <View spacing="xs">
-                <Text size="sm" >
+                <Text typography="body2">
                   Revenue
                 </Text>
-                <Text size="xl" weight="bold">
+                <Text typography="h5" weight="bold">
                   $45,678
                 </Text>
               </View>
@@ -206,13 +206,13 @@ export function DashboardScreen() {
             spacing="lg"
             radius="lg"
           >
-            <Text weight="semibold" size="lg">
+            <Text weight="semibold" typography="subtitle1">
               Recent Activity
             </Text>
             <View spacing="sm">
-              <Text size="sm">New user registered</Text>
-              <Text size="sm">Payment received</Text>
-              <Text size="sm">Order completed</Text>
+              <Text typography="body2">New user registered</Text>
+              <Text typography="body2">Payment received</Text>
+              <Text typography="body2">Order completed</Text>
             </View>
           </View>
         </View>
@@ -227,17 +227,17 @@ export function FormScreen() {
     <Screen background="secondary" padding="md" safeArea scrollable>
       <View spacing="lg">
         <View spacing="sm">
-          <Text size="xl" weight="bold">
+          <Text typography="h5" weight="bold">
             Create Account
           </Text>
-          <Text size="md" >
+          <Text typography="body1">
             Fill in your information below
           </Text>
         </View>
 
         <View spacing="md">
           <View spacing="xs">
-            <Text size="sm" weight="semibold">
+            <Text typography="body2" weight="semibold">
               Full Name
             </Text>
             <View
@@ -246,14 +246,14 @@ export function FormScreen() {
               radius="md"
               border="thin"
             >
-              <Text size="sm" >
+              <Text typography="body2">
                 Enter your full name
               </Text>
             </View>
           </View>
 
           <View spacing="xs">
-            <Text size="sm" weight="semibold">
+            <Text typography="body2" weight="semibold">
               Email
             </Text>
             <View
@@ -262,14 +262,14 @@ export function FormScreen() {
               radius="md"
               border="thin"
             >
-              <Text size="sm" >
+              <Text typography="body2">
                 Enter your email
               </Text>
             </View>
           </View>
 
           <View spacing="xs">
-            <Text size="sm" weight="semibold">
+            <Text typography="body2" weight="semibold">
               Password
             </Text>
             <View
@@ -278,7 +278,7 @@ export function FormScreen() {
               radius="md"
               border="thin"
             >
-              <Text size="sm" >
+              <Text typography="body2">
                 Enter your password
               </Text>
             </View>
@@ -295,13 +295,13 @@ export function FormScreen() {
 export function SettingsScreen() {
   return (
     <Screen background="secondary" padding="none" safeArea scrollable>
-      <View spacing="lg" marginVariant="md">
-        <Text size="xl" weight="bold">
+      <View spacing="lg" margin="md">
+        <Text typography="h5" weight="bold">
           Settings
         </Text>
 
         <View spacing="xs">
-          <Text size="sm" weight="semibold" >
+          <Text typography="body2" weight="semibold">
             ACCOUNT
           </Text>
           <View
@@ -322,7 +322,7 @@ export function SettingsScreen() {
         </View>
 
         <View spacing="xs">
-          <Text size="sm" weight="semibold" >
+          <Text typography="body2" weight="semibold">
             PREFERENCES
           </Text>
           <View

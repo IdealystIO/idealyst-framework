@@ -13,7 +13,7 @@ import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/ac
  */
 const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   open,
-  onOpenChange,
+  onClose,
   title,
   children,
   size = 'md',
@@ -81,13 +81,13 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onOpenChange(false);
+        onClose();
       }
     };
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [open, closeOnEscapeKey, onOpenChange]);
+  }, [open, closeOnEscapeKey, onClose]);
 
   // Handle focus management
   useEffect(() => {
@@ -122,12 +122,12 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
 
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (closeOnBackdropClick && event.target === event.currentTarget) {
-      onOpenChange(false);
+      onClose();
     }
   };
 
   const handleCloseClick = () => {
-    onOpenChange(false);
+    onClose();
   };
 
   // Apply variants

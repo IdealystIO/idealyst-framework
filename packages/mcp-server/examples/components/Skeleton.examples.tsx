@@ -196,7 +196,7 @@ export function LoadingStateToggle() {
           </View>
         ) : (
           <View spacing="md">
-            <Text size="lg" weight="bold">
+            <Text typography="subtitle1" weight="bold">
               Content Loaded
             </Text>
             <Text>

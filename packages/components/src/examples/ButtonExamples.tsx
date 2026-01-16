@@ -117,12 +117,12 @@ export const ButtonExamples = () => {
           >
             Success
           </Button>
-          <Button 
-            intent="error"
+          <Button
+            intent="danger"
             type="contained"
-            onPress={() => handlePress('error')}
+            onPress={() => handlePress('danger')}
           >
-            Error
+            Danger
           </Button>
           <Button 
             intent="warning"
@@ -187,7 +187,7 @@ export const ButtonExamples = () => {
           </Button>
           <Button
             type="contained"
-            intent="error"
+            intent="danger"
             leftIcon="delete"
             rightIcon="alert"
             onPress={() => handlePress('icon-both')}
@@ -246,7 +246,7 @@ export const ButtonExamples = () => {
           />
           <Button
             type="text"
-            intent="error"
+            intent="danger"
             leftIcon="close-circle"
             onPress={() => handlePress('icon-only-text')}
           />
@@ -283,11 +283,11 @@ export const ButtonExamples = () => {
           </Button>
           <Button
             type="contained"
-            intent="error"
+            intent="danger"
             leftIcon="alert-circle"
-            onPress={() => handlePress('error')}
+            onPress={() => handlePress('danger')}
           >
-            Error
+            Danger
           </Button>
         </View>
       </View>
@@ -344,7 +344,7 @@ export const ButtonExamples = () => {
           </Button>
           <Button
             type="contained"
-            intent="error"
+            intent="danger"
             gradient="darken"
             onPress={() => handlePress('gradient-error')}
           >
@@ -394,7 +394,7 @@ export const ButtonExamples = () => {
           </Button>
           <Button
             type="contained"
-            intent="error"
+            intent="danger"
             gradient="darken"
             leftIcon="delete"
             onPress={() => handlePress('gradient-icon-delete')}
@@ -457,7 +457,7 @@ export const ButtonExamples = () => {
           </Button>
           <Button
             type="contained"
-            intent="error"
+            intent="danger"
             loading
             onPress={() => handlePress('loading-error')}
           >

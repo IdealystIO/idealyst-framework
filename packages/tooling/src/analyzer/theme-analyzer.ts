@@ -301,7 +301,7 @@ function analyzeBaseTheme(
  */
 function getDefaultThemeValues(): ThemeValues {
   return {
-    intents: ['primary', 'success', 'error', 'warning', 'neutral', 'info'],
+    intents: ['primary', 'success', 'danger', 'warning', 'neutral', 'info'],
     sizes: {
       button: ['xs', 'sm', 'md', 'lg', 'xl'],
       chip: ['xs', 'sm', 'md', 'lg', 'xl'],

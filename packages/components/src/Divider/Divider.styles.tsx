@@ -3,7 +3,7 @@
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
-import type { Theme as BaseTheme, Intent } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 
 // Required: Unistyles must see StyleSheet usage in original source to process this file
 void StyleSheet;
@@ -12,14 +12,14 @@ void StyleSheet;
 type Theme = ThemeStyleWrapper<BaseTheme>;
 
 type DividerOrientation = 'horizontal' | 'vertical';
-type DividerThickness = 'thin' | 'md' | 'thick';
+type DividerSize = Size;
 type DividerType = 'solid' | 'dashed' | 'dotted';
 type DividerIntent = Intent | 'secondary' | 'neutral' | 'info';
 type DividerSpacing = 'none' | 'sm' | 'md' | 'lg';
 
 export type DividerDynamicProps = {
     orientation?: DividerOrientation;
-    thickness?: DividerThickness;
+    size?: DividerSize;
     type?: DividerType;
     intent?: DividerIntent;
     spacing?: DividerSpacing;
@@ -27,14 +27,20 @@ export type DividerDynamicProps = {
 
 export type LineDynamicProps = {
     orientation?: DividerOrientation;
-    thickness?: DividerThickness;
+    size?: DividerSize;
 };
 
-function getThicknessValue(thickness: DividerThickness): number {
-    switch (thickness) {
-        case 'thin': return 1;
+/**
+ * Maps Size to thickness value in pixels.
+ * xs=1, sm=1, md=2, lg=3, xl=4
+ */
+function getSizeValue(size: DividerSize): number {
+    switch (size) {
+        case 'xs': return 1;
+        case 'sm': return 1;
         case 'md': return 2;
-        case 'thick': return 4;
+        case 'lg': return 3;
+        case 'xl': return 4;
         default: return 1;
     }
 }
@@ -50,17 +56,17 @@ function getSpacingValue(spacing: DividerSpacing): number {
 }
 
 /**
- * Divider styles with dynamic functions for orientation/thickness/intent combinations.
+ * Divider styles with dynamic functions for orientation/size/intent combinations.
  */
 export const dividerStyles = defineStyle('Divider', (theme: Theme) => ({
     divider: ({
         orientation = 'horizontal',
-        thickness = 'thin',
+        size = 'sm',
         type = 'solid',
         intent = 'neutral',
         spacing = 'md'
     }: DividerDynamicProps) => {
-        const thicknessValue = getThicknessValue(thickness);
+        const sizeValue = getSizeValue(size);
         const spacingValue = getSpacingValue(spacing);
         const isHorizontal = orientation === 'horizontal';
         const isDashedOrDotted = type === 'dashed' || type === 'dotted';
@@ -72,11 +78,11 @@ export const dividerStyles = defineStyle('Divider', (theme: Theme) => ({
                 ? theme.colors.border.secondary
                 : intent === 'info'
                     ? theme.intents.primary.primary
-                    : theme.intents[intent as Intent].primary;
+                    : (theme.intents[intent as Intent]?.primary ?? theme.colors.border.primary);
 
         const dimensionStyles = isHorizontal
-            ? { width: '100%', height: thicknessValue, flexDirection: 'row' as const }
-            : { width: thicknessValue, height: '100%', flexDirection: 'column' as const };
+            ? { width: '100%', height: sizeValue, flexDirection: 'row' as const }
+            : { width: sizeValue, height: '100%', flexDirection: 'column' as const };
 
         const spacingStyles = isHorizontal
             ? { marginVertical: spacingValue }
@@ -86,8 +92,8 @@ export const dividerStyles = defineStyle('Divider', (theme: Theme) => ({
             border: 'none',
             backgroundColor: 'transparent',
             ...(isHorizontal
-                ? { borderTop: `${thicknessValue}px ${type} ${color}` }
-                : { borderLeft: `${thicknessValue}px ${type} ${color}` }
+                ? { borderTop: `${sizeValue}px ${type} ${color}` }
+                : { borderLeft: `${sizeValue}px ${type} ${color}` }
             ),
         } : {};
 
@@ -137,17 +143,33 @@ export const dividerStyles = defineStyle('Divider', (theme: Theme) => ({
         },
     }),
 
-    line: ({ orientation = 'horizontal', thickness = 'thin' }: LineDynamicProps) => {
-        const thicknessValue = getThicknessValue(thickness);
-        const isHorizontal = orientation === 'horizontal';
-
-        return {
-            backgroundColor: theme.colors.border.secondary,
-            flex: 1,
-            ...(isHorizontal
-                ? { height: thicknessValue }
-                : { width: thicknessValue }
-            ),
-        } as const;
-    },
+    line: (_props: LineDynamicProps) => ({
+        backgroundColor: theme.colors.border.secondary,
+        flex: 1,
+        variants: {
+            orientation: {
+                horizontal: {},
+                vertical: {},
+            },
+            size: {
+                xs: {},
+                sm: {},
+                md: {},
+                lg: {},
+                xl: {},
+            },
+        },
+        compoundVariants: [
+            { orientation: 'horizontal', size: 'xs', styles: { height: 1 } },
+            { orientation: 'horizontal', size: 'sm', styles: { height: 1 } },
+            { orientation: 'horizontal', size: 'md', styles: { height: 2 } },
+            { orientation: 'horizontal', size: 'lg', styles: { height: 3 } },
+            { orientation: 'horizontal', size: 'xl', styles: { height: 4 } },
+            { orientation: 'vertical', size: 'xs', styles: { width: 1 } },
+            { orientation: 'vertical', size: 'sm', styles: { width: 1 } },
+            { orientation: 'vertical', size: 'md', styles: { width: 2 } },
+            { orientation: 'vertical', size: 'lg', styles: { width: 3 } },
+            { orientation: 'vertical', size: 'xl', styles: { width: 4 } },
+        ],
+    }),
 }));

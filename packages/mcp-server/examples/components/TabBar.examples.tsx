@@ -90,7 +90,7 @@ export function TabBarWithDisabledItems() {
   return (
     <View spacing="md">
       <TabBar items={items} value={value} onChange={setValue} />
-      <Text size="sm" >
+      <Text typography="body2">
         Explore and Settings tabs are disabled
       </Text>
     </View>
@@ -151,7 +151,7 @@ export function TabBarWithContent() {
       <View background="primary" spacing="lg" radius="md">
         {value === 'overview' && (
           <View spacing="sm">
-            <Text size="lg" weight="bold">
+            <Text typography="subtitle1" weight="bold">
               Overview
             </Text>
             <Text>This is the overview content section.</Text>
@@ -159,7 +159,7 @@ export function TabBarWithContent() {
         )}
         {value === 'details' && (
           <View spacing="sm">
-            <Text size="lg" weight="bold">
+            <Text typography="subtitle1" weight="bold">
               Details
             </Text>
             <Text>This is the details content section.</Text>
@@ -167,7 +167,7 @@ export function TabBarWithContent() {
         )}
         {value === 'reviews' && (
           <View spacing="sm">
-            <Text size="lg" weight="bold">
+            <Text typography="subtitle1" weight="bold">
               Reviews
             </Text>
             <Text>This is the reviews content section.</Text>
@@ -189,7 +189,7 @@ export function TabBarWithDefaultValue() {
   return (
     <View spacing="md">
       <TabBar items={items} defaultValue="messages" />
-      <Text size="sm" >
+      <Text typography="body2">
         Default value is set to "messages"
       </Text>
     </View>
@@ -218,7 +218,7 @@ export function NavigationTabBar() {
       />
       <View background="primary" spacing="md" radius="md">
         <Text weight="bold">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Screen</Text>
-        <Text size="sm" >
+        <Text typography="body2">
           Content for {activeTab} goes here
         </Text>
       </View>
@@ -240,10 +240,10 @@ export function SettingsTabBar() {
   return (
     <View spacing="lg">
       <View spacing="sm">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           Settings
         </Text>
-        <Text size="sm" >
+        <Text typography="body2">
           Manage your account settings
         </Text>
       </View>
@@ -254,7 +254,7 @@ export function SettingsTabBar() {
         onChange={setSection}
       />
       <View spacing="md">
-        <Text weight="semibold" size="lg">
+        <Text weight="semibold" typography="subtitle1">
           {section.charAt(0).toUpperCase() + section.slice(1)} Settings
         </Text>
         <Text>Configure your {section} preferences here.</Text>
@@ -277,7 +277,7 @@ export function DashboardTabBar() {
   return (
     <View spacing="lg">
       <View spacing="md">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           Analytics Dashboard
         </Text>
         <TabBar
@@ -289,7 +289,7 @@ export function DashboardTabBar() {
         />
       </View>
       <View background="primary" spacing="lg" radius="lg">
-        <Text size="lg" weight="semibold">
+        <Text typography="subtitle1" weight="semibold">
           Statistics for: {period.charAt(0).toUpperCase() + period.slice(1)}
         </Text>
         <View spacing="sm">
@@ -316,10 +316,10 @@ export function ProductDetailsTabBar() {
   return (
     <View spacing="lg">
       <View spacing="md">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           Product Name
         </Text>
-        <Text size="lg" >
+        <Text typography="subtitle1">
           $99.99
         </Text>
       </View>

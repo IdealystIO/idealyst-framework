@@ -1,14 +1,15 @@
-import React, { ComponentRef, forwardRef, useMemo } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { switchStyles } from './Switch.styles';
 import Text from '../Text';
 import type { SwitchProps } from './types';
 import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
+const Switch = forwardRef<IdealystElement, SwitchProps>(({
   checked = false,
-  onCheckedChange,
+  onChange,
   disabled = false,
   label,
   labelPosition = 'right',
@@ -50,8 +51,8 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
   }, [checked, progress]);
 
   const handlePress = () => {
-    if (!disabled && onCheckedChange) {
-      onCheckedChange(!checked);
+    if (!disabled && onChange) {
+      onChange(!checked);
     }
   };
 
@@ -160,7 +161,7 @@ const Switch = forwardRef<ComponentRef<typeof Pressable>, SwitchProps>(({
   if (label) {
     return (
       <Pressable
-        ref={ref}
+        ref={ref as any}
         nativeID={id}
         onPress={handlePress}
         disabled={disabled}

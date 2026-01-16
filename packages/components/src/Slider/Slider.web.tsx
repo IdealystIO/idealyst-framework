@@ -6,12 +6,13 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebRangeAriaProps, generateAccessibilityId, SLIDER_KEYS, matchesKey } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Range slider for selecting numeric values within a min/max range.
  * Supports marks, value labels, keyboard navigation, and custom step increments.
  */
-const Slider = forwardRef<HTMLDivElement, SliderProps>(({
+const Slider = forwardRef<IdealystElement, SliderProps>(({
   value: controlledValue,
   defaultValue = 0,
   min = 0,
@@ -28,8 +29,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
   margin,
   marginVertical,
   marginHorizontal,
-  onValueChange,
-  onValueCommit,
+  onChange,
+  onChangeCommit,
   style,
   testID,
   id,
@@ -93,8 +94,8 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
       setInternalValue(clampedValue);
     }
 
-    onValueChange?.(clampedValue);
-  }, [controlledValue, clampValue, onValueChange]);
+    onChange?.(clampedValue);
+  }, [controlledValue, clampValue, onChange]);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (disabled) return;
@@ -129,11 +130,11 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
     if (isDragging) {
       setIsDragging(false);
       if (hasMoved.current) {
-        onValueCommit?.(value);
+        onChangeCommit?.(value);
       }
       hasMoved.current = false;
     }
-  }, [isDragging, value, onValueCommit]);
+  }, [isDragging, value, onChangeCommit]);
 
   // Handle keyboard navigation for accessibility
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
@@ -164,9 +165,9 @@ const Slider = forwardRef<HTMLDivElement, SliderProps>(({
 
     if (newValue !== value) {
       updateValue(newValue);
-      onValueCommit?.(newValue);
+      onChangeCommit?.(newValue);
     }
-  }, [disabled, value, step, min, max, clampValue, updateValue, onValueCommit]);
+  }, [disabled, value, step, min, max, clampValue, updateValue, onChangeCommit]);
 
   // Generate unique ID for accessibility
   const sliderId = useMemo(() => id || generateAccessibilityId('slider'), [id]);

@@ -32,7 +32,7 @@ export interface CheckboxProps extends FormInputStyleProps, SelectionAccessibili
   /**
    * Called when the checkbox state changes
    */
-  onCheckedChange?: (checked: boolean) => void;
+  onChange?: (checked: boolean) => void;
 
   /**
    * The size of the checkbox

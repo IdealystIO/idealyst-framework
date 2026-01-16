@@ -330,7 +330,7 @@ describe('React Web Component Testing Examples', () => {
 
     if (error) {
       return (
-        <div data-testid="error">
+        <div data-testid="danger">
           <p>Error: {error}</p>
           <button data-testid="retry-button" onClick={fetchUser}>
             Retry

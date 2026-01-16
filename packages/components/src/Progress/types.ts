@@ -5,11 +5,11 @@ import { BaseProps } from '../utils/viewStyleProps';
 // Component-specific type aliases for future extensibility
 export type ProgressIntentVariant = Intent;
 export type ProgressSizeVariant = Size;
-export type ProgressVariant = 'linear' | 'circular';
+export type ProgressType = 'linear' | 'circular';
 
 /**
  * Visual indicator for task completion or loading status.
- * Supports linear and circular variants with determinate and indeterminate modes.
+ * Supports linear and circular types with determinate and indeterminate modes.
  */
 export interface ProgressProps extends BaseProps {
   /**
@@ -17,7 +17,7 @@ export interface ProgressProps extends BaseProps {
    */
   value?: number;
   max?: number;
-  variant?: ProgressVariant;
+  type?: ProgressType;
   intent?: ProgressIntentVariant;
   size?: ProgressSizeVariant;
   indeterminate?: boolean;

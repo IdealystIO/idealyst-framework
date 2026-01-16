@@ -10,6 +10,7 @@ import {
 } from './TabBar.styles';
 import type { TabBarProps, TabBarItem } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 // Icon size mapping based on size variant
 const ICON_SIZES: Record<string, number> = {
@@ -33,7 +34,7 @@ function renderIcon(
   return icon;
 }
 
-const TabBar = forwardRef<View, TabBarProps>(({
+const TabBar = forwardRef<IdealystElement, TabBarProps>(({
   items,
   value: controlledValue,
   defaultValue,
@@ -154,7 +155,7 @@ const TabBar = forwardRef<View, TabBarProps>(({
       }}
       style={{ width: '100%' }}
     >
-      <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
+      <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
         {/* Animated indicator - render first so it's behind */}
         <Animated.View
           style={[

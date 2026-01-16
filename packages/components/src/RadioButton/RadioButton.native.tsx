@@ -1,12 +1,13 @@
-import React, { ComponentRef, forwardRef, useMemo } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { View, Pressable, Animated } from 'react-native';
 import Text from '../Text';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioButtonProps } from './types';
 import { useRadioGroup } from './RadioGroup.native';
 import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>(({
+const RadioButton = forwardRef<IdealystElement, RadioButtonProps>(({
   value,
   checked: checkedProp,
   onPress,
@@ -109,7 +110,7 @@ const RadioButton = forwardRef<ComponentRef<typeof Pressable>, RadioButtonProps>
 
   return (
     <Pressable
-      ref={ref}
+      ref={ref as any}
       nativeID={id}
       onPress={handlePress}
       disabled={disabled}

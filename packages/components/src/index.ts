@@ -18,8 +18,14 @@ export * from './Pressable/types';
 export { default as Link } from './Link';
 export * from './Link/types';
 
+// TextInput (primary text input component)
+export { default as TextInput } from './TextInput';
+export * from './TextInput/types';
+
+/**
+ * @deprecated Use TextInput instead. Input is maintained for backwards compatibility only.
+ */
 export { default as Input } from './Input';
-export * from './Input/types';
 
 // New primitive components
 export { default as Checkbox } from './Checkbox';
@@ -116,7 +122,9 @@ export type { ButtonProps } from './Button/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
 export type { LinkProps } from './Link/types';
-export type { InputProps } from './Input/types';
+export type { TextInputProps } from './TextInput/types';
+/** @deprecated Use TextInputProps instead */
+export type { InputProps } from './TextInput/types';
 export type { CheckboxProps } from './Checkbox/types';
 export type { CardProps } from './Card/types';
 export type { DividerProps } from './Divider/types';
@@ -156,6 +164,18 @@ export * from './utils/events';
 export * from './utils/viewStyleProps';
 export * from './utils/buildViewStyleVariants';
 
+// Cross-platform ref types
+export type {
+  IdealystElement,
+  AnchorElement,
+  AnchorRef,
+  ComponentElement,
+  WebElement,
+  NativeElement,
+  CrossPlatformElement,
+  CrossPlatformRef,
+} from './utils/refTypes';
+
 // Component style extensions
 export {
     extendComponent,
@@ -174,6 +194,7 @@ export type {
     Styles,
     ButtonStyleableElements,
     CardStyleableElements,
+    TextInputStyleableElements,
     InputStyleableElements,
     ChipStyleableElements,
     AlertStyleableElements,

@@ -15,7 +15,7 @@ export function BasicSlider() {
   return (
     <Slider
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       min={0}
       max={100}
     />
@@ -29,7 +29,7 @@ export function SliderWithValue() {
   return (
     <Slider
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       min={0}
       max={100}
       showValue
@@ -44,7 +44,7 @@ export function SliderWithMinMax() {
   return (
     <Slider
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       min={0}
       max={100}
       showMinMax
@@ -62,7 +62,7 @@ export function SliderWithSteps() {
       <Text>Value: {value}</Text>
       <Slider
         value={value}
-        onValueChange={setValue}
+        onChange={setValue}
         min={0}
         max={100}
         step={10}
@@ -79,11 +79,11 @@ export function SliderSizes() {
 
   return (
     <View spacing="lg">
-      <Slider size="xs" value={value} onValueChange={setValue} min={0} max={100} showValue />
-      <Slider size="sm" value={value} onValueChange={setValue} min={0} max={100} showValue />
-      <Slider size="md" value={value} onValueChange={setValue} min={0} max={100} showValue />
-      <Slider size="lg" value={value} onValueChange={setValue} min={0} max={100} showValue />
-      <Slider size="xl" value={value} onValueChange={setValue} min={0} max={100} showValue />
+      <Slider size="xs" value={value} onChange={setValue} min={0} max={100} showValue />
+      <Slider size="sm" value={value} onChange={setValue} min={0} max={100} showValue />
+      <Slider size="md" value={value} onChange={setValue} min={0} max={100} showValue />
+      <Slider size="lg" value={value} onChange={setValue} min={0} max={100} showValue />
+      <Slider size="xl" value={value} onChange={setValue} min={0} max={100} showValue />
     </View>
   );
 }
@@ -94,11 +94,11 @@ export function SliderIntents() {
 
   return (
     <View spacing="md">
-      <Slider intent="primary" value={value} onValueChange={setValue} min={0} max={100} showValue />
-      <Slider intent="success" value={value} onValueChange={setValue} min={0} max={100} showValue />
-      <Slider intent="error" value={value} onValueChange={setValue} min={0} max={100} showValue />
-      <Slider intent="warning" value={value} onValueChange={setValue} min={0} max={100} showValue />
-      <Slider intent="info" value={value} onValueChange={setValue} min={0} max={100} showValue />
+      <Slider intent="primary" value={value} onChange={setValue} min={0} max={100} showValue />
+      <Slider intent="success" value={value} onChange={setValue} min={0} max={100} showValue />
+      <Slider intent="danger" value={value} onChange={setValue} min={0} max={100} showValue />
+      <Slider intent="warning" value={value} onChange={setValue} min={0} max={100} showValue />
+      <Slider intent="info" value={value} onChange={setValue} min={0} max={100} showValue />
     </View>
   );
 }
@@ -113,7 +113,7 @@ export function SliderWithIcon() {
       <Slider
         icon="volume-high"
         value={volume}
-        onValueChange={setVolume}
+        onChange={setVolume}
         min={0}
         max={100}
         showValue
@@ -137,7 +137,7 @@ export function SliderWithMarks() {
   return (
     <Slider
       value={value}
-      onValueChange={setValue}
+      onChange={setValue}
       min={0}
       max={100}
       marks={marks}
@@ -151,7 +151,7 @@ export function DisabledSlider() {
   return (
     <Slider
       value={60}
-      onValueChange={() => {}}
+      onChange={() => {}}
       min={0}
       max={100}
       disabled
@@ -171,7 +171,7 @@ export function PriceRangeSlider() {
       <Slider
         icon="currency-usd"
         value={price}
-        onValueChange={setPrice}
+        onChange={setPrice}
         min={0}
         max={1000}
         step={50}
@@ -193,7 +193,7 @@ export function BrightnessControl() {
       <Slider
         icon="brightness-6"
         value={brightness}
-        onValueChange={setBrightness}
+        onChange={setBrightness}
         min={0}
         max={100}
         step={5}
@@ -221,15 +221,15 @@ export function MultipleSliders() {
       <View spacing="md">
         <Slider
           value={red}
-          onValueChange={setRed}
+          onChange={setRed}
           min={0}
           max={255}
           showValue
-          intent="error"
+          intent="danger"
         />
         <Slider
           value={green}
-          onValueChange={setGreen}
+          onChange={setGreen}
           min={0}
           max={255}
           showValue
@@ -237,7 +237,7 @@ export function MultipleSliders() {
         />
         <Slider
           value={blue}
-          onValueChange={setBlue}
+          onChange={setBlue}
           min={0}
           max={255}
           showValue

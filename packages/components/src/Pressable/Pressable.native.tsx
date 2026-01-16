@@ -2,8 +2,9 @@ import { forwardRef } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { PressableProps } from './types';
 import { pressableStyles } from './Pressable.styles';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Pressable = forwardRef<View, PressableProps>(({
+const Pressable = forwardRef<IdealystElement, PressableProps>(({
   children,
   onPress,
   onPressIn,
@@ -37,7 +38,7 @@ const Pressable = forwardRef<View, PressableProps>(({
       testID={testID}
       accessibilityLabel={accessibilityLabel}
     >
-      <View ref={ref} nativeID={id} style={[pressableStyle, style]}>
+      <View ref={ref as any} nativeID={id} style={[pressableStyle, style]}>
         {children}
       </View>
     </TouchableWithoutFeedback>

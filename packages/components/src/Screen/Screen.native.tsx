@@ -3,8 +3,9 @@ import { View as RNView, ScrollView as RNScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ScreenProps } from './types';
 import { screenStyles } from './Screen.styles';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Screen = forwardRef<RNView | RNScrollView, ScreenProps>(({
+const Screen = forwardRef<IdealystElement, ScreenProps>(({
   children,
   background = 'screen',
   safeArea = true,

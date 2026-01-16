@@ -373,7 +373,7 @@ export function UserManagement() {
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
         <Text typography="h3" weight="bold">Users</Text>
         {selectedRows.length > 0 && (
-          <Button intent="error" onPress={handleDelete}>
+          <Button intent="danger" onPress={handleDelete}>
             Delete Selected ({selectedRows.length})
           </Button>
         )}
@@ -426,7 +426,7 @@ function PropRow({
       <View style={{ width: 160 }}>
         <Text weight="semibold" style={{ fontFamily: 'monospace' }}>
           {name}
-          {required && <Text color="error">*</Text>}
+          {required && <Text color="danger">*</Text>}
         </Text>
       </View>
       <View style={{ width: 220 }}>

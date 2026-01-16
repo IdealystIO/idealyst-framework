@@ -148,7 +148,7 @@ export function MenuWithIntent() {
     { id: '1', label: 'Edit', icon: 'pencil', intent: 'primary', onClick: () => {} },
     { id: '2', label: 'Duplicate', icon: 'content-copy', intent: 'info', onClick: () => {} },
     { id: '3', label: 'Archive', icon: 'archive', intent: 'warning', onClick: () => {} },
-    { id: '4', label: 'Delete', icon: 'delete', intent: 'error', onClick: () => {} },
+    { id: '4', label: 'Delete', icon: 'delete', intent: 'danger', onClick: () => {} },
   ];
 
   return (
@@ -237,7 +237,7 @@ export function MenuWithCloseOnSelection() {
         <Button onPress={() => setOpen(true)}>Select Option</Button>
       </Menu>
       {selected && (
-        <Text size="sm" >
+        <Text typography="body2">
           Selected: {selected}
         </Text>
       )}
@@ -256,7 +256,7 @@ export function ContextMenu() {
     { id: '4', label: 'Rename', icon: 'pencil', onClick: () => {} },
     { id: '5', label: 'Move', icon: 'folder-move', onClick: () => {} },
     { id: '6', label: 'separator-2', separator: true },
-    { id: '7', label: 'Delete', icon: 'delete', intent: 'error', onClick: () => {} },
+    { id: '7', label: 'Delete', icon: 'delete', intent: 'danger', onClick: () => {} },
   ];
 
   return (

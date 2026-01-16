@@ -12,8 +12,9 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import { BoundedModalContent } from '../internal/BoundedModalContent.native';
 import { useSmartPosition } from '../hooks/useSmartPosition.native';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Menu = forwardRef<View, MenuProps>(({
+const Menu = forwardRef<IdealystElement, MenuProps>(({
   children,
   items,
   open,

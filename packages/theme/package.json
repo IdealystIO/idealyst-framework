@@ -50,6 +50,12 @@
       "import": "./src/darkTheme.ts",
       "require": "./src/darkTheme.ts",
       "types": "./src/darkTheme.ts"
+    },
+    "./animation": {
+      "native": "./src/animation/index.native.ts",
+      "import": "./src/animation/index.ts",
+      "require": "./src/animation/index.ts",
+      "types": "./src/animation/index.ts"
     }
   },
   "scripts": {

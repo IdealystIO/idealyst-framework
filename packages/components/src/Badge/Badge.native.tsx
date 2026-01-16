@@ -4,25 +4,37 @@ import MaterialDesignIcons from '@react-native-vector-icons/material-design-icon
 import { BadgeProps } from './types';
 import { badgeStyles } from './Badge.styles';
 import { isIconName } from '../Icon/icon-resolver';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Badge = forwardRef<View, BadgeProps>(({
+/**
+ * Small status indicator for counts, labels, or notifications.
+ * Available in filled, outlined, and dot variants with customizable colors.
+ *
+ * Supports both `intent` (semantic colors) and `color` (raw palette colors).
+ * If both are provided, `intent` takes precedence.
+ */
+const Badge = forwardRef<IdealystElement, BadgeProps>(({
   children,
   icon,
   size = 'md',
   type = 'filled',
-  color = 'blue',
+  intent,
+  color,
   style,
   testID,
   id,
 }, ref) => {
+  // Default to 'primary' intent if neither intent nor color is provided
+  const effectiveColor = intent ? undefined : (color ?? 'primary');
+
   badgeStyles.useVariants({
     size,
     type,
   });
 
-  // Call dynamic styles with color variant
-  const badgeStyle = (badgeStyles.badge as any)({ color });
-  const textStyle = (badgeStyles.text as any)({ color });
+  // Call dynamic styles with intent/color - intent takes precedence
+  const badgeStyle = (badgeStyles.badge as any)({ intent, color: effectiveColor });
+  const textStyle = (badgeStyles.text as any)({ intent, color: effectiveColor });
 
   // Map badge size to icon size
   const iconSize = size === 'sm' ? 12 : size === 'md' ? 14 : 16;
@@ -62,7 +74,7 @@ const Badge = forwardRef<View, BadgeProps>(({
 
   return (
     <View
-      ref={ref}
+      ref={ref as any}
       nativeID={id}
       style={[badgeStyle, style]}
       testID={testID}

@@ -3,8 +3,9 @@ import { View } from 'react-native';
 import { SvgUri } from 'react-native-svg';
 import { SVGImageProps } from './types';
 import { svgImageStyles } from './SVGImage.styles';
+import type { IdealystElement } from '../utils/refTypes';
 
-const SVGImage = forwardRef<View, SVGImageProps>(({
+const SVGImage = forwardRef<IdealystElement, SVGImageProps>(({
   source,
   width,
   height,
@@ -19,7 +20,7 @@ const SVGImage = forwardRef<View, SVGImageProps>(({
   // Apply variants using Unistyles 3.0 pattern
   if (intent) {
     svgImageStyles.useVariants({
-      intent: intent as 'primary' | 'success' | 'error' | 'warning' | 'neutral',
+      intent: intent as 'primary' | 'success' | 'danger' | 'warning' | 'neutral',
     });
   }
 
@@ -31,7 +32,7 @@ const SVGImage = forwardRef<View, SVGImageProps>(({
   if (typeof source === 'function') {
     const SvgComponent = source;
     return (
-      <View ref={ref} nativeID={id} style={[svgImageStyles.container, style]} testID={testID} {...props}>
+      <View ref={ref as any} nativeID={id} style={[svgImageStyles.container, style]} testID={testID} {...props}>
         <SvgComponent
           width={finalWidth}
           height={finalHeight}
@@ -46,7 +47,7 @@ const SVGImage = forwardRef<View, SVGImageProps>(({
   const sourceUri = typeof source === 'string' ? source : source.uri;
 
   return (
-    <View ref={ref} nativeID={id} style={[svgImageStyles.container, style]} testID={testID} {...props}>
+    <View ref={ref as any} nativeID={id} style={[svgImageStyles.container, style]} testID={testID} {...props}>
       <SvgUri
         uri={sourceUri}
         width={finalWidth}

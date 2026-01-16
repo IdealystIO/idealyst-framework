@@ -88,7 +88,7 @@ export const DialogExamples = () => {
               </Button>
               <Button 
                 type="contained" 
-                intent="error"
+                intent="danger"
                 onPress={() => setConfirmationOpen(false)}
               >
                 Delete

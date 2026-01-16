@@ -81,7 +81,7 @@ export function UserProfileList() {
         <Avatar src="https://i.pravatar.cc/150?img=8" size="md" />
         <View spacing="xs">
           <Text weight="semibold">John Doe</Text>
-          <Text size="sm" >
+          <Text typography="body2">
             john.doe@example.com
           </Text>
         </View>
@@ -90,7 +90,7 @@ export function UserProfileList() {
         <Avatar src="https://i.pravatar.cc/150?img=9" size="md" />
         <View spacing="xs">
           <Text weight="semibold">Jane Smith</Text>
-          <Text size="sm" >
+          <Text typography="body2">
             jane.smith@example.com
           </Text>
         </View>
@@ -99,7 +99,7 @@ export function UserProfileList() {
         <Avatar fallback="AB"  size="md" />
         <View spacing="xs">
           <Text weight="semibold">Alex Brown</Text>
-          <Text size="sm" >
+          <Text typography="body2">
             alex.brown@example.com
           </Text>
         </View>
@@ -112,7 +112,7 @@ export function UserProfileList() {
 export function AvatarGroup() {
   return (
     <View spacing="md">
-      <Text weight="semibold" size="sm" >
+      <Text weight="semibold" typography="body2">
         Team Members
       </Text>
       <View spacing="sm">
@@ -135,10 +135,10 @@ export function LargeProfileAvatar() {
         alt="Profile picture"
       />
       <View spacing="xs">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           Sarah Johnson
         </Text>
-        <Text size="md" >
+        <Text typography="body1">
           Product Designer
         </Text>
       </View>
@@ -156,7 +156,7 @@ export function AvatarWithFallbackOnError() {
         alt="Broken image"
         size="lg"
       />
-      <Text size="sm" >
+      <Text typography="body2">
         Fallback shown when image fails to load
       </Text>
     </View>

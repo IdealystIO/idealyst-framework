@@ -4,12 +4,13 @@ import { AvatarProps } from './types';
 import { avatarStyles } from './Avatar.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebAriaProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * User or entity representation with image support and fallback initials.
  * Available in circle or square shapes with multiple sizes.
  */
-const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
+const Avatar = forwardRef<IdealystElement, AvatarProps>(({
   src,
   alt,
   fallback,

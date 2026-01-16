@@ -33,7 +33,7 @@ export function AlertIntents() {
         message="Your changes have been saved successfully."
       />
       <Alert
-        intent="error"
+        intent="danger"
         title="Error"
         message="An error occurred while processing your request."
       />
@@ -93,7 +93,7 @@ export function AlertWithIcons() {
         showIcon
       />
       <Alert
-        intent="error"
+        intent="danger"
         title="Error"
         message="Something went wrong."
         showIcon
@@ -196,12 +196,12 @@ export function AlertWithActions() {
         }
       />
       <Alert
-        intent="error"
+        intent="danger"
         title="Connection Lost"
         message="Unable to connect to the server."
         showIcon
         actions={
-          <Button size="sm" intent="error">
+          <Button size="sm" intent="danger">
             Retry
           </Button>
         }
@@ -216,17 +216,17 @@ export function AlertWithChildren() {
     <Alert intent="info" showIcon>
       <View spacing="sm">
         <View spacing="xs">
-          <Text weight="bold" size="md">
+          <Text weight="bold" typography="body1">
             Important Notice
           </Text>
-          <Text size="sm" >
+          <Text typography="body2">
             Please read the following information carefully:
           </Text>
         </View>
         <View spacing="xs">
-          <Text size="sm">• Your account will expire in 30 days</Text>
-          <Text size="sm">• Make sure to backup your data</Text>
-          <Text size="sm">• Contact support if you need help</Text>
+          <Text typography="body2">• Your account will expire in 30 days</Text>
+          <Text typography="body2">• Make sure to backup your data</Text>
+          <Text typography="body2">• Contact support if you need help</Text>
         </View>
       </View>
     </Alert>
@@ -279,19 +279,19 @@ export function FormValidationAlerts() {
     <View spacing="md">
       <Alert
         type="outlined"
-        intent="error"
+        intent="danger"
         title="Form Validation Failed"
         message="Please correct the following errors:"
         showIcon
       >
         <View spacing="xs">
-          <Text size="sm" >
+          <Text typography="body2">
             • Email address is required
           </Text>
-          <Text size="sm" >
+          <Text typography="body2">
             • Password must be at least 8 characters
           </Text>
-          <Text size="sm" >
+          <Text typography="body2">
             • Terms and conditions must be accepted
           </Text>
         </View>
@@ -325,7 +325,7 @@ export function SystemStatusAlerts() {
       />
       <Alert
         type="filled"
-        intent="error"
+        intent="danger"
         title="Service Disruption"
         message="We're experiencing technical difficulties. Our team is working on it."
         showIcon

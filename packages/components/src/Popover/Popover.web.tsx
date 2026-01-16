@@ -5,12 +5,13 @@ import { popoverStyles } from './Popover.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Floating content panel anchored to an element for contextual information or actions.
  * Supports multiple placements and automatic dismissal behaviors.
  */
-const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
+const Popover = forwardRef<IdealystElement, PopoverProps>(({
   open,
   onOpenChange,
   anchor,

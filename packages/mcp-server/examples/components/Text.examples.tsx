@@ -17,10 +17,10 @@ export function BasicText() {
 export function TextSizes() {
   return (
     <View spacing="md">
-      <Text size="sm">Small text</Text>
-      <Text size="md">Medium text</Text>
-      <Text size="lg">Large text</Text>
-      <Text size="xl">Extra large text</Text>
+      <Text typography="body2">Small text</Text>
+      <Text typography="body1">Medium text</Text>
+      <Text typography="subtitle1">Large text</Text>
+      <Text typography="h5">Extra large text</Text>
     </View>
   );
 }
@@ -66,16 +66,16 @@ export function TextWithColor() {
 export function CombinedTextStyles() {
   return (
     <View spacing="md">
-      <Text size="xl" weight="bold" >
+      <Text typography="h5" weight="bold">
         Heading 1
       </Text>
-      <Text size="lg" weight="semibold" >
+      <Text typography="subtitle1" weight="semibold">
         Heading 2
       </Text>
-      <Text size="md" weight="medium" >
+      <Text typography="body1" weight="medium">
         Subheading
       </Text>
-      <Text size="sm" weight="normal" >
+      <Text typography="body2" weight="normal">
         Body text
       </Text>
     </View>
@@ -86,14 +86,14 @@ export function CombinedTextStyles() {
 export function ParagraphText() {
   return (
     <View spacing="md">
-      <Text size="lg" weight="bold" >
+      <Text typography="subtitle1" weight="bold">
         Article Title
       </Text>
-      <Text size="md" >
+      <Text typography="body1">
         This is a paragraph of text that demonstrates how the Text component can be used for
         longer content. It maintains good readability with appropriate sizing and spacing.
       </Text>
-      <Text size="md" >
+      <Text typography="body1">
         You can create multiple paragraphs by using multiple Text components, each with their own
         styling and configuration.
       </Text>
@@ -106,26 +106,26 @@ export function LabelsAndDescriptions() {
   return (
     <View spacing="lg">
       <View spacing="xs">
-        <Text size="sm" weight="semibold" >
+        <Text typography="body2" weight="semibold">
           Username
         </Text>
-        <Text size="md" >
+        <Text typography="body1">
           johndoe
         </Text>
       </View>
       <View spacing="xs">
-        <Text size="sm" weight="semibold" >
+        <Text typography="body2" weight="semibold">
           Email
         </Text>
-        <Text size="md" >
+        <Text typography="body1">
           john.doe@example.com
         </Text>
       </View>
       <View spacing="xs">
-        <Text size="sm" weight="semibold" >
+        <Text typography="body2" weight="semibold">
           Status
         </Text>
-        <Text size="md"  weight="medium">
+        <Text typography="body1" weight="medium">
           Active
         </Text>
       </View>
@@ -137,16 +137,16 @@ export function LabelsAndDescriptions() {
 export function StatusMessages() {
   return (
     <View spacing="md">
-      <Text size="sm"  weight="medium">
+      <Text typography="body2" weight="medium">
         ✓ Form submitted successfully
       </Text>
-      <Text size="sm"  weight="medium">
+      <Text typography="body2" weight="medium">
         ✗ Please fill out all required fields
       </Text>
-      <Text size="sm"  weight="medium">
+      <Text typography="body2" weight="medium">
         ℹ Your changes have been saved
       </Text>
-      <Text size="sm"  weight="medium">
+      <Text typography="body2" weight="medium">
         ⚠ This action cannot be undone
       </Text>
     </View>
@@ -157,19 +157,19 @@ export function StatusMessages() {
 export function TypographyHierarchy() {
   return (
     <View spacing="lg">
-      <Text size="xl" weight="bold" >
+      <Text typography="h5" weight="bold">
         Page Title
       </Text>
-      <Text size="lg" weight="semibold" >
+      <Text typography="subtitle1" weight="semibold">
         Section Heading
       </Text>
-      <Text size="md" weight="medium" >
+      <Text typography="body1" weight="medium">
         Subsection Title
       </Text>
-      <Text size="md" >
+      <Text typography="body1">
         Body text content goes here with regular weight and medium size for optimal readability.
       </Text>
-      <Text size="sm" >
+      <Text typography="body2">
         Small print or supplementary information can use smaller text size.
       </Text>
     </View>

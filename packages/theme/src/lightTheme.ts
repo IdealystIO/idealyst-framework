@@ -19,7 +19,7 @@ export const lightTheme = createTheme()
         light: '#a7f3d0',
         dark: '#165e29',
     })
-    .addIntent('error', {
+    .addIntent('danger', {
         primary: '#ef4444',
         contrast: '#ffffff',
         light: '#fca5a1',
@@ -210,6 +210,13 @@ export const lightTheme = createTheme()
             md: { size: 36, borderWidth: 3 },
             lg: { size: 48, borderWidth: 4 },
             xl: { size: 64, borderWidth: 5 },
+        },
+        alert: {
+            xs: { padding: 8, gap: 6, borderRadius: 4, titleFontSize: 12, titleLineHeight: 16, messageFontSize: 11, messageLineHeight: 14, iconSize: 16, closeIconSize: 12 },
+            sm: { padding: 12, gap: 8, borderRadius: 6, titleFontSize: 14, titleLineHeight: 20, messageFontSize: 12, messageLineHeight: 16, iconSize: 20, closeIconSize: 14 },
+            md: { padding: 16, gap: 10, borderRadius: 8, titleFontSize: 16, titleLineHeight: 24, messageFontSize: 14, messageLineHeight: 20, iconSize: 24, closeIconSize: 16 },
+            lg: { padding: 20, gap: 12, borderRadius: 10, titleFontSize: 18, titleLineHeight: 28, messageFontSize: 16, messageLineHeight: 24, iconSize: 28, closeIconSize: 18 },
+            xl: { padding: 24, gap: 14, borderRadius: 12, titleFontSize: 20, titleLineHeight: 32, messageFontSize: 18, messageLineHeight: 28, iconSize: 32, closeIconSize: 20 },
         },
         breadcrumb: {
             xs: { fontSize: 10, lineHeight: 14, iconSize: 12 },

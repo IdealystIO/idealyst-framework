@@ -5,16 +5,17 @@ import { checkboxStyles } from './Checkbox.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebSelectionAriaProps, generateAccessibilityId, combineIds } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Checkbox input for boolean selection with support for indeterminate state.
  * Includes label, helper text, and error display options.
  */
-const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
+const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
   checked = false,
   indeterminate = false,
   disabled = false,
-  onCheckedChange,
+  onChange,
   size = 'md',
   intent = 'primary',
   variant = 'default',
@@ -56,7 +57,7 @@ const Checkbox = forwardRef<HTMLDivElement, CheckboxProps>(({
 
     const newChecked = event.target.checked;
     setInternalChecked(newChecked);
-    onCheckedChange?.(newChecked);
+    onChange?.(newChecked);
   };
 
   // Generate unique IDs for accessibility

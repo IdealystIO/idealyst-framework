@@ -129,7 +129,7 @@ export const TestDemo: React.FC = () => {
                   </View>
                   <Button
                     variant="outlined"
-                    intent="error"
+                    intent="danger"
                     size="sm"
                     onPress={() => handleDeleteTest(test.id)}
                     disabled={deleteTestMutation.isPending}

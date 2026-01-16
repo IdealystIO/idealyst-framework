@@ -285,7 +285,7 @@ export function ComponentPlayground({
             <Select
               size="xs"
               value={children}
-              onValueChange={setChildren}
+              onChange={setChildren}
               options={row.options?.map((opt: string) => ({ label: opt, value: opt })) || []}
             />
           );
@@ -295,7 +295,7 @@ export function ComponentPlayground({
             <Select
               size="xs"
               value={props[row.name]}
-              onValueChange={(value) => updateProp(row.name, value)}
+              onChange={(value) => updateProp(row.name, value)}
               options={row.options.map((opt: string) => ({ label: opt, value: opt }))}
             />
           );
@@ -305,7 +305,7 @@ export function ComponentPlayground({
             <Select
               size="xs"
               value={props[row.name] ? 'true' : 'false'}
-              onValueChange={(value) => updateProp(row.name, value === 'true')}
+              onChange={(value) => updateProp(row.name, value === 'true')}
               options={[
                 { label: 'true', value: 'true' },
                 { label: 'false', value: 'false' },
@@ -463,7 +463,7 @@ export function ComponentPlayground({
       {/* Fullscreen Code Dialog */}
       <Dialog
         open={codeDialogOpen}
-        onOpenChange={setCodeDialogOpen}
+        onClose={() => setCodeDialogOpen(false)}
         title="Generated Code"
       >
         <View
@@ -552,7 +552,7 @@ export function ComponentPlayground({
       {/* Help Dialog for Theme-extensible */}
       <Dialog
         open={helpDialogOpen}
-        onOpenChange={setHelpDialogOpen}
+        onClose={() => setHelpDialogOpen(false)}
         title="Theme-extensible Props"
       >
         <View style={{ maxWidth: 400 }}>

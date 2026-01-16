@@ -238,7 +238,7 @@ describe('Async Component Testing', () => {
         </button>
         
         {loading && <div data-testid="loading">Loading...</div>}
-        {error && <div data-testid="error">{error}</div>}
+        {error && <div data-testid="danger">{error}</div>}
         {data && <div data-testid="data">{data}</div>}
       </div>
     );

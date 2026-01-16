@@ -101,11 +101,11 @@ export const RadioButtonExamples: React.FC = () => {
             onPress={() => setSelectedIntent('success')}
           />
           <RadioButton
-            value="error"
-            label="Error"
-            intent="error"
-            checked={selectedIntent === 'error'}
-            onPress={() => setSelectedIntent('error')}
+            value="danger"
+            label="Danger"
+            intent="danger"
+            checked={selectedIntent === 'danger'}
+            onPress={() => setSelectedIntent('danger')}
           />
           <RadioButton
             value="warning"

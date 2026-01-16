@@ -6,8 +6,9 @@ import { popoverStyles } from './Popover.styles';
 import { calculateSmartPosition } from '../utils/positionUtils.native';
 import { BoundedModalContent } from '../internal/BoundedModalContent.native';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Popover = forwardRef<View, PopoverProps>(({
+const Popover = forwardRef<IdealystElement, PopoverProps>(({
   open,
   onOpenChange,
   anchor,

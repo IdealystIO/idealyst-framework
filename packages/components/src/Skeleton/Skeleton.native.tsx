@@ -11,8 +11,9 @@ import Animated, {
 import { skeletonStyles } from './Skeleton.styles';
 import type { SkeletonProps, SkeletonGroupProps } from './types';
 import { getNativeLiveRegionAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Skeleton = forwardRef<View, SkeletonProps>(({
+const Skeleton = forwardRef<IdealystElement, SkeletonProps>(({
   width: _width = '100%',
   height: _height = 20,
   shape = 'rectangle',

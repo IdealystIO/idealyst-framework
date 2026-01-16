@@ -1,9 +1,9 @@
 /**
- * Alert styles using defineStyle with dynamic intent/type handling.
+ * Alert styles using defineStyle with $iterator expansion for size variants.
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
-import type { Theme as BaseTheme, Intent } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Size } from '@idealyst/theme';
 
 // Required: Unistyles must see StyleSheet usage in original source to process this file
 void StyleSheet;
@@ -16,98 +16,136 @@ type AlertType = 'filled' | 'outlined' | 'soft';
 export type AlertDynamicProps = {
     intent?: Intent;
     type?: AlertType;
+    size?: Size;
 };
 
 /**
- * Alert styles with intent/type combination handling.
+ * Alert styles with $iterator expansion for size variants.
+ *
+ * Intent/type combinations use dynamic functions with inlined theme accesses
+ * so Unistyles can trace all possible theme paths.
  */
 export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
-    container: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
-        const intentValue = theme.intents[intent];
+    container: (_props: AlertDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'flex-start' as const,
+        borderWidth: 1,
+        borderStyle: 'solid' as const,
+        variants: {
+            type: {
+                filled: {
+                    backgroundColor: theme.$intents.primary,
+                    borderColor: theme.$intents.primary,
+                },
+                outlined: {
+                    backgroundColor: 'transparent',
+                    borderColor: theme.$intents.primary,
+                },
+                soft: {
+                    backgroundColor: theme.$intents.light,
+                    borderColor: theme.$intents.light,
+                },
+            },
+            size: {
+                gap: theme.sizes.$alert.gap,
+                padding: theme.sizes.$alert.padding,
+                borderRadius: theme.sizes.$alert.borderRadius,
+            },
+        },
+    }),
 
-        // Background color based on type
-        const backgroundColor = type === 'filled'
-            ? intentValue.primary
-            : type === 'soft'
-                ? intentValue.light
-                : 'transparent';
+    iconContainer: (_props: AlertDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        alignSelf: 'flex-start' as const,
+        flexShrink: 0,
+        marginTop: 2,
+        variants: {
+            type: {
+                filled: {
+                    color: theme.$intents.contrast,
+                },
+                outlined: {
+                    color: theme.$intents.primary,
+                },
+                soft: {
+                    color: theme.$intents.primary,
+                },
+            },
+            size: {
+                width: theme.sizes.$alert.iconSize,
+                height: theme.sizes.$alert.iconSize,
+            },
+        },
+    }),
 
-        // Border color based on type
-        const borderColor = (type === 'filled' || type === 'outlined')
-            ? intentValue.primary
-            : intentValue.light;
+    title: (_props: AlertDynamicProps) => ({
+        fontWeight: '600' as const,
+        variants: {
+            type: {
+                filled: {
+                    color: theme.$intents.contrast,
+                },
+                outlined: {
+                    color: theme.$intents.primary,
+                },
+                soft: {
+                    color: theme.$intents.primary,
+                },
+            },
+            size: {
+                fontSize: theme.sizes.$alert.titleFontSize,
+                lineHeight: theme.sizes.$alert.titleLineHeight,
+            },
+        },
+    }),
 
-        return {
-            display: 'flex' as const,
-            flexDirection: 'row' as const,
-            alignItems: 'flex-start' as const,
-            gap: 8,
-            padding: 16,
-            borderRadius: 8,
-            borderWidth: 1,
-            borderStyle: 'solid' as const,
-            backgroundColor,
-            borderColor,
-        } as const;
-    },
-
-    iconContainer: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
-        const intentValue = theme.intents[intent];
-        const color = type === 'filled' ? intentValue.contrast : intentValue.primary;
-
-        return {
-            display: 'flex' as const,
-            alignItems: 'center' as const,
-            justifyContent: 'center' as const,
-            alignSelf: 'flex-start' as const,
-            flexShrink: 0,
-            width: 24,
-            height: 24,
-            marginTop: 2,
-            color,
-        } as const;
-    },
-
-    title: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
-        const intentValue = theme.intents[intent];
-        const color = type === 'filled' ? intentValue.contrast : intentValue.primary;
-
-        return {
-            fontSize: 16,
-            lineHeight: 24,
-            fontWeight: '600' as const,
-            color,
-        } as const;
-    },
-
-    message: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
-        const intentValue = theme.intents[intent];
-        const color = type === 'filled' ? intentValue.contrast : theme.colors.text.primary;
-
-        return {
-            fontSize: 14,
-            lineHeight: 20,
-            color,
-        } as const;
-    },
+    message: (_props: AlertDynamicProps) => ({
+        variants: {
+            type: {
+                filled: {
+                    color: theme.$intents.contrast,
+                },
+                outlined: {
+                    color: theme.colors.text.primary,
+                },
+                soft: {
+                    color: theme.colors.text.primary,
+                },
+            },
+            size: {
+                fontSize: theme.sizes.$alert.messageFontSize,
+                lineHeight: theme.sizes.$alert.messageLineHeight,
+            },
+        },
+    }),
 
     content: (_props: AlertDynamicProps) => ({
         flex: 1,
         display: 'flex' as const,
         flexDirection: 'column' as const,
-        gap: 4,
+        variants: {
+            size: {
+                // Gap is half of the main gap
+                gap: theme.sizes.$alert.gap,
+            },
+        },
     }),
 
     actions: (_props: AlertDynamicProps) => ({
-        marginTop: 4,
         display: 'flex' as const,
         flexDirection: 'row' as const,
-        gap: 8,
+        variants: {
+            size: {
+                marginTop: theme.sizes.$alert.gap,
+                gap: theme.sizes.$alert.gap,
+            },
+        },
     }),
 
     closeButton: (_props: AlertDynamicProps) => ({
-        padding: 4,
-        borderRadius: 4,
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
@@ -126,19 +164,43 @@ export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
                 backgroundColor: 'rgba(0, 0, 0, 0.1)',
             },
         },
+        variants: {
+            size: {
+                padding: theme.sizes.$alert.padding,
+                borderRadius: theme.sizes.$alert.borderRadius,
+            },
+        },
     }),
 
-    closeIcon: ({ intent = 'neutral', type = 'soft' }: AlertDynamicProps) => {
-        const intentValue = theme.intents[intent];
-        const color = type === 'filled' ? intentValue.contrast : intentValue.primary;
-
-        return {
-            display: 'flex' as const,
-            alignItems: 'center' as const,
-            justifyContent: 'center' as const,
-            width: 16,
-            height: 16,
-            color,
-        } as const;
-    },
+    closeIcon: (_props: AlertDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        variants: {
+            type: {
+                filled: {
+                    color: theme.$intents.contrast,
+                },
+                outlined: {
+                    color: theme.$intents.primary,
+                },
+                soft: {
+                    color: theme.$intents.primary,
+                },
+            },
+            size: {
+                width: theme.sizes.$alert.closeIconSize,
+                height: theme.sizes.$alert.closeIconSize,
+            },
+        },
+    }),
 }));
+
+// Export theme sizes for use in components (for icon sizing in native)
+export const alertSizeConfig = {
+    xs: { padding: 8, gap: 6, borderRadius: 4, titleFontSize: 12, titleLineHeight: 16, messageFontSize: 11, messageLineHeight: 14, iconSize: 16, closeIconSize: 12 },
+    sm: { padding: 12, gap: 8, borderRadius: 6, titleFontSize: 14, titleLineHeight: 20, messageFontSize: 12, messageLineHeight: 16, iconSize: 20, closeIconSize: 14 },
+    md: { padding: 16, gap: 10, borderRadius: 8, titleFontSize: 16, titleLineHeight: 24, messageFontSize: 14, messageLineHeight: 20, iconSize: 24, closeIconSize: 16 },
+    lg: { padding: 20, gap: 12, borderRadius: 10, titleFontSize: 18, titleLineHeight: 28, messageFontSize: 16, messageLineHeight: 24, iconSize: 28, closeIconSize: 18 },
+    xl: { padding: 24, gap: 14, borderRadius: 12, titleFontSize: 20, titleLineHeight: 32, messageFontSize: 18, messageLineHeight: 28, iconSize: 32, closeIconSize: 20 },
+};

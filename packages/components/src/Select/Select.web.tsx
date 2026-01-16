@@ -6,15 +6,16 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import { selectStyles } from './Select.styles';
 import { SelectOption, SelectProps } from './types';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Dropdown selection component with search, keyboard navigation, and custom option rendering.
  * Supports single selection with filterable options list.
  */
-const Select = forwardRef<HTMLDivElement, SelectProps>(({
+const Select = forwardRef<IdealystElement, SelectProps>(({
   options,
   value,
-  onValueChange,
+  onChange,
   placeholder = 'Select an option',
   disabled = false,
   error = false,
@@ -166,7 +167,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(({
 
   const handleOptionSelect = (option: SelectOption) => {
     if (!option.disabled) {
-      onValueChange?.(option.value);
+      onChange?.(option.value);
       setIsOpen(false);
       setSearchTerm('');
       triggerRef.current?.focus();

@@ -197,7 +197,7 @@ function CameraScreen() {
 
       <View style={{ padding: 20 }}>
         {!isRecording ? (
-          <Button intent="error" onPress={handleStartRecording}>
+          <Button intent="danger" onPress={handleStartRecording}>
             Start Recording
           </Button>
         ) : (
@@ -250,16 +250,16 @@ function CameraScreen() {
           <Text>Zoom: {zoom.toFixed(1)}x</Text>
           <Slider
             value={zoom}
-            minimumValue={1}
-            maximumValue={activeDevice?.maxZoom ?? 5}
-            onValueChange={setZoom}
+            min={1}
+            max={activeDevice?.maxZoom ?? 5}
+            onChange={setZoom}
           />
         </View>
 
         {/* Torch toggle */}
         <Switch
-          value={torchActive}
-          onValueChange={setTorch}
+          checked={torchActive}
+          onChange={setTorch}
           label="Flash"
         />
 
@@ -466,7 +466,7 @@ function PropRow({
       <View style={{ width: 160 }}>
         <Text weight="semibold" style={{ fontFamily: 'monospace' }}>
           {name}
-          {required && <Text color="error">*</Text>}
+          {required && <Text color="danger">*</Text>}
         </Text>
       </View>
       <View style={{ width: 200 }}>

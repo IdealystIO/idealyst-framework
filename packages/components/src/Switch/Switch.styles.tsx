@@ -56,29 +56,35 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
         },
     }),
 
-    switchTrack: ({ intent = 'primary', checked = false, disabled = false }: SwitchDynamicProps) => ({
+    switchTrack: (_props: SwitchDynamicProps) => ({
         borderRadius: 9999,
         position: 'relative' as const,
-        backgroundColor: checked
-            ? theme.intents[intent].primary
-            : theme.colors.border.secondary,
-        opacity: disabled ? 0.5 : 1,
         variants: {
             size: {
                 width: theme.sizes.$switch.trackWidth,
                 height: theme.sizes.$switch.trackHeight,
             },
+            checked: {
+                true: {
+                    backgroundColor: theme.$intents.primary,
+                },
+                false: {
+                    backgroundColor: theme.colors.border.secondary,
+                },
+            },
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
         },
         _web: {
             transition: 'background-color 0.2s ease',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            _hover: disabled ? {} : { opacity: 0.9 },
-            _active: disabled ? {} : { opacity: 0.8 },
         },
     }),
 
     switchThumb: ({ size = 'md', checked = false }: SwitchDynamicProps) => {
-        const sizeValue = theme.sizes.switch[size];
+        // translateX needs runtime calculation based on size
+        const sizeValue = theme.sizes.switch[size] ?? theme.sizes.switch.md;
         const translateX = checked ? sizeValue.translateX : 0;
 
         return {
@@ -109,26 +115,38 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
         } as const;
     },
 
-    thumbIcon: ({ intent = 'primary', checked = false }: SwitchDynamicProps) => ({
+    thumbIcon: (_props: SwitchDynamicProps) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
-        color: checked
-            ? theme.intents[intent].primary
-            : theme.colors.border.secondary,
         variants: {
             size: {
                 width: theme.sizes.$switch.thumbIconSize,
                 height: theme.sizes.$switch.thumbIconSize,
             },
+            checked: {
+                true: {
+                    color: theme.$intents.primary,
+                },
+                false: {
+                    color: theme.colors.border.secondary,
+                },
+            },
         },
     }),
 
-    label: ({ disabled = false, labelPosition = 'right' }: SwitchDynamicProps) => ({
+    label: (_props: SwitchDynamicProps) => ({
         fontSize: 14,
         color: theme.colors.text.primary,
-        opacity: disabled ? 0.5 : 1,
-        marginRight: labelPosition === 'left' ? 8 : 0,
-        marginLeft: labelPosition === 'right' ? 8 : 0,
+        variants: {
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
+            labelPosition: {
+                left: { marginRight: 8, marginLeft: 0 },
+                right: { marginLeft: 8, marginRight: 0 },
+            },
+        },
     }),
 }));

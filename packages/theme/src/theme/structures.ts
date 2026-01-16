@@ -194,6 +194,18 @@ export type ActivityIndicatorSizeValue = {
     borderWidth: SizeValue;
 };
 
+export type AlertSizeValue = {
+    padding: SizeValue;
+    gap: SizeValue;
+    borderRadius: SizeValue;
+    titleFontSize: SizeValue;
+    titleLineHeight: SizeValue;
+    messageFontSize: SizeValue;
+    messageLineHeight: SizeValue;
+    iconSize: SizeValue;
+    closeIconSize: SizeValue;
+};
+
 export type BreadcrumbSizeValue = {
     fontSize: SizeValue;
     lineHeight: SizeValue;

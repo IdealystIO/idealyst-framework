@@ -1,16 +1,17 @@
-import { ComponentRef, forwardRef, useMemo } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet as RNStyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { buttonStyles } from './Button.styles';
 import { ButtonProps } from './types';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((props, ref) => {
+const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
   const {
     children,
-    title,
     onPress,
+    onClick,
     disabled = false,
     loading = false,
     type = 'contained',
@@ -37,6 +38,16 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
 
   // Button is effectively disabled when loading
   const isDisabled = disabled || loading;
+
+  // Determine the handler to use - onPress takes precedence
+  const pressHandler = onPress ?? onClick;
+
+  // Warn about deprecated onClick usage in development
+  if (__DEV__ && onClick && !onPress) {
+    console.warn(
+      'Button: onClick prop is deprecated. Use onPress instead for cross-platform compatibility.'
+    );
+  }
 
   // Apply variants for size, disabled, gradient
   buttonStyles.useVariants({
@@ -67,8 +78,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   const iconSize = iconSizeMap[size] ?? 16;
 
 
-  // Use children if available, otherwise use title
-  const buttonContent = children || title;
+  const buttonContent = children;
 
   // Determine if we need to wrap content in icon container
   const hasIcons = leftIcon || rightIcon;
@@ -159,7 +169,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
   // TouchableOpacity types don't include nativeID but it's a valid RN prop
   const touchableProps = {
     ref,
-    onPress,
+    onPress: pressHandler,
     disabled: isDisabled,
     testID,
     nativeID: id,

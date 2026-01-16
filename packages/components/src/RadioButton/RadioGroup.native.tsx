@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioGroupProps } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 const RadioGroupContext = React.createContext<{
   value?: string;
@@ -12,7 +13,7 @@ const RadioGroupContext = React.createContext<{
 
 export const useRadioGroup = () => React.useContext(RadioGroupContext);
 
-const RadioGroup = forwardRef<View, RadioGroupProps>(({
+const RadioGroup = forwardRef<IdealystElement, RadioGroupProps>(({
   value,
   onValueChange,
   disabled = false,
@@ -43,7 +44,7 @@ const RadioGroup = forwardRef<View, RadioGroupProps>(({
   return (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>
       <View
-        ref={ref}
+        ref={ref as any}
         nativeID={id}
         style={[
           radioButtonStyles.groupContainer,

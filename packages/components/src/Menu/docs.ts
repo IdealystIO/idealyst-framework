@@ -9,7 +9,7 @@ export const sampleProps: SampleProps = {
     items: [
       { id: '1', label: 'Edit' },
       { id: '2', label: 'Duplicate' },
-      { id: '3', label: 'Delete', intent: 'error' },
+      { id: '3', label: 'Delete', intent: 'danger' },
     ],
   },
   children: 'Click for menu',

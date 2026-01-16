@@ -3,12 +3,13 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { ViewProps } from './types';
 import { viewStyles } from './View.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Fundamental layout container with background, border, and spacing options.
  * The base building block for composing UI layouts.
  */
-const View = forwardRef<HTMLDivElement, ViewProps>(({
+const View = forwardRef<IdealystElement, ViewProps>(({
   children,
   background = 'transparent',
   radius = 'none',

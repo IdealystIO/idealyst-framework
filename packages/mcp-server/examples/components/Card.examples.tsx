@@ -92,7 +92,7 @@ export function CardWithIntent() {
       <Card intent="success" type="filled">
         <Text>Success Card</Text>
       </Card>
-      <Card intent="error" type="filled">
+      <Card intent="danger" type="filled">
         <Text>Error Card</Text>
       </Card>
     </>

@@ -49,7 +49,7 @@ export interface SelectProps extends FormInputStyleProps, FormAccessibilityProps
   /**
    * Called when the selected value changes
    */
-  onValueChange?: (value: string) => void;
+  onChange?: (value: string) => void;
 
   /**
    * Placeholder text when no value is selected

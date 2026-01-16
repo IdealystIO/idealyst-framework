@@ -5,6 +5,7 @@ import type { AlertProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
 // Default icons for each intent
 const defaultIcons: Record<string, string> = {
@@ -20,12 +21,13 @@ const defaultIcons: Record<string, string> = {
  * Notification banner for displaying important messages, warnings, or status updates.
  * Supports multiple intents, dismissibility, and custom actions.
  */
-const Alert = forwardRef<HTMLDivElement, AlertProps>(({
+const Alert = forwardRef<IdealystElement, AlertProps>(({
   title,
   message,
   children,
   intent = 'neutral',
   type = 'soft',
+  size = 'md',
   icon,
   showIcon = true,
   dismissible = false,
@@ -35,14 +37,17 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(({
   testID,
   id,
 }, ref) => {
-  // Compute dynamic styles with intent and type
-  const dynamicProps = { intent, type };
+  // Apply variants for size
+  alertStyles.useVariants({ size });
+
+  // Compute dynamic styles with intent, type, and size
+  const dynamicProps = { intent, type, size };
   const containerProps = getWebProps([(alertStyles.container as any)(dynamicProps), style as any]);
   const iconContainerProps = getWebProps([(alertStyles.iconContainer as any)(dynamicProps)]);
-  const contentProps = getWebProps([(alertStyles.content as any)({})]);
+  const contentProps = getWebProps([(alertStyles.content as any)(dynamicProps)]);
   const titleProps = getWebProps([(alertStyles.title as any)(dynamicProps)]);
   const messageProps = getWebProps([(alertStyles.message as any)(dynamicProps)]);
-  const actionsProps = getWebProps([(alertStyles.actions as any)({})]);
+  const actionsProps = getWebProps([(alertStyles.actions as any)(dynamicProps)]);
   const closeButtonProps = getWebProps([(alertStyles.closeButton as any)(dynamicProps)]);
   const closeIconProps = getWebProps([(alertStyles.closeIcon as any)(dynamicProps)]);
 

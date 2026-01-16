@@ -15,9 +15,9 @@ export function BasicDialog() {
   return (
     <View spacing="md">
       <Button onPress={() => setOpen(true)}>Open Dialog</Button>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onClose={() => setOpen(false)}>
         <View spacing="md">
-          <Text size="lg" weight="bold">
+          <Text typography="subtitle1" weight="bold">
             Welcome!
           </Text>
           <Text>This is a basic dialog with some content.</Text>
@@ -35,7 +35,7 @@ export function DialogWithTitle() {
   return (
     <View spacing="md">
       <Button onPress={() => setOpen(true)}>Open Dialog</Button>
-      <Dialog open={open} onOpenChange={setOpen} title="Dialog Title">
+      <Dialog open={open} onClose={() => setOpen(false)} title="Dialog Title">
         <View spacing="md">
           <Text>This dialog has a title in the header.</Text>
           <Button onPress={() => setOpen(false)}>Close</Button>
@@ -66,7 +66,7 @@ export function DialogSizes() {
           Fullscreen Dialog
         </Button>
       </View>
-      <Dialog open={open} onOpenChange={setOpen} title={`${size.toUpperCase()} Dialog`} size={size}>
+      <Dialog open={open} onClose={() => setOpen(false)} title={`${size.toUpperCase()} Dialog`} size={size}>
         <View spacing="md">
           <Text>This is a {size} dialog.</Text>
           <Button onPress={() => setOpen(false)}>Close</Button>
@@ -78,14 +78,14 @@ export function DialogSizes() {
 
 // Example 4: Dialog Types
 export function DialogTypes() {
-  const [type, setType] = React.useState<'standard' | 'alert' | 'confirmation'>('standard');
+  const [type, setType] = React.useState<'default' | 'alert' | 'confirmation'>('default');
   const [open, setOpen] = React.useState(false);
 
   return (
     <View spacing="md">
       <View spacing="sm">
-        <Button onPress={() => { setType('standard'); setOpen(true); }}>
-          Standard Dialog
+        <Button onPress={() => { setType('default'); setOpen(true); }}>
+          Default Dialog
         </Button>
         <Button onPress={() => { setType('alert'); setOpen(true); }}>
           Alert Dialog
@@ -94,7 +94,7 @@ export function DialogTypes() {
           Confirmation Dialog
         </Button>
       </View>
-      <Dialog open={open} onOpenChange={setOpen} title="Dialog" type={type}>
+      <Dialog open={open} onClose={() => setOpen(false)} title="Dialog" type={type}>
         <View spacing="md">
           <Text>This is a {type} dialog type.</Text>
           <Button onPress={() => setOpen(false)}>Close</Button>
@@ -113,7 +113,7 @@ export function DialogWithCloseButton() {
       <Button onPress={() => setOpen(true)}>Open Dialog</Button>
       <Dialog
         open={open}
-        onOpenChange={setOpen}
+        onClose={() => setOpen(false)}
         title="Dialog with Close Button"
         showCloseButton
       >
@@ -134,7 +134,7 @@ export function DialogWithBackdropDisabled() {
       <Button onPress={() => setOpen(true)}>Open Dialog</Button>
       <Dialog
         open={open}
-        onOpenChange={setOpen}
+        onClose={() => setOpen(false)}
         title="Modal Dialog"
         closeOnBackdropClick={false}
       >
@@ -165,12 +165,12 @@ export function ConfirmationDialog() {
 
   return (
     <View spacing="md">
-      <Button intent="error" onPress={() => setOpen(true)}>
+      <Button intent="danger" onPress={() => setOpen(true)}>
         Delete Item
       </Button>
       <Dialog
         open={open}
-        onOpenChange={setOpen}
+        onClose={() => setOpen(false)}
         title="Confirm Deletion"
         type="confirmation"
         size="sm"
@@ -178,7 +178,7 @@ export function ConfirmationDialog() {
         <View spacing="lg">
           <Text>Are you sure you want to delete this item? This action cannot be undone.</Text>
           <View spacing="sm">
-            <Button intent="error" onPress={handleConfirm}>
+            <Button intent="danger" onPress={handleConfirm}>
               Delete
             </Button>
             <Button type="outlined" onPress={handleCancel}>
@@ -209,25 +209,25 @@ export function FormDialog() {
       <Button onPress={() => setOpen(true)}>Add User</Button>
       <Dialog
         open={open}
-        onOpenChange={setOpen}
+        onClose={() => setOpen(false)}
         title="Add New User"
         size="md"
         showCloseButton
       >
         <View spacing="lg">
           <View spacing="sm">
-            <Text size="sm" weight="semibold">
+            <Text typography="body2" weight="semibold">
               Name
             </Text>
-            <Text size="sm" >
+            <Text typography="body2">
               Placeholder for input
             </Text>
           </View>
           <View spacing="sm">
-            <Text size="sm" weight="semibold">
+            <Text typography="body2" weight="semibold">
               Email
             </Text>
-            <Text size="sm" >
+            <Text typography="body2">
               Placeholder for input
             </Text>
           </View>
@@ -256,7 +256,7 @@ export function AlertDialog() {
       </Button>
       <Dialog
         open={open}
-        onOpenChange={setOpen}
+        onClose={() => setOpen(false)}
         title="Important Notice"
         type="alert"
         size="sm"
@@ -294,7 +294,7 @@ export function DialogWithAnimations() {
       </View>
       <Dialog
         open={open}
-        onOpenChange={setOpen}
+        onClose={() => setOpen(false)}
         title="Animated Dialog"
         animationType={animationType}
       >
@@ -316,7 +316,7 @@ export function SettingsDialog() {
       <Button onPress={() => setOpen(true)}>Open Settings</Button>
       <Dialog
         open={open}
-        onOpenChange={setOpen}
+        onClose={() => setOpen(false)}
         title="Settings"
         size="md"
         showCloseButton
@@ -325,15 +325,15 @@ export function SettingsDialog() {
           <View spacing="md">
             <Text weight="semibold">Notifications</Text>
             <View spacing="sm">
-              <Text size="sm">• Email notifications: On</Text>
-              <Text size="sm">• Push notifications: Off</Text>
+              <Text typography="body2">• Email notifications: On</Text>
+              <Text typography="body2">• Push notifications: Off</Text>
             </View>
           </View>
           <View spacing="md">
             <Text weight="semibold">Privacy</Text>
             <View spacing="sm">
-              <Text size="sm">• Profile visibility: Public</Text>
-              <Text size="sm">• Activity status: Visible</Text>
+              <Text typography="body2">• Profile visibility: Public</Text>
+              <Text typography="body2">• Activity status: Visible</Text>
             </View>
           </View>
           <Button onPress={() => setOpen(false)}>Save Changes</Button>

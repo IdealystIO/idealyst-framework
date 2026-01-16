@@ -3,12 +3,13 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { ScreenProps } from './types';
 import { screenStyles } from './Screen.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Full-screen container for page layouts with background color and safe area support.
  * Provides the outermost wrapper for screen-level content.
  */
-const Screen = forwardRef<HTMLDivElement, ScreenProps>(({
+const Screen = forwardRef<IdealystElement, ScreenProps>(({
   children,
   background = 'screen',
   safeArea = false,

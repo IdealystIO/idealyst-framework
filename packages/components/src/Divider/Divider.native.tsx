@@ -2,11 +2,12 @@ import { forwardRef } from 'react';
 import { View, Text } from 'react-native';
 import { DividerProps } from './types';
 import { dividerStyles } from './Divider.styles';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Divider = forwardRef<View, DividerProps>(({
+const Divider = forwardRef<IdealystElement, DividerProps>(({
   orientation = 'horizontal',
   type = 'solid',
-  thickness = 'thin',
+  size = 'sm',
   intent = 'neutral',
   length = 'full',
   spacing = 'md',
@@ -26,7 +27,7 @@ const Divider = forwardRef<View, DividerProps>(({
   // Get dynamic divider style
   const dividerStyle = (dividerStyles.divider as any)({
     orientation,
-    thickness,
+    size,
     type,
     intent,
     spacing,
@@ -35,15 +36,17 @@ const Divider = forwardRef<View, DividerProps>(({
   // Get dynamic line style
   const lineStyle = (dividerStyles.line as any)({
     orientation,
-    thickness,
+    size,
   });
 
-  // Get thickness value for dashed/dotted border handling on native
-  const getThicknessValue = () => {
-    switch (thickness) {
-      case 'thin': return 1;
+  // Get size value for dashed/dotted border handling on native
+  const getSizeValue = () => {
+    switch (size) {
+      case 'xs': return 1;
+      case 'sm': return 1;
       case 'md': return 2;
-      case 'thick': return 4;
+      case 'lg': return 3;
+      case 'xl': return 4;
       default: return 1;
     }
   };
@@ -51,19 +54,19 @@ const Divider = forwardRef<View, DividerProps>(({
   // For dashed/dotted variants on native, we need to use border instead of background
   const getNativeDashedStyle = () => {
     if (type === 'dashed' || type === 'dotted') {
-      const actualThickness = getThicknessValue();
+      const actualSize = getSizeValue();
 
       return {
         backgroundColor: 'transparent',
         borderStyle: type,
         borderColor: dividerStyle.backgroundColor,
         ...(orientation === 'horizontal' ? {
-          borderTopWidth: actualThickness,
+          borderTopWidth: actualSize,
           borderBottomWidth: 0,
           borderLeftWidth: 0,
           borderRightWidth: 0,
         } : {
-          borderLeftWidth: actualThickness,
+          borderLeftWidth: actualSize,
           borderTopWidth: 0,
           borderBottomWidth: 0,
           borderRightWidth: 0,
@@ -77,7 +80,7 @@ const Divider = forwardRef<View, DividerProps>(({
   if (!children) {
     return (
       <View
-        ref={ref}
+        ref={ref as any}
         nativeID={id}
         style={[dividerStyle, getNativeDashedStyle(), style]}
         testID={testID}
@@ -89,7 +92,7 @@ const Divider = forwardRef<View, DividerProps>(({
   // For lines with content, create line segments
   const renderLineSegment = () => {
     if (type === 'dashed' || type === 'dotted') {
-      const actualThickness = getThicknessValue();
+      const actualSize = getSizeValue();
 
       return (
         <View
@@ -100,12 +103,12 @@ const Divider = forwardRef<View, DividerProps>(({
               borderStyle: type,
               borderColor: lineStyle.backgroundColor,
               ...(orientation === 'horizontal' ? {
-                borderTopWidth: actualThickness,
+                borderTopWidth: actualSize,
                 borderBottomWidth: 0,
                 borderLeftWidth: 0,
                 borderRightWidth: 0,
               } : {
-                borderLeftWidth: actualThickness,
+                borderLeftWidth: actualSize,
                 borderTopWidth: 0,
                 borderBottomWidth: 0,
                 borderRightWidth: 0,
@@ -121,7 +124,7 @@ const Divider = forwardRef<View, DividerProps>(({
 
   return (
     <View
-      ref={ref}
+      ref={ref as any}
       nativeID={id}
       style={dividerStyles.container}
       testID={testID}

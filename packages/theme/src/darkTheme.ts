@@ -20,7 +20,7 @@ export const darkTheme = createTheme()
         light: '#6ee7b7',
         dark: '#047857',
     })
-    .addIntent('error', {
+    .addIntent('danger', {
         primary: '#f87171',
         contrast: '#0f172a',
         light: '#fca5a5',

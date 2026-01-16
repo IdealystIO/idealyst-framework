@@ -54,7 +54,7 @@ export const DocsLayout: React.FC = () => {
           <Select
             size="sm"
             value={language}
-            onValueChange={(value) => setLanguage(value)}
+            onChange={(value) => setLanguage(value)}
             options={[
               { value: 'en', label: 'English' },
               { value: 'fr', label: 'Français' },

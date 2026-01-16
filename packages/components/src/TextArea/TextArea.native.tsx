@@ -4,8 +4,9 @@ import { textAreaStyles } from './TextArea.styles';
 import Text from '../Text';
 import type { TextAreaProps } from './types';
 import { getNativeFormAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const TextArea = forwardRef<TextInput, TextAreaProps>(({
+const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',
   onChange,
@@ -149,7 +150,7 @@ const TextArea = forwardRef<TextInput, TextAreaProps>(({
 
       <View style={textareaContainerStyleComputed}>
         <TextInput
-          ref={ref}
+          ref={ref as any}
           {...nativeA11yProps}
           style={[
             textareaStyleComputed,

@@ -66,7 +66,7 @@ export function PropsTable({ props }: PropsTableProps) {
               {prop.name}
             </Text>
             {prop.required && (
-              <Text intent="error" style={{ marginLeft: 4 }}>*</Text>
+              <Text intent="danger" style={{ marginLeft: 4 }}>*</Text>
             )}
           </View>
           <Text

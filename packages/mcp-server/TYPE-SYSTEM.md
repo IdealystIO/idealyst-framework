@@ -50,7 +50,7 @@ From **@idealyst/components**:
 
 From **@idealyst/theme**:
 - `Size` type: `'xs' | 'sm' | 'md' | 'lg' | 'xl'`
-- `Intent` type: `'primary' | 'success' | 'error' | 'warning' | 'neutral' | 'info'`
+- `Intent` type: `'primary' | 'success' | 'danger' | 'warning' | 'neutral' | 'info'`
 - `Color` type: `Pallet.Shade` format
 - `Pallet` and `Shade` types
 

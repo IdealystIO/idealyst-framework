@@ -15,7 +15,7 @@ export function BasicCheckbox() {
   return (
     <Checkbox
       checked={checked}
-      onCheckedChange={setChecked}
+      onChange={setChecked}
       label="Accept terms and conditions"
     />
   );
@@ -27,11 +27,11 @@ export function CheckboxSizes() {
 
   return (
     <View spacing="md">
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Extra Small" size="xs" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Small" size="sm" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Medium" size="md" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Large" size="lg" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Extra Large" size="xl" />
+      <Checkbox checked={checked} onChange={setChecked} label="Extra Small" size="xs" />
+      <Checkbox checked={checked} onChange={setChecked} label="Small" size="sm" />
+      <Checkbox checked={checked} onChange={setChecked} label="Medium" size="md" />
+      <Checkbox checked={checked} onChange={setChecked} label="Large" size="lg" />
+      <Checkbox checked={checked} onChange={setChecked} label="Extra Large" size="xl" />
     </View>
   );
 }
@@ -42,12 +42,12 @@ export function CheckboxIntents() {
 
   return (
     <View spacing="md">
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Primary" intent="primary" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Success" intent="success" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Error" intent="error" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Warning" intent="warning" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Neutral" intent="neutral" />
-      <Checkbox checked={checked} onCheckedChange={setChecked} label="Info" intent="info" />
+      <Checkbox checked={checked} onChange={setChecked} label="Primary" intent="primary" />
+      <Checkbox checked={checked} onChange={setChecked} label="Success" intent="success" />
+      <Checkbox checked={checked} onChange={setChecked} label="Error" intent="danger" />
+      <Checkbox checked={checked} onChange={setChecked} label="Warning" intent="warning" />
+      <Checkbox checked={checked} onChange={setChecked} label="Neutral" intent="neutral" />
+      <Checkbox checked={checked} onChange={setChecked} label="Info" intent="info" />
     </View>
   );
 }
@@ -60,13 +60,13 @@ export function CheckboxVariants() {
     <View spacing="md">
       <Checkbox
         checked={checked}
-        onCheckedChange={setChecked}
+        onChange={setChecked}
         label="Default variant"
         variant="default"
       />
       <Checkbox
         checked={checked}
-        onCheckedChange={setChecked}
+        onChange={setChecked}
         label="Outlined variant"
         variant="outlined"
       />
@@ -92,7 +92,7 @@ export function IndeterminateCheckbox() {
       <Checkbox
         checked={parentChecked}
         indeterminate={indeterminate}
-        onCheckedChange={(checked) => {
+        onChange={(checked) => {
           setParentChecked(checked);
           setChild1(checked);
           setChild2(checked);
@@ -100,8 +100,8 @@ export function IndeterminateCheckbox() {
         label="Select All"
       />
       <View spacing="sm" style={{ paddingLeft: 20 }}>
-        <Checkbox checked={child1} onCheckedChange={setChild1} label="Option 1" />
-        <Checkbox checked={child2} onCheckedChange={setChild2} label="Option 2" />
+        <Checkbox checked={child1} onChange={setChild1} label="Option 1" />
+        <Checkbox checked={child2} onChange={setChild2} label="Option 2" />
       </View>
     </View>
   );
@@ -111,8 +111,8 @@ export function IndeterminateCheckbox() {
 export function DisabledCheckbox() {
   return (
     <View spacing="md">
-      <Checkbox checked={false} onCheckedChange={() => {}} label="Unchecked disabled" disabled />
-      <Checkbox checked={true} onCheckedChange={() => {}} label="Checked disabled" disabled />
+      <Checkbox checked={false} onChange={() => {}} label="Unchecked disabled" disabled />
+      <Checkbox checked={true} onChange={() => {}} label="Checked disabled" disabled />
     </View>
   );
 }
@@ -122,10 +122,10 @@ export function CheckboxWithCustomContent() {
   const [checked, setChecked] = React.useState(false);
 
   return (
-    <Checkbox checked={checked} onCheckedChange={setChecked}>
+    <Checkbox checked={checked} onChange={setChecked}>
       <View spacing="xs">
         <Text weight="bold">Marketing emails</Text>
-        <Text size="sm" >
+        <Text typography="body2">
           Receive updates about new features and special offers
         </Text>
       </View>
@@ -144,7 +144,7 @@ export function CheckboxWithHelperText() {
     <View spacing="md">
       <Checkbox
         checked={accepted}
-        onCheckedChange={setAccepted}
+        onChange={setAccepted}
         label="I agree to the terms and conditions"
         required
         error={showError ? 'You must accept the terms to continue' : undefined}
@@ -172,22 +172,22 @@ export function CheckboxGroup() {
       <Text weight="bold">Select your interests:</Text>
       <Checkbox
         checked={interests.tech}
-        onCheckedChange={() => toggleInterest('tech')}
+        onChange={() => toggleInterest('tech')}
         label="Technology"
       />
       <Checkbox
         checked={interests.design}
-        onCheckedChange={() => toggleInterest('design')}
+        onChange={() => toggleInterest('design')}
         label="Design"
       />
       <Checkbox
         checked={interests.business}
-        onCheckedChange={() => toggleInterest('business')}
+        onChange={() => toggleInterest('business')}
         label="Business"
       />
       <Checkbox
         checked={interests.marketing}
-        onCheckedChange={() => toggleInterest('marketing')}
+        onChange={() => toggleInterest('marketing')}
         label="Marketing"
       />
     </View>

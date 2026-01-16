@@ -3,8 +3,9 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { SVGImageProps } from './types';
 import { svgImageStyles } from './SVGImage.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
-const SVGImage = forwardRef<HTMLDivElement, SVGImageProps>(({
+const SVGImage = forwardRef<IdealystElement, SVGImageProps>(({
   source,
   width,
   height,

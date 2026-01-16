@@ -4,18 +4,23 @@ import { BadgeProps } from './types';
 import { badgeStyles } from './Badge.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Small status indicator for counts, labels, or notifications.
  * Available in filled, outlined, and dot variants with customizable colors.
+ *
+ * Supports both `intent` (semantic colors) and `color` (raw palette colors).
+ * If both are provided, `intent` takes precedence.
  */
-const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props, ref) => {
+const Badge = forwardRef<IdealystElement, BadgeProps>((props, ref) => {
   const {
     children,
     size = 'md',
     type: typeProp,
     variant,
-    color = 'blue',
+    intent,
+    color,
     icon,
     style,
     testID,
@@ -25,14 +30,17 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>((props, ref) => {
   // variant is an alias for type - variant takes precedence if both are set
   const type = variant ?? typeProp ?? 'filled';
 
+  // Default to 'primary' intent if neither intent nor color is provided
+  const effectiveColor = intent ? undefined : (color ?? 'primary');
+
   badgeStyles.useVariants({
     size,
     type,
   });
 
-  const badgeStyle = (badgeStyles.badge as any)({ color });
+  const badgeStyle = (badgeStyles.badge as any)({ intent, color: effectiveColor });
   const contentStyle = badgeStyles.content as any;
-  const textStyle = (badgeStyles.text as any)({ color });
+  const textStyle = (badgeStyles.text as any)({ intent, color: effectiveColor });
 
   const badgeProps = getWebProps([badgeStyle]);
   const contentProps = getWebProps([contentStyle]);

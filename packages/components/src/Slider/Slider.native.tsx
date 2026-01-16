@@ -8,8 +8,9 @@ import Text from '../Text';
 import type { SliderProps } from './types';
 import { isIconName } from '../Icon/icon-resolver';
 import { getNativeRangeAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Slider = forwardRef<View, SliderProps>(({
+const Slider = forwardRef<IdealystElement, SliderProps>(({
   value: controlledValue,
   defaultValue = 0,
   min = 0,
@@ -26,8 +27,8 @@ const Slider = forwardRef<View, SliderProps>(({
   margin,
   marginVertical,
   marginHorizontal,
-  onValueChange,
-  onValueCommit,
+  onChange,
+  onChangeCommit,
   style,
   testID,
   id,
@@ -79,12 +80,12 @@ const Slider = forwardRef<View, SliderProps>(({
       setInternalValue(newValue);
     }
 
-    onValueChange?.(newValue);
-  }, [controlledValue, onValueChange]);
+    onChange?.(newValue);
+  }, [controlledValue, onChange]);
 
   const commitValue = useCallback((finalValue: number) => {
-    onValueCommit?.(finalValue);
-  }, [onValueCommit]);
+    onChangeCommit?.(finalValue);
+  }, [onChangeCommit]);
 
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
@@ -211,7 +212,7 @@ const Slider = forwardRef<View, SliderProps>(({
   const trackStyle = (sliderStyles.track as any)({});
 
   return (
-    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
+    <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
       {showValue && (
         <View style={sliderStyles.valueLabel as any}>
           <Text>{value}</Text>

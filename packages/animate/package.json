@@ -1,0 +1,72 @@
+{
+  "name": "@idealyst/animate",
+  "version": "1.2.29",
+  "description": "Cross-platform animation hooks for React and React Native",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/animate"
+  },
+  "author": "Idealyst <contact@idealyst.io>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "@idealyst/theme": "^1.2.29",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-reanimated": ">=3.0.0",
+    "react-native-svg": ">=13.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    },
+    "react-native-reanimated": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@idealyst/theme": "^1.2.29",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "react-native-reanimated": "^4.1.3",
+    "react-native-svg": "^15.14.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "animation",
+    "hooks",
+    "cross-platform",
+    "reanimated",
+    "css-transitions"
+  ]
+}

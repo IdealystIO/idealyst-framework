@@ -62,8 +62,8 @@ export const TooltipExamples: React.FC = () => {
           <Tooltip content="Warning tooltip" intent="warning">
             <Button type="contained" intent="warning">Warning</Button>
           </Tooltip>
-          <Tooltip content="Error tooltip" intent="error">
-            <Button type="contained" intent="error">Error</Button>
+          <Tooltip content="Error tooltip" intent="danger">
+            <Button type="contained" intent="danger">Error</Button>
           </Tooltip>
           <Tooltip content="Neutral tooltip" intent="neutral">
             <Button type="contained" intent="neutral">Neutral</Button>

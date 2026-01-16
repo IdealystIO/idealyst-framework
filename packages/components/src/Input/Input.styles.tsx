@@ -67,7 +67,7 @@ export const inputStyles = defineStyle('Input', (theme: Theme) => ({
                 false: { opacity: 1 }
             },
             hasError: {
-                true: { borderColor: theme.intents.error.primary },
+                true: { borderColor: theme.intents.danger.primary },
                 false: { borderColor: theme.colors.border.primary },
             },
             // $iterator expands for each input size

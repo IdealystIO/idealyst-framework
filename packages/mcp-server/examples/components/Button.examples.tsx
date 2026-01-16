@@ -47,7 +47,7 @@ export function ButtonIntents() {
     <>
       <Button intent="primary">Primary</Button>
       <Button intent="success">Success</Button>
-      <Button intent="error">Error</Button>
+      <Button intent="danger">Error</Button>
       <Button intent="warning">Warning</Button>
       <Button intent="neutral">Neutral</Button>
       <Button intent="info">Info</Button>

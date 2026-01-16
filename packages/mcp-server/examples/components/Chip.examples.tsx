@@ -43,7 +43,7 @@ export function ChipIntents() {
     <>
       <Chip label="Primary" intent="primary" />
       <Chip label="Success" intent="success" />
-      <Chip label="Error" intent="error" />
+      <Chip label="Error" intent="danger" />
       <Chip label="Warning" intent="warning" />
       <Chip label="Neutral" intent="neutral" />
       <Chip label="Info" intent="info" />

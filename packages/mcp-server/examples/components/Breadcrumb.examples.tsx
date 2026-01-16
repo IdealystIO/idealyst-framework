@@ -169,7 +169,7 @@ export function BreadcrumbWithDisabledItems() {
   return (
     <View spacing="md">
       <Breadcrumb items={items} />
-      <Text size="sm" >
+      <Text typography="body2">
         The "Restricted" item is disabled
       </Text>
     </View>
@@ -192,7 +192,7 @@ export function ResponsiveBreadcrumb() {
         <Text weight="semibold">Responsive (collapses on narrow screens)</Text>
         <Breadcrumb items={items} responsive minVisibleItems={3} />
       </View>
-      <Text size="sm" >
+      <Text typography="body2">
         Try resizing the window to see the breadcrumb collapse
       </Text>
     </View>
@@ -222,7 +222,7 @@ export function FileSystemBreadcrumb() {
   return (
     <View spacing="md">
       <Breadcrumb items={items} separator="/" />
-      <Text size="sm" >
+      <Text typography="body2">
         Current path: /{path.join('/')}
       </Text>
     </View>
@@ -243,7 +243,7 @@ export function EcommerceBreadcrumb() {
     <View spacing="lg">
       <Breadcrumb items={items} intent="primary" />
       <View spacing="md">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           Gaming Laptops
         </Text>
         <Text>Browse our selection of high-performance gaming laptops.</Text>
@@ -269,7 +269,7 @@ export function DocumentationBreadcrumb() {
         separator={<Icon name="chevron-right" size="xs" />}
       />
       <View spacing="md">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           Breadcrumb Component
         </Text>
         <Text>
@@ -293,7 +293,7 @@ export function SettingsBreadcrumb() {
     <View spacing="lg">
       <Breadcrumb items={items} intent="neutral" size="md" />
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Privacy Settings
         </Text>
         <Text>Manage your privacy preferences and data sharing options.</Text>

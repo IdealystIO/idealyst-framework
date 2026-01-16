@@ -72,8 +72,8 @@ export function TooltipWithIntent() {
       <Tooltip content="Success tooltip" intent="success">
         <Button intent="success">Success</Button>
       </Tooltip>
-      <Tooltip content="Error tooltip" intent="error">
-        <Button intent="error">Error</Button>
+      <Tooltip content="Error tooltip" intent="danger">
+        <Button intent="danger">Error</Button>
       </Tooltip>
       <Tooltip content="Warning tooltip" intent="warning">
         <Button intent="warning">Warning</Button>
@@ -149,13 +149,13 @@ export function TooltipOnText() {
 export function TooltipWithRichContent() {
   const richContent = (
     <View spacing="xs">
-      <Text weight="bold" size="sm" >
+      <Text weight="bold" typography="body2">
         User Information
       </Text>
-      <Text size="sm" >
+      <Text typography="body2">
         John Doe
       </Text>
-      <Text size="sm" >
+      <Text typography="body2">
         john@example.com
       </Text>
     </View>
@@ -192,7 +192,7 @@ export function HelpTooltips() {
             <Icon name="help-circle" size="sm"  style={{ cursor: 'pointer' }} />
           </Tooltip>
         </View>
-        <Text size="sm" >
+        <Text typography="body2">
           Placeholder for input
         </Text>
       </View>
@@ -204,7 +204,7 @@ export function HelpTooltips() {
             <Icon name="help-circle" size="sm"  style={{ cursor: 'pointer' }} />
           </Tooltip>
         </View>
-        <Text size="sm" >
+        <Text typography="body2">
           Placeholder for input
         </Text>
       </View>
@@ -216,7 +216,7 @@ export function HelpTooltips() {
             <Icon name="help-circle" size="sm"  style={{ cursor: 'pointer' }} />
           </Tooltip>
         </View>
-        <Text size="sm" >
+        <Text typography="body2">
           Placeholder for input
         </Text>
       </View>
@@ -234,7 +234,7 @@ export function ActionTooltips() {
         </Button>
       </Tooltip>
       <Tooltip content="Discard changes" placement="top">
-        <Button size="sm" intent="error">
+        <Button size="sm" intent="danger">
           <Icon name="close" />
         </Button>
       </Tooltip>
@@ -282,10 +282,10 @@ export function StatusTooltips() {
 export function KeyboardShortcutTooltips() {
   const shortcutContent = (name: string, shortcut: string) => (
     <View spacing="xs">
-      <Text size="sm" >
+      <Text typography="body2">
         {name}
       </Text>
-      <Text size="sm" >
+      <Text typography="body2">
         {shortcut}
       </Text>
     </View>

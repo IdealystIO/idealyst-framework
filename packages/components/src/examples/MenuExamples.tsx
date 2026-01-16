@@ -21,13 +21,13 @@ export const MenuExamples: React.FC = () => {
     { id: 'edit', label: 'Edit', icon: 'pencil', onClick: () => setSelectedAction('Edit') },
     { id: 'copy', label: 'Copy', icon: 'content-copy', onClick: () => setSelectedAction('Copy') },
     { id: 'share', label: 'Share', icon: 'share-variant', onClick: () => setSelectedAction('Share'), intent: 'primary' },
-    { id: 'delete', label: 'Delete', icon: 'delete', onClick: () => setSelectedAction('Delete'), intent: 'error' },
+    { id: 'delete', label: 'Delete', icon: 'delete', onClick: () => setSelectedAction('Delete'), intent: 'danger' },
   ];
 
   const intentItems: MenuItem[] = [
     { id: 'save', label: 'Save', intent: 'success', onClick: () => setSelectedAction('Save') },
     { id: 'cancel', label: 'Cancel', intent: 'neutral', onClick: () => setSelectedAction('Cancel') },
-    { id: 'delete', label: 'Delete', intent: 'error', onClick: () => setSelectedAction('Delete') },
+    { id: 'delete', label: 'Delete', intent: 'danger', onClick: () => setSelectedAction('Delete') },
     { id: 'warn', label: 'Warning Action', intent: 'warning', onClick: () => setSelectedAction('Warning') },
   ];
 

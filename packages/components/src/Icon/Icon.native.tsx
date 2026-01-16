@@ -2,8 +2,9 @@ import { forwardRef, useMemo } from 'react';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { IconProps } from './types';
 import { iconStyles } from './Icon.styles';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Icon = forwardRef<any, IconProps>(({
+const Icon = forwardRef<IdealystElement, IconProps>(({
   name,
   size = 'md',
   color,
@@ -26,7 +27,7 @@ const Icon = forwardRef<any, IconProps>(({
 
   return (
     <MaterialDesignIcons
-      ref={ref}
+      ref={ref as any}
       nativeID={id}
       size={iconSize}
       name={name}

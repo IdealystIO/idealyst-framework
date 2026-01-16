@@ -374,7 +374,7 @@ function ConfigCard({
           {type}
         </Text>
         {required && (
-          <Text typography="caption" color="error">
+          <Text typography="caption" color="danger">
             required
           </Text>
         )}

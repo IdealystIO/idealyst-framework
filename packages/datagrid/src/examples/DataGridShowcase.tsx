@@ -209,7 +209,7 @@ export function DataGridShowcase({
                   
                   <Button
                     variant="outlined"
-                    intent="error"
+                    intent="danger"
                     size="sm"
                     onPress={handleDeleteSelected}
                     disabled={selectedRows.length === 0}
@@ -232,7 +232,7 @@ export function DataGridShowcase({
                   
                   <Button
                     variant="outlined"
-                    intent="error"
+                    intent="danger"
                     size="sm"
                     onPress={handleDeleteSelected}
                     disabled={selectedRows.length === 0}

@@ -6,12 +6,13 @@ import MenuItem from './MenuItem.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import { getWebInteractiveAriaProps, generateAccessibilityId, MENU_KEYS, matchesKey } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Dropdown menu for actions and navigation triggered by a button or element.
  * Includes keyboard navigation, icons, and separator support.
  */
-const Menu = forwardRef<HTMLDivElement, MenuProps>(({
+const Menu = forwardRef<IdealystElement, MenuProps>(({
   children,
   items,
   open = false,

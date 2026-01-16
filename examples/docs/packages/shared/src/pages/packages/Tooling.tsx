@@ -440,7 +440,7 @@ function OptionRow({
       <View style={{ width: 160 }}>
         <Text weight="semibold" style={{ fontFamily: 'monospace', fontSize: 13 }}>
           {name}
-          {required && <Text color="error">*</Text>}
+          {required && <Text color="danger">*</Text>}
         </Text>
       </View>
       <View style={{ width: 140 }}>

@@ -56,7 +56,7 @@ export const CardExamples = () => {
             <Text>Success Card</Text>
           </Card>
           
-          <Card intent="error" padding="md" type="outlined">
+          <Card intent="danger" padding="md" type="outlined">
             <Text>Error Card</Text>
           </Card>
           

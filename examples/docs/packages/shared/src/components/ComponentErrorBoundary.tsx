@@ -34,7 +34,7 @@ export class ComponentErrorBoundary extends Component<Props, State> {
       return (
         <Card type="outlined" style={{ padding: 24, borderColor: 'var(--color-error)' }}>
           <View style={{ gap: 8 }}>
-            <Text weight="semibold" color="error">
+            <Text weight="semibold" color="danger">
               Failed to render {this.props.componentName}
             </Text>
             <Text typography="body2" color="secondary">

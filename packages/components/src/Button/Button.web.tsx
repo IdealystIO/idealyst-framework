@@ -5,20 +5,20 @@ import { buttonStyles } from './Button.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Interactive button component with multiple visual variants, sizes, and icon support.
  * Supports contained, outlined, and text styles with customizable intent colors.
  */
-const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
   const {
-    title,
     children,
     onPress,
+    onClick,
     disabled = false,
     loading = false,
-    type: typeProp,
-    variant,
+    type = 'contained',
     intent = 'primary',
     size = 'md',
     gradient,
@@ -42,9 +42,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     accessibilityHasPopup,
   } = props;
 
-  // variant is an alias for type - variant takes precedence if both are set
-  const type = variant ?? typeProp ?? 'contained';
-
   // Button is effectively disabled when loading
   const isDisabled = disabled || loading;
 
@@ -55,13 +52,23 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     gradient,
   });
 
+  // Determine the handler to use - onPress takes precedence
+  const pressHandler = onPress ?? onClick;
+
+  // Warn about deprecated onClick usage in development
+  if (process.env.NODE_ENV !== 'production' && onClick && !onPress) {
+    console.warn(
+      'Button: onClick prop is deprecated. Use onPress instead for cross-platform compatibility.'
+    );
+  }
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // Only stop propagation if we have an onPress handler
+    // Only stop propagation if we have a handler
     // Otherwise, let clicks bubble up to parent handlers (e.g., Menu triggers)
-    if (!isDisabled && onPress) {
+    if (!isDisabled && pressHandler) {
       e.stopPropagation();
-      onPress();
+      pressHandler();
     }
   };
 
@@ -71,8 +78,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   // Generate ARIA props - especially important for icon-only buttons
   const ariaProps = useMemo(() => {
     // For icon-only buttons, accessibilityLabel is critical
-    const buttonContent = children || title;
-    const isIconOnly = !buttonContent && (leftIcon || rightIcon);
+    const isIconOnly = !children && (leftIcon || rightIcon);
     const computedLabel = accessibilityLabel ?? (isIconOnly && typeof leftIcon === 'string' ? leftIcon : undefined);
 
     return getWebInteractiveAriaProps({
@@ -92,7 +98,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   }, [
     accessibilityLabel,
     children,
-    title,
     leftIcon,
     rightIcon,
     accessibilityHint,
@@ -149,8 +154,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     return null;
   };
 
-  // Use children if available, otherwise use title
-  const buttonContent = children || title;
+  const buttonContent = children;
 
   // Determine if we need to wrap content in icon container
   const hasIcons = leftIcon || rightIcon;

@@ -254,7 +254,7 @@ Icons follow naming patterns:
 ### Button Icons
 \`\`\`tsx
 <Button icon="content-save">Save</Button>
-<Button icon="delete" intent="error">Delete</Button>
+<Button icon="delete" intent="danger">Delete</Button>
 <Button icon="pencil">Edit</Button>
 <Button icon="plus">Add New</Button>
 \`\`\`
@@ -264,7 +264,7 @@ Icons follow naming patterns:
 <ListItem label="Dashboard" leading="view-dashboard" />
 <ListItem label="Users" leading="account-multiple" />
 <ListItem label="Settings" leading="cog" />
-<ListItem label="Logout" leading="logout" intent="error" />
+<ListItem label="Logout" leading="logout" intent="danger" />
 \`\`\`
 
 ### Navigation Icons
@@ -278,7 +278,7 @@ Icons follow naming patterns:
 \`\`\`tsx
 <Icon name="check-circle" color="success" />
 <Icon name="alert-circle" color="warning" />
-<Icon name="close-circle" color="error" />
+<Icon name="close-circle" color="danger" />
 <Icon name="information-outline" color="primary" />
 \`\`\`
 `;

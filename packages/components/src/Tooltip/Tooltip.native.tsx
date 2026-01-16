@@ -3,8 +3,9 @@ import { View, Modal, Text, Pressable } from 'react-native';
 import { tooltipStyles } from './Tooltip.styles';
 import type { TooltipProps } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Tooltip = forwardRef<View, TooltipProps>(({
+const Tooltip = forwardRef<IdealystElement, TooltipProps>(({
   content,
   children,
   placement = 'top',
@@ -144,7 +145,7 @@ const Tooltip = forwardRef<View, TooltipProps>(({
 
   return (
     <>
-      <View ref={ref} nativeID={id} collapsable={false} style={style} {...nativeA11yProps}>
+      <View ref={ref as any} nativeID={id} collapsable={false} style={style} {...nativeA11yProps}>
         {trigger}
       </View>
 

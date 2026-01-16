@@ -1,8 +1,9 @@
-import { isValidElement, forwardRef, ComponentRef } from 'react';
+import { isValidElement, forwardRef } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { menuItemStyles } from './MenuItem.styles';
 import type { MenuItem as MenuItemType, MenuSizeVariant } from './types';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import type { IdealystElement } from '../utils/refTypes';
 
 interface MenuItemProps {
   item: MenuItemType;
@@ -11,7 +12,7 @@ interface MenuItemProps {
   testID?: string;
 }
 
-const MenuItem = forwardRef<ComponentRef<typeof Pressable>, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
+const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, size = 'md', testID }, ref) => {
   // Initialize styles with useVariants (for size and disabled)
   menuItemStyles.useVariants({
     size,
@@ -41,7 +42,7 @@ const MenuItem = forwardRef<ComponentRef<typeof Pressable>, MenuItemProps>(({ it
 
   return (
     <Pressable
-      ref={ref}
+      ref={ref as any}
       style={itemStyle}
       onPress={() => onPress(item)}
       disabled={item.disabled}

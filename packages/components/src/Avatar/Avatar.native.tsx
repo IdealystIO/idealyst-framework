@@ -3,8 +3,9 @@ import { View, Text, Image } from 'react-native';
 import { AvatarProps } from './types';
 import { avatarStyles } from './Avatar.styles';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Avatar = forwardRef<View, AvatarProps>(({
+const Avatar = forwardRef<IdealystElement, AvatarProps>(({
   src,
   alt,
   fallback,
@@ -45,7 +46,7 @@ const Avatar = forwardRef<View, AvatarProps>(({
   const fallbackStyle = (avatarStyles.fallback as any)({});
 
   return (
-    <View ref={ref} nativeID={id} style={[avatarStyle, style]} testID={testID} {...nativeA11yProps}>
+    <View ref={ref as any} nativeID={id} style={[avatarStyle, style]} testID={testID} {...nativeA11yProps}>
       {src && !hasError ? (
         <Image
           source={typeof src === 'string' ? { uri: src } : src}

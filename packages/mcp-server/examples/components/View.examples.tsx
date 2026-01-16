@@ -129,18 +129,18 @@ export function ViewWithCustomColors() {
   );
 }
 
-// Example 7: View with Custom Sizes
+// Example 7: View with Custom Sizes (using style prop)
 export function ViewWithCustomSizes() {
   return (
     <View spacing="md">
-      <View padding={8} borderRadius={4} backgroundColor="gray.100">
-        <Text>Custom padding: 8</Text>
+      <View style={{ padding: 8 }} borderRadius={4} backgroundColor="gray.100">
+        <Text>Custom padding: 8px</Text>
       </View>
-      <View padding={16} borderRadius={8} backgroundColor="gray.100">
-        <Text>Custom padding: 16</Text>
+      <View style={{ padding: 16 }} borderRadius={8} backgroundColor="gray.100">
+        <Text>Custom padding: 16px</Text>
       </View>
-      <View padding={24} borderRadius={12} backgroundColor="gray.100">
-        <Text>Custom padding: 24</Text>
+      <View style={{ padding: 24 }} borderRadius={12} backgroundColor="gray.100">
+        <Text>Custom padding: 24px</Text>
       </View>
     </View>
   );
@@ -150,7 +150,7 @@ export function ViewWithCustomSizes() {
 export function NestedViews() {
   return (
     <View spacing="lg" background="primary" radius="lg">
-      <Text weight="bold" size="lg">
+      <Text weight="bold" typography="subtitle1">
         Outer View
       </Text>
       <View spacing="md" background="secondary" radius="md">
@@ -173,10 +173,10 @@ export function CardLayout() {
         radius="lg"
         border="thin"
       >
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Card Title
         </Text>
-        <Text size="md" >
+        <Text typography="body1">
           This is a card-like layout created using the View component with background, spacing,
           radius, and border properties.
         </Text>
@@ -192,28 +192,28 @@ export function ViewWithMargin() {
       <View
         background="primary"
         spacing="md"
-        marginVariant="none"
+        margin="none"
       >
         <Text>No margin</Text>
       </View>
       <View
         background="primary"
         spacing="md"
-        marginVariant="sm"
+        margin="sm"
       >
         <Text>Small margin</Text>
       </View>
       <View
         background="primary"
         spacing="md"
-        marginVariant="md"
+        margin="md"
       >
         <Text>Medium margin</Text>
       </View>
       <View
         background="primary"
         spacing="md"
-        marginVariant="lg"
+        margin="lg"
       >
         <Text>Large margin</Text>
       </View>
@@ -231,18 +231,18 @@ export function ProfileCard() {
       border="thin"
     >
       <View spacing="md">
-        <Text size="xl" weight="bold">
+        <Text typography="h5" weight="bold">
           John Doe
         </Text>
-        <Text size="md" >
+        <Text typography="body1">
           Software Engineer
         </Text>
       </View>
       <View spacing="sm">
-        <Text size="sm" >
+        <Text typography="body2">
           Email: john.doe@example.com
         </Text>
-        <Text size="sm" >
+        <Text typography="body2">
           Location: San Francisco, CA
         </Text>
       </View>
@@ -262,7 +262,7 @@ export function DashboardGrid() {
           border="thin"
         >
           <Text weight="semibold">Card 1</Text>
-          <Text size="sm" >
+          <Text typography="body2">
             Content goes here
           </Text>
         </View>
@@ -273,7 +273,7 @@ export function DashboardGrid() {
           border="thin"
         >
           <Text weight="semibold">Card 2</Text>
-          <Text size="sm" >
+          <Text typography="body2">
             Content goes here
           </Text>
         </View>
@@ -286,7 +286,7 @@ export function DashboardGrid() {
           border="thin"
         >
           <Text weight="semibold">Card 3</Text>
-          <Text size="sm" >
+          <Text typography="body2">
             Content goes here
           </Text>
         </View>
@@ -297,7 +297,7 @@ export function DashboardGrid() {
           border="thin"
         >
           <Text weight="semibold">Card 4</Text>
-          <Text size="sm" >
+          <Text typography="body2">
             Content goes here
           </Text>
         </View>

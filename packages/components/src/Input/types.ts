@@ -98,7 +98,7 @@ export interface InputProps extends FormInputStyleProps, FormAccessibilityProps 
 
   /**
    * Whether the input has an error state
-   * @deprecated Use intent="error" instead
+   * @deprecated Use intent="danger" instead
    */
   hasError?: boolean;
 

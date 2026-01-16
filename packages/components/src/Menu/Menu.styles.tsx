@@ -53,38 +53,88 @@ export const menuStyles = defineStyle('Menu', (theme: Theme) => ({
         },
     }),
 
-    item: ({ intent = 'neutral', disabled = false }: MenuDynamicProps) => {
-        const intentValue = theme.intents[intent];
-        const hoverStyles = intent !== 'neutral' ? {
-            backgroundColor: intentValue.light + '20',
-            color: intentValue.primary,
-        } : {
-            backgroundColor: theme.colors.surface.secondary,
-        };
-
-        return {
-            flexDirection: 'row' as const,
-            alignItems: 'center' as const,
-            backgroundColor: 'transparent' as const,
-            borderRadius: 4,
-            minHeight: 44,
-            opacity: disabled ? 0.5 : 1,
-            variants: {
-                size: {
-                    paddingVertical: theme.sizes.$menu.paddingVertical,
-                    paddingHorizontal: theme.sizes.$menu.paddingHorizontal,
+    item: (_props: MenuDynamicProps) => ({
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        backgroundColor: 'transparent' as const,
+        borderRadius: 4,
+        minHeight: 44,
+        variants: {
+            size: {
+                paddingVertical: theme.sizes.$menu.paddingVertical,
+                paddingHorizontal: theme.sizes.$menu.paddingHorizontal,
+            },
+            intent: {
+                neutral: {
+                    _web: {
+                        _hover: {
+                            backgroundColor: theme.colors.surface.secondary,
+                        },
+                    },
+                },
+                // For non-neutral intents, use light bg with primary text
+                primary: {
+                    _web: {
+                        _hover: {
+                            backgroundColor: theme.intents.primary.light + '20',
+                            color: theme.intents.primary.primary,
+                        },
+                    },
+                },
+                success: {
+                    _web: {
+                        _hover: {
+                            backgroundColor: theme.intents.success.light + '20',
+                            color: theme.intents.success.primary,
+                        },
+                    },
+                },
+                danger: {
+                    _web: {
+                        _hover: {
+                            backgroundColor: theme.intents.danger.light + '20',
+                            color: theme.intents.danger.primary,
+                        },
+                    },
+                },
+                warning: {
+                    _web: {
+                        _hover: {
+                            backgroundColor: theme.intents.warning.light + '20',
+                            color: theme.intents.warning.primary,
+                        },
+                    },
+                },
+                info: {
+                    _web: {
+                        _hover: {
+                            backgroundColor: theme.intents.info.light + '20',
+                            color: theme.intents.info.primary,
+                        },
+                    },
                 },
             },
-            _web: {
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                border: 'none',
-                outline: 'none',
-                transition: 'background-color 0.2s ease',
-                textAlign: 'left',
-                _hover: disabled ? { backgroundColor: 'transparent' } : hoverStyles,
+            disabled: {
+                true: {
+                    opacity: 0.5,
+                    _web: {
+                        cursor: 'not-allowed',
+                        _hover: { backgroundColor: 'transparent' },
+                    },
+                },
+                false: {
+                    opacity: 1,
+                    _web: { cursor: 'pointer' },
+                },
             },
-        } as const;
-    },
+        },
+        _web: {
+            border: 'none',
+            outline: 'none',
+            transition: 'background-color 0.2s ease',
+            textAlign: 'left',
+        },
+    }),
 
     separator: (_props: MenuDynamicProps) => ({
         height: 1,

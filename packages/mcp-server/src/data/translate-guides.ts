@@ -632,7 +632,7 @@ Usage:
   },
   "labels": {
     "loading": "Loading...",
-    "error": "An error occurred",
+    "danger": "An error occurred",
     "success": "Success!"
   }
 }
@@ -858,7 +858,7 @@ export function LoginForm() {
         secureTextEntry
       />
 
-      {error && <Text intent="error">{error}</Text>}
+      {error && <Text intent="danger">{error}</Text>}
 
       <Button onPress={handleSubmit}>
         {t('login.submit')}

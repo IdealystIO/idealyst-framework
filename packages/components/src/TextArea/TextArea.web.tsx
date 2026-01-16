@@ -4,12 +4,13 @@ import { textAreaStyles } from './TextArea.styles';
 import type { TextAreaProps } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebFormAriaProps, combineIds, generateAccessibilityId } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Multi-line text input with auto-grow, character counting, and validation support.
  * Includes label, helper text, and error message display.
  */
-const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(({
+const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',
   onChange,

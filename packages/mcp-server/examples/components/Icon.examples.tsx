@@ -58,7 +58,7 @@ export function IconWithIntent() {
     <View spacing="md">
       <Icon name="information" intent="primary" size="lg" />
       <Icon name="check-circle" intent="success" size="lg" />
-      <Icon name="alert-circle" intent="error" size="lg" />
+      <Icon name="alert-circle" intent="danger" size="lg" />
       <Icon name="alert" intent="warning" size="lg" />
       <Icon name="help-circle" intent="info" size="lg" />
     </View>
@@ -71,23 +71,23 @@ export function CommonUIIcons() {
     <View spacing="md">
       <View spacing="sm">
         <Icon name="home" />
-        <Text size="sm">Home</Text>
+        <Text typography="body2">Home</Text>
       </View>
       <View spacing="sm">
         <Icon name="magnify" />
-        <Text size="sm">Search</Text>
+        <Text typography="body2">Search</Text>
       </View>
       <View spacing="sm">
         <Icon name="account" />
-        <Text size="sm">Profile</Text>
+        <Text typography="body2">Profile</Text>
       </View>
       <View spacing="sm">
         <Icon name="cog" />
-        <Text size="sm">Settings</Text>
+        <Text typography="body2">Settings</Text>
       </View>
       <View spacing="sm">
         <Icon name="bell" />
-        <Text size="sm">Notifications</Text>
+        <Text typography="body2">Notifications</Text>
       </View>
     </View>
   );
@@ -127,25 +127,25 @@ export function StatusIconsWithText() {
     <View spacing="md">
       <View spacing="sm">
         <Icon name="check-circle" intent="success" size="md" />
-        <Text  size="sm">
+        <Text typography="body2">
           Success
         </Text>
       </View>
       <View spacing="sm">
-        <Icon name="alert-circle" intent="error" size="md" />
-        <Text  size="sm">
+        <Icon name="alert-circle" intent="danger" size="md" />
+        <Text typography="body2">
           Error
         </Text>
       </View>
       <View spacing="sm">
         <Icon name="alert" intent="warning" size="md" />
-        <Text  size="sm">
+        <Text typography="body2">
           Warning
         </Text>
       </View>
       <View spacing="sm">
         <Icon name="information" intent="info" size="md" />
-        <Text  size="sm">
+        <Text typography="body2">
           Info
         </Text>
       </View>
@@ -173,7 +173,7 @@ export function IconWithMDIPrefix() {
     <View spacing="md">
       <Icon name="mdi:home" size="lg" />
       <Icon name="mdi:account" size="lg"  />
-      <Icon name="mdi:heart" size="lg" intent="error" />
+      <Icon name="mdi:heart" size="lg" intent="danger" />
     </View>
   );
 }

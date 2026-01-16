@@ -49,60 +49,80 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
         },
     }),
 
-    radio: ({ intent = 'primary', checked = false, disabled = false }: RadioButtonDynamicProps) => {
-        const intentValue = theme.intents[intent];
-
-        return {
-            borderRadius: 9999,
-            borderWidth: 1.5,
-            borderStyle: 'solid' as const,
-            alignItems: 'center' as const,
-            justifyContent: 'center' as const,
-            backgroundColor: disabled
-                ? theme.colors.surface.tertiary
-                : theme.colors.surface.primary,
-            borderColor: checked ? intentValue.primary : theme.colors.border.primary,
-            opacity: disabled ? 0.5 : 1,
-            variants: {
-                size: {
-                    width: theme.sizes.$radioButton.radioSize,
-                    height: theme.sizes.$radioButton.radioSize,
+    radio: (_props: RadioButtonDynamicProps) => ({
+        borderRadius: 9999,
+        borderWidth: 1.5,
+        borderStyle: 'solid' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        variants: {
+            size: {
+                width: theme.sizes.$radioButton.radioSize,
+                height: theme.sizes.$radioButton.radioSize,
+            },
+            checked: {
+                true: {
+                    borderColor: theme.$intents.primary,
+                },
+                false: {
+                    borderColor: theme.colors.border.primary,
                 },
             },
-            _web: {
-                transition: 'all 0.2s ease',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                _hover: disabled ? {} : { opacity: 0.8 },
-                _active: disabled ? {} : { opacity: 0.6 },
+            disabled: {
+                true: {
+                    backgroundColor: theme.colors.surface.tertiary,
+                    opacity: 0.5,
+                },
+                false: {
+                    backgroundColor: theme.colors.surface.primary,
+                    opacity: 1,
+                },
             },
-        } as const;
-    },
+        },
+        _web: {
+            transition: 'all 0.2s ease',
+        },
+    }),
 
-    radioDot: ({ intent = 'primary' }: RadioButtonDynamicProps) => ({
+    radioDot: (_props: RadioButtonDynamicProps) => ({
         borderRadius: 9999,
-        backgroundColor: theme.intents[intent].primary,
         variants: {
             size: {
                 width: theme.sizes.$radioButton.radioDotSize,
                 height: theme.sizes.$radioButton.radioDotSize,
             },
-        },
-    }),
-
-    label: ({ disabled = false }: RadioButtonDynamicProps) => ({
-        color: theme.colors.text.primary,
-        opacity: disabled ? 0.5 : 1,
-        variants: {
-            size: {
-                fontSize: theme.sizes.$radioButton.fontSize,
+            intent: {
+                backgroundColor: theme.$intents.primary,
             },
         },
     }),
 
-    groupContainer: ({ orientation = 'vertical' }: RadioButtonDynamicProps) => ({
+    label: (_props: RadioButtonDynamicProps) => ({
+        color: theme.colors.text.primary,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$radioButton.fontSize,
+            },
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
+        },
+    }),
+
+    groupContainer: (_props: RadioButtonDynamicProps) => ({
         gap: 4,
-        flexDirection: orientation === 'horizontal' ? ('row' as const) : ('column' as const),
-        flexWrap: orientation === 'horizontal' ? ('wrap' as const) : undefined,
-        ...(orientation === 'horizontal' ? { gap: 16 } : {}),
+        variants: {
+            orientation: {
+                horizontal: {
+                    flexDirection: 'row' as const,
+                    flexWrap: 'wrap' as const,
+                    gap: 16,
+                },
+                vertical: {
+                    flexDirection: 'column' as const,
+                },
+            },
+        },
     }),
 }));

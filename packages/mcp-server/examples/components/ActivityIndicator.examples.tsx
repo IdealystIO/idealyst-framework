@@ -13,7 +13,7 @@ export function BasicActivityIndicator() {
   return (
     <View spacing="md">
       <ActivityIndicator />
-      <Text size="sm" >
+      <Text typography="body2">
         Loading...
       </Text>
     </View>
@@ -26,23 +26,23 @@ export function ActivityIndicatorSizes() {
     <View spacing="md">
       <View spacing="sm">
         <ActivityIndicator size="xs" />
-        <Text size="sm">Extra Small</Text>
+        <Text typography="body2">Extra Small</Text>
       </View>
       <View spacing="sm">
         <ActivityIndicator size="sm" />
-        <Text size="sm">Small</Text>
+        <Text typography="body2">Small</Text>
       </View>
       <View spacing="sm">
         <ActivityIndicator size="md" />
-        <Text size="sm">Medium</Text>
+        <Text typography="body2">Medium</Text>
       </View>
       <View spacing="sm">
         <ActivityIndicator size="lg" />
-        <Text size="sm">Large</Text>
+        <Text typography="body2">Large</Text>
       </View>
       <View spacing="sm">
         <ActivityIndicator size="xl" />
-        <Text size="sm">Extra Large</Text>
+        <Text typography="body2">Extra Large</Text>
       </View>
     </View>
   );
@@ -54,27 +54,27 @@ export function ActivityIndicatorWithIntent() {
     <View spacing="md">
       <View spacing="sm">
         <ActivityIndicator intent="primary" />
-        <Text size="sm">Primary</Text>
+        <Text typography="body2">Primary</Text>
       </View>
       <View spacing="sm">
         <ActivityIndicator intent="success" />
-        <Text size="sm">Success</Text>
+        <Text typography="body2">Success</Text>
       </View>
       <View spacing="sm">
-        <ActivityIndicator intent="error" />
-        <Text size="sm">Error</Text>
+        <ActivityIndicator intent="danger" />
+        <Text typography="body2">Error</Text>
       </View>
       <View spacing="sm">
         <ActivityIndicator intent="warning" />
-        <Text size="sm">Warning</Text>
+        <Text typography="body2">Warning</Text>
       </View>
       <View spacing="sm">
         <ActivityIndicator intent="info" />
-        <Text size="sm">Info</Text>
+        <Text typography="body2">Info</Text>
       </View>
       <View spacing="sm">
         <ActivityIndicator intent="neutral" />
-        <Text size="sm">Neutral</Text>
+        <Text typography="body2">Neutral</Text>
       </View>
     </View>
   );
@@ -166,7 +166,7 @@ export function LoadingCard() {
         </View>
       ) : (
         <View spacing="md">
-          <Text size="lg" weight="bold">
+          <Text typography="subtitle1" weight="bold">
             Content Loaded
           </Text>
           <Text>Here is the content that was loaded.</Text>
@@ -216,19 +216,19 @@ export function InlineLoadingStates() {
       <View spacing="sm">
         <View spacing="xs">
           <ActivityIndicator size="xs" />
-          <Text size="sm">Saving changes...</Text>
+          <Text typography="body2">Saving changes...</Text>
         </View>
       </View>
       <View spacing="sm">
         <View spacing="xs">
           <ActivityIndicator size="xs" intent="success" />
-          <Text size="sm">Syncing data...</Text>
+          <Text typography="body2">Syncing data...</Text>
         </View>
       </View>
       <View spacing="sm">
         <View spacing="xs">
           <ActivityIndicator size="xs" intent="info" />
-          <Text size="sm">Processing request...</Text>
+          <Text typography="body2">Processing request...</Text>
         </View>
       </View>
     </View>
@@ -269,7 +269,7 @@ export function FetchingDataExample() {
           ))}
         </View>
       ) : (
-        <Text size="sm"  align="center">
+        <Text typography="body2" align="center">
           Click the button to fetch data
         </Text>
       )}
@@ -300,13 +300,13 @@ export function UploadingFilesExample() {
       {uploading && (
         <View spacing="sm">
           <ActivityIndicator size="md" intent="primary" />
-          <Text size="sm" >
+          <Text typography="body2">
             Uploading files...
           </Text>
         </View>
       )}
       {success && !uploading && (
-        <Text size="sm" >
+        <Text typography="body2">
           Files uploaded successfully!
         </Text>
       )}
@@ -332,14 +332,14 @@ export function RefreshControl() {
     <View spacing="md">
       <View spacing="sm">
         <Text weight="semibold">Content Area</Text>
-        <Text size="sm" >
+        <Text typography="body2">
           Last updated: {lastUpdated.toLocaleTimeString()}
         </Text>
       </View>
       {refreshing && (
         <View spacing="sm">
           <ActivityIndicator size="sm" intent="primary" />
-          <Text size="sm">Refreshing...</Text>
+          <Text typography="body2">Refreshing...</Text>
         </View>
       )}
       <Button size="sm" onPress={handleRefresh} disabled={refreshing}>

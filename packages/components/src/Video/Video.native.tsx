@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { videoStyles } from './Video.styles';
 import type { VideoProps } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 // Import react-native-video - it's a peer dependency
 let RNVideo: any;
@@ -14,7 +15,7 @@ try {
   console.warn('react-native-video not installed. Video component will not work on native.');
 }
 
-const Video = React.forwardRef<View, VideoProps>(({
+const Video = React.forwardRef<IdealystElement, VideoProps>(({
   source,
   poster,
   width: _width,
@@ -52,7 +53,7 @@ const Video = React.forwardRef<View, VideoProps>(({
 
   if (!RNVideo) {
     return (
-      <View ref={ref} nativeID={id} style={[videoStyles.container, { aspectRatio, borderRadius }, style]} testID={testID} {...nativeA11yProps}>
+      <View ref={ref as any} nativeID={id} style={[videoStyles.container, { aspectRatio, borderRadius }, style]} testID={testID} {...nativeA11yProps}>
         <View style={videoStyles.fallback}>
           {/* Fallback when react-native-video is not installed */}
         </View>
@@ -95,7 +96,7 @@ const Video = React.forwardRef<View, VideoProps>(({
   };
 
   return (
-    <View ref={ref} nativeID={id} style={containerStyle} testID={testID} {...nativeA11yProps}>
+    <View ref={ref as any} nativeID={id} style={containerStyle} testID={testID} {...nativeA11yProps}>
       <RNVideo
         source={videoSource}
         poster={poster}

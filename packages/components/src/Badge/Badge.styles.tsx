@@ -1,9 +1,12 @@
 /**
  * Badge styles using defineStyle with $iterator expansion.
+ *
+ * Supports both `intent` (semantic colors) and `color` (raw palette colors).
+ * If both are provided, `intent` takes precedence.
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper, getColorFromString } from '@idealyst/theme';
-import type { Theme as BaseTheme, Size, Color } from '@idealyst/theme';
+import type { Theme as BaseTheme, Size, Color, Intent } from '@idealyst/theme';
 
 // Required: Unistyles must see StyleSheet usage in original source to process this file
 void StyleSheet;
@@ -16,15 +19,29 @@ type BadgeType = 'filled' | 'outlined' | 'dot';
 export type BadgeDynamicProps = {
     size?: Size;
     type?: BadgeType;
+    intent?: Intent;
     color?: Color;
+};
+
+/**
+ * Helper to resolve badge color from intent or color prop.
+ * Intent takes precedence over color.
+ */
+const resolveBadgeColor = (theme: Theme, intent?: Intent, color?: Color): string => {
+    if (intent) {
+        // Use intent's primary color
+        return (theme as unknown as BaseTheme).intents[intent].primary;
+    }
+    // Fall back to color prop or default to primary intent
+    return getColorFromString(theme as unknown as BaseTheme, color ?? 'primary');
 };
 
 /**
  * Badge styles with color-based type variants.
  */
 export const badgeStyles = defineStyle('Badge', (theme: Theme) => ({
-    badge: ({ color = 'primary', type = 'filled' }: BadgeDynamicProps) => {
-        const colorValue = getColorFromString(theme as unknown as BaseTheme, color);
+    badge: ({ intent, color, type = 'filled' }: BadgeDynamicProps) => {
+        const colorValue = resolveBadgeColor(theme, intent, color);
 
         const typeStyles = type === 'filled'
             ? { borderWidth: 0, backgroundColor: colorValue }
@@ -56,8 +73,8 @@ export const badgeStyles = defineStyle('Badge', (theme: Theme) => ({
         } as const;
     },
 
-    text: ({ color = 'primary', type = 'filled' }: BadgeDynamicProps) => {
-        const colorValue = getColorFromString(theme as unknown as BaseTheme, color);
+    text: ({ intent, color, type = 'filled' }: BadgeDynamicProps) => {
+        const colorValue = resolveBadgeColor(theme, intent, color);
 
         const textColor = type === 'filled'
             ? theme.colors.text.inverse

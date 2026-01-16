@@ -46,6 +46,21 @@ export interface ChipProps extends BaseProps, SelectionAccessibilityProps {
   /** Callback when chip is pressed */
   onPress?: () => void;
 
+  /**
+   * @deprecated Use `onPress` instead. This is a cross-platform component - use React Native conventions.
+   *
+   * Using `onClick` will trigger a console warning in development.
+   * This prop exists only for migration convenience and will be removed in a future version.
+   *
+   * @example
+   * // ❌ Don't use onClick
+   * <Chip label="Tag" onClick={() => {}} />
+   *
+   * // ✅ Use onPress instead
+   * <Chip label="Tag" onPress={() => {}} />
+   */
+  onClick?: () => void;
+
   /** Whether the chip is disabled */
   disabled?: boolean;
 

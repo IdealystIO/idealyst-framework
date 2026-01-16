@@ -329,7 +329,7 @@ export const SelectExamples = () => {
                   value={errorSelect}
                   onValueChange={setErrorSelect}
                   placeholder="Error intent"
-                  intent="error"
+                  intent="danger"
                   type="outlined"
                 />
               </View>

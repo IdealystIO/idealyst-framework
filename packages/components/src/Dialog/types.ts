@@ -19,9 +19,9 @@ export interface DialogProps extends BaseProps, InteractiveAccessibilityProps {
   open: boolean;
 
   /**
-   * Called when the dialog should be opened or closed
+   * Called when the dialog should be closed
    */
-  onOpenChange: (open: boolean) => void;
+  onClose: () => void;
 
   /**
    * Optional title for the dialog

@@ -16,11 +16,12 @@ import { selectStyles } from './Select.styles';
 import { BoundedModalContent } from '../internal/BoundedModalContent.native';
 import { useSmartPosition } from '../hooks/useSmartPosition.native';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Select = forwardRef<View, SelectProps>(({
+const Select = forwardRef<IdealystElement, SelectProps>(({
   options,
   value,
-  onValueChange,
+  onChange,
   placeholder = 'Select an option',
   disabled = false,
   error = false,
@@ -146,7 +147,7 @@ const Select = forwardRef<View, SelectProps>(({
         if (buttonIndex !== cancelButtonIndex && buttonIndex < options.length) {
           const selectedOption = options[buttonIndex];
           if (!selectedOption.disabled) {
-            onValueChange?.(selectedOption.value);
+            onChange?.(selectedOption.value);
           }
         }
       }
@@ -155,7 +156,7 @@ const Select = forwardRef<View, SelectProps>(({
 
   const handleOptionSelect = (option: SelectOption) => {
     if (!option.disabled) {
-      onValueChange?.(option.value);
+      onChange?.(option.value);
       closeDropdown();
     }
   };
@@ -318,7 +319,7 @@ const Select = forwardRef<View, SelectProps>(({
   };
 
   return (
-    <View ref={ref} nativeID={id} style={[containerStyle, style]} testID={testID}>
+    <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID}>
       {label && (
         <Text style={labelStyle}>
           {label}

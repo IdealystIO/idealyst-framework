@@ -4,8 +4,9 @@ import { listStyles } from './List.styles';
 import type { ListProps } from './types';
 import { ListProvider } from './ListContext';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const List = forwardRef<View, ListProps>(({
+const List = forwardRef<IdealystElement, ListProps>(({
   children,
   type = 'default',
   size = 'md',
@@ -92,7 +93,7 @@ const List = forwardRef<View, ListProps>(({
   }
 
   return (
-    <View ref={ref} nativeID={id} style={containerStyle as any} testID={testID} {...nativeA11yProps}>
+    <View ref={ref as any} nativeID={id} style={containerStyle as any} testID={testID} {...nativeA11yProps}>
       {content}
     </View>
   );

@@ -24,19 +24,20 @@ export type ButtonGradient = 'darken' | 'lighten';
  */
 export interface ButtonProps extends BaseProps, InteractiveAccessibilityProps {
   /**
-   * The text or content to display inside the button
+   * The content to display inside the button
    */
   children?: ReactNode;
-
-  /**
-   * The text title to display inside the button (for web)
-   */
-  title?: string;
 
   /**
    * Called when the button is pressed
    */
   onPress?: () => void;
+
+  /**
+   * @deprecated Use `onPress` instead. This prop exists for web compatibility only.
+   * Using onClick will log a deprecation warning in development.
+   */
+  onClick?: () => void;
 
   /**
    * Whether the button is disabled
@@ -47,11 +48,6 @@ export interface ButtonProps extends BaseProps, InteractiveAccessibilityProps {
    * The visual style type of the button
    */
   type?: ButtonType;
-
-  /**
-   * Alias for type - the visual style variant of the button
-   */
-  variant?: ButtonType;
 
   /**
    * The intent/color scheme of the button

@@ -61,6 +61,7 @@ export type {
     // Individual component styleable elements
     ButtonStyleableElements,
     CardStyleableElements,
+    TextInputStyleableElements,
     InputStyleableElements,
     ChipStyleableElements,
     AlertStyleableElements,

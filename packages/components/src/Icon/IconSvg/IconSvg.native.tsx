@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import type { IdealystElement } from '../../utils/refTypes';
 
 /**
  * Internal component for rendering SVG icons directly from MDI paths.
@@ -18,7 +19,7 @@ interface IconSvgProps {
   'data-testid'?: string;
 }
 
-export const IconSvg = React.forwardRef<View, IconSvgProps>(({
+export const IconSvg = React.forwardRef<IdealystElement, IconSvgProps>(({
   path,
   size = 24,
   color = 'currentColor',
@@ -29,7 +30,7 @@ export const IconSvg = React.forwardRef<View, IconSvgProps>(({
   const sizeNum = typeof size === 'string' ? parseFloat(size) : size;
 
   return (
-    <View ref={ref} style={[{ width: sizeNum, height: sizeNum }, style]} testID={testID}>
+    <View ref={ref as any} style={[{ width: sizeNum, height: sizeNum }, style]} testID={testID}>
       <Svg viewBox="0 0 24 24" width={sizeNum} height={sizeNum}>
         <Path d={path} fill={color} />
       </Svg>

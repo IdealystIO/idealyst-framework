@@ -63,7 +63,7 @@ export const SVGImageExamples = () => {
               source={testLogo}
               width={102} 
               height={30}
-              intent="error"
+              intent="danger"
             />
             <SVGImage 
               source={testLogo}

@@ -6,21 +6,22 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebSelectionAriaProps, generateAccessibilityId } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Toggle switch for binary on/off states with optional label and icons.
  * Supports custom enabled/disabled icons and multiple sizes.
  */
-const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
+const Switch = forwardRef<IdealystElement, SwitchProps>(({
   checked = false,
-  onCheckedChange,
+  onChange,
   disabled = false,
   label,
   labelPosition = 'right',
   intent = 'primary',
   size = 'md',
-  enabledIcon,
-  disabledIcon,
+  onIcon,
+  offIcon,
   // Spacing variants from FormInputStyleProps
   margin,
   marginVertical,
@@ -39,8 +40,8 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
   accessibilityChecked,
 }, ref) => {
   const handleClick = () => {
-    if (!disabled && onCheckedChange) {
-      onCheckedChange(!checked);
+    if (!disabled && onChange) {
+      onChange(!checked);
     }
   };
 
@@ -93,7 +94,7 @@ const Switch = forwardRef<HTMLDivElement | HTMLButtonElement, SwitchProps>(({
 
   // Helper to render icon
   const renderIcon = () => {
-    const iconToRender = checked ? enabledIcon : disabledIcon;
+    const iconToRender = checked ? onIcon : offIcon;
     if (!iconToRender) return null;
 
     if (isIconName(iconToRender)) {

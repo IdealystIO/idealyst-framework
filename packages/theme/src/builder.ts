@@ -20,6 +20,7 @@ import {
     ProgressSizeValue,
     AccordionSizeValue,
     ActivityIndicatorSizeValue,
+    AlertSizeValue,
     BreadcrumbSizeValue,
     ListSizeValue,
     MenuSizeValue,
@@ -68,6 +69,7 @@ export type BuiltTheme<
         progress: Record<TSize, ProgressSizeValue>;
         accordion: Record<TSize, AccordionSizeValue>;
         activityIndicator: Record<TSize, ActivityIndicatorSizeValue>;
+        alert: Record<TSize, AlertSizeValue>;
         breadcrumb: Record<TSize, BreadcrumbSizeValue>;
         list: Record<TSize, ListSizeValue>;
         menu: Record<TSize, MenuSizeValue>;
@@ -259,6 +261,7 @@ export class ThemeBuilder<
         progress: Record<S, ProgressSizeValue>;
         accordion: Record<S, AccordionSizeValue>;
         activityIndicator: Record<S, ActivityIndicatorSizeValue>;
+        alert: Record<S, AlertSizeValue>;
         breadcrumb: Record<S, BreadcrumbSizeValue>;
         list: Record<S, ListSizeValue>;
         menu: Record<S, MenuSizeValue>;

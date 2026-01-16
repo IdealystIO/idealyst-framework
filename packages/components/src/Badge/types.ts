@@ -1,11 +1,12 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
-import { Color, Size } from '@idealyst/theme';
+import { Color, Intent, Size } from '@idealyst/theme';
 import { BaseProps } from '../utils/viewStyleProps';
 
 // Component-specific type aliases for future extensibility
 export type BadgeColorVariant = Color;
+export type BadgeIntentVariant = Intent;
 export type BadgeSizeVariant = Size;
 export type BadgeType = 'filled' | 'outlined' | 'dot';
 
@@ -35,7 +36,18 @@ export interface BadgeProps extends BaseProps {
   variant?: BadgeType;
 
   /**
-   * The color scheme of the badge
+   * The semantic color scheme of the badge.
+   * Use for status-based coloring (success, danger, warning, etc.).
+   *
+   * **Note:** Only one of `intent` or `color` should be set. If both are provided, `intent` takes precedence.
+   */
+  intent?: BadgeIntentVariant;
+
+  /**
+   * The raw palette color of the badge.
+   * Use for custom coloring that doesn't map to a semantic intent.
+   *
+   * **Note:** Only one of `intent` or `color` should be set. If both are provided, `intent` takes precedence.
    */
   color?: BadgeColorVariant;
 

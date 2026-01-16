@@ -7,7 +7,7 @@ import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 
 const Dialog = forwardRef<View, DialogProps>(({
   open,
-  onOpenChange,
+  onClose,
   title,
   children,
   size = 'md',
@@ -76,22 +76,22 @@ const Dialog = forwardRef<View, DialogProps>(({
     if (!open) return;
 
     const handleBackPress = () => {
-      onOpenChange(false);
+      onClose();
       return true; // Prevent default back behavior
     };
 
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
     return () => backHandler.remove();
-  }, [open, onOpenChange]);
+  }, [open, onClose]);
 
   const handleBackdropPress = () => {
     if (closeOnBackdropClick) {
-      onOpenChange(false);
+      onClose();
     }
   };
 
   const handleClosePress = () => {
-    onOpenChange(false);
+    onClose();
   };
 
   // Apply variants
@@ -129,7 +129,7 @@ const Dialog = forwardRef<View, DialogProps>(({
       visible={open}
       transparent
       animationType="none"
-      onRequestClose={() => onOpenChange(false)}
+      onRequestClose={() => onClose()}
       statusBarTranslucent
       testID={testID}
     >

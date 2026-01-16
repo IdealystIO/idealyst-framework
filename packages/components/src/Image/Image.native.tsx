@@ -3,8 +3,9 @@ import { Image as RNImage, View } from 'react-native';
 import { imageStyles } from './Image.styles';
 import type { ImageProps } from './types';
 import ActivityIndicator from '../ActivityIndicator';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Image = forwardRef<View, ImageProps>(({
+const Image = forwardRef<IdealystElement, ImageProps>(({
   source,
   alt,
   width,
@@ -57,7 +58,7 @@ const Image = forwardRef<View, ImageProps>(({
   ];
 
   return (
-    <View ref={ref} nativeID={id} style={containerStyle as any} testID={testID} accessibilityRole="image" accessibilityLabel={accessibilityLabel || alt}>
+    <View ref={ref as any} nativeID={id} style={containerStyle as any} testID={testID} accessibilityRole="image" accessibilityLabel={accessibilityLabel || alt}>
       <RNImage
         source={imageSource as any}
         style={[imageStyles.image, { borderRadius }]}

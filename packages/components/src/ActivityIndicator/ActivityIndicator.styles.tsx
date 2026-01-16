@@ -37,32 +37,31 @@ export const activityIndicatorStyles = defineStyle('ActivityIndicator', (theme: 
         },
     }),
 
-    spinner: ({ intent = 'primary' }: ActivityIndicatorDynamicProps) => {
-        // Inline color access for Unistyles to trace
-        const color = theme.intents[intent].primary;
-
-        return {
-            borderRadius: 9999,
-            borderStyle: 'solid' as const,
-            color,
-            variants: {
-                size: {
-                    width: theme.sizes.$activityIndicator.size,
-                    height: theme.sizes.$activityIndicator.size,
-                    borderWidth: theme.sizes.$activityIndicator.borderWidth,
-                },
-                animating: {
-                    true: {},
-                    false: {},
+    spinner: (_props: ActivityIndicatorDynamicProps) => ({
+        borderRadius: 9999,
+        borderStyle: 'solid' as const,
+        variants: {
+            size: {
+                width: theme.sizes.$activityIndicator.size,
+                height: theme.sizes.$activityIndicator.size,
+                borderWidth: theme.sizes.$activityIndicator.borderWidth,
+            },
+            animating: {
+                true: {},
+                false: {},
+            },
+            intent: {
+                color: theme.$intents.primary,
+                _web: {
+                    borderColor: 'transparent',
+                    borderTopColor: theme.$intents.primary,
+                    borderRightColor: theme.$intents.primary,
                 },
             },
-            _web: {
-                borderColor: 'transparent',
-                borderTopColor: color,
-                borderRightColor: color,
-                animation: 'spin 1s linear infinite',
-                boxSizing: 'border-box',
-            },
-        } as const;
-    },
+        },
+        _web: {
+            animation: 'spin 1s linear infinite',
+            boxSizing: 'border-box',
+        },
+    }),
 }));

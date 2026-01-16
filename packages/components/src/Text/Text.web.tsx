@@ -3,12 +3,13 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { TextProps } from './types';
 import { textStyles } from './Text.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Typography component for displaying text with predefined styles and semantic variants.
  * Supports multiple typography scales, colors, weights, and alignments.
  */
-const Text = forwardRef<HTMLSpanElement, TextProps>(({
+const Text = forwardRef<IdealystElement, TextProps>(({
   children,
   typography,
   weight,

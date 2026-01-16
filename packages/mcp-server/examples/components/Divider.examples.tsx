@@ -53,16 +53,20 @@ export function DividerTypes() {
   );
 }
 
-// Example 4: Divider Thickness
-export function DividerThickness() {
+// Example 4: Divider Sizes
+export function DividerSizes() {
   return (
     <View spacing="md">
-      <Text>Thin divider</Text>
-      <Divider thickness="thin" />
+      <Text>Extra small divider</Text>
+      <Divider size="xs" />
+      <Text>Small divider</Text>
+      <Divider size="sm" />
       <Text>Medium divider</Text>
-      <Divider thickness="md" />
-      <Text>Thick divider</Text>
-      <Divider thickness="thick" />
+      <Divider size="md" />
+      <Text>Large divider</Text>
+      <Divider size="lg" />
+      <Text>Extra large divider</Text>
+      <Divider size="xl" />
     </View>
   );
 }
@@ -76,7 +80,7 @@ export function DividerWithIntent() {
       <Text>Success intent</Text>
       <Divider intent="success" />
       <Text>Error intent</Text>
-      <Divider intent="error" />
+      <Divider intent="danger" />
       <Text>Warning intent</Text>
       <Divider intent="warning" />
       <Text>Info intent</Text>
@@ -95,7 +99,7 @@ export function DividerWithText() {
       <Divider>OR</Divider>
       <Text>Section 2 content</Text>
       <Divider>
-        <Text size="sm" >
+        <Text typography="body2">
           Continue Reading
         </Text>
       </Divider>
@@ -142,7 +146,7 @@ export function SectionDividers() {
   return (
     <View spacing="lg">
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Section 1
         </Text>
         <Text>
@@ -150,10 +154,10 @@ export function SectionDividers() {
         </Text>
       </View>
 
-      <Divider spacing="lg" thickness="md" />
+      <Divider spacing="lg" size="md" />
 
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Section 2
         </Text>
         <Text>
@@ -161,10 +165,10 @@ export function SectionDividers() {
         </Text>
       </View>
 
-      <Divider spacing="lg" thickness="md" />
+      <Divider spacing="lg" size="md" />
 
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Section 3
         </Text>
         <Text>
@@ -180,16 +184,16 @@ export function StyledDividers() {
   return (
     <View spacing="md">
       <Text weight="bold">Thick Primary Divider</Text>
-      <Divider thickness="thick" intent="primary" spacing="md" />
+      <Divider size="lg" intent="primary" spacing="md" />
 
       <Text weight="bold">Dashed Success Divider</Text>
       <Divider type="dashed" intent="success" spacing="md" />
 
       <Text weight="bold">Dotted Warning Divider</Text>
-      <Divider type="dotted" intent="warning" thickness="md" spacing="md" />
+      <Divider type="dotted" intent="warning" size="md" spacing="md" />
 
       <Text weight="bold">Thick Error Divider</Text>
-      <Divider thickness="thick" intent="error" spacing="md" />
+      <Divider size="lg" intent="danger" spacing="md" />
     </View>
   );
 }
@@ -199,38 +203,38 @@ export function FormSectionDividers() {
   return (
     <View spacing="lg">
       <View spacing="md">
-        <Text size="lg" weight="bold">
+        <Text typography="subtitle1" weight="bold">
           Personal Information
         </Text>
         <View spacing="sm">
-          <Text size="sm">Name: John Doe</Text>
-          <Text size="sm">Email: john@example.com</Text>
+          <Text typography="body2">Name: John Doe</Text>
+          <Text typography="body2">Email: john@example.com</Text>
         </View>
       </View>
 
       <Divider spacing="lg">
-        <Text size="sm" weight="semibold" >
+        <Text typography="body2" weight="semibold">
           CONTACT DETAILS
         </Text>
       </Divider>
 
       <View spacing="md">
         <View spacing="sm">
-          <Text size="sm">Phone: (555) 123-4567</Text>
-          <Text size="sm">Address: 123 Main St</Text>
+          <Text typography="body2">Phone: (555) 123-4567</Text>
+          <Text typography="body2">Address: 123 Main St</Text>
         </View>
       </View>
 
       <Divider spacing="lg">
-        <Text size="sm" weight="semibold" >
+        <Text typography="body2" weight="semibold">
           PREFERENCES
         </Text>
       </Divider>
 
       <View spacing="md">
         <View spacing="sm">
-          <Text size="sm">Theme: Dark</Text>
-          <Text size="sm">Notifications: Enabled</Text>
+          <Text typography="body2">Theme: Dark</Text>
+          <Text typography="body2">Notifications: Enabled</Text>
         </View>
       </View>
     </View>
@@ -249,7 +253,7 @@ export function ListItemDividers() {
             <Text>{item}</Text>
           </View>
           {index < items.length - 1 && (
-            <Divider spacing="none" thickness="thin" />
+            <Divider spacing="none" size="sm" />
           )}
         </React.Fragment>
       ))}

@@ -221,7 +221,7 @@ export const InputExamples = () => {
           <Text
             id="password-helper"
             typography="caption"
-            color={passwordValue.length > 0 && passwordValue.length < 8 ? 'error' : 'muted'}
+            color={passwordValue.length > 0 && passwordValue.length < 8 ? 'danger' : 'muted'}
           >
             {passwordValue.length > 0 && passwordValue.length < 8
               ? 'Password must be at least 8 characters'

@@ -259,7 +259,7 @@ export function SignupForm({ onSubmit, onTermsPress }: SignupFormProps) {
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <Checkbox
             checked={acceptedTerms}
-            onCheckedChange={setAcceptedTerms}
+            onChange={setAcceptedTerms}
           />
           <Text>
             I agree to the{' '}
@@ -371,7 +371,7 @@ export function SettingsScreen() {
           >
             <Switch
               checked={settings.notifications}
-              onCheckedChange={(v) => updateSetting('notifications', v)}
+              onChange={(v) => updateSetting('notifications', v)}
             />
           </SettingRow>
 
@@ -384,7 +384,7 @@ export function SettingsScreen() {
           >
             <Switch
               checked={settings.emailUpdates}
-              onCheckedChange={(v) => updateSetting('emailUpdates', v)}
+              onChange={(v) => updateSetting('emailUpdates', v)}
             />
           </SettingRow>
         </Card>
@@ -402,7 +402,7 @@ export function SettingsScreen() {
           >
             <Switch
               checked={settings.darkMode}
-              onCheckedChange={(v) => updateSetting('darkMode', v)}
+              onChange={(v) => updateSetting('darkMode', v)}
             />
           </SettingRow>
 
@@ -414,7 +414,7 @@ export function SettingsScreen() {
           >
             <Select
               value={settings.fontSize}
-              onValueChange={(v) => updateSetting('fontSize', v)}
+              onChange={(v) => updateSetting('fontSize', v)}
               options={[
                 { label: 'Small', value: 'small' },
                 { label: 'Medium', value: 'medium' },
@@ -437,7 +437,7 @@ export function SettingsScreen() {
           >
             <Select
               value={settings.language}
-              onValueChange={(v) => updateSetting('language', v)}
+              onChange={(v) => updateSetting('language', v)}
               options={[
                 { label: 'English', value: 'en' },
                 { label: 'Spanish', value: 'es' },
@@ -583,7 +583,7 @@ export function ThemeToggle() {
       <Text>Dark Mode</Text>
       <Switch
         checked={isDark}
-        onCheckedChange={(checked) => setMode(checked ? 'dark' : 'light')}
+        onChange={(checked) => setMode(checked ? 'dark' : 'light')}
       />
     </View>
   );
@@ -1436,7 +1436,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
     <ConfirmContext.Provider value={{ confirm }}>
       {children}
 
-      <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose(false)}>
+      <Dialog open={isOpen} onClose={() => handleClose(false)}>
         {options && (
           <View style={{ padding: 24, alignItems: 'center' }}>
             {options.icon && (
@@ -1551,7 +1551,7 @@ function App() {
 import { Animated, Pressable } from 'react-native';
 import { View, Text, Icon } from '@idealyst/components';
 
-type ToastType = 'success' | 'error' | 'warning' | 'info';
+type ToastType = 'success' | 'danger' | 'warning' | 'info';
 
 interface Toast {
   id: string;
@@ -1563,7 +1563,7 @@ interface Toast {
 interface ToastContextType {
   showToast: (type: ToastType, message: string, duration?: number) => void;
   success: (message: string) => void;
-  error: (message: string) => void;
+  danger: (message: string) => void;
   warning: (message: string) => void;
   info: (message: string) => void;
 }
@@ -1572,7 +1572,7 @@ const ToastContext = createContext<ToastContextType | null>(null);
 
 const toastConfig: Record<ToastType, { icon: string; intent: string }> = {
   success: { icon: 'check-circle', intent: 'success' },
-  error: { icon: 'alert-circle', intent: 'danger' },
+  danger: { icon: 'alert-circle', intent: 'danger' },
   warning: { icon: 'alert', intent: 'warning' },
   info: { icon: 'information', intent: 'primary' },
 };
@@ -1598,7 +1598,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const contextValue: ToastContextType = {
     showToast,
     success: (msg) => showToast('success', msg),
-    error: (msg) => showToast('error', msg),
+    danger: (msg) => showToast('danger', msg),
     warning: (msg) => showToast('warning', msg),
     info: (msg) => showToast('info', msg),
   };
@@ -1898,7 +1898,7 @@ export function ContactForm({ onSubmit }: { onSubmit: (data: FormData) => Promis
             label="Country *"
             placeholder="Select your country"
             value={formData.country}
-            onValueChange={(v) => handleChange('country', v)}
+            onChange={(v) => handleChange('country', v)}
             options={[
               { label: 'United States', value: 'us' },
               { label: 'United Kingdom', value: 'uk' },
@@ -1923,7 +1923,7 @@ export function ContactForm({ onSubmit }: { onSubmit: (data: FormData) => Promis
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Checkbox
               checked={formData.subscribe}
-              onCheckedChange={(v) => handleChange('subscribe', v)}
+              onChange={(v) => handleChange('subscribe', v)}
             />
             <Text>Subscribe to our newsletter</Text>
           </View>

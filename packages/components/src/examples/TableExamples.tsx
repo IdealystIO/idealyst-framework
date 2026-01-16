@@ -126,7 +126,7 @@ export const TableExamples: React.FC = () => {
           <Button size="sm" type="outlined" onPress={() => console.log('Edit', user.id)}>
             Edit
           </Button>
-          <Button size="sm" type="outlined" intent="error" onPress={() => console.log('Delete', user.id)}>
+          <Button size="sm" type="outlined" intent="danger" onPress={() => console.log('Delete', user.id)}>
             Delete
           </Button>
         </View>

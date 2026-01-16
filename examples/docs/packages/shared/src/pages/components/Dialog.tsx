@@ -8,7 +8,7 @@ function DemoDialog(props: any) {
   return (
     <View>
       <Button onPress={() => setOpen(true)}>Open Dialog</Button>
-      <Dialog {...props} open={open} onOpenChange={setOpen} title="Example Dialog">
+      <Dialog {...props} open={open} onClose={() => setOpen(false)} title="Example Dialog">
         <Text>This is dialog content. Customize using the props above.</Text>
       </Dialog>
     </View>

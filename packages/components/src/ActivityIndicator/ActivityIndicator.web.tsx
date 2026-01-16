@@ -4,12 +4,13 @@ import { ActivityIndicatorProps } from './types';
 import { activityIndicatorStyles } from './ActivityIndicator.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebLiveRegionAriaProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Spinning loading indicator for async operations and content loading.
  * Supports intent-based coloring and automatic hiding when stopped.
  */
-const ActivityIndicator = forwardRef<HTMLDivElement, ActivityIndicatorProps>(({
+const ActivityIndicator = forwardRef<IdealystElement, ActivityIndicatorProps>(({
   animating = true,
   size = 'md',
   intent = 'primary',

@@ -48,10 +48,10 @@ export type CardStyleableElements = {
 };
 
 /**
- * Input styleable elements.
- * @see InputStylesheet in @idealyst/theme/components/input
+ * TextInput styleable elements.
+ * @see TextInputStylesheet in @idealyst/theme/components/text-input
  */
-export type InputStyleableElements = {
+export type TextInputStyleableElements = {
     container: Styles;
     leftIconContainer: Styles;
     rightIconContainer: Styles;
@@ -61,6 +61,11 @@ export type InputStyleableElements = {
     passwordToggleIcon: Styles;
     input: Styles;
 };
+
+/**
+ * @deprecated Use TextInputStyleableElements instead
+ */
+export type InputStyleableElements = TextInputStyleableElements;
 
 /**
  * Chip styleable elements.
@@ -452,6 +457,8 @@ export interface ComponentStyleExtensions {}
 interface BuiltInComponentStyleElements {
     Button: ButtonStyleableElements;
     Card: CardStyleableElements;
+    TextInput: TextInputStyleableElements;
+    /** @deprecated Use TextInput instead */
     Input: InputStyleableElements;
     Chip: ChipStyleableElements;
     Alert: AlertStyleableElements;

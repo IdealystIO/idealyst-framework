@@ -392,7 +392,7 @@ function PropRow({
       <View style={{ width: 140 }}>
         <Text weight="semibold" style={{ fontFamily: 'monospace' }}>
           {name}
-          {required && <Text color="error">*</Text>}
+          {required && <Text color="danger">*</Text>}
         </Text>
       </View>
       <View style={{ width: 200 }}>

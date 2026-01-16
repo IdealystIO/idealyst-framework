@@ -16,7 +16,7 @@ export const SliderExamples: React.FC = () => {
         <Text typography="h5">Basic Slider</Text>
         <Slider
           value={basicValue}
-          onValueChange={setBasicValue}
+          onChange={setBasicValue}
           showValue
         />
         <Text typography="caption" color="secondary">Value: {basicValue}</Text>
@@ -53,7 +53,7 @@ export const SliderExamples: React.FC = () => {
           </View>
           <View gap="xs">
             <Text typography="body2">Error</Text>
-            <Slider defaultValue={60} intent="error" />
+            <Slider defaultValue={60} intent="danger" />
           </View>
           <View gap="xs">
             <Text typography="body2">Warning</Text>
@@ -122,7 +122,7 @@ export const SliderExamples: React.FC = () => {
         <Text typography="h5">Volume Control</Text>
         <Slider
           value={volumeValue}
-          onValueChange={setVolumeValue}
+          onChange={setVolumeValue}
           min={0}
           max={100}
           showValue
@@ -163,7 +163,7 @@ export const SliderExamples: React.FC = () => {
               min={10}
               max={30}
               icon="thermometer"
-              intent="error"
+              intent="danger"
               showMinMax
             />
           </View>
@@ -174,7 +174,7 @@ export const SliderExamples: React.FC = () => {
         <Text typography="h5">Temperature Control</Text>
         <Slider
           value={temperatureValue}
-          onValueChange={setTemperatureValue}
+          onChange={setTemperatureValue}
           min={10}
           max={30}
           step={0.5}

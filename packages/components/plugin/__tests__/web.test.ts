@@ -468,12 +468,12 @@ describe('MDI Icon Registry Babel Plugin', () => {
 
     it('does not detect icon-like strings in other props', () => {
       const code = `
-        <Button title="home" aria-label="eye">Click me</Button>
+        <Button data-name="home" aria-label="eye">Click me</Button>
       `;
       const result = transform(code);
       const icons = getDetectedIcons(result?.code);
 
-      // title and aria-label are not icon props
+      // data-name and aria-label are not icon props
       expect(icons).not.toContain('home');
       expect(icons).not.toContain('eye');
     });

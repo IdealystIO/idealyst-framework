@@ -408,7 +408,7 @@ variants: {
     },
 }
 
-// Expands to all intent keys (primary, success, error, warning, etc.)
+// Expands to all intent keys (primary, success, danger, warning, etc.)
 ```
 
 **Expand sizes:**

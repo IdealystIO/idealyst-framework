@@ -4,12 +4,13 @@ import MaterialDesignIcons from '@react-native-vector-icons/material-design-icon
 import { CheckboxProps } from './types';
 import { checkboxStyles } from './Checkbox.styles';
 import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const Checkbox = forwardRef<View, CheckboxProps>(({
+const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
   checked = false,
   indeterminate = false,
   disabled = false,
-  onCheckedChange,
+  onChange,
   size = 'md',
   intent = 'primary',
   variant = 'default',
@@ -46,7 +47,7 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
 
     const newChecked = !internalChecked;
     setInternalChecked(newChecked);
-    onCheckedChange?.(newChecked);
+    onChange?.(newChecked);
   };
 
   // Generate native accessibility props
@@ -108,7 +109,7 @@ const Checkbox = forwardRef<View, CheckboxProps>(({
   const helperTextStyle = (checkboxStyles.helperText as any)({ error: !!error });
 
   return (
-    <View ref={ref} nativeID={id} style={[wrapperStyle, style]}>
+    <View ref={ref as any} nativeID={id} style={[wrapperStyle, style]}>
       <Pressable
         onPress={handlePress}
         disabled={disabled}

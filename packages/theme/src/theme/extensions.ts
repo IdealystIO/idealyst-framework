@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 
-import type { IntentValue, ShadowValue, Shade, ColorValue, InteractionConfig, ButtonSizeValue, ChipSizeValue, BadgeSizeValue, IconSizeValue, InputSizeValue, RadioButtonSizeValue, SelectSizeValue, SliderSizeValue, SwitchSizeValue, TextAreaSizeValue, AvatarSizeValue, ProgressSizeValue, AccordionSizeValue, ActivityIndicatorSizeValue, BreadcrumbSizeValue, ListSizeValue, MenuSizeValue, TextSizeValue, TabBarSizeValue, TableSizeValue, TooltipSizeValue, ViewSizeValue, Typography, TypographyValue } from './structures';
+import type { IntentValue, ShadowValue, Shade, ColorValue, InteractionConfig, ButtonSizeValue, ChipSizeValue, BadgeSizeValue, IconSizeValue, InputSizeValue, RadioButtonSizeValue, SelectSizeValue, SliderSizeValue, SwitchSizeValue, TextAreaSizeValue, AvatarSizeValue, ProgressSizeValue, AccordionSizeValue, ActivityIndicatorSizeValue, AlertSizeValue, BreadcrumbSizeValue, ListSizeValue, MenuSizeValue, TextSizeValue, TabBarSizeValue, TableSizeValue, TooltipSizeValue, ViewSizeValue, Typography, TypographyValue } from './structures';
 
 /**
  * Default fallback theme structure.
@@ -32,6 +32,7 @@ export interface DefaultTheme {
         progress: Record<string, ProgressSizeValue>;
         accordion: Record<string, AccordionSizeValue>;
         activityIndicator: Record<string, ActivityIndicatorSizeValue>;
+        alert: Record<string, AlertSizeValue>;
         breadcrumb: Record<string, BreadcrumbSizeValue>;
         list: Record<string, ListSizeValue>;
         menu: Record<string, MenuSizeValue>;

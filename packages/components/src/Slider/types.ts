@@ -28,8 +28,15 @@ export interface SliderProps extends FormInputStyleProps, RangeAccessibilityProp
   intent?: SliderIntentVariant;
   size?: SliderSizeVariant;
   icon?: IconName | React.ReactNode;
-  onValueChange?: (value: number) => void;
-  onValueCommit?: (value: number) => void;
+  /**
+   * Called when the slider value changes during interaction
+   */
+  onChange?: (value: number) => void;
+
+  /**
+   * Called when the user finishes interacting with the slider
+   */
+  onChangeCommit?: (value: number) => void;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }

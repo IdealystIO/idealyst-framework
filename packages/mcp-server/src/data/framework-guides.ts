@@ -232,7 +232,7 @@ export const myTheme = createTheme()
     light: '#a7f3d0',
     dark: '#165e29',
   })
-  .addIntent('error', {
+  .addIntent('danger', {
     primary: '#ef4444',
     contrast: '#ffffff',
     light: '#fca5a1',
@@ -1637,12 +1637,12 @@ variants: {
   },
 }
 
-// Expands to all intent keys (primary, success, error, warning, etc.)
+// Expands to all intent keys (primary, success, danger, warning, etc.)
 // Result:
 // intent: {
 //   primary: { backgroundColor: theme.intents.primary.light, borderColor: theme.intents.primary.primary },
 //   success: { backgroundColor: theme.intents.success.light, borderColor: theme.intents.success.primary },
-//   error: { ... },
+//   danger: { ... },
 //   ...
 // }
 \`\`\`

@@ -3,8 +3,9 @@ import { ActivityIndicator as RNActivityIndicator, View } from 'react-native';
 import { ActivityIndicatorProps } from './types';
 import { activityIndicatorStyles } from './ActivityIndicator.styles';
 import { getNativeLiveRegionAccessibilityProps } from '../utils/accessibility';
+import type { IdealystElement } from '../utils/refTypes';
 
-const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
+const ActivityIndicator = forwardRef<IdealystElement, ActivityIndicatorProps>(({
   animating = true,
   size = 'md',
   intent = 'primary',
@@ -55,7 +56,7 @@ const ActivityIndicator = forwardRef<View, ActivityIndicatorProps>(({
         },
         style
       ]}
-      ref={ref}
+      ref={ref as any}
       nativeID={id}
       testID={testID}
       {...nativeA11yProps}
