@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { router, publicProcedure } from '../trpc.js';
 import { testRouter } from '../routers/test.js';
+import { userRouter } from '../routers/user.js';
 
 export const appRouter = router({
   // Simple hello world procedure
@@ -25,10 +26,8 @@ export const appRouter = router({
   // Test CRUD endpoints - generated automatically from Prisma model
   test: testRouter,
 
-  // Add your model routers here
-  // Example:
-  // users: userRouter,
-  // posts: postRouter,
+  // User CRUD endpoints with extended operations (search, settings, stats)
+  users: userRouter,
 });
 
 // Export type definition of API

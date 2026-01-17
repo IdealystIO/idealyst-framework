@@ -10,6 +10,9 @@
   "scripts": {
     "dev": "yarn workspace @idealyst-showcase/web dev",
     "build": "yarn workspace @idealyst-showcase/web build",
-    "preview": "yarn workspace @idealyst-showcase/web preview"
+    "preview": "yarn workspace @idealyst-showcase/web preview",
+    "start:mobile": "yarn workspace @idealyst-showcase/mobile start",
+    "android": "yarn workspace @idealyst-showcase/mobile android",
+    "ios": "yarn workspace @idealyst-showcase/mobile ios"
   }
 }

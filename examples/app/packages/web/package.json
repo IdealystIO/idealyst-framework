@@ -13,6 +13,7 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
+    "@apollo/client": "^3.11.8",
     "@idealyst/components": "^1.2.30",
     "@idealyst/datagrid": "^1.2.30",
     "@idealyst/datepicker": "^1.2.30",
