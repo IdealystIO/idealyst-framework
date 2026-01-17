@@ -1,8 +1,5 @@
 /**
- * Chip styles using defineStyle with variant expansion.
- *
- * Chip has compound logic between type+selected+intent that's handled via
- * nested variants. The $intents iterator expands for all intent values.
+ * Chip styles using defineStyle with dynamic size/intent/type/selected handling.
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
@@ -25,144 +22,129 @@ export type ChipDynamicProps = {
 };
 
 /**
- * Chip styles with variant expansion for size/intent/type/selected.
+ * Chip styles with size/intent/type/selected handling.
  */
 export const chipStyles = defineStyle('Chip', (theme: Theme) => ({
-    container: (_props: ChipDynamicProps) => ({
-        display: 'flex' as const,
-        flexDirection: 'row' as const,
-        alignItems: 'center' as const,
-        justifyContent: 'center' as const,
-        gap: 4,
-        borderStyle: 'solid' as const,
-        variants: {
-            size: {
-                paddingHorizontal: theme.sizes.$chip.paddingHorizontal,
-                paddingVertical: theme.sizes.$chip.paddingVertical,
-                minHeight: theme.sizes.$chip.minHeight,
-                borderRadius: theme.sizes.$chip.borderRadius,
-            },
-            type: {
-                filled: {
-                    borderWidth: 1,
-                    backgroundColor: theme.$intents.primary,
-                    borderColor: 'transparent',
-                },
-                outlined: {
-                    borderWidth: 1,
-                    backgroundColor: 'transparent',
-                    borderColor: theme.$intents.primary,
-                },
-                soft: {
-                    borderWidth: 0,
-                    backgroundColor: theme.$intents.light,
-                    borderColor: 'transparent',
-                },
-            },
-            selected: {
-                true: {},
-                false: {},
-            },
-            disabled: {
-                true: { opacity: 0.5 },
-                false: { opacity: 1 },
-            },
-        },
-        compoundVariants: [
-            // filled + selected: swap bg/border
-            { type: 'filled', selected: true, styles: { backgroundColor: theme.$intents.contrast, borderColor: theme.$intents.primary } },
-            // outlined + selected: fill with primary
-            { type: 'outlined', selected: true, styles: { backgroundColor: theme.$intents.primary } },
-            // soft + selected: fill with primary
-            { type: 'soft', selected: true, styles: { backgroundColor: theme.$intents.primary } },
-        ],
-    }),
+    container: ({ size = 'md', intent = 'primary', type = 'filled', selected = false, disabled = false }: ChipDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const sizeValue = theme.sizes.chip[size];
 
-    label: (_props: ChipDynamicProps) => ({
-        fontFamily: 'inherit' as const,
-        fontWeight: '500' as const,
-        variants: {
-            size: {
-                fontSize: theme.sizes.$chip.fontSize,
-                lineHeight: theme.sizes.$chip.lineHeight,
-            },
-            type: {
-                filled: { color: theme.$intents.contrast },
-                outlined: { color: theme.$intents.primary },
-                soft: { color: theme.$intents.dark },
-            },
-            selected: {
-                true: {},
-                false: {},
-            },
-        },
-        compoundVariants: [
-            { type: 'filled', selected: true, styles: { color: theme.$intents.primary } },
-            { type: 'outlined', selected: true, styles: { color: theme.colors.text.inverse } },
-            { type: 'soft', selected: true, styles: { color: theme.colors.text.inverse } },
-        ],
-    }),
+        // Compute colors based on type and selected state
+        let backgroundColor: string;
+        let borderColor: string;
+        let borderWidth: number;
 
-    icon: (_props: ChipDynamicProps) => ({
-        display: 'flex' as const,
-        alignItems: 'center' as const,
-        justifyContent: 'center' as const,
-        variants: {
-            size: {
-                width: theme.sizes.$chip.iconSize,
-                height: theme.sizes.$chip.iconSize,
-            },
-            type: {
-                filled: { color: theme.$intents.contrast },
-                outlined: { color: theme.$intents.primary },
-                soft: { color: theme.$intents.dark },
-            },
-            selected: {
-                true: {},
-                false: {},
-            },
-        },
-        compoundVariants: [
-            { type: 'filled', selected: true, styles: { color: theme.$intents.primary } },
-            { type: 'outlined', selected: true, styles: { color: theme.colors.text.inverse } },
-            { type: 'soft', selected: true, styles: { color: theme.colors.text.inverse } },
-        ],
-    }),
+        if (type === 'filled') {
+            borderWidth = 1;
+            backgroundColor = selected ? intentValue.contrast : intentValue.primary;
+            borderColor = selected ? intentValue.primary : 'transparent';
+        } else if (type === 'outlined') {
+            borderWidth = 1;
+            backgroundColor = selected ? intentValue.primary : 'transparent';
+            borderColor = intentValue.primary;
+        } else { // soft
+            borderWidth = 0;
+            backgroundColor = selected ? intentValue.primary : intentValue.light;
+            borderColor = 'transparent';
+        }
 
-    deleteButton: (_props: ChipDynamicProps) => ({
-        display: 'flex' as const,
-        alignItems: 'center' as const,
-        justifyContent: 'center' as const,
-        padding: 0,
-        marginLeft: 4,
-        borderRadius: 12,
-        variants: {
-            size: {
-                width: theme.sizes.$chip.iconSize,
-                height: theme.sizes.$chip.iconSize,
-            },
-        },
-    }),
+        return {
+            display: 'flex' as const,
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
+            gap: 4,
+            paddingHorizontal: sizeValue.paddingHorizontal as number,
+            paddingVertical: sizeValue.paddingVertical as number,
+            minHeight: sizeValue.minHeight as number,
+            borderRadius: sizeValue.borderRadius as number,
+            backgroundColor,
+            borderColor,
+            borderWidth,
+            borderStyle: borderWidth > 0 ? ('solid' as const) : undefined,
+            opacity: disabled ? 0.5 : 1,
+        } as const;
+    },
 
-    deleteIcon: (_props: ChipDynamicProps) => ({
-        variants: {
-            size: {
-                fontSize: theme.sizes.$chip.iconSize,
-            },
-            type: {
-                filled: { color: theme.$intents.contrast },
-                outlined: { color: theme.$intents.primary },
-                soft: { color: theme.$intents.dark },
-            },
-            selected: {
-                true: {},
-                false: {},
-            },
-        },
-        compoundVariants: [
-            { type: 'filled', selected: true, styles: { color: theme.$intents.primary } },
-            { type: 'outlined', selected: true, styles: { color: theme.colors.text.inverse } },
-            { type: 'soft', selected: true, styles: { color: theme.colors.text.inverse } },
-        ],
-    }),
+    label: ({ size = 'md', intent = 'primary', type = 'filled', selected = false }: ChipDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const sizeValue = theme.sizes.chip[size];
+
+        // Compute color based on type and selected state
+        let color: string;
+        if (type === 'filled') {
+            color = selected ? intentValue.primary : intentValue.contrast;
+        } else if (type === 'outlined') {
+            color = selected ? theme.colors.text.inverse : intentValue.primary;
+        } else { // soft
+            color = selected ? theme.colors.text.inverse : intentValue.dark;
+        }
+
+        return {
+            fontFamily: 'inherit' as const,
+            fontWeight: '500' as const,
+            fontSize: sizeValue.fontSize as number,
+            lineHeight: sizeValue.lineHeight as number,
+            color,
+        } as const;
+    },
+
+    icon: ({ size = 'md', intent = 'primary', type = 'filled', selected = false }: ChipDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const sizeValue = theme.sizes.chip[size];
+
+        // Same color logic as label
+        let color: string;
+        if (type === 'filled') {
+            color = selected ? intentValue.primary : intentValue.contrast;
+        } else if (type === 'outlined') {
+            color = selected ? theme.colors.text.inverse : intentValue.primary;
+        } else {
+            color = selected ? theme.colors.text.inverse : intentValue.dark;
+        }
+
+        return {
+            display: 'flex' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
+            width: sizeValue.iconSize as number,
+            height: sizeValue.iconSize as number,
+            color,
+        } as const;
+    },
+
+    deleteButton: ({ size = 'md' }: ChipDynamicProps) => {
+        const sizeValue = theme.sizes.chip[size];
+
+        return {
+            display: 'flex' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'center' as const,
+            padding: 0,
+            marginLeft: 4,
+            borderRadius: 12,
+            width: sizeValue.iconSize as number,
+            height: sizeValue.iconSize as number,
+        } as const;
+    },
+
+    deleteIcon: ({ size = 'md', intent = 'primary', type = 'filled', selected = false }: ChipDynamicProps) => {
+        const intentValue = theme.intents[intent];
+        const sizeValue = theme.sizes.chip[size];
+
+        // Same color logic as label/icon
+        let color: string;
+        if (type === 'filled') {
+            color = selected ? intentValue.primary : intentValue.contrast;
+        } else if (type === 'outlined') {
+            color = selected ? theme.colors.text.inverse : intentValue.primary;
+        } else {
+            color = selected ? theme.colors.text.inverse : intentValue.dark;
+        }
+
+        return {
+            fontSize: sizeValue.iconSize as number,
+            color,
+        } as const;
+    },
 }));

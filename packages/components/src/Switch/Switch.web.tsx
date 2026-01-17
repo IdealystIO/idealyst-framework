@@ -77,12 +77,15 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     checked,
   ]);
 
+  
   // Apply variants using the correct Unistyles v3 pattern
   switchStyles.useVariants({
-    size: size as 'sm' | 'md' | 'lg',
+    size,
+    checked,
     disabled: disabled as boolean,
-    position: labelPosition as 'left' | 'right',
+    labelPosition,
     margin,
+    intent,
     marginVertical,
     marginHorizontal,
   });
@@ -119,13 +122,7 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
 
   // Computed container props with dynamic styles (for when label exists)
   const computedContainerProps = getWebProps([
-    (switchStyles.container as any)({}),
-    style as any,
-    {
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      display: 'inline-flex',
-      alignItems: 'center',
-    }
+    (switchStyles.container as any)({ disabled }),
   ]);
 
   const mergedButtonRef = useMergeRefs(ref as React.Ref<HTMLButtonElement>, computedButtonProps.ref);
@@ -135,6 +132,7 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     <button
       {...computedButtonProps}
       {...ariaProps}
+      style={style as any}
       ref={mergedButtonRef}
       onClick={handleClick}
       disabled={disabled}

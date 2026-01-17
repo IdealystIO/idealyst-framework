@@ -13,4 +13,13 @@ export {
   resetThemeCache,
   type BabelThemeKeys,
 } from './theme-analyzer';
+
+// New source-based analyzer (no hardcoded defaults)
+export {
+  analyzeThemeSource,
+  toBabelThemeKeys,
+  type ThemeSourceAnalyzerOptions,
+  type BabelThemeKeys as BabelThemeKeysNew,
+} from './theme-source-analyzer';
+
 export * from './types';

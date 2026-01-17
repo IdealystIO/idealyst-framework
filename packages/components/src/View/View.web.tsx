@@ -73,6 +73,9 @@ const View = forwardRef<IdealystElement, ViewProps>(({
       flexShrink,
       flexBasis,
       alignSelf,
+      // Flex content alignment - goes to content (for aligning children)
+      alignItems,
+      justifyContent,
       // Margin - goes to wrapper (positioning in parent)
       margin,
       marginTop,
@@ -124,6 +127,9 @@ const View = forwardRef<IdealystElement, ViewProps>(({
             inset: 0,
             overflow: 'auto',
             boxSizing: 'border-box',
+            // Flex alignment for children
+            ...(alignItems !== undefined && { alignItems }),
+            ...(justifyContent !== undefined && { justifyContent }),
             // User's visual styles
             ...contentStyles,
           }}
@@ -139,8 +145,8 @@ const View = forwardRef<IdealystElement, ViewProps>(({
 
   return (
     <div
-      style={style as any}
       {...webProps}
+      style={style as any}
       ref={mergedRef}
       id={id}
       data-testid={testID}

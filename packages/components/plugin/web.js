@@ -248,6 +248,8 @@ module.exports = function ({ types: t }, options = {}) {
           'Alert': ['icon'],
           'Chip': ['icon', 'deleteIcon'],
           'Input': ['leftIcon', 'rightIcon'],
+          'TextInput': ['leftIcon', 'rightIcon'],
+          'IconButton': ['icon'],
         };
 
         const iconProps = iconPropMap[componentName];

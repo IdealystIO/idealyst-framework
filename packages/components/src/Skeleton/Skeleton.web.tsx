@@ -39,7 +39,7 @@ const Skeleton: React.FC<SkeletonProps> = ({
     animation,
   });
 
-  const skeletonProps = getWebProps([skeletonStyles.skeleton, style as any]);
+  const skeletonProps = getWebProps([skeletonStyles.skeleton({}), style as any]);
 
   // Apply custom border radius if provided and shape is 'rounded'
   const customStyles: React.CSSProperties = {

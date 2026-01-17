@@ -63,7 +63,7 @@
     "publish:npm": "npm publish"
   },
   "dependencies": {
-    "@idealyst/tooling": "^1.2.3"
+    "@idealyst/tooling": "^1.2.30"
   },
   "peerDependencies": {
     "react-native-unistyles": ">=3.0.0"

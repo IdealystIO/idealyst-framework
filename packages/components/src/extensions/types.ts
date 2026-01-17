@@ -37,6 +37,17 @@ export type ButtonStyleableElements = {
     text: ElementStyle;
     icon: ElementStyle;
     iconContainer: ElementStyle;
+    spinner: ElementStyle;
+};
+
+/**
+ * IconButton styleable elements.
+ * @see IconButtonStylesheet in @idealyst/theme/components/icon-button
+ */
+export type IconButtonStyleableElements = {
+    button: ElementStyle;
+    icon: ElementStyle;
+    spinner: ElementStyle;
 };
 
 /**
@@ -456,6 +467,7 @@ export interface ComponentStyleExtensions {}
  */
 interface BuiltInComponentStyleElements {
     Button: ButtonStyleableElements;
+    IconButton: IconButtonStyleableElements;
     Card: CardStyleableElements;
     TextInput: TextInputStyleableElements;
     /** @deprecated Use TextInput instead */

@@ -43,6 +43,8 @@ const packagePaths = [
   'packages/config/package.json',
   'packages/tooling/package.json',
   'packages/markdown/package.json',
+  'packages/lottie/package.json',
+  'packages/animate/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',

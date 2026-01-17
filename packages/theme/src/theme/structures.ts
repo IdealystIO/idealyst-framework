@@ -98,6 +98,11 @@ export type ButtonSizeValue = {
     iconSize: SizeValue;
 };
 
+export type IconButtonSizeValue = {
+    size: SizeValue;
+    iconSize: SizeValue;
+};
+
 export type ChipSizeValue = {
     paddingVertical: SizeValue;
     paddingHorizontal: SizeValue;

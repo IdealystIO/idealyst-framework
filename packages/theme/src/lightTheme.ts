@@ -120,6 +120,13 @@ export const lightTheme = createTheme()
             lg: { paddingVertical: 10, paddingHorizontal: 20, minHeight: 48, fontSize: 18, lineHeight: 28, iconSize: 18 },
             xl: { paddingVertical: 12, paddingHorizontal: 24, minHeight: 56, fontSize: 20, lineHeight: 32, iconSize: 20 },
         },
+        iconButton: {
+            xs: { size: 24, iconSize: 12 },
+            sm: { size: 32, iconSize: 14 },
+            md: { size: 40, iconSize: 16 },
+            lg: { size: 48, iconSize: 18 },
+            xl: { size: 56, iconSize: 20 },
+        },
         chip: {
             xs: { paddingVertical: 1, paddingHorizontal: 6, minHeight: 16, borderRadius: 999, fontSize: 10, lineHeight: 12, iconSize: 10 },
             sm: { paddingVertical: 2, paddingHorizontal: 8, minHeight: 20, borderRadius: 999, fontSize: 11, lineHeight: 14, iconSize: 12 },

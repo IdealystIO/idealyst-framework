@@ -14,6 +14,7 @@ import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
 import type { ThemeValues } from './types';
+import { analyzeThemeSource } from './theme-source-analyzer';
 
 interface AnalyzerContext {
   program: ts.Program;
@@ -282,12 +283,37 @@ function analyzeBaseTheme(
 
   log('Base theme', varName, 'imported from', importInfo.source);
 
-  // For @idealyst/theme imports, we know the structure
+  // For @idealyst/theme imports, try to analyze from source using aliases
   if (importInfo.source === '@idealyst/theme' || importInfo.source.includes('@idealyst/theme')) {
-    // Use default light theme values
+    // Check if we have an alias for @idealyst/theme
+    const aliasPath = packageAliases['@idealyst/theme'];
+    if (aliasPath) {
+      // Determine which theme file to analyze based on variable name
+      const themeFileName = varName.toLowerCase().includes('dark') ? 'darkTheme.ts' : 'lightTheme.ts';
+      const themePath = path.join(aliasPath, 'src', themeFileName);
+
+      if (fs.existsSync(themePath)) {
+        log(`Analyzing @idealyst/theme from source: ${themePath}`);
+        try {
+          const sourceValues = analyzeThemeSource(themePath, {
+            verbose: ctx.verbose,
+            aliases: packageAliases,
+          });
+          mergeThemeValues(values, sourceValues);
+          log('Successfully extracted values from source');
+          return;
+        } catch (err) {
+          log('Failed to analyze source, falling back to defaults:', (err as Error).message);
+        }
+      } else {
+        log(`Theme file not found at alias path: ${themePath}`);
+      }
+    }
+
+    // Fall back to default values if alias resolution fails
+    log('Using default @idealyst/theme values');
     const defaultValues = getDefaultThemeValues();
     mergeThemeValues(values, defaultValues);
-    log('Using default @idealyst/theme values');
     return;
   }
 
@@ -304,6 +330,7 @@ function getDefaultThemeValues(): ThemeValues {
     intents: ['primary', 'success', 'danger', 'warning', 'neutral', 'info'],
     sizes: {
       button: ['xs', 'sm', 'md', 'lg', 'xl'],
+      iconButton: ['xs', 'sm', 'md', 'lg', 'xl'],
       chip: ['xs', 'sm', 'md', 'lg', 'xl'],
       badge: ['xs', 'sm', 'md', 'lg', 'xl'],
       icon: ['xs', 'sm', 'md', 'lg', 'xl'],
@@ -317,6 +344,7 @@ function getDefaultThemeValues(): ThemeValues {
       progress: ['xs', 'sm', 'md', 'lg', 'xl'],
       accordion: ['xs', 'sm', 'md', 'lg', 'xl'],
       activityIndicator: ['xs', 'sm', 'md', 'lg', 'xl'],
+      alert: ['xs', 'sm', 'md', 'lg', 'xl'],
       breadcrumb: ['xs', 'sm', 'md', 'lg', 'xl'],
       list: ['xs', 'sm', 'md', 'lg', 'xl'],
       menu: ['xs', 'sm', 'md', 'lg', 'xl'],
@@ -400,6 +428,31 @@ export interface BabelThemeKeys {
 let themeKeysCache: BabelThemeKeys | null = null;
 let themeLoadAttempted = false;
 
+// Global aliases configuration (set via plugin options)
+let packageAliases: Record<string, string> = {};
+
+/**
+ * Resolve an import source using configured aliases.
+ * Returns the resolved path or null if no alias matches.
+ */
+function resolveWithAliases(source: string, fromDir: string): string | null {
+  for (const [aliasPrefix, aliasPath] of Object.entries(packageAliases)) {
+    if (source === aliasPrefix || source.startsWith(aliasPrefix + '/')) {
+      // Replace the alias prefix with the actual path
+      const remainder = source.slice(aliasPrefix.length);
+      let resolved = aliasPath + remainder;
+
+      // If aliasPath is relative, resolve from fromDir
+      if (!path.isAbsolute(resolved)) {
+        resolved = path.resolve(fromDir, resolved);
+      }
+
+      return resolved;
+    }
+  }
+  return null;
+}
+
 /**
  * Load theme keys for the Babel plugin.
  * This is a compatibility wrapper around analyzeTheme() that:
@@ -407,13 +460,13 @@ let themeLoadAttempted = false;
  * - Returns the subset of keys needed by the Babel plugin
  * - Handles path resolution based on babel opts
  *
- * @param opts - Babel plugin options (requires themePath)
+ * @param opts - Babel plugin options (requires themePath, optional aliases)
  * @param rootDir - Root directory for path resolution
  * @param _babelTypes - Unused (kept for backwards compatibility)
  * @param verboseMode - Enable verbose logging
  */
 export function loadThemeKeys(
-  opts: { themePath?: string },
+  opts: { themePath?: string; aliases?: Record<string, string> },
   rootDir: string,
   _babelTypes?: unknown,
   verboseMode = false
@@ -422,6 +475,14 @@ export function loadThemeKeys(
     return themeKeysCache;
   }
   themeLoadAttempted = true;
+
+  // Set up package aliases for resolution
+  if (opts.aliases && typeof opts.aliases === 'object') {
+    packageAliases = opts.aliases;
+    if (verboseMode) {
+      console.log('[idealyst-plugin] Configured aliases:', packageAliases);
+    }
+  }
 
   const themePath = opts.themePath;
 
@@ -433,10 +494,16 @@ export function loadThemeKeys(
     );
   }
 
-  // Resolve the path
-  const resolvedPath = themePath.startsWith('.')
-    ? path.resolve(rootDir, themePath)
-    : themePath;
+  // First try to resolve using aliases
+  let resolvedPath: string;
+  const aliasResolved = resolveWithAliases(themePath, rootDir);
+  if (aliasResolved && fs.existsSync(aliasResolved)) {
+    resolvedPath = aliasResolved;
+  } else {
+    resolvedPath = themePath.startsWith('.')
+      ? path.resolve(rootDir, themePath)
+      : themePath;
+  }
 
   if (verboseMode) {
     console.log('[idealyst-plugin] Analyzing theme file via @idealyst/tooling:', resolvedPath);

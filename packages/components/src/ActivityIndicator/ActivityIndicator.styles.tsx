@@ -22,10 +22,10 @@ export type ActivityIndicatorDynamicProps = {
  */
 export const activityIndicatorStyles = defineStyle('ActivityIndicator', (theme: Theme) => ({
     container: (_props: ActivityIndicatorDynamicProps) => ({
+        display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         variants: {
-            // $iterator expands for each activityIndicator size
             size: {
                 width: theme.sizes.$activityIndicator.size,
                 height: theme.sizes.$activityIndicator.size,
@@ -45,10 +45,6 @@ export const activityIndicatorStyles = defineStyle('ActivityIndicator', (theme: 
                 width: theme.sizes.$activityIndicator.size,
                 height: theme.sizes.$activityIndicator.size,
                 borderWidth: theme.sizes.$activityIndicator.borderWidth,
-            },
-            animating: {
-                true: {},
-                false: {},
             },
             intent: {
                 color: theme.$intents.primary,

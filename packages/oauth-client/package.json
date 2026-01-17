@@ -33,7 +33,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@idealyst/storage": "^1.0.76",
+    "@idealyst/storage": "^1.2.30",
     "@types/react": "^18.3.18",
     "@types/react-native": "^0.73.0",
     "react": "^19.1.0",
@@ -42,7 +42,7 @@
     "typescript": "^5.7.3"
   },
   "peerDependencies": {
-    "@idealyst/storage": "^1.0.76",
+    "@idealyst/storage": "^1.2.30",
     "react-native": ">=0.60.0"
   },
   "files": [

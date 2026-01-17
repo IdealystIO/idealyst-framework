@@ -29,7 +29,7 @@ export const SwitchExamples: React.FC = () => {
         <Text typography="h5">Basic Switch</Text>
         <Switch
           checked={basicChecked}
-          onCheckedChange={setBasicChecked}
+          onChange={setBasicChecked}
         />
       </View>
 
@@ -37,7 +37,7 @@ export const SwitchExamples: React.FC = () => {
         <Text typography="h5">With Label</Text>
         <Switch
           checked={labelledChecked}
-          onCheckedChange={setLabelledChecked}
+          onChange={setLabelledChecked}
           label="Enable notifications"
         />
       </View>
@@ -46,7 +46,7 @@ export const SwitchExamples: React.FC = () => {
         <Text typography="h5">Label Position</Text>
         <Switch
           checked={labelledChecked}
-          onCheckedChange={setLabelledChecked}
+          onChange={setLabelledChecked}
           label="Left label"
           labelPosition="left"
         />
@@ -57,13 +57,13 @@ export const SwitchExamples: React.FC = () => {
         <View gap="sm">
           <Switch
             checked={basicChecked}
-            onCheckedChange={setBasicChecked}
+            onChange={setBasicChecked}
             size="sm"
             label="Small"
           />
           <Switch
             checked={basicChecked}
-            onCheckedChange={setBasicChecked}
+            onChange={setBasicChecked}
             size="md"
             label="Medium (default)"
           />
@@ -81,31 +81,31 @@ export const SwitchExamples: React.FC = () => {
         <View gap="sm">
           <Switch
             checked={intentChecked.primary}
-            onCheckedChange={(checked) => setIntentChecked(prev => ({ ...prev, primary: checked }))}
+            onChange={(checked) => setIntentChecked(prev => ({ ...prev, primary: checked }))}
             intent="primary"
             label="Primary"
           />
           <Switch
             checked={intentChecked.success}
-            onCheckedChange={(checked) => setIntentChecked(prev => ({ ...prev, success: checked }))}
+            onChange={(checked) => setIntentChecked(prev => ({ ...prev, success: checked }))}
             intent="success"
             label="Success"
           />
           <Switch
             checked={intentChecked.error}
-            onCheckedChange={(checked) => setIntentChecked(prev => ({ ...prev, error: checked }))}
+            onChange={(checked) => setIntentChecked(prev => ({ ...prev, error: checked }))}
             intent="danger"
             label="Error"
           />
           <Switch
             checked={intentChecked.warning}
-            onCheckedChange={(checked) => setIntentChecked(prev => ({ ...prev, warning: checked }))}
+            onChange={(checked) => setIntentChecked(prev => ({ ...prev, warning: checked }))}
             intent="warning"
             label="Warning"
           />
           <Switch
             checked={intentChecked.neutral}
-            onCheckedChange={(checked) => setIntentChecked(prev => ({ ...prev, neutral: checked }))}
+            onChange={(checked) => setIntentChecked(prev => ({ ...prev, neutral: checked }))}
             intent="neutral"
             label="Neutral"
           />
@@ -117,32 +117,32 @@ export const SwitchExamples: React.FC = () => {
         <View gap="sm">
           <Switch
             checked={iconChecked.basic}
-            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, basic: checked }))}
-            enabledIcon="check"
-            disabledIcon="close"
+            onChange={(checked) => setIconChecked(prev => ({ ...prev, basic: checked }))}
+            onIcon="check"
+            offIcon="close"
             label="On/Off"
           />
           <Switch
             checked={iconChecked.notifications}
-            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, notifications: checked }))}
-            enabledIcon="bell"
-            disabledIcon="bell-off"
+            onChange={(checked) => setIconChecked(prev => ({ ...prev, notifications: checked }))}
+            onIcon="bell"
+            offIcon="bell-off"
             intent="success"
             label="Notifications"
           />
           <Switch
             checked={iconChecked.visibility}
-            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, visibility: checked }))}
-            enabledIcon="eye"
-            disabledIcon="eye-off"
+            onChange={(checked) => setIconChecked(prev => ({ ...prev, visibility: checked }))}
+            onIcon="eye"
+            offIcon="eye-off"
             intent="primary"
             label="Visibility"
           />
           <Switch
             checked={iconChecked.volume}
-            onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, volume: checked }))}
-            enabledIcon="volume-high"
-            disabledIcon="volume-off"
+            onChange={(checked) => setIconChecked(prev => ({ ...prev, volume: checked }))}
+            onIcon="volume-high"
+            offIcon="volume-off"
             intent="warning"
             label="Sound"
             size="lg"
@@ -150,8 +150,8 @@ export const SwitchExamples: React.FC = () => {
           <Switch
             checked={iconChecked.wifi}
             onCheckedChange={(checked) => setIconChecked(prev => ({ ...prev, wifi: checked }))}
-            enabledIcon="wifi"
-            disabledIcon="wifi-off"
+            onIcon="wifi"
+            offIcon="wifi-off"
             intent="danger"
             label="WiFi Connection"
             size="sm"

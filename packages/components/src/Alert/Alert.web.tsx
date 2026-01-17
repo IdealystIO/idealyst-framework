@@ -1,4 +1,4 @@
-import { isValidElement, forwardRef } from 'react';
+import { isValidElement, forwardRef, ElementType, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { alertStyles } from './Alert.styles';
 import type { AlertProps } from './types';
@@ -8,13 +8,13 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
 
 // Default icons for each intent
-const defaultIcons: Record<string, string> = {
-  primary: 'information',
-  success: 'check-circle',
-  error: 'alert-circle',
-  warning: 'alert',
-  info: 'information',
-  neutral: 'record-circle',
+const defaultIcons: Record<string, React.ComponentType<any>> = {
+  primary: (props: any) => <IconSvg {...props} name="information" aria-label="information" />,
+  success: (props: any) => <IconSvg {...props} name="check-circle" aria-label="check-circle" />,
+  error: (props: any) => <IconSvg {...props} name="alert-circle" aria-label="alert-circle" />,
+  warning: (props: any) => <IconSvg {...props} name="alert" aria-label="alert" />,
+  info: (props: any) => <IconSvg {...props} name="information" aria-label="information" />,
+  neutral: (props: any) => <IconSvg {...props} name="record-circle" aria-label="record-circle" />,
 };
 
 /**
@@ -37,8 +37,8 @@ const Alert = forwardRef<IdealystElement, AlertProps>(({
   testID,
   id,
 }, ref) => {
-  // Apply variants for size
-  alertStyles.useVariants({ size });
+  // Apply variants for size, intent, and type
+  alertStyles.useVariants({ size, intent, type });
 
   // Compute dynamic styles with intent, type, and size
   const dynamicProps = { intent, type, size };
@@ -51,26 +51,25 @@ const Alert = forwardRef<IdealystElement, AlertProps>(({
   const closeButtonProps = getWebProps([(alertStyles.closeButton as any)(dynamicProps)]);
   const closeIconProps = getWebProps([(alertStyles.closeIcon as any)(dynamicProps)]);
 
-  const displayIcon = icon !== undefined ? icon : (showIcon ? defaultIcons[intent] : null);
-
-  // Helper to render icon
-  const renderIcon = (iconProp: typeof displayIcon) => {
-    if (!iconProp) return null;
-
-    if (isIconName(iconProp)) {
-      return (
-        <IconSvg
-          name={iconProp}
+  const Icon = useMemo(() => {
+    if (!showIcon) return null;
+    if (!icon) {
+      const Element = defaultIcons[intent];
+      if (Element) {
+        return <Element {...iconContainerProps} />;
+      }
+      return null
+    }  else if (typeof icon === 'string') {
+      return <IconSvg
+          name={icon}
           {...iconContainerProps}
-          aria-label={iconProp}
+          aria-label={icon}
         />
-      );
-    } else if (isValidElement(iconProp)) {
-      return iconProp;
+    } else if (isValidElement(icon)) {
+      return icon;
     }
-
     return null;
-  };
+  }, [icon, showIcon, intent]);
 
   const mergedRef = useMergeRefs(ref, containerProps.ref);
 
@@ -82,7 +81,7 @@ const Alert = forwardRef<IdealystElement, AlertProps>(({
       data-testid={testID}
       role="alert"
     >
-      {displayIcon && renderIcon(displayIcon)}
+      {Icon}
 
       <div {...contentProps}>
         {title && (

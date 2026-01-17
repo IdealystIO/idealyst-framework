@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@idealyst-docs/shared": "workspace:*",
-    "@idealyst/components": "^1.1.8",
-    "@idealyst/navigation": "^1.1.8",
-    "@idealyst/theme": "^1.1.8",
+    "@idealyst/components": "^1.2.30",
+    "@idealyst/navigation": "^1.2.30",
+    "@idealyst/theme": "^1.2.30",
     "expo": "~53.0.0",
     "expo-status-bar": "~2.2.0",
     "react": "^19.1.0",

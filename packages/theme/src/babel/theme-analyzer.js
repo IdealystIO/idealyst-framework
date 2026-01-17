@@ -16,6 +16,31 @@ const fs = require('fs');
 let themeKeys = null;
 let themeLoadAttempted = false;
 
+// Global aliases configuration (set via plugin options)
+let packageAliases = {};
+
+/**
+ * Resolve an import source using configured aliases (static version for use outside AST traversal).
+ * Returns the resolved path or null if no alias matches.
+ */
+function resolveWithAliasesStatic(source, fromDir) {
+    for (const [aliasPrefix, aliasPath] of Object.entries(packageAliases)) {
+        if (source === aliasPrefix || source.startsWith(aliasPrefix + '/')) {
+            // Replace the alias prefix with the actual path
+            const remainder = source.slice(aliasPrefix.length);
+            let resolved = aliasPath + remainder;
+
+            // If aliasPath is relative, resolve from fromDir
+            if (!nodePath.isAbsolute(resolved)) {
+                resolved = nodePath.resolve(fromDir, resolved);
+            }
+
+            return resolved;
+        }
+    }
+    return null;
+}
+
 /**
  * Extract theme keys by statically analyzing the theme file's AST.
  */
@@ -100,6 +125,29 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
     }
 
     /**
+     * Resolve an import source using configured aliases.
+     * Returns the resolved path or null if no alias matches.
+     */
+    function resolveWithAliases(source, fromDir) {
+        for (const [aliasPrefix, aliasPath] of Object.entries(packageAliases)) {
+            if (source === aliasPrefix || source.startsWith(aliasPrefix + '/')) {
+                // Replace the alias prefix with the actual path
+                const remainder = source.slice(aliasPrefix.length);
+                let resolved = aliasPath + remainder;
+
+                // If aliasPath is relative, resolve from fromDir
+                if (!nodePath.isAbsolute(resolved)) {
+                    resolved = nodePath.resolve(fromDir, resolved);
+                }
+
+                log('Resolved alias:', source, '->', resolved);
+                return resolved;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Resolve and analyze a base theme from an import.
      */
     function analyzeBaseTheme(varName) {
@@ -122,42 +170,75 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
             } else {
                 const packageDir = nodePath.dirname(themeFilePath);
 
-                // Determine which theme file to look for based on variable name
-                const themeFileName = varName.includes('dark') ? 'darkTheme.ts' : 'lightTheme.ts';
-                let possiblePaths = [];
+                // First, try to resolve using configured aliases
+                const aliasResolved = resolveWithAliases(importInfo.source, packageDir);
+                if (aliasResolved) {
+                    // Determine which theme file to look for based on variable name
+                    const themeFileName = varName.includes('dark') ? 'darkTheme.ts' : 'lightTheme.ts';
 
-                if (importInfo.source === '@idealyst/theme') {
-                    possiblePaths = [
-                        // Symlinked packages at root level
-                        `/idealyst-packages/theme/src/${themeFileName}`,
-                        // Standard node_modules
-                        nodePath.resolve(packageDir, `node_modules/@idealyst/theme/src/${themeFileName}`),
-                        // Monorepo structure - walk up to find packages dir
-                        nodePath.resolve(packageDir, `../theme/src/${themeFileName}`),
-                        nodePath.resolve(packageDir, `../../theme/src/${themeFileName}`),
-                        nodePath.resolve(packageDir, `../../../theme/src/${themeFileName}`),
-                        nodePath.resolve(packageDir, `../../packages/theme/src/${themeFileName}`),
-                        nodePath.resolve(packageDir, `../../../packages/theme/src/${themeFileName}`),
-                        // This plugin's own package location
-                        nodePath.resolve(__dirname, `../${themeFileName}`),
+                    // Check if alias points to a directory or a specific file
+                    let possiblePaths = [
+                        aliasResolved,
+                        nodePath.join(aliasResolved, 'src', themeFileName),
+                        nodePath.join(aliasResolved, themeFileName),
                     ];
 
-                    log('Looking for base theme in:', possiblePaths);
+                    // Add .ts extension if needed
+                    possiblePaths = possiblePaths.flatMap(p => {
+                        if (p.endsWith('.ts') || p.endsWith('.tsx')) return [p];
+                        return [p, p + '.ts', p + '.tsx'];
+                    });
+
+                    log('Looking for aliased theme in:', possiblePaths);
 
                     for (const p of possiblePaths) {
                         if (fs.existsSync(p)) {
                             baseThemePath = p;
-                            log('Found base theme at:', p);
+                            log('Found aliased theme at:', p);
                             break;
+                        }
+                    }
+                }
+
+                // If no alias match, use default resolution for @idealyst/theme
+                if (!baseThemePath) {
+                    // Determine which theme file to look for based on variable name
+                    const themeFileName = varName.includes('dark') ? 'darkTheme.ts' : 'lightTheme.ts';
+                    let possiblePaths = [];
+
+                    if (importInfo.source === '@idealyst/theme') {
+                        possiblePaths = [
+                            // Symlinked packages at root level
+                            `/idealyst-packages/theme/src/${themeFileName}`,
+                            // Standard node_modules
+                            nodePath.resolve(packageDir, `node_modules/@idealyst/theme/src/${themeFileName}`),
+                            // Monorepo structure - walk up to find packages dir
+                            nodePath.resolve(packageDir, `../theme/src/${themeFileName}`),
+                            nodePath.resolve(packageDir, `../../theme/src/${themeFileName}`),
+                            nodePath.resolve(packageDir, `../../../theme/src/${themeFileName}`),
+                            nodePath.resolve(packageDir, `../../packages/theme/src/${themeFileName}`),
+                            nodePath.resolve(packageDir, `../../../packages/theme/src/${themeFileName}`),
+                            nodePath.resolve(packageDir, `../../../../packages/theme/src/${themeFileName}`),
+                            nodePath.resolve(packageDir, `../../../../../packages/theme/src/${themeFileName}`),
+                            nodePath.resolve(packageDir, `../../../../../../packages/theme/src/${themeFileName}`),
+                            // This plugin's own package location
+                            nodePath.resolve(__dirname, `../${themeFileName}`),
+                        ];
+
+                        log('Looking for base theme in:', possiblePaths);
+
+                        for (const p of possiblePaths) {
+                            if (fs.existsSync(p)) {
+                                baseThemePath = p;
+                                log('Found base theme at:', p);
+                                break;
+                            }
                         }
                     }
                 }
 
                 if (!baseThemePath) {
                     log('Could not resolve base theme path for:', importInfo.source);
-                    if (possiblePaths.length > 0) {
-                        log('Searched paths:', possiblePaths);
-                    }
                     return;
                 }
             }
@@ -366,10 +447,22 @@ function extractThemeKeysFromAST(themeFilePath, babelTypes, verboseMode) {
  *
  * REQUIRED Options:
  * - themePath: Path to the consumer's theme file (e.g., './src/theme/styles.ts')
+ *
+ * OPTIONAL Options:
+ * - aliases: Object mapping package prefixes to paths for resolution
+ *   Example: { '@idealyst/theme': '/path/to/packages/theme' }
  */
 function loadThemeKeys(opts, rootDir, babelTypes, verboseMode) {
     if (themeLoadAttempted) return themeKeys;
     themeLoadAttempted = true;
+
+    // Set up package aliases for resolution
+    if (opts.aliases && typeof opts.aliases === 'object') {
+        packageAliases = opts.aliases;
+        if (verboseMode) {
+            console.log('[idealyst-plugin] Configured aliases:', packageAliases);
+        }
+    }
 
     const themePath = opts.themePath;
 
@@ -381,9 +474,16 @@ function loadThemeKeys(opts, rootDir, babelTypes, verboseMode) {
         );
     }
 
-    const resolvedPath = themePath.startsWith('.')
-        ? nodePath.resolve(rootDir, themePath)
-        : require.resolve(themePath, { paths: [rootDir] });
+    // First try to resolve using aliases
+    let resolvedPath;
+    const aliasResolved = resolveWithAliasesStatic(themePath, rootDir);
+    if (aliasResolved && fs.existsSync(aliasResolved)) {
+        resolvedPath = aliasResolved;
+    } else {
+        resolvedPath = themePath.startsWith('.')
+            ? nodePath.resolve(rootDir, themePath)
+            : require.resolve(themePath, { paths: [rootDir] });
+    }
 
     if (verboseMode) {
         console.log('[idealyst-plugin] Analyzing theme file:', resolvedPath);

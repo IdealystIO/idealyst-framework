@@ -210,6 +210,14 @@ function expandIterators(t, callback, themeParam, keys, verbose, expandedVariant
             }
         }
 
+        // Look for compoundVariants: [ { type: 'filled', selected: true, styles: { ... } }, ... ]
+        if (t.isObjectProperty(node) && t.isIdentifier(node.key, { name: 'compoundVariants' })) {
+            if (t.isArrayExpression(node.value)) {
+                const expanded = expandCompoundVariantsArray(t, node.value, themeParam, keys, verbose, expandedVariants);
+                return t.objectProperty(node.key, expanded);
+            }
+        }
+
         if (t.isObjectExpression(node)) {
             return t.objectExpression(
                 node.properties.map(prop => processNode(prop, depth + 1))
@@ -350,6 +358,112 @@ function expandVariantsObject(t, variantsObj, themeParam, keys, verbose, expande
     }
 
     return t.objectExpression(newProperties);
+}
+
+/**
+ * Expand $iterator patterns in compoundVariants arrays.
+ *
+ * Input:
+ *   compoundVariants: [
+ *     { type: 'filled', selected: true, styles: { backgroundColor: theme.$intents.contrast } }
+ *   ]
+ *
+ * Output (for intents = ['primary', 'success', 'danger', ...]):
+ *   compoundVariants: [
+ *     { type: 'filled', selected: true, intent: 'primary', styles: { backgroundColor: theme.intents.primary.contrast } },
+ *     { type: 'filled', selected: true, intent: 'success', styles: { backgroundColor: theme.intents.success.contrast } },
+ *     { type: 'filled', selected: true, intent: 'danger', styles: { backgroundColor: theme.intents.danger.contrast } },
+ *     ...
+ *   ]
+ */
+function expandCompoundVariantsArray(t, arrayNode, themeParam, keys, verbose, expandedVariants) {
+    const newElements = [];
+
+    verbose(`    expandCompoundVariantsArray: processing ${arrayNode.elements?.length || 0} compound variants`);
+
+    for (const element of arrayNode.elements) {
+        if (!t.isObjectExpression(element)) {
+            newElements.push(element);
+            continue;
+        }
+
+        // Find the 'styles' property in this compound variant entry
+        let stylesProperty = null;
+        const otherProperties = [];
+
+        for (const prop of element.properties) {
+            if (t.isObjectProperty(prop)) {
+                const keyName = t.isIdentifier(prop.key) ? prop.key.name :
+                               t.isStringLiteral(prop.key) ? prop.key.value : null;
+                if (keyName === 'styles') {
+                    stylesProperty = prop;
+                } else {
+                    otherProperties.push(prop);
+                }
+            } else {
+                otherProperties.push(prop);
+            }
+        }
+
+        if (!stylesProperty) {
+            // No styles property, keep as-is
+            newElements.push(element);
+            continue;
+        }
+
+        // Check if the styles object contains $iterator patterns
+        const iteratorInfo = findIteratorPattern(t, stylesProperty.value, themeParam);
+
+        if (!iteratorInfo) {
+            // No $iterator pattern, keep as-is
+            newElements.push(element);
+            continue;
+        }
+
+        verbose(`      Found $iterator in compoundVariant styles: ${iteratorInfo.type}`);
+
+        // Get keys to expand
+        let keysToExpand = [];
+        let variantKeyName = 'intent'; // Default for intents
+
+        if (iteratorInfo.type === 'intents') {
+            keysToExpand = keys?.intents || [];
+            variantKeyName = 'intent';
+        } else if (iteratorInfo.type === 'typography') {
+            keysToExpand = keys?.typography || [];
+            variantKeyName = 'typography';
+        } else if (iteratorInfo.type === 'sizes' && iteratorInfo.componentName) {
+            keysToExpand = keys?.sizes?.[iteratorInfo.componentName] || [];
+            variantKeyName = 'size';
+        }
+
+        if (keysToExpand.length === 0) {
+            // No keys to expand, keep as-is
+            newElements.push(element);
+            continue;
+        }
+
+        verbose(`      Expanding compoundVariant for ${keysToExpand.length} ${variantKeyName} keys`);
+
+        // Expand this compound variant for each key
+        for (const key of keysToExpand) {
+            // Replace $iterator refs in the styles
+            const expandedStyles = replaceIteratorRefs(t, stylesProperty.value, themeParam, iteratorInfo, key);
+
+            // Create new compound variant entry with the variant key added as a condition
+            const newProps = [
+                ...otherProperties.map(p => t.cloneDeep(p)),
+                t.objectProperty(t.identifier(variantKeyName), t.stringLiteral(key)),
+                t.objectProperty(t.identifier('styles'), expandedStyles),
+            ];
+
+            newElements.push(t.objectExpression(newProps));
+        }
+
+        expandedVariants.push({ variant: 'compoundVariants', iterator: iteratorInfo.type });
+    }
+
+    return t.arrayExpression(newElements);
 }
 
 function findIteratorPattern(t, node, themeParam, debugLog = () => {}) {
@@ -577,8 +691,6 @@ module.exports = function idealystStylesPlugin({ types: t }) {
             console.log('[idealyst-plugin]', ...args);
         }
     }
-
-    // Plugin initialization logged in debug mode only
 
     return {
         name: 'idealyst-styles',

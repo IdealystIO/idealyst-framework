@@ -22,6 +22,7 @@ export interface DefaultTheme {
         chip: Record<string, ChipSizeValue>;
         badge: Record<string, BadgeSizeValue>;
         icon: Record<string, IconSizeValue>;
+        iconButton: Record<string, IconSizeValue>;
         input: Record<string, InputSizeValue>;
         radioButton: Record<string, RadioButtonSizeValue>;
         select: Record<string, SelectSizeValue>;

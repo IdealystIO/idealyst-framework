@@ -90,6 +90,7 @@ export const viewStyles = defineStyle('View', (theme: Theme) => ({
             display: 'flex',
             flexDirection: 'column',
             boxSizing: 'border-box',
+            borderStyle: 'solid',
         },
     }),
     // Web-only: Wrapper for scrollable view

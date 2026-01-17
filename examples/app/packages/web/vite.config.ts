@@ -35,8 +35,7 @@ export default defineConfig({
                 '@idealyst/navigation',
                 '@idealyst/theme',
               ],
-            themePath: '../shared/src/unistyles.ts',
-              debug: true,
+              themePath: path.resolve(__dirname, '../shared/src/unistyles.ts'),
             }
           ],
           // Unistyles plugin runs SECOND to process expanded StyleSheet.create

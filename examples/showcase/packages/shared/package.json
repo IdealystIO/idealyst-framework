@@ -1,0 +1,43 @@
+{
+  "name": "@idealyst-showcase/shared",
+  "version": "1.0.0",
+  "description": "Shared library for Idealyst Showcase app",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./unistyles": {
+      "import": "./src/unistyles.ts",
+      "require": "./src/unistyles.ts",
+      "types": "./src/unistyles.ts"
+    }
+  },
+  "peerDependencies": {
+    "@idealyst/components": "^1.2.30",
+    "@idealyst/navigation": "^1.2.30",
+    "@idealyst/theme": "^1.2.30",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@idealyst/components": "^1.2.30",
+    "@idealyst/navigation": "^1.2.30",
+    "@idealyst/theme": "^1.2.30",
+    "@types/react": "^19.1.0",
+    "react-native-unistyles": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src"
+  ]
+}

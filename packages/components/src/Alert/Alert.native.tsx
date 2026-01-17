@@ -32,8 +32,8 @@ const Alert = forwardRef<IdealystElement, AlertProps>(({
   testID,
   id,
 }, ref) => {
-  // Apply variants for size
-  alertStyles.useVariants({ size });
+  // Apply variants for size, intent, and type
+  alertStyles.useVariants({ size, intent, type });
 
   // Call all styles as functions to get theme-reactive styles
   const dynamicProps = { intent, type, size };

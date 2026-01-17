@@ -48,6 +48,12 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
 
     switchContainer: (_props: SwitchDynamicProps) => ({
         justifyContent: 'center' as const,
+        variants: {
+            disabled: {
+                true: { _web: { cursor: 'not-allowed' } },
+                false: { _web: { cursor: 'pointer' } },
+            },
+        },
         _web: {
             border: 'none',
             padding: 0,
@@ -59,15 +65,13 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
     switchTrack: (_props: SwitchDynamicProps) => ({
         borderRadius: 9999,
         position: 'relative' as const,
+        pointerEvents: 'none' as const,
         variants: {
             size: {
                 width: theme.sizes.$switch.trackWidth,
                 height: theme.sizes.$switch.trackHeight,
             },
             checked: {
-                true: {
-                    backgroundColor: theme.$intents.primary,
-                },
                 false: {
                     backgroundColor: theme.colors.border.secondary,
                 },
@@ -77,6 +81,14 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
                 false: { opacity: 1 },
             },
         },
+        compoundVariants: [
+            {
+                checked: true,
+                styles: {
+                    backgroundColor: theme.$intents.primary,
+                },
+            },
+        ],
         _web: {
             transition: 'background-color 0.2s ease',
         },
@@ -125,14 +137,19 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
                 height: theme.sizes.$switch.thumbIconSize,
             },
             checked: {
-                true: {
-                    color: theme.$intents.primary,
-                },
                 false: {
                     color: theme.colors.border.secondary,
                 },
             },
         },
+        compoundVariants: [
+            {
+                checked: true,
+                styles: {
+                    color: theme.$intents.primary,
+                },
+            },
+        ],
     }),
 
     label: (_props: SwitchDynamicProps) => ({

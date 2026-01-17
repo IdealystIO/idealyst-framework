@@ -1956,21 +1956,23 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@idealyst/components@npm:^1.0.82":
-  version: 1.0.82
-  resolution: "@idealyst/components@npm:1.0.82"
+"@idealyst/components@npm:^1.2.30":
+  version: 1.2.30
+  resolution: "@idealyst/components@npm:1.2.30"
   peerDependencies:
-    "@idealyst/theme": ^1.0.82
-    "@mdi/js": ^7.4.47
-    "@mdi/react": ^1.6.1
-    "@react-native-vector-icons/common": ^12.0.1
-    "@react-native-vector-icons/material-design-icons": ^12.0.1
+    "@idealyst/theme": ^1.2.30
+    "@mdi/js": ">=7.0.0"
+    "@mdi/react": ">=1.0.0"
+    "@react-native-vector-icons/common": ">=12.0.0"
+    "@react-native-vector-icons/material-design-icons": ">=12.0.0"
     "@react-native/normalize-colors": "*"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-edge-to-edge: "*"
     react-native-nitro-modules: "*"
-    react-native-unistyles: ^3.0.4
+    react-native-reanimated: ">=3.0.0"
+    react-native-safe-area-context: ">=5.0.0"
+    react-native-unistyles: ">=3.0.0"
   peerDependenciesMeta:
     "@idealyst/theme":
       optional: true
@@ -1986,20 +1988,24 @@ __metadata:
       optional: true
     react-native-nitro-modules:
       optional: true
+    react-native-reanimated:
+      optional: true
+    react-native-safe-area-context:
+      optional: true
     react-native-unistyles:
       optional: true
     react-native-vector-icons:
       optional: true
-  checksum: 10/eec6a03315975895754936a65b2da7d6da08307f28c1538120b4a883f20419b687c1392f538120929f2d369f59399dc9e21d1064a03129ebf36665cf3a4a1570
+  checksum: 10/40deec50ccf3c6c55a11c89de1795e73df7b208892a1c1e6b26c1b3cd273f39ef8226f737216eef0fc940fbf4081c0191c9bb4d13977f34c644f97c6fbd1654a
   languageName: node
   linkType: hard
 
-"@idealyst/datagrid@npm:^1.0.93":
-  version: 1.1.2
-  resolution: "@idealyst/datagrid@npm:1.1.2"
+"@idealyst/datagrid@npm:^1.2.30":
+  version: 1.2.30
+  resolution: "@idealyst/datagrid@npm:1.2.30"
   peerDependencies:
-    "@idealyst/components": ^1.1.2
-    "@idealyst/theme": ^1.1.2
+    "@idealyst/components": ^1.2.30
+    "@idealyst/theme": ^1.2.30
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -2015,32 +2021,57 @@ __metadata:
       optional: true
     react-window:
       optional: true
-  checksum: 10/58a1b79793393726a151205b70ac74588d26c574aee076dc5b052cfe2ade7a5d174426fc3c1684fdbf7e695384653edeeceeea7e9137fd50a3b0066f847dcce5
+  checksum: 10/2c78ce257789c6086cf55ba7ac4b9118690ba687755ee15ce788956dba12987221edc91dc396125cff3c79b8e8c7d805cc2f564c2d90e8e3ef444e59a572794d
   languageName: node
   linkType: hard
 
-"@idealyst/datepicker@npm:^1.0.93":
-  version: 1.1.2
-  resolution: "@idealyst/datepicker@npm:1.1.2"
+"@idealyst/datepicker@npm:^1.2.30":
+  version: 1.2.30
+  resolution: "@idealyst/datepicker@npm:1.2.30"
   peerDependencies:
-    "@idealyst/components": ^1.1.2
-    "@idealyst/theme": ^1.1.2
+    "@idealyst/theme": ^1.2.30
+    "@mdi/js": ">=7.0.0"
+    "@mdi/react": ">=1.6.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-svg: ">=13.0.0"
     react-native-unistyles: ^3.0.4
+    react-native-vector-icons: ">=10.0.0"
   peerDependenciesMeta:
-    "@idealyst/components":
-      optional: false
     "@idealyst/theme":
       optional: false
+    "@mdi/js":
+      optional: true
+    "@mdi/react":
+      optional: true
     react-native:
       optional: true
     react-native-svg:
       optional: true
     react-native-unistyles:
       optional: true
-  checksum: 10/efa2d03e29fc82afa125ac01c9f308c91c38e1e96a151b9575a65209deeffca42304e9c4996511b558ed4212a4045d93ca713490ff11697081464455f724df98
+    react-native-vector-icons:
+      optional: true
+  checksum: 10/cb50c49d5c1c35117dfea336b958117b7a8bb4bde98e8798971940624f3c09e66560891113ad6968e8a7d9aad17d7573a56a566cb43680ba3595a313415159ea
+  languageName: node
+  linkType: hard
+
+"@idealyst/microphone@npm:^1.2.30":
+  version: 1.2.30
+  resolution: "@idealyst/microphone@npm:1.2.30"
+  peerDependencies:
+    "@idealyst/components": ^1.2.30
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-live-audio-stream: ">=1.1.0"
+  peerDependenciesMeta:
+    "@idealyst/components":
+      optional: true
+    react-native:
+      optional: true
+    react-native-live-audio-stream:
+      optional: true
+  checksum: 10/77606c37c9dad0cbd81e602d6a6ec5c7efdecae38176c16de9c4fd765b8acdf9bbe3f54cd267c7b93ad3743d7bc6abac07f65af8e2ec2ada53fff83d01e46191
   languageName: node
   linkType: hard
 
@@ -2048,7 +2079,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/microphone@portal:../../../../packages/microphone::locator=%40test-select-demo%2Fshared%40workspace%3Apackages%2Fshared"
   peerDependencies:
-    "@idealyst/components": ">=1.0.0"
+    "@idealyst/components": ^1.2.30
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-live-audio-stream: ">=1.1.0"
@@ -2062,53 +2093,14 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@idealyst/microphone@portal:../../../../packages/microphone::locator=%40test-select-demo%2Fweb%40workspace%3Apackages%2Fweb":
-  version: 0.0.0-use.local
-  resolution: "@idealyst/microphone@portal:../../../../packages/microphone::locator=%40test-select-demo%2Fweb%40workspace%3Apackages%2Fweb"
+"@idealyst/navigation@npm:^1.2.30":
+  version: 1.2.30
+  resolution: "@idealyst/navigation@npm:1.2.30"
   peerDependencies:
-    "@idealyst/components": ">=1.0.0"
-    react: ">=16.8.0"
-    react-native: ">=0.60.0"
-    react-native-live-audio-stream: ">=1.1.0"
-  peerDependenciesMeta:
-    "@idealyst/components":
-      optional: true
-    react-native:
-      optional: true
-    react-native-live-audio-stream:
-      optional: true
-  languageName: node
-  linkType: soft
-
-"@idealyst/navigation@npm:^1.0.82":
-  version: 1.0.82
-  resolution: "@idealyst/navigation@npm:1.0.82"
-  peerDependencies:
-    "@idealyst/components": ^1.0.82
-    "@idealyst/theme": ^1.0.82
-    "@react-navigation/bottom-tabs": ^7.0.0
-    "@react-navigation/drawer": ^7.0.0
-    "@react-navigation/native": ^7.0.0
-    "@react-navigation/native-stack": ^7.0.0
-    react: ">=16.8.0"
-    react-native: ">=0.60.0"
-    react-native-gesture-handler: "*"
-    react-native-reanimated: "*"
-    react-native-safe-area-context: "*"
-    react-native-screens: "*"
-    react-native-unistyles: ^3.0.10
-    react-router: ^7.6.3
-    react-router-dom: ^7.6.3
-  checksum: 10/ad14ac2649bacfbee4b32d20d953c3a34dd8b9019c733e1a3920dcac2d7a4f567bebabe0fa360dd7fdc5c2b99be4135589fef610ebfbb43abe68ee27d52a07ea
-  languageName: node
-  linkType: hard
-
-"@idealyst/navigation@npm:^1.0.93":
-  version: 1.1.2
-  resolution: "@idealyst/navigation@npm:1.1.2"
-  peerDependencies:
-    "@idealyst/components": ^1.1.2
-    "@idealyst/theme": ^1.1.2
+    "@idealyst/camera": ^1.1.6
+    "@idealyst/components": ^1.2.30
+    "@idealyst/microphone": ^1.1.7
+    "@idealyst/theme": ^1.2.30
     "@react-navigation/bottom-tabs": ">=7.0.0"
     "@react-navigation/drawer": ">=7.0.0"
     "@react-navigation/native": ">=7.0.0"
@@ -2122,19 +2114,40 @@ __metadata:
     react-native-unistyles: ">=3.0.0"
     react-router: ">=6.0.0"
     react-router-dom: ">=6.0.0"
-  checksum: 10/d600a7678b2d82cd4368f1009b7eab563a21ac8f3462be11a55d6b65ade97bfab6e01abc8786c52fad6c846715d5a990817967ef1255cf7ed69def1d4528ae38
+  peerDependenciesMeta:
+    "@idealyst/camera":
+      optional: true
+    "@idealyst/microphone":
+      optional: true
+  checksum: 10/572f25457648f27eb6e3e76e31d39c244772caa22a1c0234f149c4f638c64741c2e369cf1766febaa49f0efc65ea9705b2c29c78a741d34e613be278bd85cffe
   languageName: node
   linkType: hard
 
-"@idealyst/theme@npm:^1.0.82":
-  version: 1.0.82
-  resolution: "@idealyst/theme@npm:1.0.82"
+"@idealyst/theme@npm:^1.2.30":
+  version: 1.2.30
+  resolution: "@idealyst/theme@npm:1.2.30"
+  dependencies:
+    "@idealyst/tooling": "npm:^1.2.3"
   peerDependencies:
-    react-native-unistyles: ^3.0.4
+    react-native-unistyles: ">=3.0.0"
   peerDependenciesMeta:
     react-native-unistyles:
       optional: true
-  checksum: 10/85633d76ca0f3967b50f0a208dd8ee15424abb6c4eb1a620cabd52d865e6ea877d73bc6401ab9d17cf4aa583be3993536a7008adf09b7e0785cc86d2c801388c
+  checksum: 10/d7a5321a5bae697c914995038bcd55551d0db31e5f809a8bbf72d872770776d7be0e6b5b71b8b2c493750e59860b63d2c183ee035d2808ed0c34f95278f4caf8
+  languageName: node
+  linkType: hard
+
+"@idealyst/tooling@npm:^1.2.3":
+  version: 1.2.30
+  resolution: "@idealyst/tooling@npm:1.2.30"
+  dependencies:
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    vite: ">=5.0.0"
+  peerDependenciesMeta:
+    vite:
+      optional: true
+  checksum: 10/4835df63c2399ec12621d6c1585b593aeb72e9d543393ca6327b9a31320d3846d6e6b8dbb73cc6995f34525d0406037d1d70b67d7ad0f2259f93d53f8c221417
   languageName: node
   linkType: hard
 
@@ -3581,10 +3594,10 @@ __metadata:
   resolution: "@test-select-demo/shared@workspace:packages/shared"
   dependencies:
     "@idealyst/camera": "portal:../../../../packages/camera"
-    "@idealyst/components": "npm:^1.0.82"
+    "@idealyst/components": "npm:^1.2.30"
     "@idealyst/microphone": "portal:../../../../packages/microphone"
-    "@idealyst/navigation": "npm:^1.0.82"
-    "@idealyst/theme": "npm:^1.0.82"
+    "@idealyst/navigation": "npm:^1.2.30"
+    "@idealyst/theme": "npm:^1.2.30"
     "@tanstack/react-query": "npm:^5.83.0"
     "@trpc/client": "npm:^11.5.1"
     "@trpc/react-query": "npm:^11.5.1"
@@ -3596,11 +3609,11 @@ __metadata:
     ts-jest: "npm:^29.1.2"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/camera": ^1.1.6
-    "@idealyst/components": ^1.0.82
-    "@idealyst/microphone": ^1.1.2
-    "@idealyst/navigation": ^1.0.82
-    "@idealyst/theme": ^1.0.82
+    "@idealyst/camera": ^1.2.30
+    "@idealyst/components": ^1.2.30
+    "@idealyst/microphone": ^1.2.30
+    "@idealyst/navigation": ^1.2.30
+    "@idealyst/theme": ^1.2.30
     "@tanstack/react-query": ^5.83.0
     "@trpc/client": ^11.5.1
     "@trpc/react-query": ^11.5.1
@@ -3637,12 +3650,12 @@ __metadata:
     "@babel/preset-env": "npm:^7.28.0"
     "@babel/preset-react": "npm:^7.27.1"
     "@babel/preset-typescript": "npm:^7.27.1"
-    "@idealyst/components": "npm:^1.0.82"
-    "@idealyst/datagrid": "npm:^1.0.93"
-    "@idealyst/datepicker": "npm:^1.0.93"
-    "@idealyst/microphone": "portal:../../../../packages/microphone"
-    "@idealyst/navigation": "npm:^1.0.93"
-    "@idealyst/theme": "npm:^1.0.82"
+    "@idealyst/components": "npm:^1.2.30"
+    "@idealyst/datagrid": "npm:^1.2.30"
+    "@idealyst/datepicker": "npm:^1.2.30"
+    "@idealyst/microphone": "npm:^1.2.30"
+    "@idealyst/navigation": "npm:^1.2.30"
+    "@idealyst/theme": "npm:^1.2.30"
     "@mdi/js": "npm:^7.4.47"
     "@mdi/react": "npm:^1.6.1"
     "@react-native/normalize-colors": "npm:^0.80.1"
@@ -9925,11 +9938,11 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
-    "@idealyst/components": "npm:^1.0.82"
-    "@idealyst/datagrid": "npm:^1.0.93"
-    "@idealyst/datepicker": "npm:^1.0.93"
-    "@idealyst/navigation": "npm:^1.0.93"
-    "@idealyst/theme": "npm:^1.0.82"
+    "@idealyst/components": "npm:^1.2.30"
+    "@idealyst/datagrid": "npm:^1.2.30"
+    "@idealyst/datepicker": "npm:^1.2.30"
+    "@idealyst/navigation": "npm:^1.2.30"
+    "@idealyst/theme": "npm:^1.2.30"
     "@mdi/react": "npm:^1.6.1"
     "@react-native-community/cli": "npm:20.0.0"
     "@react-native-community/cli-platform-android": "npm:20.0.0"

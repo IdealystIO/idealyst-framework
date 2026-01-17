@@ -1,3 +1,4 @@
+export { ActivityIndicatorExamples } from './ActivityIndicatorExamples';
 export { ButtonExamples } from './ButtonExamples';
 export { TextExamples } from './TextExamples';
 export { ViewExamples } from './ViewExamples';

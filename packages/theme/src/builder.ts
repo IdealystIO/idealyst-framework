@@ -7,6 +7,7 @@ import {
     Typography,
     TypographyValue,
     ButtonSizeValue,
+    IconButtonSizeValue,
     ChipSizeValue,
     BadgeSizeValue,
     IconSizeValue,
@@ -56,6 +57,7 @@ export type BuiltTheme<
     };
     sizes: {
         button: Record<TSize, ButtonSizeValue>;
+        iconButton: Record<TSize, IconButtonSizeValue>;
         chip: Record<TSize, ChipSizeValue>;
         badge: Record<TSize, BadgeSizeValue>;
         icon: Record<TSize, IconSizeValue>;
@@ -248,6 +250,7 @@ export class ThemeBuilder<
      */
     setSizes<S extends string>(sizes: {
         button: Record<S, ButtonSizeValue>;
+        iconButton: Record<S, IconButtonSizeValue>;
         chip: Record<S, ChipSizeValue>;
         badge: Record<S, BadgeSizeValue>;
         icon: Record<S, IconSizeValue>;

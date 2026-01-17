@@ -43,9 +43,9 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/camera": "^1.1.6",
+    "@idealyst/camera": "^1.2.30",
     "@idealyst/components": "^1.2.30",
-    "@idealyst/microphone": "^1.1.7",
+    "@idealyst/microphone": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
     "@react-navigation/bottom-tabs": ">=7.0.0",
     "@react-navigation/drawer": ">=7.0.0",
@@ -70,11 +70,11 @@
     }
   },
   "devDependencies": {
-    "@idealyst/camera": "^1.1.6",
+    "@idealyst/camera": "^1.2.30",
     "@idealyst/components": "^1.2.30",
-    "@idealyst/datagrid": "^1.0.93",
-    "@idealyst/datepicker": "^1.0.93",
-    "@idealyst/microphone": "^1.1.7",
+    "@idealyst/datagrid": "^1.2.30",
+    "@idealyst/datepicker": "^1.2.30",
+    "@idealyst/microphone": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",

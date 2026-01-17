@@ -52,7 +52,7 @@
     "@idealyst/components": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
-    "@idealyst/tooling": "^1.2.1",
+    "@idealyst/tooling": "^1.2.30",
     "@modelcontextprotocol/sdk": "^1.0.4"
   },
   "devDependencies": {

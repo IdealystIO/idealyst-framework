@@ -1,5 +1,5 @@
 import React from 'react';
-import { AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, LinkExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
+import { ActivityIndicatorExamples, AvatarExamples, BadgeExamples, ButtonExamples, CardExamples, CheckboxExamples, DialogExamples, DividerExamples, IconExamples, InputExamples, LinkExamples, PopoverExamples, ScreenExamples, SelectExamples, SliderExamples, SVGImageExamples, TextExamples, ViewExamples, ThemeExtensionExamples, SwitchExamples, RadioButtonExamples, ProgressExamples, TextAreaExamples, TabBarExamples, TooltipExamples, AccordionExamples, ListExamples, TableExamples, MenuExamples, ImageExamples, VideoExamples, AlertExamples, SkeletonExamples, ChipExamples, BreadcrumbExamples } from '@idealyst/components/examples';
 import { DataGridShowcase } from '@idealyst/datagrid/examples';
 import { DatePickerExamples } from '@idealyst/datepicker/examples';
 import { CameraExamples } from '@idealyst/camera/examples';
@@ -298,6 +298,7 @@ const ExampleNavigationRouter: NavigatorParam = {
         { path: "fullscreen-demo", type: 'screen', component: FullScreenExample, options: { title: "Full Screen Demo", fullScreen: true } },
         // Nested settings navigator with its own 404 handling
         SettingsNavigator,
+        { path: "activity-indicator", type: 'screen', component: ActivityIndicatorExamples, options: { title: "Activity Indicator" } },
         { path: "avatar", type: 'screen', component: AvatarExamples, options: { title: "Avatar" } },
         { path: "badge", type: 'screen', component: BadgeExamples, options: { title: "Badge" } },
         { path: "button", type: 'screen', component: ButtonExamples, options: { title: "Button" } },

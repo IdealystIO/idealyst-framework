@@ -1,0 +1,15 @@
+{
+  "name": "@idealyst-showcase/showcase",
+  "version": "1.0.0",
+  "description": "Multi-screen Idealyst Framework showcase app",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@4.1.0",
+  "scripts": {
+    "dev": "yarn workspace @idealyst-showcase/web dev",
+    "build": "yarn workspace @idealyst-showcase/web build",
+    "preview": "yarn workspace @idealyst-showcase/web preview"
+  }
+}

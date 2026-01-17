@@ -2,12 +2,17 @@
  * Get Types Tool
  *
  * Returns TypeScript type definitions for Idealyst components, theme, and navigation.
- * Now enhanced with @idealyst/tooling registry data for authoritative prop values.
+ * Enhanced with @idealyst/tooling registry data for authoritative prop values.
+ *
+ * Types are generated dynamically at runtime using @idealyst/tooling if the
+ * pre-generated types.json file is not found.
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { analyzeComponents, analyzeTheme } from '@idealyst/tooling';
+import type { ComponentRegistry, ThemeValues } from '@idealyst/tooling';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,7 +23,7 @@ interface TypesData {
   components: Record<string, any>;
   theme: Record<string, any>;
   navigation: Record<string, any>;
-  // New: Registry data from @idealyst/tooling (single source of truth)
+  // Registry data from @idealyst/tooling (single source of truth)
   registry?: {
     components: Record<string, any>;
     themeValues: any;
@@ -28,25 +33,177 @@ interface TypesData {
 let cachedTypes: TypesData | null = null;
 
 /**
- * Load extracted types from JSON file
+ * Find the monorepo root by looking for package.json with workspaces
+ */
+function findMonorepoRoot(): string | null {
+  // Start from the mcp-server package location
+  let currentDir = path.resolve(__dirname, '../..');
+
+  // Walk up looking for the monorepo root (has workspaces in package.json)
+  for (let i = 0; i < 10; i++) {
+    const packageJsonPath = path.join(currentDir, 'package.json');
+    if (fs.existsSync(packageJsonPath)) {
+      try {
+        const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+        if (pkg.workspaces) {
+          return currentDir;
+        }
+      } catch {
+        // Continue searching
+      }
+    }
+    const parentDir = path.dirname(currentDir);
+    if (parentDir === currentDir) break;
+    currentDir = parentDir;
+  }
+
+  return null;
+}
+
+/**
+ * Find package paths - works with both symlinked monorepo and installed packages
+ */
+function findPackagePaths(): { componentsPath: string; themePath: string } | null {
+  // First try: resolve via node_modules (works for symlinked monorepo)
+  try {
+    const componentsEntry = require.resolve('@idealyst/components');
+    const themeEntry = require.resolve('@idealyst/theme');
+
+    // Get the src directories
+    const componentsPath = path.join(path.dirname(componentsEntry), '..', 'src');
+    const themePath = path.join(path.dirname(themeEntry), '..', 'src', 'lightTheme.ts');
+
+    if (fs.existsSync(componentsPath) && fs.existsSync(themePath)) {
+      return { componentsPath, themePath };
+    }
+  } catch {
+    // Not found via require.resolve
+  }
+
+  // Second try: look for monorepo structure
+  const monorepoRoot = findMonorepoRoot();
+  if (monorepoRoot) {
+    const componentsPath = path.join(monorepoRoot, 'packages/components/src');
+    const themePath = path.join(monorepoRoot, 'packages/theme/src/lightTheme.ts');
+
+    if (fs.existsSync(componentsPath) && fs.existsSync(themePath)) {
+      return { componentsPath, themePath };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Generate types dynamically using @idealyst/tooling
+ */
+function generateTypes(): TypesData {
+  const paths = findPackagePaths();
+
+  if (!paths) {
+    throw new Error(
+      'Could not find @idealyst/components and @idealyst/theme packages. ' +
+        'Ensure you are running in the Idealyst monorepo or have the packages installed.'
+    );
+  }
+
+  const { componentsPath, themePath } = paths;
+
+  // Analyze components using @idealyst/tooling
+  let componentRegistry: ComponentRegistry = {};
+  let themeValues: ThemeValues | null = null;
+
+  try {
+    componentRegistry = analyzeComponents({
+      componentPaths: [componentsPath],
+      themePath,
+    });
+  } catch (error) {
+    console.warn('[mcp-server] Warning: Could not analyze components:', error);
+  }
+
+  try {
+    themeValues = analyzeTheme(themePath, false);
+  } catch (error) {
+    console.warn('[mcp-server] Warning: Could not analyze theme:', error);
+  }
+
+  // Convert component registry to the expected format
+  const components: Record<string, any> = {};
+  for (const [name, def] of Object.entries(componentRegistry)) {
+    components[name] = {
+      propsInterface: `${name}Props`,
+      props: Object.entries(def.props).map(([propName, prop]) => ({
+        name: propName,
+        type: prop.type,
+        required: prop.required,
+        description: prop.description,
+        values: prop.values,
+        default: prop.default,
+      })),
+      typeDefinition: '', // Not available without ts-morph
+      relatedTypes: {},
+      registry: def,
+    };
+  }
+
+  // Build theme types from themeValues
+  const theme: Record<string, any> = {};
+  if (themeValues) {
+    theme.Intent = {
+      name: 'Intent',
+      definition: `type Intent = ${themeValues.intents.map((i) => `'${i}'`).join(' | ')};`,
+      values: themeValues.intents,
+    };
+
+    // Extract size keys from the first size group
+    const sizeKeys = Object.keys(themeValues.sizes)[0]
+      ? Object.keys(themeValues.sizes[Object.keys(themeValues.sizes)[0]])
+      : ['xs', 'sm', 'md', 'lg', 'xl'];
+    theme.Size = {
+      name: 'Size',
+      definition: `type Size = ${sizeKeys.map((s) => `'${s}'`).join(' | ')};`,
+      values: sizeKeys,
+    };
+  }
+
+  return {
+    version: 'dynamic',
+    extractedAt: new Date().toISOString(),
+    components,
+    theme,
+    navigation: {}, // Navigation types require ts-morph, not available dynamically
+    registry: {
+      components: componentRegistry,
+      themeValues,
+    },
+  };
+}
+
+/**
+ * Load types from JSON file or generate dynamically
  */
 function loadTypes(): TypesData {
   if (cachedTypes) {
     return cachedTypes;
   }
 
+  // Try to load pre-generated types first
   const typesPath = path.join(__dirname, '../generated/types.json');
 
-  if (!fs.existsSync(typesPath)) {
-    throw new Error(
-      'Types file not found. Please run "yarn extract-types" to generate type definitions.'
-    );
+  if (fs.existsSync(typesPath)) {
+    try {
+      const content = fs.readFileSync(typesPath, 'utf-8');
+      cachedTypes = JSON.parse(content);
+      return cachedTypes!;
+    } catch (error) {
+      console.warn('[mcp-server] Warning: Could not parse types.json, generating dynamically');
+    }
   }
 
-  const content = fs.readFileSync(typesPath, 'utf-8');
-  cachedTypes = JSON.parse(content);
-
-  return cachedTypes!;
+  // Generate types dynamically
+  cachedTypes = generateTypes();
+  return cachedTypes;
 }
 
 /**
@@ -98,7 +255,7 @@ export function getThemeTypes(format: 'typescript' | 'json' | 'both' = 'both') {
 
   if (format === 'typescript' || format === 'both') {
     const tsOutput = Object.entries(types.theme)
-      .map(([name, info]: [string, any]) => info.definition)
+      .map(([_, info]: [string, any]) => info.definition)
       .join('\n\n');
     result.typescript = tsOutput;
   }
@@ -127,7 +284,7 @@ export function getNavigationTypes(format: 'typescript' | 'json' | 'both' = 'bot
 
   if (format === 'typescript' || format === 'both') {
     const tsOutput = Object.entries(types.navigation)
-      .map(([name, definition]) => definition)
+      .map(([_, definition]) => definition)
       .join('\n\n');
     result.typescript = tsOutput;
   }
@@ -152,7 +309,7 @@ function formatTypeScriptOutput(component: any): string {
   // Related types
   if (Object.keys(component.relatedTypes).length > 0) {
     sections.push('\n// Related Types');
-    for (const [name, definition] of Object.entries(component.relatedTypes)) {
+    for (const [_, definition] of Object.entries(component.relatedTypes)) {
       sections.push(definition as string);
     }
   }

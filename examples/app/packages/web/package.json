@@ -13,12 +13,12 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@idealyst/components": "^1.1.8",
-    "@idealyst/datagrid": "^1.1.8",
-    "@idealyst/datepicker": "^1.1.8",
-    "@idealyst/microphone": "^1.1.8",
-    "@idealyst/navigation": "^1.1.8",
-    "@idealyst/theme": "^1.1.8",
+    "@idealyst/components": "^1.2.30",
+    "@idealyst/datagrid": "^1.2.30",
+    "@idealyst/datepicker": "^1.2.30",
+    "@idealyst/microphone": "^1.2.30",
+    "@idealyst/navigation": "^1.2.30",
+    "@idealyst/theme": "^1.2.30",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@react-native/normalize-colors": "^0.80.1",

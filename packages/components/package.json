@@ -107,7 +107,7 @@
   },
   "devDependencies": {
     "@idealyst/theme": "^1.2.30",
-    "@idealyst/tooling": "^1.2.4",
+    "@idealyst/tooling": "^1.2.30",
     "@mdi/react": "^1.6.1",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",

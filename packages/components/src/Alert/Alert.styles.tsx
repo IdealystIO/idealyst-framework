@@ -1,5 +1,8 @@
 /**
- * Alert styles using defineStyle with $iterator expansion for size variants.
+ * Alert styles using defineStyle with variant expansion.
+ *
+ * Alert has compound logic between type+intent that's handled via compoundVariants.
+ * The $intents iterator in compoundVariants expands for all intent values.
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
@@ -20,10 +23,10 @@ export type AlertDynamicProps = {
 };
 
 /**
- * Alert styles with $iterator expansion for size variants.
+ * Alert styles with variant expansion for size/intent/type.
  *
- * Intent/type combinations use dynamic functions with inlined theme accesses
- * so Unistyles can trace all possible theme paths.
+ * The intent variant is expanded via $intents iterator.
+ * CompoundVariants handle type+intent combinations for colors.
  */
 export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
     container: (_props: AlertDynamicProps) => ({
@@ -33,26 +36,33 @@ export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
         borderWidth: 1,
         borderStyle: 'solid' as const,
         variants: {
-            type: {
-                filled: {
-                    backgroundColor: theme.$intents.primary,
-                    borderColor: theme.$intents.primary,
-                },
-                outlined: {
-                    backgroundColor: 'transparent',
-                    borderColor: theme.$intents.primary,
-                },
-                soft: {
-                    backgroundColor: theme.$intents.light,
-                    borderColor: theme.$intents.light,
-                },
-            },
             size: {
                 gap: theme.sizes.$alert.gap,
                 padding: theme.sizes.$alert.padding,
                 borderRadius: theme.sizes.$alert.borderRadius,
             },
+            // Intent variant - expands to primary, success, danger, etc.
+            intent: {
+                // Base styles per intent (overridden by type+intent compoundVariants)
+                backgroundColor: theme.$intents.primary,
+                borderColor: theme.$intents.primary,
+            },
+            type: {
+                filled: {},
+                outlined: {
+                    backgroundColor: 'transparent',
+                },
+                soft: {},
+            },
         },
+        compoundVariants: [
+            // filled: use intent primary for bg and border
+            { type: 'filled', styles: { backgroundColor: theme.$intents.primary, borderColor: theme.$intents.primary } },
+            // outlined: transparent bg, intent primary for border
+            { type: 'outlined', styles: { backgroundColor: 'transparent', borderColor: theme.$intents.primary } },
+            // soft: intent light for bg and border
+            { type: 'soft', styles: { backgroundColor: theme.$intents.light, borderColor: theme.$intents.light } },
+        ],
     }),
 
     iconContainer: (_props: AlertDynamicProps) => ({
@@ -63,63 +73,75 @@ export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
         flexShrink: 0,
         marginTop: 2,
         variants: {
-            type: {
-                filled: {
-                    color: theme.$intents.contrast,
-                },
-                outlined: {
-                    color: theme.$intents.primary,
-                },
-                soft: {
-                    color: theme.$intents.primary,
-                },
-            },
             size: {
                 width: theme.sizes.$alert.iconSize,
                 height: theme.sizes.$alert.iconSize,
             },
+            intent: {
+                color: theme.$intents.primary,
+            },
+            type: {
+                filled: {},
+                outlined: {},
+                soft: {},
+            },
         },
+        compoundVariants: [
+            // filled: contrast color for icon
+            { type: 'filled', styles: { color: theme.$intents.contrast } },
+            // outlined/soft: primary color for icon
+            { type: 'outlined', styles: { color: theme.$intents.primary } },
+            { type: 'soft', styles: { color: theme.$intents.primary } },
+        ],
     }),
 
     title: (_props: AlertDynamicProps) => ({
         fontWeight: '600' as const,
         variants: {
-            type: {
-                filled: {
-                    color: theme.$intents.contrast,
-                },
-                outlined: {
-                    color: theme.$intents.primary,
-                },
-                soft: {
-                    color: theme.$intents.primary,
-                },
-            },
             size: {
                 fontSize: theme.sizes.$alert.titleFontSize,
                 lineHeight: theme.sizes.$alert.titleLineHeight,
             },
+            intent: {
+                color: theme.$intents.primary,
+            },
+            type: {
+                filled: {},
+                outlined: {},
+                soft: {},
+            },
         },
+        compoundVariants: [
+            // filled: contrast color for title
+            { type: 'filled', styles: { color: theme.$intents.contrast } },
+            // outlined/soft: primary color for title
+            { type: 'outlined', styles: { color: theme.$intents.primary } },
+            { type: 'soft', styles: { color: theme.$intents.primary } },
+        ],
     }),
 
     message: (_props: AlertDynamicProps) => ({
         variants: {
-            type: {
-                filled: {
-                    color: theme.$intents.contrast,
-                },
-                outlined: {
-                    color: theme.colors.text.primary,
-                },
-                soft: {
-                    color: theme.colors.text.primary,
-                },
-            },
             size: {
                 fontSize: theme.sizes.$alert.messageFontSize,
                 lineHeight: theme.sizes.$alert.messageLineHeight,
             },
+            intent: {
+                color: theme.colors.text.primary,
+            },
+            type: {
+                filled: {},
+                outlined: {},
+                soft: {},
+            },
         },
+        compoundVariants: [
+            // filled: contrast color for message
+            { type: 'filled', styles: { color: theme.$intents.contrast } },
+            // outlined/soft: use default text color (set in intent variant)
+            { type: 'outlined', styles: { color: theme.colors.text.primary } },
+            { type: 'soft', styles: { color: theme.colors.text.primary } },
+        ],
     }),
 
     content: (_props: AlertDynamicProps) => ({
@@ -128,7 +150,6 @@ export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
         flexDirection: 'column' as const,
         variants: {
             size: {
-                // Gap is half of the main gap
                 gap: theme.sizes.$alert.gap,
             },
         },
@@ -177,22 +198,26 @@ export const alertStyles = defineStyle('Alert', (theme: Theme) => ({
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         variants: {
-            type: {
-                filled: {
-                    color: theme.$intents.contrast,
-                },
-                outlined: {
-                    color: theme.$intents.primary,
-                },
-                soft: {
-                    color: theme.$intents.primary,
-                },
-            },
             size: {
                 width: theme.sizes.$alert.closeIconSize,
                 height: theme.sizes.$alert.closeIconSize,
             },
+            intent: {
+                color: theme.$intents.primary,
+            },
+            type: {
+                filled: {},
+                outlined: {},
+                soft: {},
+            },
         },
+        compoundVariants: [
+            // filled: contrast color for close icon
+            { type: 'filled', styles: { color: theme.$intents.contrast } },
+            // outlined/soft: primary color for close icon
+            { type: 'outlined', styles: { color: theme.$intents.primary } },
+            { type: 'soft', styles: { color: theme.$intents.primary } },
+        ],
     }),
 }));
 

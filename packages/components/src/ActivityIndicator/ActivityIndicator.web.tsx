@@ -42,8 +42,9 @@ const ActivityIndicator = forwardRef<IdealystElement, ActivityIndicatorProps>(({
 
   // Apply variants using the correct Unistyles 3.0 pattern
   activityIndicatorStyles.useVariants({
-    size: sizeVariant,
+    size: size,
     animating,
+    intent,
   });
 
   // Don't render if not animating and hidesWhenStopped is true
@@ -51,35 +52,21 @@ const ActivityIndicator = forwardRef<IdealystElement, ActivityIndicatorProps>(({
     return null;
   }
 
-  // Create the style array following the official documentation pattern
-  const containerStyleArray = [
-    (activityIndicatorStyles.container as any)({}),
-    customSize && {
-      width: customSize,
-      height: customSize,
-    },
+  // Dynamic props for style functions
+  const dynamicProps = { size: sizeVariant, animating, intent };
+
+  // Use getWebProps - same pattern as Alert
+  const containerProps = getWebProps([
+    (activityIndicatorStyles.container as any)(dynamicProps),
+    customSize && { width: customSize, height: customSize },
     style,
-  ];
+  ]);
 
-  const spinnerStyleArray = [
-    (activityIndicatorStyles.spinner as any)({
-      intent,
-    }),
-    customSize ? {
-      width: customSize,
-      height: customSize,
-      borderWidth: Math.max(2, customSize / 10),
-    } : {},
-    color ? { borderTopColor: color, borderRightColor: color } : {},
-    // Add inline CSS animation
-    {
-      animation: animating ? 'spin 1s linear infinite' : undefined,
-    },
-  ];
-
-  // Use getWebProps to generate className and ref for web
-  const containerProps = getWebProps(containerStyleArray);
-  const spinnerProps = getWebProps(spinnerStyleArray);
+  const spinnerProps = getWebProps([
+    (activityIndicatorStyles.spinner as any)(dynamicProps),
+    customSize && { width: customSize, height: customSize, borderWidth: Math.max(2, customSize / 10) },
+    color && { borderTopColor: color, borderRightColor: color },
+  ]);
 
   const mergedRef = useMergeRefs(ref, containerProps.ref);
 

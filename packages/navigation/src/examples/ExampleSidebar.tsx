@@ -68,6 +68,7 @@ const componentGroups: ComponentGroup[] = [
     {
         title: 'Feedback',
         items: [
+            { label: 'Activity Indicator', path: '/activity-indicator', icon: 'loading' },
             { label: 'Progress', path: '/progress', icon: 'timer-sand-empty' },
         ],
     },

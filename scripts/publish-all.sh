@@ -25,6 +25,8 @@ PACKAGES=(
   "tooling"
   "config"
   "markdown"
+  "lottie"
+  "animate"
 )
 
 for pkg in "${PACKAGES[@]}"; do

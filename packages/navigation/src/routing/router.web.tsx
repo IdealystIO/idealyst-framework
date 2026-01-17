@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Routes, Route, useLocation, useParams } from '../router'
 import { DefaultStackLayout } from '../layouts/DefaultStackLayout'
 import { DefaultTabLayout } from '../layouts/DefaultTabLayout'
-import { NavigatorParam, RouteParam, ScreenParam, NotFoundComponentProps } from './types'
+import { NavigatorParam, RouteParam, ScreenParam, NotFoundComponentProps, StackLayoutProps, TabLayoutProps, RouteWithFullPath } from './types'
 import { NavigateParams } from '../context/types'
 
 /**
@@ -87,6 +87,24 @@ const NotFoundWrapper = ({
     }
 
     return <Component path={location.pathname} params={params as Record<string, string>} />
+}
+
+/**
+ * Wrapper component that provides currentPath to layout components
+ */
+const LayoutWrapper: React.FC<{
+    LayoutComponent: React.ComponentType<StackLayoutProps | TabLayoutProps>
+    options?: any
+    routes: RouteWithFullPath[]
+}> = ({ LayoutComponent, options, routes }) => {
+    const location = useLocation()
+    return (
+        <LayoutComponent
+            options={options}
+            routes={routes}
+            currentPath={location.pathname}
+        />
+    )
 }
 
 /**
@@ -218,15 +236,16 @@ const buildRoute = (params: RouteParam, index: number, isNested = false, parentP
         }
 
         // Build the main navigator route with layout
+        // Use LayoutWrapper to provide reactive currentPath
         const navigatorRoute = (
             <Route
                 key={`${params.path}-${index}`}
                 path={routePath}
                 element={
-                    <LayoutComponent
+                    <LayoutWrapper
+                        LayoutComponent={LayoutComponent}
                         options={params.options}
                         routes={routesWithFullPaths}
-                        currentPath=""
                     />
                 }
             >

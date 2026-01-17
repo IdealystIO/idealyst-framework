@@ -6,6 +6,9 @@ import useMergeRefs from './hooks/useMergeRefs';
 export { default as Button } from './Button';
 export * from './Button/types';
 
+export { default as IconButton } from './IconButton';
+export * from './IconButton/types';
+
 export { default as Text } from './Text';
 export * from './Text/types';
 
@@ -119,6 +122,7 @@ export { default as Platform } from './Platform';
 export * from './Platform/types';
 
 export type { ButtonProps } from './Button/types';
+export type { IconButtonProps } from './IconButton/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
 export type { LinkProps } from './Link/types';

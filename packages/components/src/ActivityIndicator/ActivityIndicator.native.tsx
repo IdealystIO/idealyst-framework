@@ -37,6 +37,7 @@ const ActivityIndicator = forwardRef<IdealystElement, ActivityIndicatorProps>(({
   activityIndicatorStyles.useVariants({
     size: sizeVariant,
     animating,
+    intent,
   });
 
   // Call dynamic style with intent variant
