@@ -636,7 +636,7 @@ function generateInputStyles(theme: Theme, extensions?: ComponentExtensions): Re
             },
             error: {
                 true: {
-                    borderColor: themeRef('intents.error.primary'),
+                    borderColor: themeRef('intents.danger.primary'),
                 },
                 false: {},
             },
@@ -666,7 +666,7 @@ function generateInputStyles(theme: Theme, extensions?: ComponentExtensions): Re
         fontSize: 12,
         variants: {
             error: {
-                true: { color: themeRef('intents.error.primary') },
+                true: { color: themeRef('intents.danger.primary') },
                 false: {},
             },
         },

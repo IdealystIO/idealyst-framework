@@ -54,6 +54,7 @@ export type ComponentName =
   | 'Table'
   | 'Text'
   | 'TextArea'
+  | 'TextInput'
   | 'TimePicker'
   | 'Tooltip'
   | 'Video'

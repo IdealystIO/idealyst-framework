@@ -27,13 +27,13 @@ export const dateTimeInputStyles = defineStyle('DateTimeInput', (theme: Theme) =
     borderWidth: 1,
     borderRadius: 6,
     overflow: 'hidden' as const,
-    borderColor: error ? theme.intents.error.primary : theme.colors.border.primary,
+    borderColor: error ? theme.intents.danger.primary : theme.colors.border.primary,
     backgroundColor: disabled ? theme.colors.surface.secondary : theme.colors.surface.primary,
     _web: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
-      border: `1px solid ${error ? theme.intents.error.primary : theme.colors.border.primary}`,
+      border: `1px solid ${error ? theme.intents.danger.primary : theme.colors.border.primary}`,
     },
   }),
 
@@ -70,7 +70,7 @@ export const dateTimeInputStyles = defineStyle('DateTimeInput', (theme: Theme) =
   errorText: (_props: InputDynamicProps) => ({
     marginTop: 4,
     fontSize: 12,
-    color: theme.intents.error.primary,
+    color: theme.intents.danger.primary,
   }),
 
   // Label text above input

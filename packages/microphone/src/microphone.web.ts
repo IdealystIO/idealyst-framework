@@ -466,7 +466,7 @@ export class WebMicrophone implements IMicrophone {
       );
     }
 
-    this.updateStatus({ state: 'error', error: micError });
+    this.updateStatus({ state: 'danger', error: micError });
     this.cleanup();
 
     // Notify error listeners
