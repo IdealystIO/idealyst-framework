@@ -45,8 +45,8 @@ export default defineConfig({
                 '@idealyst/theme': '/home/nicho/Development/idealyst-framework/packages/theme',
                 '@idealyst/components': '/home/nicho/Development/idealyst-framework/packages/components',
               },
-              verbose: true,
-              themePath: path.resolve(__dirname, '../shared/src/styles.ts'),
+              verbose: false,
+              themePath: path.resolve(__dirname, '../shared/src/theme.ts'),
             }
           ],
           // Unistyles plugin runs SECOND to process expanded StyleSheet.create

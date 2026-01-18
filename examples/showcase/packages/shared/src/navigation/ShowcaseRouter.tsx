@@ -7,6 +7,8 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { ExploreScreen } from '../screens/ExploreScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { TRPCDemoScreen } from '../screens/TRPCDemoScreen';
+import { GraphQLDemoScreen } from '../screens/GraphQLDemoScreen';
 
 // Custom Layouts
 import { ShowcaseTabLayout, ShowcaseStackLayout } from '../layouts/ShowcaseLayout';
@@ -62,6 +64,38 @@ const MainTabNavigator: NavigatorParam = {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'account' : 'account-outline'}
+            color={color}
+            size={size}
+          />
+        ),
+      } as TabBarScreenOptions,
+    },
+    {
+      path: 'trpc',
+      type: 'screen',
+      component: TRPCDemoScreen,
+      options: {
+        title: 'tRPC',
+        tabBarLabel: 'tRPC',
+        tabBarIcon: ({ focused, color, size }) => (
+          <Icon
+            name={focused ? 'api' : 'api'}
+            color={color}
+            size={size}
+          />
+        ),
+      } as TabBarScreenOptions,
+    },
+    {
+      path: 'graphql',
+      type: 'screen',
+      component: GraphQLDemoScreen,
+      options: {
+        title: 'GraphQL',
+        tabBarLabel: 'GraphQL',
+        tabBarIcon: ({ focused, color, size }) => (
+          <Icon
+            name={focused ? 'graphql' : 'graphql'}
             color={color}
             size={size}
           />

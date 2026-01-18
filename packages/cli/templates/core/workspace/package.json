@@ -1,0 +1,24 @@
+{
+  "name": "@{{workspaceScope}}/{{projectName}}",
+  "version": "{{version}}",
+  "private": true,
+  "packageManager": "yarn@4.1.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspace @{{workspaceScope}}/web dev",
+    "build": "yarn workspace @{{workspaceScope}}/web build",
+    "preview": "yarn workspace @{{workspaceScope}}/web preview",
+    "start:mobile": "yarn workspace @{{workspaceScope}}/mobile start",
+    "android": "yarn workspace @{{workspaceScope}}/mobile android",
+    "ios": "yarn workspace @{{workspaceScope}}/mobile ios"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/navigation",
-  "version": "1.2.30",
+  "version": "1.2.32",
   "description": "Cross-platform navigation library for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",
@@ -18,8 +18,9 @@
   },
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "require": "./src/index.ts",
+      "react-native": "./src/index.native.ts",
+      "import": "./src/index.web.ts",
+      "require": "./src/index.web.ts",
       "types": "./src/index.ts"
     },
     "./examples": {
@@ -44,9 +45,9 @@
   },
   "peerDependencies": {
     "@idealyst/camera": "^1.2.30",
-    "@idealyst/components": "^1.2.30",
+    "@idealyst/components": "^1.2.32",
     "@idealyst/microphone": "^1.2.30",
-    "@idealyst/theme": "^1.2.30",
+    "@idealyst/theme": "^1.2.32",
     "@react-navigation/bottom-tabs": ">=7.0.0",
     "@react-navigation/drawer": ">=7.0.0",
     "@react-navigation/native": ">=7.0.0",
@@ -71,11 +72,11 @@
   },
   "devDependencies": {
     "@idealyst/camera": "^1.2.30",
-    "@idealyst/components": "^1.2.30",
+    "@idealyst/components": "^1.2.32",
     "@idealyst/datagrid": "^1.2.30",
     "@idealyst/datepicker": "^1.2.30",
     "@idealyst/microphone": "^1.2.30",
-    "@idealyst/theme": "^1.2.30",
+    "@idealyst/theme": "^1.2.32",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "react": "^19.1.0",

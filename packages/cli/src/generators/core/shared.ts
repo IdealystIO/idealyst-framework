@@ -22,36 +22,470 @@ export async function generateSharedPackage(
 
   await fs.ensureDir(sharedDir);
 
-  // Try to use template first, or generate programmatically
-  const templatePath = getTemplatePath('core', 'shared');
+  // Always generate config files programmatically (package.json, tsconfig, etc.)
+  await generateSharedConfigFiles(sharedDir, data);
 
-  if (await templateHasContent(templatePath)) {
-    await copyTemplateDirectory(templatePath, sharedDir, data);
+  // Try to use template src/ files first, or generate programmatically
+  const templateSrcPath = getTemplatePath('core', 'shared', 'src');
+
+  if (await templateHasContent(templateSrcPath)) {
+    // Copy base src/ from templates (showcase-based, excludes API-dependent files)
+    await copyTemplateDirectory(templateSrcPath, path.join(sharedDir, 'src'), data);
+    logger.dim('Using showcase-based source files');
+
+    // Copy API-dependent files based on user selection
+    await copyApiDependentFiles(sharedDir, data);
   } else {
-    // Generate programmatically
-    await generateSharedFiles(sharedDir, data);
+    // Generate src/ programmatically (fallback)
+    await generateSharedSrcFiles(sharedDir, data);
   }
 
   return { success: true };
 }
 
 /**
- * Generate shared package files programmatically
+ * Copy API-dependent files (trpc/, graphql/, components/, screens/, navigation/, layouts/) based on user selection
  */
-async function generateSharedFiles(
+async function copyApiDependentFiles(
   sharedDir: string,
   data: TemplateData
 ): Promise<void> {
-  // Create directory structure
-  await fs.ensureDir(path.join(sharedDir, 'src', 'components'));
-  await fs.ensureDir(path.join(sharedDir, 'src', 'screens'));
-  await fs.ensureDir(path.join(sharedDir, 'src', 'navigation'));
+  const srcDir = path.join(sharedDir, 'src');
 
-  // Create utils directory for tRPC client if enabled
+  // Copy tRPC client if enabled
   if (data.hasTrpc) {
-    await fs.ensureDir(path.join(sharedDir, 'src', 'utils'));
+    const trpcTemplatePath = getTemplatePath('core', 'shared', 'src-trpc');
+    if (await templateHasContent(trpcTemplatePath)) {
+      await copyTemplateDirectory(trpcTemplatePath, path.join(srcDir, 'trpc'), data);
+      logger.dim('Added tRPC client');
+    }
   }
 
+  // Copy GraphQL client if enabled
+  if (data.hasGraphql) {
+    const graphqlTemplatePath = getTemplatePath('core', 'shared', 'src-graphql');
+    if (await templateHasContent(graphqlTemplatePath)) {
+      await copyTemplateDirectory(graphqlTemplatePath, path.join(srcDir, 'graphql'), data);
+      logger.dim('Added GraphQL client');
+    }
+  }
+
+  // Copy layouts (AppLayout.tsx with tab/stack layouts)
+  const layoutsTemplatePath = getTemplatePath('core', 'shared', 'src-layouts');
+  if (await templateHasContent(layoutsTemplatePath)) {
+    await copyTemplateDirectory(layoutsTemplatePath, path.join(srcDir, 'layouts'), data);
+  }
+
+  // Copy base screens and conditionally add API demo screens
+  await copyScreensWithApiDemos(srcDir, data);
+
+  // Generate navigation/AppRouter.tsx based on API selection
+  await generateNavigation(srcDir, data);
+
+  // Generate components/App.tsx and components/index.ts based on API selection
+  await generateAppComponent(srcDir, data);
+}
+
+/**
+ * Copy screens and conditionally add API demo screens
+ */
+async function copyScreensWithApiDemos(srcDir: string, data: TemplateData): Promise<void> {
+  const screensDir = path.join(srcDir, 'screens');
+  await fs.ensureDir(screensDir);
+
+  // Copy base screens (Home, Explore, Profile, Settings)
+  const baseScreensPath = getTemplatePath('core', 'shared', 'src-screens');
+  if (await templateHasContent(baseScreensPath)) {
+    await copyTemplateDirectory(baseScreensPath, screensDir, data);
+  }
+
+  // Copy tRPC demo screen if enabled
+  if (data.hasTrpc) {
+    const trpcScreenPath = getTemplatePath('core', 'shared', 'src-screens-trpc');
+    if (await templateHasContent(trpcScreenPath)) {
+      await copyTemplateDirectory(trpcScreenPath, screensDir, data);
+
+      // Modify HAS_DATABASE constant based on Prisma availability
+      const trpcDemoPath = path.join(screensDir, 'TRPCDemoScreen.tsx');
+      if (await fs.pathExists(trpcDemoPath)) {
+        let content = await fs.readFile(trpcDemoPath, 'utf8');
+        if (!data.hasPrisma) {
+          // Replace HAS_DATABASE = true with HAS_DATABASE = false
+          content = content.replace(
+            /const HAS_DATABASE = true;/,
+            'const HAS_DATABASE = false;'
+          );
+          await fs.writeFile(trpcDemoPath, content);
+        }
+      }
+    }
+  }
+
+  // Copy GraphQL demo screen ONLY if both GraphQL AND Prisma are enabled
+  // (GraphQL demo requires database for meaningful operations)
+  if (data.hasGraphql && data.hasPrisma) {
+    const graphqlScreenPath = getTemplatePath('core', 'shared', 'src-screens-graphql');
+    if (await templateHasContent(graphqlScreenPath)) {
+      await copyTemplateDirectory(graphqlScreenPath, screensDir, data);
+    }
+  }
+
+  // Generate screens/index.ts based on what's enabled
+  await generateScreensIndex(screensDir, data);
+}
+
+/**
+ * Generate screens/index.ts based on API selection
+ */
+async function generateScreensIndex(screensDir: string, data: TemplateData): Promise<void> {
+  const exports = [
+    `export { HomeScreen } from './HomeScreen';`,
+    `export { ExploreScreen } from './ExploreScreen';`,
+    `export { ProfileScreen } from './ProfileScreen';`,
+    `export { SettingsScreen } from './SettingsScreen';`,
+  ];
+
+  if (data.hasTrpc) {
+    exports.push(`export { TRPCDemoScreen } from './TRPCDemoScreen';`);
+  }
+
+  // GraphQL demo only available when both GraphQL AND Prisma are enabled
+  if (data.hasGraphql && data.hasPrisma) {
+    exports.push(`export { GraphQLDemoScreen } from './GraphQLDemoScreen';`);
+  }
+
+  await fs.writeFile(path.join(screensDir, 'index.ts'), exports.join('\n') + '\n');
+}
+
+/**
+ * Generate navigation/AppRouter.tsx based on API selection
+ */
+async function generateNavigation(srcDir: string, data: TemplateData): Promise<void> {
+  const navigationDir = path.join(srcDir, 'navigation');
+  await fs.ensureDir(navigationDir);
+
+  // Generate AppRouter.tsx
+  const routerContent = createAppRouter(data);
+  await fs.writeFile(path.join(navigationDir, 'AppRouter.tsx'), routerContent);
+
+  // Generate navigation/index.ts
+  await fs.writeFile(
+    path.join(navigationDir, 'index.ts'),
+    `export { AppRouter } from './AppRouter';\n`
+  );
+}
+
+/**
+ * Create AppRouter based on API selection
+ */
+function createAppRouter(data: TemplateData): string {
+  const hasTrpc = data.hasTrpc;
+  const hasGraphql = data.hasGraphql;
+
+  // Build screen imports
+  const screenImports = [
+    `import { HomeScreen } from '../screens/HomeScreen';`,
+    `import { ExploreScreen } from '../screens/ExploreScreen';`,
+    `import { ProfileScreen } from '../screens/ProfileScreen';`,
+    `import { SettingsScreen } from '../screens/SettingsScreen';`,
+  ];
+
+  if (hasTrpc) {
+    screenImports.push(`import { TRPCDemoScreen } from '../screens/TRPCDemoScreen';`);
+  }
+
+  // GraphQL demo only available when both GraphQL AND Prisma are enabled
+  const hasGraphqlDemo = hasGraphql && data.hasPrisma;
+  if (hasGraphqlDemo) {
+    screenImports.push(`import { GraphQLDemoScreen } from '../screens/GraphQLDemoScreen';`);
+  }
+
+  // Build tab routes
+  const tabRoutes = [
+    `    {
+      path: '',
+      type: 'screen',
+      component: HomeScreen,
+      options: {
+        title: 'Home',
+        tabBarLabel: 'Home',
+        tabBarIcon: ({ focused, color, size }) => (
+          <Icon
+            name={focused ? 'home' : 'home-outline'}
+            color={color}
+            size={size}
+          />
+        ),
+      } as TabBarScreenOptions,
+    }`,
+    `    {
+      path: 'explore',
+      type: 'screen',
+      component: ExploreScreen,
+      options: {
+        title: 'Explore',
+        tabBarLabel: 'Explore',
+        tabBarIcon: ({ focused, color, size }) => (
+          <Icon
+            name={focused ? 'compass' : 'compass-outline'}
+            color={color}
+            size={size}
+          />
+        ),
+      } as TabBarScreenOptions,
+    }`,
+    `    {
+      path: 'profile',
+      type: 'screen',
+      component: ProfileScreen,
+      options: {
+        title: 'Profile',
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({ focused, color, size }) => (
+          <Icon
+            name={focused ? 'account' : 'account-outline'}
+            color={color}
+            size={size}
+          />
+        ),
+      } as TabBarScreenOptions,
+    }`,
+  ];
+
+  if (hasTrpc) {
+    tabRoutes.push(`    {
+      path: 'trpc',
+      type: 'screen',
+      component: TRPCDemoScreen,
+      options: {
+        title: 'tRPC',
+        tabBarLabel: 'tRPC',
+        tabBarIcon: ({ focused, color, size }) => (
+          <Icon
+            name="api"
+            color={color}
+            size={size}
+          />
+        ),
+      } as TabBarScreenOptions,
+    }`);
+  }
+
+  if (hasGraphqlDemo) {
+    tabRoutes.push(`    {
+      path: 'graphql',
+      type: 'screen',
+      component: GraphQLDemoScreen,
+      options: {
+        title: 'GraphQL',
+        tabBarLabel: 'GraphQL',
+        tabBarIcon: ({ focused, color, size }) => (
+          <Icon
+            name="graphql"
+            color={color}
+            size={size}
+          />
+        ),
+      } as TabBarScreenOptions,
+    }`);
+  }
+
+  return `import React from 'react';
+import { Icon } from '@idealyst/components';
+import type { NavigatorParam, TabBarScreenOptions } from '@idealyst/navigation';
+
+// Screens
+${screenImports.join('\n')}
+
+// Custom Layouts
+import { AppTabLayout, AppStackLayout } from '../layouts/AppLayout';
+
+/**
+ * Tab Navigator - Contains main tabs
+ */
+const MainTabNavigator: NavigatorParam = {
+  path: '',
+  type: 'navigator',
+  layout: 'tab',
+  layoutComponent: AppTabLayout,
+  routes: [
+${tabRoutes.join(',\n')},
+  ],
+};
+
+/**
+ * Root Stack Navigator - Wraps tabs and adds Settings screen
+ */
+export const AppRouter: NavigatorParam = {
+  path: '/',
+  type: 'navigator',
+  layout: 'stack',
+  layoutComponent: AppStackLayout,
+  routes: [
+    MainTabNavigator,
+    {
+      path: 'settings',
+      type: 'screen',
+      component: SettingsScreen,
+      options: {
+        title: 'Settings',
+        headerShown: true,
+      },
+    },
+  ],
+};
+
+export default AppRouter;
+`;
+}
+
+/**
+ * Generate App.tsx and components/index.ts based on API selection
+ */
+async function generateAppComponent(srcDir: string, data: TemplateData): Promise<void> {
+  const componentsDir = path.join(srcDir, 'components');
+  await fs.ensureDir(componentsDir);
+
+  // Generate App.tsx based on what's enabled
+  const appContent = createTemplateAppComponent(data);
+  await fs.writeFile(path.join(componentsDir, 'App.tsx'), appContent);
+
+  // Generate components/index.ts
+  await fs.writeFile(
+    path.join(componentsDir, 'index.ts'),
+    `export { App, default } from './App';\n`
+  );
+}
+
+/**
+ * Create App component based on API selection (for showcase templates)
+ */
+function createTemplateAppComponent(data: TemplateData): string {
+  const hasTrpc = data.hasTrpc;
+  const hasGraphql = data.hasGraphql;
+  const hasApi = data.hasApi;
+
+  // No API - simple app
+  if (!hasApi || (!hasTrpc && !hasGraphql)) {
+    return `import React from 'react';
+import { NavigatorProvider } from '@idealyst/navigation';
+import { AppRouter } from '../navigation/AppRouter';
+
+/**
+ * Main App component for ${data.appDisplayName}
+ */
+export const App: React.FC = () => {
+  return <NavigatorProvider route={AppRouter} />;
+};
+
+export default App;
+`;
+  }
+
+  // Build imports
+  const imports: string[] = [
+    `import React, { useState } from 'react';`,
+    `import { NavigatorProvider } from '@idealyst/navigation';`,
+  ];
+
+  if (hasTrpc || hasGraphql) {
+    imports.push(`import { QueryClient, QueryClientProvider } from '@tanstack/react-query';`);
+  }
+
+  imports.push(`import { AppRouter } from '../navigation/AppRouter';`);
+
+  if (hasTrpc) {
+    imports.push(`import { trpc, createTRPCClient } from '../trpc/client';`);
+  }
+
+  if (hasGraphql) {
+    imports.push(`import { ApolloProvider, createApolloClient } from '../graphql/client';`);
+  }
+
+  // Build component body
+  const stateSetup: string[] = [];
+
+  if (hasTrpc || hasGraphql) {
+    stateSetup.push(`  // Create React Query client
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        staleTime: 5000,
+      },
+    },
+  }));`);
+  }
+
+  if (hasTrpc) {
+    stateSetup.push(`
+  // Create tRPC client
+  const [trpcClient] = useState(() =>
+    createTRPCClient({
+      apiUrl: \`\${API_URL}/trpc\`,
+    })
+  );`);
+  }
+
+  if (hasGraphql) {
+    stateSetup.push(`
+  // Create Apollo client
+  const [apolloClient] = useState(() =>
+    createApolloClient({
+      graphqlUrl: \`\${API_URL}/graphql\`,
+    })
+  );`);
+  }
+
+  // Build JSX tree
+  let jsx = `<NavigatorProvider route={AppRouter} />`;
+
+  if (hasGraphql) {
+    jsx = `<ApolloProvider client={apolloClient}>
+          ${jsx}
+        </ApolloProvider>`;
+  }
+
+  if (hasTrpc || hasGraphql) {
+    jsx = `<QueryClientProvider client={queryClient}>
+        ${jsx}
+      </QueryClientProvider>`;
+  }
+
+  if (hasTrpc) {
+    jsx = `<trpc.Provider client={trpcClient} queryClient={queryClient}>
+      ${jsx}
+    </trpc.Provider>`;
+  }
+
+  return `${imports.join('\n')}
+
+// API configuration
+const API_URL = 'http://localhost:3000';
+
+/**
+ * Main App component for ${data.appDisplayName}
+ * Sets up navigation${hasTrpc ? ' with tRPC' : ''}${hasGraphql ? (hasTrpc ? ' and Apollo' : ' with Apollo') : ''} providers
+ */
+export const App: React.FC = () => {
+${stateSetup.join('\n')}
+
+  return (
+    ${jsx}
+  );
+};
+
+export default App;
+`;
+}
+
+/**
+ * Generate shared package config files (package.json, tsconfig)
+ */
+async function generateSharedConfigFiles(
+  sharedDir: string,
+  data: TemplateData
+): Promise<void> {
   // Create package.json
   await fs.writeJson(
     path.join(sharedDir, 'package.json'),
@@ -65,6 +499,24 @@ async function generateSharedFiles(
     createSharedTsConfig(),
     { spaces: 2 }
   );
+}
+
+/**
+ * Generate shared package src files programmatically (fallback when no template)
+ */
+async function generateSharedSrcFiles(
+  sharedDir: string,
+  data: TemplateData
+): Promise<void> {
+  // Create directory structure
+  await fs.ensureDir(path.join(sharedDir, 'src', 'components'));
+  await fs.ensureDir(path.join(sharedDir, 'src', 'screens'));
+  await fs.ensureDir(path.join(sharedDir, 'src', 'navigation'));
+
+  // Create utils directory for tRPC client if enabled
+  if (data.hasTrpc) {
+    await fs.ensureDir(path.join(sharedDir, 'src', 'utils'));
+  }
 
   // Create src/index.ts
   await fs.writeFile(
@@ -167,7 +619,6 @@ function createSharedPackageJson(data: TemplateData): Record<string, unknown> {
     types: 'src/index.ts',
     exports: {
       '.': './src/index.ts',
-      './theme': './src/theme.ts',
     },
     scripts: {
       'build': 'tsc',
@@ -376,9 +827,9 @@ export default function Home() {
 }
 
 /**
- * Create AppRouter - shared navigation configuration
+ * Create AppRouter - shared navigation configuration (fallback when no templates)
  */
-function createAppRouter(data: TemplateData): string {
+function createFallbackAppRouter(data: TemplateData): string {
   return `/**
  * Application navigation router
  * Shared between web and mobile platforms

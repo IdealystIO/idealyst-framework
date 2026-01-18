@@ -1,0 +1,78 @@
+# AI/Tool configs
+.claude/
+.serena/
+.playwright/
+
+# Dependencies
+node_modules/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Build outputs
+dist/
+build/
+.cache/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.jest/
+
+# Mobile
+ios/Pods/
+android/.gradle/
+android/app/build/
+*.keystore
+*.jks
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+*.tmp
+*.bak
+
+# Turborepo
+.turbo/
+
+# Linting
+.eslintcache
+
+# SSL
+*.pem
+
+# Deployment
+.vercel/
+.netlify/
+
+# Expo
+.expo/
+.expo-shared/
+
+# Metro
+.metro-health-check*
+
+# Watchman
+.watchman-*

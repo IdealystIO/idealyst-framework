@@ -56,39 +56,43 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
         marginBottom: 4,
     }),
 
-    trigger: ({ type: _type = 'outlined', intent: _intent = 'neutral', disabled = false, error: _error = false, focused: _focused = false }: SelectDynamicProps) => ({
-        position: 'relative' as const,
-        flexDirection: 'row' as const,
-        alignItems: 'center' as const,
-        justifyContent: 'space-between' as const,
-        borderWidth: 1,
-        borderStyle: 'solid' as const,
-        opacity: disabled ? 0.6 : 1,
-        variants: {
-            type: {
-                filled: {
-                    backgroundColor: theme.colors.surface.secondary,
-                    borderColor: 'transparent',
-                },
-                outlined: {
-                    backgroundColor: theme.colors.surface.primary,
-                    borderWidth: 1,
-                    borderColor: theme.colors.border.primary,
-                }
+    trigger: ({ type = 'outlined', intent = 'neutral', disabled = false, error = false, focused = false }: SelectDynamicProps) => {
+        // Determine border color based on state priority: error > focused > default
+        const getBorderColor = () => {
+            if (error) return theme.intents.danger.primary;
+            if (focused) return theme.intents[intent]?.primary ?? theme.intents.primary.primary;
+            return type === 'filled' ? 'transparent' : theme.colors.border.primary;
+        };
+
+        const borderColor = getBorderColor();
+
+        return {
+            position: 'relative' as const,
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            justifyContent: 'space-between' as const,
+            borderWidth: 1,
+            borderStyle: 'solid' as const,
+            borderColor,
+            borderRadius: 8,
+            opacity: disabled ? 0.6 : 1,
+            backgroundColor: type === 'filled' ? theme.colors.surface.secondary : theme.colors.surface.primary,
+            variants: {
+                size: theme.sizes.$select,
             },
-            size: theme.sizes.$select,
-        },
-        _web: {
-            display: 'flex',
-            boxSizing: 'border-box',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            border: `1px solid`,
-            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-            _hover: disabled ? {} : { opacity: 0.9 },
-            _active: disabled ? {} : { opacity: 0.8 },
-            _focus: { outline: 'none' },
-        },
-    }),
+            _web: {
+                display: 'flex',
+                boxSizing: 'border-box',
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                border: `1px solid ${borderColor}`,
+                boxShadow: focused && !error ? `0 0 0 2px ${theme.intents[intent]?.primary ?? theme.intents.primary.primary}33` : 'none',
+                transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+                _hover: disabled ? {} : { borderColor: focused || error ? borderColor : theme.colors.border.secondary },
+                _active: disabled ? {} : { opacity: 0.9 },
+                _focus: { outline: 'none' },
+            },
+        };
+    },
 
     triggerContent: (_props: SelectDynamicProps) => ({
         flex: 1,

@@ -10,17 +10,17 @@
       "import": "./src/index.ts",
       "require": "./src/index.ts",
       "types": "./src/index.ts"
-    },
-    "./unistyles": {
-      "import": "./src/unistyles.ts",
-      "require": "./src/unistyles.ts",
-      "types": "./src/unistyles.ts"
     }
   },
   "peerDependencies": {
+    "@apollo/client": "^3.11.8",
     "@idealyst/components": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
+    "@tanstack/react-query": "^5.83.0",
+    "@trpc/client": "^11.5.1",
+    "@trpc/react-query": "^11.5.1",
+    "graphql": "^16.9.0",
     "react": "^19.1.0",
     "react-native": "^0.80.1"
   },
@@ -29,11 +29,20 @@
       "optional": true
     }
   },
+  "dependencies": {
+    "@idealyst-showcase/api": "workspace:*"
+  },
   "devDependencies": {
+    "@apollo/client": "^3.11.8",
     "@idealyst/components": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
+    "@tanstack/react-query": "^5.83.0",
+    "@trpc/client": "^11.5.1",
+    "@trpc/react-query": "^11.5.1",
+    "@trpc/server": "^11.5.1",
     "@types/react": "^19.1.0",
+    "graphql": "^16.9.0",
     "react-native-unistyles": "^3.0.0",
     "typescript": "^5.0.0"
   },

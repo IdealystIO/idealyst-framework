@@ -6,7 +6,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { TemplateData, PackageGeneratorResult } from '../../types';
 import { copyTemplateDirectory, getTemplatePath, templateHasContent } from '../../templates/copier';
-import { initializeReactNative, overlayIdealystFiles, hasNativeFolders } from '../reactNative';
+import { initializeReactNative } from '../reactNative';
 import { DEPENDENCIES, IDEALYST_VERSION } from '../../constants';
 import { logger } from '../../utils/logger';
 
@@ -39,20 +39,24 @@ export async function generateMobilePackage(
     interactive: options.interactive ?? false,
   });
 
-  // Now overlay Idealyst-specific files or generate programmatically
-  const templatePath = getTemplatePath('core', 'mobile');
+  // Always generate config files programmatically
+  await generateMobileConfigFiles(mobileDir, options);
 
-  if (await templateHasContent(templatePath)) {
-    if (rnResult.success) {
-      // Overlay on top of RN-generated project
-      await overlayIdealystFiles(mobileDir, templatePath, options);
-    } else {
-      // No RN init, copy full template
-      await copyTemplateDirectory(templatePath, mobileDir, options);
-    }
+  // Try to use template src/ files first, or generate programmatically
+  const templateSrcPath = getTemplatePath('core', 'mobile', 'src');
+
+  if (await templateHasContent(templateSrcPath)) {
+    // Copy src/ from templates (showcase-based)
+    await copyTemplateDirectory(templateSrcPath, path.join(mobileDir, 'src'), options);
+    logger.dim('Using showcase-based source files');
   } else {
-    // Generate programmatically
-    await generateMobileFiles(mobileDir, options, rnResult.success);
+    // Generate src/ programmatically (fallback)
+    await generateMobileSrcFiles(mobileDir, options);
+  }
+
+  if (!rnResult.success) {
+    logger.warn('Native folders (android/ios) were not created.');
+    logger.dim('Run "npx react-native init" in the mobile directory to create them.');
   }
 
   return {
@@ -62,12 +66,11 @@ export async function generateMobilePackage(
 }
 
 /**
- * Generate mobile package files programmatically
+ * Generate mobile package config files (package.json, app.json, configs)
  */
-async function generateMobileFiles(
+async function generateMobileConfigFiles(
   mobileDir: string,
-  data: MobileGeneratorOptions,
-  hasNative: boolean
+  data: MobileGeneratorOptions
 ): Promise<void> {
   // Create directory structure
   await fs.ensureDir(path.join(mobileDir, 'src'));
@@ -110,17 +113,20 @@ async function generateMobileFiles(
     path.join(mobileDir, 'index.js'),
     createIndexJs(data)
   );
+}
 
+/**
+ * Generate mobile package src files programmatically (fallback)
+ */
+async function generateMobileSrcFiles(
+  mobileDir: string,
+  data: MobileGeneratorOptions
+): Promise<void> {
   // Create src/App.tsx
   await fs.writeFile(
     path.join(mobileDir, 'src', 'App.tsx'),
     createAppTsx(data)
   );
-
-  if (!hasNative) {
-    logger.warn('Native folders (android/ios) were not created.');
-    logger.dim('Run "npx react-native init" in the mobile directory to create them.');
-  }
 }
 
 /**

@@ -1,4 +1,4 @@
-import './styles';
+import './theme';
 
 // Export the unified App component
 export { App } from './components';

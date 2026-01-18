@@ -1,0 +1,45 @@
+{
+  "name": "@idealyst-showcase/api",
+  "version": "1.0.0",
+  "description": "API server for Idealyst Showcase app",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@idealyst-showcase/database": "workspace:*",
+    "@pothos/core": "^4.3.0",
+    "@trpc/server": "^11.5.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "graphql": "^16.9.0",
+    "graphql-yoga": "^5.10.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.4",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "api",
+    "trpc",
+    "zod",
+    "typescript",
+    "express"
+  ]
+}

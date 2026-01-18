@@ -123,17 +123,17 @@ async function addTrpcToShared(projectPath: string, data: TemplateData): Promise
 
   await fs.ensureDir(trpcDir);
 
-  // Create shared tRPC client factory
-  await fs.writeFile(
-    path.join(trpcDir, 'client.ts'),
-    createSharedTrpcClient(data)
-  );
+  // Only create client.ts if it doesn't exist (templates may have a better version)
+  const clientPath = path.join(trpcDir, 'client.ts');
+  if (!await fs.pathExists(clientPath)) {
+    await fs.writeFile(clientPath, createSharedTrpcClient(data));
+  }
 
-  // Create index.ts
-  await fs.writeFile(
-    path.join(trpcDir, 'index.ts'),
-    `export * from './client';\n`
-  );
+  // Only create index.ts if it doesn't exist
+  const indexPath = path.join(trpcDir, 'index.ts');
+  if (!await fs.pathExists(indexPath)) {
+    await fs.writeFile(indexPath, `export * from './client';\n`);
+  }
 
   // Add dependencies
   await addDependencies(
@@ -203,52 +203,119 @@ export const middleware = t.middleware;
  */
 function createTrpcRouter(data: TemplateData): string {
   return `/**
- * tRPC router
+ * tRPC router - re-exports from routers/index.ts
  */
 
-import { router, publicProcedure, createContext } from './trpc';
-import { exampleRouter } from './routers';
+import { appRouter, createContext } from './routers';
 
-export const appRouter = router({
-  // Health check
-  health: publicProcedure.query(() => ({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-  })),
-
-  // Example router
-  example: exampleRouter,
-
-  // Add more routers here
-});
-
+export { appRouter, createContext };
 export type AppRouter = typeof appRouter;
-export { createContext };
 `;
 }
 
 /**
- * Create example router
+ * Create example router with base routes (and database routes if Prisma enabled)
  */
 function createExampleRouter(data: TemplateData): string {
-  return `/**
- * Example router
- */
-
-import { z } from 'zod';
-import { router, publicProcedure } from '../trpc';
-
-export const exampleRouter = router({
+  const baseRoutes = `  // Hello endpoint
   hello: publicProcedure
     .input(z.object({ name: z.string().optional() }))
     .query(({ input }) => {
       return {
         greeting: \`Hello, \${input.name || 'World'}!\`,
+        timestamp: new Date().toISOString(),
       };
     }),
 
-  // Add more procedures here
+  // Echo endpoint
+  echo: publicProcedure
+    .input(z.object({ message: z.string() }))
+    .query(({ input }) => {
+      return {
+        original: input.message,
+        reversed: input.message.split('').reverse().join(''),
+        length: input.message.length,
+        timestamp: new Date().toISOString(),
+      };
+    }),
+
+  // In-memory counter
+  counter: router({
+    get: publicProcedure.query(() => ({ value: counterState.value })),
+    increment: publicProcedure.mutation(() => {
+      counterState.value += 1;
+      return { value: counterState.value };
+    }),
+    decrement: publicProcedure.mutation(() => {
+      counterState.value -= 1;
+      return { value: counterState.value };
+    }),
+    reset: publicProcedure.mutation(() => {
+      counterState.value = 0;
+      return { value: counterState.value };
+    }),
+  }),`;
+
+  const databaseRoutes = data.hasPrisma ? `
+
+  // Items CRUD (requires database)
+  items: router({
+    list: publicProcedure.query(async ({ ctx }) => {
+      return await ctx.prisma.item.findMany({ orderBy: { createdAt: 'desc' } });
+    }),
+    create: publicProcedure
+      .input(z.object({ title: z.string(), description: z.string().optional() }))
+      .mutation(async ({ ctx, input }) => {
+        return await ctx.prisma.item.create({ data: input });
+      }),
+    toggle: publicProcedure
+      .input(z.object({ id: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        const item = await ctx.prisma.item.findUnique({ where: { id: input.id } });
+        if (!item) throw new Error('Item not found');
+        return await ctx.prisma.item.update({
+          where: { id: input.id },
+          data: { completed: !item.completed },
+        });
+      }),
+    delete: publicProcedure
+      .input(z.object({ id: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        return await ctx.prisma.item.delete({ where: { id: input.id } });
+      }),
+    stats: publicProcedure.query(async ({ ctx }) => {
+      const items = await ctx.prisma.item.findMany();
+      return {
+        total: items.length,
+        completed: items.filter((i: { completed: boolean }) => i.completed).length,
+        pending: items.filter((i: { completed: boolean }) => !i.completed).length,
+      };
+    }),
+  }),` : '';
+
+  return `/**
+ * Main app router
+ */
+
+import { z } from 'zod';
+import { router, publicProcedure, createContext } from '../trpc';
+
+// In-memory state for counter demo
+const counterState = { value: 0 };
+
+export const appRouter = router({
+  // Health check
+  health: publicProcedure.query(() => ({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0',
+  })),
+
+${baseRoutes}${databaseRoutes}
 });
+
+export { createContext };
+export type AppRouter = typeof appRouter;
 `;
 }
 

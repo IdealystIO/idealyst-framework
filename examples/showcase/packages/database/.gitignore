@@ -1,0 +1,13 @@
+# Database files
+*.db
+*.db-journal
+
+# Generated Prisma client
+generated/
+
+# Build output
+dist/
+
+# Environment files
+.env
+.env.local

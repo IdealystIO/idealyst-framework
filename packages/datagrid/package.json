@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/datagrid",
-  "version": "1.2.30",
+  "version": "1.2.32",
   "description": "High-performance datagrid component for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/datagrid#readme",
   "readme": "README.md",
@@ -36,8 +36,8 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.2.30",
-    "@idealyst/theme": "^1.2.30",
+    "@idealyst/components": "^1.2.32",
+    "@idealyst/theme": "^1.2.32",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-unistyles": "^3.0.4",
@@ -61,8 +61,8 @@
     }
   },
   "devDependencies": {
-    "@idealyst/components": "^1.2.30",
-    "@idealyst/theme": "^1.2.30",
+    "@idealyst/components": "^1.2.32",
+    "@idealyst/theme": "^1.2.32",
     "@types/react": "^19.1.0",
     "@types/react-window": "^1.8.8",
     "react": "^19.1.0",

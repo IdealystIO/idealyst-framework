@@ -97,7 +97,7 @@ StyleSheet.create((theme) => ({
   // or path.resolve(__dirname, "packages/theme/src/babel/plugin.js")
   {
     // REQUIRED: Path to your theme configuration file
-    themePath: "./src/styles.ts",
+    themePath: "./src/theme.ts",
 
     // REQUIRED: Paths that should be processed
     autoProcessPaths: [

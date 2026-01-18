@@ -21,31 +21,53 @@ export async function generateWebPackage(
   logger.info('Creating web package...');
 
   await fs.ensureDir(webDir);
+  await fs.ensureDir(path.join(webDir, 'src'));
+  await fs.ensureDir(path.join(webDir, 'public'));
 
-  // Try to use template first, or generate programmatically
+  // Always generate config files programmatically
+  await generateWebConfigFiles(webDir, data);
+
+  // Try to use template src/ and index.html first, or generate programmatically
   const templatePath = getTemplatePath('core', 'web');
+  const templateSrcPath = getTemplatePath('core', 'web', 'src');
+  const templateIndexHtml = path.join(templatePath, 'index.html');
+  const templatePublicPath = path.join(templatePath, 'public');
 
-  if (await templateHasContent(templatePath)) {
-    await copyTemplateDirectory(templatePath, webDir, data);
+  if (await templateHasContent(templateSrcPath)) {
+    // Copy src/ from templates (showcase-based)
+    await copyTemplateDirectory(templateSrcPath, path.join(webDir, 'src'), data);
+    logger.dim('Using showcase-based source files');
   } else {
-    // Generate programmatically
-    await generateWebFiles(webDir, data);
+    // Generate src/ programmatically (fallback)
+    await generateWebSrcFiles(webDir, data);
+  }
+
+  // Copy index.html from template if exists
+  if (await fs.pathExists(templateIndexHtml)) {
+    await fs.copy(templateIndexHtml, path.join(webDir, 'index.html'));
+    // Process template variables in index.html
+    const content = await fs.readFile(path.join(webDir, 'index.html'), 'utf8');
+    const { processTemplateContent } = await import('../../templates/processor');
+    await fs.writeFile(path.join(webDir, 'index.html'), processTemplateContent(content, data));
+  } else {
+    await fs.writeFile(path.join(webDir, 'index.html'), createIndexHtml(data));
+  }
+
+  // Copy public/ from template if exists
+  if (await templateHasContent(templatePublicPath)) {
+    await copyTemplateDirectory(templatePublicPath, path.join(webDir, 'public'), data);
   }
 
   return { success: true };
 }
 
 /**
- * Generate web package files programmatically
+ * Generate web package config files (package.json, vite.config, tsconfig)
  */
-async function generateWebFiles(
+async function generateWebConfigFiles(
   webDir: string,
   data: TemplateData
 ): Promise<void> {
-  // Create directory structure
-  await fs.ensureDir(path.join(webDir, 'src'));
-  await fs.ensureDir(path.join(webDir, 'public'));
-
   // Create package.json
   await fs.writeJson(
     path.join(webDir, 'package.json'),
@@ -72,13 +94,15 @@ async function generateWebFiles(
     createWebTsConfigNode(),
     { spaces: 2 }
   );
+}
 
-  // Create index.html
-  await fs.writeFile(
-    path.join(webDir, 'index.html'),
-    createIndexHtml(data)
-  );
-
+/**
+ * Generate web package src files programmatically (fallback)
+ */
+async function generateWebSrcFiles(
+  webDir: string,
+  data: TemplateData
+): Promise<void> {
   // Create src/main.tsx
   await fs.writeFile(
     path.join(webDir, 'src', 'main.tsx'),

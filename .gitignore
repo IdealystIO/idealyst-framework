@@ -211,3 +211,5 @@ yarn-error.log*
 /.cursor
 /.playwright-mcp
 /examples/app/packages/database/generated
+/examples/showcase/packages/mobile/android/.gradle
+/examples/showcase/packages/mobile/android/app/.cxx

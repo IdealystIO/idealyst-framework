@@ -13,6 +13,13 @@
     "preview": "yarn workspace @idealyst-showcase/web preview",
     "start:mobile": "yarn workspace @idealyst-showcase/mobile start",
     "android": "yarn workspace @idealyst-showcase/mobile android",
-    "ios": "yarn workspace @idealyst-showcase/mobile ios"
+    "ios": "yarn workspace @idealyst-showcase/mobile ios",
+    "api": "yarn workspace @idealyst-showcase/api dev",
+    "api:build": "yarn workspace @idealyst-showcase/api build",
+    "db:generate": "yarn workspace @idealyst-showcase/database db:generate",
+    "db:push": "yarn workspace @idealyst-showcase/database db:push",
+    "db:migrate": "yarn workspace @idealyst-showcase/database db:migrate",
+    "db:studio": "yarn workspace @idealyst-showcase/database db:studio",
+    "db:seed": "yarn workspace @idealyst-showcase/database db:seed"
   }
 }

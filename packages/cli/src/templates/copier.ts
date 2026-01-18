@@ -112,10 +112,13 @@ export async function copyTemplateFile(
  * Get the path to a template directory
  */
 export function getTemplatePath(...segments: string[]): string {
-  // In production, templates are in dist/templates
-  // In development, they're in templates/
-  const distPath = path.resolve(__dirname, '..', '..', 'templates', ...segments);
-  const devPath = path.resolve(__dirname, '..', '..', '..', 'templates', ...segments);
+  // The compiled copier.js lives in dist/templates/copier.js
+  // The templates are in dist/templates/core/... and dist/templates/extensions/...
+  // So from __dirname (dist/templates), we just need to add the segments directly
+  const distPath = path.resolve(__dirname, ...segments);
+
+  // In development (running from src/templates), templates are at ../../templates
+  const devPath = path.resolve(__dirname, '..', '..', 'templates', ...segments);
 
   if (fs.existsSync(distPath)) {
     return distPath;

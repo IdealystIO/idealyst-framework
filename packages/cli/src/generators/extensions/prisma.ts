@@ -56,6 +56,10 @@ async function generatePrismaFiles(
   await fs.ensureDir(path.join(dbDir, 'prisma'));
   await fs.ensureDir(path.join(dbDir, 'src'));
 
+  // Determine database provider based on devcontainer setting
+  const usePostgres = data.hasDevcontainer;
+  const dbProvider = usePostgres ? 'postgresql' : 'sqlite';
+
   // Create package.json
   await fs.writeJson(
     path.join(dbDir, 'package.json'),
@@ -70,11 +74,36 @@ async function generatePrismaFiles(
     { spaces: 2 }
   );
 
-  // Create prisma/schema.prisma
-  await fs.writeFile(
-    path.join(dbDir, 'prisma', 'schema.prisma'),
-    createPrismaSchema()
-  );
+  // Try to use template schema.prisma, or generate programmatically
+  const templateSchemaPath = getTemplatePath('core', 'database', 'schema.prisma');
+  if (await fs.pathExists(templateSchemaPath)) {
+    // Read template schema and adjust provider
+    let schemaContent = await fs.readFile(templateSchemaPath, 'utf8');
+
+    // Replace provider based on devcontainer setting
+    if (usePostgres) {
+      schemaContent = schemaContent.replace(
+        /provider\s*=\s*"sqlite"/g,
+        'provider = "postgresql"'
+      );
+    }
+
+    // Process template variables
+    const { processTemplateContent } = await import('../../templates/processor');
+    schemaContent = processTemplateContent(schemaContent, data);
+
+    await fs.writeFile(
+      path.join(dbDir, 'schema.prisma'),
+      schemaContent
+    );
+    logger.dim(`Using showcase schema with ${dbProvider} provider`);
+  } else {
+    // Generate schema programmatically
+    await fs.writeFile(
+      path.join(dbDir, 'schema.prisma'),
+      createPrismaSchema(dbProvider)
+    );
+  }
 
   // Create src/index.ts
   await fs.writeFile(
@@ -88,11 +117,17 @@ async function generatePrismaFiles(
     createZodSchemas()
   );
 
-  // Create .env.example
-  await fs.writeFile(
-    path.join(dbDir, '.env.example'),
-    'DATABASE_URL="postgresql://user:password@localhost:5432/mydb"\n'
-  );
+  // Create .env.example with appropriate DATABASE_URL
+  const envExample = usePostgres
+    ? 'DATABASE_URL="postgresql://postgres:postgres@localhost:5432/app"\n'
+    : 'DATABASE_URL="file:./dev.db"\n';
+  await fs.writeFile(path.join(dbDir, '.env.example'), envExample);
+
+  // Create .env with default value for local development
+  const envContent = usePostgres
+    ? 'DATABASE_URL="postgresql://postgres:postgres@db:5432/app"\n'
+    : 'DATABASE_URL="file:./dev.db"\n';
+  await fs.writeFile(path.join(dbDir, '.env'), envContent);
 }
 
 /**
@@ -153,7 +188,7 @@ function createPrismaTsConfig(): Record<string, unknown> {
 /**
  * Create Prisma schema
  */
-function createPrismaSchema(): string {
+function createPrismaSchema(provider: 'sqlite' | 'postgresql' = 'sqlite'): string {
   return `// This is your Prisma schema file
 // Learn more: https://pris.ly/d/prisma-schema
 
@@ -162,7 +197,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "${provider}"
   url      = env("DATABASE_URL")
 }
 
