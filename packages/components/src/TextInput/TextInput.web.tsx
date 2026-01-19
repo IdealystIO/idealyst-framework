@@ -123,9 +123,13 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  // Apply variants (for size and spacing)
+  // Apply variants (for size, type, and spacing)
   textInputStyles.useVariants({
     size,
+    type,
+    focused: isFocused,
+    hasError,
+    disabled,
     margin,
     marginVertical,
     marginHorizontal,

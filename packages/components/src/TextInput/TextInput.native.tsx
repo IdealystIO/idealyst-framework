@@ -201,9 +201,13 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     nativeA11yProps,
   ]);
 
-  // Apply variants to the stylesheet (for size and spacing)
+  // Apply variants to the stylesheet (for size, type, and spacing)
   textInputStyles.useVariants({
     size,
+    type,
+    focused: isFocused,
+    hasError,
+    disabled,
     margin,
     marginVertical,
     marginHorizontal,
