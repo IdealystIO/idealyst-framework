@@ -69,7 +69,11 @@ const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, si
       {...itemProps}
       ref={mergedRef}
       style={buttonResetStyles}
-      onClick={() => onPress(item)}
+      onClick={(e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onPress(item);
+      }}
       disabled={item.disabled}
       role="menuitem"
       aria-disabled={item.disabled}

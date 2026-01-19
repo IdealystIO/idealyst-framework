@@ -146,6 +146,39 @@ async function addTrpcToShared(projectPath: string, data: TemplateData): Promise
  * Create tRPC initialization (server-side)
  */
 function createTrpcInit(data: TemplateData): string {
+  // When Prisma is enabled, we need to define Context type explicitly to avoid
+  // TypeScript inference issues with Prisma's runtime types
+  const prismaImports = data.hasPrisma
+    ? `import { prisma, PrismaClient } from '@${data.workspaceScope}/database';`
+    : '';
+
+  const contextType = data.hasPrisma
+    ? `
+/**
+ * Context type - explicitly defined to avoid Prisma runtime type inference issues
+ */
+export interface Context {
+  req: CreateExpressContextOptions['req'];
+  res: CreateExpressContextOptions['res'];
+  prisma: PrismaClient;
+}`
+    : `
+export type Context = {
+  req: CreateExpressContextOptions['req'];
+  res: CreateExpressContextOptions['res'];
+};`;
+
+  const contextReturn = data.hasPrisma
+    ? `  return {
+    req,
+    res,
+    prisma,
+  };`
+    : `  return {
+    req,
+    res,
+  };`;
+
   return `/**
  * tRPC initialization
  */
@@ -153,20 +186,15 @@ function createTrpcInit(data: TemplateData): string {
 import { initTRPC } from '@trpc/server';
 import { ZodError } from 'zod';
 import type { CreateExpressContextOptions } from '@trpc/server/adapters/express';
-${data.hasPrisma ? `import { prisma } from '@${data.workspaceScope}/database';` : ''}
+${prismaImports}
+${contextType}
 
 /**
  * Create context for each request
  */
-export const createContext = ({ req, res }: CreateExpressContextOptions) => {
-  return {
-    req,
-    res,
-${data.hasPrisma ? '    prisma,' : ''}
-  };
-};
-
-export type Context = Awaited<ReturnType<typeof createContext>>;
+export function createContext({ req, res }: CreateExpressContextOptions): Context {
+${contextReturn}
+}
 
 /**
  * Initialize tRPC

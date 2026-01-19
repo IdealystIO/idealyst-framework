@@ -170,6 +170,7 @@ function SortableDataGrid() {
 | `onRowClick` | `(row: T, index: number) => void` | - | Row click handler |
 | `onSelectionChange` | `(rows: number[]) => void` | - | Selection change handler |
 | `onSort` | `(column: Column, direction: 'asc' \| 'desc') => void` | - | Sort handler |
+| `onColumnResize` | `(columnKey: string, width: number) => void` | - | Column resize handler (web only) |
 | `style` | `ViewStyle` | - | Container style |
 | `headerStyle` | `ViewStyle` | - | Header style |
 | `rowStyle` | `ViewStyle \| ((row: T, index: number) => ViewStyle)` | - | Row style |
@@ -184,7 +185,7 @@ function SortableDataGrid() {
 | `minWidth` | `number` | Minimum column width |
 | `maxWidth` | `number` | Maximum column width |
 | `sortable` | `boolean` | Enable sorting for this column |
-| `resizable` | `boolean` | Enable resizing (coming soon) |
+| `resizable` | `boolean` | Enable column resizing (web only) |
 | `accessor` | `(row: T) => any` | Custom value accessor |
 | `render` | `(value: any, row: T, index: number) => ReactNode` | Custom cell renderer |
 | `headerStyle` | `ViewStyle` | Header cell style |

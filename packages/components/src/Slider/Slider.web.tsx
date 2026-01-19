@@ -101,6 +101,7 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
     if (disabled) return;
 
     e.preventDefault();
+    e.stopPropagation();
 
     // Check if click is on the thumb
     const isThumbClick = thumbRef.current && thumbRef.current.contains(e.target as Node);
@@ -145,21 +146,27 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
 
     if (matchesKey(e, SLIDER_KEYS.increase)) {
       e.preventDefault();
+      e.stopPropagation();
       newValue = clampValue(value + step);
     } else if (matchesKey(e, SLIDER_KEYS.decrease)) {
       e.preventDefault();
+      e.stopPropagation();
       newValue = clampValue(value - step);
     } else if (matchesKey(e, SLIDER_KEYS.min)) {
       e.preventDefault();
+      e.stopPropagation();
       newValue = min;
     } else if (matchesKey(e, SLIDER_KEYS.max)) {
       e.preventDefault();
+      e.stopPropagation();
       newValue = max;
     } else if (matchesKey(e, SLIDER_KEYS.increaseLarge)) {
       e.preventDefault();
+      e.stopPropagation();
       newValue = clampValue(value + largeStep);
     } else if (matchesKey(e, SLIDER_KEYS.decreaseLarge)) {
       e.preventDefault();
+      e.stopPropagation();
       newValue = clampValue(value - largeStep);
     }
 

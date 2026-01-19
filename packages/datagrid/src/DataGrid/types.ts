@@ -24,6 +24,10 @@ export interface DataGridProps<T = any> {
   headerHeight?: number;
   onRowClick?: (row: T, index: number) => void;
   onSort?: (column: Column<T>, direction: 'asc' | 'desc') => void;
+  /** Callback when a column is resized. Receives the column key and the new width. Only called on mouse release. */
+  onColumnResize?: (columnKey: string, width: number) => void;
+  /** Resize mode: 'indicator' shows a line during drag (default), 'live' updates column width during drag */
+  columnResizeMode?: 'indicator' | 'live';
   virtualized?: boolean;
   height?: number | string;
   width?: number | string;

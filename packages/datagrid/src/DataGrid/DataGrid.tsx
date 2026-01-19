@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { Platform } from 'react-native';
 import { View, Text } from '@idealyst/components';
 import { ScrollView } from '../primitives/ScrollView';
@@ -13,6 +13,8 @@ export function DataGrid<T extends Record<string, any>>({
   headerHeight = 56,
   onRowClick,
   onSort,
+  onColumnResize,
+  columnResizeMode = 'indicator',
   virtualized = true,
   height = 400,
   width = '100%',
@@ -29,12 +31,123 @@ export function DataGrid<T extends Record<string, any>>({
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [scrollTop, setScrollTop] = useState(0);
 
+  // Column resize state
+  const [columnWidths, setColumnWidths] = useState<Record<string, number>>(() => {
+    const widths: Record<string, number> = {};
+    columns.forEach(col => {
+      widths[col.key] = col.width || col.minWidth || 120;
+    });
+    return widths;
+  });
+  const [isResizing, setIsResizing] = useState(false);
+  const resizeRef = useRef<{ columnKey: string; startX: number; startWidth: number } | null>(null);
+  const indicatorRef = useRef<HTMLDivElement>(null);
+  const columnWidthsRef = useRef(columnWidths);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    columnWidthsRef.current = columnWidths;
+  }, [columnWidths]);
+
+  // Sync column widths when columns prop changes
+  useEffect(() => {
+    setColumnWidths(prev => {
+      const widths: Record<string, number> = {};
+      columns.forEach(col => {
+        // Keep existing width if we have one, otherwise use column definition
+        widths[col.key] = prev[col.key] ?? col.width ?? col.minWidth ?? 120;
+      });
+      return widths;
+    });
+  }, [columns]);
+
+  // Calculate indicator position without triggering re-render
+  const calculateIndicatorPosition = useCallback((currentX: number) => {
+    if (!resizeRef.current) return 0;
+    const { columnKey, startX, startWidth } = resizeRef.current;
+    const column = columns.find(c => c.key === columnKey);
+    const minW = column?.minWidth || 50;
+    const maxW = column?.maxWidth || Infinity;
+    const delta = currentX - startX;
+    const newWidth = Math.min(maxW, Math.max(minW, startWidth + delta));
+
+    // Calculate X position: sum of widths of columns before this one + new width
+    let xPos = 0;
+    for (const col of columns) {
+      if (col.key === columnKey) {
+        xPos += newWidth;
+        break;
+      }
+      xPos += columnWidthsRef.current[col.key] || col.width || 120;
+    }
+    return xPos;
+  }, [columns]);
+
+  // Handle resize mouse events - uses DOM manipulation for indicator mode, state for live mode
+  const handleResizeStart = useCallback((e: React.MouseEvent, columnKey: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const startWidth = columnWidthsRef.current[columnKey] || 120;
+    resizeRef.current = { columnKey, startX: e.clientX, startWidth };
+    setIsResizing(true);
+
+    // Set initial indicator position (indicator mode only)
+    if (columnResizeMode === 'indicator' && indicatorRef.current) {
+      indicatorRef.current.style.left = `${calculateIndicatorPosition(e.clientX)}px`;
+    }
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      if (!resizeRef.current) return;
+
+      if (columnResizeMode === 'live') {
+        // Live mode: update column width state during drag
+        const { columnKey: key, startX, startWidth: sw } = resizeRef.current;
+        const column = columns.find(c => c.key === key);
+        const minW = column?.minWidth || 50;
+        const maxW = column?.maxWidth || Infinity;
+        const delta = moveEvent.clientX - startX;
+        const newWidth = Math.min(maxW, Math.max(minW, sw + delta));
+        setColumnWidths(prev => ({ ...prev, [key]: newWidth }));
+      } else {
+        // Indicator mode: update indicator position directly in DOM - no React re-render
+        if (indicatorRef.current) {
+          indicatorRef.current.style.left = `${calculateIndicatorPosition(moveEvent.clientX)}px`;
+        }
+      }
+    };
+
+    const handleMouseUp = (upEvent: MouseEvent) => {
+      if (resizeRef.current) {
+        const { columnKey: key, startX, startWidth: sw } = resizeRef.current;
+        const column = columns.find(c => c.key === key);
+        const minW = column?.minWidth || 50;
+        const maxW = column?.maxWidth || Infinity;
+        const delta = upEvent.clientX - startX;
+        const newWidth = Math.min(maxW, Math.max(minW, sw + delta));
+
+        // Apply the new width on mouse up (indicator mode) or just finalize (live mode)
+        if (columnResizeMode === 'indicator') {
+          setColumnWidths(prev => ({ ...prev, [key]: newWidth }));
+        }
+        // onColumnResize is always called on release, regardless of mode
+        onColumnResize?.(key, newWidth);
+      }
+      resizeRef.current = null;
+      setIsResizing(false);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  }, [columns, onColumnResize, calculateIndicatorPosition, columnResizeMode]);
+
   // Calculate minimum table width for horizontal scrolling
   const minTableWidth = useMemo(() => {
     return columns.reduce((total, column) => {
-      return total + (column.width ? (typeof column.width === 'number' ? column.width : 120) : 120);
+      return total + (columnWidths[column.key] || column.width || 120);
     }, 0);
-  }, [columns]);
+  }, [columns, columnWidths]);
 
   // Virtualization calculations
   const visibleRange = useMemo(() => {
@@ -43,7 +156,7 @@ export function DataGrid<T extends Record<string, any>>({
     }
 
     const containerHeight = height - headerHeight;
-    const overscan = 3; // Render extra rows above and below visible area to prevent flickering
+    const overscan = 5; // Render extra rows above and below visible area to prevent flickering
 
     // Calculate the raw start index based on scroll position
     const rawStartIndex = Math.floor(scrollTop / rowHeight);
@@ -80,8 +193,8 @@ export function DataGrid<T extends Record<string, any>>({
 
   // Helper function to get consistent column styles
   // Always use fixed widths to ensure header and body tables stay aligned
-  const getColumnStyle = (column: Column<T>) => {
-    const width = column.width || column.minWidth || 120;
+  const getColumnStyle = useCallback((column: Column<T>) => {
+    const width = columnWidths[column.key] || column.width || column.minWidth || 120;
     return {
       boxSizing: 'border-box' as const,
       flexShrink: 0,
@@ -90,7 +203,7 @@ export function DataGrid<T extends Record<string, any>>({
       minWidth: width,
       maxWidth: column.maxWidth || width,
     };
-  };
+  }, [columnWidths]);
 
   const handleSort = useCallback((column: Column<T>) => {
     if (!column.sortable) return;
@@ -118,6 +231,8 @@ export function DataGrid<T extends Record<string, any>>({
     onRowClick?.(row, index);
   }, [selectedRows, onSelectionChange, multiSelect, onRowClick]);
 
+  const isWeb = Platform.OS === 'web';
+
   const renderHeader = () => (
     <TableRow style={{
       ...(dataGridStyles.headerRow as any)({ stickyHeader }),
@@ -127,11 +242,13 @@ export function DataGrid<T extends Record<string, any>>({
       {columns.map((column) => (
         <TableCell
           key={column.key}
-          width={column.width}
+          width={columnWidths[column.key] || column.width}
           style={{
             ...dataGridStyles.headerCell,
             ...getColumnStyle(column),
             ...cellStyle,
+            ...column.headerStyle,
+            position: 'relative' as const,
           }}
           onPress={column.sortable ? () => handleSort(column) : undefined}
         >
@@ -150,20 +267,42 @@ export function DataGrid<T extends Record<string, any>>({
               )}
             </Text>
           )}
+          {/* Resize handle */}
+          {isWeb && column.resizable && (
+            <div
+              onMouseDown={(e) => handleResizeStart(e, column.key)}
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: 8,
+                cursor: 'col-resize',
+                backgroundColor: 'transparent',
+                zIndex: 1,
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
+              }}
+            />
+          )}
         </TableCell>
       ))}
     </TableRow>
   );
 
   // Render colgroup to define fixed column widths for table-layout: fixed
-  const renderColGroup = () => (
+  const renderColGroup = useCallback(() => (
     <colgroup>
       {columns.map((column) => {
-        const width = column.width || column.minWidth || 120;
+        const width = columnWidths[column.key] || column.width || column.minWidth || 120;
         return <col key={column.key} style={{ width, minWidth: width, maxWidth: width }} />;
       })}
     </colgroup>
-  );
+  ), [columns, columnWidths]);
 
   const renderRow = (item: T, virtualIndex: number) => {
     const actualIndex = virtualized ? visibleRange.start + virtualIndex : virtualIndex;
@@ -213,7 +352,6 @@ export function DataGrid<T extends Record<string, any>>({
   };
 
   const containerHeight = typeof height === 'number' ? height : undefined;
-  const isWeb = Platform.OS === 'web';
 
   // For web with sticky header, use a single table with sticky thead
   if (isWeb && stickyHeader) {
@@ -223,6 +361,7 @@ export function DataGrid<T extends Record<string, any>>({
         width,
         height,
         ...style,
+        position: 'relative' as const,
       }}>
         <div
           style={{
@@ -233,6 +372,23 @@ export function DataGrid<T extends Record<string, any>>({
           } as React.CSSProperties}
           onScroll={handleScroll as any}
         >
+          {/* Resize indicator line - only shown in indicator mode, positioned via ref for performance */}
+          {columnResizeMode === 'indicator' && (
+            <div
+              ref={indicatorRef}
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: 2,
+                backgroundColor: '#3b82f6',
+                zIndex: 1000,
+                pointerEvents: 'none',
+                display: isResizing ? 'block' : 'none',
+              }}
+            />
+          )}
           <Table style={{ width: minTableWidth, minWidth: minTableWidth }}>
             {renderColGroup()}
             <TableHeader style={{
@@ -245,29 +401,44 @@ export function DataGrid<T extends Record<string, any>>({
             }}>
               {renderHeader()}
             </TableHeader>
-            <TableBody>
-              {virtualized && visibleRange.offsetY > 0 && (
-                <TableRow style={{ ...dataGridStyles.spacerRow, height: visibleRange.offsetY }}>
-                  <TableCell
-                    style={{ ...dataGridStyles.spacerCell, height: visibleRange.offsetY }}
+            {virtualized ? (
+              <TableBody style={{ position: 'relative' } as any}>
+                <tr style={{ height: 0, padding: 0, margin: 0, border: 'none' }}>
+                  <td
                     colSpan={columns.length}
+                    style={{
+                      height: data.length * rowHeight,
+                      padding: 0,
+                      margin: 0,
+                      border: 'none',
+                      position: 'relative',
+                    }}
                   >
-                    <View />
-                  </TableCell>
-                </TableRow>
-              )}
-              {visibleData.map((item, index) => renderRow(item, index))}
-              {virtualized && (data.length - visibleRange.end - 1) > 0 && (
-                <TableRow style={{ ...dataGridStyles.spacerRow, height: (data.length - visibleRange.end - 1) * rowHeight }}>
-                  <TableCell
-                    style={{ ...dataGridStyles.spacerCell, height: (data.length - visibleRange.end - 1) * rowHeight }}
-                    colSpan={columns.length}
-                  >
-                    <View />
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        transform: `translateY(${visibleRange.offsetY}px)`,
+                        willChange: 'transform',
+                      }}
+                    >
+                      <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+                        {renderColGroup()}
+                        <tbody>
+                          {visibleData.map((item, index) => renderRow(item, index))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </TableBody>
+            ) : (
+              <TableBody>
+                {visibleData.map((item, index) => renderRow(item, index))}
+              </TableBody>
+            )}
           </Table>
         </div>
       </View>
@@ -281,7 +452,25 @@ export function DataGrid<T extends Record<string, any>>({
       width,
       height,
       ...style,
+      position: 'relative' as const,
     }}>
+      {/* Resize indicator line (web only, indicator mode) - positioned via ref for performance */}
+      {isWeb && columnResizeMode === 'indicator' && (
+        <div
+          ref={indicatorRef}
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            width: 2,
+            backgroundColor: '#3b82f6',
+            zIndex: 1000,
+            pointerEvents: 'none',
+            display: isResizing ? 'block' : 'none',
+          }}
+        />
+      )}
       <ScrollView
         style={{
           ...dataGridStyles.scrollView,
@@ -301,29 +490,44 @@ export function DataGrid<T extends Record<string, any>>({
             <TableHeader style={(dataGridStyles.header as any)({ stickyHeader: false })}>
               {renderHeader()}
             </TableHeader>
-            <TableBody>
-              {virtualized && visibleRange.offsetY > 0 && (
-                <TableRow style={{ ...dataGridStyles.spacerRow, height: visibleRange.offsetY }}>
-                  <TableCell
-                    style={{ ...dataGridStyles.spacerCell, height: visibleRange.offsetY }}
+            {virtualized ? (
+              <TableBody style={{ position: 'relative' } as any}>
+                <tr style={{ height: 0, padding: 0, margin: 0, border: 'none' }}>
+                  <td
                     colSpan={columns.length}
+                    style={{
+                      height: data.length * rowHeight,
+                      padding: 0,
+                      margin: 0,
+                      border: 'none',
+                      position: 'relative',
+                    }}
                   >
-                    <View />
-                  </TableCell>
-                </TableRow>
-              )}
-              {visibleData.map((item, index) => renderRow(item, index))}
-              {virtualized && (data.length - visibleRange.end - 1) > 0 && (
-                <TableRow style={{ ...dataGridStyles.spacerRow, height: (data.length - visibleRange.end - 1) * rowHeight }}>
-                  <TableCell
-                    style={{ ...dataGridStyles.spacerCell, height: (data.length - visibleRange.end - 1) * rowHeight }}
-                    colSpan={columns.length}
-                  >
-                    <View />
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        transform: `translateY(${visibleRange.offsetY}px)`,
+                        willChange: 'transform',
+                      }}
+                    >
+                      <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+                        {renderColGroup()}
+                        <tbody>
+                          {visibleData.map((item, index) => renderRow(item, index))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </TableBody>
+            ) : (
+              <TableBody>
+                {visibleData.map((item, index) => renderRow(item, index))}
+              </TableBody>
+            )}
           </Table>
         </View>
       </ScrollView>

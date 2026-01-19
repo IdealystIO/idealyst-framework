@@ -64,10 +64,8 @@ const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // Only stop propagation if we have a handler
-    // Otherwise, let clicks bubble up to parent handlers (e.g., Menu triggers)
+    e.stopPropagation();
     if (!isDisabled && pressHandler) {
-      e.stopPropagation();
       pressHandler();
     }
   };

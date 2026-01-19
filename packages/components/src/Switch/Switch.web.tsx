@@ -39,7 +39,9 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   accessibilityDescribedBy,
   accessibilityChecked,
 }, ref) => {
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!disabled && onChange) {
       onChange(!checked);
     }

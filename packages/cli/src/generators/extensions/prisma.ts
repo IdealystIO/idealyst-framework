@@ -88,6 +88,22 @@ async function generatePrismaFiles(
       );
     }
 
+    // Add pothos generator if GraphQL is enabled
+    if (data.hasGraphql) {
+      // Insert pothos generator after the client generator
+      const pothosGenerator = `
+generator pothos {
+  provider     = "prisma-pothos-types"
+  output       = "./generated/pothos.ts"
+  clientOutput = "./client"
+}
+`;
+      schemaContent = schemaContent.replace(
+        /(generator client \{[^}]+\})/,
+        `$1\n${pothosGenerator}`
+      );
+    }
+
     // Process template variables
     const { processTemplateContent } = await import('../../templates/processor');
     schemaContent = processTemplateContent(schemaContent, data);
@@ -101,7 +117,7 @@ async function generatePrismaFiles(
     // Generate schema programmatically
     await fs.writeFile(
       path.join(dbDir, 'schema.prisma'),
-      createPrismaSchema(dbProvider)
+      createPrismaSchema(dbProvider, data.hasGraphql)
     );
   }
 
@@ -134,15 +150,30 @@ async function generatePrismaFiles(
  * Create Prisma package.json
  */
 function createPrismaPackageJson(data: TemplateData): Record<string, unknown> {
+  const devDeps: Record<string, string> = {
+    ...DEPENDENCIES.prismaDev,
+    'tsx': '^4.7.0',
+    'typescript': '^5.0.0',
+  };
+
+  // Add @pothos/plugin-prisma for the prisma-pothos-types generator
+  // This is needed so `prisma generate` can find the generator
+  if (data.hasGraphql) {
+    devDeps['@pothos/plugin-prisma'] = DEPENDENCIES.graphqlServerPrisma['@pothos/plugin-prisma'];
+  }
+
   return {
     name: `@${data.workspaceScope}/database`,
     version: data.version,
+    type: 'module',
     main: 'src/index.ts',
     types: 'src/index.ts',
     exports: {
       '.': './src/index.ts',
       './client': './src/index.ts',
       './schemas': './src/schemas.ts',
+      // Export pothos types when GraphQL is enabled
+      ...(data.hasGraphql ? { './pothos': './generated/pothos.ts' } : {}),
     },
     scripts: {
       'build': 'tsc',
@@ -156,11 +187,7 @@ function createPrismaPackageJson(data: TemplateData): Record<string, unknown> {
       ...DEPENDENCIES.prisma,
       'zod': '^3.22.0',
     },
-    devDependencies: {
-      ...DEPENDENCIES.prismaDev,
-      'tsx': '^4.7.0',
-      'typescript': '^5.0.0',
-    },
+    devDependencies: devDeps,
   };
 }
 
@@ -177,10 +204,9 @@ function createPrismaTsConfig(): Record<string, unknown> {
       strict: true,
       skipLibCheck: true,
       outDir: './dist',
-      rootDir: './src',
       declaration: true,
     },
-    include: ['src/**/*'],
+    include: ['src/**/*', 'generated/**/*'],
     exclude: ['node_modules', 'dist'],
   };
 }
@@ -188,14 +214,23 @@ function createPrismaTsConfig(): Record<string, unknown> {
 /**
  * Create Prisma schema
  */
-function createPrismaSchema(provider: 'sqlite' | 'postgresql' = 'sqlite'): string {
+function createPrismaSchema(provider: 'sqlite' | 'postgresql' = 'sqlite', hasGraphql: boolean = false): string {
+  const pothosGenerator = hasGraphql ? `
+generator pothos {
+  provider     = "prisma-pothos-types"
+  output       = "./generated/pothos.ts"
+  clientOutput = "./client"
+}
+` : '';
+
   return `// This is your Prisma schema file
 // Learn more: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/client"
 }
-
+${pothosGenerator}
 datasource db {
   provider = "${provider}"
   url      = env("DATABASE_URL")
@@ -253,7 +288,7 @@ function createPrismaIndex(): string {
  * Database package exports
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/client/index.js';
 
 // Prevent multiple instances of Prisma Client in development
 declare global {
@@ -267,7 +302,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export { PrismaClient };
-export * from '@prisma/client';
+export * from '../generated/client/index.js';
 `;
 }
 

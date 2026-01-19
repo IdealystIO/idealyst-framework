@@ -88,6 +88,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     if (onChangeText) {
       onChangeText(e.target.value);
     }

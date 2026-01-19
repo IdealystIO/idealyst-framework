@@ -61,7 +61,9 @@ const Chip = forwardRef<IdealystElement, ChipProps>(({
   const deleteButtonProps = getWebProps([(chipStyles.deleteButton as any)({ size })]);
   const deleteIconProps = getWebProps([(chipStyles.deleteIcon as any)({ size, intent, type, selected: isSelected })]);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (disabled) return;
     // Prefer onPress, fall back to deprecated onClick
     const handler = onPress ?? onClick;
@@ -71,6 +73,7 @@ const Chip = forwardRef<IdealystElement, ChipProps>(({
   };
 
   const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     if (disabled) return;
     if (onDelete) {

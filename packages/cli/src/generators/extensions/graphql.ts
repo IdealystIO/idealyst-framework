@@ -63,6 +63,14 @@ async function addGraphqlToApi(projectPath: string, data: TemplateData): Promise
     path.join(apiDir, 'package.json'),
     DEPENDENCIES.graphqlServer
   );
+
+  // Add Prisma plugin if Prisma is enabled
+  if (data.hasPrisma) {
+    await addDependencies(
+      path.join(apiDir, 'package.json'),
+      DEPENDENCIES.graphqlServerPrisma
+    );
+  }
 }
 
 /**
@@ -128,35 +136,47 @@ export const schema = builder.toSchema();
  * Create Pothos schema builder
  */
 function createPothosBuilder(data: TemplateData): string {
-  let imports = `import SchemaBuilder from '@pothos/core';`;
-  let builderConfig = '';
-
   if (data.hasPrisma) {
-    imports += `
-import PrismaPlugin from '@pothos/plugin-prisma';
-import type PrismaTypes from '@pothos/plugin-prisma/generated';
-import { prisma } from '@${data.workspaceScope}/database';`;
+    // With Prisma: use @pothos/plugin-prisma for type-safe GraphQL from models
+    return `/**
+ * Pothos schema builder with Prisma integration
+ */
 
-    builderConfig = `
+import SchemaBuilder from '@pothos/core';
+import PrismaPlugin from '@pothos/plugin-prisma';
+import type PrismaTypes from '@${data.workspaceScope}/database/pothos';
+import { prisma, Prisma } from '@${data.workspaceScope}/database';
+
+// Export prisma for use in resolvers
+export { prisma };
+
+export const builder = new SchemaBuilder<{
+  PrismaTypes: PrismaTypes;
+}>({
   plugins: [PrismaPlugin],
   prisma: {
     client: prisma,
-  },`;
+    // Required for the Prisma plugin - provides Prisma's data model metadata
+    dmmf: Prisma.dmmf,
+  },
+});
+
+// Initialize Query and Mutation types
+builder.queryType({});
+builder.mutationType({});
+`;
   }
 
+  // Without Prisma: simple builder
   return `/**
  * Pothos schema builder
  */
 
-${imports}
+import SchemaBuilder from '@pothos/core';
 
 export const builder = new SchemaBuilder<{
-  Context: {
-${data.hasPrisma ? '    prisma: typeof prisma;' : ''}
-  };${data.hasPrisma ? `
-  PrismaTypes: PrismaTypes;` : ''}
-}>({${builderConfig}
-});
+  Context: {};
+}>({});
 
 // Initialize Query and Mutation types
 builder.queryType({});
@@ -168,11 +188,90 @@ builder.mutationType({});
  * Create example resolvers
  */
 function createExampleResolvers(data: TemplateData): string {
+  const prismaResolvers = data.hasPrisma ? `
+// Item type - using Prisma plugin for type-safe GraphQL from Prisma models
+builder.prismaObject('Item', {
+  fields: (t) => ({
+    id: t.exposeID('id'),
+    title: t.exposeString('title'),
+    description: t.exposeString('description', { nullable: true }),
+    completed: t.exposeBoolean('completed'),
+    createdAt: t.field({
+      type: 'String',
+      resolve: (item) => item.createdAt.toISOString(),
+    }),
+  }),
+});
+
+// Items query
+builder.queryField('items', (t) =>
+  t.prismaField({
+    type: ['Item'],
+    resolve: async (query) => {
+      return await prisma.item.findMany({
+        ...query,
+        orderBy: { createdAt: 'desc' },
+      });
+    },
+  })
+);
+
+// Create item mutation
+builder.mutationField('createItem', (t) =>
+  t.prismaField({
+    type: 'Item',
+    args: {
+      title: t.arg.string({ required: true }),
+      description: t.arg.string(),
+    },
+    resolve: async (query, _, { title, description }) => {
+      return await prisma.item.create({
+        ...query,
+        data: { title, description },
+      });
+    },
+  })
+);
+
+// Toggle item mutation
+builder.mutationField('toggleItem', (t) =>
+  t.prismaField({
+    type: 'Item',
+    args: {
+      id: t.arg.string({ required: true }),
+    },
+    resolve: async (query, _, { id }) => {
+      const item = await prisma.item.findUnique({ where: { id } });
+      if (!item) throw new Error('Item not found');
+      return await prisma.item.update({
+        ...query,
+        where: { id },
+        data: { completed: !item.completed },
+      });
+    },
+  })
+);
+
+// Delete item mutation
+builder.mutationField('deleteItem', (t) =>
+  t.field({
+    type: 'Boolean',
+    args: {
+      id: t.arg.string({ required: true }),
+    },
+    resolve: async (_, { id }) => {
+      await prisma.item.delete({ where: { id } });
+      return true;
+    },
+  })
+);
+` : '';
+
   return `/**
  * Example GraphQL resolvers
  */
 
-import { builder } from '../builder';
+import { builder${data.hasPrisma ? ', prisma' : ''} } from '../builder';
 
 // Health check query
 builder.queryField('health', (t) =>
@@ -203,17 +302,7 @@ builder.mutationField('echo', (t) =>
     resolve: (_, { message }) => message,
   })
 );
-${data.hasPrisma ? `
-// Example User type (uncomment to use with Prisma)
-// builder.prismaObject('User', {
-//   fields: (t) => ({
-//     id: t.exposeID('id'),
-//     email: t.exposeString('email'),
-//     name: t.exposeString('name', { nullable: true }),
-//     posts: t.relation('posts'),
-//   }),
-// });
-` : ''}
+${prismaResolvers}
 `;
 }
 

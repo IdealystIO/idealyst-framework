@@ -9,18 +9,17 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, gql } from '../graphql/client';
 import {
+  Screen,
   View,
   Text,
   Button,
   Input,
   Card,
   Chip,
-  ScrollView,
   ActivityIndicator,
   Alert,
   Divider,
 } from '@idealyst/components';
-import { defineStyle } from '@idealyst/theme';
 
 // =============================================================================
 // GraphQL Queries & Mutations
@@ -284,22 +283,22 @@ export function GraphQLDemoScreen() {
     if (activeTab === 'posts' && postsData?.postStats) {
       const stats = postsData.postStats;
       return (
-        <View style={styles.statsContainer}>
-          <Card style={styles.statCard}>
-            <Text style={styles.statValue}>{stats.totalPosts}</Text>
-            <Text style={styles.statLabel}>Total Posts</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }} padding="md">
+          <Card padding="md" style={{ flex: 1, alignItems: 'center' }}>
+            <Text typography="h4" intent="primary">{stats.totalPosts}</Text>
+            <Text typography="caption" color="secondary">Total Posts</Text>
           </Card>
-          <Card style={styles.statCard}>
-            <Text style={styles.statValue}>{stats.publishedPosts}</Text>
-            <Text style={styles.statLabel}>Published</Text>
+          <Card padding="md" style={{ flex: 1, alignItems: 'center' }}>
+            <Text typography="h4" intent="primary">{stats.publishedPosts}</Text>
+            <Text typography="caption" color="secondary">Published</Text>
           </Card>
-          <Card style={styles.statCard}>
-            <Text style={styles.statValue}>{stats.totalViews}</Text>
-            <Text style={styles.statLabel}>Total Views</Text>
+          <Card padding="md" style={{ flex: 1, alignItems: 'center' }}>
+            <Text typography="h4" intent="primary">{stats.totalViews}</Text>
+            <Text typography="caption" color="secondary">Total Views</Text>
           </Card>
-          <Card style={styles.statCard}>
-            <Text style={styles.statValue}>{stats.totalLikes}</Text>
-            <Text style={styles.statLabel}>Total Likes</Text>
+          <Card padding="md" style={{ flex: 1, alignItems: 'center' }}>
+            <Text typography="h4" intent="primary">{stats.totalLikes}</Text>
+            <Text typography="caption" color="secondary">Total Likes</Text>
           </Card>
         </View>
       );
@@ -308,18 +307,18 @@ export function GraphQLDemoScreen() {
     if (activeTab === 'users' && usersData?.userStats) {
       const stats = usersData.userStats;
       return (
-        <View style={styles.statsContainer}>
-          <Card style={styles.statCard}>
-            <Text style={styles.statValue}>{stats.totalUsers}</Text>
-            <Text style={styles.statLabel}>Total Users</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }} padding="md">
+          <Card padding="md" style={{ flex: 1, alignItems: 'center' }}>
+            <Text typography="h4" intent="primary">{stats.totalUsers}</Text>
+            <Text typography="caption" color="secondary">Total Users</Text>
           </Card>
-          <Card style={styles.statCard}>
-            <Text style={styles.statValue}>{stats.newUsersThisWeek}</Text>
-            <Text style={styles.statLabel}>New This Week</Text>
+          <Card padding="md" style={{ flex: 1, alignItems: 'center' }}>
+            <Text typography="h4" intent="primary">{stats.newUsersThisWeek}</Text>
+            <Text typography="caption" color="secondary">New This Week</Text>
           </Card>
-          <Card style={styles.statCard}>
-            <Text style={styles.statValue}>{stats.usersWithPosts}</Text>
-            <Text style={styles.statLabel}>With Posts</Text>
+          <Card padding="md" style={{ flex: 1, alignItems: 'center' }}>
+            <Text typography="h4" intent="primary">{stats.usersWithPosts}</Text>
+            <Text typography="caption" color="secondary">With Posts</Text>
           </Card>
         </View>
       );
@@ -330,17 +329,21 @@ export function GraphQLDemoScreen() {
 
   // Render Post Card
   const renderPostCard = (post: Post) => (
-    <Card key={post.id} style={styles.postCard}>
-      <View style={styles.postHeader}>
-        <View style={styles.postAuthor}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
+    <Card key={post.id} padding="md" gap="sm">
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <View
+            background="primary"
+            radius="full"
+            style={{ width: 40, height: 40, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>
               {post.author.name?.[0]?.toUpperCase() || post.author.email[0].toUpperCase()}
             </Text>
           </View>
           <View>
-            <Text style={styles.authorName}>{post.author.name || 'Anonymous'}</Text>
-            <Text style={styles.postDate}>
+            <Text weight="semibold">{post.author.name || 'Anonymous'}</Text>
+            <Text typography="caption" color="secondary">
               {new Date(post.createdAt).toLocaleDateString()}
             </Text>
           </View>
@@ -352,42 +355,42 @@ export function GraphQLDemoScreen() {
         )}
       </View>
 
-      <Text style={styles.postTitle}>{post.title}</Text>
-      <Text style={styles.postContent} numberOfLines={3}>
+      <Text typography="h5" weight="bold">{post.title}</Text>
+      <Text color="secondary" numberOfLines={3}>
         {post.excerpt || post.content}
       </Text>
 
       {post.tags && (
-        <View style={styles.tagsContainer}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
           {post.tags.split(',').map((tag, i) => (
-            <Chip key={i} size="sm" variant="outline">
+            <Chip key={i} size="sm" type="outlined">
               {tag.trim()}
             </Chip>
           ))}
         </View>
       )}
 
-      <View style={styles.postActions}>
+      <View style={{ flexDirection: 'row', gap: 8 }}>
         <Button
-          variant="ghost"
+          type="text"
           size="sm"
           onPress={() => handleLikePost(post.id)}
-          leftIcon="mdi:heart"
+          leftIcon="heart"
         >
           {post.likes}
         </Button>
         <Button
-          variant="ghost"
+          type="text"
           size="sm"
-          leftIcon="mdi:eye"
+          leftIcon="eye"
         >
           {post.views}
         </Button>
         <Button
-          variant="ghost"
+          type="text"
           size="sm"
           onPress={() => setCommentingOn(commentingOn === post.id ? null : post.id)}
-          leftIcon="mdi:comment"
+          leftIcon="comment"
         >
           {post.commentCount}
         </Button>
@@ -395,13 +398,17 @@ export function GraphQLDemoScreen() {
 
       {/* Comments Section */}
       {post.comments.length > 0 && (
-        <View style={styles.commentsSection}>
+        <View gap="sm">
           <Divider />
-          <Text style={styles.commentsTitle}>Recent Comments</Text>
+          <Text weight="semibold">Recent Comments</Text>
           {post.comments.slice(0, 3).map((comment) => (
-            <View key={comment.id} style={styles.comment}>
-              <Text style={styles.commentAuthor}>{comment.author.name || 'Anonymous'}</Text>
-              <Text style={styles.commentContent}>{comment.content}</Text>
+            <View
+              key={comment.id}
+              padding="sm"
+              style={{ borderLeftWidth: 2, borderLeftColor: '#ccc' }}
+            >
+              <Text typography="caption" weight="semibold">{comment.author.name || 'Anonymous'}</Text>
+              <Text typography="caption" color="secondary">{comment.content}</Text>
             </View>
           ))}
         </View>
@@ -409,17 +416,16 @@ export function GraphQLDemoScreen() {
 
       {/* Add Comment Form */}
       {commentingOn === post.id && (
-        <View style={styles.addCommentForm}>
+        <View gap="sm">
           <Divider />
           <Input
             placeholder="Write a comment..."
             value={newComment}
             onChangeText={setNewComment}
-            multiline
           />
-          <View style={styles.commentActions}>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 8 }}>
             <Button
-              variant="ghost"
+              type="text"
               size="sm"
               onPress={() => setCommentingOn(null)}
             >
@@ -428,9 +434,9 @@ export function GraphQLDemoScreen() {
             <Button
               size="sm"
               onPress={() => handleAddComment(post.id, post.author.id)}
-              loading={creatingComment}
+              disabled={creatingComment}
             >
-              Comment
+              {creatingComment ? 'Posting...' : 'Comment'}
             </Button>
           </View>
         </View>
@@ -440,39 +446,47 @@ export function GraphQLDemoScreen() {
 
   // Render User Card
   const renderUserCard = (user: User) => (
-    <Card key={user.id} style={styles.userCard}>
-      <View style={styles.userHeader}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>
+    <Card key={user.id} padding="md" gap="sm">
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <View
+          background="primary"
+          radius="full"
+          style={{ width: 40, height: 40, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Text style={{ color: '#fff', fontWeight: 'bold' }}>
             {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
           </Text>
         </View>
-        <View style={styles.userInfo}>
-          <Text style={styles.userName}>{user.name || 'Anonymous'}</Text>
-          <Text style={styles.userEmail}>{user.email}</Text>
+        <View style={{ flex: 1 }}>
+          <Text typography="h5" weight="bold">{user.name || 'Anonymous'}</Text>
+          <Text typography="caption" color="secondary">{user.email}</Text>
         </View>
       </View>
 
-      {user.bio && <Text style={styles.userBio}>{user.bio}</Text>}
+      {user.bio && <Text color="secondary">{user.bio}</Text>}
 
-      <View style={styles.userStats}>
-        <View style={styles.userStat}>
-          <Text style={styles.userStatValue}>{user.postCount}</Text>
-          <Text style={styles.userStatLabel}>Posts</Text>
+      <View style={{ flexDirection: 'row', gap: 24 }}>
+        <View style={{ alignItems: 'center' }}>
+          <Text typography="h4" intent="primary">{user.postCount}</Text>
+          <Text typography="caption" color="secondary">Posts</Text>
         </View>
-        <View style={styles.userStat}>
-          <Text style={styles.userStatValue}>{user.commentCount}</Text>
-          <Text style={styles.userStatLabel}>Comments</Text>
+        <View style={{ alignItems: 'center' }}>
+          <Text typography="h4" intent="primary">{user.commentCount}</Text>
+          <Text typography="caption" color="secondary">Comments</Text>
         </View>
       </View>
 
       {user.posts.length > 0 && (
-        <View style={styles.recentPosts}>
-          <Text style={styles.recentPostsTitle}>Recent Posts</Text>
+        <View gap="xs">
+          <Text weight="semibold">Recent Posts</Text>
           {user.posts.map((post) => (
-            <View key={post.id} style={styles.recentPost}>
-              <Text style={styles.recentPostTitle}>{post.title}</Text>
-              <Text style={styles.recentPostMeta}>
+            <View
+              key={post.id}
+              padding="sm"
+              style={{ borderLeftWidth: 2, borderLeftColor: '#6366f1' }}
+            >
+              <Text weight="medium">{post.title}</Text>
+              <Text typography="caption" color="secondary">
                 {post.views} views · {post.likes} likes
               </Text>
             </View>
@@ -486,443 +500,164 @@ export function GraphQLDemoScreen() {
   const error = activeTab === 'posts' ? postsError : usersError;
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>GraphQL Demo</Text>
-        <Text style={styles.subtitle}>
-          Demonstrates complex queries with nested relations using Apollo Client
-        </Text>
-      </View>
+    <Screen background="primary" padding="lg" scrollable>
+      <View gap="lg">
+        {/* Header */}
+        <View gap="sm">
+          <Text typography="h3">GraphQL Demo</Text>
+          <Text color="secondary">
+            Demonstrates complex queries with nested relations using Apollo Client
+          </Text>
+        </View>
 
-      {/* Tabs */}
-      <View style={styles.tabs}>
-        <Button
-          variant={activeTab === 'posts' ? 'filled' : 'outline'}
-          onPress={() => setActiveTab('posts')}
-          leftIcon="mdi:post"
-        >
-          Posts
-        </Button>
-        <Button
-          variant={activeTab === 'users' ? 'filled' : 'outline'}
-          onPress={() => setActiveTab('users')}
-          leftIcon="mdi:account-group"
-        >
-          Users
-        </Button>
-      </View>
-
-      {/* Stats */}
-      {renderStats()}
-
-      {/* Search (Posts only) */}
-      {activeTab === 'posts' && (
-        <View style={styles.searchContainer}>
-          <Input
-            placeholder="Search posts..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            leftIcon="mdi:magnify"
-          />
+        {/* Tabs */}
+        <View style={{ flexDirection: 'row', gap: 8 }}>
           <Button
-            onPress={() => setShowCreatePost(!showCreatePost)}
-            leftIcon="mdi:plus"
+            type={activeTab === 'posts' ? 'contained' : 'outlined'}
+            onPress={() => setActiveTab('posts')}
+            leftIcon="file-document"
           >
-            New Post
+            Posts
+          </Button>
+          <Button
+            type={activeTab === 'users' ? 'contained' : 'outlined'}
+            onPress={() => setActiveTab('users')}
+            leftIcon="account-group"
+          >
+            Users
           </Button>
         </View>
-      )}
 
-      {/* Create Post Form */}
-      {showCreatePost && (
-        <Card style={styles.createPostForm}>
-          <Text style={styles.formTitle}>Create New Post</Text>
-          <Input
-            label="Title"
-            placeholder="Enter post title"
-            value={newPost.title}
-            onChangeText={(title) => setNewPost({ ...newPost, title })}
-          />
-          <Input
-            label="Content"
-            placeholder="Write your post content..."
-            value={newPost.content}
-            onChangeText={(content) => setNewPost({ ...newPost, content })}
-            multiline
-            numberOfLines={4}
-          />
-          <Input
-            label="Author ID"
-            placeholder="Enter author user ID"
-            value={newPost.authorId}
-            onChangeText={(authorId) => setNewPost({ ...newPost, authorId })}
-          />
-          <View style={styles.formActions}>
-            <Button variant="outline" onPress={() => setShowCreatePost(false)}>
-              Cancel
-            </Button>
-            <Button onPress={handleCreatePost} loading={creatingPost}>
-              Create Post
+        {/* Stats */}
+        {renderStats()}
+
+        {/* Search (Posts only) */}
+        {activeTab === 'posts' && (
+          <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+            <View style={{ flex: 1 }}>
+              <Input
+                placeholder="Search posts..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                leftIcon="magnify"
+              />
+            </View>
+            <Button
+              onPress={() => setShowCreatePost(!showCreatePost)}
+              leftIcon="plus"
+            >
+              New Post
             </Button>
           </View>
-        </Card>
-      )}
+        )}
 
-      {/* Error State */}
-      {error && (
-        <Alert intent="danger" style={styles.alert}>
-          <Text>{error.message}</Text>
-        </Alert>
-      )}
+        {/* Create Post Form */}
+        {showCreatePost && (
+          <Card padding="md" gap="md">
+            <Text typography="h5" weight="bold">Create New Post</Text>
+            <Input
+              label="Title"
+              placeholder="Enter post title"
+              value={newPost.title}
+              onChangeText={(title) => setNewPost({ ...newPost, title })}
+            />
+            <Input
+              label="Content"
+              placeholder="Write your post content..."
+              value={newPost.content}
+              onChangeText={(content) => setNewPost({ ...newPost, content })}
+            />
+            <Input
+              label="Author ID"
+              placeholder="Enter author user ID"
+              value={newPost.authorId}
+              onChangeText={(authorId) => setNewPost({ ...newPost, authorId })}
+            />
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 8 }}>
+              <Button type="outlined" onPress={() => setShowCreatePost(false)}>
+                Cancel
+              </Button>
+              <Button onPress={handleCreatePost} disabled={creatingPost}>
+                {creatingPost ? 'Creating...' : 'Create Post'}
+              </Button>
+            </View>
+          </Card>
+        )}
 
-      {/* Loading State */}
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="lg" />
-          <Text>Loading {activeTab}...</Text>
-        </View>
-      )}
+        {/* Error State */}
+        {error && (
+          <Alert intent="danger" title="Error">
+            {error.message}
+          </Alert>
+        )}
 
-      {/* Content */}
-      {!loading && !error && (
-        <View style={styles.content}>
-          {activeTab === 'posts' && (
-            <>
-              {postsData?.posts.length === 0 ? (
-                <Card style={styles.emptyState}>
-                  <Text style={styles.emptyText}>No posts found</Text>
-                  <Text style={styles.emptySubtext}>
-                    Create your first post to get started
-                  </Text>
-                </Card>
-              ) : (
-                postsData?.posts.map(renderPostCard)
-              )}
-            </>
-          )}
+        {/* Loading State */}
+        {loading && (
+          <Card padding="lg">
+            <View style={{ alignItems: 'center', gap: 12 }}>
+              <ActivityIndicator size="lg" />
+              <Text color="secondary">Loading {activeTab}...</Text>
+            </View>
+          </Card>
+        )}
 
-          {activeTab === 'users' && (
-            <>
-              {usersData?.users.length === 0 ? (
-                <Card style={styles.emptyState}>
-                  <Text style={styles.emptyText}>No users found</Text>
-                </Card>
-              ) : (
-                usersData?.users.map(renderUserCard)
-              )}
-            </>
-          )}
-        </View>
-      )}
+        {/* Content */}
+        {!loading && !error && (
+          <View gap="md">
+            {activeTab === 'posts' && (
+              <>
+                {postsData?.posts.length === 0 ? (
+                  <Card padding="lg">
+                    <View style={{ alignItems: 'center', gap: 8 }}>
+                      <Text typography="h5" weight="bold">No posts found</Text>
+                      <Text color="secondary">Create your first post to get started</Text>
+                    </View>
+                  </Card>
+                ) : (
+                  postsData?.posts.map(renderPostCard)
+                )}
+              </>
+            )}
 
-      {/* GraphQL Benefits Note */}
-      <Card style={styles.noteCard}>
-        <Text style={styles.noteTitle}>Why GraphQL?</Text>
-        <Text style={styles.noteText}>
-          This screen fetches posts with their authors and comments in a single request.
-          With REST, this would require multiple API calls. GraphQL's nested query
-          capability makes it perfect for complex, relational data.
-        </Text>
-        <View style={styles.codeBlock}>
-          <Text style={styles.codeText}>
-            {`query {
+            {activeTab === 'users' && (
+              <>
+                {usersData?.users.length === 0 ? (
+                  <Card padding="lg">
+                    <View style={{ alignItems: 'center' }}>
+                      <Text typography="h5" weight="bold">No users found</Text>
+                    </View>
+                  </Card>
+                ) : (
+                  usersData?.users.map(renderUserCard)
+                )}
+              </>
+            )}
+          </View>
+        )}
+
+        {/* GraphQL Benefits Note */}
+        <Card type="elevated" padding="md" gap="sm">
+          <Text weight="semibold">Why GraphQL?</Text>
+          <Text color="secondary">
+            This screen fetches posts with their authors and comments in a single request.
+            With REST, this would require multiple API calls. GraphQL's nested query
+            capability makes it perfect for complex, relational data.
+          </Text>
+          <View background="secondary" padding="sm" radius="sm">
+            <Text typography="caption" style={{ fontFamily: 'monospace' }}>
+              {`query {
   posts {
     title
     author { name, email }
     comments { content, author { name } }
   }
 }`}
-          </Text>
-        </View>
-      </Card>
-    </ScrollView>
+            </Text>
+          </View>
+        </Card>
+      </View>
+    </Screen>
   );
 }
-
-// =============================================================================
-// Styles
-// =============================================================================
-
-const styles = defineStyle((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  header: {
-    padding: theme.spacing.lg,
-    backgroundColor: theme.colors.primary,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: theme.colors.primaryText,
-    marginBottom: theme.spacing.xs,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: theme.colors.primaryText,
-    opacity: 0.8,
-  },
-  tabs: {
-    flexDirection: 'row',
-    padding: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    padding: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  statCard: {
-    flex: 1,
-    padding: theme.spacing.md,
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-    marginTop: theme.spacing.xs,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    padding: theme.spacing.md,
-    gap: theme.spacing.sm,
-    alignItems: 'center',
-  },
-  content: {
-    padding: theme.spacing.md,
-    gap: theme.spacing.md,
-  },
-  loadingContainer: {
-    padding: theme.spacing.xl,
-    alignItems: 'center',
-    gap: theme.spacing.md,
-  },
-  alert: {
-    margin: theme.spacing.md,
-  },
-  // Post styles
-  postCard: {
-    padding: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-  },
-  postHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing.sm,
-  },
-  postAuthor: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatarText: {
-    color: theme.colors.primaryText,
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  authorName: {
-    fontWeight: '600',
-    color: theme.colors.text,
-  },
-  postDate: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-  },
-  postTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.xs,
-  },
-  postContent: {
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.sm,
-  },
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.xs,
-    marginBottom: theme.spacing.sm,
-  },
-  postActions: {
-    flexDirection: 'row',
-    gap: theme.spacing.sm,
-  },
-  commentsSection: {
-    marginTop: theme.spacing.md,
-  },
-  commentsTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: theme.colors.text,
-    marginTop: theme.spacing.sm,
-    marginBottom: theme.spacing.sm,
-  },
-  comment: {
-    paddingVertical: theme.spacing.xs,
-    paddingLeft: theme.spacing.sm,
-    borderLeftWidth: 2,
-    borderLeftColor: theme.colors.border,
-    marginBottom: theme.spacing.xs,
-  },
-  commentAuthor: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: theme.colors.text,
-  },
-  commentContent: {
-    fontSize: 13,
-    color: theme.colors.textSecondary,
-  },
-  addCommentForm: {
-    marginTop: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
-  commentActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: theme.spacing.sm,
-  },
-  // User styles
-  userCard: {
-    padding: theme.spacing.md,
-    marginBottom: theme.spacing.md,
-  },
-  userHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.md,
-    marginBottom: theme.spacing.sm,
-  },
-  userInfo: {
-    flex: 1,
-  },
-  userName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: theme.colors.text,
-  },
-  userEmail: {
-    fontSize: 14,
-    color: theme.colors.textSecondary,
-  },
-  userBio: {
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.md,
-  },
-  userStats: {
-    flexDirection: 'row',
-    gap: theme.spacing.lg,
-    marginBottom: theme.spacing.md,
-  },
-  userStat: {
-    alignItems: 'center',
-  },
-  userStatValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-  },
-  userStatLabel: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-  },
-  recentPosts: {
-    marginTop: theme.spacing.sm,
-  },
-  recentPostsTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
-  },
-  recentPost: {
-    paddingVertical: theme.spacing.xs,
-    borderLeftWidth: 2,
-    borderLeftColor: theme.colors.primary,
-    paddingLeft: theme.spacing.sm,
-    marginBottom: theme.spacing.xs,
-  },
-  recentPostTitle: {
-    fontWeight: '500',
-    color: theme.colors.text,
-  },
-  recentPostMeta: {
-    fontSize: 12,
-    color: theme.colors.textSecondary,
-  },
-  // Form styles
-  createPostForm: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.md,
-    gap: theme.spacing.md,
-  },
-  formTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: theme.colors.text,
-  },
-  formActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: theme.spacing.sm,
-  },
-  // Empty state
-  emptyState: {
-    padding: theme.spacing.xl,
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: theme.colors.text,
-  },
-  emptySubtext: {
-    color: theme.colors.textSecondary,
-    marginTop: theme.spacing.xs,
-  },
-  // Note card
-  noteCard: {
-    margin: theme.spacing.md,
-    padding: theme.spacing.md,
-    backgroundColor: theme.colors.backgroundSecondary,
-  },
-  noteTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
-  },
-  noteText: {
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.md,
-  },
-  codeBlock: {
-    backgroundColor: theme.colors.background,
-    padding: theme.spacing.md,
-    borderRadius: 8,
-  },
-  codeText: {
-    fontFamily: 'monospace',
-    fontSize: 12,
-    color: theme.colors.text,
-  },
-}));
 
 export default GraphQLDemoScreen;

@@ -53,7 +53,9 @@ const ListItem: React.FC<ListItemProps & { isLast?: boolean }> = ({
   const leadingProps = getWebProps([leadingStyle]);
   const trailingProps = getWebProps([trailingStyle]);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!disabled && onPress) {
       onPress();
     }

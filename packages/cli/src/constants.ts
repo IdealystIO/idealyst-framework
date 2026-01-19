@@ -6,7 +6,7 @@
 export const VERSION = '0.1.0';
 
 // Current Idealyst framework version to use in templates
-export const IDEALYST_VERSION = '1.2.32';
+export const IDEALYST_VERSION = '1.2.33';
 
 // React Native version
 export const REACT_NATIVE_VERSION = '0.83.0';
@@ -113,11 +113,15 @@ export const DEPENDENCIES = {
   },
   graphql: {
     '@apollo/client': '^3.11.0',
+    '@tanstack/react-query': '^5.62.0',
     'graphql': '^16.9.0',
   },
   graphqlServer: {
     '@pothos/core': '^4.3.0',
     'graphql-yoga': '^5.10.0',
+  },
+  graphqlServerPrisma: {
+    '@pothos/plugin-prisma': '^4.3.0',
   },
   prisma: {
     '@prisma/client': '^5.19.0',

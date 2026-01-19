@@ -168,6 +168,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   }, [value, autoGrow, minHeight, maxHeight]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    e.stopPropagation();
     const newValue = e.target.value;
 
     if (maxLength && newValue.length > maxLength) {

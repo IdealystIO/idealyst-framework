@@ -39,7 +39,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   const checked = group.value !== undefined ? group.value === value : checkedProp;
   const disabled = group.disabled || disabledProp;
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!disabled) {
       if (group.onValueChange) {
         group.onValueChange(value);

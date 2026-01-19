@@ -72,7 +72,9 @@ const Card = forwardRef<IdealystElement, CardProps>(({
     });
   }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, clickable, accessibilityPressed]);
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!disabled && clickable) {
       // Prefer onPress, fall back to deprecated onClick
       const handler = onPress ?? onClick;

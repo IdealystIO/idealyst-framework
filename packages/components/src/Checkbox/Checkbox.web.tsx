@@ -53,6 +53,8 @@ const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
   }, [checked]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     if (disabled) return;
 
     const newChecked = event.target.checked;

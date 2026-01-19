@@ -59,19 +59,28 @@ export function DataGridShowcase({
       key: 'id',
       header: 'ID',
       width: showAllColumns ? 60 : 50,
+      minWidth: 40,
+      maxWidth: 100,
       sortable: true,
+      resizable: true,
     },
     {
       key: 'name',
       header: showAllColumns ? 'Product Name' : 'Product',
       width: showAllColumns ? 150 : 120,
+      minWidth: 80,
+      maxWidth: 300,
       sortable: true,
+      resizable: true,
     },
     {
       key: 'category',
       header: 'Category',
       width: showAllColumns ? 120 : 100,
+      minWidth: 80,
+      maxWidth: 200,
       sortable: true,
+      resizable: true,
       render: (value) => (
         <Badge variant="outlined" size="sm">
           {value}
@@ -82,7 +91,10 @@ export function DataGridShowcase({
       key: 'price',
       header: 'Price',
       width: showAllColumns ? 100 : 80,
+      minWidth: 60,
+      maxWidth: 150,
       sortable: true,
+      resizable: true,
       render: (value) => (
         <Text weight="semibold" size={showAllColumns ? 'md' : 'sm'}>
           ${value.toFixed(2)}
@@ -93,13 +105,16 @@ export function DataGridShowcase({
       key: 'stock',
       header: 'Stock',
       width: showAllColumns ? 80 : 60,
+      minWidth: 50,
+      maxWidth: 120,
       sortable: true,
+      resizable: true,
       render: (value, row) => (
         <Text
           size="sm"
-          style={{ 
-            color: row.status === 'out-of-stock' ? '#ef4444' : 
-                   row.status === 'low-stock' ? '#f59e0b' : '#22c55e' 
+          style={{
+            color: row.status === 'out-of-stock' ? '#ef4444' :
+                   row.status === 'low-stock' ? '#f59e0b' : '#22c55e'
           }}
         >
           {value}
@@ -110,8 +125,11 @@ export function DataGridShowcase({
       key: 'status',
       header: 'Status',
       width: showAllColumns ? 120 : 100,
+      minWidth: 80,
+      maxWidth: 180,
+      resizable: true,
       render: (value) => {
-        const intent = value === 'in-stock' ? 'success' : 
+        const intent = value === 'in-stock' ? 'success' :
                        value === 'low-stock' ? 'warning' : 'error';
         return (
           <Badge variant="filled" intent={intent} size="sm">
@@ -127,15 +145,25 @@ export function DataGridShowcase({
       key: 'vendor',
       header: 'Vendor',
       width: 100,
+      minWidth: 70,
+      maxWidth: 180,
       sortable: true,
+      resizable: true,
     },
     {
       key: 'lastUpdated',
       header: 'Last Updated',
       width: 120,
+      minWidth: 90,
+      maxWidth: 180,
       sortable: true,
+      resizable: true,
     },
   ] : [];
+
+  const handleColumnResize = (columnKey: string, newWidth: number) => {
+    console.log(`Column "${columnKey}" resized to ${newWidth}px`);
+  };
 
   const columns = [...baseColumns, ...additionalColumns];
   
@@ -269,6 +297,7 @@ export function DataGridShowcase({
             onSelectionChange={setSelectedRows}
             multiSelect={true}
             onSort={handleSort}
+            onColumnResize={handleColumnResize}
             stickyHeader={true}
             rowHeight={showAllColumns ? 48 : 44}
             headerHeight={48}
@@ -283,11 +312,11 @@ export function DataGridShowcase({
             <Text weight="semibold" size="md">Features {showAllColumns ? 'Demonstrated' : ''}</Text>
             <Text size="sm">✓ Virtualized rendering{showAllColumns ? ` with ${productCount} rows` : ''}</Text>
             <Text size="sm">✓ Sortable columns{showAllColumns ? ' (ID, Name, Category, Price, Stock, Vendor, Date)' : ''}</Text>
+            <Text size="sm">✓ Resizable columns{showAllColumns ? ' (drag column borders to resize)' : ''}</Text>
             <Text size="sm">✓ Multi-row selection{showAllColumns ? ' with visual feedback' : ''}</Text>
             <Text size="sm">✓ Custom cell rendering{showAllColumns ? ' (badges, colored text)' : ''}</Text>
             <Text size="sm">✓ Sticky header{showAllColumns ? ' while scrolling' : ''}</Text>
             <Text size="sm">✓ Alternating row colors</Text>
-            {showAllColumns && <Text size="sm">✓ Responsive column widths</Text>}
           </View>
         </Card>
       </View>

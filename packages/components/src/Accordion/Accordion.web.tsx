@@ -61,7 +61,11 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
       <button
         {...headerProps}
         id={headerId}
-        onClick={onToggle}
+        onClick={(e: React.MouseEvent) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onToggle();
+        }}
         onKeyDown={(e) => onKeyDown(e, item.id)}
         disabled={item.disabled}
         aria-expanded={isExpanded}
@@ -146,16 +150,20 @@ const Accordion: React.FC<AccordionProps> = ({
     // ArrowDown moves to next item
     if (key === 'ArrowDown') {
       e.preventDefault();
+      e.stopPropagation();
       nextIndex = currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
     // ArrowUp moves to previous item
     } else if (key === 'ArrowUp') {
       e.preventDefault();
+      e.stopPropagation();
       nextIndex = currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
     } else if (ACCORDION_KEYS.first.includes(key as 'Home')) {
       e.preventDefault();
+      e.stopPropagation();
       nextIndex = 0;
     } else if (ACCORDION_KEYS.last.includes(key as 'End')) {
       e.preventDefault();
+      e.stopPropagation();
       nextIndex = enabledItems.length - 1;
     }
 

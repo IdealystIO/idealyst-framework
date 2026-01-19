@@ -36,7 +36,7 @@ function renderIcon(
 interface TabProps {
   item: TabBarItem;
   isActive: boolean;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent) => void;
   onKeyDown: (e: React.KeyboardEvent) => void;
   size: TabBarProps['size'];
   type: TabBarProps['type'];
@@ -168,15 +168,19 @@ const TabBar: React.FC<TabBarProps> = ({
 
     if (key === 'ArrowRight') {
       e.preventDefault();
+      e.stopPropagation();
       nextIndex = currentIndex < enabledItems.length - 1 ? currentIndex + 1 : 0;
     } else if (key === 'ArrowLeft') {
       e.preventDefault();
+      e.stopPropagation();
       nextIndex = currentIndex > 0 ? currentIndex - 1 : enabledItems.length - 1;
     } else if (key === 'Home') {
       e.preventDefault();
+      e.stopPropagation();
       nextIndex = 0;
     } else if (key === 'End') {
       e.preventDefault();
+      e.stopPropagation();
       nextIndex = enabledItems.length - 1;
     }
 
@@ -237,7 +241,9 @@ const TabBar: React.FC<TabBarProps> = ({
     updateIndicator();
   }, [items]);
 
-  const handleTabClick = (itemValue: string, disabled?: boolean) => {
+  const handleTabClick = (e: React.MouseEvent, itemValue: string, disabled?: boolean) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (disabled) return;
 
     if (controlledValue === undefined) {
@@ -306,7 +312,7 @@ const TabBar: React.FC<TabBarProps> = ({
             key={item.value}
             item={item}
             isActive={isActive}
-            onClick={() => handleTabClick(item.value, item.disabled)}
+            onClick={(e) => handleTabClick(e, item.value, item.disabled)}
             onKeyDown={(e) => handleKeyDown(e, item.value)}
             size={size}
             type={type}
