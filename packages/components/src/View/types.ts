@@ -2,6 +2,7 @@ import { Size, Surface, ResponsiveStyle } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { ContainerStyleProps } from '../utils/viewStyleProps';
+import type { LayoutChangeEvent } from '../hooks/useWebLayout';
 
 /**
  * Style prop type that accepts both regular styles and responsive styles.
@@ -99,4 +100,11 @@ export interface ViewProps extends ContainerStyleProps {
    * Test ID for testing
    */
   testID?: string;
+
+  /**
+   * Callback when the view's layout changes.
+   * Called with layout information (x, y, width, height) when the component
+   * mounts or when its dimensions change.
+   */
+  onLayout?: (event: LayoutChangeEvent) => void;
 }

@@ -11,6 +11,7 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   safeArea = true,
   scrollable = true,
   contentInset,
+  onLayout,
   // Spacing variants from ContainerStyleProps
   gap,
   padding,
@@ -66,6 +67,7 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
         style={[screenStyle, style]}
         contentContainerStyle={{ flexGrow: 1 }}
         testID={testID}
+        onLayout={onLayout}
       >
         <RNView style={[contentInsetStyle, { flex: 1 }]}>
           {children}
@@ -75,7 +77,7 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   }
 
   return (
-    <RNView ref={ref as any} nativeID={id} style={[screenStyle, safeAreaStyle, style]} testID={testID}>
+    <RNView ref={ref as any} nativeID={id} style={[screenStyle, safeAreaStyle, style]} testID={testID} onLayout={onLayout}>
       {children}
     </RNView>
   );

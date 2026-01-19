@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { ContainerStyleProps } from '../utils/viewStyleProps';
 import { InteractiveAccessibilityProps } from '../utils/accessibility';
+import type { LayoutChangeEvent } from '../hooks/useWebLayout';
 
 // Component-specific type aliases for future extensibility
 export type CardIntentVariant = Intent;
@@ -78,4 +79,10 @@ export interface CardProps extends ContainerStyleProps, InteractiveAccessibility
    * Test ID for testing
    */
   testID?: string;
+
+  /**
+   * Called when the layout of the card changes.
+   * Provides the new width, height, x, and y coordinates.
+   */
+  onLayout?: (event: LayoutChangeEvent) => void;
 }

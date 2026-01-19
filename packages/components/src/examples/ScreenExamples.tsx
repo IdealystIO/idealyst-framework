@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Screen, View, Text } from '../index';
 
 export const ScreenExamples = () => {
+  const [screenDimensions, setScreenDimensions] = useState({ width: 0, height: 0 });
+
   return (
     <Screen background="primary" padding="lg">
       <View gap="lg">
@@ -142,6 +145,34 @@ export const ScreenExamples = () => {
                 </Text>
                 <Text typography="caption" color="secondary" align="center">
                   Perfect for main app screens
+                </Text>
+              </View>
+            </Screen>
+          </View>
+        </View>
+
+        {/* onLayout Example */}
+        <View gap="md">
+          <Text typography="subtitle1">onLayout Callback</Text>
+          <Text typography="caption" color="secondary">
+            Track screen dimensions as they change
+          </Text>
+          <View style={{ height: 120, borderWidth: 1, borderColor: '#ccc' }}>
+            <Screen
+              background="secondary"
+              padding="md"
+              onLayout={(event) => {
+                const { width, height } = event.nativeEvent.layout;
+                setScreenDimensions({ width, height });
+              }}
+            >
+              <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                <Text weight="semibold">Responsive Screen</Text>
+                <Text typography="caption" color="secondary">
+                  Width: {Math.round(screenDimensions.width)}px
+                </Text>
+                <Text typography="caption" color="secondary">
+                  Height: {Math.round(screenDimensions.height)}px
                 </Text>
               </View>
             </Screen>

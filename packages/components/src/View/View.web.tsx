@@ -3,6 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { ViewProps } from './types';
 import { viewStyles } from './View.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { useWebLayout } from '../hooks/useWebLayout';
 import type { IdealystElement } from '../utils/refTypes';
 
 /**
@@ -31,7 +32,10 @@ const View = forwardRef<IdealystElement, ViewProps>(({
   style,
   testID,
   id,
+  onLayout,
 }, ref) => {
+  const layoutRef = useWebLayout<HTMLDivElement>(onLayout);
+
   viewStyles.useVariants({
     background,
     radius,
@@ -51,7 +55,7 @@ const View = forwardRef<IdealystElement, ViewProps>(({
   /** @ts-ignore */
   const wrapperWebProps = getWebProps(viewStyles.scrollableWrapper);
 
-  const mergedRef = useMergeRefs(ref, webProps.ref);
+  const mergedRef = useMergeRefs(ref, webProps.ref, layoutRef);
 
   // When scrollable, render a wrapper + content structure
   // Wrapper: sizing and margin (positioning in parent layout)

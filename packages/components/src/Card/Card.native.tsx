@@ -17,6 +17,7 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   onPress,
   onClick,
   disabled = false,
+  onLayout,
   // Spacing variants from ContainerStyleProps
   gap,
   padding,
@@ -93,6 +94,7 @@ const Card = forwardRef<IdealystElement, CardProps>(({
     nativeID: id,
     style: [cardStyle, style],
     testID,
+    onLayout,
     ...nativeA11yProps,
     ...(clickable && {
       onPress: disabled ? undefined : pressHandler,

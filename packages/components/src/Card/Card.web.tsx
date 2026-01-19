@@ -3,6 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
+import { useWebLayout } from '../hooks/useWebLayout';
 import { getWebInteractiveAriaProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
 
@@ -23,6 +24,7 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   onPress,
   onClick,
   disabled = false,
+  onLayout,
   // Spacing variants from ContainerStyleProps
   gap,
   padding,
@@ -43,6 +45,7 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   accessibilityPressed,
 }, ref) => {
   const hasWarnedRef = useRef(false);
+  const layoutRef = useWebLayout<HTMLElement>(onLayout);
 
   // Warn about onClick usage (deprecated)
   useEffect(() => {
@@ -105,7 +108,7 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   // Generate web props
   const webProps = getWebProps([cardStyle, style as any]);
 
-  const mergedRef = useMergeRefs(ref, webProps.ref);
+  const mergedRef = useMergeRefs(ref, webProps.ref, layoutRef);
 
   // Use appropriate HTML element based on clickable state
   const Component: any = clickable ? 'button' : 'div';

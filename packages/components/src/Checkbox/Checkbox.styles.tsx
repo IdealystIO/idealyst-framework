@@ -86,10 +86,6 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
                 outlined: { borderWidth: 2 },
             },
             checked: {
-                true: {
-                    backgroundColor: theme.$intents.primary,
-                    borderColor: theme.$intents.primary,
-                },
                 false: {
                     backgroundColor: 'transparent',
                     borderColor: theme.colors.border.primary,
@@ -100,6 +96,15 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
                 false: { opacity: 1 },
             },
         },
+        compoundVariants: [
+            {
+                checked: true,
+                styles: {
+                    backgroundColor: theme.$intents.primary,
+                    borderColor: theme.$intents.primary,
+                },
+            },
+        ],
         _web: {
             outline: 'none',
             display: 'flex',

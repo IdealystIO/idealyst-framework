@@ -87,6 +87,7 @@ const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
   // Apply variants
   checkboxStyles.useVariants({
     size,
+    intent,
     type: variant as any,
     checked: internalChecked,
     disabled,

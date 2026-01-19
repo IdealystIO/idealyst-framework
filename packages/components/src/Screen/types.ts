@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { Surface } from '@idealyst/theme';
 import { ContainerStyleProps } from '../utils/viewStyleProps';
+import type { LayoutChangeEvent } from '../hooks/useWebLayout';
 
 /**
  * Full-screen container component with safe area support.
@@ -49,4 +50,10 @@ export interface ScreenProps extends ContainerStyleProps {
    * Scrollable content
    */
   scrollable?: boolean;
+
+  /**
+   * Called when the layout of the screen changes.
+   * Provides the new width, height, x, and y coordinates.
+   */
+  onLayout?: (event: LayoutChangeEvent) => void;
 }

@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Screen, View, Text, Card, Button } from '../index';
 
 export const CardExamples = () => {
   const handleCardPress = (cardType: string) => {
     console.log(`Card pressed: ${cardType}`);
   };
+
+  const [cardDimensions, setCardDimensions] = useState({ width: 0, height: 0 });
 
   return (
     <Screen background="primary" padding="lg">
@@ -161,6 +164,30 @@ export const CardExamples = () => {
               Add to Cart
             </Button>
           </View>
+        </Card>
+      </View>
+
+      {/* onLayout Example */}
+      <View gap="md">
+        <Text typography="subtitle1">onLayout Callback</Text>
+        <Text typography="caption" color="secondary">
+          Track card dimensions as they change
+        </Text>
+        <Card
+          type="outlined"
+          padding="md"
+          onLayout={(event) => {
+            const { width, height } = event.nativeEvent.layout;
+            setCardDimensions({ width, height });
+          }}
+        >
+          <Text weight="semibold">Responsive Card</Text>
+          <Text typography="caption" color="secondary">
+            Width: {Math.round(cardDimensions.width)}px
+          </Text>
+          <Text typography="caption" color="secondary">
+            Height: {Math.round(cardDimensions.height)}px
+          </Text>
         </Card>
       </View>
     </View>

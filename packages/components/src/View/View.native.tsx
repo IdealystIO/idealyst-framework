@@ -45,6 +45,7 @@ const View = forwardRef<IdealystElement, ViewProps>(({
   style,
   testID,
   id,
+  onLayout,
 }, ref) => {
   // Set active variants for this render
   viewStyles.useVariants({
@@ -89,6 +90,7 @@ const View = forwardRef<IdealystElement, ViewProps>(({
         contentContainerStyle={[viewStyle, overrideStyles]}
         testID={testID}
         nativeID={id}
+        onLayout={onLayout}
       >
         {children}
       </RNScrollView>
@@ -96,7 +98,7 @@ const View = forwardRef<IdealystElement, ViewProps>(({
   }
 
   return (
-    <RNView ref={ref as any} style={[viewStyle, overrideStyles, finalStyle]} testID={testID} nativeID={id}>
+    <RNView ref={ref as any} style={[viewStyle, overrideStyles, finalStyle]} testID={testID} nativeID={id} onLayout={onLayout}>
       {children}
     </RNView>
   );
