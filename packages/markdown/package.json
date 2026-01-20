@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/markdown",
-  "version": "1.2.43",
+  "version": "1.2.45",
   "description": "Cross-platform markdown renderer and editor for React and React Native with theme integration",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -41,7 +41,7 @@
   },
   "peerDependencies": {
     "@10play/tentap-editor": ">=0.5.0",
-    "@idealyst/theme": "^1.2.43",
+    "@idealyst/theme": "^1.2.45",
     "@tiptap/extension-link": ">=2.0.0",
     "@tiptap/extension-placeholder": ">=2.0.0",
     "@tiptap/extension-task-item": ">=2.0.0",
@@ -114,7 +114,7 @@
   },
   "devDependencies": {
     "@10play/tentap-editor": "^0.5.0",
-    "@idealyst/theme": "^1.2.43",
+    "@idealyst/theme": "^1.2.45",
     "@tiptap/extension-link": "^2.11.0",
     "@tiptap/extension-placeholder": "^2.11.0",
     "@tiptap/extension-task-item": "^2.11.0",

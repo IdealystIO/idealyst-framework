@@ -52,6 +52,14 @@ export interface ScreenProps extends ContainerStyleProps {
   scrollable?: boolean;
 
   /**
+   * Whether to avoid the keyboard on native platforms (iOS/Android).
+   * When enabled, content will shift up when the keyboard appears.
+   * @default true
+   * @platform native
+   */
+  avoidKeyboard?: boolean;
+
+  /**
    * Called when the layout of the screen changes.
    * Provides the new width, height, x, and y coordinates.
    */

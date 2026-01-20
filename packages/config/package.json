@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/config",
-  "version": "1.2.43",
+  "version": "1.2.45",
   "description": "Cross-platform configuration and environment variable support for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/config#readme",
   "readme": "README.md",

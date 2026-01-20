@@ -34,6 +34,10 @@ export const IconSvg: React.FC<IconSvgProps> = ({
   // Look up path from registry
   const path = IconRegistry.get(name);
 
+  // Convert numeric size to pixel string to prevent @mdi/react from
+  // treating it as a multiplier of the base 24px size
+  const normalizedSize = typeof size === 'number' ? `${size}px` : size;
+
   // Warn in development if icon is not registered
   if (!path && process.env.NODE_ENV !== 'production') {
     console.warn(
@@ -51,7 +55,7 @@ export const IconSvg: React.FC<IconSvgProps> = ({
       style={style}
       className={className}
       path={path}
-      size={size}
+      size={normalizedSize}
       color={color}
       aria-label={ariaLabel || name}
       data-testid={testID}
