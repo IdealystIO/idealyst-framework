@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/tooling",
-  "version": "1.2.41",
+  "version": "1.2.43",
   "type": "module",
   "description": "Code analysis and validation utilities for Idealyst Framework",
   "readme": "README.md",
@@ -51,7 +51,7 @@
   },
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "yarn build",
+    "prepublishOnly": "npm run build",
     "publish:npm": "npm publish",
     "test": "jest",
     "typecheck": "tsc --noEmit"

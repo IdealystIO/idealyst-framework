@@ -39,24 +39,27 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     const days: Array<{ date: Date; isCurrentMonth: boolean }> = [];
 
     // Previous month padding
+    // Use noon (12:00) to avoid timezone issues when date crosses day boundaries
     const prevMonthEnd = new Date(year, month, 0);
     for (let i = startPadding - 1; i >= 0; i--) {
       days.push({
-        date: new Date(year, month - 1, prevMonthEnd.getDate() - i),
+        date: new Date(year, month - 1, prevMonthEnd.getDate() - i, 12, 0, 0, 0),
         isCurrentMonth: false,
       });
     }
 
     // Current month
+    // Use noon (12:00) to avoid timezone issues when date crosses day boundaries
     for (let day = 1; day <= daysInMonth; day++) {
-      days.push({ date: new Date(year, month, day), isCurrentMonth: true });
+      days.push({ date: new Date(year, month, day, 12, 0, 0, 0), isCurrentMonth: true });
     }
 
     // Next month padding (fill to complete last week)
+    // Use noon (12:00) to avoid timezone issues when date crosses day boundaries
     const remaining = 7 - (days.length % 7);
     if (remaining < 7) {
       for (let day = 1; day <= remaining; day++) {
-        days.push({ date: new Date(year, month + 1, day), isCurrentMonth: false });
+        days.push({ date: new Date(year, month + 1, day, 12, 0, 0, 0), isCurrentMonth: false });
       }
     }
 
@@ -105,12 +108,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   };
 
   const handleDayPress = (date: Date) => {
-    console.log('[DatePicker] handleDayPress called with:', date.toISOString());
-    console.log('[DatePicker] isDisabled:', isDisabled(date));
     if (!isDisabled(date)) {
-      // Create a new date to avoid mutating the calendar's date objects
-      const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      console.log('[DatePicker] Calling onChange with:', newDate.toISOString());
+      // Create a new date with noon time to avoid timezone issues
+      const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0, 0);
       onChange(newDate);
     }
   };

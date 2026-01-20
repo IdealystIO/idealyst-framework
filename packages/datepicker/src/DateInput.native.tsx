@@ -41,12 +41,12 @@ export const DateInput: React.FC<DateInputProps> = ({
     return `${month}/${day}/${year}`;
   };
 
-  // Parse string to date
+  // Parse string to date (use noon to avoid timezone issues)
   const parseDate = (str: string): Date | null => {
     const match = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
     if (!match) return null;
     const [, month, day, year] = match;
-    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 12, 0, 0, 0);
     if (isNaN(date.getTime())) return null;
     return date;
   };

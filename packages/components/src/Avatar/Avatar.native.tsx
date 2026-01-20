@@ -11,6 +11,7 @@ const Avatar = forwardRef<IdealystElement, AvatarProps>(({
   fallback,
   size = 'md',
   shape = 'circle',
+  color,
   style,
   testID,
   id,
@@ -42,8 +43,8 @@ const Avatar = forwardRef<IdealystElement, AvatarProps>(({
     setHasError(true);
   };
 
-  const avatarStyle = (avatarStyles.avatar as any)({});
-  const fallbackStyle = (avatarStyles.fallback as any)({});
+  const avatarStyle = (avatarStyles.avatar as any)({ color });
+  const fallbackStyle = (avatarStyles.fallback as any)({ color });
 
   return (
     <View ref={ref as any} nativeID={id} style={[avatarStyle, style]} testID={testID} {...nativeA11yProps}>

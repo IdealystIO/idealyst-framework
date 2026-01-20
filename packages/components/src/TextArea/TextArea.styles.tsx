@@ -37,13 +37,10 @@ function _createIntentVariants(theme: Theme) {
  * TextArea styles with static styles and variants.
  */
 export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
-    container: {
+    container: (_props: TextAreaVariants) => ({
         display: 'flex' as const,
         flexDirection: 'column' as const,
         gap: 4,
-        borderWidth: 1,
-        borderColor: theme.colors.border.primary,
-        borderRadius: theme.radii.md,
         variants: {
             margin: {
                 margin: theme.sizes.$view.padding,
@@ -55,9 +52,9 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
                 marginHorizontal: theme.sizes.$view.padding,
             },
         },
-    },
+    }),
 
-    label: {
+    label: (_props: TextAreaVariants) => ({
         fontSize: 14,
         fontWeight: '500' as const,
         color: theme.colors.text.primary,
@@ -67,21 +64,31 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
                 false: { opacity: 1 },
             },
         },
-    },
+    }),
 
-    textareaContainer: {
+    textareaContainer: (_props: TextAreaVariants) => ({
         position: 'relative' as const,
+        borderWidth: 1,
+        borderColor: theme.colors.border.primary,
+        borderRadius: theme.radii.md,
+        backgroundColor: theme.colors.surface.primary,
+        overflow: 'hidden' as const,
         variants: {
             disabled: {
                 true: { opacity: 0.8 },
                 false: { opacity: 1 },
             },
         },
-    },
+        _web: {
+            border: `1px solid ${theme.colors.border.primary}`,
+        },
+    }),
 
-    textarea: {
+    textarea: (_props: TextAreaVariants) => ({
         width: '100%',
         color: theme.colors.text.primary,
+        backgroundColor: 'transparent',
+        borderWidth: 0,
         variants: {
             size: {
                 fontSize: theme.sizes.$textarea.fontSize,
@@ -107,13 +114,15 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
         _web: {
             fontFamily: 'inherit',
             outline: 'none',
+            border: 'none',
             transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
             boxSizing: 'border-box',
             overflowY: 'hidden',
+            resize: 'none',
         },
-    },
+    }),
 
-    helperText: {
+    helperText: (_props: TextAreaVariants) => ({
         fontSize: 12,
         variants: {
             hasError: {
@@ -121,17 +130,17 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
                 false: { color: theme.colors.text.secondary },
             },
         },
-    },
+    }),
 
-    footer: {
+    footer: (_props: TextAreaVariants) => ({
         display: 'flex' as const,
         flexDirection: 'row' as const,
         justifyContent: 'space-between' as const,
         alignItems: 'center' as const,
         gap: 4,
-    },
+    }),
 
-    characterCount: {
+    characterCount: (_props: TextAreaVariants) => ({
         fontSize: 12,
         color: theme.colors.text.secondary,
         variants: {
@@ -153,5 +162,5 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
                 },
             },
         ] as CompoundVariants<keyof TextAreaVariants>,
-    },
+    }),
 }));

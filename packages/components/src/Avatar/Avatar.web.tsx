@@ -16,6 +16,7 @@ const Avatar = forwardRef<IdealystElement, AvatarProps>(({
   fallback,
   size = 'md',
   shape = 'circle',
+  color,
   style,
   testID,
   id,
@@ -43,11 +44,11 @@ const Avatar = forwardRef<IdealystElement, AvatarProps>(({
     shape,
   });
 
-  const avatarStyleArray = [(avatarStyles.avatar as any)({}), style];
+  const avatarStyleArray = [(avatarStyles.avatar as any)({ color }), style];
   const avatarProps = getWebProps(avatarStyleArray);
 
   // Generate fallback text styles with proper theming and size
-  const fallbackStyleArray = [(avatarStyles.fallback as any)({})];
+  const fallbackStyleArray = [(avatarStyles.fallback as any)({ color })];
   const fallbackProps = getWebProps(fallbackStyleArray);
 
   const handleImageError = () => {

@@ -31,8 +31,15 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     // Preserve time from current value, or use noon as default
     const hours = value?.getHours() ?? 12;
     const minutes = value?.getMinutes() ?? 0;
-    const updated = new Date(date);
-    updated.setHours(hours, minutes, 0, 0);
+    const updated = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      hours,
+      minutes,
+      0,
+      0
+    );
     onChange(updated);
   };
 
@@ -40,8 +47,15 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     if (!time) {
       // Only clear time component, keep date if it exists
       if (value) {
-        const updated = new Date(value);
-        updated.setHours(12, 0, 0, 0);
+        const updated = new Date(
+          value.getFullYear(),
+          value.getMonth(),
+          value.getDate(),
+          12,
+          0,
+          0,
+          0
+        );
         onChange(updated);
       }
       return;

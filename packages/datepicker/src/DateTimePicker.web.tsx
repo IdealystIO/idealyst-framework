@@ -26,8 +26,6 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   const inputColumnStyle = (styles.inputColumn as any)({});
 
   const handleDateChange = (date: Date | null) => {
-    console.log('[DateTimePicker] handleDateChange received:', date?.toISOString());
-    console.log('[DateTimePicker] Current value:', value?.toISOString());
     if (!date) {
       onChange(null);
       return;
@@ -35,23 +33,31 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     // Preserve time from current value, or use noon as default
     const hours = value?.getHours() ?? 12;
     const minutes = value?.getMinutes() ?? 0;
-    console.log('[DateTimePicker] Preserving hours:', hours, 'minutes:', minutes);
-    const updated = new Date(date);
-    console.log('[DateTimePicker] After new Date(date):', updated.toISOString());
-    updated.setHours(hours, minutes, 0, 0);
-    console.log('[DateTimePicker] After setHours:', updated.toISOString());
-    console.log('[DateTimePicker] Calling onChange with:', updated.toISOString());
+    const updated = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      hours,
+      minutes,
+      0,
+      0
+    );
     onChange(updated);
   };
 
   const handleTimeChange = (time: Date | null) => {
-    console.log('[DateTimePicker] handleTimeChange received:', time?.toISOString());
-    console.log('[DateTimePicker] Current value:', value?.toISOString());
     if (!time) {
       // Only clear time component, keep date if it exists
       if (value) {
-        const updated = new Date(value);
-        updated.setHours(12, 0, 0, 0);
+        const updated = new Date(
+          value.getFullYear(),
+          value.getMonth(),
+          value.getDate(),
+          12,
+          0,
+          0,
+          0
+        );
         onChange(updated);
       }
       return;
@@ -67,7 +73,6 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       0,
       0
     );
-    console.log('[DateTimePicker] Time change - calling onChange with:', updated.toISOString());
     onChange(updated);
   };
 

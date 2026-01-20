@@ -104,6 +104,12 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
     triggerText: (_props: SelectDynamicProps) => ({
         color: theme.colors.text.primary,
         flex: 1,
+        textAlign: 'left' as const,
+        overflow: 'hidden' as const,
+        _web: {
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+        },
         variants: {
             size: {
                 fontSize: theme.sizes.$select.fontSize,
@@ -113,6 +119,12 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
 
     placeholder: (_props: SelectDynamicProps) => ({
         color: theme.colors.text.secondary,
+        textAlign: 'left' as const,
+        overflow: 'hidden' as const,
+        _web: {
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+        },
         variants: {
             size: {
                 fontSize: theme.sizes.$select.fontSize,

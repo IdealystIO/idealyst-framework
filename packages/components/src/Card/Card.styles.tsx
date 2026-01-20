@@ -3,7 +3,7 @@
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
-import type { Theme as BaseTheme, Intent, Radius } from '@idealyst/theme';
+import type { Theme as BaseTheme, Intent, Radius, Surface } from '@idealyst/theme';
 import { ViewStyleSize } from '../utils/viewStyleProps';
 
 // Required: Unistyles must see StyleSheet usage in original source to process this file
@@ -14,6 +14,7 @@ type Theme = ThemeStyleWrapper<BaseTheme>;
 
 type CardType = 'outlined' | 'elevated' | 'filled';
 type CardIntent = Intent | 'info' | 'neutral';
+type CardPadding = ViewStyleSize | 'none';
 
 export type CardVariants = {
     type: CardType;
@@ -21,13 +22,14 @@ export type CardVariants = {
     intent: CardIntent;
     clickable: boolean;
     disabled: boolean;
-    gap: ViewStyleSize;
-    padding: ViewStyleSize;
-    paddingVertical: ViewStyleSize;
-    paddingHorizontal: ViewStyleSize;
-    margin: ViewStyleSize;
-    marginVertical: ViewStyleSize;
-    marginHorizontal: ViewStyleSize;
+    background: Surface;
+    gap: CardPadding;
+    padding: CardPadding;
+    paddingVertical: CardPadding;
+    paddingHorizontal: CardPadding;
+    margin: CardPadding;
+    marginVertical: CardPadding;
+    marginHorizontal: CardPadding;
 };
 
 export type CardDynamicProps = {
@@ -65,59 +67,98 @@ export const cardStyles = defineStyle('Card', (theme: Theme) => ({
                 },
             },
             radius: {
-                    none: { borderRadius: 0 },
-                    xs: { borderRadius: 2 },
-                    sm: { borderRadius: 4 },
-                    md: { borderRadius: 8 },
-                    lg: { borderRadius: 12 },
-                    xl: { borderRadius: 16 },
-                },
-                clickable: {
-                    true: {
-                        _web: {
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease',
-                            _hover: {
-                                transform: 'translateY(-2px)',
-                                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06)',
-                            },
+                none: { borderRadius: 0 },
+                xs: { borderRadius: 2 },
+                sm: { borderRadius: 4 },
+                md: { borderRadius: 8 },
+                lg: { borderRadius: 12 },
+                xl: { borderRadius: 16 },
+            },
+            // $iterator expands for each surface color
+            background: {
+                backgroundColor: theme.colors.$surface,
+            },
+            clickable: {
+                true: {
+                    _web: {
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        _hover: {
+                            transform: 'translateY(-2px)',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06)',
                         },
                     },
-                    false: {
-                        _web: { cursor: 'default' },
-                    },
                 },
-                disabled: {
-                    true: { opacity: 0.6, _web: { cursor: 'not-allowed' } },
-                    false: { opacity: 1 },
-                },
-                // $iterator expands for each view size
-                gap: {
-                    gap: theme.sizes.$view.spacing,
-                },
-                padding: {
-                    padding: theme.sizes.$view.padding,
-                },
-                paddingVertical: {
-                    paddingVertical: theme.sizes.$view.padding,
-                },
-                paddingHorizontal: {
-                    paddingHorizontal: theme.sizes.$view.padding,
-                },
-                margin: {
-                    margin: theme.sizes.$view.padding,
-                },
-                marginVertical: {
-                    marginVertical: theme.sizes.$view.padding,
-                },
-                marginHorizontal: {
-                    marginHorizontal: theme.sizes.$view.padding,
+                false: {
+                    _web: { cursor: 'default' },
                 },
             },
-            _web: {
-                display: 'flex',
-                flexDirection: 'column',
-                boxSizing: 'border-box',
+            disabled: {
+                true: { opacity: 0.6, _web: { cursor: 'not-allowed' } },
+                false: { opacity: 1 },
             },
+            // $iterator expands for each view size, plus 'none'
+            gap: {
+                none: { gap: 0 },
+                xs: { gap: theme.sizes.view.xs.spacing },
+                sm: { gap: theme.sizes.view.sm.spacing },
+                md: { gap: theme.sizes.view.md.spacing },
+                lg: { gap: theme.sizes.view.lg.spacing },
+                xl: { gap: theme.sizes.view.xl.spacing },
+            },
+            padding: {
+                none: { padding: 0 },
+                xs: { padding: theme.sizes.view.xs.padding },
+                sm: { padding: theme.sizes.view.sm.padding },
+                md: { padding: theme.sizes.view.md.padding },
+                lg: { padding: theme.sizes.view.lg.padding },
+                xl: { padding: theme.sizes.view.xl.padding },
+            },
+            paddingVertical: {
+                none: { paddingVertical: 0 },
+                xs: { paddingVertical: theme.sizes.view.xs.padding },
+                sm: { paddingVertical: theme.sizes.view.sm.padding },
+                md: { paddingVertical: theme.sizes.view.md.padding },
+                lg: { paddingVertical: theme.sizes.view.lg.padding },
+                xl: { paddingVertical: theme.sizes.view.xl.padding },
+            },
+            paddingHorizontal: {
+                none: { paddingHorizontal: 0 },
+                xs: { paddingHorizontal: theme.sizes.view.xs.padding },
+                sm: { paddingHorizontal: theme.sizes.view.sm.padding },
+                md: { paddingHorizontal: theme.sizes.view.md.padding },
+                lg: { paddingHorizontal: theme.sizes.view.lg.padding },
+                xl: { paddingHorizontal: theme.sizes.view.xl.padding },
+            },
+            margin: {
+                none: { margin: 0 },
+                xs: { margin: theme.sizes.view.xs.padding },
+                sm: { margin: theme.sizes.view.sm.padding },
+                md: { margin: theme.sizes.view.md.padding },
+                lg: { margin: theme.sizes.view.lg.padding },
+                xl: { margin: theme.sizes.view.xl.padding },
+            },
+            marginVertical: {
+                none: { marginVertical: 0 },
+                xs: { marginVertical: theme.sizes.view.xs.padding },
+                sm: { marginVertical: theme.sizes.view.sm.padding },
+                md: { marginVertical: theme.sizes.view.md.padding },
+                lg: { marginVertical: theme.sizes.view.lg.padding },
+                xl: { marginVertical: theme.sizes.view.xl.padding },
+            },
+            marginHorizontal: {
+                none: { marginHorizontal: 0 },
+                xs: { marginHorizontal: theme.sizes.view.xs.padding },
+                sm: { marginHorizontal: theme.sizes.view.sm.padding },
+                md: { marginHorizontal: theme.sizes.view.md.padding },
+                lg: { marginHorizontal: theme.sizes.view.lg.padding },
+                xl: { marginHorizontal: theme.sizes.view.xl.padding },
+            },
+        },
+        _web: {
+            display: 'flex',
+            flexDirection: 'column',
+            boxSizing: 'border-box',
+        },
     }),
 }));

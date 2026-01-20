@@ -1,4 +1,4 @@
-import { Intent, Size } from '@idealyst/theme';
+import { Intent, Size, Surface } from '@idealyst/theme';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { ContainerStyleProps } from '../utils/viewStyleProps';
@@ -9,6 +9,7 @@ import type { LayoutChangeEvent } from '../hooks/useWebLayout';
 export type CardIntentVariant = Intent;
 export type CardType = 'default' | 'outlined' | 'elevated' | 'filled';
 export type CardRadiusVariant = 'none' | Size;
+export type CardBackgroundVariant = Surface;
 
 /**
  * Container component for grouping related content with visual separation.
@@ -39,6 +40,11 @@ export interface CardProps extends ContainerStyleProps, InteractiveAccessibility
    * The intent/color scheme of the card
    */
   intent?: CardIntentVariant;
+
+  /**
+   * The background color from the surface palette (screen, primary, secondary, tertiary, inverse, etc.)
+   */
+  background?: CardBackgroundVariant;
 
   /**
    * Whether the card is clickable
