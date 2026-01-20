@@ -23,6 +23,10 @@ export default defineConfig({
           ],
         ],
         plugins: [
+          // Config plugin - injects env vars at build time
+          [path.resolve(__dirname, "../../../../packages/config/plugin.js"), {
+            extends: ['../shared/.env'],
+          }],
           // Idealyst plugin runs FIRST to expand $iterator patterns
           [
             path.resolve(__dirname, "../../../../packages/theme/src/babel/plugin.js"),
@@ -32,6 +36,11 @@ export default defineConfig({
                 'packages/navigation',
                 'packages/theme',
                 'packages/shared',
+                'packages/datagrid',
+                'packages/datepicker',
+                'packages/translate',
+                'packages/tooling',
+                'packages/markdown',
                 '@idealyst/components',
                 '@idealyst/navigation',
                 '@idealyst/theme',
@@ -59,6 +68,11 @@ export default defineConfig({
                 "packages/navigation",
                 "packages/theme",
                 "packages/shared",
+                "packages/datagrid",
+                "packages/datepicker",
+                "packages/translate",
+                "packages/tooling",
+                "packages/markdown",
                 "@idealyst/components",
                 "@idealyst/navigation",
                 "@idealyst/theme",
@@ -91,6 +105,7 @@ export default defineConfig({
       '@react-native/normalize-colors': path.resolve(__dirname, 'node_modules/@react-native/normalize-colors'),
       // Ensure we use the source code of our packages for live development
       '@idealyst/components': path.resolve(__dirname, '../../../../packages/components/src'),
+      '@idealyst/config': path.resolve(__dirname, '../../../../packages/config/src'),
       '@idealyst/navigation': path.resolve(__dirname, '../../../../packages/navigation/src'),
       '@idealyst/theme': path.resolve(__dirname, '../../../../packages/theme/src'),
       '@idealyst/datagrid': path.resolve(__dirname, '../../../../packages/datagrid/src'),

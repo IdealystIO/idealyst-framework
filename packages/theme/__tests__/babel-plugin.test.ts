@@ -5,6 +5,7 @@
  * - $iterator expansion for intents (theme.$intents.primary)
  * - $iterator expansion for sizes (theme.sizes.$button.paddingVertical)
  * - $iterator expansion for typography (theme.sizes.$typography.fontSize)
+ * - $iterator expansion for colors (theme.colors.$surface, $text, $border)
  * - compoundVariants expansion
  * - defineStyle transformation
  */
@@ -14,6 +15,9 @@ import * as path from 'path';
 
 // Import the plugin
 const plugin = require('../src/babel/plugin.js');
+
+// Import the cache reset function from tooling
+const { resetThemeCache } = require('@idealyst/tooling');
 
 // Mock theme keys for testing (avoids needing to parse actual theme file)
 const mockThemeKeys = {
@@ -76,6 +80,11 @@ function extractSection(code: string, startPattern: RegExp, endPattern?: RegExp)
 }
 
 describe('Idealyst Babel Plugin', () => {
+  // Reset the theme cache before each test to ensure fresh analysis
+  beforeEach(() => {
+    resetThemeCache();
+  });
+
   describe('$intents iterator expansion', () => {
     it('should expand theme.$intents.primary to all intent keys', () => {
       const input = `
@@ -434,6 +443,102 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('StyleSheet.create');
       // Should NOT contain defineStyle
       expect(output).not.toContain('defineStyle(');
+    });
+  });
+
+  describe('$surfaceColors iterator expansion', () => {
+    it('should expand theme.colors.$surface to all surface color keys', () => {
+      const input = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const styles = defineStyle('View', (theme) => ({
+          container: {
+            variants: {
+              background: {
+                backgroundColor: theme.colors.$surface,
+              },
+            },
+          },
+        }));
+      `;
+
+      const output = transform(input);
+
+      // Should expand to surface color keys (from lightTheme)
+      expect(output).toContain('screen: {');
+      expect(output).toContain('primary: {');
+      expect(output).toContain('secondary: {');
+      expect(output).toContain('tertiary: {');
+      expect(output).toContain('inverse: {');
+
+      // Should have correct theme references
+      expect(output).toContain('theme.colors.surface.screen');
+      expect(output).toContain('theme.colors.surface.primary');
+      expect(output).toContain('theme.colors.surface.inverse');
+    });
+  });
+
+  describe('$textColors iterator expansion', () => {
+    it('should expand theme.colors.$text to all text color keys', () => {
+      const input = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const styles = defineStyle('Text', (theme) => ({
+          text: {
+            variants: {
+              color: {
+                color: theme.colors.$text,
+              },
+            },
+          },
+        }));
+      `;
+
+      const output = transform(input);
+
+      // Should expand to text color keys (from lightTheme)
+      expect(output).toContain('primary: {');
+      expect(output).toContain('secondary: {');
+      expect(output).toContain('tertiary: {');
+      expect(output).toContain('inverse: {');
+
+      // Should have correct theme references
+      expect(output).toContain('theme.colors.text.primary');
+      expect(output).toContain('theme.colors.text.secondary');
+      expect(output).toContain('theme.colors.text.inverse');
+    });
+  });
+
+  describe('$borderColors iterator expansion', () => {
+    it('should expand theme.colors.$border to all border color keys', () => {
+      const input = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const styles = defineStyle('Card', (theme) => ({
+          card: {
+            variants: {
+              borderColor: {
+                borderColor: theme.colors.$border,
+              },
+            },
+          },
+        }));
+      `;
+
+      const output = transform(input);
+
+      // Should expand to border color keys (from lightTheme)
+      expect(output).toContain('primary: {');
+      expect(output).toContain('secondary: {');
+      expect(output).toContain('disabled: {');
+
+      // Should have correct theme references
+      expect(output).toContain('theme.colors.border.primary');
+      expect(output).toContain('theme.colors.border.secondary');
+      expect(output).toContain('theme.colors.border.disabled');
     });
   });
 

@@ -33,7 +33,7 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
     container: (_props: SelectDynamicProps) => ({
         position: 'relative' as const,
         _web: {
-            display: 'inline-flex',
+            display: 'flex',
             flexDirection: 'column',
         },
         variants: {
@@ -82,6 +82,7 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
             },
             _web: {
                 display: 'flex',
+                width: '100%',
                 boxSizing: 'border-box',
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 border: `1px solid ${borderColor}`,

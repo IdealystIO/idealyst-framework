@@ -186,6 +186,10 @@ export default defineConfig({
           ['@babel/preset-typescript', { isTSX: true, allExtensions: true }],
         ],
         plugins: [
+          // 0. Config plugin - injects env vars at build time
+          ['@idealyst/config/plugin', {
+            extends: ['../shared/.env'],
+          }],
           // 1. Idealyst theme plugin - processes $iterator patterns FIRST
           [
             '@idealyst/theme/plugin',
@@ -365,30 +369,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
  * Web just wraps the shared App with BrowserRouter for web routing
  */
 function createAppTsx(data: TemplateData): string {
-  if (data.hasTrpc) {
-    return `/**
- * Web App entry point
- * Wraps the shared App with BrowserRouter for web routing
- */
-
-import { BrowserRouter } from 'react-router-dom';
-import { App } from '@${data.workspaceScope}/shared';
-
-// API base URL for web - uses same origin in production, localhost in development
-const API_BASE_URL = window.location.hostname === 'localhost'
-  ? 'http://localhost:3001'
-  : window.location.origin;
-
-export default function WebApp() {
-  return (
-    <BrowserRouter>
-      <App apiBaseUrl={API_BASE_URL} />
-    </BrowserRouter>
-  );
-}
-`;
-  }
-
   return `/**
  * Web App entry point
  * Wraps the shared App with BrowserRouter for web routing

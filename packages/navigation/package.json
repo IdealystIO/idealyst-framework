@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/navigation",
-  "version": "1.2.35",
+  "version": "1.2.41",
   "description": "Cross-platform navigation library for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",
@@ -45,9 +45,9 @@
   },
   "peerDependencies": {
     "@idealyst/camera": "^1.2.30",
-    "@idealyst/components": "^1.2.35",
+    "@idealyst/components": "^1.2.41",
     "@idealyst/microphone": "^1.2.30",
-    "@idealyst/theme": "^1.2.35",
+    "@idealyst/theme": "^1.2.41",
     "@react-navigation/bottom-tabs": ">=7.0.0",
     "@react-navigation/drawer": ">=7.0.0",
     "@react-navigation/native": ">=7.0.0",
@@ -71,12 +71,16 @@
     }
   },
   "devDependencies": {
+    "@idealyst/animate": "^1.2.38",
+    "@idealyst/blur": "^1.2.40",
     "@idealyst/camera": "^1.2.30",
-    "@idealyst/components": "^1.2.35",
+    "@idealyst/components": "^1.2.41",
     "@idealyst/datagrid": "^1.2.30",
     "@idealyst/datepicker": "^1.2.30",
+    "@idealyst/lottie": "^1.2.38",
+    "@idealyst/markdown": "^1.2.41",
     "@idealyst/microphone": "^1.2.30",
-    "@idealyst/theme": "^1.2.35",
+    "@idealyst/theme": "^1.2.41",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "react": "^19.1.0",

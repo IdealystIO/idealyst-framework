@@ -1,0 +1,74 @@
+{
+  "name": "@idealyst/blur",
+  "version": "1.2.41",
+  "description": "Cross-platform blur component for React and React Native",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/blur"
+  },
+  "author": "Idealyst <contact@idealyst.io>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./examples": {
+      "import": "./src/examples/index.ts",
+      "require": "./src/examples/index.ts",
+      "types": "./src/examples/index.ts"
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "@idealyst/components": "^1.2.41",
+    "@react-native-community/blur": ">=4.0.0",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0"
+  },
+  "peerDependenciesMeta": {
+    "@idealyst/components": {
+      "optional": true
+    },
+    "@react-native-community/blur": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@idealyst/components": "^1.2.41",
+    "@react-native-community/blur": "^4.4.1",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "blur",
+    "backdrop-filter",
+    "cross-platform",
+    "glassmorphism"
+  ]
+}

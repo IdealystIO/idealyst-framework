@@ -17,6 +17,7 @@
     "@idealyst/components": "^1.2.30",
     "@idealyst/datagrid": "^1.2.30",
     "@idealyst/datepicker": "^1.2.30",
+    "@idealyst/markdown": "^1.2.38",
     "@idealyst/microphone": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
@@ -27,6 +28,13 @@
     "@test-select-demo/api": "workspace:*",
     "@test-select-demo/database": "workspace:*",
     "@test-select-demo/shared": "workspace:*",
+    "@tiptap/extension-link": "^2.11.0",
+    "@tiptap/extension-placeholder": "^2.11.0",
+    "@tiptap/extension-task-item": "^2.11.0",
+    "@tiptap/extension-task-list": "^2.11.0",
+    "@tiptap/extension-underline": "^2.11.0",
+    "@tiptap/react": "^2.11.0",
+    "@tiptap/starter-kit": "^2.11.0",
     "@trpc/client": "^11.5.1",
     "@trpc/react-query": "^11.5.1",
     "@trpc/server": "^11.5.1",
@@ -41,7 +49,8 @@
     "react-native-web": "^0.20.0",
     "react-router": "^7.9.1",
     "react-router-dom": "^7.9.1",
-    "sirv": "^2.0.4"
+    "sirv": "^2.0.4",
+    "tiptap-markdown": "^0.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",

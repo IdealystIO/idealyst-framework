@@ -4,6 +4,10 @@ import { DataGridShowcase } from '@idealyst/datagrid/examples';
 import { DatePickerExamples } from '@idealyst/datepicker/examples';
 import { CameraExamples } from '@idealyst/camera/examples';
 import { MicrophoneExamples } from '@idealyst/microphone/examples';
+import { AnimateExamples } from '@idealyst/animate/examples';
+import { LottieExamples } from '@idealyst/lottie/examples';
+import { BlurViewExamples } from '@idealyst/blur/examples';
+import { MarkdownEditorExamples } from '@idealyst/markdown/examples';
 import { Text, View, Card, Screen, Icon, Button } from '@idealyst/components';
 import { NavigatorParam, RouteParam, NotFoundComponentProps } from '../routing';
 import { ExampleWebLayout } from './ExampleWebLayout';
@@ -336,6 +340,10 @@ const ExampleNavigationRouter: NavigatorParam = {
         { path: "microphone", type: 'screen', component: MicrophoneExamples, options: { title: "Microphone" } },
         { path: "datagrid", type: 'screen', component: DataGridShowcase, options: { title: "Data Grid" } },
         { path: "datepicker", type: 'screen', component: DatePickerExamples, options: { title: "Date Picker" } },
+        { path: "animate", type: 'screen', component: AnimateExamples, options: { title: "Animate" } },
+        { path: "lottie", type: 'screen', component: LottieExamples, options: { title: "Lottie" } },
+        { path: "blur", type: 'screen', component: BlurViewExamples, options: { title: "Blur" } },
+        { path: "markdown-editor", type: 'screen', component: MarkdownEditorExamples, options: { title: "Markdown Editor" } },
         { path: "theme-extension", type: 'screen', component: ThemeExtensionExamples, options: { title: "Theme Extension" } },
     ],
 };

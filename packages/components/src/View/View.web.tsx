@@ -36,8 +36,12 @@ const View = forwardRef<IdealystElement, ViewProps>(({
 }, ref) => {
   const layoutRef = useWebLayout<HTMLDivElement>(onLayout);
 
+  // Handle 'transparent' background separately since it's not a surface color key
+  // The $surface iterator only expands to actual surface color keys
+  const backgroundVariant = background === 'transparent' ? undefined : background;
+
   viewStyles.useVariants({
-    background,
+    background: backgroundVariant,
     radius,
     border,
     gap,

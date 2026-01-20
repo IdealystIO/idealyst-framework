@@ -26,9 +26,13 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
 }, ref) => {
   const insets = useSafeAreaInsets();
 
+  // Handle 'transparent' background separately since it's not a surface color key
+  // The $surface iterator only expands to actual surface color keys
+  const backgroundVariant = background === 'transparent' ? undefined : background;
+
   // Set active variants for this render
   screenStyles.useVariants({
-    background,
+    background: backgroundVariant,
     safeArea,
     gap,
     padding,

@@ -15,6 +15,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   minuteStep = 1,
   disabled = false,
   error,
+  size = 'md',
   style,
 }) => {
   const styles = dateTimePickerStyles;
@@ -25,6 +26,8 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   const inputColumnStyle = (styles.inputColumn as any)({});
 
   const handleDateChange = (date: Date | null) => {
+    console.log('[DateTimePicker] handleDateChange received:', date?.toISOString());
+    console.log('[DateTimePicker] Current value:', value?.toISOString());
     if (!date) {
       onChange(null);
       return;
@@ -32,12 +35,18 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     // Preserve time from current value, or use noon as default
     const hours = value?.getHours() ?? 12;
     const minutes = value?.getMinutes() ?? 0;
+    console.log('[DateTimePicker] Preserving hours:', hours, 'minutes:', minutes);
     const updated = new Date(date);
+    console.log('[DateTimePicker] After new Date(date):', updated.toISOString());
     updated.setHours(hours, minutes, 0, 0);
+    console.log('[DateTimePicker] After setHours:', updated.toISOString());
+    console.log('[DateTimePicker] Calling onChange with:', updated.toISOString());
     onChange(updated);
   };
 
   const handleTimeChange = (time: Date | null) => {
+    console.log('[DateTimePicker] handleTimeChange received:', time?.toISOString());
+    console.log('[DateTimePicker] Current value:', value?.toISOString());
     if (!time) {
       // Only clear time component, keep date if it exists
       if (value) {
@@ -58,19 +67,22 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
       0,
       0
     );
+    console.log('[DateTimePicker] Time change - calling onChange with:', updated.toISOString());
     onChange(updated);
   };
 
-  // Get web props
+  // Get web props for all elements
   const inputRowProps = getWebProps([inputRowStyle]);
+  const labelProps = getWebProps([labelTextStyle]);
+  const inputColumnProps = getWebProps([inputColumnStyle]);
 
   return (
     <div style={style as React.CSSProperties}>
       {label && (
-        <span style={labelTextStyle}>{label}</span>
+        <span {...labelProps}>{label}</span>
       )}
       <div {...inputRowProps}>
-        <div style={inputColumnStyle}>
+        <div {...inputColumnProps}>
           <DateInput
             value={value ?? undefined}
             onChange={handleDateChange}
@@ -79,9 +91,10 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             maxDate={maxDate}
             disabled={disabled}
             error={error}
+            size={size}
           />
         </div>
-        <div style={inputColumnStyle}>
+        <div {...inputColumnProps}>
           <TimeInput
             value={value ?? undefined}
             onChange={handleTimeChange}
@@ -89,6 +102,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             mode={timeMode}
             minuteStep={minuteStep}
             disabled={disabled}
+            size={size}
           />
         </div>
       </div>

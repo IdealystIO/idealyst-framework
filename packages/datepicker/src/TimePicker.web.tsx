@@ -15,6 +15,11 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 }) => {
   const styles = timePickerStyles;
 
+  // Apply variants for disabled state
+  styles.useVariants({
+    disabled,
+  });
+
   const currentDate = value || new Date();
   const hours = currentDate.getHours();
   const minutes = currentDate.getMinutes();
@@ -67,10 +72,16 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   const periodButtonTextStyle = (styles.periodButtonText as any)({});
   const iconColorStyle = (styles.iconColor as any)({});
 
-  // Get web props
+  // Get web props for all elements
   const timePickerProps = getWebProps([timePickerStyle, style as any]);
   const timeColumnsProps = getWebProps([timeColumnsStyle]);
   const timeColumnProps = getWebProps([timeColumnStyle]);
+  const timeSeparatorProps = getWebProps([timeSeparatorStyle]);
+  const separatorTextProps = getWebProps([separatorTextStyle]);
+  const timeValueProps = getWebProps([timeValueStyle]);
+  const arrowButtonProps = getWebProps([arrowButtonStyle]);
+  const periodButtonProps = getWebProps([periodButtonStyle]);
+  const periodButtonTextProps = getWebProps([periodButtonTextStyle]);
 
   return (
     <div {...timePickerProps}>
@@ -78,17 +89,19 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         {/* Hours column */}
         <div {...timeColumnProps}>
           <button
-            style={arrowButtonStyle}
+            type="button"
+            {...arrowButtonProps}
             onClick={incrementHours}
             disabled={disabled}
           >
             <IconSvg path={mdiChevronUp} size={20} color={iconColorStyle.color} />
           </button>
-          <span style={timeValueStyle}>
+          <span {...timeValueProps}>
             {String(displayHours).padStart(2, '0')}
           </span>
           <button
-            style={arrowButtonStyle}
+            type="button"
+            {...arrowButtonProps}
             onClick={decrementHours}
             disabled={disabled}
           >
@@ -97,24 +110,26 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         </div>
 
         {/* Separator */}
-        <div style={timeSeparatorStyle}>
-          <span style={separatorTextStyle}>:</span>
+        <div {...timeSeparatorProps}>
+          <span {...separatorTextProps}>:</span>
         </div>
 
         {/* Minutes column */}
         <div {...timeColumnProps}>
           <button
-            style={arrowButtonStyle}
+            type="button"
+            {...arrowButtonProps}
             onClick={incrementMinutes}
             disabled={disabled}
           >
             <IconSvg path={mdiChevronUp} size={20} color={iconColorStyle.color} />
           </button>
-          <span style={timeValueStyle}>
+          <span {...timeValueProps}>
             {String(minutes).padStart(2, '0')}
           </span>
           <button
-            style={arrowButtonStyle}
+            type="button"
+            {...arrowButtonProps}
             onClick={decrementMinutes}
             disabled={disabled}
           >
@@ -126,11 +141,12 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         {is12Hour && (
           <div {...timeColumnProps}>
             <button
-              style={periodButtonStyle}
+              type="button"
+              {...periodButtonProps}
               onClick={togglePeriod}
               disabled={disabled}
             >
-              <span style={periodButtonTextStyle}>
+              <span {...periodButtonTextProps}>
                 {isPM ? 'PM' : 'AM'}
               </span>
             </button>

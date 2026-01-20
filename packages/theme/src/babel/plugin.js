@@ -435,6 +435,15 @@ function expandCompoundVariantsArray(t, arrayNode, themeParam, keys, verbose, ex
         } else if (iteratorInfo.type === 'sizes' && iteratorInfo.componentName) {
             keysToExpand = keys?.sizes?.[iteratorInfo.componentName] || [];
             variantKeyName = 'size';
+        } else if (iteratorInfo.type === 'surfaceColors') {
+            keysToExpand = keys?.surfaceColors || [];
+            variantKeyName = 'background';
+        } else if (iteratorInfo.type === 'textColors') {
+            keysToExpand = keys?.textColors || [];
+            variantKeyName = 'color';
+        } else if (iteratorInfo.type === 'borderColors') {
+            keysToExpand = keys?.borderColors || [];
+            variantKeyName = 'borderColor';
         }
 
         if (keysToExpand.length === 0) {
@@ -496,6 +505,32 @@ function findIteratorPattern(t, node, themeParam, debugLog = () => {}) {
                                 accessPath: chain.slice(i + 1),
                             };
                             return;
+                        }
+
+                        // Color iterators: theme.colors.$surface, theme.colors.$text, theme.colors.$border
+                        // Pattern: theme.colors.$surface expands to screen, primary, secondary, etc.
+                        if (i > 0 && chain[i - 1] === 'colors') {
+                            if (iteratorName === 'surface') {
+                                result = {
+                                    type: 'surfaceColors',
+                                    accessPath: chain.slice(i + 1),
+                                };
+                                return;
+                            }
+                            if (iteratorName === 'text') {
+                                result = {
+                                    type: 'textColors',
+                                    accessPath: chain.slice(i + 1),
+                                };
+                                return;
+                            }
+                            if (iteratorName === 'border') {
+                                result = {
+                                    type: 'borderColors',
+                                    accessPath: chain.slice(i + 1),
+                                };
+                                return;
+                            }
                         }
 
                         if (i > 0 && chain[i - 1] === 'sizes') {
@@ -561,6 +596,12 @@ function expandVariantWithIterator(t, valueNode, themeParam, keys, iteratorInfo,
         keysToExpand = keys?.typography || [];
     } else if (iteratorInfo.type === 'sizes' && iteratorInfo.componentName) {
         keysToExpand = keys?.sizes?.[iteratorInfo.componentName] || [];
+    } else if (iteratorInfo.type === 'surfaceColors') {
+        keysToExpand = keys?.surfaceColors || [];
+    } else if (iteratorInfo.type === 'textColors') {
+        keysToExpand = keys?.textColors || [];
+    } else if (iteratorInfo.type === 'borderColors') {
+        keysToExpand = keys?.borderColors || [];
     }
 
     if (keysToExpand.length === 0) {
@@ -573,9 +614,14 @@ function expandVariantWithIterator(t, valueNode, themeParam, keys, iteratorInfo,
 
     for (const key of keysToExpand) {
         const expandedValue = replaceIteratorRefs(t, valueNode, themeParam, iteratorInfo, key);
+        // Use string literal for keys with special characters (like hyphens)
+        // e.g., 'inverse-secondary' cannot be a valid identifier
+        const keyNode = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key)
+            ? t.identifier(key)
+            : t.stringLiteral(key);
         expandedProps.push(
             t.objectProperty(
-                t.identifier(key),
+                keyNode,
                 expandedValue
             )
         );
@@ -617,6 +663,22 @@ function replaceIteratorRefs(t, node, themeParam, iteratorInfo, key) {
                             break;
                         }
                         if (iteratorInfo.type === 'sizes' && iterName === iteratorInfo.componentName && i > 0 && chain[i - 1] === 'sizes') {
+                            hasIterator = true;
+                            dollarIndex = i;
+                            break;
+                        }
+                        // Color iterators: theme.colors.$surface -> theme.colors.surface.{key}
+                        if (iteratorInfo.type === 'surfaceColors' && iterName === 'surface' && i > 0 && chain[i - 1] === 'colors') {
+                            hasIterator = true;
+                            dollarIndex = i;
+                            break;
+                        }
+                        if (iteratorInfo.type === 'textColors' && iterName === 'text' && i > 0 && chain[i - 1] === 'colors') {
+                            hasIterator = true;
+                            dollarIndex = i;
+                            break;
+                        }
+                        if (iteratorInfo.type === 'borderColors' && iterName === 'border' && i > 0 && chain[i - 1] === 'colors') {
                             hasIterator = true;
                             dollarIndex = i;
                             break;
@@ -664,7 +726,14 @@ function replaceIteratorRefs(t, node, themeParam, iteratorInfo, key) {
 function buildMemberExpression(t, base, chain) {
     let expr = t.identifier(base);
     for (const part of chain) {
-        expr = t.memberExpression(expr, t.identifier(part));
+        // Use bracket notation for keys with special characters (like hyphens)
+        // e.g., theme.colors.surface['inverse-secondary'] instead of theme.colors.surface.inverse-secondary
+        const isValidIdentifier = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(part);
+        if (isValidIdentifier) {
+            expr = t.memberExpression(expr, t.identifier(part));
+        } else {
+            expr = t.memberExpression(expr, t.stringLiteral(part), true); // computed = true
+        }
     }
     return expr;
 }

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, ComponentType } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { BaseProps } from '../utils/viewStyleProps';
 import { InteractiveAccessibilityProps } from '../utils/accessibility';
@@ -7,6 +7,16 @@ import { InteractiveAccessibilityProps } from '../utils/accessibility';
 export type DialogSizeVariant = 'sm' | 'md' | 'lg' | 'fullscreen';
 export type DialogType = 'default' | 'alert' | 'confirmation';
 export type DialogAnimationType = 'slide' | 'fade' | 'none';
+
+/**
+ * Props passed to custom backdrop components
+ */
+export interface BackdropComponentProps {
+  /**
+   * Whether the dialog is visible (for animation purposes)
+   */
+  isVisible: boolean;
+}
 
 /**
  * Modal dialog component for focused interactions requiring user attention.
@@ -72,4 +82,11 @@ export interface DialogProps extends BaseProps, InteractiveAccessibilityProps {
    * Test ID for testing
    */
   testID?: string;
+
+  /**
+   * Custom backdrop component that replaces the default backdrop.
+   * The component will be rendered as a full-screen overlay behind the dialog.
+   * It receives isVisible for animation coordination.
+   */
+  BackdropComponent?: ComponentType<BackdropComponentProps>;
 }

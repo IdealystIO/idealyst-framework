@@ -2223,7 +2223,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/animate@workspace:packages/animate"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.29"
+    "@idealyst/theme": "npm:^1.2.36"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
@@ -2231,7 +2231,7 @@ __metadata:
     react-native-svg: "npm:^15.14.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.29
+    "@idealyst/theme": ^1.2.36
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-reanimated: ">=3.0.0"
@@ -2246,7 +2246,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/camera@npm:^1.1.6, @idealyst/camera@workspace:packages/camera":
+"@idealyst/camera@npm:^1.2.30, @idealyst/camera@workspace:packages/camera":
   version: 0.0.0-use.local
   resolution: "@idealyst/camera@workspace:packages/camera"
   dependencies:
@@ -2294,12 +2294,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/components@npm:^1.2.29, @idealyst/components@workspace:packages/components":
+"@idealyst/components@npm:^1.2.36, @idealyst/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.29"
-    "@idealyst/tooling": "npm:^1.2.4"
+    "@idealyst/theme": "npm:^1.2.36"
+    "@idealyst/tooling": "npm:^1.2.30"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
@@ -2312,7 +2312,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.3.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.29
+    "@idealyst/theme": ^1.2.36
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.0.0"
     "@react-native-vector-icons/common": ">=12.0.0"
@@ -2368,12 +2368,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/datagrid@npm:^1.0.93, @idealyst/datagrid@workspace:packages/datagrid":
+"@idealyst/datagrid@npm:^1.2.30, @idealyst/datagrid@workspace:packages/datagrid":
   version: 0.0.0-use.local
   resolution: "@idealyst/datagrid@workspace:packages/datagrid"
   dependencies:
-    "@idealyst/components": "npm:^1.2.29"
-    "@idealyst/theme": "npm:^1.2.29"
+    "@idealyst/components": "npm:^1.2.36"
+    "@idealyst/theme": "npm:^1.2.36"
     "@types/react": "npm:^19.1.0"
     "@types/react-window": "npm:^1.8.8"
     react: "npm:^19.1.0"
@@ -2381,8 +2381,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.29
-    "@idealyst/theme": ^1.2.29
+    "@idealyst/components": ^1.2.36
+    "@idealyst/theme": ^1.2.36
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -2401,11 +2401,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/datepicker@npm:^1.0.93, @idealyst/datepicker@workspace:packages/datepicker":
+"@idealyst/datepicker@npm:^1.2.30, @idealyst/datepicker@workspace:packages/datepicker":
   version: 0.0.0-use.local
   resolution: "@idealyst/datepicker@workspace:packages/datepicker"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.29"
+    "@idealyst/theme": "npm:^1.2.36"
     "@mdi/js": "npm:^7.4.47"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
@@ -2416,7 +2416,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.2.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.29
+    "@idealyst/theme": ^1.2.36
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.6.0"
     react: ">=16.8.0"
@@ -2471,7 +2471,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/markdown@workspace:packages/markdown"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.29"
+    "@idealyst/theme": "npm:^1.2.36"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-markdown: "npm:^9.0.0"
@@ -2480,7 +2480,7 @@ __metadata:
     remark-gfm: "npm:^4.0.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.29
+    "@idealyst/theme": ^1.2.36
     react: ">=16.8.0"
     react-markdown: ">=9.0.0"
     react-native: ">=0.60.0"
@@ -2507,10 +2507,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/mcp-server@workspace:packages/mcp-server"
   dependencies:
-    "@idealyst/components": "npm:^1.2.29"
-    "@idealyst/navigation": "npm:^1.2.29"
-    "@idealyst/theme": "npm:^1.2.29"
-    "@idealyst/tooling": "npm:^1.2.1"
+    "@idealyst/components": "npm:^1.2.36"
+    "@idealyst/navigation": "npm:^1.2.36"
+    "@idealyst/theme": "npm:^1.2.36"
+    "@idealyst/tooling": "npm:^1.2.30"
     "@modelcontextprotocol/sdk": "npm:^1.0.4"
     "@types/node": "npm:^20.0.0"
     "@types/react": "npm:^19.1.0"
@@ -2526,7 +2526,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/microphone@npm:^1.1.7, @idealyst/microphone@workspace:packages/microphone":
+"@idealyst/microphone@npm:^1.2.30, @idealyst/microphone@workspace:packages/microphone":
   version: 0.0.0-use.local
   resolution: "@idealyst/microphone@workspace:packages/microphone"
   dependencies:
@@ -2535,7 +2535,7 @@ __metadata:
     react-native-live-audio-stream: "npm:^1.1.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.29
+    "@idealyst/components": ^1.2.36
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-live-audio-stream: ">=1.1.0"
@@ -2549,16 +2549,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/navigation@npm:^1.2.29, @idealyst/navigation@workspace:packages/navigation":
+"@idealyst/navigation@npm:^1.2.36, @idealyst/navigation@workspace:packages/navigation":
   version: 0.0.0-use.local
   resolution: "@idealyst/navigation@workspace:packages/navigation"
   dependencies:
-    "@idealyst/camera": "npm:^1.1.6"
-    "@idealyst/components": "npm:^1.2.29"
-    "@idealyst/datagrid": "npm:^1.0.93"
-    "@idealyst/datepicker": "npm:^1.0.93"
-    "@idealyst/microphone": "npm:^1.1.7"
-    "@idealyst/theme": "npm:^1.2.29"
+    "@idealyst/camera": "npm:^1.2.30"
+    "@idealyst/components": "npm:^1.2.36"
+    "@idealyst/datagrid": "npm:^1.2.30"
+    "@idealyst/datepicker": "npm:^1.2.30"
+    "@idealyst/microphone": "npm:^1.2.30"
+    "@idealyst/theme": "npm:^1.2.36"
     "@types/react": "npm:^19.1.8"
     "@types/react-dom": "npm:^19.1.6"
     react: "npm:^19.1.0"
@@ -2568,10 +2568,10 @@ __metadata:
     react-router-dom: "npm:7.9.1"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/camera": ^1.1.6
-    "@idealyst/components": ^1.2.29
-    "@idealyst/microphone": ^1.1.7
-    "@idealyst/theme": ^1.2.29
+    "@idealyst/camera": ^1.2.30
+    "@idealyst/components": ^1.2.36
+    "@idealyst/microphone": ^1.2.30
+    "@idealyst/theme": ^1.2.36
     "@react-navigation/bottom-tabs": ">=7.0.0"
     "@react-navigation/drawer": ">=7.0.0"
     "@react-navigation/native": ">=7.0.0"
@@ -2597,7 +2597,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/oauth-client@workspace:packages/oauth-client"
   dependencies:
-    "@idealyst/storage": "npm:^1.0.76"
+    "@idealyst/storage": "npm:^1.2.30"
     "@types/react": "npm:^18.3.18"
     "@types/react-native": "npm:^0.73.0"
     react: "npm:^19.1.0"
@@ -2605,12 +2605,12 @@ __metadata:
     tsup: "npm:^8.3.5"
     typescript: "npm:^5.7.3"
   peerDependencies:
-    "@idealyst/storage": ^1.0.76
+    "@idealyst/storage": ^1.2.30
     react-native: ">=0.60.0"
   languageName: unknown
   linkType: soft
 
-"@idealyst/storage@npm:^1.0.76, @idealyst/storage@workspace:packages/storage":
+"@idealyst/storage@npm:^1.2.30, @idealyst/storage@workspace:packages/storage":
   version: 0.0.0-use.local
   resolution: "@idealyst/storage@workspace:packages/storage"
   dependencies:
@@ -2633,14 +2633,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/theme@npm:^1.2.29, @idealyst/theme@workspace:packages/theme":
+"@idealyst/theme@npm:^1.2.36, @idealyst/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
     "@babel/core": "npm:^7.28.5"
     "@babel/preset-typescript": "npm:^7.28.5"
     "@babel/types": "npm:^7.28.5"
-    "@idealyst/tooling": "npm:^1.2.3"
+    "@idealyst/tooling": "npm:^1.2.30"
     "@types/babel__core": "npm:^7.20.0"
     "@types/react": "npm:^19.1.0"
     "@types/react-native": "npm:^0.73.0"
@@ -2654,7 +2654,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/tooling@npm:^1.2.1, @idealyst/tooling@npm:^1.2.3, @idealyst/tooling@npm:^1.2.4, @idealyst/tooling@workspace:packages/tooling":
+"@idealyst/tooling@npm:^1.2.30, @idealyst/tooling@workspace:packages/tooling":
   version: 0.0.0-use.local
   resolution: "@idealyst/tooling@workspace:packages/tooling"
   dependencies:

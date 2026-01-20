@@ -18,6 +18,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   style,
   testID,
   id,
+  BackdropComponent,
   // Accessibility props
   accessibilityLabel,
   accessibilityHint,
@@ -124,6 +125,56 @@ const Dialog = forwardRef<View, DialogProps>(({
   const closeButtonTextStyle = (dialogStyles.closeButtonText as any)({});
   const contentStyle = (dialogStyles.content as any)({});
 
+  // Style for custom backdrop wrapper (no default backdrop styling)
+  const customBackdropWrapperStyle = {
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+  };
+
+  // Style for custom backdrop component container (fills entire backdrop area)
+  const customBackdropContainerStyle = {
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  };
+
+  const dialogContainer = (
+    <TouchableWithoutFeedback onPress={(e: GestureResponderEvent) => e.stopPropagation()}>
+      <Animated.View ref={ref as any} style={[containerStyle, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
+        {(title || showCloseButton) && (
+          <View style={headerStyle}>
+            {title && (
+              <Text style={titleStyle}>
+                {title}
+              </Text>
+            )}
+            {showCloseButton && (
+              <TouchableOpacity
+                style={closeButtonStyle}
+                onPress={handleClosePress}
+                accessibilityLabel="Close dialog"
+                accessibilityRole="button"
+              >
+                <Text style={closeButtonTextStyle}>×</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+        <View style={contentStyle}>
+          {children}
+        </View>
+      </Animated.View>
+    </TouchableWithoutFeedback>
+  );
+
   return (
     <Modal
       visible={open}
@@ -134,34 +185,18 @@ const Dialog = forwardRef<View, DialogProps>(({
       testID={testID}
     >
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
-        <Animated.View style={[backdropStyle, backdropAnimatedStyle]}>
-          <TouchableWithoutFeedback onPress={(e: GestureResponderEvent) => e.stopPropagation()}>
-            <Animated.View ref={ref as any} style={[containerStyle, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
-              {(title || showCloseButton) && (
-                <View style={headerStyle}>
-                  {title && (
-                    <Text style={titleStyle}>
-                      {title}
-                    </Text>
-                  )}
-                  {showCloseButton && (
-                    <TouchableOpacity
-                      style={closeButtonStyle}
-                      onPress={handleClosePress}
-                      accessibilityLabel="Close dialog"
-                      accessibilityRole="button"
-                    >
-                      <Text style={closeButtonTextStyle}>×</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              )}
-              <View style={contentStyle}>
-                {children}
-              </View>
+        {BackdropComponent ? (
+          <View style={customBackdropWrapperStyle}>
+            <Animated.View style={[customBackdropContainerStyle, backdropAnimatedStyle]}>
+              <BackdropComponent isVisible={open} />
             </Animated.View>
-          </TouchableWithoutFeedback>
-        </Animated.View>
+            {dialogContainer}
+          </View>
+        ) : (
+          <Animated.View style={[backdropStyle, backdropAnimatedStyle]}>
+            {dialogContainer}
+          </Animated.View>
+        )}
       </TouchableWithoutFeedback>
     </Modal>
   );

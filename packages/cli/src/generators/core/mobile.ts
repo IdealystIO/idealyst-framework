@@ -221,6 +221,10 @@ function createBabelConfig(data: MobileGeneratorOptions): string {
   return `module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
+    // Config plugin - injects env vars at build time
+    ['@idealyst/config/plugin', {
+      extends: ['../shared/.env'],
+    }],
     ['@idealyst/theme/plugin', {
       themePath: '../shared/src/theme.ts',
       autoProcessPaths: [
@@ -277,36 +281,6 @@ AppRegistry.registerComponent(appName, () => App);
  * Mobile wraps the shared App with SafeAreaProvider
  */
 function createAppTsx(data: MobileGeneratorOptions): string {
-  if (data.hasTrpc) {
-    return `/**
- * Mobile App entry point
- * Wraps the shared App with SafeAreaProvider and mobile-specific API configuration
- */
-
-import { Platform } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { App } from '@${data.workspaceScope}/shared';
-
-// API base URL for mobile
-// Android emulator uses 10.0.2.2 to reach host localhost
-// iOS simulator can use localhost directly
-// For physical devices, use your machine's local IP address
-const API_BASE_URL = Platform.select({
-  android: 'http://10.0.2.2:3001',
-  ios: 'http://localhost:3001',
-  default: 'http://localhost:3001',
-});
-
-export default function MobileApp() {
-  return (
-    <SafeAreaProvider>
-      <App apiBaseUrl={API_BASE_URL} />
-    </SafeAreaProvider>
-  );
-}
-`;
-  }
-
   return `/**
  * Mobile App entry point
  * Wraps the shared App with SafeAreaProvider

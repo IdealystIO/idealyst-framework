@@ -29,10 +29,12 @@ export type ViewVariants = {
 export type ViewDynamicProps = Partial<ViewVariants>;
 
 /**
- * View styles with $iterator expansion for spacing variants.
+ * View styles with $iterator expansion for spacing and background variants.
  *
  * NOTE: At least one top-level theme access is required for Unistyles to trace
  * theme dependencies. We use a transparent borderColor as a marker.
+ *
+ * The background variant uses $surface iterator to expand to all surface color keys.
  */
 export const viewStyles = defineStyle('View', (theme: Theme) => ({
     view: (_props: ViewDynamicProps) => ({
@@ -41,14 +43,10 @@ export const viewStyles = defineStyle('View', (theme: Theme) => ({
         borderColor: theme.colors.border.primary,
         borderWidth: 0,
         variants: {
+            // $iterator expands for each surface color key
             background: {
-                transparent: { backgroundColor: 'transparent' },
-                primary: { backgroundColor: theme.colors.surface.primary },
-                secondary: { backgroundColor: theme.colors.surface.secondary },
-                tertiary: { backgroundColor: theme.colors.surface.tertiary },
-                inverse: { backgroundColor: theme.colors.surface.inverse },
-                'inverse-secondary': { backgroundColor: theme.colors.surface['inverse-secondary'] },
-                'inverse-tertiary': { backgroundColor: theme.colors.surface['inverse-tertiary'] },
+                backgroundColor: theme.colors.$surface,
+                // 'transparent' is handled as a special case
             },
             radius: {
                 none: { borderRadius: 0 },

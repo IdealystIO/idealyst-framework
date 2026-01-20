@@ -286,7 +286,8 @@ export function analyzeThemeSource(
 
     for (const { method, args } of calls) {
       switch (method) {
-        case 'addIntent': {
+        case 'addIntent':
+        case 'setIntent': {
           const name = getStringValue(args[0]);
           if (name && !values.intents.includes(name)) {
             values.intents.push(name);
@@ -437,6 +438,47 @@ export function analyzeThemeSource(
           break;
         }
 
+        case 'addSurfaceColor':
+        case 'setSurfaceColor': {
+          const name = getStringValue(args[0]);
+          if (name && !values.surfaceColors.includes(name)) {
+            values.surfaceColors.push(name);
+            log(`  Found surface color: ${name}`);
+          }
+          break;
+        }
+
+        case 'addTextColor':
+        case 'setTextColor': {
+          const name = getStringValue(args[0]);
+          if (name && !values.textColors.includes(name)) {
+            values.textColors.push(name);
+            log(`  Found text color: ${name}`);
+          }
+          break;
+        }
+
+        case 'addBorderColor':
+        case 'setBorderColor': {
+          const name = getStringValue(args[0]);
+          if (name && !values.borderColors.includes(name)) {
+            values.borderColors.push(name);
+            log(`  Found border color: ${name}`);
+          }
+          break;
+        }
+
+        case 'addPalletColor':
+        case 'setPalletColor': {
+          // For pallet colors, we just track that they exist
+          // The actual shade keys (50-900) are always the same
+          const name = getStringValue(args[0]);
+          if (name) {
+            log(`  Found pallet color: ${name}`);
+          }
+          break;
+        }
+
         case 'build':
           // End of chain, nothing to extract
           break;
@@ -543,6 +585,9 @@ export interface BabelThemeKeys {
   radii: string[];
   shadows: string[];
   typography: string[];
+  surfaceColors: string[];
+  textColors: string[];
+  borderColors: string[];
 }
 
 export function toBabelThemeKeys(values: ThemeValues): BabelThemeKeys {
@@ -552,5 +597,8 @@ export function toBabelThemeKeys(values: ThemeValues): BabelThemeKeys {
     radii: values.radii,
     shadows: values.shadows,
     typography: values.typography,
+    surfaceColors: values.surfaceColors,
+    textColors: values.textColors,
+    borderColors: values.borderColors,
   };
 }

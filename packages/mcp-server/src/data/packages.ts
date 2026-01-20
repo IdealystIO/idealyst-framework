@@ -59,7 +59,7 @@ export const packages: Record<string, PackageInfo> = {
     name: "Theme",
     npmName: "@idealyst/theme",
     description:
-      "Cross-platform theming system built on react-native-unistyles. Provides colors, typography, spacing, and responsive breakpoints.",
+      "Cross-platform theming system built on react-native-unistyles. Provides colors, typography, spacing, and responsive breakpoints with a fluent builder API.",
     category: "core",
     platforms: ["web", "native"],
     documentationStatus: "full",
@@ -68,6 +68,9 @@ export const packages: Record<string, PackageInfo> = {
     features: [
       "Light and dark theme variants",
       "Semantic color tokens (intent-based)",
+      "Fluent builder API for theme creation",
+      "Individual color modification (add/set surface, text, border, pallet)",
+      "Intent management (addIntent, setIntent)",
       "Responsive breakpoints",
       "Typography scale",
       "Spacing and sizing utilities",
@@ -79,10 +82,14 @@ export const packages: Record<string, PackageInfo> = {
   <App />
 </UnistylesProvider>`,
     apiHighlights: [
+      "createTheme() / fromTheme(base) - Theme builder",
+      "addIntent() / setIntent() - Intent management",
+      "addSurfaceColor() / setSurfaceColor() - Surface colors",
+      "addTextColor() / setTextColor() - Text colors",
+      "addBorderColor() / setBorderColor() - Border colors",
+      "addPalletColor() / setPalletColor() - Pallet colors",
       "Size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'",
       "Intent: 'primary' | 'secondary' | 'success' | 'warning' | 'danger'",
-      "Color: theme color tokens",
-      "useStyles() hook for styling",
     ],
     relatedPackages: ["components"],
   },

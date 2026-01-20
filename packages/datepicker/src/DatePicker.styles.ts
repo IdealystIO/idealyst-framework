@@ -20,12 +20,17 @@ export type DatePickerDynamicProps = {
  */
 export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme: Theme) => ({
   // Calendar container - compact
-  calendar: ({ disabled = false }: DatePickerDynamicProps) => ({
+  calendar: (_props: DatePickerDynamicProps) => ({
     padding: 8,
     backgroundColor: theme.colors.surface.primary,
     borderRadius: 6,
     width: 220,
-    opacity: disabled ? 0.6 : 1,
+    variants: {
+      disabled: {
+        true: { opacity: 0.6 },
+        false: { opacity: 1 },
+      },
+    },
   }),
 
   // Calendar header with month/year and navigation
@@ -111,27 +116,44 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   }),
 
   // Navigation button
-  navButton: ({ disabled = false }: DatePickerDynamicProps) => ({
+  navButton: (_props: DatePickerDynamicProps) => ({
     width: 28,
     height: 28,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     borderRadius: 4,
-    opacity: disabled ? 0.4 : 1,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
     _web: {
       display: 'flex',
-      cursor: disabled ? 'not-allowed' : 'pointer',
+      background: 'none',
+      border: 'none',
+      padding: 0,
+    },
+    variants: {
+      disabled: {
+        true: { opacity: 0.4, _web: { cursor: 'not-allowed' } },
+        false: { opacity: 1, _web: { cursor: 'pointer' } },
+      },
     },
   }),
 
   // Title button (month/year selector)
-  titleButton: ({ disabled = false }: DatePickerDynamicProps) => ({
+  titleButton: (_props: DatePickerDynamicProps) => ({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
-    opacity: disabled ? 0.6 : 1,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
     _web: {
-      cursor: disabled ? 'not-allowed' : 'pointer',
+      background: 'none',
+      border: 'none',
+    },
+    variants: {
+      disabled: {
+        true: { opacity: 0.6, _web: { cursor: 'not-allowed' } },
+        false: { opacity: 1, _web: { cursor: 'pointer' } },
+      },
     },
   }),
 
@@ -141,23 +163,36 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
     color: theme.colors.text.primary,
   }),
 
-  // Day button
-  dayButton: ({ disabled = false }: DatePickerDynamicProps) => ({
-    width: 24,
-    height: 24,
+  // Day button - fills entire cell for better click handling
+  dayButton: (_props: DatePickerDynamicProps) => ({
+    width: 28,
+    height: 28,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
-    borderRadius: 12,
-    opacity: disabled ? 0.4 : 1,
+    borderRadius: 14,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
     _web: {
       display: 'flex',
-      cursor: disabled ? 'not-allowed' : 'pointer',
+      background: 'none',
+      border: 'none',
+      padding: 0,
+      cursor: 'pointer',
+    },
+    variants: {
+      disabled: {
+        true: { opacity: 0.4, _web: { cursor: 'not-allowed' } },
+        false: { opacity: 1, _web: { cursor: 'pointer' } },
+      },
     },
   }),
 
   dayText: (_props: DatePickerDynamicProps) => ({
     fontSize: 12,
     color: theme.colors.text.primary,
+    _web: {
+      pointerEvents: 'none',
+    },
   }),
 
   weekdayText: (_props: DatePickerDynamicProps) => ({
@@ -166,7 +201,7 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   }),
 
   // Month/Year selector item
-  selectorItem: ({ disabled = false }: DatePickerDynamicProps) => ({
+  selectorItem: (_props: DatePickerDynamicProps) => ({
     minWidth: 48,
     paddingVertical: 6,
     paddingHorizontal: 8,
@@ -174,41 +209,66 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     borderRadius: 4,
-    opacity: disabled ? 0.4 : 1,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
     _web: {
       display: 'flex',
-      cursor: disabled ? 'not-allowed' : 'pointer',
+      background: 'none',
+      border: 'none',
+    },
+    variants: {
+      disabled: {
+        true: { opacity: 0.4, _web: { cursor: 'not-allowed' } },
+        false: { opacity: 1, _web: { cursor: 'pointer' } },
+      },
     },
   }),
 
   selectorItemSelected: (_props: DatePickerDynamicProps) => ({
     backgroundColor: theme.intents.primary.primary,
+    _web: {
+      background: theme.intents.primary.primary,
+    },
   }),
 
   selectorItemText: (_props: DatePickerDynamicProps) => ({
     fontSize: 12,
     color: theme.colors.text.primary,
+    _web: {
+      pointerEvents: 'none',
+    },
   }),
 
   selectorItemTextSelected: (_props: DatePickerDynamicProps) => ({
     color: theme.intents.primary.contrast,
+    _web: {
+      pointerEvents: 'none',
+    },
   }),
 
   // Selected day styling
   selectedDay: (_props: DatePickerDynamicProps) => ({
     backgroundColor: theme.intents.primary.primary,
-    borderRadius: 14,
+    borderRadius: 6,
+    _web: {
+      background: theme.intents.primary.primary,
+    },
   }),
 
   selectedDayText: (_props: DatePickerDynamicProps) => ({
     color: theme.intents.primary.contrast,
+    _web: {
+      pointerEvents: 'none',
+    },
   }),
 
-  // Today styling
+  // Today styling - subtle background highlight
   todayDay: (_props: DatePickerDynamicProps) => ({
-    borderWidth: 1,
-    borderColor: theme.intents.primary.primary,
-    borderRadius: 14,
+    backgroundColor: theme.intents.primary.muted,
+    borderRadius: 6,
+    _web: {
+      background: theme.intents.primary.muted,
+    },
   }),
 
   // Icon color helper

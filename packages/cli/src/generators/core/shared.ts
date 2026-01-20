@@ -386,6 +386,7 @@ export default App;
   const imports: string[] = [
     `import React, { useState } from 'react';`,
     `import { NavigatorProvider } from '@idealyst/navigation';`,
+    `import { config } from '@idealyst/config';`,
   ];
 
   if (hasTrpc || hasGraphql) {
@@ -460,8 +461,8 @@ export default App;
 
   return `${imports.join('\n')}
 
-// API configuration
-const API_URL = 'http://localhost:3000';
+// API URL from environment configuration
+const API_URL = config.get('API_URL', 'http://localhost:3000');
 
 /**
  * Main App component for ${data.appDisplayName}
@@ -498,6 +499,12 @@ async function generateSharedConfigFiles(
     path.join(sharedDir, 'tsconfig.json'),
     createSharedTsConfig(),
     { spaces: 2 }
+  );
+
+  // Create .env file with default API_URL
+  await fs.writeFile(
+    path.join(sharedDir, '.env'),
+    '# API Configuration\nAPI_URL=http://localhost:3000\n'
   );
 }
 
@@ -973,18 +980,17 @@ function createAppComponent(data: TemplateData): string {
 
 import { useMemo } from 'react';
 import { NavigatorProvider } from '@idealyst/navigation';
+import { config } from '@idealyst/config';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppRouter } from './navigation';
 import { trpc, createTrpcClient } from './utils/trpc';
 
-export interface AppProps {
-  /** Base URL for the API server (e.g., 'http://localhost:3001') */
-  apiBaseUrl: string;
-}
+// API URL from environment configuration
+const API_URL = config.get('API_URL', 'http://localhost:3000');
 
-export default function App({ apiBaseUrl }: AppProps) {
+export default function App() {
   const queryClient = useMemo(() => new QueryClient(), []);
-  const trpcClient = useMemo(() => createTrpcClient(apiBaseUrl), [apiBaseUrl]);
+  const trpcClient = useMemo(() => createTrpcClient(API_URL), []);
 
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

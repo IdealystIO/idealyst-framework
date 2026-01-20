@@ -20,11 +20,16 @@ export type TimePickerDynamicProps = {
  */
 export const timePickerStyles = defineStyle('TimePicker', (theme: Theme) => ({
   // Time picker container
-  timePicker: ({ disabled = false }: TimePickerDynamicProps) => ({
+  timePicker: (_props: TimePickerDynamicProps) => ({
     padding: 12,
     backgroundColor: theme.colors.surface.primary,
     borderRadius: 6,
-    opacity: disabled ? 0.6 : 1,
+    variants: {
+      disabled: {
+        true: { opacity: 0.6 },
+        false: { opacity: 1 },
+      },
+    },
   }),
 
   // Time columns container
@@ -62,32 +67,51 @@ export const timePickerStyles = defineStyle('TimePicker', (theme: Theme) => ({
     fontSize: 24,
     fontWeight: '600' as const,
     color: theme.colors.text.primary,
+    _web: {
+      pointerEvents: 'none',
+    },
   }),
 
   // Arrow button (up/down)
-  arrowButton: ({ disabled = false }: TimePickerDynamicProps) => ({
+  arrowButton: (_props: TimePickerDynamicProps) => ({
     width: 32,
     height: 32,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     borderRadius: 4,
-    opacity: disabled ? 0.4 : 1,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
     _web: {
       display: 'flex',
-      cursor: disabled ? 'not-allowed' : 'pointer',
+      background: 'none',
+      border: 'none',
+      padding: 0,
+    },
+    variants: {
+      disabled: {
+        true: { opacity: 0.4, _web: { cursor: 'not-allowed' } },
+        false: { opacity: 1, _web: { cursor: 'pointer' } },
+      },
     },
   }),
 
   // Period toggle button (AM/PM)
-  periodButton: ({ disabled = false }: TimePickerDynamicProps) => ({
+  periodButton: (_props: TimePickerDynamicProps) => ({
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderWidth: 1,
+    borderStyle: 'solid' as const,
     borderColor: theme.colors.border.primary,
     borderRadius: 4,
-    opacity: disabled ? 0.4 : 1,
+    backgroundColor: 'transparent',
     _web: {
-      cursor: disabled ? 'not-allowed' : 'pointer',
+      background: 'none',
+    },
+    variants: {
+      disabled: {
+        true: { opacity: 0.4, _web: { cursor: 'not-allowed' } },
+        false: { opacity: 1, _web: { cursor: 'pointer' } },
+      },
     },
   }),
 
@@ -95,6 +119,9 @@ export const timePickerStyles = defineStyle('TimePicker', (theme: Theme) => ({
     fontSize: 14,
     fontWeight: '500' as const,
     color: theme.colors.text.primary,
+    _web: {
+      pointerEvents: 'none',
+    },
   }),
 
   // Icon color helper

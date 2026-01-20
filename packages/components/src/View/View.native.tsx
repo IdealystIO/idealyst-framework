@@ -47,9 +47,13 @@ const View = forwardRef<IdealystElement, ViewProps>(({
   id,
   onLayout,
 }, ref) => {
+  // Handle 'transparent' background separately since it's not a surface color key
+  // The $surface iterator only expands to actual surface color keys
+  const backgroundVariant = background === 'transparent' ? undefined : background;
+
   // Set active variants for this render
   viewStyles.useVariants({
-    background,
+    background: backgroundVariant,
     radius,
     border,
     gap,

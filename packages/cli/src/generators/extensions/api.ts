@@ -83,6 +83,12 @@ async function generateApiFiles(
     path.join(apiDir, '.env.example'),
     createEnvExample()
   );
+
+  // Create .env with default values
+  await fs.writeFile(
+    path.join(apiDir, '.env'),
+    createEnvFile()
+  );
 }
 
 /**
@@ -233,8 +239,14 @@ app.get('/', (req, res) => {
 
 export const app = express();
 
+// CORS configuration from environment
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:3001';
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: CORS_ORIGIN,
+  credentials: true,
+}));
 app.use(express.json());
 ${middleware}
 ${routes}
@@ -258,12 +270,27 @@ if (import.meta.url === \`file://\${process.argv[1]}\`) {
  * Create .env.example
  */
 function createEnvExample(): string {
-  return `# Server
+  return `# Server Configuration
 PORT=3000
+
+# CORS - allowed origin for API requests
+CORS_ORIGIN=http://localhost:3001
 
 # Database (if using Prisma)
 DATABASE_URL="postgresql://user:password@localhost:5432/mydb"
 
 # Add your environment variables here
+`;
+}
+
+/**
+ * Create .env with default values
+ */
+function createEnvFile(): string {
+  return `# Server Configuration
+PORT=3000
+
+# CORS - allowed origin for API requests
+CORS_ORIGIN=http://localhost:3001
 `;
 }

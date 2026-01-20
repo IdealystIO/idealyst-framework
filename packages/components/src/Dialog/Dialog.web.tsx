@@ -24,6 +24,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   style,
   testID,
   id,
+  BackdropComponent,
   // Accessibility props
   accessibilityLabel,
   accessibilityHint,
@@ -154,7 +155,73 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
 
   const mergedBackdropRef = useMergeRefs(ref, backdropProps.ref);
 
-  const dialogContent = (
+  // Styles for the custom backdrop wrapper (no default backdrop styling)
+  const customBackdropWrapperStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  };
+
+  // Styles for the custom backdrop component container (fills the entire backdrop area)
+  const customBackdropStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  };
+
+  const dialogContent = BackdropComponent ? (
+    <div
+      ref={mergedBackdropRef}
+      style={customBackdropWrapperStyle}
+      onClick={handleBackdropClick}
+      data-testid={testID}
+    >
+      <div style={customBackdropStyle}>
+        <BackdropComponent isVisible={isVisible} />
+      </div>
+      <div
+        {...containerProps}
+        {...ariaProps}
+        ref={dialogRef}
+        id={dialogId}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? titleId : undefined}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {(title || showCloseButton) && (
+          <div {...headerProps}>
+            {title && (
+              <h2 {...titleProps} id={titleId}>
+                {title}
+              </h2>
+            )}
+            {showCloseButton && (
+              <button
+                {...closeButtonProps}
+                onClick={handleCloseClick}
+                aria-label="Close dialog"
+                type="button"
+              >
+                <Icon name="close" />
+              </button>
+            )}
+          </div>
+        )}
+        <div {...contentProps}>
+          {children}
+        </div>
+      </div>
+    </div>
+  ) : (
     <div
       {...backdropProps}
       ref={mergedBackdropRef}
@@ -169,7 +236,6 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? titleId : undefined}
-        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         {(title || showCloseButton) && (

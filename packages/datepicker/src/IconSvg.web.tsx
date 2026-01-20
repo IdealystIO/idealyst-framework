@@ -22,11 +22,14 @@ export const IconSvg: React.FC<IconSvgProps> = ({
 }) => {
   if (!path) return null;
 
+  // Convert numeric sizes to pixel strings - @mdi/react interprets bare numbers as rem
+  const sizeValue = typeof size === 'number' ? `${size}px` : size;
+
   return (
     <MdiIcon
       style={style}
       path={path}
-      size={size}
+      size={sizeValue}
       color={color}
       aria-label={ariaLabel}
     />

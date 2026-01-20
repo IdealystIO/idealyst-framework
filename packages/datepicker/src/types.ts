@@ -1,4 +1,5 @@
 import type { ViewStyle } from 'react-native';
+import type { Size } from '@idealyst/theme';
 
 export interface DatePickerProps {
   value?: Date;
@@ -27,6 +28,7 @@ export interface DateInputProps {
   maxDate?: Date;
   disabled?: boolean;
   error?: string;
+  size?: Size;
   style?: ViewStyle;
 }
 
@@ -39,6 +41,7 @@ export interface TimeInputProps {
   minuteStep?: number;
   disabled?: boolean;
   error?: string;
+  size?: Size;
   style?: ViewStyle;
 }
 
@@ -52,5 +55,6 @@ export interface DateTimePickerProps {
   minuteStep?: number;
   disabled?: boolean;
   error?: string;
+  size?: Size;
   style?: ViewStyle;
 }

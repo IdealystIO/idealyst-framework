@@ -334,6 +334,85 @@ export const brandTheme = fromTheme(lightTheme)
   .build();
 \`\`\`
 
+## Modifying Intents
+
+### setIntent() - Replace an existing intent
+
+Use \`setIntent()\` to override an intent from a base theme:
+
+\`\`\`typescript
+const customTheme = fromTheme(lightTheme)
+  .setIntent('primary', {
+    primary: '#6366f1',  // Change brand color
+    contrast: '#ffffff',
+    light: '#a5b4fc',
+    dark: '#4338ca',
+  })
+  .build();
+\`\`\`
+
+## Modifying Colors
+
+### Individual Color Methods
+
+Instead of replacing all colors with \`setColors()\`, you can add or modify individual colors:
+
+\`\`\`typescript
+const theme = fromTheme(lightTheme)
+  // Add new surface colors
+  .addSurfaceColor('card', '#ffffff')
+  .addSurfaceColor('modal', 'rgba(0,0,0,0.5)')
+
+  // Replace existing surface colors
+  .setSurfaceColor('screen', '#fafafa')
+
+  // Add new text colors
+  .addTextColor('muted', '#9ca3af')
+  .addTextColor('link', '#3b82f6')
+
+  // Replace existing text colors
+  .setTextColor('primary', '#111827')
+
+  // Add new border colors
+  .addBorderColor('focus', '#3b82f6')
+  .addBorderColor('error', '#ef4444')
+
+  // Replace existing border colors
+  .setBorderColor('primary', '#d1d5db')
+
+  // Add new pallet colors (full shade set)
+  .addPalletColor('brand', {
+    50: '#eff6ff',
+    100: '#dbeafe',
+    200: '#bfdbfe',
+    300: '#93c5fd',
+    400: '#60a5fa',
+    500: '#3b82f6',
+    600: '#2563eb',
+    700: '#1d4ed8',
+    800: '#1e40af',
+    900: '#1e3a8a',
+  })
+
+  // Replace existing pallet colors
+  .setPalletColor('blue', { /* new shades */ })
+
+  .build();
+\`\`\`
+
+### Color Method Reference
+
+| Method | Purpose | Type Change |
+|--------|---------|-------------|
+| \`addSurfaceColor(name, value)\` | Add new surface color | Expands type union |
+| \`setSurfaceColor(name, value)\` | Replace existing surface color | No type change |
+| \`addTextColor(name, value)\` | Add new text color | Expands type union |
+| \`setTextColor(name, value)\` | Replace existing text color | No type change |
+| \`addBorderColor(name, value)\` | Add new border color | Expands type union |
+| \`setBorderColor(name, value)\` | Replace existing border color | No type change |
+| \`addPalletColor(name, shades)\` | Add new pallet with all shades | Expands type union |
+| \`setPalletColor(name, shades)\` | Replace existing pallet | No type change |
+
 ## Registering Your Theme
 
 For full TypeScript inference:
@@ -1320,7 +1399,38 @@ defineStyle('Button', (theme) => ({
 // Result: { padding: 16, borderRadius: 9999 }
 \`\`\`
 
-### 4. Removes extendStyle/overrideStyle Calls
+### 4. Expands Color Iterators
+
+**Input:**
+\`\`\`typescript
+defineStyle('Screen', (theme) => ({
+  screen: {
+    variants: {
+      background: {
+        backgroundColor: theme.colors.$surface,
+      },
+    },
+  },
+}));
+\`\`\`
+
+**Output:**
+\`\`\`typescript
+StyleSheet.create((theme) => ({
+  screen: {
+    variants: {
+      background: {
+        screen: { backgroundColor: theme.colors.surface.screen },
+        primary: { backgroundColor: theme.colors.surface.primary },
+        secondary: { backgroundColor: theme.colors.surface.secondary },
+        // ... expands to all surface color keys
+      },
+    },
+  },
+}));
+\`\`\`
+
+### 5. Removes extendStyle/overrideStyle Calls
 
 After capturing extension definitions, the plugin removes the calls from the output since all merging happens at build time.
 
@@ -1331,6 +1441,9 @@ The plugin statically analyzes your theme file to extract:
 - Size keys (xs, sm, md, lg, xl)
 - Radius names (none, sm, md, lg)
 - Shadow names (none, sm, md, lg, xl)
+- Surface color keys (screen, primary, secondary, etc.)
+- Text color keys (primary, secondary, inverse, etc.)
+- Border color keys (primary, secondary, disabled, etc.)
 
 This enables $iterator expansion without runtime overhead.
 
@@ -1619,10 +1732,13 @@ type Theme = ThemeStyleWrapper<BaseTheme>;
 
 This adds \`$property\` versions of iterable theme properties:
 
-| Original Path            | $iterator Path            |
-|--------------------------|---------------------------|
-| \`theme.intents.primary\`  | \`theme.$intents.primary\`  |
-| \`theme.sizes.button.md\`  | \`theme.sizes.$button.md\`  |
+| Original Path              | $iterator Path              |
+|----------------------------|-----------------------------|
+| \`theme.intents.primary\`   | \`theme.$intents.primary\`   |
+| \`theme.sizes.button.md\`   | \`theme.sizes.$button.md\`   |
+| \`theme.colors.surface.screen\` | \`theme.colors.$surface\`   |
+| \`theme.colors.text.primary\` | \`theme.colors.$text\`      |
+| \`theme.colors.border.primary\` | \`theme.colors.$border\`   |
 
 ## Usage Examples
 
@@ -1665,6 +1781,69 @@ variants: {
 //   sm: { paddingVertical: theme.sizes.button.sm.paddingVertical, fontSize: theme.sizes.button.sm.fontSize },
 //   md: { ... },
 //   ...
+// }
+\`\`\`
+
+### Expand Surface Colors
+
+\`\`\`typescript
+// Single definition
+variants: {
+  background: {
+    backgroundColor: theme.colors.$surface,
+  },
+}
+
+// Expands to all surface color keys (screen, primary, secondary, tertiary, inverse, etc.)
+// Result:
+// background: {
+//   screen: { backgroundColor: theme.colors.surface.screen },
+//   primary: { backgroundColor: theme.colors.surface.primary },
+//   secondary: { backgroundColor: theme.colors.surface.secondary },
+//   tertiary: { backgroundColor: theme.colors.surface.tertiary },
+//   inverse: { backgroundColor: theme.colors.surface.inverse },
+//   ...
+// }
+\`\`\`
+
+### Expand Text Colors
+
+\`\`\`typescript
+// Single definition
+variants: {
+  color: {
+    color: theme.colors.$text,
+  },
+}
+
+// Expands to all text color keys (primary, secondary, tertiary, inverse, etc.)
+// Result:
+// color: {
+//   primary: { color: theme.colors.text.primary },
+//   secondary: { color: theme.colors.text.secondary },
+//   tertiary: { color: theme.colors.text.tertiary },
+//   inverse: { color: theme.colors.text.inverse },
+//   ...
+// }
+\`\`\`
+
+### Expand Border Colors
+
+\`\`\`typescript
+// Single definition
+variants: {
+  borderColor: {
+    borderColor: theme.colors.$border,
+  },
+}
+
+// Expands to all border color keys (primary, secondary, tertiary, disabled)
+// Result:
+// borderColor: {
+//   primary: { borderColor: theme.colors.border.primary },
+//   secondary: { borderColor: theme.colors.border.secondary },
+//   tertiary: { borderColor: theme.colors.border.tertiary },
+//   disabled: { borderColor: theme.colors.border.disabled },
 // }
 \`\`\`
 
@@ -1729,11 +1908,21 @@ export const styles = createIteratorStyles((theme) => ({
 }));
 \`\`\`
 
+## Supported Iterators
+
+| Iterator | Pattern | Expands To |
+|----------|---------|------------|
+| Intents | \`theme.$intents.X\` | All intent keys (primary, success, danger, etc.) |
+| Sizes | \`theme.sizes.$component.X\` | All size keys (xs, sm, md, lg, xl) |
+| Surface Colors | \`theme.colors.$surface\` | All surface color keys |
+| Text Colors | \`theme.colors.$text\` | All text color keys |
+| Border Colors | \`theme.colors.$border\` | All border color keys |
+
 ## Benefits
 
 1. **DRY Code**: Define once, expand to many
 2. **Type Safety**: TypeScript validates iterator properties
-3. **Maintainable**: Adding new sizes/intents to theme auto-expands
+3. **Maintainable**: Adding new sizes/intents/colors to theme auto-expands
 4. **Zero Runtime Cost**: Expansion happens at build time
 `,
 };

@@ -91,6 +91,19 @@ const componentGroups: ComponentGroup[] = [
         ],
     },
     {
+        title: 'Content',
+        items: [
+            { label: 'Markdown Editor', path: '/markdown-editor', icon: 'text-box-edit' },
+        ],
+    },
+    {
+        title: 'Animation',
+        items: [
+            { label: 'Animate', path: '/animate', icon: 'animation' },
+            { label: 'Lottie', path: '/lottie', icon: 'animation-play' },
+        ],
+    },
+    {
         title: 'Theme',
         items: [
             { label: 'Theme Extension', path: '/theme-extension', icon: 'palette' },

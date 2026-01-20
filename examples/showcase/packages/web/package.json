@@ -13,6 +13,7 @@
     "@apollo/client": "^3.11.8",
     "@idealyst-showcase/shared": "workspace:*",
     "@idealyst/components": "^1.2.30",
+    "@idealyst/config": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
     "@mdi/js": "^7.4.47",

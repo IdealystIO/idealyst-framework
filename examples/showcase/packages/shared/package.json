@@ -15,6 +15,7 @@
   "peerDependencies": {
     "@apollo/client": "^3.11.8",
     "@idealyst/components": "^1.2.30",
+    "@idealyst/config": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
     "@tanstack/react-query": "^5.83.0",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@apollo/client": "^3.11.8",
     "@idealyst/components": "^1.2.30",
+    "@idealyst/config": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
     "@idealyst/theme": "^1.2.30",
     "@tanstack/react-query": "^5.83.0",

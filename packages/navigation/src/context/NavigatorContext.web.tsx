@@ -293,10 +293,15 @@ export const NavigatorProvider = ({
         return isValidRoute(parentPath, validPatterns);
     };
 
+    // Find the nearest valid parent route and navigate to it
     const goBack = () => {
-        const parentPath = getParentPath(location.pathname);
-        if (parentPath && isValidRoute(parentPath, validPatterns)) {
-            reactRouterNavigate(parentPath);
+        let parentPath = getParentPath(location.pathname);
+        while (parentPath) {
+            if (parentPath && isValidRoute(parentPath, validPatterns)) {
+                reactRouterNavigate(parentPath);
+                break;
+            }
+            parentPath = getParentPath(parentPath);
         }
     };
 

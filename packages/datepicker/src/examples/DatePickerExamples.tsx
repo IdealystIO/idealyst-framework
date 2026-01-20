@@ -79,8 +79,8 @@ export const DatePickerExamples = () => {
         <View gap="md">
           <Text typography="h4" weight="semibold">With Min/Max Date</Text>
           <DateInput
-            value={undefined}
-            onChange={() => {}}
+            value={date ?? undefined}
+            onChange={setDate}
             label="Future Dates Only"
             placeholder="MM/DD/YYYY"
             minDate={tomorrow}
@@ -89,6 +89,129 @@ export const DatePickerExamples = () => {
           <Text typography="caption" color="secondary">
             Only dates between tomorrow and next month
           </Text>
+        </View>
+
+        {/* Size Variants */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">Size Variants</Text>
+          <Text typography="caption" color="secondary">
+            DateInput, TimeInput, and DateTimePicker support different sizes
+          </Text>
+
+          <View gap="sm">
+            <Text typography="body2" weight="medium">Extra Small (xs)</Text>
+            <View gap="xs">
+              <DateInput
+                value={date ?? undefined}
+                onChange={setDate}
+                placeholder="MM/DD/YYYY"
+                size="xs"
+              />
+              <TimeInput
+                value={time ?? undefined}
+                onChange={setTime}
+                placeholder="12:00 PM"
+                size="xs"
+              />
+            </View>
+          </View>
+
+          <View gap="sm">
+            <Text typography="body2" weight="medium">Small (sm)</Text>
+            <View gap="xs">
+              <DateInput
+                value={date ?? undefined}
+                onChange={setDate}
+                placeholder="MM/DD/YYYY"
+                size="sm"
+              />
+              <TimeInput
+                value={time ?? undefined}
+                onChange={setTime}
+                placeholder="12:00 PM"
+                size="sm"
+              />
+            </View>
+          </View>
+
+          <View gap="sm">
+            <Text typography="body2" weight="medium">Medium (md) - Default</Text>
+            <View gap="xs">
+              <DateInput
+                value={date ?? undefined}
+                onChange={setDate}
+                placeholder="MM/DD/YYYY"
+                size="md"
+              />
+              <TimeInput
+                value={time ?? undefined}
+                onChange={setTime}
+                placeholder="12:00 PM"
+                size="md"
+              />
+            </View>
+          </View>
+
+          <View gap="sm">
+            <Text typography="body2" weight="medium">Large (lg)</Text>
+            <View gap="xs">
+              <DateInput
+                value={date ?? undefined}
+                onChange={setDate}
+                placeholder="MM/DD/YYYY"
+                size="lg"
+              />
+              <TimeInput
+                value={time ?? undefined}
+                onChange={setTime}
+                placeholder="12:00 PM"
+                size="lg"
+              />
+            </View>
+          </View>
+
+          <View gap="sm">
+            <Text typography="body2" weight="medium">Extra Large (xl)</Text>
+            <View gap="xs">
+              <DateInput
+                value={date ?? undefined}
+                onChange={setDate}
+                placeholder="MM/DD/YYYY"
+                size="xl"
+              />
+              <TimeInput
+                value={time ?? undefined}
+                onChange={setTime}
+                placeholder="12:00 PM"
+                size="xl"
+              />
+            </View>
+          </View>
+        </View>
+
+        {/* DateTimePicker Sizes */}
+        <View gap="md">
+          <Text typography="h4" weight="semibold">DateTimePicker Sizes</Text>
+          <View gap="sm">
+            <DateTimePicker
+              value={dateTime ?? undefined}
+              onChange={setDateTime}
+              label="Small"
+              size="sm"
+            />
+            <DateTimePicker
+              value={dateTime ?? undefined}
+              onChange={setDateTime}
+              label="Medium (Default)"
+              size="md"
+            />
+            <DateTimePicker
+              value={dateTime ?? undefined}
+              onChange={setDateTime}
+              label="Large"
+              size="lg"
+            />
+          </View>
         </View>
 
         {/* Inline DatePicker */}
@@ -120,8 +243,8 @@ export const DatePickerExamples = () => {
         <View gap="md">
           <Text typography="h4" weight="semibold">24-hour Format</Text>
           <TimeInput
-            value={undefined}
-            onChange={() => {}}
+            value={time ?? undefined}
+            onChange={setTime}
             label="24-hour Time"
             placeholder="14:30"
             mode="24h"

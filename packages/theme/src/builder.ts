@@ -174,6 +174,25 @@ export class ThemeBuilder<
     }
 
     /**
+     * Set (replace) an existing intent in the theme.
+     * Use this to override an intent inherited from a base theme.
+     */
+    setIntent<K extends TIntents>(
+        name: K,
+        value: IntentValue
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            intents: {
+                ...this.config.intents,
+                [name]: value,
+            } as any,
+        };
+        return newBuilder;
+    }
+
+    /**
      * Add a custom border radius value.
      */
     addRadius<K extends string>(
@@ -242,6 +261,182 @@ export class ThemeBuilder<
             ...this.config,
             colors,
         } as any;
+        return newBuilder;
+    }
+
+    /**
+     * Add a new pallet color to the theme.
+     * Expands the available pallet colors.
+     */
+    addPalletColor<K extends string>(
+        name: K,
+        shades: Record<Shade, ColorValue>
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet | K, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet | K, TSurface, TText, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            colors: {
+                ...this.config.colors,
+                pallet: {
+                    ...this.config.colors.pallet,
+                    [name]: shades,
+                } as any,
+            },
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Set (replace) an existing pallet color in the theme.
+     * Use this to override a pallet color inherited from a base theme.
+     */
+    setPalletColor<K extends TPallet>(
+        name: K,
+        shades: Record<Shade, ColorValue>
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            colors: {
+                ...this.config.colors,
+                pallet: {
+                    ...this.config.colors.pallet,
+                    [name]: shades,
+                } as any,
+            },
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Add a new surface color to the theme.
+     * Expands the available surface colors.
+     */
+    addSurfaceColor<K extends string>(
+        name: K,
+        value: ColorValue
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface | K, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface | K, TText, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            colors: {
+                ...this.config.colors,
+                surface: {
+                    ...this.config.colors.surface,
+                    [name]: value,
+                } as any,
+            },
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Set (replace) an existing surface color in the theme.
+     * Use this to override a surface color inherited from a base theme.
+     */
+    setSurfaceColor<K extends TSurface>(
+        name: K,
+        value: ColorValue
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            colors: {
+                ...this.config.colors,
+                surface: {
+                    ...this.config.colors.surface,
+                    [name]: value,
+                } as any,
+            },
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Add a new text color to the theme.
+     * Expands the available text colors.
+     */
+    addTextColor<K extends string>(
+        name: K,
+        value: ColorValue
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText | K, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText | K, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            colors: {
+                ...this.config.colors,
+                text: {
+                    ...this.config.colors.text,
+                    [name]: value,
+                } as any,
+            },
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Set (replace) an existing text color in the theme.
+     * Use this to override a text color inherited from a base theme.
+     */
+    setTextColor<K extends TText>(
+        name: K,
+        value: ColorValue
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            colors: {
+                ...this.config.colors,
+                text: {
+                    ...this.config.colors.text,
+                    [name]: value,
+                } as any,
+            },
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Add a new border color to the theme.
+     * Expands the available border colors.
+     */
+    addBorderColor<K extends string>(
+        name: K,
+        value: ColorValue
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder | K, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder | K, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            colors: {
+                ...this.config.colors,
+                border: {
+                    ...this.config.colors.border,
+                    [name]: value,
+                } as any,
+            },
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Set (replace) an existing border color in the theme.
+     * Use this to override a border color inherited from a base theme.
+     */
+    setBorderColor<K extends TBorder>(
+        name: K,
+        value: ColorValue
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            colors: {
+                ...this.config.colors,
+                border: {
+                    ...this.config.colors.border,
+                    [name]: value,
+                } as any,
+            },
+        };
         return newBuilder;
     }
 

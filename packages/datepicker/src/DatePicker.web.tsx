@@ -23,6 +23,11 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   const styles = datePickerCalendarStyles;
 
+  // Apply variants for disabled state
+  styles.useVariants({
+    disabled,
+  });
+
   const { days, monthShort, year } = useMemo(() => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
@@ -78,8 +83,16 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   const isDisabled = (date: Date): boolean => {
     if (disabled) return true;
-    if (minDate && date < new Date(minDate.setHours(0, 0, 0, 0))) return true;
-    if (maxDate && date > new Date(maxDate.setHours(23, 59, 59, 999))) return true;
+    // Normalize the date to start of day for comparison
+    const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    if (minDate) {
+      const min = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+      if (normalizedDate < min) return true;
+    }
+    if (maxDate) {
+      const max = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+      if (normalizedDate > max) return true;
+    }
     return false;
   };
 
@@ -92,8 +105,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   };
 
   const handleDayPress = (date: Date) => {
+    console.log('[DatePicker] handleDayPress called with:', date.toISOString());
+    console.log('[DatePicker] isDisabled:', isDisabled(date));
     if (!isDisabled(date)) {
-      onChange(date);
+      // Create a new date to avoid mutating the calendar's date objects
+      const newDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      console.log('[DatePicker] Calling onChange with:', newDate.toISOString());
+      onChange(newDate);
     }
   };
 
@@ -140,13 +158,22 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const selectorItemTextSelectedStyle = (styles.selectorItemTextSelected as any)({});
   const iconColorStyle = (styles.iconColor as any)({});
 
-  // Get web props
+  // Get web props for all elements
   const calendarProps = getWebProps([calendarStyle, style as any]);
   const headerProps = getWebProps([headerStyle]);
   const weekdayRowProps = getWebProps([weekdayRowStyle]);
+  const weekdayCellProps = getWebProps([weekdayCellStyle]);
   const gridProps = getWebProps([gridStyle]);
   const monthGridProps = getWebProps([monthGridStyle]);
   const yearGridProps = getWebProps([yearGridStyle]);
+  const navButtonProps = getWebProps([navButtonStyle]);
+  const titleButtonProps = getWebProps([titleButtonStyle]);
+  const titleTextProps = getWebProps([titleTextStyle]);
+  const weekdayTextProps = getWebProps([weekdayTextStyle]);
+  const selectorItemProps = getWebProps([selectorItemStyle]);
+  const selectorItemSelectedProps = getWebProps([selectorItemStyle, selectorItemSelectedStyle]);
+  const selectorItemTextProps = getWebProps([selectorItemTextStyle]);
+  const selectorItemTextSelectedProps = getWebProps([selectorItemTextStyle, selectorItemTextSelectedStyle]);
 
   // Render month selector
   if (viewMode === 'months') {
@@ -154,18 +181,20 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       <div {...calendarProps}>
         <div {...headerProps}>
           <button
-            style={navButtonStyle}
+            type="button"
+            {...navButtonProps}
             onClick={() => setViewMode('calendar')}
             disabled={disabled}
           >
             <IconSvg path={mdiChevronLeft} size={16} color={iconColorStyle.color} />
           </button>
           <button
-            style={titleButtonStyle}
+            type="button"
+            {...titleButtonProps}
             onClick={() => setViewMode('years')}
             disabled={disabled}
           >
-            <span style={titleTextStyle}>{year}</span>
+            <span {...titleTextProps}>{year}</span>
           </button>
           <div style={{ width: 28 }} />
         </div>
@@ -174,20 +203,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             const isCurrentMonth = index === currentMonth.getMonth();
             return (
               <button
+                type="button"
                 key={month}
-                style={{
-                  ...selectorItemStyle,
-                  ...(isCurrentMonth ? selectorItemSelectedStyle : {}),
-                }}
+                {...(isCurrentMonth ? selectorItemSelectedProps : selectorItemProps)}
                 onClick={() => handleMonthSelect(index)}
                 disabled={disabled}
               >
-                <span
-                  style={{
-                    ...selectorItemTextStyle,
-                    ...(isCurrentMonth ? selectorItemTextSelectedStyle : {}),
-                  }}
-                >
+                <span {...(isCurrentMonth ? selectorItemTextSelectedProps : selectorItemTextProps)}>
                   {month}
                 </span>
               </button>
@@ -204,17 +226,19 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       <div {...calendarProps}>
         <div {...headerProps}>
           <button
-            style={navButtonStyle}
+            type="button"
+            {...navButtonProps}
             onClick={goToPrevYearRange}
             disabled={disabled}
           >
             <IconSvg path={mdiChevronLeft} size={16} color={iconColorStyle.color} />
           </button>
-          <span style={titleTextStyle}>
+          <span {...titleTextProps}>
             {yearRange[0]} - {yearRange[yearRange.length - 1]}
           </span>
           <button
-            style={navButtonStyle}
+            type="button"
+            {...navButtonProps}
             onClick={goToNextYearRange}
             disabled={disabled}
           >
@@ -226,20 +250,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
             const isCurrentYear = yr === currentMonth.getFullYear();
             return (
               <button
+                type="button"
                 key={yr}
-                style={{
-                  ...selectorItemStyle,
-                  ...(isCurrentYear ? selectorItemSelectedStyle : {}),
-                }}
+                {...(isCurrentYear ? selectorItemSelectedProps : selectorItemProps)}
                 onClick={() => handleYearSelect(yr)}
                 disabled={disabled}
               >
-                <span
-                  style={{
-                    ...selectorItemTextStyle,
-                    ...(isCurrentYear ? selectorItemTextSelectedStyle : {}),
-                  }}
-                >
+                <span {...(isCurrentYear ? selectorItemTextSelectedProps : selectorItemTextProps)}>
                   {yr}
                 </span>
               </button>
@@ -250,29 +267,49 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     );
   }
 
+  // Get day cell props
+  const dayCellStyle = (styles.dayCell as any)({});
+  const selectedDayStyle = (styles.selectedDay as any)({});
+  const todayDayStyle = (styles.todayDay as any)({});
+  const dayButtonStyle = (styles.dayButton as any)({ disabled: false });
+  const dayButtonDisabledStyle = (styles.dayButton as any)({ disabled: true });
+  const dayTextStyle = (styles.dayText as any)({});
+  const selectedDayTextStyle = (styles.selectedDayText as any)({});
+
+  const dayCellProps = getWebProps([dayCellStyle]);
+  const dayButtonProps = getWebProps([dayButtonStyle]);
+  const dayButtonSelectedProps = getWebProps([dayButtonStyle, selectedDayStyle]);
+  const dayButtonTodayProps = getWebProps([dayButtonStyle, todayDayStyle]);
+  const dayButtonDisabledProps = getWebProps([dayButtonDisabledStyle]);
+  const dayTextProps = getWebProps([dayTextStyle]);
+  const selectedDayTextProps = getWebProps([dayTextStyle, selectedDayTextStyle]);
+
   // Render calendar (default)
   return (
     <div {...calendarProps}>
       {/* Header */}
       <div {...headerProps}>
         <button
-          style={navButtonStyle}
+          type="button"
+          {...navButtonProps}
           onClick={goToPrevMonth}
           disabled={disabled}
         >
           <IconSvg path={mdiChevronLeft} size={16} color={iconColorStyle.color} />
         </button>
         <button
-          style={titleButtonStyle}
+          type="button"
+          {...titleButtonProps}
           onClick={() => setViewMode('months')}
           disabled={disabled}
         >
-          <span style={titleTextStyle}>
+          <span {...titleTextProps}>
             {monthShort} {year}
           </span>
         </button>
         <button
-          style={navButtonStyle}
+          type="button"
+          {...navButtonProps}
           onClick={goToNextMonth}
           disabled={disabled}
         >
@@ -283,51 +320,41 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       {/* Weekday headers */}
       <div {...weekdayRowProps}>
         {WEEKDAYS.map((day, i) => (
-          <div key={i} style={weekdayCellStyle}>
-            <span style={weekdayTextStyle}>{day}</span>
+          <div key={i} {...weekdayCellProps}>
+            <span {...weekdayTextProps}>{day}</span>
           </div>
         ))}
       </div>
 
       {/* Calendar grid */}
       <div {...gridProps}>
-        {days.map(({ date, isCurrentMonth }, index) => {
+        {days.map(({ date, isCurrentMonth: isCurrentMonthDay }, index) => {
           const selected = isSelected(date);
           const today = isToday(date);
           const dayDisabled = isDisabled(date);
 
-          const dayCellStyle = (styles.dayCell as any)({});
-          const selectedDayStyle = (styles.selectedDay as any)({});
-          const todayDayStyle = (styles.todayDay as any)({});
-          const dayButtonStyle = (styles.dayButton as any)({ disabled: dayDisabled });
-          const dayTextStyle = (styles.dayText as any)({});
-          const selectedDayTextStyle = (styles.selectedDayText as any)({});
+          // Get appropriate button props (className and ref only)
+          const buttonProps = dayDisabled
+            ? dayButtonDisabledProps
+            : selected
+              ? dayButtonSelectedProps
+              : today
+                ? dayButtonTodayProps
+                : dayButtonProps;
 
           return (
-            <div
+            <button
               key={index}
-              style={{
-                ...dayCellStyle,
-                ...(selected ? selectedDayStyle : {}),
-                ...(today && !selected ? todayDayStyle : {}),
-                opacity: (!isCurrentMonth || dayDisabled) ? 0.3 : 1,
-              }}
+              type="button"
+              className={buttonProps.className}
+              style={{ opacity: (!isCurrentMonthDay || dayDisabled) ? 0.3 : 1 }}
+              onClick={() => handleDayPress(date)}
+              disabled={dayDisabled}
             >
-              <button
-                style={dayButtonStyle}
-                onClick={() => handleDayPress(date)}
-                disabled={dayDisabled}
-              >
-                <span
-                  style={{
-                    ...dayTextStyle,
-                    ...(selected ? selectedDayTextStyle : {}),
-                  }}
-                >
-                  {date.getDate()}
-                </span>
-              </button>
-            </div>
+              <span {...(selected ? selectedDayTextProps : dayTextProps)}>
+                {date.getDate()}
+              </span>
+            </button>
           );
         })}
       </div>

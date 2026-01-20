@@ -286,4 +286,282 @@ describe('Theme Source Analyzer', () => {
       expect(values.sizes.iconButton).toBeDefined();
     });
   });
+
+  describe('new builder methods parsing', () => {
+    // These tests verify that the analyzer correctly parses the new builder methods
+    // by creating temporary theme files with the new syntax
+
+    const fs = require('fs');
+    const os = require('os');
+
+    function createTempThemeFile(content: string): string {
+      const tmpDir = os.tmpdir();
+      const tmpFile = path.join(tmpDir, `test-theme-${Date.now()}.ts`);
+      fs.writeFileSync(tmpFile, content);
+      return tmpFile;
+    }
+
+    function cleanupTempFile(filePath: string): void {
+      try {
+        fs.unlinkSync(filePath);
+      } catch {
+        // Ignore cleanup errors
+      }
+    }
+
+    describe('setIntent', () => {
+      it('should parse setIntent method calls', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addIntent('primary', { primary: '#000', contrast: '#fff', light: '#eee', dark: '#111' })
+            .setIntent('primary', { primary: '#333', contrast: '#fff', light: '#ccc', dark: '#222' })
+            .addIntent('success', { primary: '#0f0', contrast: '#fff', light: '#efe', dark: '#010' })
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+          expect(values.intents).toContain('primary');
+          expect(values.intents).toContain('success');
+          expect(values.intents).toHaveLength(2);
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+
+    describe('addSurfaceColor', () => {
+      it('should parse addSurfaceColor method calls', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addSurfaceColor('card', '#ffffff')
+            .addSurfaceColor('modal', '#f5f5f5')
+            .addSurfaceColor('overlay', 'rgba(0,0,0,0.5)')
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+          expect(values.surfaceColors).toContain('card');
+          expect(values.surfaceColors).toContain('modal');
+          expect(values.surfaceColors).toContain('overlay');
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+
+    describe('setSurfaceColor', () => {
+      it('should parse setSurfaceColor method calls', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addSurfaceColor('card', '#ffffff')
+            .setSurfaceColor('card', '#f0f0f0')
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+          expect(values.surfaceColors).toContain('card');
+          // Should only have one entry (not duplicated)
+          expect(values.surfaceColors.filter(c => c === 'card')).toHaveLength(1);
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+
+    describe('addTextColor', () => {
+      it('should parse addTextColor method calls', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addTextColor('primary', '#000000')
+            .addTextColor('muted', '#666666')
+            .addTextColor('link', '#0066cc')
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+          expect(values.textColors).toContain('primary');
+          expect(values.textColors).toContain('muted');
+          expect(values.textColors).toContain('link');
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+
+    describe('setTextColor', () => {
+      it('should parse setTextColor method calls', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addTextColor('primary', '#000000')
+            .setTextColor('primary', '#111111')
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+          expect(values.textColors).toContain('primary');
+          expect(values.textColors.filter(c => c === 'primary')).toHaveLength(1);
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+
+    describe('addBorderColor', () => {
+      it('should parse addBorderColor method calls', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addBorderColor('default', '#e5e7eb')
+            .addBorderColor('focus', '#3b82f6')
+            .addBorderColor('error', '#ef4444')
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+          expect(values.borderColors).toContain('default');
+          expect(values.borderColors).toContain('focus');
+          expect(values.borderColors).toContain('error');
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+
+    describe('setBorderColor', () => {
+      it('should parse setBorderColor method calls', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addBorderColor('focus', '#3b82f6')
+            .setBorderColor('focus', '#6366f1')
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+          expect(values.borderColors).toContain('focus');
+          expect(values.borderColors.filter(c => c === 'focus')).toHaveLength(1);
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+
+    describe('addPalletColor and setPalletColor', () => {
+      it('should parse addPalletColor method calls (logs only)', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addPalletColor('brand', { 50: '#f0f', 100: '#e0e', 200: '#d0d', 300: '#c0c', 400: '#b0b', 500: '#a0a', 600: '#909', 700: '#808', 800: '#707', 900: '#606' })
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          // addPalletColor is logged but not tracked in values (shades are fixed)
+          // This test just ensures it doesn't throw
+          const values = analyzeThemeSource(tmpFile);
+          expect(values).toBeDefined();
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+
+      it('should parse setPalletColor method calls (logs only)', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addPalletColor('brand', { 50: '#f0f', 100: '#e0e', 200: '#d0d', 300: '#c0c', 400: '#b0b', 500: '#a0a', 600: '#909', 700: '#808', 800: '#707', 900: '#606' })
+            .setPalletColor('brand', { 50: '#fff', 100: '#eee', 200: '#ddd', 300: '#ccc', 400: '#bbb', 500: '#aaa', 600: '#999', 700: '#888', 800: '#777', 900: '#666' })
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+          expect(values).toBeDefined();
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+
+    describe('combined new methods', () => {
+      it('should parse a theme using all new builder methods', () => {
+        const content = `
+          import { createTheme } from '@idealyst/theme';
+
+          export const theme = createTheme()
+            .addIntent('primary', { primary: '#3b82f6', contrast: '#fff', light: '#bfdbfe', dark: '#1e40af' })
+            .addIntent('danger', { primary: '#ef4444', contrast: '#fff', light: '#fecaca', dark: '#b91c1c' })
+            .setIntent('primary', { primary: '#6366f1', contrast: '#fff', light: '#a5b4fc', dark: '#4338ca' })
+            .addPalletColor('blue', { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' })
+            .addSurfaceColor('screen', '#ffffff')
+            .addSurfaceColor('card', '#f9fafb')
+            .setSurfaceColor('card', '#f3f4f6')
+            .addTextColor('primary', '#111827')
+            .addTextColor('secondary', '#6b7280')
+            .setTextColor('primary', '#1f2937')
+            .addBorderColor('default', '#e5e7eb')
+            .addBorderColor('focus', '#3b82f6')
+            .setBorderColor('focus', '#6366f1')
+            .build();
+        `;
+
+        const tmpFile = createTempThemeFile(content);
+        try {
+          const values = analyzeThemeSource(tmpFile);
+
+          // Intents
+          expect(values.intents).toContain('primary');
+          expect(values.intents).toContain('danger');
+          expect(values.intents).toHaveLength(2);
+
+          // Surface colors
+          expect(values.surfaceColors).toContain('screen');
+          expect(values.surfaceColors).toContain('card');
+          expect(values.surfaceColors).toHaveLength(2);
+
+          // Text colors
+          expect(values.textColors).toContain('primary');
+          expect(values.textColors).toContain('secondary');
+          expect(values.textColors).toHaveLength(2);
+
+          // Border colors
+          expect(values.borderColors).toContain('default');
+          expect(values.borderColors).toContain('focus');
+          expect(values.borderColors).toHaveLength(2);
+        } finally {
+          cleanupTempFile(tmpFile);
+        }
+      });
+    });
+  });
 });

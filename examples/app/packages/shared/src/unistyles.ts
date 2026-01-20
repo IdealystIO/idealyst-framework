@@ -15,6 +15,8 @@ export const customLightTheme = fromTheme(lightTheme)
     light: '#fbbf24',
     dark: '#d97706',
   })
+  .addSurfaceColor('highlight', '#FF0000')
+
   .addRadius('2xl', 24)
   .addRadius('full', 9999)
   .build();
@@ -33,7 +35,7 @@ export const customDarkTheme = fromTheme(darkTheme)
     light: '#f59e0b',
     dark: '#d97706',
   })
-  .addRadius('2xl', 24)
+  .addSurfaceColor('highlight', '#FF0000')
   .addRadius('full', 9999)
   .build();
 

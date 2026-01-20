@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { NavigatorProvider } from '@idealyst/navigation';
+import { config } from '@idealyst/config';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ShowcaseRouter } from '../navigation/ShowcaseRouter';
 import { trpc, createTRPCClient } from '../trpc/client';
 import { ApolloProvider, createApolloClient } from '../graphql/client';
 
-// API configuration
-const API_URL = 'http://localhost:3002';
+// API URL from environment configuration
+const API_URL = config.get('API_URL', 'http://localhost:3002');
 
 /**
  * Main App component for the Idealyst Showcase

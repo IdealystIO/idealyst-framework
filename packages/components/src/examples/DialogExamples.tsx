@@ -1,11 +1,30 @@
 import { useState } from 'react';
 import { Screen, View, Button, Text, Dialog } from '../index';
+import { BlurView } from '@idealyst/blur';
+import type { BackdropComponentProps } from '../Dialog/types';
+
+/**
+ * Custom blur backdrop component for dialogs.
+ * Uses @idealyst/blur to create a frosted glass effect over the content.
+ */
+const BlurBackdrop = ({ isVisible }: BackdropComponentProps) => (
+  <BlurView
+    intensity={isVisible ? 80 : 0}
+    blurType="dark"
+    style={{
+      flex: 1,
+      width: '100%',
+      height: '100%',
+    }}
+  />
+);
 
 export const DialogExamples = () => {
   const [basicOpen, setBasicOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [sizesOpen, setSizesOpen] = useState<string | null>(null);
+  const [blurBackdropOpen, setBlurBackdropOpen] = useState(false);
 
   return (
     <Screen background="primary" padding="lg">
@@ -22,7 +41,7 @@ export const DialogExamples = () => {
           </Button>
           <Dialog
             open={basicOpen}
-            onOpenChange={setBasicOpen}
+            onClose={() => setBasicOpen(false)}
             title="Basic Dialog"
           >
             <Text>This is a basic dialog with a title and some content.</Text>
@@ -53,7 +72,7 @@ export const DialogExamples = () => {
           {/* Alert Dialog */}
           <Dialog
             open={alertOpen}
-            onOpenChange={setAlertOpen}
+            onClose={() => setAlertOpen(false)}
             title="Important Alert"
             type="alert"
           >
@@ -72,7 +91,7 @@ export const DialogExamples = () => {
           {/* Confirmation Dialog */}
           <Dialog
             open={confirmationOpen}
-            onOpenChange={setConfirmationOpen}
+            onClose={() => setConfirmationOpen(false)}
             title="Confirm Action"
             type="confirmation"
             closeOnBackdropClick={false}
@@ -114,7 +133,7 @@ export const DialogExamples = () => {
           {sizesOpen && (
             <Dialog
               open={!!sizesOpen}
-              onOpenChange={() => setSizesOpen(null)}
+              onClose={() => setSizesOpen(null)}
               title={`${sizesOpen === 'sm' ? 'Small' : sizesOpen === 'md' ? 'Medium' : 'Large'} Dialog`}
               size={sizesOpen as 'sm' | 'md' | 'lg'}
             >
@@ -135,6 +154,41 @@ export const DialogExamples = () => {
         </View>
 
 
+        {/* Custom Blur Backdrop */}
+        <View gap="md">
+          <Text typography="subtitle1">Custom Blur Backdrop</Text>
+          <Text typography="caption" color="secondary">
+            Use the BackdropComponent prop to create a custom blur backdrop using @idealyst/blur.
+          </Text>
+          <Button onPress={() => setBlurBackdropOpen(true)}>
+            Open Dialog with Blur Backdrop
+          </Button>
+          <Dialog
+            open={blurBackdropOpen}
+            onClose={() => setBlurBackdropOpen(false)}
+            title="Blur Backdrop Dialog"
+            BackdropComponent={BlurBackdrop}
+          >
+            <Text>
+              This dialog uses a custom backdrop component with @idealyst/blur to create
+              a frosted glass effect over the background content.
+            </Text>
+            <View gap="md" style={{ marginTop: 16 }}>
+              <Text typography="caption" color="secondary">
+                The blur intensity animates based on the isVisible prop passed to the
+                BackdropComponent.
+              </Text>
+              <Button
+                type="contained"
+                intent="primary"
+                onPress={() => setBlurBackdropOpen(false)}
+              >
+                Close
+              </Button>
+            </View>
+          </Dialog>
+        </View>
+
         {/* Dialog Options */}
         <View gap="md">
           <Text typography="subtitle1">Dialog Options</Text>
@@ -149,6 +203,9 @@ export const DialogExamples = () => {
           </Text>
           <Text typography="caption" color="secondary">
             • Focus management: Automatic focus trapping and restoration (web only)
+          </Text>
+          <Text typography="caption" color="secondary">
+            • Custom backdrop: Use BackdropComponent prop for custom effects like blur
           </Text>
         </View>
       </View>

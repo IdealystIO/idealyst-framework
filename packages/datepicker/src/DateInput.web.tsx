@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
+import { useUnistyles } from 'react-native-unistyles';
 import { mdiCalendar } from '@mdi/js';
 import { PositionedPortal } from '@idealyst/components/internal';
 import { IconSvg } from './IconSvg.web';
@@ -16,6 +17,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   maxDate,
   disabled = false,
   error,
+  size = 'md',
   style,
 }) => {
   const [open, setOpen] = useState(false);
@@ -24,14 +26,26 @@ export const DateInput: React.FC<DateInputProps> = ({
 
   const styles = dateTimeInputStyles;
 
-  // Get dynamic styles
+  // Apply variants for disabled, error, and size states
+  styles.useVariants({
+    disabled,
+    error: !!error,
+    size,
+  });
+
+  // Get theme for icon size and color
+  const { theme } = useUnistyles();
+  const iconSize = theme.sizes.input[size].iconSize;
+  const iconColor = theme.colors.text.secondary;
+
+  // Get dynamic styles with size variant
   const labelTextStyle = (styles.labelText as any)({});
-  const inputContainerStyle = (styles.inputContainer as any)({ disabled, error: !!error });
-  const textInputStyle = (styles.textInput as any)({ disabled });
-  const iconButtonStyle = (styles.iconButton as any)({ disabled });
+  const inputContainerStyle = (styles.inputContainer as any)({ disabled, error: !!error, size });
+  const textInputStyle = (styles.textInput as any)({ disabled, size });
+  const iconButtonStyle = (styles.iconButton as any)({ disabled, size });
+  const iconStyle = (styles.icon as any)({ size });
   const errorTextStyle = (styles.errorText as any)({});
   const popoverContentStyle = (styles.popoverContent as any)({});
-  const iconColorStyle = (styles.iconColor as any)({ disabled });
 
   // Format date to string
   const formatDate = (date: Date | undefined): string => {
@@ -80,17 +94,24 @@ export const DateInput: React.FC<DateInputProps> = ({
   };
 
   const handleDateSelect = (date: Date) => {
+    console.log('[DateInput] handleDateSelect received:', date.toISOString());
+    console.log('[DateInput] Calling onChange with:', date.toISOString());
     onChange(date);
     setOpen(false);
   };
 
-  // Get web props
+  // Get web props for all elements
   const containerProps = getWebProps([inputContainerStyle]);
+  const labelProps = getWebProps([labelTextStyle]);
+  const inputProps = getWebProps([textInputStyle]);
+  const iconButtonProps = getWebProps([iconButtonStyle]);
+  const errorProps = getWebProps([errorTextStyle]);
+  const popoverProps = getWebProps([popoverContentStyle]);
 
   return (
     <div style={style as React.CSSProperties}>
       {label && (
-        <span style={labelTextStyle}>{label}</span>
+        <span {...labelProps}>{label}</span>
       )}
       <div {...containerProps} ref={triggerRef}>
         <input
@@ -100,18 +121,19 @@ export const DateInput: React.FC<DateInputProps> = ({
           onBlur={handleInputBlur}
           placeholder={placeholder}
           disabled={disabled}
-          style={textInputStyle}
+          {...inputProps}
         />
         <button
-          style={iconButtonStyle}
+          type="button"
+          {...iconButtonProps}
           onClick={() => !disabled && setOpen(!open)}
           disabled={disabled}
         >
-          <IconSvg path={mdiCalendar} size={18} color={iconColorStyle.color} />
+          <IconSvg path={mdiCalendar} size={iconSize} color={iconColor} />
         </button>
       </div>
       {error && (
-        <span style={errorTextStyle}>{error}</span>
+        <span {...errorProps}>{error}</span>
       )}
 
       <PositionedPortal
@@ -123,7 +145,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         onEscapeKey={() => setOpen(false)}
         zIndex={9999}
       >
-        <div style={popoverContentStyle}>
+        <div {...popoverProps}>
           <DatePicker
             value={value ?? undefined}
             onChange={handleDateSelect}
