@@ -1,8 +1,8 @@
 {
-  "name": "@idealyst/datepicker",
+  "name": "@idealyst/audio-playback",
   "version": "1.2.47",
-  "description": "Cross-platform date and time picker components for React and React Native",
-  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/datepicker#readme",
+  "description": "Cross-platform audio playback for React and React Native with PCM streaming support",
+  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/audio-playback#readme",
   "readme": "README.md",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -11,9 +11,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/IdealystIO/idealyst-framework.git",
-    "directory": "packages/datepicker"
+    "directory": "packages/audio-playback"
   },
-  "author": "Your Name <your.email@example.com>",
+  "author": "Idealyst <contact@idealyst.io>",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -21,6 +21,7 @@
   "exports": {
     ".": {
       "react-native": "./src/index.native.ts",
+      "browser": "./src/index.web.ts",
       "import": "./src/index.ts",
       "require": "./src/index.ts",
       "types": "./src/index.ts"
@@ -36,48 +37,26 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/theme": "^1.2.47",
-    "@mdi/js": ">=7.0.0",
-    "@mdi/react": ">=1.6.0",
+    "@idealyst/components": "^1.2.47",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
-    "react-native-svg": ">=13.0.0",
-    "react-native-unistyles": "^3.0.4",
-    "react-native-vector-icons": ">=10.0.0"
+    "react-native-audio-api": ">=0.4.0"
   },
   "peerDependenciesMeta": {
-    "@idealyst/theme": {
-      "optional": false
-    },
-    "@mdi/js": {
-      "optional": true
-    },
-    "@mdi/react": {
+    "@idealyst/components": {
       "optional": true
     },
     "react-native": {
       "optional": true
     },
-    "react-native-svg": {
-      "optional": true
-    },
-    "react-native-unistyles": {
-      "optional": true
-    },
-    "react-native-vector-icons": {
+    "react-native-audio-api": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@idealyst/theme": "^1.2.47",
-    "@mdi/js": "^7.4.47",
-    "@mdi/react": "^1.6.1",
     "@types/react": "^19.1.0",
-    "react": "^19.1.0",
-    "react-native": "^0.80.1",
-    "react-native-svg": "^15.15.1",
-    "react-native-unistyles": "^3.0.10",
-    "react-native-vector-icons": "^10.2.0",
+    "@types/react-native": "^0.73.0",
+    "react-native-audio-api": "^0.4.0",
     "typescript": "^5.0.0"
   },
   "files": [
@@ -87,12 +66,11 @@
   "keywords": [
     "react",
     "react-native",
-    "datepicker",
-    "timepicker",
-    "date-range",
-    "datetime",
-    "calendar",
+    "audio",
+    "playback",
+    "pcm",
+    "streaming",
     "cross-platform",
-    "picker"
+    "web-audio-api"
   ]
 }

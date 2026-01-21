@@ -89,4 +89,11 @@ export interface DialogProps extends BaseProps, InteractiveAccessibilityProps {
    * It receives isVisible for animation coordination.
    */
   BackdropComponent?: ComponentType<BackdropComponentProps>;
+
+  /**
+   * Whether the dialog should avoid the keyboard on mobile (native only).
+   * When true, the dialog content will shift up when the keyboard is shown.
+   * @default false
+   */
+  avoidKeyboard?: boolean;
 }

@@ -161,6 +161,14 @@ export interface SearchRecipesArgs {
 }
 
 // ============================================================================
+// Install Guide Tool Types
+// ============================================================================
+
+export interface GetInstallGuideArgs {
+  package: string;
+}
+
+// ============================================================================
 // Union Types
 // ============================================================================
 
@@ -182,7 +190,8 @@ export type ToolName =
   | "search_packages"
   | "list_recipes"
   | "get_recipe"
-  | "search_recipes";
+  | "search_recipes"
+  | "get_install_guide";
 
 export type ToolArgs =
   | ListComponentsArgs
@@ -202,4 +211,5 @@ export type ToolArgs =
   | SearchPackagesArgs
   | ListRecipesArgs
   | GetRecipeArgs
-  | SearchRecipesArgs;
+  | SearchRecipesArgs
+  | GetInstallGuideArgs;

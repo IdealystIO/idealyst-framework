@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/cli",
-  "version": "1.2.45",
+  "version": "1.2.47",
   "description": "CLI tool for generating Idealyst Framework projects",
   "readme": "README.md",
   "main": "dist/index.js",

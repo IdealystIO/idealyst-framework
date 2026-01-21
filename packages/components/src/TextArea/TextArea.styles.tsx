@@ -68,6 +68,7 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
 
     textareaContainer: (_props: TextAreaVariants) => ({
         position: 'relative' as const,
+        width: '100%',
         borderWidth: 1,
         borderColor: theme.colors.border.primary,
         borderRadius: theme.radii.md,
@@ -80,6 +81,7 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
             },
         },
         _web: {
+            boxSizing: 'border-box',
             border: `1px solid ${theme.colors.border.primary}`,
         },
     }),
@@ -112,9 +114,13 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
             },
         },
         _web: {
+            display: 'block',
+            width: '100%',
             fontFamily: 'inherit',
             outline: 'none',
             border: 'none',
+            borderWidth: 0,
+            background: 'transparent',
             transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
             boxSizing: 'border-box',
             overflowY: 'hidden',

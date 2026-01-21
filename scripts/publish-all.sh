@@ -28,6 +28,7 @@ PACKAGES=(
   "lottie"
   "animate"
   "blur"
+  "audio-playback"
 )
 
 for pkg in "${PACKAGES[@]}"; do

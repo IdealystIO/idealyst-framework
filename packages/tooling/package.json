@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/tooling",
-  "version": "1.2.45",
+  "version": "1.2.47",
   "type": "module",
   "description": "Code analysis and validation utilities for Idealyst Framework",
   "readme": "README.md",

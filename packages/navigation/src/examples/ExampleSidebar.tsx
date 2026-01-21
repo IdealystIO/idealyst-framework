@@ -80,6 +80,7 @@ const componentGroups: ComponentGroup[] = [
             { label: 'Video', path: '/video', icon: 'video' },
             { label: 'Camera', path: '/camera', icon: 'camera' },
             { label: 'Microphone', path: '/microphone', icon: 'microphone' },
+            { label: 'Audio Playback', path: '/audio-playback', icon: 'speaker' },
         ],
     },
     {

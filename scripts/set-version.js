@@ -46,6 +46,7 @@ const packagePaths = [
   'packages/lottie/package.json',
   'packages/animate/package.json',
   "packages/blur/package.json",
+  "packages/audio-playback/package.json",
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',

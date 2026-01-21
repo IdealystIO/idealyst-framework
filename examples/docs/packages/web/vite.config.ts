@@ -94,6 +94,7 @@ export default defineConfig({
       '@mdi/js': path.resolve(__dirname, 'node_modules/@mdi/js'),
       '@react-native/normalize-colors': path.resolve(__dirname, 'node_modules/@react-native/normalize-colors'),
       // Ensure we use the source code of our packages for live development
+      '@idealyst/audio-playback': path.resolve(__dirname, '../../../../packages/audio-playback/src'),
       '@idealyst/components': path.resolve(__dirname, '../../../../packages/components/src'),
       '@idealyst/navigation': path.resolve(__dirname, '../../../../packages/navigation/src'),
       '@idealyst/theme': path.resolve(__dirname, '../../../../packages/theme/src'),
@@ -116,6 +117,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: [
+      '@idealyst/audio-playback',
       '@idealyst/components',
       '@idealyst/navigation',
       '@idealyst/theme',

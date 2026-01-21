@@ -373,6 +373,27 @@ export const searchRecipesDefinition: ToolDefinition = {
 };
 
 // ============================================================================
+// Install Guide Tool Definitions
+// ============================================================================
+
+export const getInstallGuideDefinition: ToolDefinition = {
+  name: "get_install_guide",
+  description:
+    "Get detailed installation instructions for an Idealyst package, including iOS (Info.plist, CocoaPods), Android (AndroidManifest.xml, permissions, Gradle), and web configuration. Essential for packages with native dependencies.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      package: {
+        type: "string",
+        description:
+          "Package name (e.g., 'camera', 'microphone', 'oauth-client', 'storage')",
+      },
+    },
+    required: ["package"],
+  },
+};
+
+// ============================================================================
 // All Tool Definitions Array
 // ============================================================================
 
@@ -407,6 +428,8 @@ export const toolDefinitions: ToolDefinition[] = [
   listRecipesDefinition,
   getRecipeDefinition,
   searchRecipesDefinition,
+  // Install guide tools
+  getInstallGuideDefinition,
 ];
 
 /**

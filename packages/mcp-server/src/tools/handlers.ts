@@ -32,6 +32,11 @@ import {
   getRecipesByCategory,
   searchRecipes as searchRecipesData,
 } from "../data/recipes.js";
+import {
+  installGuides,
+  getInstallGuide as getInstallGuideData,
+  formatInstallGuideMarkdown,
+} from "../data/install-guides.js";
 import iconsData from "../data/icons.json" with { type: "json" };
 import {
   getComponentTypes as getTypesFromFile,
@@ -60,6 +65,7 @@ import type {
   ListRecipesArgs,
   GetRecipeArgs,
   SearchRecipesArgs,
+  GetInstallGuideArgs,
 } from "./types.js";
 
 // ============================================================================
@@ -702,6 +708,34 @@ export function searchRecipes(args: SearchRecipesArgs): ToolResponse {
 }
 
 // ============================================================================
+// Install Guide Tool Handlers
+// ============================================================================
+
+/**
+ * Get detailed installation guide for a package
+ */
+export function getInstallGuide(args: GetInstallGuideArgs): ToolResponse {
+  const packageName = args.package;
+
+  if (!packageName) {
+    return textResponse("Please provide a package name.");
+  }
+
+  const guide = getInstallGuideData(packageName);
+
+  if (!guide) {
+    const availablePackages = Object.keys(installGuides).join(", ");
+    return textResponse(
+      `No installation guide found for "${packageName}".\n\nAvailable packages: ${availablePackages}`
+    );
+  }
+
+  // Format as detailed markdown
+  const markdown = formatInstallGuideMarkdown(guide);
+  return textResponse(markdown);
+}
+
+// ============================================================================
 // Handler Registry
 // ============================================================================
 
@@ -728,6 +762,7 @@ export const toolHandlers: Record<string, (args: any) => ToolResponse> = {
   list_recipes: listRecipes,
   get_recipe: getRecipe,
   search_recipes: searchRecipes,
+  get_install_guide: getInstallGuide,
 };
 
 /**

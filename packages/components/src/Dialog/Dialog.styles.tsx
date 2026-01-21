@@ -127,7 +127,6 @@ export const dialogStyles = defineStyle('Dialog', (theme: Theme) => ({
     }),
 
     content: (_props: DialogDynamicProps) => ({
-        padding: 24,
         _web: {
             overflow: 'visible',
             maxHeight: 'none',

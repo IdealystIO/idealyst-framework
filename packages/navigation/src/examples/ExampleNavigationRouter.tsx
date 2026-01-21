@@ -4,6 +4,7 @@ import { DataGridShowcase } from '@idealyst/datagrid/examples';
 import { DatePickerExamples } from '@idealyst/datepicker/examples';
 import { CameraExamples } from '@idealyst/camera/examples';
 import { MicrophoneExamples } from '@idealyst/microphone/examples';
+import { AudioPlaybackPage } from '@test-select-demo/shared/pages/packages/AudioPlayback';
 import { AnimateExamples } from '@idealyst/animate/examples';
 import { LottieExamples } from '@idealyst/lottie/examples';
 import { BlurViewExamples } from '@idealyst/blur/examples';
@@ -338,6 +339,7 @@ const ExampleNavigationRouter: NavigatorParam = {
         { path: "video", type: 'screen', component: VideoExamples, options: { title: "Video" } },
         { path: "camera", type: 'screen', component: CameraExamples, options: { title: "Camera" } },
         { path: "microphone", type: 'screen', component: MicrophoneExamples, options: { title: "Microphone" } },
+        { path: "audio-playback", type: 'screen', component: AudioPlaybackPage, options: { title: "Audio Playback" } },
         { path: "datagrid", type: 'screen', component: DataGridShowcase, options: { title: "Data Grid" } },
         { path: "datepicker", type: 'screen', component: DatePickerExamples, options: { title: "Date Picker" } },
         { path: "animate", type: 'screen', component: AnimateExamples, options: { title: "Animate" } },

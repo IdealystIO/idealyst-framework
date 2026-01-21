@@ -31,6 +31,9 @@ export const dateTimeInputStyles = defineStyle('DateTimeInput', (theme: Theme) =
     overflow: 'hidden' as const,
     borderColor: theme.colors.border.primary,
     backgroundColor: theme.colors.surface.primary,
+    // Default padding/height for when size variant isn't specified
+    height: theme.sizes.input.md.height,
+    paddingHorizontal: theme.sizes.input.md.paddingHorizontal,
     _web: {
       display: 'flex',
       flexDirection: 'row',
@@ -61,6 +64,8 @@ export const dateTimeInputStyles = defineStyle('DateTimeInput', (theme: Theme) =
     backgroundColor: 'transparent',
     color: theme.colors.text.primary,
     fontWeight: '400' as const,
+    // Default font size for when size variant isn't specified
+    fontSize: theme.sizes.input.md.fontSize,
     _web: {
       outline: 'none',
       border: 'none',
@@ -86,6 +91,10 @@ export const dateTimeInputStyles = defineStyle('DateTimeInput', (theme: Theme) =
     backgroundColor: 'transparent',
     borderWidth: 0,
     flexShrink: 0,
+    // Default icon sizing for when size variant isn't specified
+    width: theme.sizes.input.md.iconSize,
+    height: theme.sizes.input.md.iconSize,
+    marginLeft: theme.sizes.input.md.iconMargin,
     _web: {
       display: 'flex',
       background: 'none',
@@ -109,6 +118,9 @@ export const dateTimeInputStyles = defineStyle('DateTimeInput', (theme: Theme) =
   // Icon inside button - sized based on input size
   icon: (_props: InputDynamicProps) => ({
     color: theme.colors.text.secondary,
+    // Default icon sizing for when size variant isn't specified
+    width: theme.sizes.input.md.iconSize,
+    height: theme.sizes.input.md.iconSize,
     variants: {
       // $iterator expands for each input size
       size: {

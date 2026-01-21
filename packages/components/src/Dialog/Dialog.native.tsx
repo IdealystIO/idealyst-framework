@@ -1,5 +1,5 @@
 import { useEffect, forwardRef, useMemo } from 'react';
-import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler, GestureResponderEvent } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler, GestureResponderEvent, KeyboardAvoidingView, Platform } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
@@ -15,6 +15,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   showCloseButton = true,
   closeOnBackdropClick = true,
   animationType: _animationType = 'fade',
+  avoidKeyboard = false,
   style,
   testID,
   id,
@@ -175,6 +176,23 @@ const Dialog = forwardRef<View, DialogProps>(({
     </TouchableWithoutFeedback>
   );
 
+  const modalContent = (
+    <TouchableWithoutFeedback onPress={handleBackdropPress}>
+      {BackdropComponent ? (
+        <View style={customBackdropWrapperStyle}>
+          <Animated.View style={[customBackdropContainerStyle, backdropAnimatedStyle]}>
+            <BackdropComponent isVisible={open} />
+          </Animated.View>
+          {dialogContainer}
+        </View>
+      ) : (
+        <Animated.View style={[backdropStyle, backdropAnimatedStyle]}>
+          {dialogContainer}
+        </Animated.View>
+      )}
+    </TouchableWithoutFeedback>
+  );
+
   return (
     <Modal
       visible={open}
@@ -184,20 +202,16 @@ const Dialog = forwardRef<View, DialogProps>(({
       statusBarTranslucent
       testID={testID}
     >
-      <TouchableWithoutFeedback onPress={handleBackdropPress}>
-        {BackdropComponent ? (
-          <View style={customBackdropWrapperStyle}>
-            <Animated.View style={[customBackdropContainerStyle, backdropAnimatedStyle]}>
-              <BackdropComponent isVisible={open} />
-            </Animated.View>
-            {dialogContainer}
-          </View>
-        ) : (
-          <Animated.View style={[backdropStyle, backdropAnimatedStyle]}>
-            {dialogContainer}
-          </Animated.View>
-        )}
-      </TouchableWithoutFeedback>
+      {avoidKeyboard ? (
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          {modalContent}
+        </KeyboardAvoidingView>
+      ) : (
+        modalContent
+      )}
     </Modal>
   );
 });

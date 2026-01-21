@@ -61,6 +61,8 @@ export type {
   ListRecipesArgs,
   GetRecipeArgs,
   SearchRecipesArgs,
+  // Install guide tool types
+  GetInstallGuideArgs,
 } from "./types.js";
 
 // Re-export all definitions
@@ -84,6 +86,8 @@ export {
   listRecipesDefinition,
   getRecipeDefinition,
   searchRecipesDefinition,
+  // Install guide definitions
+  getInstallGuideDefinition,
   // Collections
   toolDefinitions,
   toolDefinitionMap,
@@ -110,6 +114,8 @@ export {
   listRecipes,
   getRecipe,
   searchRecipes,
+  // Install guide handlers
+  getInstallGuide,
   // Handler registry and dispatcher
   toolHandlers,
   callTool,

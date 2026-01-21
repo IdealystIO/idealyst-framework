@@ -2188,6 +2188,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@idealyst/audio-playback@npm:^1.2.47":
+  version: 1.2.47
+  resolution: "@idealyst/audio-playback@npm:1.2.47"
+  peerDependencies:
+    "@idealyst/components": ^1.2.47
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-audio-api: ">=0.4.0"
+  peerDependenciesMeta:
+    "@idealyst/components":
+      optional: true
+    react-native:
+      optional: true
+    react-native-audio-api:
+      optional: true
+  checksum: 10/257e7add556b4a121748bf39349f6b00f620c5a82d63003ced6f9513b0fc68315109713a0e8549aeaa6d3c6f50cf4722a90baa4fe98f2bd13d7de9fb1ae1d0ba
+  languageName: node
+  linkType: hard
+
 "@idealyst/camera@portal:../../../../packages/camera::locator=%40test-select-demo%2Fshared%40workspace%3Apackages%2Fshared":
   version: 0.0.0-use.local
   resolution: "@idealyst/camera@portal:../../../../packages/camera::locator=%40test-select-demo%2Fshared%40workspace%3Apackages%2Fshared"
@@ -2390,7 +2409,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/microphone@portal:../../../../packages/microphone::locator=%40test-select-demo%2Fshared%40workspace%3Apackages%2Fshared"
   peerDependencies:
-    "@idealyst/components": ^1.2.40
+    "@idealyst/components": ^1.2.47
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-live-audio-stream: ">=1.1.0"
@@ -4134,6 +4153,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.28.0"
     "@babel/preset-react": "npm:^7.27.1"
     "@babel/preset-typescript": "npm:^7.27.1"
+    "@idealyst/audio-playback": "npm:^1.2.47"
     "@idealyst/components": "npm:^1.2.30"
     "@idealyst/datagrid": "npm:^1.2.30"
     "@idealyst/datepicker": "npm:^1.2.30"
