@@ -25,6 +25,12 @@ export * from './responsive';
 export * from './breakpoints';
 export * from './useResponsiveStyle';
 
+// Style props hook (platform-specific via .native.ts)
+export { useStyleProps, type StyleProps } from './useStyleProps';
+
+// Shadow utility (platform-specific via .native.ts)
+export { shadow, type ShadowOptions, type ShadowStyle } from './shadow';
+
 // Animation tokens and utilities
 // Note: Use '@idealyst/theme/animation' for full animation API
 export { durations, easings, presets } from './animation/tokens';

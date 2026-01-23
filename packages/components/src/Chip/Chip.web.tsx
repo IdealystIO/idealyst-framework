@@ -6,6 +6,7 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 // Track if we've logged the onClick deprecation warning (log once per session)
 let hasLoggedOnClickWarning = false;
@@ -55,7 +56,7 @@ const Chip = forwardRef<IdealystElement, ChipProps>(({
   const isSelected = selectable ? selected : false;
 
   // Compute dynamic styles
-  const containerProps = getWebProps([(chipStyles.container as any)({ size, intent, type, selected: isSelected, disabled }), style as any]);
+  const containerProps = getWebProps([(chipStyles.container as any)({ size, intent, type, selected: isSelected, disabled }), flattenStyle(style)]);
   const labelProps = getWebProps([(chipStyles.label as any)({ size, intent, type, selected: isSelected })]);
   const iconProps = getWebProps([(chipStyles.icon as any)({ size, intent, type, selected: isSelected })]);
   const deleteButtonProps = getWebProps([(chipStyles.deleteButton as any)({ size })]);

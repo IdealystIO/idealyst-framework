@@ -6,6 +6,7 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebSelectionAriaProps, generateAccessibilityId, combineIds } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Checkbox input for boolean selection with support for indeterminate state.
@@ -132,7 +133,7 @@ const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
   });
 
   // Create style arrays - call as functions with required props for theme reactivity
-  const wrapperStyleArray = [(checkboxStyles.wrapper as any)({}), style as any];
+  const wrapperStyleArray = [(checkboxStyles.wrapper as any)({}), flattenStyle(style)];
   const containerStyleArray = [(checkboxStyles.container as any)({})];
   const checkboxStyleArray = [(checkboxStyles.checkbox as any)({ intent, checked: internalChecked, disabled, type: variant })];
   const labelStyleArray = [(checkboxStyles.label as any)({ disabled })];

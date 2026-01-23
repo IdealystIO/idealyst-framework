@@ -121,6 +121,9 @@ export * from './Breadcrumb/types';
 export { default as Platform } from './Platform';
 export * from './Platform/types';
 
+export { Keyboard } from './Keyboard';
+export * from './Keyboard/types';
+
 export type { ButtonProps } from './Button/types';
 export type { IconButtonProps } from './IconButton/types';
 export type { TextProps } from './Text/types';
@@ -158,6 +161,15 @@ export type { SkeletonProps, SkeletonGroupProps, SkeletonShape, SkeletonAnimatio
 export type { ChipProps, ChipSize, ChipIntent } from './Chip/types';
 export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
 export type { PlatformAPI, PlatformSystem, PlatformSelectSpec } from './Platform/types';
+export type {
+  KeyboardMetrics,
+  KeyboardEventEasing,
+  KeyboardEvent,
+  KeyboardEventName,
+  KeyboardEventListener,
+  KeyboardSubscription,
+  KeyboardStatic,
+} from './Keyboard/types';
 
 export { useMergeRefs };
 

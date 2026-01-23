@@ -386,7 +386,7 @@ export const getInstallGuideDefinition: ToolDefinition = {
       package: {
         type: "string",
         description:
-          "Package name (e.g., 'camera', 'microphone', 'oauth-client', 'storage')",
+          "Package name (e.g., 'camera', 'audio', 'oauth-client', 'storage')",
       },
     },
     required: ["package"],

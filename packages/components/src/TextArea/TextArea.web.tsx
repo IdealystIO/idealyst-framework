@@ -28,6 +28,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   showCharacterCount = false,
   intent = 'primary',
   size = 'md',
+  type = 'outlined',
   // Spacing variants from FormInputStyleProps
   margin,
   marginVertical,
@@ -55,6 +56,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   accessibilityAutoComplete,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
+  const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
@@ -125,8 +127,11 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   textAreaStyles.useVariants({
     size,
     intent,
+    type,
+    focused: isFocused,
     disabled,
     hasError,
+    autoGrow,
     isNearLimit,
     isAtLimit,
     margin,
@@ -134,13 +139,22 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
     marginHorizontal,
   });
 
-  // Get static styles (cast to any for Unistyles variant compatibility)
-  const containerProps = getWebProps([textAreaStyles.container as any, style as any]);
-  const labelProps = getWebProps([textAreaStyles.label as any]);
-  const textareaContainerProps = getWebProps([textAreaStyles.textareaContainer as any]);
-  const footerProps = getWebProps([textAreaStyles.footer as any]);
-  const helperTextProps = getWebProps([textAreaStyles.helperText as any]);
-  const characterCountProps = getWebProps([textAreaStyles.characterCount as any]);
+  // Get dynamic styles - call as functions for theme reactivity
+  const containerStyleComputed = (textAreaStyles.container as any)({});
+  const labelStyleComputed = (textAreaStyles.label as any)({ disabled });
+  const textareaContainerStyleComputed = (textAreaStyles.textareaContainer as any)({ type, focused: isFocused, hasError, disabled });
+  const textareaStyleComputed = (textAreaStyles.textarea as any)({ autoGrow, disabled });
+  const footerStyleComputed = (textAreaStyles.footer as any)({});
+  const helperTextStyleComputed = (textAreaStyles.helperText as any)({ hasError });
+  const characterCountStyleComputed = (textAreaStyles.characterCount as any)({ isNearLimit, isAtLimit });
+
+  // Convert to web props
+  const containerProps = getWebProps([containerStyleComputed, style as any]);
+  const labelProps = getWebProps([labelStyleComputed]);
+  const textareaContainerProps = getWebProps([textareaContainerStyleComputed]);
+  const footerProps = getWebProps([footerStyleComputed]);
+  const helperTextProps = getWebProps([helperTextStyleComputed]);
+  const characterCountProps = getWebProps([characterCountStyleComputed]);
 
   const adjustHeight = () => {
     if (!autoGrow || !textareaRef.current) return;
@@ -182,10 +196,18 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
     onChange?.(newValue);
   };
 
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
   const showFooter = (error || helperText) || (showCharacterCount && maxLength);
 
   const computedTextareaProps = getWebProps([
-    textAreaStyles.textarea as any,
+    textareaStyleComputed,
     textareaStyle as any,
     { resize } as any, // Apply resize as inline style since it's CSS-only
     minHeight ? { minHeight: `${minHeight}px` } : null,
@@ -210,6 +232,8 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
           ref={mergedTextareaRef}
           value={value}
           onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           placeholder={placeholder}
           disabled={disabled}
           rows={autoGrow ? undefined : rows}

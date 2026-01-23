@@ -20,7 +20,6 @@ PACKAGES=(
   "storage"
   "mcp-server"
   "oauth-client"
-  "microphone"
   "translate"
   "tooling"
   "config"
@@ -28,7 +27,8 @@ PACKAGES=(
   "lottie"
   "animate"
   "blur"
-  "audio-playback"
+  "audio"
+  "svg"
 )
 
 for pkg in "${PACKAGES[@]}"; do

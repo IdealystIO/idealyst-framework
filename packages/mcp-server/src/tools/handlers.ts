@@ -16,6 +16,7 @@ import {
   getComponentNames,
   searchComponents as searchComponentsData,
   getComponentsByCategory,
+  findComponentName,
 } from "../data/component-metadata.js";
 import { cliCommands } from "../data/cli-commands.js";
 import { translateGuides } from "../data/translate-guides.js";
@@ -31,7 +32,7 @@ import {
   getRecipeSummary,
   getRecipesByCategory,
   searchRecipes as searchRecipesData,
-} from "../data/recipes.js";
+} from "../data/recipes/index.js";
 import {
   installGuides,
   getInstallGuide as getInstallGuideData,
@@ -118,19 +119,21 @@ export function listComponents(_args: ListComponentsArgs = {}): ToolResponse {
  * - Type-checked examples from .examples.tsx files
  */
 export function getComponentDocs(args: GetComponentDocsArgs): ToolResponse {
-  const componentName = args.component;
-  const meta = getComponentMetadata(componentName);
+  const inputName = args.component;
+  const canonicalName = findComponentName(inputName);
 
-  if (!meta) {
+  if (!canonicalName) {
     return textResponse(
-      `Component "${componentName}" not found. Available components: ${getComponentNames().join(", ")}`
+      `Component "${inputName}" not found. Available components: ${getComponentNames().join(", ")}`
     );
   }
+
+  const meta = getComponentMetadata(canonicalName)!;
 
   // Get TypeScript types for props documentation
   let propsSection = "";
   try {
-    const types = getTypesFromFile(componentName, "typescript");
+    const types = getTypesFromFile(canonicalName, "typescript");
     propsSection = `## Props (TypeScript)
 
 \`\`\`typescript
@@ -142,7 +145,7 @@ ${types.typescript}
 
   // Get type-checked examples
   let examplesSection = "";
-  const examples = getComponentExamplesFromFile(componentName);
+  const examples = getComponentExamplesFromFile(canonicalName);
   if (examples) {
     examplesSection = `## Examples
 
@@ -151,7 +154,7 @@ ${examples}
 \`\`\``;
   }
 
-  const docs = `# ${componentName}
+  const docs = `# ${canonicalName}
 
 ${meta.description}
 
@@ -180,17 +183,17 @@ ${examplesSection}
  * are now in a single .examples.tsx file.
  */
 export function getComponentExample(args: GetComponentExampleArgs): ToolResponse {
-  const componentName = args.component;
-  const meta = getComponentMetadata(componentName);
+  const inputName = args.component;
+  const canonicalName = findComponentName(inputName);
 
-  if (!meta) {
-    return textResponse(`Component "${componentName}" not found.`);
+  if (!canonicalName) {
+    return textResponse(`Component "${inputName}" not found.`);
   }
 
-  const examples = getComponentExamplesFromFile(componentName);
+  const examples = getComponentExamplesFromFile(canonicalName);
   if (!examples) {
     return textResponse(
-      `No examples found for "${componentName}". Examples are in packages/mcp-server/examples/components/${componentName}.examples.tsx`
+      `No examples found for "${canonicalName}". Examples are in packages/mcp-server/examples/components/${canonicalName}.examples.tsx`
     );
   }
 
@@ -250,14 +253,17 @@ export function getComponentTypes(args: GetComponentTypesArgs): ToolResponse {
  * to ensure they compile and are correct.
  */
 export function getComponentExamplesTs(args: GetComponentExamplesTsArgs): ToolResponse {
-  const componentName = args.component;
+  const inputName = args.component;
+  const canonicalName = findComponentName(inputName);
 
   try {
-    const examples = getComponentExamplesFromFile(componentName);
+    // If component name is not recognized in metadata, still try to find examples
+    const lookupName = canonicalName || inputName;
+    const examples = getComponentExamplesFromFile(lookupName);
     if (!examples) {
       const availableComponents = getAvailableComponents();
       return textResponse(
-        `No TypeScript examples found for component "${componentName}". Available components with examples: ${availableComponents.join(", ")}`
+        `No TypeScript examples found for component "${inputName}". Available components with examples: ${availableComponents.join(", ")}`
       );
     }
 

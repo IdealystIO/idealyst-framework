@@ -5,6 +5,7 @@ import { screenStyles } from './Screen.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { useWebLayout } from '../hooks/useWebLayout';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Full-screen container for page layouts with background color and safe area support.
@@ -46,7 +47,7 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   });
 
   // Call style as function to get theme-reactive styles
-  const webProps = getWebProps([(screenStyles.screen as any)({}), style as any]);
+  const webProps = getWebProps([(screenStyles.screen as any)({}), flattenStyle(style)]);
 
   const mergedRef = useMergeRefs(ref, webProps.ref, layoutRef);
 

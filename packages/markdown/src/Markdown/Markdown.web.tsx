@@ -5,6 +5,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { markdownStyles } from './Markdown.styles';
 import { createWebRenderers } from '../renderers/web';
 import type { MarkdownProps } from './types';
+import { flattenStyle } from '../flattenStyle';
 
 /**
  * Cross-platform Markdown renderer for web.
@@ -64,7 +65,7 @@ const Markdown = forwardRef<HTMLDivElement, MarkdownProps>(
     // Get web props for the container
     const containerStyleArray = [
       (markdownStyles.container as any)({ size, linkIntent }),
-      style,
+      flattenStyle(style),
     ];
     const webProps = getWebProps(containerStyleArray);
 

@@ -4,6 +4,7 @@ import { TextProps } from './types';
 import { textStyles } from './Text.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Typography component for displaying text with predefined styles and semantic variants.
@@ -38,7 +39,7 @@ const Text = forwardRef<IdealystElement, TextProps>(({
   // Create the style array - pass all style-affecting props to dynamic style function
   const textStyleArray = [
     (textStyles.text as any)({ color, typography, weight, align }),
-    style,
+    flattenStyle(style),
   ];
 
   // Use getWebProps to generate className and ref for web

@@ -1,4 +1,13 @@
-import type { PlaybackConfig, SampleRate, ChannelCount, BitDepth, PlayerStatus } from './types';
+import type {
+  PlaybackConfig,
+  SampleRate,
+  ChannelCount,
+  BitDepth,
+  PlayerStatus,
+  AudioSessionConfig,
+  AudioSessionState,
+  AudioSessionPresets,
+} from './types';
 
 /**
  * Default playback configuration.
@@ -88,3 +97,78 @@ export const DEFAULT_BUFFER_SIZE = 4096;
  * Helps prevent buffer underruns.
  */
 export const MIN_BUFFER_THRESHOLD_MS = 100;
+
+// ============================================
+// AUDIO SESSION CONSTANTS
+// ============================================
+
+/**
+ * Default audio session state.
+ */
+export const DEFAULT_AUDIO_SESSION_STATE: AudioSessionState = {
+  isActive: false,
+  category: 'soloAmbient',
+  mode: 'default',
+  categoryOptions: [],
+  otherAudioPlaying: false,
+};
+
+/**
+ * Pre-configured audio session presets for common use cases.
+ */
+export const AUDIO_SESSION_PRESETS: AudioSessionPresets = {
+  /**
+   * For apps that only play audio (music players, podcast apps).
+   * Audio continues in background, ignores silent switch.
+   */
+  playback: {
+    category: 'playback',
+    mode: 'default',
+    categoryOptions: [],
+    active: true,
+  },
+
+  /**
+   * For apps that only record audio.
+   * Silences other audio during recording.
+   */
+  record: {
+    category: 'record',
+    mode: 'default',
+    categoryOptions: [],
+    active: true,
+  },
+
+  /**
+   * For voice chat / VoIP applications.
+   * Enables simultaneous recording and playback with optimizations for voice.
+   */
+  voiceChat: {
+    category: 'playAndRecord',
+    mode: 'voiceChat',
+    categoryOptions: ['defaultToSpeaker', 'allowBluetooth', 'allowBluetoothA2DP'],
+    active: true,
+  },
+
+  /**
+   * For apps that mix with other audio (games with sound effects).
+   * Audio is silenced by the silent switch and lock screen.
+   */
+  ambient: {
+    category: 'ambient',
+    mode: 'default',
+    categoryOptions: ['mixWithOthers'],
+    active: true,
+  },
+
+  /**
+   * Default configuration for simultaneous playback and recording.
+   * Good for AI assistants that need to listen while playing responses.
+   */
+  default: {
+    category: 'playAndRecord',
+    mode: 'default',
+    categoryOptions: ['defaultToSpeaker', 'allowBluetooth', 'allowBluetoothA2DP', 'mixWithOthers'],
+    active: true,
+  },
+} as const;

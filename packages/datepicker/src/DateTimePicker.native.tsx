@@ -15,6 +15,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   minuteStep = 1,
   disabled = false,
   error,
+  size = 'md',
   style,
 }) => {
   // Get dynamic styles - call as functions for theme reactivity
@@ -91,6 +92,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             maxDate={maxDate}
             disabled={disabled}
             error={error}
+            size={size}
           />
         </View>
         <View style={inputColumnStyle}>
@@ -101,6 +103,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             mode={timeMode}
             minuteStep={minuteStep}
             disabled={disabled}
+            size={size}
           />
         </View>
       </View>

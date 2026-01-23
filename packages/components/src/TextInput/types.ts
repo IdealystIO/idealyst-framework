@@ -17,6 +17,13 @@ export type TextInputType = 'outlined' | 'filled' | 'bare';
 export type TextInputMode = 'text' | 'email' | 'password' | 'number';
 
 /**
+ * Return key type for mobile keyboard.
+ * Controls what the return/submit button on the keyboard displays.
+ * @platform native
+ */
+export type ReturnKeyType = 'done' | 'go' | 'next' | 'search' | 'send' | 'default';
+
+/**
  * Single-line text input field with support for icons, validation states, and multiple visual styles.
  * Includes built-in password visibility toggle and platform-specific keyboard handling.
  *
@@ -138,6 +145,20 @@ export interface TextInputProps extends FormInputStyleProps, FormAccessibilityPr
    * @deprecated Use intent="danger" instead
    */
   hasError?: boolean;
+
+  /**
+   * Called when the user submits the input (presses Enter on web, or the return key on mobile).
+   * Use this for form submission or moving to the next field.
+   */
+  onSubmitEditing?: () => void;
+
+  /**
+   * Determines how the return key on mobile keyboard should look.
+   * Has no effect on web.
+   * @platform native
+   * @default 'default'
+   */
+  returnKeyType?: ReturnKeyType;
 
   /**
    * Additional styles (platform-specific)

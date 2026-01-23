@@ -46,7 +46,7 @@ const packagesSection = {
     { label: 'DatePicker', path: '/packages/datepicker' },
     { label: 'DataGrid', path: '/packages/datagrid' },
     { label: 'Camera', path: '/packages/camera' },
-    { label: 'Microphone', path: '/packages/microphone' },
+    { label: 'Audio', path: '/packages/audio' },
     { label: 'Config', path: '/packages/config' },
     { label: 'Tooling', path: '/packages/tooling' },
   ],

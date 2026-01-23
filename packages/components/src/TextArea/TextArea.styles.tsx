@@ -12,11 +12,16 @@ void StyleSheet;
 // Wrap theme for $iterator support
 type Theme = ThemeStyleWrapper<BaseTheme>;
 
+type TextAreaType = 'outlined' | 'filled' | 'bare';
+
 export type TextAreaVariants = {
     size: Size;
     intent: Intent;
+    type: TextAreaType;
+    focused: boolean;
     disabled: boolean;
     hasError: boolean;
+    autoGrow: boolean;
     isNearLimit: boolean;
     isAtLimit: boolean;
     margin?: ViewStyleSize;
@@ -70,19 +75,45 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
         position: 'relative' as const,
         width: '100%',
         borderWidth: 1,
+        borderStyle: 'solid' as const,
         borderColor: theme.colors.border.primary,
         borderRadius: theme.radii.md,
         backgroundColor: theme.colors.surface.primary,
         overflow: 'hidden' as const,
         variants: {
+            type: {
+                outlined: {
+                    backgroundColor: theme.colors.surface.primary,
+                    borderColor: theme.colors.border.primary,
+                },
+                filled: {
+                    backgroundColor: theme.colors.surface.secondary,
+                    borderColor: 'transparent',
+                },
+                bare: {
+                    backgroundColor: 'transparent',
+                    borderWidth: 0,
+                    borderColor: 'transparent',
+                },
+            },
+            focused: {
+                true: {
+                    borderColor: theme.intents.primary.primary,
+                },
+                false: {},
+            },
             disabled: {
-                true: { opacity: 0.8 },
+                true: { opacity: 0.8, _web: { cursor: 'not-allowed' } },
                 false: { opacity: 1 },
+            },
+            hasError: {
+                true: { borderColor: theme.intents.danger.primary },
+                false: {},
             },
         },
         _web: {
             boxSizing: 'border-box',
-            border: `1px solid ${theme.colors.border.primary}`,
+            transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
         },
     }),
 
@@ -96,7 +127,15 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
                 fontSize: theme.sizes.$textarea.fontSize,
                 padding: theme.sizes.$textarea.padding,
                 lineHeight: theme.sizes.$textarea.lineHeight,
-                minHeight: theme.sizes.$textarea.minHeight,
+            },
+            autoGrow: {
+                true: {
+                    // Use input height as minHeight when autoGrow is enabled
+                    minHeight: theme.sizes.$input.height,
+                },
+                false: {
+                    // No minHeight - let rows attribute control height
+                },
             },
             disabled: {
                 true: {

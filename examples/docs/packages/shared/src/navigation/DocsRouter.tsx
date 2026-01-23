@@ -23,7 +23,7 @@ import { OAuthClientPage } from '../pages/packages/OAuthClient';
 import { DatePickerPage } from '../pages/packages/DatePicker';
 import { DataGridPage } from '../pages/packages/DataGrid';
 import { CameraPage } from '../pages/packages/Camera';
-import { MicrophonePage } from '../pages/packages/Microphone';
+import { AudioPage } from '../pages/packages/Audio';
 import { ConfigPage } from '../pages/packages/Config';
 import { ToolingPage } from '../pages/packages/Tooling';
 import { MarkdownPage } from '../pages/packages/Markdown';
@@ -84,7 +84,7 @@ export const DocsRouter: NavigatorParam = {
     { path: 'packages/datepicker', type: 'screen', component: DatePickerPage, options: { title: 'DatePicker' } },
     { path: 'packages/datagrid', type: 'screen', component: DataGridPage, options: { title: 'DataGrid' } },
     { path: 'packages/camera', type: 'screen', component: CameraPage, options: { title: 'Camera' } },
-    { path: 'packages/microphone', type: 'screen', component: MicrophonePage, options: { title: 'Microphone' } },
+    { path: 'packages/audio', type: 'screen', component: AudioPage, options: { title: 'Audio' } },
     { path: 'packages/config', type: 'screen', component: ConfigPage, options: { title: 'Config' } },
     { path: 'packages/tooling', type: 'screen', component: ToolingPage, options: { title: 'Tooling' } },
     { path: 'packages/markdown', type: 'screen', component: MarkdownPage, options: { title: 'Markdown' } },

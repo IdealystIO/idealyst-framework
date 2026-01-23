@@ -4,7 +4,7 @@
  * Manages mount/unmount animations using Reanimated.
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -15,7 +15,14 @@ import {
   runOnJS,
 } from 'react-native-reanimated';
 import { timingConfig, springConfig, isSpringEasing, resolveDuration } from '@idealyst/theme/animation';
-import type { UsePresenceOptions, UsePresenceResult, AnimatableStyle } from './types';
+import type {
+  UsePresenceOptions,
+  UsePresenceResult,
+  AnimatableStyle,
+  AnimatableProperties,
+  TransformProperty,
+} from './types';
+import { isTransformObject, normalizeTransform } from './normalizeTransform';
 
 /**
  * Hook that manages presence animations for mount/unmount.
@@ -57,23 +64,37 @@ export function usePresence(isVisible: boolean, options: UsePresenceOptions): Us
   const exitOpacity = exit.opacity ?? 0;
   const initialOpacity = initial?.opacity ?? exitOpacity;
 
-  // Extract transform values
+  // Normalize transforms to array format
+  const normalizedEnterTransform = useMemo((): TransformProperty[] => {
+    if (!enter.transform) return [];
+    return isTransformObject(enter.transform)
+      ? normalizeTransform(enter.transform)
+      : enter.transform;
+  }, [enter.transform]);
+
+  const normalizedExitTransform = useMemo((): TransformProperty[] => {
+    if (!exit.transform) return [];
+    return isTransformObject(exit.transform)
+      ? normalizeTransform(exit.transform)
+      : exit.transform;
+  }, [exit.transform]);
+
+  // Extract transform values from normalized arrays
   const getTransformValue = (
-    style: typeof enter | typeof exit,
+    transforms: TransformProperty[],
     key: string,
     defaultValue: number | string
   ) => {
-    if (!style.transform) return defaultValue;
-    const transform = style.transform.find((t) => key in t);
+    const transform = transforms.find((t) => key in t);
     return transform ? (transform as any)[key] : defaultValue;
   };
 
-  const enterTranslateY = getTransformValue(enter, 'translateY', 0) as number;
-  const exitTranslateY = getTransformValue(exit, 'translateY', 0) as number;
-  const enterTranslateX = getTransformValue(enter, 'translateX', 0) as number;
-  const exitTranslateX = getTransformValue(exit, 'translateX', 0) as number;
-  const enterScale = getTransformValue(enter, 'scale', 1) as number;
-  const exitScale = getTransformValue(exit, 'scale', 1) as number;
+  const enterTranslateY = getTransformValue(normalizedEnterTransform, 'translateY', 0) as number;
+  const exitTranslateY = getTransformValue(normalizedExitTransform, 'translateY', 0) as number;
+  const enterTranslateX = getTransformValue(normalizedEnterTransform, 'translateX', 0) as number;
+  const exitTranslateX = getTransformValue(normalizedExitTransform, 'translateX', 0) as number;
+  const enterScale = getTransformValue(normalizedEnterTransform, 'scale', 1) as number;
+  const exitScale = getTransformValue(normalizedExitTransform, 'scale', 1) as number;
 
   // Animation helper
   const animateTo = useCallback(

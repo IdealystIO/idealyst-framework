@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@idealyst-docs/shared": "workspace:*",
-    "@idealyst/audio-playback": "^1.2.46",
+    "@idealyst/audio": "^1.2.47",
     "@idealyst/components": "^1.2.30",
     "@idealyst/markdown": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",

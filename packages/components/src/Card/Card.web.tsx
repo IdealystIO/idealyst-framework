@@ -6,6 +6,7 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import { useWebLayout } from '../hooks/useWebLayout';
 import { getWebInteractiveAriaProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 // Track if we've logged the onClick deprecation warning (log once per session)
 let hasLoggedOnClickWarning = false;
@@ -108,7 +109,7 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   const cardStyle = (cardStyles.card as any)({});
 
   // Generate web props
-  const webProps = getWebProps([cardStyle, style as any]);
+  const webProps = getWebProps([cardStyle, flattenStyle(style)]);
 
   const mergedRef = useMergeRefs(ref, webProps.ref, layoutRef);
 

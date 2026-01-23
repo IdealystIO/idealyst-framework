@@ -64,6 +64,7 @@ export const dialogStyles = defineStyle('Dialog', (theme: Theme) => ({
             shadowRadius: 20,
             elevation: 10,
             maxHeight: '90%',
+            flexDirection: 'column' as const,
             ...sizeStyles,
             ...typeStyles,
             _web: {
@@ -127,6 +128,7 @@ export const dialogStyles = defineStyle('Dialog', (theme: Theme) => ({
     }),
 
     content: (_props: DialogDynamicProps) => ({
+        flex: 1,
         _web: {
             overflow: 'visible',
             maxHeight: 'none',

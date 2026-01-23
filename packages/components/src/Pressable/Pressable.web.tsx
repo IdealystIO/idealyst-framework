@@ -4,6 +4,7 @@ import { PressableProps } from './types';
 import { pressableStyles } from './Pressable.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 const Pressable = forwardRef<IdealystElement, PressableProps>(({
   children,
@@ -62,7 +63,7 @@ const Pressable = forwardRef<IdealystElement, PressableProps>(({
     paddingHorizontal,
   });
 
-  const webProps = getWebProps([(pressableStyles.pressable as any)({}), style as any]);
+  const webProps = getWebProps([(pressableStyles.pressable as any)({}), flattenStyle(style)]);
 
   const baseStyle: React.CSSProperties = {
     cursor: disabled ? 'default' : 'pointer',

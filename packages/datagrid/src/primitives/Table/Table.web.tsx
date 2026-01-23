@@ -1,5 +1,6 @@
 import React from 'react';
 import { UnistylesRuntime } from 'react-native-unistyles';
+import { flattenStyle } from '../../flattenStyle';
 
 interface TableProps {
   children: React.ReactNode;
@@ -7,7 +8,7 @@ interface TableProps {
 }
 
 export const Table: React.FC<TableProps> = ({ children, style }) => {
-  let resolvedStyle = {};
+  let resolvedStyle: React.CSSProperties = {};
   if (typeof style === 'function') {
     try {
       resolvedStyle = style((UnistylesRuntime as any).theme);
@@ -15,9 +16,9 @@ export const Table: React.FC<TableProps> = ({ children, style }) => {
       resolvedStyle = {};
     }
   } else if (style) {
-    resolvedStyle = style;
+    resolvedStyle = flattenStyle(style);
   }
-  
+
   const combinedStyle = {
     width: '100%',
     tableLayout: 'fixed' as const,
@@ -40,7 +41,7 @@ interface TableRowProps {
 }
 
 export const TableRow: React.FC<TableRowProps> = ({ children, style, onPress }) => {
-  let resolvedStyle = {};
+  let resolvedStyle: React.CSSProperties = {};
   if (typeof style === 'function') {
     try {
       resolvedStyle = style((UnistylesRuntime as any).theme);
@@ -48,7 +49,7 @@ export const TableRow: React.FC<TableRowProps> = ({ children, style, onPress }) 
       resolvedStyle = {};
     }
   } else if (style) {
-    resolvedStyle = style;
+    resolvedStyle = flattenStyle(style);
   }
   
   return (
@@ -82,7 +83,7 @@ export const TableCell: React.FC<TableCellProps> = ({ children, style, width, co
   const combinedStyle = {
     verticalAlign: 'middle',
     ...(width && { width }),
-    ...style,
+    ...flattenStyle(style),
   };
   
   return (

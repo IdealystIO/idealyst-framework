@@ -9,7 +9,7 @@ import type { Duration, EasingKey, SpringType } from '@idealyst/theme/animation'
 export type AnimatableStyle = ViewStyle | TextStyle | ImageStyle;
 export type StyleValue = string | number | undefined;
 
-// Transform types (React Native style)
+// Transform types (React Native array style - legacy)
 export type TransformProperty =
   | { perspective: number }
   | { rotate: string }
@@ -23,6 +23,41 @@ export type TransformProperty =
   | { translateY: number }
   | { skewX: string }
   | { skewY: string };
+
+/**
+ * Simplified transform object syntax.
+ * Cleaner alternative to the React Native array format.
+ *
+ * @example
+ * // Instead of: transform: [{ translateX: 10 }, { translateY: 20 }, { scale: 1.2 }]
+ * // Use: transform: { x: 10, y: 20, scale: 1.2 }
+ */
+export interface TransformObject {
+  /** translateX - horizontal movement in pixels */
+  x?: number;
+  /** translateY - vertical movement in pixels */
+  y?: number;
+  /** Uniform scale (1 = normal, 2 = double, 0.5 = half) */
+  scale?: number;
+  /** Horizontal scale */
+  scaleX?: number;
+  /** Vertical scale */
+  scaleY?: number;
+  /** Rotation in degrees (number) or string ("45deg") */
+  rotate?: number | string;
+  /** X-axis rotation (string, e.g., "45deg") */
+  rotateX?: string;
+  /** Y-axis rotation (string, e.g., "45deg") */
+  rotateY?: string;
+  /** Z-axis rotation (string, e.g., "45deg") */
+  rotateZ?: string;
+  /** X-axis skew (string, e.g., "10deg") */
+  skewX?: string;
+  /** Y-axis skew (string, e.g., "10deg") */
+  skewY?: string;
+  /** Perspective for 3D transforms */
+  perspective?: number;
+}
 
 // Animatable properties (subset that can be animated smoothly)
 export interface AnimatableProperties {
@@ -55,8 +90,18 @@ export interface AnimatableProperties {
   bottom?: number | string;
   left?: number | string;
 
-  // Transform (preferred for performance)
-  transform?: TransformProperty[];
+  /**
+   * Transform - preferred for performance (GPU accelerated).
+   * Accepts either the new object syntax or legacy array format.
+   *
+   * @example
+   * // New object syntax (recommended)
+   * transform: { x: 10, y: 20, scale: 1.2, rotate: 45 }
+   *
+   * // Legacy array syntax (still supported)
+   * transform: [{ translateX: 10 }, { translateY: 20 }, { scale: 1.2 }]
+   */
+  transform?: TransformObject | TransformProperty[];
 }
 
 // Animation configuration

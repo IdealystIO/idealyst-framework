@@ -6,6 +6,7 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Interactive button component with multiple visual variants, sizes, and icon support.
@@ -117,7 +118,7 @@ const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
   const buttonStyleArray = [
     (buttonStyles.button as any)(dynamicProps),
     (buttonStyles.text as any)(dynamicProps),
-    style as any,
+    flattenStyle(style),
   ];
 
   // Use getWebProps to generate className and ref for web

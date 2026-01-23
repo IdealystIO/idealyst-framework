@@ -74,6 +74,11 @@ export interface DialogProps extends BaseProps, InteractiveAccessibilityProps {
   animationType?: DialogAnimationType;
 
   /**
+   * Maximum height for the dialog content area (native only)
+   */
+  maxContentHeight?: number;
+
+  /**
    * Additional styles (platform-specific)
    */
   style?: StyleProp<ViewStyle>;
@@ -96,4 +101,31 @@ export interface DialogProps extends BaseProps, InteractiveAccessibilityProps {
    * @default false
    */
   avoidKeyboard?: boolean;
+
+  /**
+   * Fixed height for the dialog container.
+   * Can be a number (pixels) or a string (e.g., '50%', '400px').
+   * When set, children can use flex: 1 to fill the available space.
+   */
+  height?: number | string;
+
+  /**
+   * Padding for the dialog content area.
+   * Set to 0 to disable padding for custom layouts.
+   * @default 24
+   */
+  contentPadding?: number;
+
+  /**
+   * Style for the content wrapper.
+   * Use { flex: 1 } to make content fill available space.
+   * By default, content wraps to its implicit height.
+   */
+  contentStyle?: StyleProp<ViewStyle>;
+
+  /**
+   * Padding around the dialog container
+   * @default 20
+   */
+  padding?: number;
 }

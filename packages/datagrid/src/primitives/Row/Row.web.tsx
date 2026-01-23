@@ -1,5 +1,6 @@
 import React from 'react';
 import { UnistylesRuntime } from 'react-native-unistyles';
+import { flattenStyle } from '../../flattenStyle';
 
 interface RowProps {
   children: React.ReactNode;
@@ -9,7 +10,7 @@ interface RowProps {
 
 export const Row: React.FC<RowProps> = ({ children, style, onPress }) => {
   // Handle function-based styles (Unistyles 3) with proper theme access
-  let resolvedStyle = {};
+  let resolvedStyle: React.CSSProperties = {};
   if (typeof style === 'function') {
     try {
       resolvedStyle = style((UnistylesRuntime as any).theme);
@@ -18,7 +19,7 @@ export const Row: React.FC<RowProps> = ({ children, style, onPress }) => {
       resolvedStyle = {};
     }
   } else if (style) {
-    resolvedStyle = style;
+    resolvedStyle = flattenStyle(style);
   }
   
   const combinedStyle = {

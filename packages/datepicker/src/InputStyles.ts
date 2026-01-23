@@ -61,15 +61,22 @@ export const dateTimeInputStyles = defineStyle('DateTimeInput', (theme: Theme) =
   textInput: (_props: InputDynamicProps) => ({
     flex: 1,
     minWidth: 0,
+    height: '100%',
+    padding: 0,
+    margin: 0,
     backgroundColor: 'transparent',
     color: theme.colors.text.primary,
     fontWeight: '400' as const,
+    textAlignVertical: 'center' as const,
     // Default font size for when size variant isn't specified
     fontSize: theme.sizes.input.md.fontSize,
     _web: {
       outline: 'none',
       border: 'none',
       fontFamily: 'inherit',
+      height: '100%',
+      padding: 0,
+      margin: 0,
     },
     variants: {
       disabled: {

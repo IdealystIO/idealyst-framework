@@ -20,7 +20,7 @@ import {
 import {
   recipes,
   getRecipesByCategory,
-} from "./data/recipes.js";
+} from "./data/recipes/index.js";
 
 // Import tool definitions and handler from the extracted tools module
 import { toolDefinitions, callTool } from "./tools/index.js";

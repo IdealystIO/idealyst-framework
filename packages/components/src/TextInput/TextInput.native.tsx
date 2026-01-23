@@ -83,6 +83,9 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   accessibilityRole,
   accessibilityRequired,
   accessibilityInvalid,
+  // Submit handling
+  onSubmitEditing,
+  returnKeyType = 'default',
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -141,6 +144,10 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  const handleSubmitEditing = useCallback(() => {
+    onSubmitEditing?.();
+  }, [onSubmitEditing]);
+
   // Memoized change handler for InnerTextInput
   const handleChangeText = useCallback((text: string) => {
     internalValueRef.current = text;
@@ -186,6 +193,8 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     autoCapitalize,
     onFocus: handleFocus,
     onBlur: handleBlur,
+    onSubmitEditing: handleSubmitEditing,
+    returnKeyType,
     placeholderTextColor: '#999999',
     ...nativeA11yProps,
   }), [
@@ -198,6 +207,8 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     autoCapitalize,
     handleFocus,
     handleBlur,
+    handleSubmitEditing,
+    returnKeyType,
     nativeA11yProps,
   ]);
 

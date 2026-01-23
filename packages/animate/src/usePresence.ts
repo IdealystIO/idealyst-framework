@@ -7,7 +7,14 @@
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { resolveDuration, resolveEasing } from '@idealyst/theme/animation';
-import type { UsePresenceOptions, UsePresenceResult, AnimatableStyle } from './types';
+import type {
+  UsePresenceOptions,
+  UsePresenceResult,
+  AnimatableStyle,
+  AnimatableProperties,
+  TransformProperty,
+} from './types';
+import { isTransformObject, normalizeTransform } from './normalizeTransform';
 
 /**
  * Hook that manages presence animations for mount/unmount.
@@ -87,11 +94,18 @@ export function usePresence(isVisible: boolean, options: UsePresenceOptions): Us
     }, durationMs + delay);
   }, [durationMs, delay]);
 
-  // Convert transform array to CSS transform string
-  const transformToString = (transform: any[] | undefined): string | undefined => {
+  // Convert transform to CSS transform string (handles both object and array formats)
+  const transformToString = (
+    transform: AnimatableProperties['transform']
+  ): string | undefined => {
     if (!transform) return undefined;
 
-    return transform
+    // Normalize if it's an object
+    const normalizedTransform: TransformProperty[] = isTransformObject(transform)
+      ? normalizeTransform(transform)
+      : transform;
+
+    return normalizedTransform
       .map((t) => {
         const [key, value] = Object.entries(t)[0];
         switch (key) {

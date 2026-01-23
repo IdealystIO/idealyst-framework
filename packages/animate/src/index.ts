@@ -36,6 +36,7 @@ export type {
   AnimatableStyle,
   AnimatableProperties,
   TransformProperty,
+  TransformObject,
   AnimationOptions,
   PlatformOverrides,
   UseAnimatedStyleOptions,
@@ -59,6 +60,9 @@ export { useAnimatedStyle } from './useAnimatedStyle';
 export { useAnimatedValue } from './useAnimatedValue';
 export { usePresence } from './usePresence';
 export { useGradientBorder, createGradientBorderStyle } from './useGradientBorder';
+
+// HOC for wrapping components (no-op on web, CSS handles animations)
+export { withAnimated } from './withAnimated';
 
 // Re-export animation tokens for convenience
 export { durations, easings, presets } from '@idealyst/theme/animation';

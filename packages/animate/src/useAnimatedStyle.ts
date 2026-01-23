@@ -5,9 +5,15 @@
  * Uses CSS transitions for smooth, performant animations.
  */
 
-import { useMemo, useRef, useEffect } from 'react';
-import { cssTransition, resolveDuration, resolveEasing } from '@idealyst/theme/animation';
-import type { AnimatableProperties, UseAnimatedStyleOptions, AnimatableStyle } from './types';
+import { useMemo } from 'react';
+import { resolveDuration, resolveEasing } from '@idealyst/theme/animation';
+import type {
+  AnimatableProperties,
+  UseAnimatedStyleOptions,
+  AnimatableStyle,
+  TransformProperty,
+} from './types';
+import { isTransformObject, normalizeTransform } from './normalizeTransform';
 
 /**
  * Hook that returns an animated style object.
@@ -19,12 +25,19 @@ import type { AnimatableProperties, UseAnimatedStyleOptions, AnimatableStyle } f
  *
  * @example
  * ```tsx
+ * // New object syntax (recommended)
  * const style = useAnimatedStyle({
  *   opacity: isVisible ? 1 : 0,
- *   transform: [{ translateY: isVisible ? 0 : 20 }],
+ *   transform: { y: isVisible ? 0 : 20 },
  * }, {
  *   duration: 'normal',
  *   easing: 'easeOut',
+ * });
+ *
+ * // Legacy array syntax (still supported)
+ * const legacyStyle = useAnimatedStyle({
+ *   opacity: isVisible ? 1 : 0,
+ *   transform: [{ translateY: isVisible ? 0 : 20 }],
  * });
  *
  * return <div style={style}>Content</div>;
@@ -41,20 +54,22 @@ export function useAnimatedStyle(
   const finalEasing = web?.easing ?? easing;
   const finalDelay = web?.delay ?? delay;
 
-  // Track if this is the initial render
-  const isInitialRender = useRef(true);
-
-  useEffect(() => {
-    isInitialRender.current = false;
-  }, []);
+  // Normalize transform to array format if using object syntax
+  const normalizedTransform = useMemo((): TransformProperty[] | undefined => {
+    if (!style.transform) return undefined;
+    if (isTransformObject(style.transform)) {
+      return normalizeTransform(style.transform);
+    }
+    return style.transform;
+  }, [style.transform]);
 
   // Convert transform array to CSS transform string
   const transformString = useMemo(() => {
-    if (!style.transform || !Array.isArray(style.transform)) {
+    if (!normalizedTransform) {
       return undefined;
     }
 
-    return style.transform
+    return normalizedTransform
       .map((t) => {
         const [key, value] = Object.entries(t)[0];
         // Handle different transform types
@@ -79,63 +94,23 @@ export function useAnimatedStyle(
         }
       })
       .join(' ');
-  }, [style.transform]);
+  }, [normalizedTransform]);
 
-  // Build the transition string
+  // Build the transition string - use 'all' for simplicity and to catch any property
   const transition = useMemo(() => {
     // Use custom transition if provided
     if (web?.transition) {
       return web.transition;
     }
 
-    // Get all animatable property names from the style
-    const properties = Object.keys(style).filter((key) => key !== 'transform');
-    if (style.transform) {
-      properties.push('transform');
-    }
-
-    if (properties.length === 0) {
-      return undefined;
-    }
-
-    // Map RN property names to CSS property names
-    const cssProperties = properties.map((prop) => {
-      switch (prop) {
-        case 'backgroundColor':
-          return 'background-color';
-        case 'borderColor':
-          return 'border-color';
-        case 'borderWidth':
-          return 'border-width';
-        case 'borderRadius':
-          return 'border-radius';
-        case 'borderTopLeftRadius':
-          return 'border-top-left-radius';
-        case 'borderTopRightRadius':
-          return 'border-top-right-radius';
-        case 'borderBottomLeftRadius':
-          return 'border-bottom-left-radius';
-        case 'borderBottomRightRadius':
-          return 'border-bottom-right-radius';
-        case 'maxHeight':
-          return 'max-height';
-        case 'maxWidth':
-          return 'max-width';
-        case 'minHeight':
-          return 'min-height';
-        case 'minWidth':
-          return 'min-width';
-        default:
-          return prop;
-      }
-    });
-
     const durationMs = resolveDuration(finalDuration);
     const easingCss = resolveEasing(finalEasing);
     const delayStr = finalDelay > 0 ? ` ${finalDelay}ms` : '';
 
-    return cssProperties.map((prop) => `${prop} ${durationMs}ms ${easingCss}${delayStr}`).join(', ');
-  }, [style, finalDuration, finalEasing, finalDelay, web?.transition]);
+    // Use 'all' to animate any property that changes
+    // This is simpler and catches properties we might not explicitly list
+    return `all ${durationMs}ms ${easingCss}${delayStr}`;
+  }, [finalDuration, finalEasing, finalDelay, web?.transition]);
 
   // Build the final style object
   const animatedStyle = useMemo(() => {
@@ -153,8 +128,9 @@ export function useAnimatedStyle(
       result.transform = transformString;
     }
 
-    // Add transition (skip on initial render to avoid animation on mount)
-    if (transition && !isInitialRender.current) {
+    // Always include transition - CSS handles the timing correctly
+    // The transition property must be present BEFORE values change for animation to work
+    if (transition) {
       result.transition = transition;
     }
 

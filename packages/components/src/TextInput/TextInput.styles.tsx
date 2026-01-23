@@ -94,9 +94,13 @@ export const textInputStyles = defineStyle('TextInput', (theme: Theme) => ({
     input: (_props: TextInputDynamicProps) => ({
         flex: 1,
         minWidth: 0,
+        height: '100%',
+        padding: 0,
+        margin: 0,
         backgroundColor: 'transparent' as const,
         color: theme.colors.text.primary,
         fontWeight: '400' as const,
+        textAlignVertical: 'center' as const,
         variants: {
             size: {
                 fontSize: theme.sizes.$input.fontSize,
@@ -106,6 +110,9 @@ export const textInputStyles = defineStyle('TextInput', (theme: Theme) => ({
             border: 'none',
             outline: 'none',
             fontFamily: 'inherit',
+            height: '100%',
+            padding: 0,
+            margin: 0,
         },
     }),
 

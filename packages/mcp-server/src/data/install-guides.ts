@@ -353,23 +353,23 @@ if (!hasPermission) {
     ],
   },
 
-  microphone: {
-    packageName: "Microphone",
-    npmName: "@idealyst/microphone",
+  audio: {
+    packageName: "Audio",
+    npmName: "@idealyst/audio",
     description:
-      "Cross-platform microphone streaming for real-time PCM audio capture",
+      "Unified cross-platform audio for recording, playback, and PCM streaming using React Native Audio API",
     platforms: ["web", "native"],
     complexity: "complex",
     installation: {
-      yarn: "yarn add @idealyst/microphone react-native-live-audio-stream",
-      npm: "npm install @idealyst/microphone react-native-live-audio-stream",
+      yarn: "yarn add @idealyst/audio react-native-audio-api",
+      npm: "npm install @idealyst/audio react-native-audio-api",
     },
     peerDependencies: [
       {
-        name: "react-native-live-audio-stream",
+        name: "react-native-audio-api",
         required: true,
         platforms: ["native"],
-        note: "Core audio streaming for React Native",
+        note: "Core audio API for React Native (Web Audio API polyfill)",
       },
     ],
     ios: {
@@ -378,108 +378,91 @@ if (!hasPermission) {
         {
           key: "NSMicrophoneUsageDescription",
           value: "$(PRODUCT_NAME) needs access to your microphone to record audio",
-          description: "Required: Microphone permission description",
+          description: "Required for recording: Microphone permission description",
         },
       ],
       additionalSteps: [
         "cd ios && pod install",
-        "Ensure minimum iOS deployment target is 12.0 or higher",
+        "Ensure minimum iOS deployment target is 13.0 or higher",
+        "For background audio, add audio background mode to Info.plist",
+        "Audio session is auto-configured for playAndRecord mode",
       ],
     },
     android: {
       permissions: [
         {
           permission: "android.permission.RECORD_AUDIO",
-          description: "Required: Microphone access for audio recording",
+          description: "Required for recording: Microphone access",
         },
       ],
       manifestEntries: [
         {
           location: "AndroidManifest.xml (inside <manifest>)",
           xml: `<uses-permission android:name="android.permission.RECORD_AUDIO" />`,
-          description: "Microphone permission",
+          description: "Microphone permission for recording",
         },
       ],
       additionalSteps: [
         "Ensure minSdkVersion is 21 or higher",
         "Permission must be requested at runtime on Android 6.0+",
+        "No additional permissions required for playback only",
       ],
     },
     web: {
       notes: [
-        "Uses Web Audio API for audio processing",
+        "Uses Web Audio API for recording and playback",
         "Requires HTTPS in production for microphone access",
-        "User must grant microphone permission in browser",
-        "PCM data format matches native implementation",
+        "User must grant microphone permission in browser for recording",
+        "No permissions required for playback only",
+        "Supports PCM streaming for real-time TTS playback",
       ],
     },
-    verification: `import { useMicrophone } from '@idealyst/microphone';
+    verification: `import { useRecorder, usePlayer, useAudio, AUDIO_PROFILES } from '@idealyst/audio';
 
-const { start, stop, isRecording } = useMicrophone({
-  sampleRate: 16000,
-  onAudioData: (pcmData) => console.log('Audio chunk:', pcmData.length),
-});`,
+// Initialize audio session (recommended)
+const audio = useAudio();
+
+// Recording
+const recorder = useRecorder({ config: AUDIO_PROFILES.speech });
+await recorder.start();
+// ... later
+await recorder.stop();
+
+// File playback
+const player = usePlayer();
+await player.loadFile('/audio/music.mp3');
+await player.play();
+
+// PCM streaming (for TTS)
+await player.loadPCMStream(AUDIO_PROFILES.speech);
+await player.play();
+player.feedPCMData(pcmData);`,
     troubleshooting: [
       {
-        issue: "No audio data received",
+        issue: "No audio data received during recording",
         solution:
-          "Ensure microphone permission is granted and check onAudioData callback",
+          "Ensure microphone permission is granted and check subscribeToData callback",
       },
       {
         issue: "Build fails on iOS",
         solution:
-          "Run pod install and ensure NSMicrophoneUsageDescription is set",
+          "Run pod install and ensure NSMicrophoneUsageDescription is set in Info.plist",
       },
       {
         issue: "Permission prompt not appearing on web",
         solution: "Ensure page is served over HTTPS (required for getUserMedia)",
       },
-    ],
-  },
-
-  "audio-playback": {
-    packageName: "Audio Playback",
-    npmName: "@idealyst/audio-playback",
-    description:
-      "Cross-platform audio playback with PCM streaming support using React Native Audio API",
-    platforms: ["web", "native"],
-    complexity: "complex",
-    installation: {
-      yarn: "yarn add @idealyst/audio-playback react-native-audio-api",
-      npm: "npm install @idealyst/audio-playback react-native-audio-api",
-    },
-    peerDependencies: [
       {
-        name: "react-native-audio-api",
-        required: true,
-        platforms: ["native"],
-        note: "Core audio API for React Native",
+        issue: "Recording and playback conflict on iOS",
+        solution:
+          "Use useAudio() hook to initialize session with playAndRecord category, or use SESSION_PRESETS.voiceChat",
+      },
+      {
+        issue: "Audio cuts out when switching between recording and playback",
+        solution:
+          "Ensure audio session is configured with SESSION_PRESETS.default which enables simultaneous recording and playback",
       },
     ],
-    ios: {
-      podInstallRequired: true,
-      additionalSteps: [
-        "cd ios && pod install",
-        "Ensure minimum iOS deployment target is 13.0 or higher",
-        "For background audio, add audio background mode to Info.plist",
-      ],
-    },
-    android: {
-      additionalSteps: [
-        "Ensure minSdkVersion is 21 or higher",
-        "No additional permissions required for playback",
-      ],
-    },
-    web: {
-      notes: [
-        "Uses Web Audio API for audio playback",
-        "No permissions required for audio playback",
-        "Supports PCM streaming for real-time audio",
-      ],
-    },
-    verification: `import { useAudioPlayback } from '@idealyst/audio-playback';
-
-const { play, pause, isPlaying } = useAudioPlayback();`,
   },
 
   // ============================================================================

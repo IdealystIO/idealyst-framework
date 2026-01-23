@@ -23,6 +23,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   showCharacterCount = false,
   intent = 'primary',
   size = 'md',
+  type = 'outlined',
   // Spacing variants from FormInputStyleProps
   margin,
   marginVertical,
@@ -44,6 +45,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   accessibilityErrorMessage,
 }, ref) => {
   const [internalValue, setInternalValue] = useState(defaultValue);
+  const [isFocused, setIsFocused] = useState(false);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
@@ -89,8 +91,11 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   textAreaStyles.useVariants({
     size,
     intent,
+    type,
+    focused: isFocused,
     disabled,
     hasError,
+    autoGrow,
     resize: 'none',
     isNearLimit: maxLength ? value.length >= maxLength * 0.9 : false,
     isAtLimit: maxLength ? value.length >= maxLength : false,
@@ -109,6 +114,14 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
     }
 
     onChange?.(newValue);
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
   };
 
   const handleContentSizeChange = (e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
@@ -133,8 +146,8 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   // Get dynamic styles - call as functions for theme reactivity
   const containerStyleComputed = (textAreaStyles.container as any)({});
   const labelStyleComputed = (textAreaStyles.label as any)({ disabled });
-  const textareaContainerStyleComputed = (textAreaStyles.textareaContainer as any)({});
-  const textareaStyleComputed = (textAreaStyles.textarea as any)({ intent, disabled, hasError });
+  const textareaContainerStyleComputed = (textAreaStyles.textareaContainer as any)({ type, focused: isFocused, hasError, disabled });
+  const textareaStyleComputed = (textAreaStyles.textarea as any)({ autoGrow, disabled });
   const footerStyleComputed = (textAreaStyles.footer as any)({});
   const helperTextStyleComputed = (textAreaStyles.helperText as any)({ hasError });
   const characterCountStyleComputed = (textAreaStyles.characterCount as any)({
@@ -155,7 +168,8 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
           style={[
             textareaStyleComputed,
             {
-              textAlignVertical: 'top',
+              // Center text vertically when autoGrow (single-line behavior), top-align for multi-line
+              textAlignVertical: autoGrow ? 'center' : 'top',
               backgroundColor: 'transparent',
             },
             maxHeight && { maxHeight },
@@ -164,6 +178,8 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
           ]}
           value={value}
           onChangeText={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           onContentSizeChange={handleContentSizeChange}
           placeholder={placeholder}
           editable={!disabled}

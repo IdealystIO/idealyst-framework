@@ -622,10 +622,27 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
 };
 
 /**
- * Get metadata for a specific component
+ * Find the canonical component name (case-insensitive lookup)
+ */
+export function findComponentName(componentName: string): string | undefined {
+  // Direct match first (fast path)
+  if (componentMetadata[componentName]) {
+    return componentName;
+  }
+
+  // Case-insensitive lookup
+  const lowerName = componentName.toLowerCase();
+  return Object.keys(componentMetadata).find(
+    (name) => name.toLowerCase() === lowerName
+  );
+}
+
+/**
+ * Get metadata for a specific component (case-insensitive)
  */
 export function getComponentMetadata(componentName: string): ComponentMetadata | undefined {
-  return componentMetadata[componentName];
+  const canonicalName = findComponentName(componentName);
+  return canonicalName ? componentMetadata[canonicalName] : undefined;
 }
 
 /**

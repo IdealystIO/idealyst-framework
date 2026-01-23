@@ -6,6 +6,7 @@ import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 // Default icons for each intent
 const defaultIcons: Record<string, React.ComponentType<any>> = {
@@ -42,7 +43,7 @@ const Alert = forwardRef<IdealystElement, AlertProps>(({
 
   // Compute dynamic styles with intent, type, and size
   const dynamicProps = { intent, type, size };
-  const containerProps = getWebProps([(alertStyles.container as any)(dynamicProps), style as any]);
+  const containerProps = getWebProps([(alertStyles.container as any)(dynamicProps), flattenStyle(style)]);
   const iconContainerProps = getWebProps([(alertStyles.iconContainer as any)(dynamicProps)]);
   const contentProps = getWebProps([(alertStyles.content as any)(dynamicProps)]);
   const titleProps = getWebProps([(alertStyles.title as any)(dynamicProps)]);

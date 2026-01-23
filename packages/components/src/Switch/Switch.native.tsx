@@ -35,6 +35,8 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   switchStyles.useVariants({
     size,
     disabled,
+    checked,
+    intent,
     position: labelPosition,
     margin,
     marginVertical,

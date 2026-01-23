@@ -1,6 +1,7 @@
-import { useEffect, forwardRef, useMemo } from 'react';
-import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler, GestureResponderEvent, KeyboardAvoidingView, Platform } from 'react-native';
+import { useEffect, forwardRef, useMemo, useState } from 'react';
+import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler, Platform, Keyboard, useWindowDimensions } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
@@ -16,6 +17,10 @@ const Dialog = forwardRef<View, DialogProps>(({
   closeOnBackdropClick = true,
   animationType: _animationType = 'fade',
   avoidKeyboard = false,
+  padding: paddingProp = 20,
+  maxContentHeight,
+  contentPadding = 24,
+  contentStyle,
   style,
   testID,
   id,
@@ -41,6 +46,33 @@ const Dialog = forwardRef<View, DialogProps>(({
   const backdropOpacity = useSharedValue(0);
   const containerScale = useSharedValue(0.9);
   const containerOpacity = useSharedValue(0);
+
+  // Get safe area insets
+  const insets = useSafeAreaInsets();
+
+  // Track keyboard height for avoidKeyboard
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const { height: screenHeight } = useWindowDimensions();
+
+  useEffect(() => {
+    if (!avoidKeyboard || !open) return;
+
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const showSub = Keyboard.addListener(showEvent, (e) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+
+    const hideSub = Keyboard.addListener(hideEvent, () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, [avoidKeyboard, open]);
 
   // Animate in/out when open changes
   useEffect(() => {
@@ -109,11 +141,12 @@ const Dialog = forwardRef<View, DialogProps>(({
   });
 
   const containerAnimatedStyle = useAnimatedStyle(() => {
+    'worklet';
     return {
       opacity: containerOpacity.value,
       transform: [
         { scale: containerScale.value },
-      ],
+      ] as { scale: number }[],
     };
   });
 
@@ -124,19 +157,6 @@ const Dialog = forwardRef<View, DialogProps>(({
   const titleStyle = (dialogStyles.title as any)({});
   const closeButtonStyle = (dialogStyles.closeButton as any)({});
   const closeButtonTextStyle = (dialogStyles.closeButtonText as any)({});
-  const contentStyle = (dialogStyles.content as any)({});
-
-  // Style for custom backdrop wrapper (no default backdrop styling)
-  const customBackdropWrapperStyle = {
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    display: 'flex' as const,
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-  };
 
   // Style for custom backdrop component container (fills entire backdrop area)
   const customBackdropContainerStyle = {
@@ -147,50 +167,55 @@ const Dialog = forwardRef<View, DialogProps>(({
     bottom: 0,
   };
 
-  const dialogContainer = (
-    <TouchableWithoutFeedback onPress={(e: GestureResponderEvent) => e.stopPropagation()}>
-      <Animated.View ref={ref as any} style={[containerStyle, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
-        {(title || showCloseButton) && (
-          <View style={headerStyle}>
-            {title && (
-              <Text style={titleStyle}>
-                {title}
-              </Text>
-            )}
-            {showCloseButton && (
-              <TouchableOpacity
-                style={closeButtonStyle}
-                onPress={handleClosePress}
-                accessibilityLabel="Close dialog"
-                accessibilityRole="button"
-              >
-                <Text style={closeButtonTextStyle}>×</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
-        <View style={contentStyle}>
-          {children}
-        </View>
-      </Animated.View>
-    </TouchableWithoutFeedback>
-  );
+  // Position offsets for the container view
+  // Top: always safe area + padding
+  // Bottom: safe area + padding (no keyboard) or keyboard + padding (with keyboard)
+  const topOffset = insets.top + paddingProp;
+  const bottomOffset = keyboardHeight > 0
+    ? keyboardHeight + paddingProp
+    : insets.bottom + paddingProp;
 
-  const modalContent = (
-    <TouchableWithoutFeedback onPress={handleBackdropPress}>
-      {BackdropComponent ? (
-        <View style={customBackdropWrapperStyle}>
-          <Animated.View style={[customBackdropContainerStyle, backdropAnimatedStyle]}>
-            <BackdropComponent isVisible={open} />
-          </Animated.View>
-          {dialogContainer}
+  // Max height is the available space (used as a ceiling, children can be smaller)
+  const maxAvailableHeight = screenHeight - topOffset - bottomOffset;
+
+  // Use the smaller of user's preferred max height and available space
+  const effectiveMaxHeight = maxContentHeight
+    ? Math.min(maxContentHeight, maxAvailableHeight)
+    : maxAvailableHeight;
+
+  // Dialog uses the effective max height, with flex: 1 so children can fill it
+  const dialogContainerStyle = {
+    ...containerStyle,
+    maxHeight: effectiveMaxHeight,
+    height: maxContentHeight ? effectiveMaxHeight : undefined,
+    flex: undefined,
+  };
+
+  const dialogContainer = (
+    <Animated.View ref={ref as any} style={[dialogContainerStyle, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
+      {(title || showCloseButton) && (
+        <View style={[headerStyle, { flexShrink: 0 }]}>
+          {title && (
+            <Text style={titleStyle}>
+              {title}
+            </Text>
+          )}
+          {showCloseButton && (
+            <TouchableOpacity
+              style={closeButtonStyle}
+              onPress={handleClosePress}
+              accessibilityLabel="Close dialog"
+              accessibilityRole="button"
+            >
+              <Text style={closeButtonTextStyle}>×</Text>
+            </TouchableOpacity>
+          )}
         </View>
-      ) : (
-        <Animated.View style={[backdropStyle, backdropAnimatedStyle]}>
-          {dialogContainer}
-        </Animated.View>
       )}
-    </TouchableWithoutFeedback>
+      <View style={[contentPadding > 0 ? { padding: contentPadding } : undefined, contentStyle]}>
+        {children}
+      </View>
+    </Animated.View>
   );
 
   return (
@@ -202,16 +227,36 @@ const Dialog = forwardRef<View, DialogProps>(({
       statusBarTranslucent
       testID={testID}
     >
-      {avoidKeyboard ? (
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-          {modalContent}
-        </KeyboardAvoidingView>
+      {/* Backdrop layer - positioned absolute, full screen */}
+      {BackdropComponent ? (
+        <TouchableWithoutFeedback onPress={handleBackdropPress}>
+          <Animated.View style={[customBackdropContainerStyle, backdropAnimatedStyle]} pointerEvents="auto">
+            <View style={{ flex: 1 }} pointerEvents="none">
+              <BackdropComponent isVisible={open} />
+            </View>
+          </Animated.View>
+        </TouchableWithoutFeedback>
       ) : (
-        modalContent
+        <TouchableWithoutFeedback onPress={handleBackdropPress}>
+          <Animated.View style={[backdropStyle, backdropAnimatedStyle]} />
+        </TouchableWithoutFeedback>
       )}
+      {/* Dialog content - positioned absolute, accounts for keyboard and safe areas */}
+      <View
+        style={{
+          position: 'absolute',
+          top: topOffset,
+          left: 0,
+          right: 0,
+          bottom: bottomOffset,
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1001,
+        }}
+        pointerEvents="box-none"
+      >
+        {dialogContainer}
+      </View>
     </Modal>
   );
 });

@@ -5,6 +5,7 @@ import { badgeStyles } from './Badge.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Small status indicator for counts, labels, or notifications.
@@ -67,11 +68,14 @@ const Badge = forwardRef<IdealystElement, BadgeProps>((props, ref) => {
 
   const mergedRef = useMergeRefs(ref, badgeProps.ref);
 
+  // Flatten style array for web compatibility
+  const flatStyle = flattenStyle(style);
+
   if (type === 'dot') {
     return (
       <span
         {...badgeProps}
-        style={style as React.CSSProperties}
+        style={flatStyle}
         ref={mergedRef}
         id={id}
         data-testid={testID}
@@ -86,7 +90,7 @@ const Badge = forwardRef<IdealystElement, BadgeProps>((props, ref) => {
   return (
     <span
       {...badgeProps}
-      style={style as React.CSSProperties}
+      style={flatStyle}
       ref={mergedRef}
       id={id}
       data-testid={testID}

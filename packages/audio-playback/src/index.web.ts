@@ -29,9 +29,24 @@ export type {
   // Interface types
   IAudioPlayer,
 
-  // Hook types
+  // Hook types (player)
   UseAudioPlayerOptions,
   UseAudioPlayerResult,
+
+  // Audio session types
+  AudioSessionCategory,
+  AudioSessionCategoryOption,
+  AudioSessionMode,
+  AudioSessionConfig,
+  AudioSessionState,
+  AudioSessionInterruption,
+  AudioSessionRouteChange,
+  AudioSessionInterruptionCallback,
+  AudioSessionRouteChangeCallback,
+  IAudioSessionManager,
+  AudioSessionPresets,
+  UseAudioSessionOptions,
+  UseAudioSessionResult,
 } from './types';
 
 // Constants
@@ -44,6 +59,9 @@ export {
   DEFAULT_POSITION_UPDATE_INTERVAL,
   DEFAULT_BUFFER_SIZE,
   MIN_BUFFER_THRESHOLD_MS,
+  // Audio session constants
+  DEFAULT_AUDIO_SESSION_STATE,
+  AUDIO_SESSION_PRESETS,
 } from './constants';
 
 // Utilities
@@ -70,9 +88,13 @@ export {
 } from './utils';
 
 // Hooks
-export { useAudioPlayer } from './hooks/index.web';
+export { useAudioPlayer, useAudioSession } from './hooks/index.web';
 export { createUseAudioPlayerHook } from './hooks/createUseAudioPlayerHook';
+export { createUseAudioSessionHook } from './hooks/useAudioSession';
 export type { CreatePlayerFactory } from './hooks/createUseAudioPlayerHook';
 
 // Player class
 export { WebAudioPlayer, createPlayer } from './player.web';
+
+// Audio session manager
+export { getAudioSessionManager, WebAudioSessionManager } from './AudioSessionManager.web';

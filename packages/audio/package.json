@@ -1,0 +1,69 @@
+{
+  "name": "@idealyst/audio",
+  "version": "1.2.65",
+  "description": "Unified cross-platform audio for React and React Native - recording, playback, and PCM streaming",
+  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/audio#readme",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/audio"
+  },
+  "author": "Idealyst <contact@idealyst.io>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "browser": "./src/index.web.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-audio-api": ">=0.4.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    },
+    "react-native-audio-api": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-native": "^0.73.0",
+    "react-native-audio-api": "^0.4.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "audio",
+    "recording",
+    "playback",
+    "pcm",
+    "streaming",
+    "microphone",
+    "cross-platform",
+    "web-audio-api"
+  ]
+}

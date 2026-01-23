@@ -16,6 +16,9 @@ export * from './Pressable/types';
 export { default as Input } from './Input';
 export * from './Input/types';
 
+export { default as TextInput } from './TextInput';
+export * from './TextInput/types';
+
 // New primitive components
 export { default as Checkbox } from './Checkbox';
 export * from './Checkbox/types';
@@ -110,11 +113,15 @@ export * from './Link/types';
 export { default as Platform } from './Platform';
 export * from './Platform/types';
 
+export { Keyboard } from './Keyboard';
+export * from './Keyboard/types';
+
 export type { ButtonProps } from './Button/types';
 export type { IconButtonProps } from './IconButton/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
 export type { InputProps } from './Input/types';
+export type { TextInputProps } from './TextInput/types';
 export type { CheckboxProps } from './Checkbox/types';
 export type { CardProps } from './Card/types';
 export type { DividerProps } from './Divider/types';
@@ -145,6 +152,15 @@ export type { ChipProps, ChipSize, ChipIntent } from './Chip/types';
 export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb/types';
 export type { LinkProps } from './Link/types';
 export type { PlatformAPI, PlatformSystem, PlatformSelectSpec } from './Platform/types';
+export type {
+  KeyboardMetrics,
+  KeyboardEventEasing,
+  KeyboardEvent,
+  KeyboardEventName,
+  KeyboardEventListener,
+  KeyboardSubscription,
+  KeyboardStatic,
+} from './Keyboard/types';
 
 // Event utilities
 export * from './utils/events';

@@ -7,6 +7,7 @@ import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebSelectionAriaProps, generateAccessibilityId } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Toggle switch for binary on/off states with optional label and icons.
@@ -134,7 +135,7 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     <button
       {...computedButtonProps}
       {...ariaProps}
-      style={style as any}
+      style={flattenStyle(style)}
       ref={mergedButtonRef}
       onClick={handleClick}
       disabled={disabled}

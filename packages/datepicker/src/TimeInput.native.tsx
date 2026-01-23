@@ -14,6 +14,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
   minuteStep = 1,
   disabled = false,
   error,
+  size = 'md',
   style,
 }) => {
   const [open, setOpen] = useState(false);
@@ -21,16 +22,24 @@ export const TimeInput: React.FC<TimeInputProps> = ({
 
   // Get dynamic styles - call as functions for theme reactivity
   const styles = dateTimeInputStyles;
+
+  // Apply variants for disabled, error, and size states
+  styles.useVariants({
+    disabled,
+    error: !!error,
+    size,
+  });
+
   const labelTextStyle = (styles.labelText as any)({});
-  const inputContainerStyle = (styles.inputContainer as any)({ disabled, error: !!error });
-  const textInputStyle = (styles.textInput as any)({ disabled });
-  const iconButtonStyle = (styles.iconButton as any)({ disabled });
+  const inputContainerStyle = (styles.inputContainer as any)({ disabled, error: !!error, size });
+  const textInputStyle = (styles.textInput as any)({ disabled, size });
+  const iconButtonStyle = (styles.iconButton as any)({ disabled, size });
+  const iconStyle = (styles.icon as any)({ size });
   const errorTextStyle = (styles.errorText as any)({});
   const modalBackdropStyle = (styles.modalBackdrop as any)({});
   const popoverContentStyle = (styles.popoverContent as any)({});
   const closeButtonStyle = (styles.closeButton as any)({ disabled: false });
   const closeButtonTextStyle = (styles.closeButtonText as any)({});
-  const iconStyle = (styles.iconColor as any)({ disabled });
 
   // Format time to string
   const formatTime = (date: Date | undefined): string => {
@@ -123,7 +132,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
           onPress={() => !disabled && setOpen(true)}
           disabled={disabled}
         >
-          <MaterialDesignIcons name="clock-outline" size={18} style={iconStyle} />
+          <MaterialDesignIcons name="clock-outline" size={iconStyle.width} style={iconStyle} />
         </TouchableOpacity>
       </View>
       {error && (

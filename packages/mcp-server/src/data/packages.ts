@@ -59,7 +59,7 @@ export const packages: Record<string, PackageInfo> = {
     name: "Theme",
     npmName: "@idealyst/theme",
     description:
-      "Cross-platform theming system built on react-native-unistyles. Provides colors, typography, spacing, and responsive breakpoints with a fluent builder API.",
+      "Cross-platform theming system built on react-native-unistyles. Provides colors, typography, spacing, responsive breakpoints, shadow utilities, and style helpers with a fluent builder API.",
     category: "core",
     platforms: ["web", "native"],
     documentationStatus: "full",
@@ -75,12 +75,25 @@ export const packages: Record<string, PackageInfo> = {
       "Typography scale",
       "Spacing and sizing utilities",
       "Platform-specific adaptations",
+      "shadow() - Cross-platform shadow styles",
+      "useStyleProps() - Unified Unistyles + inline style handling",
     ],
-    quickStart: `import { UnistylesProvider } from '@idealyst/theme';
+    quickStart: `import { UnistylesProvider, shadow, useStyleProps } from '@idealyst/theme';
+import { View } from '@idealyst/components';
 
-<UnistylesProvider>
-  <App />
-</UnistylesProvider>`,
+// Cross-platform shadows
+<View style={shadow({ radius: 10, y: 4, opacity: 0.15 })}>
+  Shadowed content
+</View>
+
+// Unified style handling for custom components
+function MyComponent({ style }) {
+  const styleProps = useStyleProps(
+    (styles.container as any)({}),  // Unistyles
+    [style, { marginTop: 16 }]      // Additional styles
+  );
+  return <View {...styleProps}>Content</View>;
+}`,
     apiHighlights: [
       "createTheme() / fromTheme(base) - Theme builder",
       "addIntent() / setIntent() - Intent management",
@@ -88,6 +101,8 @@ export const packages: Record<string, PackageInfo> = {
       "addTextColor() / setTextColor() - Text colors",
       "addBorderColor() / setBorderColor() - Border colors",
       "addPalletColor() / setPalletColor() - Pallet colors",
+      "shadow({ radius, x, y, color, opacity }) - Cross-platform shadows",
+      "useStyleProps(unistyles, inlineStyles) - Style prop unification",
       "Size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'",
       "Intent: 'primary' | 'secondary' | 'success' | 'warning' | 'danger'",
     ],
@@ -280,45 +295,69 @@ function CameraScreen() {
     relatedPackages: ["components", "storage"],
   },
 
-  microphone: {
-    name: "Microphone",
-    npmName: "@idealyst/microphone",
+  audio: {
+    name: "Audio",
+    npmName: "@idealyst/audio",
     description:
-      "Cross-platform microphone streaming for real-time audio capture. Provides PCM audio data for processing or streaming.",
+      "Unified cross-platform audio for React and React Native. Provides recording with real-time PCM streaming, file playback, and session management for simultaneous recording and playback.",
     category: "media",
     platforms: ["web", "native"],
-    documentationStatus: "minimal",
-    installation: "yarn add @idealyst/microphone",
-    peerDependencies: ["react-native-live-audio-stream (native)"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/audio react-native-audio-api",
+    peerDependencies: ["react-native-audio-api (native)"],
     features: [
-      "Real-time audio streaming",
-      "PCM audio format",
-      "Configurable sample rate",
-      "Permission handling",
-      "Start/stop controls",
+      "Recording with real-time PCM streaming",
+      "File playback (mp3, wav, etc.)",
+      "PCM streaming playback for TTS",
+      "Audio session management (iOS/Android)",
+      "Simultaneous recording and playback",
       "Audio level monitoring",
+      "Configurable sample rates and bit depths",
+      "Audio profiles (speech, music, phone)",
     ],
-    quickStart: `import { useMicrophone } from '@idealyst/microphone';
+    quickStart: `import { useRecorder, usePlayer, AUDIO_PROFILES } from '@idealyst/audio';
 
-function AudioRecorder() {
-  const { start, stop, isRecording, audioData } = useMicrophone({
-    sampleRate: 16000,
-    onAudioData: (pcmData) => {
-      // Process or stream audio data
-    },
-  });
+function AudioApp() {
+  const recorder = useRecorder({ config: AUDIO_PROFILES.speech });
+  const player = usePlayer();
+
+  // Record audio
+  const handleRecord = async () => {
+    if (recorder.isRecording) {
+      await recorder.stop();
+    } else {
+      await recorder.start();
+    }
+  };
+
+  // Play file
+  const handlePlay = async () => {
+    await player.loadFile('/audio/music.mp3');
+    await player.play();
+  };
+
+  // Stream PCM (e.g., from TTS API)
+  const handleStream = async () => {
+    await player.loadPCMStream(AUDIO_PROFILES.speech);
+    await player.play();
+    player.feedPCMData(pcmData); // Feed PCM chunks
+  };
 
   return (
-    <Button onPress={isRecording ? stop : start}>
-      {isRecording ? 'Stop' : 'Record'}
-    </Button>
+    <View>
+      <Button onPress={handleRecord}>
+        {recorder.isRecording ? 'Stop' : 'Record'}
+      </Button>
+      <Button onPress={handlePlay}>Play File</Button>
+    </View>
   );
 }`,
     apiHighlights: [
-      "useMicrophone() hook",
-      "MicrophoneProvider",
-      "Audio streaming callbacks",
-      "Sample rate configuration",
+      "useRecorder() - Recording with PCM streaming",
+      "usePlayer() - File and PCM playback",
+      "useAudio() - Session management",
+      "AUDIO_PROFILES - Pre-configured audio settings",
+      "SESSION_PRESETS - Audio session configurations",
     ],
     relatedPackages: ["camera", "components"],
   },
@@ -609,6 +648,72 @@ This is **bold** and _italic_ text.
       "linkHandler / imageHandler",
     ],
     relatedPackages: ["components", "theme"],
+  },
+
+  animate: {
+    name: "Animate",
+    npmName: "@idealyst/animate",
+    description:
+      "Cross-platform animation hooks for React and React Native. Provides a unified API with CSS transitions on web and Reanimated on native for smooth, performant animations.",
+    category: "ui",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/animate react-native-reanimated",
+    peerDependencies: [
+      "@idealyst/theme",
+      "react-native-reanimated (native)",
+    ],
+    features: [
+      "useAnimatedStyle - State-driven animations with transform object syntax",
+      "usePresence - Mount/unmount animations with enter/exit states",
+      "useAnimatedValue - Imperative animated values with interpolation",
+      "useGradientBorder - Animated gradient border effects",
+      "withAnimated HOC - Wrap components for Reanimated (native)",
+      "Simplified transform syntax: { x, y, scale, rotate }",
+      "Duration tokens: 'instant', 'fast', 'normal', 'slow', 'verySlow'",
+      "Easing presets: 'linear', 'easeIn', 'easeOut', 'easeInOut', 'spring'",
+      "Platform-specific overrides for fine-tuned control",
+    ],
+    quickStart: `import { View } from '@idealyst/components';
+import { withAnimated, useAnimatedStyle, usePresence } from '@idealyst/animate';
+
+// Wrap components for native animations
+const AnimatedView = withAnimated(View);
+
+function FadeInComponent({ isVisible }: { isVisible: boolean }) {
+  // State-driven animation with simplified transform syntax
+  const style = useAnimatedStyle({
+    opacity: isVisible ? 1 : 0,
+    transform: { y: isVisible ? 0 : 20 },
+  }, {
+    duration: 'normal',
+    easing: 'easeOut',
+  });
+
+  return <AnimatedView style={style}>Content</AnimatedView>;
+}
+
+function ModalContent({ isOpen }: { isOpen: boolean }) {
+  // Mount/unmount animation
+  const { isPresent, style } = usePresence(isOpen, {
+    enter: { opacity: 1, transform: { y: 0, scale: 1 } },
+    exit: { opacity: 0, transform: { y: -20, scale: 0.95 } },
+    duration: 'fast',
+  });
+
+  return isPresent && <AnimatedView style={style}>Modal</AnimatedView>;
+}`,
+    apiHighlights: [
+      "useAnimatedStyle(style, options) - Animate style changes",
+      "usePresence(isVisible, { enter, exit }) - Mount/unmount animations",
+      "useAnimatedValue(initial) - Imperative animated values",
+      "useGradientBorder(options) - Animated gradient borders",
+      "withAnimated(Component) - HOC for native (no-op on web)",
+      "TransformObject: { x, y, scale, rotate, ... }",
+      "Duration: 'instant' | 'fast' | 'normal' | 'slow' | 'verySlow'",
+      "EasingKey: 'linear' | 'easeIn' | 'easeOut' | 'easeInOut' | 'spring' | ...",
+    ],
+    relatedPackages: ["theme", "components"],
   },
 };
 

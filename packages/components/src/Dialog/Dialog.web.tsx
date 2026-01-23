@@ -6,6 +6,7 @@ import { dialogStyles } from './Dialog.styles';
 import Icon from '../Icon';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Modal overlay dialog for focused user interactions and confirmations.
@@ -21,6 +22,8 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   showCloseButton = true,
   closeOnBackdropClick = true,
   closeOnEscapeKey = true,
+  height,
+  contentPadding = 24,
   style,
   testID,
   id,
@@ -143,15 +146,20 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   ]);
   const containerProps = getWebProps([
     (dialogStyles.container as any)({}),
-    style as any,
+    flattenStyle(style),
+    height !== undefined ? { height, display: 'flex', flexDirection: 'column' } : null,
     isVisible
       ? { opacity: 1, transform: 'scale(1) translateY(0px)' }
       : { opacity: 0, transform: 'scale(0.96) translateY(-4px)' }
-  ]);
+  ].filter(Boolean));
   const headerProps = getWebProps([(dialogStyles.header as any)({})]);
   const titleProps = getWebProps([(dialogStyles.title as any)({})]);
   const closeButtonProps = getWebProps([(dialogStyles.closeButton as any)({})]);
-  const contentProps = getWebProps([(dialogStyles.content as any)({})]);
+  const contentProps = getWebProps([
+    (dialogStyles.content as any)({}),
+    height !== undefined ? { flex: 1, overflow: 'auto' } : null,
+    contentPadding > 0 ? { padding: contentPadding } : null,
+  ].filter(Boolean));
 
   const mergedBackdropRef = useMergeRefs(ref, backdropProps.ref);
 

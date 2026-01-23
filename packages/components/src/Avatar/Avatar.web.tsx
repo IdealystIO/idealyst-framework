@@ -5,6 +5,7 @@ import { avatarStyles } from './Avatar.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebAriaProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * User or entity representation with image support and fallback initials.
@@ -44,7 +45,7 @@ const Avatar = forwardRef<IdealystElement, AvatarProps>(({
     shape,
   });
 
-  const avatarStyleArray = [(avatarStyles.avatar as any)({ color }), style];
+  const avatarStyleArray = [(avatarStyles.avatar as any)({ color }), flattenStyle(style)];
   const avatarProps = getWebProps(avatarStyleArray);
 
   // Generate fallback text styles with proper theming and size

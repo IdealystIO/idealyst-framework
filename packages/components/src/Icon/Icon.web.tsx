@@ -8,6 +8,7 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import { getColorFromString, Intent, Color, Text } from '@idealyst/theme';
 import { IconRegistry } from './IconRegistry';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Vector icon display from the Material Design Icons library.
@@ -61,7 +62,7 @@ const Icon = forwardRef<IdealystElement, IconProps>((props, ref) => {
 
   // Use getWebProps for className generation but override with computed values
   const iconStyle = (iconStyles.icon as any)({ intent, color, textColor, size });
-  const iconProps = getWebProps([iconStyle, style]);
+  const iconProps = getWebProps([iconStyle, flattenStyle(style)]);
 
   const mergedRef = useMergeRefs(ref, iconProps.ref);
 

@@ -1,13 +1,27 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { View, Text, Card, Screen, Button, Slider } from '@idealyst/components';
 import { CodeBlock } from '../../components/CodeBlock';
-import { useAudioPlayer, PLAYBACK_PROFILES } from '@idealyst/audio-playback';
-import type { PlaybackConfig } from '@idealyst/audio-playback';
+import {
+  useAudio,
+  useRecorder,
+  usePlayer,
+  AUDIO_PROFILES,
+  SESSION_PRESETS,
+} from '@idealyst/audio';
+import type { AudioConfig } from '@idealyst/audio';
 
 /**
  * Progress bar component for audio playback
  */
-const ProgressBar = ({ position, duration, onSeek }: { position: number; duration: number; onSeek?: (pos: number) => void }) => {
+const ProgressBar = ({
+  position,
+  duration,
+  onSeek,
+}: {
+  position: number;
+  duration: number;
+  onSeek?: (pos: number) => void;
+}) => {
   const percentage = duration > 0 ? (position / duration) * 100 : 0;
 
   return (
@@ -88,11 +102,111 @@ const formatTime = (ms: number): string => {
 };
 
 // ============================================
+// RECORDING DEMO
+// ============================================
+
+function RecordingDemo() {
+  const recorder = useRecorder({
+    config: AUDIO_PROFILES.speech,
+    levelUpdateInterval: 50,
+  });
+
+  return (
+    <Card>
+      <View spacing="md" style={{ padding: 16 }}>
+        <Text size="lg" weight="semibold">
+          Recording Demo
+        </Text>
+        <Text size="sm" color="secondary">
+          Record audio with real-time level metering.
+        </Text>
+
+        {/* Audio Level Meter */}
+        <View style={{ marginTop: 12 }}>
+          <Text size="sm" weight="medium" style={{ marginBottom: 4 }}>
+            Audio Level:
+          </Text>
+          <View
+            style={{
+              height: 20,
+              backgroundColor: '#e5e7eb',
+              borderRadius: 4,
+              overflow: 'hidden',
+            }}
+          >
+            <View
+              style={{
+                height: '100%',
+                width: `${recorder.level.current * 100}%`,
+                backgroundColor:
+                  recorder.level.current > 0.8 ? '#ef4444' : '#22c55e',
+                transition: 'width 50ms linear',
+              }}
+            />
+          </View>
+          <View direction="row" style={{ justifyContent: 'space-between', marginTop: 4 }}>
+            <Text size="sm">Level: {(recorder.level.current * 100).toFixed(0)}%</Text>
+            <Text size="sm">Peak: {(recorder.level.peak * 100).toFixed(0)}%</Text>
+            <Text size="sm">dB: {recorder.level.db.toFixed(1)}</Text>
+          </View>
+        </View>
+
+        {/* Duration */}
+        <View style={{ marginTop: 8 }}>
+          <Text size="lg" weight="medium">
+            {formatTime(recorder.duration)}
+          </Text>
+        </View>
+
+        {/* Controls */}
+        <View direction="row" spacing="sm" style={{ marginTop: 12 }}>
+          <Button
+            size="sm"
+            intent={recorder.isRecording ? 'danger' : 'primary'}
+            onPress={recorder.isRecording ? recorder.stop : () => recorder.start()}
+          >
+            {recorder.isRecording ? 'Stop' : 'Start'} Recording
+          </Button>
+          {recorder.isRecording && (
+            <Button
+              type="outlined"
+              size="sm"
+              onPress={recorder.isPaused ? recorder.resume : recorder.pause}
+            >
+              {recorder.isPaused ? 'Resume' : 'Pause'}
+            </Button>
+          )}
+          <Button type="outlined" size="sm" onPress={recorder.resetPeakLevel}>
+            Reset Peak
+          </Button>
+        </View>
+
+        {/* Status */}
+        <View
+          style={{
+            marginTop: 8,
+            padding: 8,
+            backgroundColor: '#f9fafb',
+            borderRadius: 6,
+          }}
+        >
+          <Text size="sm" color="secondary">
+            State: <Text weight="medium">{recorder.status.state}</Text> | Permission:{' '}
+            <Text weight="medium">{recorder.permission}</Text>
+            {recorder.error && <Text color="danger"> | Error: {recorder.error.message}</Text>}
+          </Text>
+        </View>
+      </View>
+    </Card>
+  );
+}
+
+// ============================================
 // FILE PLAYBACK DEMO
 // ============================================
 
 function FilePlaybackDemo() {
-  const player = useAudioPlayer();
+  const player = usePlayer();
   const [url, setUrl] = useState('');
 
   const loadAndPlay = useCallback(async () => {
@@ -105,25 +219,32 @@ function FilePlaybackDemo() {
     }
   }, [url, player]);
 
-  const handleSeek = useCallback(async (positionMs: number) => {
-    try {
-      await player.seek(positionMs);
-    } catch (error) {
-      console.error('Failed to seek:', error);
-    }
-  }, [player]);
+  const handleSeek = useCallback(
+    async (positionMs: number) => {
+      try {
+        await player.seek(positionMs);
+      } catch (error) {
+        console.error('Failed to seek:', error);
+      }
+    },
+    [player]
+  );
 
   return (
     <Card>
       <View spacing="md" style={{ padding: 16 }}>
-        <Text size="lg" weight="semibold">File Playback Demo</Text>
+        <Text size="lg" weight="semibold">
+          File Playback Demo
+        </Text>
         <Text size="sm" color="secondary">
           Load and play audio files from URLs or local paths.
         </Text>
 
         {/* URL Input */}
         <View style={{ marginTop: 8 }}>
-          <Text size="sm" weight="medium" style={{ marginBottom: 4 }}>Audio URL:</Text>
+          <Text size="sm" weight="medium" style={{ marginBottom: 4 }}>
+            Audio URL:
+          </Text>
           <input
             type="text"
             value={url}
@@ -154,12 +275,7 @@ function FilePlaybackDemo() {
 
         {/* Controls */}
         <View direction="row" spacing="sm" style={{ marginTop: 12, justifyContent: 'center' }}>
-          <Button
-            type="outlined"
-            size="sm"
-            onPress={loadAndPlay}
-            disabled={!url || player.isLoading}
-          >
+          <Button type="outlined" size="sm" onPress={loadAndPlay} disabled={!url || player.isLoading}>
             Load
           </Button>
           <Button
@@ -169,12 +285,7 @@ function FilePlaybackDemo() {
           >
             {player.isPlaying ? 'Pause' : 'Play'}
           </Button>
-          <Button
-            type="outlined"
-            size="sm"
-            onPress={player.stop}
-            disabled={player.status.state === 'idle'}
-          >
+          <Button type="outlined" size="sm" onPress={player.stop} disabled={player.status.state === 'idle'}>
             Stop
           </Button>
         </View>
@@ -193,16 +304,16 @@ function FilePlaybackDemo() {
               step={0.1}
             />
           </View>
-          <Text size="sm" style={{ marginLeft: 8 }}>{Math.round(player.volume * 100)}%</Text>
+          <Text size="sm" style={{ marginLeft: 8 }}>
+            {Math.round(player.volume * 100)}%
+          </Text>
         </View>
 
         {/* Status */}
         <View style={{ marginTop: 8, padding: 8, backgroundColor: '#f9fafb', borderRadius: 6 }}>
           <Text size="sm" color="secondary">
             State: <Text weight="medium">{player.status.state}</Text>
-            {player.error && (
-              <Text color="danger"> | Error: {player.error.message}</Text>
-            )}
+            {player.error && <Text color="danger"> | Error: {player.error.message}</Text>}
           </Text>
         </View>
       </View>
@@ -215,12 +326,12 @@ function FilePlaybackDemo() {
 // ============================================
 
 function PCMStreamingDemo() {
-  const player = useAudioPlayer();
+  const player = usePlayer();
   const [isStreaming, setIsStreaming] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState<keyof typeof PLAYBACK_PROFILES>('speech');
+  const [selectedProfile, setSelectedProfile] = useState<keyof typeof AUDIO_PROFILES>('speech');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const currentConfig = PLAYBACK_PROFILES[selectedProfile];
+  const currentConfig = AUDIO_PROFILES[selectedProfile];
 
   const startStreaming = useCallback(async () => {
     try {
@@ -298,16 +409,20 @@ function PCMStreamingDemo() {
   return (
     <Card>
       <View spacing="md" style={{ padding: 16 }}>
-        <Text size="lg" weight="semibold">PCM Streaming Demo</Text>
+        <Text size="lg" weight="semibold">
+          PCM Streaming Demo
+        </Text>
         <Text size="sm" color="secondary">
           Stream raw PCM audio data for real-time playback. Ideal for TTS and AI voice responses.
         </Text>
 
         {/* Profile Selection */}
         <View style={{ marginTop: 8 }}>
-          <Text size="sm" weight="medium" style={{ marginBottom: 4 }}>Playback Profile:</Text>
+          <Text size="sm" weight="medium" style={{ marginBottom: 4 }}>
+            Audio Profile:
+          </Text>
           <View direction="row" spacing="sm">
-            {(Object.keys(PLAYBACK_PROFILES) as Array<keyof typeof PLAYBACK_PROFILES>).map((profile) => (
+            {(Object.keys(AUDIO_PROFILES) as Array<keyof typeof AUDIO_PROFILES>).map((profile) => (
               <Button
                 key={profile}
                 size="sm"
@@ -324,9 +439,9 @@ function PCMStreamingDemo() {
         {/* Config Info */}
         <View style={{ marginTop: 8, padding: 8, backgroundColor: '#f0f9ff', borderRadius: 6 }}>
           <Text size="sm">
-            Sample Rate: <Text weight="medium">{currentConfig.sampleRate}Hz</Text> |
-            Channels: <Text weight="medium">{currentConfig.channels}</Text> |
-            Bit Depth: <Text weight="medium">{currentConfig.bitDepth}</Text>
+            Sample Rate: <Text weight="medium">{currentConfig.sampleRate}Hz</Text> | Channels:{' '}
+            <Text weight="medium">{currentConfig.channels}</Text> | Bit Depth:{' '}
+            <Text weight="medium">{currentConfig.bitDepth}</Text>
           </Text>
         </View>
 
@@ -342,12 +457,7 @@ function PCMStreamingDemo() {
           >
             {isStreaming ? 'Stop Streaming' : 'Start Streaming'}
           </Button>
-          <Button
-            type="outlined"
-            size="sm"
-            onPress={feedSampleData}
-            disabled={!isStreaming}
-          >
+          <Button type="outlined" size="sm" onPress={feedSampleData} disabled={!isStreaming}>
             Feed Sample Data
           </Button>
           <Button
@@ -364,9 +474,7 @@ function PCMStreamingDemo() {
         <View style={{ marginTop: 8, padding: 8, backgroundColor: '#f9fafb', borderRadius: 6 }}>
           <Text size="sm" color="secondary">
             State: <Text weight="medium">{player.status.state}</Text>
-            {player.error && (
-              <Text color="danger"> | Error: {player.error.message}</Text>
-            )}
+            {player.error && <Text color="danger"> | Error: {player.error.message}</Text>}
           </Text>
         </View>
       </View>
@@ -378,17 +486,20 @@ function PCMStreamingDemo() {
 // MAIN PAGE
 // ============================================
 
-export function AudioPlaybackPage() {
+export function AudioPage() {
+  // Initialize audio context and session
+  const audio = useAudio();
+
   return (
     <Screen scroll>
       <View style={{ maxWidth: 800 }}>
         <Text typography="h2" weight="bold" style={{ marginBottom: 16 }}>
-          Audio Playback
+          Audio
         </Text>
 
         <Text typography="body1" color="secondary" style={{ marginBottom: 24, lineHeight: 26 }}>
-          Cross-platform audio playback for React and React Native. Supports file playback
-          and real-time PCM streaming for TTS and AI voice responses.
+          Unified cross-platform audio for React and React Native. Provides recording with real-time
+          PCM streaming, file playback, and session management for simultaneous recording and playback.
         </Text>
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
@@ -397,13 +508,109 @@ export function AudioPlaybackPage() {
 
         <CodeBlock
           code={`import {
-  useAudioPlayer,
-  PLAYBACK_PROFILES,
-} from '@idealyst/audio-playback';`}
+  // Hooks
+  useAudio,
+  useRecorder,
+  usePlayer,
+
+  // Constants
+  AUDIO_PROFILES,
+  SESSION_PRESETS,
+} from '@idealyst/audio';`}
           language="typescript"
           title="Import"
         />
 
+        {/* Recording Section */}
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
+          Recording
+        </Text>
+
+        <Text typography="body2" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
+          Use useRecorder for real-time audio capture with level metering and PCM data streaming:
+        </Text>
+
+        <CodeBlock
+          code={`import { useRecorder, AUDIO_PROFILES } from '@idealyst/audio';
+
+function VoiceRecorder() {
+  const {
+    isRecording,
+    isPaused,
+    level,
+    duration,
+    error,
+    start,
+    stop,
+    pause,
+    resume,
+    subscribeToData,
+  } = useRecorder({
+    config: AUDIO_PROFILES.speech,
+    levelUpdateInterval: 50,
+  });
+
+  // Subscribe to raw PCM data
+  useEffect(() => {
+    if (!isRecording) return;
+
+    const unsubscribe = subscribeToData((pcmData) => {
+      // Send to speech recognition, etc.
+      console.log('PCM samples:', pcmData.samples.length);
+    });
+
+    return unsubscribe;
+  }, [isRecording, subscribeToData]);
+
+  return (
+    <View>
+      {/* Audio level meter */}
+      <View style={{ height: 20, backgroundColor: '#e5e7eb' }}>
+        <View
+          style={{
+            height: '100%',
+            width: \`\${level.current * 100}%\`,
+            backgroundColor: level.current > 0.8 ? '#ef4444' : '#22c55e',
+          }}
+        />
+      </View>
+
+      <Text>{formatTime(duration)}</Text>
+
+      <Button onPress={isRecording ? stop : start}>
+        {isRecording ? 'Stop' : 'Start'}
+      </Button>
+    </View>
+  );
+}`}
+          language="tsx"
+          title="Recording Example"
+        />
+
+        <RecordingDemo />
+
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
+          useRecorder Hook
+        </Text>
+
+        <View style={{ gap: 12, marginBottom: 32 }}>
+          <PropRow name="status" type="RecorderStatus" description="Full recorder status object." />
+          <PropRow name="isRecording" type="boolean" description="Whether recording is active." />
+          <PropRow name="isPaused" type="boolean" description="Whether recording is paused." />
+          <PropRow name="permission" type="PermissionStatus" description="Microphone permission status." />
+          <PropRow name="duration" type="number" description="Recording duration in ms." />
+          <PropRow name="level" type="AudioLevel" description="Current audio level metrics." />
+          <PropRow name="error" type="AudioError | null" description="Current error if any." />
+          <PropRow name="start" type="(config?) => Promise" description="Start recording." />
+          <PropRow name="stop" type="() => Promise" description="Stop recording." />
+          <PropRow name="pause" type="() => Promise" description="Pause recording." />
+          <PropRow name="resume" type="() => Promise" description="Resume recording." />
+          <PropRow name="subscribeToData" type="(callback) => () => void" description="Subscribe to PCM data." />
+          <PropRow name="requestPermission" type="() => Promise" description="Request mic permission." />
+          <PropRow name="resetPeakLevel" type="() => void" description="Reset peak level meter." />
+        </View>
+
+        {/* Playback Section */}
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
           File Playback
         </Text>
@@ -413,10 +620,10 @@ export function AudioPlaybackPage() {
         </Text>
 
         <CodeBlock
-          code={`import { useAudioPlayer } from '@idealyst/audio-playback';
+          code={`import { usePlayer } from '@idealyst/audio';
 
 function MusicPlayer() {
-  const player = useAudioPlayer();
+  const player = usePlayer();
 
   const playFile = async (uri: string) => {
     await player.loadFile(uri);
@@ -452,23 +659,25 @@ function MusicPlayer() {
 
         <FilePlaybackDemo />
 
+        {/* PCM Streaming Section */}
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
           PCM Streaming
         </Text>
 
         <Text typography="body2" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
-          Stream raw PCM audio data for real-time playback. Perfect for TTS APIs and AI voice responses:
+          Stream raw PCM audio data for real-time playback. Perfect for TTS APIs and AI voice
+          responses:
         </Text>
 
         <CodeBlock
-          code={`import { useAudioPlayer, PLAYBACK_PROFILES } from '@idealyst/audio-playback';
+          code={`import { usePlayer, AUDIO_PROFILES } from '@idealyst/audio';
 
 function VoicePlayer() {
-  const player = useAudioPlayer();
+  const player = usePlayer();
 
   const startStreaming = async () => {
     // Initialize stream with speech-optimized settings
-    await player.loadPCMStream(PLAYBACK_PROFILES.speech);
+    await player.loadPCMStream(AUDIO_PROFILES.speech);
     await player.play();
   };
 
@@ -496,7 +705,7 @@ function VoicePlayer() {
         <PCMStreamingDemo />
 
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
-          useAudioPlayer Hook
+          usePlayer Hook
         </Text>
 
         <View style={{ gap: 12, marginBottom: 32 }}>
@@ -509,9 +718,17 @@ function VoicePlayer() {
           <PropRow name="volume" type="number" description="Current volume (0.0 - 1.0)." />
           <PropRow name="error" type="PlayerError | null" description="Current error if any." />
           <PropRow name="loadFile" type="(uri: string) => Promise" description="Load an audio file." />
-          <PropRow name="loadPCMStream" type="(config: PlaybackConfig) => Promise" description="Initialize PCM streaming." />
+          <PropRow
+            name="loadPCMStream"
+            type="(config: AudioConfig) => Promise"
+            description="Initialize PCM streaming."
+          />
           <PropRow name="unload" type="() => void" description="Unload current source." />
-          <PropRow name="feedPCMData" type="(data: ArrayBuffer | Int16Array) => void" description="Feed PCM data to stream." />
+          <PropRow
+            name="feedPCMData"
+            type="(data: ArrayBuffer | Int16Array) => void"
+            description="Feed PCM data to stream."
+          />
           <PropRow name="flush" type="() => Promise" description="Flush remaining buffered audio." />
           <PropRow name="play" type="() => Promise" description="Start or resume playback." />
           <PropRow name="pause" type="() => void" description="Pause playback." />
@@ -521,76 +738,144 @@ function VoicePlayer() {
           <PropRow name="toggleMute" type="() => void" description="Toggle mute state." />
         </View>
 
+        {/* Audio Profiles Section */}
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
-          Playback Profiles
+          Audio Profiles
         </Text>
 
         <CodeBlock
-          code={`import { PLAYBACK_PROFILES } from '@idealyst/audio-playback';
+          code={`import { AUDIO_PROFILES } from '@idealyst/audio';
 
 // Pre-configured profiles for common use cases
-PLAYBACK_PROFILES.speech   // 16kHz, mono, 16-bit (TTS, voice)
-PLAYBACK_PROFILES.phone    // 8kHz, mono, 16-bit (telephony)
-PLAYBACK_PROFILES.highQuality  // 44.1kHz, stereo, 16-bit (music)
-PLAYBACK_PROFILES.studio   // 48kHz, stereo, 16-bit (professional)
+AUDIO_PROFILES.speech      // 16kHz, mono, 16-bit (TTS, voice)
+AUDIO_PROFILES.phone       // 8kHz, mono, 16-bit (telephony)
+AUDIO_PROFILES.highQuality // 44.1kHz, stereo, 16-bit (music)
+AUDIO_PROFILES.studio      // 48kHz, stereo, 16-bit (professional)
 
 // Custom configuration
-const customConfig: PlaybackConfig = {
+const customConfig: AudioConfig = {
   sampleRate: 22050,
   channels: 1,
   bitDepth: 16,
 };`}
           language="typescript"
-          title="Playback Profiles"
+          title="Audio Profiles"
         />
 
+        {/* Session Management Section */}
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
-          Player States
+          Audio Session (iOS/Android)
+        </Text>
+
+        <Text typography="body2" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
+          Manage audio session for simultaneous recording and playback on mobile:
         </Text>
 
         <CodeBlock
-          code={`type PlayerState =
-  | 'idle'      // No source loaded
-  | 'loading'   // Loading source
-  | 'ready'     // Source loaded, ready to play
-  | 'playing'   // Currently playing
-  | 'paused'    // Playback paused
-  | 'stopped'   // Playback stopped
-  | 'error';    // Error occurred
+          code={`import { useAudio, SESSION_PRESETS } from '@idealyst/audio';
 
-// Check state
-if (player.status.state === 'playing') {
-  // Audio is playing
+function App() {
+  const audio = useAudio({
+    // Configure session for recording + playback
+    session: SESSION_PRESETS.voiceChat,
+    initializeOnMount: true,
+  });
+
+  // Or configure manually
+  const configureForVoiceChat = async () => {
+    await audio.configureSession({
+      category: 'playAndRecord',
+      mode: 'voiceChat',
+      categoryOptions: ['defaultToSpeaker', 'allowBluetooth'],
+    });
+  };
+
+  return (
+    <View>
+      <Text>Session: {audio.sessionState.category}</Text>
+      <Text>Outputs: {audio.outputs.join(', ')}</Text>
+    </View>
+  );
 }
 
-// Or use convenience booleans
-if (player.isPlaying) { /* ... */ }
-if (player.isPaused) { /* ... */ }
-if (player.isLoading) { /* ... */ }`}
-          language="typescript"
-          title="Player States"
+// Available presets
+SESSION_PRESETS.default    // playAndRecord with speaker + bluetooth
+SESSION_PRESETS.voiceChat  // Optimized for voice calls
+SESSION_PRESETS.playback   // Playback only
+SESSION_PRESETS.record     // Recording only
+SESSION_PRESETS.ambient    // Mix with other audio`}
+          language="tsx"
+          title="Audio Session Management"
         />
 
+        {/* Platform Differences */}
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
+          Platform Differences
+        </Text>
+
+        <View style={{ gap: 16, marginBottom: 32 }}>
+          <Card variant="outlined" style={{ padding: 16 }}>
+            <Text weight="semibold" style={{ marginBottom: 8 }}>
+              Web
+            </Text>
+            <Text typography="body2" color="tertiary">
+              Uses Web Audio API with AudioWorklet for low-latency audio processing. Supports mp3,
+              wav, ogg, and other web-compatible formats. Audio session management is a no-op on
+              web.
+            </Text>
+          </Card>
+          <Card variant="outlined" style={{ padding: 16 }}>
+            <Text weight="semibold" style={{ marginBottom: 8 }}>
+              React Native
+            </Text>
+            <Text typography="body2" color="tertiary">
+              Uses react-native-audio-api (Web Audio API polyfill) for consistent cross-platform
+              behavior. Audio session management allows simultaneous recording and playback with
+              proper iOS/Android configuration.
+            </Text>
+          </Card>
+        </View>
+
+        {/* Error Handling */}
+        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           Error Handling
         </Text>
 
         <CodeBlock
-          code={`const { error } = useAudioPlayer();
+          code={`const { error } = useRecorder();
+// or
+const { error } = usePlayer();
 
 // Error codes:
-// 'SOURCE_NOT_FOUND'      - Audio file not found
-// 'FORMAT_NOT_SUPPORTED'  - Unsupported audio format
-// 'DECODE_ERROR'          - Failed to decode audio
-// 'PLAYBACK_ERROR'        - Error during playback
-// 'BUFFER_UNDERRUN'       - Buffer ran empty (streaming)
-// 'INITIALIZATION_FAILED' - Failed to initialize audio
-// 'UNKNOWN'               - Unknown error
+// Permission
+// 'PERMISSION_DENIED'      - User denied microphone access
+// 'PERMISSION_BLOCKED'     - Permission blocked in settings
+
+// Device
+// 'DEVICE_NOT_FOUND'       - No microphone/speaker found
+// 'DEVICE_IN_USE'          - Device used by another app
+// 'NOT_SUPPORTED'          - Audio not supported
+
+// Playback
+// 'SOURCE_NOT_FOUND'       - Audio file not found
+// 'FORMAT_NOT_SUPPORTED'   - Unsupported format
+// 'DECODE_ERROR'           - Failed to decode
+// 'PLAYBACK_ERROR'         - Error during playback
+// 'BUFFER_UNDERRUN'        - Buffer ran empty
+
+// Recording
+// 'RECORDING_ERROR'        - Recording failed
+
+// General
+// 'INITIALIZATION_FAILED'  - Failed to initialize
+// 'INVALID_STATE'          - Invalid operation
+// 'INVALID_CONFIG'         - Invalid configuration
+// 'UNKNOWN'                - Unknown error
 
 if (error) {
   switch (error.code) {
-    case 'SOURCE_NOT_FOUND':
-      // File doesn't exist
+    case 'PERMISSION_DENIED':
+      // Show permission explanation
       break;
     case 'BUFFER_UNDERRUN':
       // Feed more PCM data
@@ -603,47 +888,21 @@ if (error) {
           title="Error Handling"
         />
 
+        {/* WebSocket TTS Example */}
         <Text weight="semibold" typography="h4" style={{ marginBottom: 12, marginTop: 32 }}>
-          Platform Differences
-        </Text>
-
-        <View style={{ gap: 16, marginBottom: 32 }}>
-          <Card variant="outlined" style={{ padding: 16 }}>
-            <Text weight="semibold" style={{ marginBottom: 8 }}>
-              Web
-            </Text>
-            <Text typography="body2" color="tertiary">
-              Uses Web Audio API with AudioWorklet for low-latency PCM streaming.
-              File playback uses decodeAudioData for full format support.
-              Supports mp3, wav, ogg, and other web-compatible formats.
-            </Text>
-          </Card>
-          <Card variant="outlined" style={{ padding: 16 }}>
-            <Text weight="semibold" style={{ marginBottom: 8 }}>
-              React Native
-            </Text>
-            <Text typography="body2" color="tertiary">
-              Uses react-native-audio-api (Web Audio API polyfill) for consistent
-              cross-platform behavior. Supports native audio formats.
-              Requires react-native-audio-api peer dependency.
-            </Text>
-          </Card>
-        </View>
-
-        <Text weight="semibold" typography="h4" style={{ marginBottom: 12 }}>
           WebSocket TTS Integration
         </Text>
 
         <CodeBlock
-          code={`import { useAudioPlayer, PLAYBACK_PROFILES } from '@idealyst/audio-playback';
+          code={`import { usePlayer, AUDIO_PROFILES } from '@idealyst/audio';
 
 function TTSPlayer() {
-  const player = useAudioPlayer();
+  const player = usePlayer();
   const wsRef = useRef<WebSocket | null>(null);
 
   const connectTTS = async () => {
     // Initialize player for speech
-    await player.loadPCMStream(PLAYBACK_PROFILES.speech);
+    await player.loadPCMStream(AUDIO_PROFILES.speech);
     await player.play();
 
     // Connect to TTS WebSocket
@@ -684,15 +943,7 @@ function TTSPlayer() {
   );
 }
 
-function PropRow({
-  name,
-  type,
-  description,
-}: {
-  name: string;
-  type: string;
-  description: string;
-}) {
+function PropRow({ name, type, description }: { name: string; type: string; description: string }) {
   return (
     <View
       style={{

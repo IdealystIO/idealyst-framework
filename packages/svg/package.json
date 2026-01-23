@@ -1,0 +1,69 @@
+{
+  "name": "@idealyst/svg",
+  "version": "1.2.65",
+  "description": "Cross-platform SVG primitives for React and React Native with identical behavior",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/svg"
+  },
+  "author": "Idealyst <contact@idealyst.io>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./examples": {
+      "import": "./src/examples/index.ts",
+      "require": "./src/examples/index.ts",
+      "types": "./src/examples/index.ts"
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-svg": ">=13.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "react-native-svg": "^15.14.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "svg",
+    "cross-platform",
+    "vector-graphics",
+    "idealyst"
+  ]
+}

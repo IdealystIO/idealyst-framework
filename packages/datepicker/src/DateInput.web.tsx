@@ -7,6 +7,7 @@ import { IconSvg } from './IconSvg.web';
 import { DatePicker } from './DatePicker';
 import { dateTimeInputStyles } from './InputStyles';
 import type { DateInputProps } from './types';
+import { flattenStyle } from './flattenStyle';
 
 export const DateInput: React.FC<DateInputProps> = ({
   value,
@@ -107,7 +108,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   const popoverProps = getWebProps([popoverContentStyle]);
 
   return (
-    <div style={style as React.CSSProperties}>
+    <div style={flattenStyle(style)}>
       {label && (
         <span {...labelProps}>{label}</span>
       )}

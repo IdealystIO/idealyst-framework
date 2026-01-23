@@ -234,6 +234,223 @@ export interface UseAudioPlayerOptions {
   positionUpdateInterval?: number;
 }
 
+// ============================================
+// AUDIO SESSION TYPES (iOS/Android)
+// ============================================
+
+/**
+ * iOS AVAudioSession categories
+ * @see https://developer.apple.com/documentation/avfaudio/avaudiosession/category
+ */
+export type AudioSessionCategory =
+  | 'ambient' // Playback mixes with other audio, silenced by lock/silent switch
+  | 'soloAmbient' // Default. Silences other audio, silenced by lock/silent switch
+  | 'playback' // Audio continues in background, ignores silent switch
+  | 'record' // For recording audio input
+  | 'playAndRecord' // Simultaneous recording and playback
+  | 'multiRoute'; // Route audio to multiple outputs
+
+/**
+ * iOS AVAudioSession category options
+ * @see https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions
+ */
+export type AudioSessionCategoryOption =
+  | 'mixWithOthers' // Allow mixing with other audio
+  | 'duckOthers' // Lower other audio volume
+  | 'allowBluetooth' // Enable Bluetooth audio devices
+  | 'allowBluetoothA2DP' // Enable Bluetooth A2DP
+  | 'allowAirPlay' // Enable AirPlay
+  | 'defaultToSpeaker' // Route to speaker instead of receiver
+  | 'interruptSpokenAudioAndMixWithOthers'; // Interrupt spoken audio
+
+/**
+ * iOS AVAudioSession modes
+ * @see https://developer.apple.com/documentation/avfaudio/avaudiosession/mode
+ */
+export type AudioSessionMode =
+  | 'default' // Default mode
+  | 'voiceChat' // Optimized for voice chat (VoIP)
+  | 'gameChat' // Optimized for game chat
+  | 'videoRecording' // For video recording
+  | 'measurement' // For audio measurement apps
+  | 'moviePlayback' // For movie playback
+  | 'videoChat' // For video chat
+  | 'spokenAudio'; // For spoken audio (podcasts, audiobooks)
+
+/**
+ * Audio session configuration
+ */
+export interface AudioSessionConfig {
+  /** Audio session category. Default: 'playAndRecord' */
+  category: AudioSessionCategory;
+
+  /** Additional category options */
+  categoryOptions?: AudioSessionCategoryOption[];
+
+  /** Audio session mode. Default: 'default' */
+  mode?: AudioSessionMode;
+
+  /** Whether to activate the session immediately. Default: true */
+  active?: boolean;
+}
+
+/**
+ * Audio session state
+ */
+export interface AudioSessionState {
+  /** Whether the audio session is active */
+  isActive: boolean;
+
+  /** Current category */
+  category: AudioSessionCategory;
+
+  /** Current mode */
+  mode: AudioSessionMode;
+
+  /** Current category options */
+  categoryOptions: AudioSessionCategoryOption[];
+
+  /** Whether another app is playing audio */
+  otherAudioPlaying: boolean;
+}
+
+/**
+ * Audio session interruption info
+ */
+export interface AudioSessionInterruption {
+  /** Type of interruption */
+  type: 'began' | 'ended';
+
+  /** Whether playback should resume (only for 'ended') */
+  shouldResume?: boolean;
+}
+
+/**
+ * Audio session route change info
+ */
+export interface AudioSessionRouteChange {
+  /** Reason for the route change */
+  reason:
+    | 'unknown'
+    | 'newDeviceAvailable'
+    | 'oldDeviceUnavailable'
+    | 'categoryChange'
+    | 'override'
+    | 'wakeFromSleep'
+    | 'noSuitableRouteForCategory'
+    | 'routeConfigurationChange';
+
+  /** Previous route outputs */
+  previousOutputs: string[];
+
+  /** Current route outputs */
+  currentOutputs: string[];
+}
+
+export type AudioSessionInterruptionCallback = (interruption: AudioSessionInterruption) => void;
+export type AudioSessionRouteChangeCallback = (change: AudioSessionRouteChange) => void;
+
+/**
+ * Audio session manager interface
+ */
+export interface IAudioSessionManager {
+  /** Current audio session state */
+  readonly state: AudioSessionState;
+
+  /**
+   * Configure and optionally activate the audio session.
+   * @param config Audio session configuration
+   */
+  configure(config: Partial<AudioSessionConfig>): Promise<void>;
+
+  /**
+   * Activate the audio session with current configuration.
+   */
+  activate(): Promise<void>;
+
+  /**
+   * Deactivate the audio session.
+   * @param notifyOthers Whether to notify other apps they can resume. Default: true
+   */
+  deactivate(notifyOthers?: boolean): Promise<void>;
+
+  /**
+   * Subscribe to audio interruption events (e.g., phone call).
+   * @returns Unsubscribe function
+   */
+  onInterruption(callback: AudioSessionInterruptionCallback): () => void;
+
+  /**
+   * Subscribe to audio route change events (e.g., headphones plugged/unplugged).
+   * @returns Unsubscribe function
+   */
+  onRouteChange(callback: AudioSessionRouteChangeCallback): () => void;
+
+  /**
+   * Get current audio route outputs.
+   */
+  getCurrentOutputs(): string[];
+}
+
+/**
+ * Preset configurations for common use cases
+ */
+export interface AudioSessionPresets {
+  /** For apps that only play audio (music, podcasts) */
+  playback: AudioSessionConfig;
+
+  /** For apps that only record audio */
+  record: AudioSessionConfig;
+
+  /** For voice chat / VoIP applications */
+  voiceChat: AudioSessionConfig;
+
+  /** For apps that mix with other audio (games with sound effects) */
+  ambient: AudioSessionConfig;
+
+  /** Default for simultaneous playback and recording */
+  default: AudioSessionConfig;
+}
+
+// ============================================
+// HOOK TYPES (useAudioSession)
+// ============================================
+
+export interface UseAudioSessionOptions {
+  /** Initial configuration to apply. If not provided, uses default preset. */
+  config?: Partial<AudioSessionConfig>;
+
+  /** Whether to activate on mount. Default: false */
+  activateOnMount?: boolean;
+
+  /** Whether to deactivate on unmount. Default: true */
+  deactivateOnUnmount?: boolean;
+}
+
+export interface UseAudioSessionResult {
+  /** Current audio session state */
+  state: AudioSessionState;
+
+  /** Whether the session is active */
+  isActive: boolean;
+
+  /** Configure the audio session */
+  configure: (config: Partial<AudioSessionConfig>) => Promise<void>;
+
+  /** Activate the audio session */
+  activate: () => Promise<void>;
+
+  /** Deactivate the audio session */
+  deactivate: (notifyOthers?: boolean) => Promise<void>;
+
+  /** Current route outputs (e.g., ['Speaker'], ['Headphones']) */
+  outputs: string[];
+}
+
+// ============================================
+// HOOK TYPES (useAudioPlayer)
+// ============================================
+
 export interface UseAudioPlayerResult {
   // State
   /** Full player status object */

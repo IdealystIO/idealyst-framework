@@ -8,6 +8,7 @@ import { textInputStyles } from './TextInput.styles';
 import { TextInputProps } from './types';
 import { getWebFormAriaProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Single-line text input field with support for icons, password visibility toggle, and validation states.
@@ -54,6 +55,9 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   accessibilityInvalid,
   accessibilityErrorMessage,
   accessibilityAutoComplete,
+  onSubmitEditing,
+  // returnKeyType is native-only, ignored on web
+  returnKeyType: _returnKeyType,
 }, ref) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -123,6 +127,12 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && onSubmitEditing) {
+      onSubmitEditing();
+    }
+  };
+
   // Apply variants (for size, type, and spacing)
   textInputStyles.useVariants({
     size,
@@ -137,7 +147,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
 
   // Get web props for all styled elements (all styles are dynamic functions)
   const dynamicContainerStyle = (textInputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
-  const {ref: containerStyleRef, ...containerProps} = getWebProps([dynamicContainerStyle, style]);
+  const {ref: containerStyleRef, ...containerProps} = getWebProps([dynamicContainerStyle, flattenStyle(style)]);
   const leftIconContainerProps = getWebProps([(textInputStyles.leftIconContainer as any)({})]);
   const rightIconContainerProps = getWebProps([(textInputStyles.rightIconContainer as any)({})]);
   const passwordToggleProps = getWebProps([(textInputStyles.passwordToggle as any)({})]);
@@ -275,6 +285,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={disabled}
         autoCapitalize={autoCapitalize}

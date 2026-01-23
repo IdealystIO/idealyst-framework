@@ -7,6 +7,7 @@ import { FormAccessibilityProps } from '../utils/accessibility';
 export type TextAreaIntentVariant = Intent;
 export type TextAreaSizeVariant = Size;
 export type TextAreaResizeVariant = 'none' | 'vertical' | 'horizontal' | 'both';
+export type TextAreaType = 'outlined' | 'filled' | 'bare';
 
 export interface TextAreaProps extends FormInputStyleProps, FormAccessibilityProps {
   value?: string;
@@ -26,6 +27,11 @@ export interface TextAreaProps extends FormInputStyleProps, FormAccessibilityPro
   showCharacterCount?: boolean;
   intent?: TextAreaIntentVariant;
   size?: TextAreaSizeVariant;
+  /**
+   * Visual style type of the textarea
+   * @default 'outlined'
+   */
+  type?: TextAreaType;
   style?: StyleProp<ViewStyle>;
   textareaStyle?: StyleProp<TextStyle>;
   testID?: string;

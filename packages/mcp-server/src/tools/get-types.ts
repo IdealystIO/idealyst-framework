@@ -207,20 +207,38 @@ function loadTypes(): TypesData {
 }
 
 /**
- * Get component types by name
+ * Find the canonical component name from types data (case-insensitive)
+ */
+function findComponentNameInTypes(types: TypesData, componentName: string): string | undefined {
+  // Direct match first (fast path)
+  if (types.components[componentName]) {
+    return componentName;
+  }
+
+  // Case-insensitive lookup
+  const lowerName = componentName.toLowerCase();
+  return Object.keys(types.components).find(
+    (name) => name.toLowerCase() === lowerName
+  );
+}
+
+/**
+ * Get component types by name (case-insensitive)
  */
 export function getComponentTypes(componentName: string, format: 'typescript' | 'json' | 'both' = 'both') {
   const types = loadTypes();
-  const component = types.components[componentName];
+  const canonicalName = findComponentNameInTypes(types, componentName);
 
-  if (!component) {
+  if (!canonicalName) {
     throw new Error(
       `Component "${componentName}" not found. Available components: ${Object.keys(types.components).join(', ')}`
     );
   }
 
+  const component = types.components[canonicalName];
+
   const result: any = {
-    component: componentName,
+    component: canonicalName,
   };
 
   if (format === 'typescript' || format === 'both') {
@@ -326,15 +344,38 @@ export function getAvailableComponents() {
 }
 
 /**
- * Get examples for a component
+ * Find the correct example file name (case-insensitive)
  */
-export function getComponentExamples(componentName: string): string | null {
-  const examplesPath = path.join(
-    __dirname,
-    `../../examples/components/${componentName}.examples.tsx`
+function findExampleFile(componentName: string): string | null {
+  const examplesDir = path.join(__dirname, '../../examples/components');
+
+  // Direct match first (fast path)
+  const directPath = path.join(examplesDir, `${componentName}.examples.tsx`);
+  if (fs.existsSync(directPath)) {
+    return directPath;
+  }
+
+  // Case-insensitive lookup
+  if (!fs.existsSync(examplesDir)) {
+    return null;
+  }
+
+  const lowerName = componentName.toLowerCase();
+  const files = fs.readdirSync(examplesDir);
+  const match = files.find(
+    (file) => file.toLowerCase() === `${lowerName}.examples.tsx`
   );
 
-  if (!fs.existsSync(examplesPath)) {
+  return match ? path.join(examplesDir, match) : null;
+}
+
+/**
+ * Get examples for a component (case-insensitive)
+ */
+export function getComponentExamples(componentName: string): string | null {
+  const examplesPath = findExampleFile(componentName);
+
+  if (!examplesPath) {
     return null;
   }
 

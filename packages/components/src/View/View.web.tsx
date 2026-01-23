@@ -5,6 +5,7 @@ import { viewStyles } from './View.styles';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { useWebLayout } from '../hooks/useWebLayout';
 import type { IdealystElement } from '../utils/refTypes';
+import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Fundamental layout container with background, border, and spacing options.
@@ -61,12 +62,15 @@ const View = forwardRef<IdealystElement, ViewProps>(({
 
   const mergedRef = useMergeRefs(ref, webProps.ref, layoutRef);
 
+  // Flatten style array into a single object (style can be an array on RN)
+  const flatStyle = flattenStyle(style);
+
   // When scrollable, render a wrapper + content structure
   // Wrapper: sizing and margin (positioning in parent layout)
   // Content: absolutely positioned with overflow:auto, visual styles (padding, background, border)
   if (scrollable) {
     // Split user styles: layout/sizing to wrapper, visual styles to content
-    const styleObj = (style as React.CSSProperties) || {};
+    const styleObj = flatStyle;
     const {
       // Sizing - goes to wrapper
       width,
@@ -154,7 +158,7 @@ const View = forwardRef<IdealystElement, ViewProps>(({
   return (
     <div
       {...webProps}
-      style={style as any}
+      style={flatStyle}
       ref={mergedRef}
       id={id}
       data-testid={testID}

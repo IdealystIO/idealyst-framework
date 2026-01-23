@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BlurViewWebProps, BlurType } from './types';
+import { flattenStyle } from './flattenStyle';
 
 /**
  * Get the background color based on blur type
@@ -43,7 +44,7 @@ export const BlurView: React.FC<BlurViewWebProps> = ({
     backdropFilter: `blur(${blurAmount}px)`,
     WebkitBackdropFilter: `blur(${blurAmount}px)`,
     backgroundColor: getBackgroundColor(blurType),
-    ...(style as React.CSSProperties),
+    ...flattenStyle(style),
   };
 
   return (
