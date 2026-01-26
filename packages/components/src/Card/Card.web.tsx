@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useEffect, useRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
@@ -8,12 +8,9 @@ import { getWebInteractiveAriaProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
 import { flattenStyle } from '../utils/flattenStyle';
 
-// Track if we've logged the onClick deprecation warning (log once per session)
-let hasLoggedOnClickWarning = false;
-
 /**
  * Container component for grouping related content with elevation and styling options.
- * Supports elevated, outlined, and filled variants with optional click interaction.
+ * Supports elevated, outlined, and filled variants with optional press interaction.
  */
 const Card = forwardRef<IdealystElement, CardProps>(({
   children,
@@ -22,9 +19,7 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   radius = 'md',
   intent: _intent,
   background,
-  clickable = false,
   onPress,
-  onClick,
   disabled = false,
   onLayout,
   // Spacing variants from ContainerStyleProps
@@ -46,25 +41,14 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   accessibilityRole,
   accessibilityPressed,
 }, ref) => {
-  const hasWarnedRef = useRef(false);
   const layoutRef = useWebLayout<HTMLElement>(onLayout);
 
-  // Warn about onClick usage (deprecated)
-  useEffect(() => {
-    if (onClick && !hasWarnedRef.current && !hasLoggedOnClickWarning) {
-      hasWarnedRef.current = true;
-      hasLoggedOnClickWarning = true;
-      console.warn(
-        '[Card] onClick is deprecated. Use onPress instead.\n' +
-        'Card is a cross-platform component that follows React Native conventions.\n' +
-        'onClick will be removed in a future version.\n\n' +
-        'Migration: Replace onClick={handler} with onPress={handler}'
-      );
-    }
-  }, [onClick]);
+  // Derive pressable from whether onPress is provided
+  const pressable = !!onPress;
 
   // variant is an alias for type - variant takes precedence if both are set
   const type = variant ?? typeProp ?? 'elevated';
+
   // Generate ARIA props
   const ariaProps = useMemo(() => {
     return getWebInteractiveAriaProps({
@@ -72,20 +56,16 @@ const Card = forwardRef<IdealystElement, CardProps>(({
       accessibilityHint,
       accessibilityDisabled: accessibilityDisabled ?? disabled,
       accessibilityHidden,
-      accessibilityRole: accessibilityRole ?? (clickable ? 'button' : 'region'),
+      accessibilityRole: accessibilityRole ?? (pressable ? 'button' : 'region'),
       accessibilityPressed,
     });
-  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, clickable, accessibilityPressed]);
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, pressable, accessibilityPressed]);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!disabled && clickable) {
-      // Prefer onPress, fall back to deprecated onClick
-      const handler = onPress ?? onClick;
-      if (handler) {
-        handler();
-      }
+    if (!disabled && onPress) {
+      onPress();
     }
   };
 
@@ -93,7 +73,7 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   cardStyles.useVariants({
     type,
     radius,
-    clickable,
+    pressable,
     disabled,
     background,
     gap,
@@ -113,21 +93,17 @@ const Card = forwardRef<IdealystElement, CardProps>(({
 
   const mergedRef = useMergeRefs(ref, webProps.ref, layoutRef);
 
-  // Use appropriate HTML element based on clickable state
-  const Component: any = clickable ? 'button' : 'div';
-
   return (
-    <Component
+    <div
       {...webProps}
       {...ariaProps}
       ref={mergedRef as any}
       id={id}
-      onClick={clickable ? handleClick : undefined}
-      disabled={clickable && disabled}
+      onClick={pressable ? handleClick : undefined}
       data-testid={testID}
     >
       {children}
-    </Component>
+    </div>
   );
 });
 

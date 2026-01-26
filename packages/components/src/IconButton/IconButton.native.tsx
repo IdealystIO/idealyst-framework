@@ -2,10 +2,12 @@ import { forwardRef, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet as RNStyleSheet, TouchableOpacity, View } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
+import { useUnistyles } from 'react-native-unistyles';
 import { iconButtonStyles } from './IconButton.styles';
 import { IconButtonProps } from './types';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import type { Theme } from '@idealyst/theme';
 
 const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => {
   const {
@@ -34,8 +36,14 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
     accessibilityPressed,
   } = props;
 
+  // Get theme for icon size
+  const { theme } = useUnistyles() as { theme: Theme };
+
   // Button is effectively disabled when loading
   const isDisabled = disabled || loading;
+
+  // Get icon size directly from theme
+  const iconSize = theme.sizes.iconButton[size]?.iconSize ?? 24;
 
   // Determine the handler to use - onPress takes precedence
   const pressHandler = onPress ?? onClick;
@@ -62,16 +70,6 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
 
   // Gradient is only applicable to contained buttons
   const showGradient = gradient && type === 'contained';
-
-  // Map button size to icon size
-  const iconSizeMap: Record<string, number> = {
-    xs: 12,
-    sm: 14,
-    md: 16,
-    lg: 18,
-    xl: 20,
-  };
-  const iconSize = iconSizeMap[size] ?? 16;
 
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
@@ -200,15 +198,14 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
       {renderGradientLayer()}
       {/* Centered spinner overlay */}
       {loading && (
-        <View style={RNStyleSheet.absoluteFill}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator
-              size="small"
-              color={spinnerColor}
-            />
-          </View>
+        <View style={[RNStyleSheet.absoluteFill, { justifyContent: 'center', alignItems: 'center' }]}>
+          <ActivityIndicator
+            size="small"
+            color={spinnerColor}
+          />
         </View>
       )}
+      {/* Icon renders directly - TouchableOpacity has alignItems/justifyContent center */}
       {renderIcon()}
     </TouchableOpacity>
   );

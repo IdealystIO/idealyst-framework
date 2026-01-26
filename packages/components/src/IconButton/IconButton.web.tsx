@@ -1,11 +1,13 @@
 import React, { isValidElement, forwardRef, useMemo } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
+import { useUnistyles } from 'react-native-unistyles';
 import { IconButtonProps } from './types';
 import { iconButtonStyles } from './IconButton.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import type { Theme } from '@idealyst/theme';
 
 /**
  * Circular icon button component with multiple visual variants and sizes.
@@ -40,8 +42,14 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
     accessibilityHasPopup,
   } = props;
 
+  // Get theme for icon size
+  const { theme } = useUnistyles() as { theme: Theme };
+
   // Button is effectively disabled when loading
   const isDisabled = disabled || loading;
+
+  // Get icon size directly from theme
+  const iconSize = theme.sizes.iconButton[size]?.iconSize ?? 24;
 
   // Apply variants for size, disabled, gradient
   iconButtonStyles.useVariants({
@@ -117,7 +125,8 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
   const webProps = getWebProps(buttonStyleArray);
 
   // Icon styles with dynamic function
-  const iconStyleArray = [(iconButtonStyles.icon as any)(dynamicProps)];
+  const iconStyleComputed = (iconButtonStyles.icon as any)(dynamicProps);
+  const iconStyleArray = [iconStyleComputed];
   const iconProps = getWebProps(iconStyleArray);
 
   // Spinner styles that match the icon color
@@ -130,6 +139,7 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
       return (
         <IconSvg
           name={icon}
+          size={iconSize}
           {...iconProps}
           aria-label={icon}
         />

@@ -1,15 +1,17 @@
-import { useState, forwardRef, useMemo } from 'react';
-import { View, TextInput, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from 'react-native';
+import { useState, forwardRef, useMemo, useEffect, useRef } from 'react';
+import { View, TextInput, NativeSyntheticEvent, TextInputContentSizeChangeEventData, TextInput as RNTextInput } from 'react-native';
 import { textAreaStyles } from './TextArea.styles';
 import Text from '../Text';
 import type { TextAreaProps } from './types';
 import { getNativeFormAccessibilityProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import useMergeRefs from '../hooks/useMergeRefs';
 
 const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',
   onChange,
+  onKeyDown: _onKeyDown, // Web-only, no-op on native
   placeholder,
   disabled = false,
   minHeight,
@@ -47,8 +49,17 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isFocused, setIsFocused] = useState(false);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
+  const textInputRef = useRef<RNTextInput>(null);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
+
+  // When value is cleared externally, trigger a layout recalculation via setNativeProps
+  useEffect(() => {
+    if (autoGrow && value === '' && textInputRef.current) {
+      // Force the TextInput to recalculate its layout by setting the text again
+      textInputRef.current.setNativeProps({ text: '' });
+    }
+  }, [value, autoGrow]);
   const hasError = Boolean(error);
 
   // Generate native accessibility props
@@ -163,7 +174,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
 
       <View style={textareaContainerStyleComputed}>
         <TextInput
-          ref={ref as any}
+          ref={useMergeRefs(textInputRef, ref as any)}
           {...nativeA11yProps}
           style={[
             textareaStyleComputed,
@@ -172,8 +183,16 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
               textAlignVertical: autoGrow ? 'center' : 'top',
               backgroundColor: 'transparent',
             },
-            maxHeight && { maxHeight },
-            { height: autoGrow ? contentHeight : rows * 24 },
+            // For autoGrow: don't set height, let it grow naturally with minHeight constraint
+            // For fixed height: use rows-based height
+            autoGrow
+              ? {
+                  minHeight: minHeight ?? 44,
+                  maxHeight: maxHeight,
+                  // Force height to minHeight when empty to ensure shrinking
+                  ...(value === '' ? { height: minHeight ?? 44 } : {}),
+                }
+              : { height: rows * 24 },
             textareaStyle,
           ]}
           value={value}
@@ -184,7 +203,9 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
           placeholder={placeholder}
           editable={!disabled}
           multiline
-          numberOfLines={0}
+          // Disable internal scrolling when autoGrow - let the TextInput expand instead
+          scrollEnabled={!autoGrow || (maxHeight !== undefined && contentHeight !== undefined && contentHeight >= maxHeight)}
+          numberOfLines={autoGrow ? undefined : rows}
           maxLength={maxLength}
           placeholderTextColor="#999"
         />

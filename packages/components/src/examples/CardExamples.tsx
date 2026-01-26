@@ -117,27 +117,25 @@ export const CardExamples = () => {
         </View>
       </View>
 
-      {/* Clickable Cards */}
+      {/* Pressable Cards */}
       <View gap="md">
         <Text typography="subtitle1">Interactive Cards</Text>
         <View gap="sm">
-          <Card 
-            clickable 
-            onPress={() => handleCardPress('clickable')} 
-            type="outlined" 
+          <Card
+            onPress={() => handleCardPress('pressable')}
+            type="outlined"
             padding="md"
           >
-            <Text weight="semibold">Clickable Card</Text>
+            <Text weight="semibold">Pressable Card</Text>
             <Text typography="caption" color="secondary">
-              Click me to see interaction
+              Press me to see interaction
             </Text>
           </Card>
-          
-          <Card 
-            clickable 
-            disabled 
-            onPress={() => handleCardPress('disabled')} 
-            type="outlined" 
+
+          <Card
+            disabled
+            onPress={() => handleCardPress('disabled')}
+            type="outlined"
             padding="md"
           >
             <Text weight="semibold">Disabled Card</Text>

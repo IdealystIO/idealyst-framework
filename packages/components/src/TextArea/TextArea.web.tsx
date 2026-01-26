@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef, useMemo } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useMemo, useCallback } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { textAreaStyles } from './TextArea.styles';
 import type { TextAreaProps } from './types';
@@ -14,6 +14,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',
   onChange,
+  onKeyDown,
   placeholder,
   disabled = false,
   rows = 4,
@@ -156,7 +157,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   const helperTextProps = getWebProps([helperTextStyleComputed]);
   const characterCountProps = getWebProps([characterCountStyleComputed]);
 
-  const adjustHeight = () => {
+  const adjustHeight = useCallback(() => {
     if (!autoGrow || !textareaRef.current) return;
 
     const textarea = textareaRef.current;
@@ -175,11 +176,11 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
     }
 
     textarea.style.height = `${newHeight}px`;
-  };
+  }, [autoGrow, minHeight, maxHeight]);
 
   useEffect(() => {
     adjustHeight();
-  }, [value, autoGrow, minHeight, maxHeight]);
+  }, [value, adjustHeight]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.stopPropagation();
@@ -202,6 +203,19 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
 
   const handleBlur = () => {
     setIsFocused(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (onKeyDown) {
+      onKeyDown({
+        key: e.key,
+        ctrlKey: e.ctrlKey,
+        shiftKey: e.shiftKey,
+        altKey: e.altKey,
+        metaKey: e.metaKey,
+        preventDefault: () => e.preventDefault(),
+      });
+    }
   };
 
   const showFooter = (error || helperText) || (showCharacterCount && maxLength);
@@ -234,6 +248,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
           rows={autoGrow ? undefined : rows}

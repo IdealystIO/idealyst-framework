@@ -99,7 +99,7 @@ The library includes 14 core components organized by category:
 
 | Component | Description | Key Props |
 |-----------|-------------|-----------|
-| **[Card](src/Card/README.md)** | Container for grouped content | `variant`, `padding`, `clickable`, `intent` |
+| **[Card](src/Card/README.md)** | Container for grouped content | `variant`, `padding`, `onPress`, `intent` |
 | **[Badge](src/Badge/README.md)** | Status indicators and count displays | `variant`, `color`, `size` |
 | **[Avatar](src/Avatar/README.md)** | User profile pictures with fallback | `src`, `fallback`, `size`, `shape` |
 
@@ -175,7 +175,7 @@ import { View, Card, Text, Avatar, Badge } from '@idealyst/components';
 
 <View spacing="md">
   {items.map(item => (
-    <Card key={item.id} clickable onPress={() => navigate(item)}>
+    <Card key={item.id} onPress={() => navigate(item)}>
       <View spacing="sm" style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Avatar src={item.avatar} fallback={item.initials} />
         <View spacing="xs" style={{ flex: 1 }}>

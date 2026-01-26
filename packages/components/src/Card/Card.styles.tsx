@@ -20,7 +20,7 @@ export type CardVariants = {
     type: CardType;
     radius: Radius;
     intent: CardIntent;
-    clickable: boolean;
+    pressable: boolean;
     disabled: boolean;
     background: Surface;
     gap: CardPadding;
@@ -78,13 +78,12 @@ export const cardStyles = defineStyle('Card', (theme: Theme) => ({
             background: {
                 backgroundColor: theme.colors.$surface,
             },
-            clickable: {
+            pressable: {
                 true: {
                     _web: {
                         cursor: 'pointer',
-                        transition: 'all 0.2s ease',
+                        transition: 'box-shadow 0.2s ease',
                         _hover: {
-                            transform: 'translateY(-2px)',
                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06)',
                         },
                     },

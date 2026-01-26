@@ -99,16 +99,15 @@ export function CardWithIntent() {
   );
 }
 
-// Example 6: Clickable Card
-export function ClickableCard() {
+// Example 6: Pressable Card
+export function PressableCard() {
   return (
     <Card
-      clickable
-      onPress={() => console.log('Card clicked')}
+      onPress={() => console.log('Card pressed')}
       type="outlined"
       padding="md"
     >
-      <Text>Click this card</Text>
+      <Text>Press this card</Text>
     </Card>
   );
 }

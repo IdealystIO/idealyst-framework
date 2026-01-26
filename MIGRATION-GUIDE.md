@@ -222,13 +222,23 @@ These components now accept `onClick` as a deprecated alias for `onPress`. Using
 ```tsx
 // This works but shows a deprecation warning
 <Button onClick={() => {}} />
-<Card clickable onClick={() => {}} />
 <Chip label="Tag" onClick={() => {}} />
 
 // Preferred approach
 <Button onPress={() => {}} />
-<Card clickable onPress={() => {}} />
 <Chip label="Tag" onPress={() => {}} />
+```
+
+### Card - Removed `clickable` prop
+
+The `clickable` prop has been removed from Card. Cards are now automatically pressable when an `onPress` handler is provided.
+
+```tsx
+// Old way (no longer works)
+<Card clickable onPress={() => {}} />
+
+// New way - just provide onPress
+<Card onPress={() => {}} />
 ```
 
 ---

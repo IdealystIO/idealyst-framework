@@ -83,7 +83,7 @@ export const HomeScreen: React.FC = () => {
         <View gap="md">
           <Text typography="subtitle1">Highlights</Text>
 
-          <Card type="outlined" padding="md" clickable>
+          <Card type="outlined" padding="md" onPress={() => {}}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               <View
                 background="secondary"
@@ -107,7 +107,7 @@ export const HomeScreen: React.FC = () => {
             </View>
           </Card>
 
-          <Card type="outlined" padding="md" clickable>
+          <Card type="outlined" padding="md" onPress={() => {}}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
               <View
                 background="secondary"

@@ -47,29 +47,10 @@ export interface CardProps extends ContainerStyleProps, InteractiveAccessibility
   background?: CardBackgroundVariant;
 
   /**
-   * Whether the card is clickable
-   */
-  clickable?: boolean;
-
-  /**
-   * Called when the card is pressed (if clickable)
+   * Called when the card is pressed.
+   * Providing this prop automatically makes the card pressable with hover effects.
    */
   onPress?: () => void;
-
-  /**
-   * @deprecated Use `onPress` instead. This is a cross-platform component - use React Native conventions.
-   *
-   * Using `onClick` will trigger a console warning in development.
-   * This prop exists only for migration convenience and will be removed in a future version.
-   *
-   * @example
-   * // ❌ Don't use onClick
-   * <Card clickable onClick={() => {}} />
-   *
-   * // ✅ Use onPress instead
-   * <Card clickable onPress={() => {}} />
-   */
-  onClick?: () => void;
 
   /**
    * Whether the card is disabled

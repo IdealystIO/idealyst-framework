@@ -325,4 +325,191 @@ describe('ThemeBuilder', () => {
             expect(theme.shadows.sm).toBeDefined();
         });
     });
+
+    describe('setRadius', () => {
+        it('should replace an existing radius value', () => {
+            const theme = createTheme()
+                .addRadius('sm', 4)
+                .addRadius('md', 8)
+                .setRadius('md', 12)
+                .build();
+
+            expect(theme.radii.sm).toBe(4);
+            expect(theme.radii.md).toBe(12);
+        });
+    });
+
+    describe('setShadow', () => {
+        it('should replace an existing shadow value', () => {
+            const originalShadow = {
+                elevation: 2,
+                shadowColor: '#000000',
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.1,
+                shadowRadius: 2,
+            };
+            const updatedShadow = {
+                elevation: 4,
+                shadowColor: '#000000',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.15,
+                shadowRadius: 8,
+            };
+
+            const theme = createTheme()
+                .addShadow('md', originalShadow)
+                .setShadow('md', updatedShadow)
+                .build();
+
+            expect(theme.shadows.md).toEqual(updatedShadow);
+        });
+    });
+
+    describe('individual size methods', () => {
+        it('should add a new button size variant', () => {
+            const newSize = {
+                paddingVertical: 14,
+                paddingHorizontal: 28,
+                minHeight: 64,
+                fontSize: 22,
+                lineHeight: 36,
+                iconSize: 22,
+            };
+
+            const theme = createTheme()
+                .addButtonSize('2xl', newSize)
+                .build();
+
+            expect(theme.sizes.button['2xl']).toEqual(newSize);
+        });
+
+        it('should set an existing button size variant', () => {
+            const originalSize = {
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+                minHeight: 40,
+                fontSize: 16,
+                lineHeight: 24,
+                iconSize: 16,
+            };
+            const updatedSize = {
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                minHeight: 44,
+                fontSize: 18,
+                lineHeight: 28,
+                iconSize: 18,
+            };
+
+            const theme = createTheme()
+                .addButtonSize('md', originalSize)
+                .setButtonSize('md', updatedSize)
+                .build();
+
+            expect(theme.sizes.button.md).toEqual(updatedSize);
+        });
+
+        it('should add multiple component size variants', () => {
+            const theme = createTheme()
+                .addButtonSize('tiny', {
+                    paddingVertical: 2,
+                    paddingHorizontal: 4,
+                    minHeight: 20,
+                    fontSize: 10,
+                    lineHeight: 12,
+                    iconSize: 10,
+                })
+                .addIconButtonSize('tiny', { size: 20, iconSize: 12 })
+                .addInputSize('tiny', {
+                    height: 24,
+                    paddingHorizontal: 4,
+                    fontSize: 10,
+                    iconSize: 10,
+                    iconMargin: 2,
+                })
+                .build();
+
+            expect(theme.sizes.button.tiny).toBeDefined();
+            expect(theme.sizes.iconButton.tiny).toBeDefined();
+            expect(theme.sizes.input.tiny).toBeDefined();
+        });
+    });
+
+    describe('setTypography', () => {
+        it('should update an existing typography variant', () => {
+            const theme = createTheme()
+                .setTypography('h1', {
+                    fontSize: 40,
+                    lineHeight: 48,
+                    fontWeight: '700',
+                })
+                .build();
+
+            expect(theme.sizes.typography.h1).toEqual({
+                fontSize: 40,
+                lineHeight: 48,
+                fontWeight: '700',
+            });
+        });
+    });
+
+    describe('updateInteraction', () => {
+        it('should partially update interaction config', () => {
+            const theme = createTheme()
+                .setInteraction({
+                    focusedBackground: 'rgba(0, 0, 255, 0.1)',
+                    focusBorder: 'rgba(0, 0, 255, 0.3)',
+                    opacity: {
+                        hover: 0.9,
+                        active: 0.75,
+                        disabled: 0.5,
+                    },
+                })
+                .updateInteraction({
+                    opacity: { disabled: 0.3 },
+                })
+                .build();
+
+            expect(theme.interaction.opacity.hover).toBe(0.9);
+            expect(theme.interaction.opacity.active).toBe(0.75);
+            expect(theme.interaction.opacity.disabled).toBe(0.3);
+            expect(theme.interaction.focusedBackground).toBe('rgba(0, 0, 255, 0.1)');
+        });
+
+        it('should update focus styles without affecting opacity', () => {
+            const theme = createTheme()
+                .setInteraction({
+                    focusedBackground: 'rgba(0, 0, 255, 0.1)',
+                    focusBorder: 'rgba(0, 0, 255, 0.3)',
+                    opacity: {
+                        hover: 0.9,
+                        active: 0.75,
+                        disabled: 0.5,
+                    },
+                })
+                .updateInteraction({
+                    focusedBackground: 'rgba(255, 0, 0, 0.1)',
+                })
+                .build();
+
+            expect(theme.interaction.focusedBackground).toBe('rgba(255, 0, 0, 0.1)');
+            expect(theme.interaction.focusBorder).toBe('rgba(0, 0, 255, 0.3)');
+            expect(theme.interaction.opacity.hover).toBe(0.9);
+        });
+    });
+
+    describe('setBreakpoint', () => {
+        it('should update an existing breakpoint', () => {
+            const theme = createTheme()
+                .addBreakpoint('xs', 0)
+                .addBreakpoint('sm', 576)
+                .addBreakpoint('md', 768)
+                .setBreakpoint('md', 800)
+                .build();
+
+            expect(theme.breakpoints.xs).toBe(0);
+            expect(theme.breakpoints.sm).toBe(576);
+            expect(theme.breakpoints.md).toBe(800);
+        });
+    });
 });

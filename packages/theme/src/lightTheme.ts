@@ -121,11 +121,11 @@ export const lightTheme = createTheme()
             xl: { paddingVertical: 12, paddingHorizontal: 24, minHeight: 56, fontSize: 20, lineHeight: 32, iconSize: 20 },
         },
         iconButton: {
-            xs: { size: 24, iconSize: 12 },
-            sm: { size: 32, iconSize: 14 },
-            md: { size: 40, iconSize: 16 },
-            lg: { size: 48, iconSize: 18 },
-            xl: { size: 56, iconSize: 20 },
+            xs: { size: 24, iconSize: 16 },
+            sm: { size: 32, iconSize: 20 },
+            md: { size: 40, iconSize: 24 },
+            lg: { size: 48, iconSize: 28 },
+            xl: { size: 56, iconSize: 32 },
         },
         chip: {
             xs: { paddingVertical: 1, paddingHorizontal: 6, minHeight: 16, borderRadius: 999, fontSize: 10, lineHeight: 12, iconSize: 10 },

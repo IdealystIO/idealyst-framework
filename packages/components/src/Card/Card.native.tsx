@@ -1,21 +1,16 @@
-import { forwardRef, useMemo, useEffect, useRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { View, Pressable } from 'react-native';
 import { CardProps } from './types';
 import { cardStyles } from './Card.styles';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
 
-// Track if we've logged the onClick deprecation warning (log once per session)
-let hasLoggedOnClickWarning = false;
-
 const Card = forwardRef<IdealystElement, CardProps>(({
   children,
   type = 'elevated',
   radius = 'md',
   intent: _intent = 'neutral',
-  clickable = false,
   onPress,
-  onClick,
   disabled = false,
   onLayout,
   // Spacing variants from ContainerStyleProps
@@ -38,21 +33,8 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   accessibilityRole,
   accessibilityPressed,
 }, ref) => {
-  const hasWarnedRef = useRef(false);
-
-  // Warn about onClick usage (deprecated)
-  useEffect(() => {
-    if (onClick && !hasWarnedRef.current && !hasLoggedOnClickWarning) {
-      hasWarnedRef.current = true;
-      hasLoggedOnClickWarning = true;
-      console.warn(
-        '[Card] onClick is deprecated. Use onPress instead.\n' +
-        'Card is a cross-platform component that follows React Native conventions.\n' +
-        'onClick will be removed in a future version.\n\n' +
-        'Migration: Replace onClick={handler} with onPress={handler}'
-      );
-    }
-  }, [onClick]);
+  // Derive pressable from whether onPress is provided
+  const pressable = !!onPress;
 
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
@@ -61,16 +43,16 @@ const Card = forwardRef<IdealystElement, CardProps>(({
       accessibilityHint,
       accessibilityDisabled: accessibilityDisabled ?? disabled,
       accessibilityHidden,
-      accessibilityRole: accessibilityRole ?? (clickable ? 'button' : 'none'),
+      accessibilityRole: accessibilityRole ?? (pressable ? 'button' : 'none'),
       accessibilityPressed,
     });
-  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, clickable, accessibilityPressed]);
+  }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole, pressable, accessibilityPressed]);
 
   // Apply variants
   cardStyles.useVariants({
     type,
     radius,
-    clickable,
+    pressable,
     disabled,
     background,
     gap,
@@ -85,11 +67,8 @@ const Card = forwardRef<IdealystElement, CardProps>(({
   // Get card style
   const cardStyle = (cardStyles.card as any)({});
 
-  // Use appropriate component based on clickable state
-  const Component = clickable ? Pressable : View;
-
-  // Prefer onPress, fall back to deprecated onClick
-  const pressHandler = onPress ?? onClick;
+  // Use appropriate component based on pressable state
+  const Component = pressable ? Pressable : View;
 
   const componentProps = {
     ref,
@@ -98,8 +77,8 @@ const Card = forwardRef<IdealystElement, CardProps>(({
     testID,
     onLayout,
     ...nativeA11yProps,
-    ...(clickable && {
-      onPress: disabled ? undefined : pressHandler,
+    ...(pressable && {
+      onPress: disabled ? undefined : onPress,
       disabled,
       android_ripple: { color: 'rgba(0, 0, 0, 0.1)' },
     }),

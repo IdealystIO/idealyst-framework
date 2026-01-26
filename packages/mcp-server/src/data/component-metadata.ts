@@ -142,15 +142,16 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
     category: 'layout',
     description: 'Container component for grouping related content with optional elevation and borders',
     features: [
-      'Multiple variants (default, outlined, elevated, filled)',
-      'Clickable mode with press feedback',
+      'Multiple type variants (outlined, elevated, filled)',
+      'Pressable when onPress is provided',
       'Customizable border radius',
       'Intent colors',
     ],
     bestPractices: [
       'Use for grouping related content',
       'Keep card content focused on a single topic',
-      "Use 'elevated' variant sparingly for emphasis",
+      "Use 'elevated' type sparingly for emphasis",
+      'Simply add onPress to make a card interactive',
     ],
   },
 
