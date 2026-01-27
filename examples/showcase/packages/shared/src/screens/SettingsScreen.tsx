@@ -78,7 +78,7 @@ export const SettingsScreen: React.FC = () => {
                   <Icon
                     name={isDarkMode ? 'moon-waning-crescent' : 'white-balance-sunny'}
                     size={22}
-                    color={isDarkMode ? '#a5b4fc' : '#f59e0b'}
+                    color={isDarkMode ? "primary" : "orange"}
                   />
                 </View>
                 <View style={{ flex: 1 }}>

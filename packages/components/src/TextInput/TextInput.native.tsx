@@ -86,6 +86,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   // Submit handling
   onSubmitEditing,
   returnKeyType = 'default',
+  textContentType,
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -183,6 +184,10 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     hasError,
   ]);
 
+  // Determine the textContentType for iOS AutoFill
+  // If explicitly provided, use that; otherwise default password fields to 'password'
+  const resolvedTextContentType = textContentType ?? (isSecureField ? 'password' : undefined);
+
   // Memoized TextInput props (everything except value/onChangeText)
   const textInputProps = useMemo(() => ({
     onPress: handlePress,
@@ -196,6 +201,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     onSubmitEditing: handleSubmitEditing,
     returnKeyType,
     placeholderTextColor: '#999999',
+    textContentType: resolvedTextContentType,
     ...nativeA11yProps,
   }), [
     handlePress,
@@ -209,6 +215,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     handleBlur,
     handleSubmitEditing,
     returnKeyType,
+    resolvedTextContentType,
     nativeA11yProps,
   ]);
 

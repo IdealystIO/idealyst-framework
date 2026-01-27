@@ -126,7 +126,7 @@ export const textAreaStyles = defineStyle('TextArea', (theme: Theme) => ({
             size: {
                 fontSize: theme.sizes.$textarea.fontSize,
                 padding: theme.sizes.$textarea.padding,
-                lineHeight: theme.sizes.$textarea.lineHeight,
+                lineHeight: 'auto',
             },
             autoGrow: {
                 true: {

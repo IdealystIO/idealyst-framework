@@ -15,6 +15,10 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   children,
   background = 'screen',
   safeArea = false,
+  safeAreaTop: _safeAreaTop,
+  safeAreaBottom: _safeAreaBottom,
+  safeAreaLeft: _safeAreaLeft,
+  safeAreaRight: _safeAreaRight,
   onLayout,
   // Spacing variants from ContainerStyleProps
   gap,

@@ -187,7 +187,7 @@ export const GraphQLDemoScreen: React.FC = () => {
                 radius="md"
                 style={{ flex: 1, alignItems: 'center' }}
               >
-                <Text typography="h4" intent="success">
+                <Text typography="h4">
                   {statsData.itemStats.completed}
                 </Text>
                 <Text typography="caption" color="secondary">
@@ -200,7 +200,7 @@ export const GraphQLDemoScreen: React.FC = () => {
                 radius="md"
                 style={{ flex: 1, alignItems: 'center' }}
               >
-                <Text typography="h4" intent="warning">
+                <Text typography="h4">
                   {statsData.itemStats.pending}
                 </Text>
                 <Text typography="caption" color="secondary">

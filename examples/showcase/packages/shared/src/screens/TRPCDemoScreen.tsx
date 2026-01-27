@@ -166,8 +166,8 @@ export const TRPCDemoScreen: React.FC = () => {
           >
             {echoQuery.data ? (
               <>
-                <Text typography="caption" color="secondary" numberOfLines={1}>Original: {echoQuery.data.original}</Text>
-                <Text typography="caption" color="secondary" numberOfLines={1}>Reversed: {echoQuery.data.reversed}</Text>
+                <Text typography="caption" color="secondary">Original: {echoQuery.data.original}</Text>
+                <Text typography="caption" color="secondary">Reversed: {echoQuery.data.reversed}</Text>
                 <Text typography="caption" color="secondary">Length: {echoQuery.data.length}</Text>
               </>
             ) : (
@@ -271,7 +271,7 @@ export const TRPCDemoScreen: React.FC = () => {
                     radius="md"
                     style={{ flex: 1, alignItems: 'center' }}
                   >
-                    <Text typography="h4" color="success">
+                    <Text typography="h4">
                       {statsQuery.data.completed}
                     </Text>
                     <Text typography="caption" color="secondary">
@@ -284,7 +284,7 @@ export const TRPCDemoScreen: React.FC = () => {
                     radius="md"
                     style={{ flex: 1, alignItems: 'center' }}
                   >
-                    <Text typography="h4" color="warning">
+                    <Text typography="h4">
                       {statsQuery.data.pending}
                     </Text>
                     <Text typography="caption" color="secondary">

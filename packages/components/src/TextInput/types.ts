@@ -24,6 +24,31 @@ export type TextInputMode = 'text' | 'email' | 'password' | 'number';
 export type ReturnKeyType = 'done' | 'go' | 'next' | 'search' | 'send' | 'default';
 
 /**
+ * Text content type for iOS AutoFill.
+ * Helps iOS identify the purpose of the field for password/credential autofill.
+ * @platform ios
+ */
+export type TextContentType =
+  | 'none'
+  | 'username'
+  | 'password'
+  | 'newPassword'
+  | 'oneTimeCode'
+  | 'emailAddress'
+  | 'name'
+  | 'givenName'
+  | 'familyName'
+  | 'telephoneNumber'
+  | 'streetAddressLine1'
+  | 'streetAddressLine2'
+  | 'addressCity'
+  | 'addressState'
+  | 'addressCityAndState'
+  | 'postalCode'
+  | 'countryName'
+  | 'creditCardNumber';
+
+/**
  * Single-line text input field with support for icons, validation states, and multiple visual styles.
  * Includes built-in password visibility toggle and platform-specific keyboard handling.
  *
@@ -159,6 +184,15 @@ export interface TextInputProps extends FormInputStyleProps, FormAccessibilityPr
    * @default 'default'
    */
   returnKeyType?: ReturnKeyType;
+
+  /**
+   * iOS AutoFill content type. Helps iOS identify the field purpose for
+   * password/credential autofill. Set to 'none' to disable autofill suggestions.
+   * For password fields, use 'password' for existing passwords or 'newPassword' for signup.
+   * Pair with a username field using 'username' or 'emailAddress' for best results.
+   * @platform ios
+   */
+  textContentType?: TextContentType;
 
   /**
    * Additional styles (platform-specific)

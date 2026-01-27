@@ -25,6 +25,9 @@ export * from './responsive';
 export * from './breakpoints';
 export * from './useResponsiveStyle';
 
+// Color scheme utilities
+export * from './colorScheme';
+
 // Style props hook (platform-specific via .native.ts)
 export { useStyleProps, type StyleProps } from './useStyleProps';
 

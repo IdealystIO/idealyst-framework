@@ -365,7 +365,7 @@ describe('ThemeBuilder', () => {
         });
     });
 
-    describe('individual size methods', () => {
+    describe('addSize and setSize', () => {
         it('should add a new button size variant', () => {
             const newSize = {
                 paddingVertical: 14,
@@ -377,7 +377,7 @@ describe('ThemeBuilder', () => {
             };
 
             const theme = createTheme()
-                .addButtonSize('2xl', newSize)
+                .addSize('button', '2xl', newSize)
                 .build();
 
             expect(theme.sizes.button['2xl']).toEqual(newSize);
@@ -402,8 +402,8 @@ describe('ThemeBuilder', () => {
             };
 
             const theme = createTheme()
-                .addButtonSize('md', originalSize)
-                .setButtonSize('md', updatedSize)
+                .addSize('button', 'md', originalSize)
+                .setSize('button', 'md', updatedSize)
                 .build();
 
             expect(theme.sizes.button.md).toEqual(updatedSize);
@@ -411,7 +411,7 @@ describe('ThemeBuilder', () => {
 
         it('should add multiple component size variants', () => {
             const theme = createTheme()
-                .addButtonSize('tiny', {
+                .addSize('button', 'tiny', {
                     paddingVertical: 2,
                     paddingHorizontal: 4,
                     minHeight: 20,
@@ -419,8 +419,8 @@ describe('ThemeBuilder', () => {
                     lineHeight: 12,
                     iconSize: 10,
                 })
-                .addIconButtonSize('tiny', { size: 20, iconSize: 12 })
-                .addInputSize('tiny', {
+                .addSize('iconButton', 'tiny', { size: 20, iconSize: 12 })
+                .addSize('input', 'tiny', {
                     height: 24,
                     paddingHorizontal: 4,
                     fontSize: 10,
@@ -432,6 +432,31 @@ describe('ThemeBuilder', () => {
             expect(theme.sizes.button.tiny).toBeDefined();
             expect(theme.sizes.iconButton.tiny).toBeDefined();
             expect(theme.sizes.input.tiny).toBeDefined();
+        });
+
+        it('should provide type safety for component-specific size values', () => {
+            // This test verifies that TypeScript enforces correct value types per component
+            const theme = createTheme()
+                .addSize('avatar', 'xl', { width: 80, height: 80, fontSize: 32 })
+                .addSize('switch', 'xl', {
+                    trackWidth: 60,
+                    trackHeight: 36,
+                    thumbSize: 32,
+                    thumbIconSize: 18,
+                    translateX: 24,
+                })
+                .addSize('slider', 'xl', {
+                    trackHeight: 8,
+                    thumbSize: 28,
+                    thumbIconSize: 16,
+                    markHeight: 12,
+                    labelFontSize: 16,
+                })
+                .build();
+
+            expect(theme.sizes.avatar.xl).toBeDefined();
+            expect(theme.sizes.switch.xl).toBeDefined();
+            expect(theme.sizes.slider.xl).toBeDefined();
         });
     });
 

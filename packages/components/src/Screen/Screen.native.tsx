@@ -10,6 +10,10 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   children,
   background = 'screen',
   safeArea = true,
+  safeAreaTop,
+  safeAreaBottom,
+  safeAreaLeft,
+  safeAreaRight,
   scrollable = true,
   avoidKeyboard = true,
   contentInset,
@@ -27,6 +31,12 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   id,
 }, ref) => {
   const insets = useSafeAreaInsets();
+
+  // Resolve safe area per edge: specific prop > general safeArea prop
+  const applySafeAreaTop = safeAreaTop ?? safeArea;
+  const applySafeAreaBottom = safeAreaBottom ?? safeArea;
+  const applySafeAreaLeft = safeAreaLeft ?? safeArea;
+  const applySafeAreaRight = safeAreaRight ?? safeArea;
 
   // Animated keyboard offset
   const keyboardOffset = useSharedValue(0);
@@ -82,22 +92,22 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   // Call styles as functions to get theme-reactive styles
   const screenStyle = (screenStyles.screen as any)({});
 
-  // Calculate safe area padding
-  const safeAreaStyle = safeArea ? {
-    paddingTop: insets.top,
-    paddingBottom: insets.bottom,
-    paddingLeft: insets.left,
-    paddingRight: insets.right,
-  } : undefined;
+  // Calculate safe area padding per edge
+  const safeAreaStyle = {
+    paddingTop: applySafeAreaTop ? insets.top : 0,
+    paddingBottom: applySafeAreaBottom ? insets.bottom : 0,
+    paddingLeft: applySafeAreaLeft ? insets.left : 0,
+    paddingRight: applySafeAreaRight ? insets.right : 0,
+  };
 
   if (scrollable) {
     // Content styles applied via View wrapper for Unistyles reactivity
     // (contentContainerStyle isn't reactive, only style prop is)
     const contentInsetStyle = contentInset ? {
-      paddingTop: (safeArea ? insets.top : 0) + (contentInset.top ?? 0),
-      paddingBottom: (safeArea ? insets.bottom : 0) + (contentInset.bottom ?? 0),
-      paddingLeft: (safeArea ? insets.left : 0) + (contentInset.left ?? 0),
-      paddingRight: (safeArea ? insets.right : 0) + (contentInset.right ?? 0),
+      paddingTop: safeAreaStyle.paddingTop + (contentInset.top ?? 0),
+      paddingBottom: safeAreaStyle.paddingBottom + (contentInset.bottom ?? 0),
+      paddingLeft: safeAreaStyle.paddingLeft + (contentInset.left ?? 0),
+      paddingRight: safeAreaStyle.paddingRight + (contentInset.right ?? 0),
     } : safeAreaStyle;
 
     return (

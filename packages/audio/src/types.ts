@@ -2,7 +2,7 @@
 // AUDIO CONFIGURATION
 // ============================================
 
-export type SampleRate = 8000 | 16000 | 22050 | 44100 | 48000;
+export type SampleRate = 8000 | 16000 | 22050 | 24000 | 44100 | 48000;
 export type BitDepth = 8 | 16 | 32;
 export type ChannelCount = 1 | 2;
 

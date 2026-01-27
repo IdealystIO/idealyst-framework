@@ -125,7 +125,7 @@ export const ProfileScreen: React.FC = () => {
                   justifyContent: 'center',
                 }}
               >
-                <Icon name="trophy" size={24} color="#f59e0b" />
+                <Icon name="trophy" size={24} color="orange" />
               </View>
               <Text typography="caption" weight="medium">
                 Top Contributor
@@ -146,7 +146,7 @@ export const ProfileScreen: React.FC = () => {
                   justifyContent: 'center',
                 }}
               >
-                <Icon name="star" size={24} color="#3b82f6" />
+                <Icon name="star" size={24} color="primary" />
               </View>
               <Text typography="caption" weight="medium">
                 Rising Star
@@ -167,7 +167,7 @@ export const ProfileScreen: React.FC = () => {
                   justifyContent: 'center',
                 }}
               >
-                <Icon name="rocket-launch" size={24} color="#22c55e" />
+                <Icon name="rocket-launch" size={24} color="success" />
               </View>
               <Text typography="caption" weight="medium">
                 Early Adopter

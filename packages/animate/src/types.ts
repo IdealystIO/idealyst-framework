@@ -59,37 +59,19 @@ export interface TransformObject {
   perspective?: number;
 }
 
-// Animatable properties (subset that can be animated smoothly)
+/**
+ * All animatable style properties.
+ * Includes properties from ViewStyle, TextStyle, and ImageStyle that can be animated.
+ */
 export interface AnimatableProperties {
-  // Opacity
+  // ============================================
+  // OPACITY (GPU accelerated)
+  // ============================================
   opacity?: number;
 
-  // Background
-  backgroundColor?: string;
-
-  // Border
-  borderColor?: string;
-  borderWidth?: number;
-  borderRadius?: number;
-  borderTopLeftRadius?: number;
-  borderTopRightRadius?: number;
-  borderBottomLeftRadius?: number;
-  borderBottomRightRadius?: number;
-
-  // Dimensions (use sparingly - triggers layout)
-  width?: number | string;
-  height?: number | string;
-  maxHeight?: number | string;
-  maxWidth?: number | string;
-  minHeight?: number | string;
-  minWidth?: number | string;
-
-  // Positioning (use sparingly - triggers layout)
-  top?: number | string;
-  right?: number | string;
-  bottom?: number | string;
-  left?: number | string;
-
+  // ============================================
+  // TRANSFORM (GPU accelerated - preferred)
+  // ============================================
   /**
    * Transform - preferred for performance (GPU accelerated).
    * Accepts either the new object syntax or legacy array format.
@@ -102,6 +84,128 @@ export interface AnimatableProperties {
    * transform: [{ translateX: 10 }, { translateY: 20 }, { scale: 1.2 }]
    */
   transform?: TransformObject | TransformProperty[];
+
+  // ============================================
+  // COLORS
+  // ============================================
+  backgroundColor?: string;
+  borderColor?: string;
+  borderTopColor?: string;
+  borderRightColor?: string;
+  borderBottomColor?: string;
+  borderLeftColor?: string;
+  borderStartColor?: string;
+  borderEndColor?: string;
+  color?: string;
+  textDecorationColor?: string;
+  textShadowColor?: string;
+  shadowColor?: string;
+  tintColor?: string;
+  overlayColor?: string;
+
+  // ============================================
+  // BORDER WIDTH
+  // ============================================
+  borderWidth?: number;
+  borderTopWidth?: number;
+  borderRightWidth?: number;
+  borderBottomWidth?: number;
+  borderLeftWidth?: number;
+  borderStartWidth?: number;
+  borderEndWidth?: number;
+
+  // ============================================
+  // BORDER RADIUS
+  // ============================================
+  borderRadius?: number;
+  borderTopLeftRadius?: number;
+  borderTopRightRadius?: number;
+  borderBottomLeftRadius?: number;
+  borderBottomRightRadius?: number;
+  borderTopStartRadius?: number;
+  borderTopEndRadius?: number;
+  borderBottomStartRadius?: number;
+  borderBottomEndRadius?: number;
+
+  // ============================================
+  // DIMENSIONS
+  // ============================================
+  width?: number | string;
+  height?: number | string;
+  minWidth?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  maxHeight?: number | string;
+
+  // ============================================
+  // POSITIONING
+  // ============================================
+  top?: number | string;
+  right?: number | string;
+  bottom?: number | string;
+  left?: number | string;
+  start?: number | string;
+  end?: number | string;
+
+  // ============================================
+  // MARGIN
+  // ============================================
+  margin?: number | string;
+  marginTop?: number | string;
+  marginRight?: number | string;
+  marginBottom?: number | string;
+  marginLeft?: number | string;
+  marginStart?: number | string;
+  marginEnd?: number | string;
+  marginHorizontal?: number | string;
+  marginVertical?: number | string;
+
+  // ============================================
+  // PADDING
+  // ============================================
+  padding?: number | string;
+  paddingTop?: number | string;
+  paddingRight?: number | string;
+  paddingBottom?: number | string;
+  paddingLeft?: number | string;
+  paddingStart?: number | string;
+  paddingEnd?: number | string;
+  paddingHorizontal?: number | string;
+  paddingVertical?: number | string;
+
+  // ============================================
+  // GAP (Flexbox)
+  // ============================================
+  gap?: number | string;
+  rowGap?: number | string;
+  columnGap?: number | string;
+
+  // ============================================
+  // FLEX
+  // ============================================
+  flex?: number;
+  flexGrow?: number;
+  flexShrink?: number;
+  flexBasis?: number | string;
+
+  // ============================================
+  // SHADOW (iOS)
+  // ============================================
+  shadowOpacity?: number;
+  shadowRadius?: number;
+
+  // ============================================
+  // TEXT
+  // ============================================
+  fontSize?: number;
+  letterSpacing?: number;
+  lineHeight?: number;
+  textShadowRadius?: number;
+
+  // ============================================
+  // IMAGE
+  // ============================================
+  resizeMode?: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center';
 }
 
 // Animation configuration

@@ -20,9 +20,34 @@ export interface ScreenProps extends ContainerStyleProps {
   background?: Surface | 'transparent';
 
   /**
-   * Safe area padding for mobile devices
+   * Safe area padding for all edges (lower precedence).
+   * Individual edge props (safeAreaTop, etc.) override this when set.
    */
   safeArea?: boolean;
+
+  /**
+   * Safe area padding for the top edge.
+   * Overrides safeArea for top when explicitly set.
+   */
+  safeAreaTop?: boolean;
+
+  /**
+   * Safe area padding for the bottom edge.
+   * Overrides safeArea for bottom when explicitly set.
+   */
+  safeAreaBottom?: boolean;
+
+  /**
+   * Safe area padding for the left edge.
+   * Overrides safeArea for left when explicitly set.
+   */
+  safeAreaLeft?: boolean;
+
+  /**
+   * Safe area padding for the right edge.
+   * Overrides safeArea for right when explicitly set.
+   */
+  safeAreaRight?: boolean;
 
   /**
    * Content inset padding for scrollable content (mobile only)

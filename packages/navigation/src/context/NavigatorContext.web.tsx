@@ -223,6 +223,7 @@ function getParentPath(path: string): string | null {
 
 export const NavigatorProvider = ({
     route,
+    floatingComponent,
 }: NavigatorProviderProps) => {
     const reactRouterNavigate = useNavigate();
     const location = useLocation();
@@ -319,6 +320,7 @@ export const NavigatorProvider = ({
             goBack,
         }}>
             <RouteComponent />
+            {floatingComponent}
         </NavigatorContext.Provider>
     );
 };

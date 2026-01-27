@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavigatorParam } from "../routing";
 
 /**
@@ -25,6 +26,13 @@ export type NavigateParams = {
 
 export type NavigatorProviderProps = {
     route: NavigatorParam;
+    /**
+     * Optional component to render alongside the route hierarchy.
+     * This component has access to the NavigatorContext (useNavigator hook)
+     * but is not tied to any specific screen.
+     * Useful for global floating UI like FABs, toasts, or audio players.
+     */
+    floatingComponent?: React.ReactNode;
     _overrideNavigation?: any; // Used in the drawer navigator which has to provide its own navigation object
 };
 

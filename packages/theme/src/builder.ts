@@ -33,6 +33,42 @@ import {
 } from './theme/structures';
 
 /**
+ * Mapping of component names to their size value types.
+ * Used for type-safe addSize/setSize methods.
+ */
+export type ComponentSizeMap = {
+    button: ButtonSizeValue;
+    iconButton: IconButtonSizeValue;
+    chip: ChipSizeValue;
+    badge: BadgeSizeValue;
+    icon: IconSizeValue;
+    input: InputSizeValue;
+    radioButton: RadioButtonSizeValue;
+    select: SelectSizeValue;
+    slider: SliderSizeValue;
+    switch: SwitchSizeValue;
+    textarea: TextAreaSizeValue;
+    avatar: AvatarSizeValue;
+    progress: ProgressSizeValue;
+    accordion: AccordionSizeValue;
+    activityIndicator: ActivityIndicatorSizeValue;
+    alert: AlertSizeValue;
+    breadcrumb: BreadcrumbSizeValue;
+    list: ListSizeValue;
+    menu: MenuSizeValue;
+    text: TextSizeValue;
+    tabBar: TabBarSizeValue;
+    table: TableSizeValue;
+    tooltip: TooltipSizeValue;
+    view: ViewSizeValue;
+};
+
+/**
+ * Valid component names for size methods.
+ */
+export type SizeableComponent = keyof ComponentSizeMap;
+
+/**
  * Built theme structure - self-contained, no external type dependencies.
  */
 export type BuiltTheme<
@@ -113,6 +149,7 @@ type ThemeConfig<
  *   .addIntent('brand', { primary: '#6366f1', contrast: '#fff', light: '#818cf8', dark: '#4f46e5' })
  *   .addRadius('sm', 4)
  *   .addRadius('full', 9999)
+ *   .addSize('button', '2xl', { paddingVertical: 14, paddingHorizontal: 28, ... })
  *   .build();
  *
  * // Register the theme type
@@ -155,6 +192,10 @@ export class ThemeBuilder<
         };
     }
 
+    // =========================================================================
+    // Intent Methods
+    // =========================================================================
+
     /**
      * Add a custom intent to the theme.
      */
@@ -191,6 +232,10 @@ export class ThemeBuilder<
         };
         return newBuilder;
     }
+
+    // =========================================================================
+    // Radius Methods
+    // =========================================================================
 
     /**
      * Add a custom border radius value.
@@ -229,6 +274,10 @@ export class ThemeBuilder<
         return newBuilder;
     }
 
+    // =========================================================================
+    // Shadow Methods
+    // =========================================================================
+
     /**
      * Add a custom shadow value.
      */
@@ -266,6 +315,10 @@ export class ThemeBuilder<
         return newBuilder;
     }
 
+    // =========================================================================
+    // Interaction Methods
+    // =========================================================================
+
     /**
      * Set the interaction configuration.
      */
@@ -279,6 +332,46 @@ export class ThemeBuilder<
         };
         return newBuilder;
     }
+
+    /**
+     * Update specific interaction properties without replacing the entire config.
+     * Use this to modify individual opacity values or focus styles.
+     *
+     * @example
+     * ```typescript
+     * fromTheme(lightTheme)
+     *   .updateInteraction({ opacity: { disabled: 0.3 } })
+     *   .build();
+     * ```
+     */
+    updateInteraction(
+        partial: {
+            focusedBackground?: string;
+            focusBorder?: string;
+            opacity?: Partial<InteractionConfig['opacity']>;
+        }
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
+        const currentInteraction = this.config.interaction ?? {} as InteractionConfig;
+        const currentOpacity = currentInteraction.opacity ?? { hover: 0.9, active: 0.75, disabled: 0.5 };
+
+        newBuilder.config = {
+            ...this.config,
+            interaction: {
+                focusedBackground: partial.focusedBackground ?? currentInteraction.focusedBackground,
+                focusBorder: partial.focusBorder ?? currentInteraction.focusBorder,
+                opacity: {
+                    ...currentOpacity,
+                    ...partial.opacity,
+                },
+            },
+        };
+        return newBuilder;
+    }
+
+    // =========================================================================
+    // Color Methods
+    // =========================================================================
 
     /**
      * Set the colors configuration.
@@ -478,8 +571,12 @@ export class ThemeBuilder<
         return newBuilder;
     }
 
+    // =========================================================================
+    // Size Methods
+    // =========================================================================
+
     /**
-     * Set the sizes configuration.
+     * Set all sizes at once.
      */
     setSizes<S extends string>(sizes: {
         button: Record<S, ButtonSizeValue>;
@@ -516,26 +613,47 @@ export class ThemeBuilder<
         return newBuilder;
     }
 
-    // =========================================================================
-    // Individual Size Methods - Add new size variants
-    // =========================================================================
-
     /**
-     * Add a new size variant for button component.
-     * @param name - The size name (e.g., '2xl', 'compact')
-     * @param value - The size values
+     * Add a new size variant for a specific component.
+     * This adds the size to all components in the theme.
+     *
+     * @param component - The component type (e.g., 'button', 'input', 'avatar')
+     * @param name - The size name (e.g., '2xl', 'compact', 'tiny')
+     * @param value - The size values for that component
+     *
+     * @example
+     * ```typescript
+     * createTheme()
+     *   .addSize('button', '2xl', {
+     *     paddingVertical: 14,
+     *     paddingHorizontal: 28,
+     *     minHeight: 64,
+     *     fontSize: 22,
+     *     lineHeight: 36,
+     *     iconSize: 22,
+     *   })
+     *   .addSize('input', '2xl', {
+     *     height: 64,
+     *     paddingHorizontal: 20,
+     *     fontSize: 18,
+     *     iconSize: 24,
+     *     iconMargin: 12,
+     *   })
+     *   .build();
+     * ```
      */
-    addButtonSize<K extends string>(
+    addSize<C extends SizeableComponent, K extends string>(
+        component: C,
         name: K,
-        value: ButtonSizeValue
+        value: ComponentSizeMap[C]
     ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
         const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             sizes: {
                 ...this.config.sizes,
-                button: {
-                    ...(this.config.sizes?.button ?? {}),
+                [component]: {
+                    ...((this.config.sizes as any)?.[component] ?? {}),
                     [name]: value,
                 },
             } as any,
@@ -544,985 +662,39 @@ export class ThemeBuilder<
     }
 
     /**
-     * Set (replace) an existing button size variant.
+     * Set (replace) an existing size variant for a specific component.
+     * Use this to override a size inherited from a base theme.
+     *
+     * @param component - The component type (e.g., 'button', 'input', 'avatar')
+     * @param name - The existing size name to override
+     * @param value - The new size values for that component
+     *
+     * @example
+     * ```typescript
+     * fromTheme(lightTheme)
+     *   .setSize('button', 'md', {
+     *     paddingVertical: 10,
+     *     paddingHorizontal: 20,
+     *     minHeight: 44,
+     *     fontSize: 18,
+     *     lineHeight: 28,
+     *     iconSize: 18,
+     *   })
+     *   .build();
+     * ```
      */
-    setButtonSize<K extends TSize>(
+    setSize<C extends SizeableComponent, K extends TSize>(
+        component: C,
         name: K,
-        value: ButtonSizeValue
+        value: ComponentSizeMap[C]
     ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
         const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             sizes: {
                 ...this.config.sizes,
-                button: {
-                    ...(this.config.sizes?.button ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for iconButton component.
-     */
-    addIconButtonSize<K extends string>(
-        name: K,
-        value: IconButtonSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                iconButton: {
-                    ...(this.config.sizes?.iconButton ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing iconButton size variant.
-     */
-    setIconButtonSize<K extends TSize>(
-        name: K,
-        value: IconButtonSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                iconButton: {
-                    ...(this.config.sizes?.iconButton ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for chip component.
-     */
-    addChipSize<K extends string>(
-        name: K,
-        value: ChipSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                chip: {
-                    ...(this.config.sizes?.chip ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing chip size variant.
-     */
-    setChipSize<K extends TSize>(
-        name: K,
-        value: ChipSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                chip: {
-                    ...(this.config.sizes?.chip ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for badge component.
-     */
-    addBadgeSize<K extends string>(
-        name: K,
-        value: BadgeSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                badge: {
-                    ...(this.config.sizes?.badge ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing badge size variant.
-     */
-    setBadgeSize<K extends TSize>(
-        name: K,
-        value: BadgeSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                badge: {
-                    ...(this.config.sizes?.badge ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for icon component.
-     */
-    addIconSize<K extends string>(
-        name: K,
-        value: IconSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                icon: {
-                    ...(this.config.sizes?.icon ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing icon size variant.
-     */
-    setIconSize<K extends TSize>(
-        name: K,
-        value: IconSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                icon: {
-                    ...(this.config.sizes?.icon ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for input component.
-     */
-    addInputSize<K extends string>(
-        name: K,
-        value: InputSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                input: {
-                    ...(this.config.sizes?.input ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing input size variant.
-     */
-    setInputSize<K extends TSize>(
-        name: K,
-        value: InputSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                input: {
-                    ...(this.config.sizes?.input ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for radioButton component.
-     */
-    addRadioButtonSize<K extends string>(
-        name: K,
-        value: RadioButtonSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                radioButton: {
-                    ...(this.config.sizes?.radioButton ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing radioButton size variant.
-     */
-    setRadioButtonSize<K extends TSize>(
-        name: K,
-        value: RadioButtonSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                radioButton: {
-                    ...(this.config.sizes?.radioButton ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for select component.
-     */
-    addSelectSize<K extends string>(
-        name: K,
-        value: SelectSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                select: {
-                    ...(this.config.sizes?.select ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing select size variant.
-     */
-    setSelectSize<K extends TSize>(
-        name: K,
-        value: SelectSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                select: {
-                    ...(this.config.sizes?.select ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for slider component.
-     */
-    addSliderSize<K extends string>(
-        name: K,
-        value: SliderSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                slider: {
-                    ...(this.config.sizes?.slider ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing slider size variant.
-     */
-    setSliderSize<K extends TSize>(
-        name: K,
-        value: SliderSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                slider: {
-                    ...(this.config.sizes?.slider ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for switch component.
-     */
-    addSwitchSize<K extends string>(
-        name: K,
-        value: SwitchSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                switch: {
-                    ...(this.config.sizes?.switch ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing switch size variant.
-     */
-    setSwitchSize<K extends TSize>(
-        name: K,
-        value: SwitchSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                switch: {
-                    ...(this.config.sizes?.switch ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for textarea component.
-     */
-    addTextAreaSize<K extends string>(
-        name: K,
-        value: TextAreaSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                textarea: {
-                    ...(this.config.sizes?.textarea ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing textarea size variant.
-     */
-    setTextAreaSize<K extends TSize>(
-        name: K,
-        value: TextAreaSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                textarea: {
-                    ...(this.config.sizes?.textarea ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for avatar component.
-     */
-    addAvatarSize<K extends string>(
-        name: K,
-        value: AvatarSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                avatar: {
-                    ...(this.config.sizes?.avatar ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing avatar size variant.
-     */
-    setAvatarSize<K extends TSize>(
-        name: K,
-        value: AvatarSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                avatar: {
-                    ...(this.config.sizes?.avatar ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for progress component.
-     */
-    addProgressSize<K extends string>(
-        name: K,
-        value: ProgressSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                progress: {
-                    ...(this.config.sizes?.progress ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing progress size variant.
-     */
-    setProgressSize<K extends TSize>(
-        name: K,
-        value: ProgressSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                progress: {
-                    ...(this.config.sizes?.progress ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for accordion component.
-     */
-    addAccordionSize<K extends string>(
-        name: K,
-        value: AccordionSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                accordion: {
-                    ...(this.config.sizes?.accordion ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing accordion size variant.
-     */
-    setAccordionSize<K extends TSize>(
-        name: K,
-        value: AccordionSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                accordion: {
-                    ...(this.config.sizes?.accordion ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for activityIndicator component.
-     */
-    addActivityIndicatorSize<K extends string>(
-        name: K,
-        value: ActivityIndicatorSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                activityIndicator: {
-                    ...(this.config.sizes?.activityIndicator ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing activityIndicator size variant.
-     */
-    setActivityIndicatorSize<K extends TSize>(
-        name: K,
-        value: ActivityIndicatorSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                activityIndicator: {
-                    ...(this.config.sizes?.activityIndicator ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for alert component.
-     */
-    addAlertSize<K extends string>(
-        name: K,
-        value: AlertSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                alert: {
-                    ...(this.config.sizes?.alert ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing alert size variant.
-     */
-    setAlertSize<K extends TSize>(
-        name: K,
-        value: AlertSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                alert: {
-                    ...(this.config.sizes?.alert ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for breadcrumb component.
-     */
-    addBreadcrumbSize<K extends string>(
-        name: K,
-        value: BreadcrumbSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                breadcrumb: {
-                    ...(this.config.sizes?.breadcrumb ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing breadcrumb size variant.
-     */
-    setBreadcrumbSize<K extends TSize>(
-        name: K,
-        value: BreadcrumbSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                breadcrumb: {
-                    ...(this.config.sizes?.breadcrumb ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for list component.
-     */
-    addListSize<K extends string>(
-        name: K,
-        value: ListSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                list: {
-                    ...(this.config.sizes?.list ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing list size variant.
-     */
-    setListSize<K extends TSize>(
-        name: K,
-        value: ListSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                list: {
-                    ...(this.config.sizes?.list ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for menu component.
-     */
-    addMenuSize<K extends string>(
-        name: K,
-        value: MenuSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                menu: {
-                    ...(this.config.sizes?.menu ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing menu size variant.
-     */
-    setMenuSize<K extends TSize>(
-        name: K,
-        value: MenuSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                menu: {
-                    ...(this.config.sizes?.menu ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for text component.
-     */
-    addTextSize<K extends string>(
-        name: K,
-        value: TextSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                text: {
-                    ...(this.config.sizes?.text ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing text size variant.
-     */
-    setTextSize<K extends TSize>(
-        name: K,
-        value: TextSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                text: {
-                    ...(this.config.sizes?.text ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for tabBar component.
-     */
-    addTabBarSize<K extends string>(
-        name: K,
-        value: TabBarSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                tabBar: {
-                    ...(this.config.sizes?.tabBar ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing tabBar size variant.
-     */
-    setTabBarSize<K extends TSize>(
-        name: K,
-        value: TabBarSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                tabBar: {
-                    ...(this.config.sizes?.tabBar ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for table component.
-     */
-    addTableSize<K extends string>(
-        name: K,
-        value: TableSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                table: {
-                    ...(this.config.sizes?.table ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing table size variant.
-     */
-    setTableSize<K extends TSize>(
-        name: K,
-        value: TableSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                table: {
-                    ...(this.config.sizes?.table ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for tooltip component.
-     */
-    addTooltipSize<K extends string>(
-        name: K,
-        value: TooltipSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                tooltip: {
-                    ...(this.config.sizes?.tooltip ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing tooltip size variant.
-     */
-    setTooltipSize<K extends TSize>(
-        name: K,
-        value: TooltipSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                tooltip: {
-                    ...(this.config.sizes?.tooltip ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Add a new size variant for view component.
-     */
-    addViewSize<K extends string>(
-        name: K,
-        value: ViewSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize | K, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                view: {
-                    ...(this.config.sizes?.view ?? {}),
-                    [name]: value,
-                },
-            } as any,
-        };
-        return newBuilder;
-    }
-
-    /**
-     * Set (replace) an existing view size variant.
-     */
-    setViewSize<K extends TSize>(
-        name: K,
-        value: ViewSizeValue
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            sizes: {
-                ...this.config.sizes,
-                view: {
-                    ...(this.config.sizes?.view ?? {}),
+                [component]: {
+                    ...((this.config.sizes as any)?.[component] ?? {}),
                     [name]: value,
                 },
             } as any,
@@ -1535,9 +707,15 @@ export class ThemeBuilder<
     // =========================================================================
 
     /**
-     * Add a new typography variant to the theme.
-     * Note: Typography variants use a fixed set of names (h1-h6, subtitle1-2, body1-2, caption).
-     * Use setTypography to modify existing variants.
+     * Set (replace) a typography variant in the theme.
+     * Typography variants use a fixed set of names (h1-h6, subtitle1-2, body1-2, caption).
+     *
+     * @example
+     * ```typescript
+     * fromTheme(lightTheme)
+     *   .setTypography('h1', { fontSize: 40, lineHeight: 48, fontWeight: '700' })
+     *   .build();
+     * ```
      */
     setTypography<K extends Typography>(
         name: K,
@@ -1558,74 +736,8 @@ export class ThemeBuilder<
     }
 
     // =========================================================================
-    // Interaction Methods
-    // =========================================================================
-
-    /**
-     * Update specific interaction properties without replacing the entire config.
-     * Use this to modify individual opacity values or focus styles.
-     *
-     * @example
-     * ```typescript
-     * fromTheme(lightTheme)
-     *   .updateInteraction({ opacity: { disabled: 0.3 } })
-     *   .build();
-     * ```
-     */
-    updateInteraction(
-        partial: {
-            focusedBackground?: string;
-            focusBorder?: string;
-            opacity?: Partial<InteractionConfig['opacity']>;
-        }
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        const currentInteraction = this.config.interaction ?? {} as InteractionConfig;
-        const currentOpacity = currentInteraction.opacity ?? { hover: 0.9, active: 0.75, disabled: 0.5 };
-
-        newBuilder.config = {
-            ...this.config,
-            interaction: {
-                focusedBackground: partial.focusedBackground ?? currentInteraction.focusedBackground,
-                focusBorder: partial.focusBorder ?? currentInteraction.focusBorder,
-                opacity: {
-                    ...currentOpacity,
-                    ...partial.opacity,
-                },
-            },
-        };
-        return newBuilder;
-    }
-
-    // =========================================================================
     // Breakpoint Methods
     // =========================================================================
-
-    /**
-     * Set (replace) an existing breakpoint value.
-     * Use this to override a breakpoint inherited from a base theme.
-     *
-     * @example
-     * ```typescript
-     * fromTheme(lightTheme)
-     *   .setBreakpoint('md', 800) // Change md breakpoint from 768 to 800
-     *   .build();
-     * ```
-     */
-    setBreakpoint<K extends TBreakpoints>(
-        name: K,
-        value: number
-    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
-        newBuilder.config = {
-            ...this.config,
-            breakpoints: {
-                ...this.config.breakpoints,
-                [name]: value,
-            } as any,
-        };
-        return newBuilder;
-    }
 
     /**
      * Add a single breakpoint to the theme.
@@ -1650,6 +762,32 @@ export class ThemeBuilder<
         value: number
     ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints | K> {
         const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints | K>();
+        newBuilder.config = {
+            ...this.config,
+            breakpoints: {
+                ...this.config.breakpoints,
+                [name]: value,
+            } as any,
+        };
+        return newBuilder;
+    }
+
+    /**
+     * Set (replace) an existing breakpoint value.
+     * Use this to override a breakpoint inherited from a base theme.
+     *
+     * @example
+     * ```typescript
+     * fromTheme(lightTheme)
+     *   .setBreakpoint('md', 800) // Change md breakpoint from 768 to 800
+     *   .build();
+     * ```
+     */
+    setBreakpoint<K extends TBreakpoints>(
+        name: K,
+        value: number
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
         newBuilder.config = {
             ...this.config,
             breakpoints: {
@@ -1691,6 +829,10 @@ export class ThemeBuilder<
         } as any;
         return newBuilder;
     }
+
+    // =========================================================================
+    // Build
+    // =========================================================================
 
     /**
      * Build the final theme object.
