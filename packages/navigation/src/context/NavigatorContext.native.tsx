@@ -204,7 +204,7 @@ const parseParameterizedPath = (path: string, rootRoute: any): { routeName: stri
     return null;
 };
 
-const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
+const UnwrappedNavigatorProvider = ({ route, floatingComponent }: NavigatorProviderProps) => {
 
     const navigation = useNavigation();
 
@@ -257,7 +257,7 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
 
             // Navigate to 404 screen if configured
             if (route.notFoundComponent) {
-                navigation.navigate(NOT_FOUND_SCREEN_NAME as never, {
+                (navigation.navigate as any)(NOT_FOUND_SCREEN_NAME as never, {
                     path: normalizedPath,
                 } as never);
                 return;
@@ -281,7 +281,8 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
             );
         } else {
             // Navigate to the pattern route with extracted parameters
-            navigation.navigate(parsed.routeName as never, navigationParams as never);
+            // TODO - investigate why we can't pass the second argument directly
+            (navigation.navigate as any)(parsed.routeName as never, navigationParams as never);
         }
     };
 
@@ -331,18 +332,19 @@ const UnwrappedNavigatorProvider = ({ route }: NavigatorProviderProps) => {
             goBack,
         }}>
             <RouteComponent />
+            {floatingComponent}
         </NavigatorContext.Provider>
     )
 };
 
-const NavigatorProvider = ({ route }: NavigatorProviderProps) => {
+const NavigatorProvider = ({ route, floatingComponent }: NavigatorProviderProps) => {
     const {rt} = useUnistyles()
 
     const isDarkMode = rt.themeName === 'dark';
 
     return (
         <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
-            <UnwrappedNavigatorProvider route={route} />
+            <UnwrappedNavigatorProvider route={route} floatingComponent={floatingComponent} />
         </NavigationContainer>
     )
 };

@@ -30,6 +30,7 @@ program
   .option('--with-graphql', 'Enable GraphQL (requires --with-api)')
   .option('--with-devcontainer', 'Enable devcontainer setup (Docker, PostgreSQL, Redis, Claude Code)')
   .option('--current-dir', 'Initialize in current directory instead of creating a new folder')
+  .option('--blank', 'Create a minimal Hello World app instead of the showcase app')
   .option('--no-interactive', 'Disable interactive mode (requires all options)')
   .option('--skip-install', 'Skip dependency installation')
   .action(initCommand);

@@ -220,13 +220,23 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
 
   const showFooter = (error || helperText) || (showCharacterCount && maxLength);
 
+  // Determine overflow behavior:
+  // - When autoGrow is false: always allow scrolling (overflowY: 'auto')
+  // - When autoGrow is true without maxHeight: hide overflow (content expands)
+  // - When autoGrow is true with maxHeight: allow scrolling when content exceeds maxHeight
+  const overflowStyle = !autoGrow
+    ? { overflowY: 'auto' as const }
+    : maxHeight
+      ? { overflowY: 'auto' as const }
+      : { overflowY: 'hidden' as const };
+
   const computedTextareaProps = getWebProps([
     textareaStyleComputed,
     textareaStyle as any,
     { resize } as any, // Apply resize as inline style since it's CSS-only
     minHeight ? { minHeight: `${minHeight}px` } : null,
     maxHeight ? { maxHeight: `${maxHeight}px` } : null,
-    autoGrow && maxHeight && textareaRef.current && textareaRef.current.scrollHeight > maxHeight ? { overflowY: 'auto' as const } : null,
+    overflowStyle,
   ].filter(Boolean));
 
   const mergedRef = useMergeRefs(ref, containerProps.ref);

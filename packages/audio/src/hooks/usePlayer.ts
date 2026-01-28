@@ -104,6 +104,14 @@ export function usePlayer(options: UsePlayerOptions = {}): UsePlayerResult {
     }
   }, []);
 
+  // Clear buffer (immediately stops all buffered/scheduled audio)
+  const clearBuffer = useCallback(() => {
+    const player = playerRef.current;
+    if (player) {
+      player.clearBuffer();
+    }
+  }, []);
+
   // Play
   const play = useCallback(async () => {
     const player = getPlayer();
@@ -233,6 +241,7 @@ export function usePlayer(options: UsePlayerOptions = {}): UsePlayerResult {
     loadPCMStream,
     feedPCMData,
     flush,
+    clearBuffer,
 
     // Playback control
     play,

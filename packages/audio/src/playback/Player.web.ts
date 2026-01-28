@@ -43,6 +43,7 @@ export class WebPlayer implements IPlayer {
   private isStreaming: boolean = false;
   private streamScheduleInterval: ReturnType<typeof setInterval> | null = null;
   private nextScheduleTime: number = 0;
+  private scheduledSources: AudioBufferSourceNode[] = [];
 
   // Position tracking
   private positionIntervalId: ReturnType<typeof setInterval> | null = null;
@@ -185,6 +186,24 @@ export class WebPlayer implements IPlayer {
         checkBuffer();
       });
     }
+  }
+
+  clearBuffer(): void {
+    // Clear pending PCM chunks
+    this.pcmBuffer = [];
+
+    // Stop all scheduled sources that haven't finished playing
+    this.stopScheduledSources();
+
+    // Reset schedule time to now so new audio plays immediately
+    const ctx = this.audioContext.getContext() as AudioContext;
+    if (ctx) {
+      this.nextScheduleTime = ctx.currentTime;
+    }
+
+    // Update buffer status
+    this._status.buffered = 0;
+    this.notifyBufferChange(0);
   }
 
   async play(): Promise<void> {
@@ -368,6 +387,15 @@ export class WebPlayer implements IPlayer {
     source.buffer = audioBuffer;
     source.connect(this.gainNode);
 
+    // Track this source so we can stop it on clearBuffer()
+    this.scheduledSources.push(source);
+    source.onended = () => {
+      const idx = this.scheduledSources.indexOf(source);
+      if (idx !== -1) {
+        this.scheduledSources.splice(idx, 1);
+      }
+    };
+
     const scheduleTime = Math.max(this.nextScheduleTime, ctx.currentTime);
     source.start(scheduleTime);
 
@@ -413,7 +441,20 @@ export class WebPlayer implements IPlayer {
     this.stopPositionTracking();
     this.stopStreamScheduler();
     this.stopSourceNode();
+    this.stopScheduledSources();
     this.isStreaming = false;
+  }
+
+  private stopScheduledSources(): void {
+    for (const source of this.scheduledSources) {
+      try {
+        source.stop();
+        source.disconnect();
+      } catch {
+        // Ignore errors
+      }
+    }
+    this.scheduledSources = [];
   }
 
   private updateState(state: PlayerState): void {

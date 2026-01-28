@@ -25,6 +25,13 @@ export async function generateSharedPackage(
   // Always generate config files programmatically (package.json, tsconfig, etc.)
   await generateSharedConfigFiles(sharedDir, data);
 
+  // If --blank flag is set, use the minimal Hello World generation
+  if (data.isBlank) {
+    logger.dim('Creating minimal Hello World app');
+    await generateSharedSrcFiles(sharedDir, data);
+    return { success: true };
+  }
+
   // Try to use template src/ files first, or generate programmatically
   const templateSrcPath = getTemplatePath('core', 'shared', 'src');
 

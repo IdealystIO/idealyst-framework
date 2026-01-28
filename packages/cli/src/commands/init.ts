@@ -25,6 +25,7 @@ export interface InitOptions {
   withGraphql?: boolean;
   withDevcontainer?: boolean;
   currentDir?: boolean; // Initialize in current directory instead of creating a new folder
+  blank?: boolean; // Create a minimal Hello World app instead of showcase
   interactive?: boolean; // Commander converts --no-interactive to interactive: false
   skipInstall?: boolean;
 }
@@ -46,6 +47,7 @@ export async function initCommand(
       withTrpc: options.withTrpc,
       withGraphql: options.withGraphql,
       withDevcontainer: options.withDevcontainer,
+      blank: options.blank,
       noInteractive: options.interactive === false,
       skipInstall: options.skipInstall,
       directory: options.directory,
@@ -96,6 +98,7 @@ export async function initCommand(
         useCurrentDir: options.currentDir ?? false,
         skipInstall: args.skipInstall ?? false,
         isInteractive: false,
+        blank: args.blank ?? false,
       };
     } else {
       // Interactive wizard mode

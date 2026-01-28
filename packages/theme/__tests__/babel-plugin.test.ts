@@ -112,10 +112,10 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('neutral: {');
       expect(output).toContain('info: {');
 
-      // Should have correct theme references
-      expect(output).toContain('theme.intents.primary.primary');
-      expect(output).toContain('theme.intents.success.primary');
-      expect(output).toContain('theme.intents.danger.primary');
+      // Should have correct theme references (with optional chaining)
+      expect(output).toContain('theme?.intents?.primary?.primary');
+      expect(output).toContain('theme?.intents?.success?.primary');
+      expect(output).toContain('theme?.intents?.danger?.primary');
     });
 
     it('should expand theme.$intents.contrast correctly', () => {
@@ -136,8 +136,8 @@ describe('Idealyst Babel Plugin', () => {
 
       const output = transform(input);
 
-      expect(output).toContain('theme.intents.primary.contrast');
-      expect(output).toContain('theme.intents.success.contrast');
+      expect(output).toContain('theme?.intents?.primary?.contrast');
+      expect(output).toContain('theme?.intents?.success?.contrast');
     });
 
     it('should expand theme.$intents.light correctly', () => {
@@ -158,8 +158,8 @@ describe('Idealyst Babel Plugin', () => {
 
       const output = transform(input);
 
-      expect(output).toContain('theme.intents.primary.light');
-      expect(output).toContain('theme.intents.warning.light');
+      expect(output).toContain('theme?.intents?.primary?.light');
+      expect(output).toContain('theme?.intents?.warning?.light');
     });
   });
 
@@ -190,10 +190,10 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('lg: {');
       expect(output).toContain('xl: {');
 
-      // Should have correct theme references
-      expect(output).toContain('theme.sizes.button.xs.paddingVertical');
-      expect(output).toContain('theme.sizes.button.md.paddingHorizontal');
-      expect(output).toContain('theme.sizes.button.xl.paddingVertical');
+      // Should have correct theme references (with optional chaining)
+      expect(output).toContain('theme?.sizes?.button?.xs?.paddingVertical');
+      expect(output).toContain('theme?.sizes?.button?.md?.paddingHorizontal');
+      expect(output).toContain('theme?.sizes?.button?.xl?.paddingVertical');
     });
 
     it('should expand theme.sizes.$alert for alert component', () => {
@@ -221,10 +221,10 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('md: {');
       expect(output).toContain('xl: {');
 
-      // Should have correct theme references
-      expect(output).toContain('theme.sizes.alert.xs.gap');
-      expect(output).toContain('theme.sizes.alert.md.padding');
-      expect(output).toContain('theme.sizes.alert.lg.borderRadius');
+      // Should have correct theme references (with optional chaining)
+      expect(output).toContain('theme?.sizes?.alert?.xs?.gap');
+      expect(output).toContain('theme?.sizes?.alert?.md?.padding');
+      expect(output).toContain('theme?.sizes?.alert?.lg?.borderRadius');
     });
   });
 
@@ -254,9 +254,9 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('body1: {');
       expect(output).toContain('caption: {');
 
-      // Should have correct theme references
-      expect(output).toContain('theme.sizes.typography.h1.fontSize');
-      expect(output).toContain('theme.sizes.typography.body1.lineHeight');
+      // Should have correct theme references (with optional chaining)
+      expect(output).toContain('theme?.sizes?.typography?.h1?.fontSize');
+      expect(output).toContain('theme?.sizes?.typography?.body1?.lineHeight');
     });
   });
 
@@ -298,9 +298,9 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('intent: "success"');
       expect(output).toContain('intent: "danger"');
 
-      // Check correct theme references in expanded styles
-      expect(output).toContain('theme.intents.primary.primary');
-      expect(output).toContain('theme.intents.success.primary');
+      // Check correct theme references in expanded styles (with optional chaining)
+      expect(output).toContain('theme?.intents?.primary?.primary');
+      expect(output).toContain('theme?.intents?.success?.primary');
     });
 
     it('should expand $intents.contrast in compoundVariants', () => {
@@ -329,9 +329,9 @@ describe('Idealyst Babel Plugin', () => {
 
       const output = transform(input);
 
-      // Should expand and use .contrast accessor
-      expect(output).toContain('theme.intents.primary.contrast');
-      expect(output).toContain('theme.intents.danger.contrast');
+      // Should expand and use .contrast accessor (with optional chaining)
+      expect(output).toContain('theme?.intents?.primary?.contrast');
+      expect(output).toContain('theme?.intents?.danger?.contrast');
     });
 
     it('should preserve non-iterator compound variants unchanged', () => {
@@ -389,11 +389,11 @@ describe('Idealyst Babel Plugin', () => {
 
       const output = transform(input);
 
-      // Both should be expanded
-      expect(output).toContain('theme.intents.primary.primary');
-      expect(output).toContain('theme.intents.success.primary');
-      expect(output).toContain('theme.sizes.button.xs.paddingVertical');
-      expect(output).toContain('theme.sizes.button.lg.paddingVertical');
+      // Both should be expanded (with optional chaining)
+      expect(output).toContain('theme?.intents?.primary?.primary');
+      expect(output).toContain('theme?.intents?.success?.primary');
+      expect(output).toContain('theme?.sizes?.button?.xs?.paddingVertical');
+      expect(output).toContain('theme?.sizes?.button?.lg?.paddingVertical');
     });
   });
 
@@ -418,9 +418,9 @@ describe('Idealyst Babel Plugin', () => {
 
       const output = transform(input);
 
-      // Should still expand within the arrow function
-      expect(output).toContain('theme.sizes.button.xs.paddingVertical');
-      expect(output).toContain('theme.sizes.button.md.paddingVertical');
+      // Should still expand within the arrow function (with optional chaining)
+      expect(output).toContain('theme?.sizes?.button?.xs?.paddingVertical');
+      expect(output).toContain('theme?.sizes?.button?.md?.paddingVertical');
     });
   });
 
@@ -472,10 +472,10 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('tertiary: {');
       expect(output).toContain('inverse: {');
 
-      // Should have correct theme references
-      expect(output).toContain('theme.colors.surface.screen');
-      expect(output).toContain('theme.colors.surface.primary');
-      expect(output).toContain('theme.colors.surface.inverse');
+      // Should have correct theme references (with optional chaining)
+      expect(output).toContain('theme?.colors?.surface?.screen');
+      expect(output).toContain('theme?.colors?.surface?.primary');
+      expect(output).toContain('theme?.colors?.surface?.inverse');
     });
   });
 
@@ -504,10 +504,10 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('tertiary: {');
       expect(output).toContain('inverse: {');
 
-      // Should have correct theme references
-      expect(output).toContain('theme.colors.text.primary');
-      expect(output).toContain('theme.colors.text.secondary');
-      expect(output).toContain('theme.colors.text.inverse');
+      // Should have correct theme references (with optional chaining)
+      expect(output).toContain('theme?.colors?.text?.primary');
+      expect(output).toContain('theme?.colors?.text?.secondary');
+      expect(output).toContain('theme?.colors?.text?.inverse');
     });
   });
 
@@ -535,10 +535,10 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('secondary: {');
       expect(output).toContain('disabled: {');
 
-      // Should have correct theme references
-      expect(output).toContain('theme.colors.border.primary');
-      expect(output).toContain('theme.colors.border.secondary');
-      expect(output).toContain('theme.colors.border.disabled');
+      // Should have correct theme references (with optional chaining)
+      expect(output).toContain('theme?.colors?.border?.primary');
+      expect(output).toContain('theme?.colors?.border?.secondary');
+      expect(output).toContain('theme?.colors?.border?.disabled');
     });
   });
 
@@ -605,10 +605,10 @@ describe('Idealyst Babel Plugin', () => {
 
       const output = transform(input);
 
-      // Should expand the type variant properly with nested intent expansion
+      // Should expand the type variant properly with nested intent expansion (with optional chaining)
       expect(output).toContain('filled');
       expect(output).toContain('outlined');
-      expect(output).toContain('theme.intents');
+      expect(output).toContain('theme?.intents');
     });
 
     it('should not process files without processAll or autoProcessPaths', () => {

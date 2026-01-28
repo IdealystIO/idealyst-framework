@@ -123,6 +123,7 @@ export async function runWizard(
     useCurrentDir: false, // Interactive mode always creates a new folder
     skipInstall: prefilledArgs.skipInstall ?? false,
     isInteractive: true,
+    blank: prefilledArgs.blank ?? false,
   };
 }
 
@@ -181,6 +182,7 @@ export function buildConfigFromArgs(args: CLIArgs): ProjectConfig {
     useCurrentDir: false, // Default to creating new folder
     skipInstall: args.skipInstall ?? false,
     isInteractive: false,
+    blank: args.blank ?? false,
   };
 }
 

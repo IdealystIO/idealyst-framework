@@ -27,6 +27,7 @@ export interface ProjectConfig {
   useCurrentDir: boolean;        // Initialize in current directory instead of creating new folder
   skipInstall: boolean;          // Skip yarn install
   isInteractive: boolean;        // Was wizard used?
+  blank: boolean;                // Create minimal Hello World app instead of showcase
 }
 
 /**
@@ -101,6 +102,7 @@ export interface CLIArgs {
   withTrpc?: boolean;
   withGraphql?: boolean;
   withDevcontainer?: boolean;
+  blank?: boolean;
   noInteractive?: boolean;
   skipInstall?: boolean;
   directory?: string;
@@ -163,6 +165,7 @@ export interface TemplateData {
   hasTrpc: boolean;
   hasGraphql: boolean;
   hasDevcontainer: boolean;
+  isBlank: boolean;              // Create minimal Hello World app instead of showcase
 }
 
 /**

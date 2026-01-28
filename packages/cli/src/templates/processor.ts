@@ -22,6 +22,7 @@ const TEMPLATE_VARIABLES = [
   'hasTrpc',
   'hasGraphql',
   'hasDevcontainer',
+  'isBlank',
 ] as const;
 
 /**
@@ -144,6 +145,7 @@ export function buildTemplateData(config: {
     graphql: boolean;
     devcontainer: boolean | { enabled: boolean };
   };
+  blank?: boolean;
 }, idealystVersion: string): TemplateData {
   // Normalize devcontainer to boolean for template data
   const hasDevcontainer = typeof config.extensions.devcontainer === 'boolean'
@@ -165,5 +167,6 @@ export function buildTemplateData(config: {
     hasTrpc: config.extensions.trpc,
     hasGraphql: config.extensions.graphql,
     hasDevcontainer,
+    isBlank: config.blank ?? false,
   };
 }

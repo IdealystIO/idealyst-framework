@@ -730,9 +730,11 @@ function buildMemberExpression(t, base, chain) {
         // e.g., theme.colors.surface['inverse-secondary'] instead of theme.colors.surface.inverse-secondary
         const isValidIdentifier = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(part);
         if (isValidIdentifier) {
-            expr = t.memberExpression(expr, t.identifier(part));
+            // Use optional chaining to avoid crashes when theme values are undefined
+            expr = t.optionalMemberExpression(expr, t.identifier(part), false, true);
         } else {
-            expr = t.memberExpression(expr, t.stringLiteral(part), true); // computed = true
+            // computed = true, optional = true
+            expr = t.optionalMemberExpression(expr, t.stringLiteral(part), true, true);
         }
     }
     return expr;

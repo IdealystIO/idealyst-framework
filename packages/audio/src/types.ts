@@ -234,6 +234,7 @@ export interface IPlayer {
   loadPCMStream(config: AudioConfig): Promise<void>;
   feedPCMData(data: ArrayBuffer | Int16Array): void;
   flush(): Promise<void>;
+  clearBuffer(): void;
 
   // Playback control
   play(): Promise<void>;
@@ -438,6 +439,7 @@ export interface UsePlayerResult {
   loadPCMStream: (config: AudioConfig) => Promise<void>;
   feedPCMData: (data: ArrayBuffer | Int16Array) => void;
   flush: () => Promise<void>;
+  clearBuffer: () => void;
 
   // Playback control
   play: () => Promise<void>;
