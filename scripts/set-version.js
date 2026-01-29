@@ -65,7 +65,7 @@ function updatePackageVersion(packagePath) {
   packageJson.version = newVersion;
   
   // Update dependencies to use the new version
-  const idealystPackages = ['@idealyst/theme', '@idealyst/components', '@idealyst/navigation', '@idealyst/cli', '@idealyst/markdown'];
+  const idealystPackages = ['@idealyst/theme', '@idealyst/components', '@idealyst/navigation', '@idealyst/cli', '@idealyst/markdown', '@idealyst/tooling'];
   
   ['dependencies', 'peerDependencies', 'devDependencies'].forEach(depType => {
     if (packageJson[depType]) {

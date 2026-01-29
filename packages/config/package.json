@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/config",
-  "version": "1.2.78",
+  "version": "1.2.79",
   "description": "Cross-platform configuration and environment variable support for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/config#readme",
   "readme": "README.md",
@@ -28,6 +28,10 @@
         "types": "./src/index.web.ts",
         "import": "./src/index.web.ts",
         "require": "./src/index.web.ts"
+      },
+      "import": {
+        "types": "./src/index.web.ts",
+        "default": "./src/index.web.ts"
       },
       "default": {
         "types": "./src/index.ts",
