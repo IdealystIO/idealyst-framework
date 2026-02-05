@@ -240,7 +240,7 @@ export const PositionedPortal: React.FC<PositionedPortalProps> = ({
         position: 'fixed',
         top: position.top,
         left: position.left,
-        width: position.width,
+        ...(position.width != null && { width: position.width }),
         zIndex,
         opacity: isPositioned ? 1 : 0,
         pointerEvents: isPositioned ? 'auto' : 'none',

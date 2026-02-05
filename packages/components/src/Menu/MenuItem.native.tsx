@@ -31,6 +31,7 @@ const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, si
       return (
         <MaterialDesignIcons
           name={item.icon as any}
+          color={iconStyle.color}
           style={iconStyle}
         />
       );

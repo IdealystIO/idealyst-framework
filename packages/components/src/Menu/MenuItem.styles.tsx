@@ -111,6 +111,7 @@ export const menuItemStyles = defineStyle('MenuItem', (theme: Theme) => ({
         justifyContent: 'center' as const,
         flexShrink: 0,
         marginRight: 12,
+        color: theme.colors.text.primary,
         variants: {
             size: {
                 width: theme.sizes.$menu.iconSize,

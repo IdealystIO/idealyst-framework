@@ -111,7 +111,6 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
           <BoundedModalContent
             top={menuPosition.top}
             left={menuPosition.left}
-            width={menuPosition.width}
             maxHeight={300}
             style={[
               (menuStyles.menu as any)({}),
