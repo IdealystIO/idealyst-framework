@@ -44,6 +44,8 @@ export type {
 export {
   resolveDuration,
   resolveEasing,
+  resolveEasingWithDuration,
+  getSpringInfo,
   cssTransition,
   cssPreset,
   cssKeyframes,
@@ -53,6 +55,17 @@ export {
   conicSpinnerStyle,
   pulseGradientStyle,
 } from './transitions';
+
+// Export spring approximation utilities
+export {
+  approximateSpring,
+  getSpringApproximation,
+  springApproximations,
+  isLinearEasingSupported,
+  getLinearFallback,
+  usesLinearEasing,
+  type SpringApproximation,
+} from './springApproximation';
 
 // Export native utilities (these are also exported from index.native.ts)
 // Including here allows type-checking in monorepo without platform resolution

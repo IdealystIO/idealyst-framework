@@ -1,7 +1,7 @@
 import React, { useState, useMemo, ReactNode } from 'react';
 import { View, Text, Card, Select, Icon, Button, Dialog, Table } from '@idealyst/components';
 import type { TableColumn } from '@idealyst/components/Table/types';
-import { useUnistyles } from 'react-native-unistyles';
+import { useTheme } from '@idealyst/theme';
 
 // Force Babel to bundle these icons for playground use
 function IconPreloader() {
@@ -133,7 +133,7 @@ export function ComponentPlayground({
   fixedProps = {},
   stateConfig,
 }: PlaygroundProps) {
-  const { theme } = useUnistyles();
+  const theme = useTheme();
 
   // Initialize state from defaults
   const initialState = useMemo(() => {

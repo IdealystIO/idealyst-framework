@@ -63,16 +63,7 @@ const Pressable = forwardRef<IdealystElement, PressableProps>(({
     paddingHorizontal,
   });
 
-  const webProps = getWebProps([(pressableStyles.pressable as any)({}), flattenStyle(style)]);
-
-  const baseStyle: React.CSSProperties = {
-    cursor: disabled ? 'default' : 'pointer',
-    outline: 'none',
-    userSelect: 'none',
-    WebkitUserSelect: 'none',
-    WebkitTapHighlightColor: 'transparent',
-    opacity: disabled ? 0.5 : 1,
-  };
+  const webProps = getWebProps([(pressableStyles.pressable as any)({ disabled }), flattenStyle(style)]);
 
   // Merge ref from getWebProps with forwarded ref
   const mergedRef = useMergeRefs(ref as any, webProps.ref as any);
@@ -84,7 +75,6 @@ const Pressable = forwardRef<IdealystElement, PressableProps>(({
       id={id}
       role={accessibilityRole}
       tabIndex={disabled ? -1 : 0}
-      style={baseStyle}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp} // Handle mouse leave as press out

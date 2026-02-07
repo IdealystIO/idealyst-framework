@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Card } from '@idealyst/components';
-import { useUnistyles } from 'react-native-unistyles';
+import { useTheme } from '@idealyst/theme';
 
 interface PropDefinition {
   name: string;
@@ -15,7 +15,7 @@ interface PropsTableProps {
 }
 
 export function PropsTable({ props }: PropsTableProps) {
-  const { theme } = useUnistyles();
+  const theme = useTheme();
 
   return (
     <Card

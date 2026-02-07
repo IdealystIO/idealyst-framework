@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from '@idealyst/components';
-import { useUnistyles } from 'react-native-unistyles';
+import { useTheme } from '@idealyst/theme';
 
 interface CodeBlockProps {
   code?: string;
@@ -10,7 +10,7 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({ code, children, language = 'typescript', title }: CodeBlockProps) {
-  const { theme } = useUnistyles();
+  const theme = useTheme();
   const content = code ?? children ?? '';
 
   return (

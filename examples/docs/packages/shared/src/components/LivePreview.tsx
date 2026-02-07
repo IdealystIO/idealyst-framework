@@ -1,6 +1,6 @@
 import React, { useState, ReactNode } from 'react';
 import { View, Text, Button, Card } from '@idealyst/components';
-import { useUnistyles } from 'react-native-unistyles';
+import { useTheme } from '@idealyst/theme';
 
 interface LivePreviewProps {
   /** The component to preview */
@@ -13,7 +13,7 @@ interface LivePreviewProps {
 
 export function LivePreview({ children, code, title }: LivePreviewProps) {
   const [showCode, setShowCode] = useState(false);
-  const { theme } = useUnistyles();
+  const theme = useTheme();
 
   return (
     <Card

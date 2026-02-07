@@ -14,9 +14,11 @@
   },
   "peerDependencies": {
     "@apollo/client": "^3.11.8",
+    "@idealyst/charts": "^1.2.80",
     "@idealyst/components": "^1.2.30",
     "@idealyst/config": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
+    "@idealyst/svg": "^1.2.80",
     "@idealyst/theme": "^1.2.30",
     "@tanstack/react-query": "^5.83.0",
     "@trpc/client": "^11.5.1",
@@ -35,9 +37,11 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.11.8",
+    "@idealyst/charts": "^1.2.80",
     "@idealyst/components": "^1.2.30",
     "@idealyst/config": "^1.2.30",
     "@idealyst/navigation": "^1.2.30",
+    "@idealyst/svg": "^1.2.80",
     "@idealyst/theme": "^1.2.30",
     "@tanstack/react-query": "^5.83.0",
     "@trpc/client": "^11.5.1",

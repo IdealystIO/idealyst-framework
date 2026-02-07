@@ -28,6 +28,9 @@ export * from './useResponsiveStyle';
 // Color scheme utilities
 export * from './colorScheme';
 
+// Theme hook
+export { useTheme } from './useTheme';
+
 // Style props hook (platform-specific via .native.ts)
 export { useStyleProps, type StyleProps } from './useStyleProps';
 

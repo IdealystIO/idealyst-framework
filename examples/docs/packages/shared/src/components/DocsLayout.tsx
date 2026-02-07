@@ -3,19 +3,20 @@ import { View, Text, Button, Badge, Select } from '@idealyst/components';
 import { useNavigator } from '@idealyst/navigation';
 import { useLanguage } from '@idealyst/translate';
 import { Outlet } from 'react-router-dom';
-import { useUnistyles, UnistylesRuntime } from 'react-native-unistyles';
+import { UnistylesRuntime } from 'react-native-unistyles';
+import { useTheme, ThemeSettings } from '@idealyst/theme';
 import { DocsSidebar } from './DocsSidebar';
 
 export const DocsLayout: React.FC = () => {
   const { navigate } = useNavigator();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const { theme } = useUnistyles();
+  const theme = useTheme();
   const currentTheme = UnistylesRuntime.themeName || 'light';
   const { language, setLanguage } = useLanguage();
 
   const cycleTheme = () => {
     const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-    UnistylesRuntime.setTheme(nextTheme as any);
+    ThemeSettings.setTheme(nextTheme, nextTheme);
   };
 
   const sidebarWidth = sidebarCollapsed ? 0 : 280;

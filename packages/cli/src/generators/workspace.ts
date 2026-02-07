@@ -127,8 +127,7 @@ function createRootTsConfig(): Record<string, unknown> {
     compilerOptions: {
       target: 'ES2020',
       module: 'ESNext',
-      declaration: true,
-      declarationMap: true,
+      jsx: 'react-jsx',
       sourceMap: true,
       strict: true,
       esModuleInterop: true,
@@ -136,6 +135,7 @@ function createRootTsConfig(): Record<string, unknown> {
       forceConsistentCasingInFileNames: true,
       moduleResolution: 'bundler',
       resolveJsonModule: true,
+      types: ['vite/client'],
     },
     include: ['packages/*/src/**/*'],
     exclude: ['node_modules', 'dist', 'build'],

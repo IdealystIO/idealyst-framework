@@ -48,6 +48,6 @@ export const ThemeSettings = {
         UnistylesRuntime.setRootViewBackgroundColor(
             contentColor === 'dark' ? '#000000' : '#ffffff'
         );
-        UnistylesRuntime.statusBar.setStyle(contentColor === 'dark' ? 'light' : 'dark', animated);
+        UnistylesRuntime.statusBar.setStyle((contentColor === 'dark' ? 'light' : 'dark') as any, animated);
     },
 };

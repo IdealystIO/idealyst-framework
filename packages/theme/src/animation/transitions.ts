@@ -15,6 +15,13 @@ import type {
   AnimationDirection,
   AnimationFillMode,
 } from './types';
+import {
+  springApproximations,
+  getSpringApproximation,
+  isLinearEasingSupported,
+  getLinearFallback,
+  type SpringApproximation,
+} from './springApproximation';
 
 /**
  * Resolve a duration value to milliseconds
@@ -28,14 +35,96 @@ export function resolveDuration(duration: Duration): number {
 
 /**
  * Resolve an easing key to CSS string
+ *
+ * For spring easings, returns an approximated CSS easing that
+ * tries to match the spring's feel as closely as possible.
  */
 export function resolveEasing(easing: EasingKey): string {
   const easingConfig = easings[easing];
-  // Spring configs don't have CSS equivalent, fall back to ease-out
+
+  // Handle spring configs with smart approximation
   if ('damping' in easingConfig) {
-    return 'ease-out';
+    const approx = getSpringApproximation(easing as keyof typeof springApproximations);
+
+    // Check if linear() is supported for bouncy springs
+    if (approx.css.startsWith('linear(') && !isLinearEasingSupported()) {
+      return getLinearFallback(approx);
+    }
+
+    return approx.css;
   }
+
   return easingConfig.css;
+}
+
+/**
+ * Resolve an easing key to both CSS string and duration
+ *
+ * For spring easings, this returns the approximated CSS easing
+ * along with a calculated duration that matches the spring's
+ * settling time. This provides better spring approximation than
+ * using resolveEasing alone.
+ *
+ * @param easing - Easing token key
+ * @param baseDuration - Base duration (used for non-spring easings)
+ * @returns Object with CSS easing and recommended duration
+ *
+ * @example
+ * // Non-spring easing - uses provided duration
+ * resolveEasingWithDuration('easeOut', 200)
+ * // => { css: 'ease-out', duration: 200 }
+ *
+ * // Spring easing - calculates optimal duration
+ * resolveEasingWithDuration('spring', 200)
+ * // => { css: 'cubic-bezier(0.34, 1.4, 0.64, 1)', duration: 350 }
+ */
+export function resolveEasingWithDuration(
+  easing: EasingKey,
+  baseDuration: number
+): { css: string; duration: number } {
+  const easingConfig = easings[easing];
+
+  // Handle spring configs with smart approximation
+  if ('damping' in easingConfig) {
+    const approx = getSpringApproximation(easing as keyof typeof springApproximations);
+
+    let css = approx.css;
+    if (approx.css.startsWith('linear(') && !isLinearEasingSupported()) {
+      css = getLinearFallback(approx);
+    }
+
+    return {
+      css,
+      duration: approx.duration,
+    };
+  }
+
+  return {
+    css: easingConfig.css,
+    duration: baseDuration,
+  };
+}
+
+/**
+ * Check if an easing is a spring type
+ */
+export function isSpringEasing(easing: EasingKey): boolean {
+  const easingConfig = easings[easing];
+  return 'damping' in easingConfig;
+}
+
+/**
+ * Get detailed spring approximation info for an easing
+ *
+ * Returns null for non-spring easings. For springs, returns
+ * the full approximation data including quality assessment.
+ */
+export function getSpringInfo(easing: EasingKey): SpringApproximation | null {
+  const easingConfig = easings[easing];
+  if (!('damping' in easingConfig)) {
+    return null;
+  }
+  return getSpringApproximation(easing as keyof typeof springApproximations);
 }
 
 /**

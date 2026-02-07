@@ -118,7 +118,8 @@ function createApiPackageJson(data: TemplateData): Record<string, unknown> {
     name: `@${data.workspaceScope}/api`,
     version: data.version,
     type: 'module',
-    main: 'dist/index.js',
+    main: 'src/index.ts',
+    types: 'src/index.ts',
     scripts: {
       'dev': 'tsx watch src/server.ts',
       'build': 'tsc',

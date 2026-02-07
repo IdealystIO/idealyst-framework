@@ -1,10 +1,10 @@
-import React from 'react';
 import { Icon } from '@idealyst/components';
 import type { NavigatorParam, TabBarScreenOptions } from '@idealyst/navigation';
 
 // Screens
 import { HomeScreen } from '../screens/HomeScreen';
 import { ExploreScreen } from '../screens/ExploreScreen';
+import { ChartsScreen } from '../screens/ChartsScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { TRPCDemoScreen } from '../screens/TRPCDemoScreen';
@@ -32,8 +32,8 @@ const MainTabNavigator: NavigatorParam = {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'home' : 'home-outline'}
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
@@ -48,8 +48,24 @@ const MainTabNavigator: NavigatorParam = {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'compass' : 'compass-outline'}
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
+          />
+        ),
+      } as TabBarScreenOptions,
+    },
+    {
+      path: 'charts',
+      type: 'screen',
+      component: ChartsScreen,
+      options: {
+        title: 'Charts',
+        tabBarLabel: 'Charts',
+        tabBarIcon: ({ focused, color, size }) => (
+          <Icon
+            name={focused ? 'chart-line' : 'chart-line-variant'}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
@@ -64,8 +80,8 @@ const MainTabNavigator: NavigatorParam = {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'account' : 'account-outline'}
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
@@ -80,8 +96,8 @@ const MainTabNavigator: NavigatorParam = {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'api' : 'api'}
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
@@ -96,8 +112,8 @@ const MainTabNavigator: NavigatorParam = {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'graphql' : 'graphql'}
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,

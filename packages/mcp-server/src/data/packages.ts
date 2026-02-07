@@ -715,6 +715,165 @@ function ModalContent({ isOpen }: { isOpen: boolean }) {
     ],
     relatedPackages: ["theme", "components"],
   },
+
+  lottie: {
+    name: "Lottie",
+    npmName: "@idealyst/lottie",
+    description:
+      "Cross-platform Lottie animation component for React and React Native. Renders After Effects animations using lottie-web on web and lottie-react-native on native.",
+    category: "ui",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/lottie lottie-web lottie-react-native",
+    peerDependencies: ["lottie-web (web)", "lottie-react-native (native)"],
+    features: [
+      "Render After Effects animations from JSON",
+      "URL, imported JSON, or require() sources",
+      "Imperative ref API for playback control",
+      "Autoplay, loop, and speed configuration",
+      "Resize modes (cover, contain, center)",
+      "Segment playback for partial animations",
+      "Frame-level control and progress tracking",
+      "Event callbacks (onComplete, onLoad, onError)",
+      "Direction control (forward/reverse)",
+    ],
+    quickStart: `import { Lottie, LottieRef } from '@idealyst/lottie';
+import { useRef } from 'react';
+
+// Basic usage with URL
+<Lottie
+  source="https://assets.example.com/animation.json"
+  autoPlay
+  loop
+/>
+
+// With imported JSON
+import animationData from './animation.json';
+<Lottie source={animationData} autoPlay />
+
+// With ref for imperative control
+function AnimatedComponent() {
+  const lottieRef = useRef<LottieRef>(null);
+
+  return (
+    <>
+      <Lottie
+        ref={lottieRef}
+        source={animationData}
+        onComplete={() => console.log('Animation complete')}
+      />
+      <Button onPress={() => lottieRef.current?.play()}>Play</Button>
+      <Button onPress={() => lottieRef.current?.pause()}>Pause</Button>
+      <Button onPress={() => lottieRef.current?.setProgress(0.5)}>
+        Go to 50%
+      </Button>
+    </>
+  );
+}`,
+    apiHighlights: [
+      "Lottie component",
+      "LottieRef.play() / pause() / stop()",
+      "LottieRef.setProgress(0-1)",
+      "LottieRef.goToAndPlay(frame) / goToAndStop(frame)",
+      "LottieRef.playSegments(start, end)",
+      "LottieRef.setSpeed(speed) / setDirection(1 | -1)",
+      "LottieRef.getCurrentFrame() / getTotalFrames()",
+      "LottieSource: string | LottieJSON | { uri: string }",
+      "ResizeMode: 'cover' | 'contain' | 'center'",
+    ],
+    relatedPackages: ["components", "animate"],
+  },
+
+  charts: {
+    name: "Charts",
+    npmName: "@idealyst/charts",
+    description:
+      "Cross-platform animated charting library for React and React Native. Supports line, bar, area, pie, scatter, and candlestick charts with dual-renderer architecture (SVG for web, Skia for native).",
+    category: "ui",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/charts @idealyst/theme @idealyst/svg",
+    peerDependencies: [
+      "@idealyst/theme",
+      "@idealyst/svg",
+      "react-native-reanimated (native)",
+      "react-native-gesture-handler (native)",
+      "@shopify/react-native-skia (native, optional)",
+    ],
+    features: [
+      "LineChart - Time series, trends with multiple curve types (linear, monotone, step)",
+      "BarChart - Vertical/horizontal, grouped, stacked with staggered animations",
+      "PieChart/DonutChart - Segment reveal animations (coming soon)",
+      "AreaChart - Filled area with gradient support (coming soon)",
+      "ScatterChart - Point clouds (coming soon)",
+      "CandlestickChart - OHLC financial data (coming soon)",
+      "Dual-renderer: SVG (web default) and Skia (native GPU-accelerated)",
+      "Full animation support - entrance, transitions, interactions",
+      "Theme integration - intent-based colors, dark mode",
+      "Touch/mouse interactions - tooltips, selection",
+      "Zoom/pan support (coming soon)",
+      "Scale utilities - linear, band, time scales",
+      "Responsive container sizing",
+    ],
+    quickStart: `import { LineChart, BarChart, ChartProvider } from '@idealyst/charts';
+
+// Basic Line Chart with animation
+<LineChart
+  data={[{
+    id: 'revenue',
+    name: 'Revenue',
+    intent: 'primary',
+    data: [
+      { x: 'Jan', y: 100 },
+      { x: 'Feb', y: 150 },
+      { x: 'Mar', y: 120 },
+    ],
+  }]}
+  height={300}
+  curve="monotone"
+  showDots
+  showArea
+  animate
+/>
+
+// Animated Bar Chart with stagger effect
+<BarChart
+  data={[{
+    id: 'sales',
+    name: 'Sales',
+    intent: 'success',
+    data: [
+      { x: 'Q1', y: 120 },
+      { x: 'Q2', y: 180 },
+      { x: 'Q3', y: 150 },
+    ],
+  }]}
+  height={300}
+  animate
+  barRadius={4}
+/>
+
+// App-wide chart defaults
+<ChartProvider renderer="svg" defaultIntent="primary">
+  <App />
+</ChartProvider>`,
+    apiHighlights: [
+      "LineChart - Line/area charts with curve interpolation",
+      "BarChart - Bar charts with grouping/stacking",
+      "ChartContainer - Responsive container with padding",
+      "ChartProvider - App-wide renderer and defaults",
+      "XAxis, YAxis, GridLines - Axis components",
+      "useChartAnimation() - Custom animation hook",
+      "useStaggeredAnimation() - Staggered entrance animations",
+      "createLinearScale() - Numeric value scaling",
+      "createBandScale() - Categorical scaling",
+      "createTimeScale() - Date/time scaling",
+      "generateLinePath() - SVG path generation",
+      "CurveType: 'linear' | 'monotone' | 'step' | 'cardinal'",
+      "Data: { id, name, intent?, color?, data: [{ x, y }] }",
+    ],
+    relatedPackages: ["theme", "svg", "animate"],
+  },
 };
 
 /**

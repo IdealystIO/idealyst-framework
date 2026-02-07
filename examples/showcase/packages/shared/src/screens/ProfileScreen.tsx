@@ -167,7 +167,7 @@ export const ProfileScreen: React.FC = () => {
                   justifyContent: 'center',
                 }}
               >
-                <Icon name="rocket-launch" size={24} color="success" />
+                <Icon name="rocket-launch" size={24} intent="success" />
               </View>
               <Text typography="caption" weight="medium">
                 Early Adopter

@@ -34,6 +34,7 @@ export type ComponentName =
   | 'Dialog'
   | 'Divider'
   | 'Icon'
+  | 'IconButton'
   | 'Image'
   | 'Input'
   | 'Link'

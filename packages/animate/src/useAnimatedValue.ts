@@ -3,11 +3,27 @@
  *
  * Creates an animated numeric value that can be interpolated.
  * Uses requestAnimationFrame for smooth animations on web.
+ *
+ * NOTE: This hook uses RAF which is less performant than CSS transitions.
+ * Consider using useAnimatedStyle for style-based animations instead.
  */
 
 import { useState, useRef, useCallback, useMemo } from 'react';
 import { resolveDuration, resolveEasing } from '@idealyst/theme/animation';
 import type { AnimatedValue, AnimationOptions, InterpolationConfig } from './types';
+
+// Warn about RAF usage in development (once per session)
+let hasWarnedAboutRAF = false;
+function warnRAFUsage(hookName: string) {
+  if (process.env.NODE_ENV === 'development' && !hasWarnedAboutRAF) {
+    hasWarnedAboutRAF = true;
+    console.warn(
+      `[@idealyst/animate] ${hookName} uses requestAnimationFrame for animations, ` +
+        `which is less performant than CSS transitions. Consider using useAnimatedStyle ` +
+        `for style-based animations to leverage GPU-accelerated CSS transitions.`
+    );
+  }
+}
 
 // Bezier curve evaluation for custom easing
 function bezierEval(t: number, p1: number, p2: number, p3: number, p4: number): number {
@@ -102,6 +118,8 @@ export function useAnimatedValue(initialValue: number): AnimatedValue {
   // Set value with animation
   const set = useCallback(
     (target: number, options: AnimationOptions = {}) => {
+      warnRAFUsage('useAnimatedValue');
+
       const { duration = 'normal', easing = 'easeOut', delay = 0 } = options;
       const durationMs = resolveDuration(duration);
       const easingCss = resolveEasing(easing);

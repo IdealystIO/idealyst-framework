@@ -64,9 +64,8 @@ function buildValidPatterns(route: NavigatorParam, prefix = ''): string[] {
     if (!route.routes) return patterns;
 
     for (const childRoute of route.routes) {
-        const childPath = childRoute.path.startsWith('/')
-            ? childRoute.path
-            : `${prefix}/${childRoute.path}`.replace(/\/+/g, '/');
+        // Always join with prefix - strip leading slash from child path to avoid treating it as absolute
+        const childPath = `${prefix}/${childRoute.path.replace(/^\//, '')}`.replace(/\/+/g, '/');
 
         // Add the pattern (keeping :param placeholders)
         if (childPath) {

@@ -47,38 +47,45 @@ export const TRPCDemoScreen: React.FC = () => {
 
   // ==========================================================================
   // Database tRPC queries (requires Prisma)
+  // These hooks are conditionally used based on HAS_DATABASE flag
   // ==========================================================================
   const itemsQuery = HAS_DATABASE ? trpc.items.list.useQuery() : null;
   const statsQuery = HAS_DATABASE ? trpc.items.stats.useQuery() : null;
 
-  const createMutation = trpc.items.create.useMutation({
-    onSuccess: () => {
-      itemsQuery?.refetch();
-      statsQuery?.refetch();
-      setNewItemTitle('');
-    },
-  });
+  const createMutation = HAS_DATABASE
+    ? trpc.items.create.useMutation({
+        onSuccess: () => {
+          itemsQuery?.refetch();
+          statsQuery?.refetch();
+          setNewItemTitle('');
+        },
+      })
+    : null;
 
-  const toggleMutation = trpc.items.toggle.useMutation({
-    onSuccess: () => {
-      itemsQuery?.refetch();
-      statsQuery?.refetch();
-    },
-  });
+  const toggleMutation = HAS_DATABASE
+    ? trpc.items.toggle.useMutation({
+        onSuccess: () => {
+          itemsQuery?.refetch();
+          statsQuery?.refetch();
+        },
+      })
+    : null;
 
-  const deleteMutation = trpc.items.delete.useMutation({
-    onSuccess: () => {
-      itemsQuery?.refetch();
-      statsQuery?.refetch();
-    },
-  });
+  const deleteMutation = HAS_DATABASE
+    ? trpc.items.delete.useMutation({
+        onSuccess: () => {
+          itemsQuery?.refetch();
+          statsQuery?.refetch();
+        },
+      })
+    : null;
 
   const isLoading = healthQuery.isLoading;
   const hasError = healthQuery.isError;
 
   const handleCreateItem = () => {
     if (newItemTitle.trim()) {
-      createMutation.mutate({ title: newItemTitle.trim() });
+      createMutation?.mutate({ title: newItemTitle.trim() });
     }
   };
 
@@ -312,9 +319,9 @@ export const TRPCDemoScreen: React.FC = () => {
                 intent="primary"
                 leftIcon="plus"
                 onPress={handleCreateItem}
-                disabled={!newItemTitle.trim() || createMutation.isPending}
+                disabled={!newItemTitle.trim() || createMutation?.isPending}
               >
-                {createMutation.isPending ? 'Creating...' : 'Add Item'}
+                {createMutation?.isPending ? 'Creating...' : 'Add Item'}
               </Button>
             </Card>
 
@@ -342,7 +349,7 @@ export const TRPCDemoScreen: React.FC = () => {
                         size="sm"
                         intent={item.completed ? 'success' : 'neutral'}
                         leftIcon={item.completed ? 'check-circle' : 'circle-outline'}
-                        onPress={() => toggleMutation.mutate({ id: item.id })}
+                        onPress={() => toggleMutation?.mutate({ id: item.id })}
                       />
                       <View style={{ flex: 1 }}>
                         <Text
@@ -364,7 +371,7 @@ export const TRPCDemoScreen: React.FC = () => {
                         size="sm"
                         intent="danger"
                         leftIcon="delete"
-                        onPress={() => deleteMutation.mutate({ id: item.id })}
+                        onPress={() => deleteMutation?.mutate({ id: item.id })}
                       />
                     </View>
                   ))}

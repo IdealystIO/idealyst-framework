@@ -3,10 +3,16 @@
  *
  * Creates an animated style that transitions when properties change.
  * Uses CSS transitions for smooth, performant animations.
+ *
+ * For spring easings, automatically converts to CSS approximations
+ * with calculated durations that match the spring's settling time.
  */
 
 import { useMemo } from 'react';
-import { resolveDuration, resolveEasing } from '@idealyst/theme/animation';
+import {
+  resolveDuration,
+  resolveEasingWithDuration,
+} from '@idealyst/theme/animation';
 import type {
   AnimatableProperties,
   UseAnimatedStyleOptions,
@@ -103,8 +109,15 @@ export function useAnimatedStyle(
       return web.transition;
     }
 
-    const durationMs = resolveDuration(finalDuration);
-    const easingCss = resolveEasing(finalEasing);
+    const baseDuration = resolveDuration(finalDuration);
+
+    // For spring easings, resolveEasingWithDuration calculates the optimal
+    // duration based on the spring's settling time, giving better approximation
+    const { css: easingCss, duration: durationMs } = resolveEasingWithDuration(
+      finalEasing,
+      baseDuration
+    );
+
     const delayStr = finalDelay > 0 ? ` ${finalDelay}ms` : '';
 
     // Use 'all' to animate any property that changes

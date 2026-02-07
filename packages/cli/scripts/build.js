@@ -250,7 +250,8 @@ async function copyShowcaseToTemplates() {
     path.join(DIST_TEMPLATES_DIR, 'core', 'shared', 'src-screens'),
     {
       // Exclude API demo screens - these are conditionally added
-      excludeFiles: ['TRPCDemoScreen.tsx', 'GraphQLDemoScreen.tsx', 'index.ts'],
+      // Also exclude ChartsScreen - depends on @idealyst/charts which isn't in generated projects
+      excludeFiles: ['TRPCDemoScreen.tsx', 'GraphQLDemoScreen.tsx', 'ChartsScreen.tsx', 'index.ts'],
     }
   );
   console.log(`   Shared screens (base): ${screensCount} files`);
@@ -405,10 +406,13 @@ async function copyShowcaseToTemplates() {
   }
 
   // Copy mobile/src only (App.tsx)
+  // Exclude utils/ - tRPC is conditionally added by the tRPC extension generator
   const mobileSrcCount = await copyAndTransformShowcase(
     path.join(SHOWCASE_DIR, 'packages', 'mobile', 'src'),
     path.join(DIST_TEMPLATES_DIR, 'core', 'mobile', 'src'),
-    {}
+    {
+      excludeDirs: ['utils'],
+    }
   );
   console.log(`   Mobile src: ${mobileSrcCount} files`);
   totalFiles += mobileSrcCount;

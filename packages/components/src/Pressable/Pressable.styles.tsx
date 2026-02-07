@@ -22,7 +22,13 @@ export type PressableDynamicProps = {
  * Pressable styles with spacing variants.
  */
 export const pressableStyles = defineStyle('Pressable', (theme: Theme) => ({
-    pressable: (_props: PressableDynamicProps) => ({
+    pressable: (props: PressableDynamicProps & { disabled?: boolean }) => ({
+        cursor: props.disabled ? 'default' : 'pointer',
+        outline: 'none',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
+        WebkitTapHighlightColor: 'transparent',
+        opacity: props.disabled ? 0.5 : 1,
         variants: {
             // $iterator expands for each view size
             padding: {

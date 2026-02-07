@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, Button, IconButton, Icon, Badge } from '@idealyst/components';
 import { useNavigator, Outlet } from '@idealyst/navigation';
 import type { TabLayoutProps, StackLayoutProps } from '@idealyst/navigation';
-import { UnistylesRuntime, useUnistyles } from 'react-native-unistyles';
+import { UnistylesRuntime } from 'react-native-unistyles';
+import { useTheme, ThemeSettings } from '@idealyst/theme';
 
 /**
  * Custom Tab Layout for the Idealyst Showcase app.
@@ -16,12 +17,12 @@ export const ShowcaseTabLayout: React.FC<TabLayoutProps> = ({
   currentPath,
 }) => {
   const navigator = useNavigator();
-  const { theme } = useUnistyles();
+  const theme = useTheme();
   const currentTheme = UnistylesRuntime.themeName || 'light';
 
   const cycleTheme = () => {
     const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-    UnistylesRuntime.setTheme(nextTheme as any);
+    ThemeSettings.setTheme(nextTheme, nextTheme);
   };
 
   // Check if a route is active
@@ -181,7 +182,7 @@ export const ShowcaseStackLayout: React.FC<StackLayoutProps> = ({
   options,
   routes,
 }) => {
-  const { theme } = useUnistyles();
+  const theme = useTheme();
 
   return (
     <View

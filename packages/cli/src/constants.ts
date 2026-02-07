@@ -6,7 +6,7 @@
 export const VERSION = '0.1.0';
 
 // Current Idealyst framework version to use in templates
-export const IDEALYST_VERSION = '1.2.79';
+export const IDEALYST_VERSION = '1.2.82';
 
 // React Native version
 export const REACT_NATIVE_VERSION = '0.83.0';
@@ -125,10 +125,10 @@ export const DEPENDENCIES = {
     '@pothos/plugin-prisma': '^4.3.0',
   },
   prisma: {
-    '@prisma/client': '^5.19.0',
+    '@prisma/client': '^7.1.0',
   },
   prismaDev: {
-    'prisma': '^5.19.0',
+    'prisma': '^7.1.0',
   },
   tooling: {
     '@idealyst/tooling': `^${IDEALYST_VERSION}`,

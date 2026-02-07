@@ -108,23 +108,18 @@ async function copyScreensWithApiDemos(srcDir: string, data: TemplateData): Prom
 
   // Copy tRPC demo screen if enabled
   if (data.hasTrpc) {
-    const trpcScreenPath = getTemplatePath('core', 'shared', 'src-screens-trpc');
-    if (await templateHasContent(trpcScreenPath)) {
-      await copyTemplateDirectory(trpcScreenPath, screensDir, data);
-
-      // Modify HAS_DATABASE constant based on Prisma availability
-      const trpcDemoPath = path.join(screensDir, 'TRPCDemoScreen.tsx');
-      if (await fs.pathExists(trpcDemoPath)) {
-        let content = await fs.readFile(trpcDemoPath, 'utf8');
-        if (!data.hasPrisma) {
-          // Replace HAS_DATABASE = true with HAS_DATABASE = false
-          content = content.replace(
-            /const HAS_DATABASE = true;/,
-            'const HAS_DATABASE = false;'
-          );
-          await fs.writeFile(trpcDemoPath, content);
-        }
+    if (data.hasPrisma) {
+      // With Prisma, use the full showcase TRPCDemoScreen
+      const trpcScreenPath = getTemplatePath('core', 'shared', 'src-screens-trpc');
+      if (await templateHasContent(trpcScreenPath)) {
+        await copyTemplateDirectory(trpcScreenPath, screensDir, data);
       }
+    } else {
+      // Without Prisma, generate a simplified TRPCDemoScreen
+      await fs.writeFile(
+        path.join(screensDir, 'TRPCDemoScreen.tsx'),
+        createSimpleTRPCDemoScreen(data)
+      );
     }
   }
 
@@ -219,8 +214,8 @@ function createAppRouter(data: TemplateData): string {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'home' : 'home-outline'}
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
@@ -235,8 +230,8 @@ function createAppRouter(data: TemplateData): string {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'compass' : 'compass-outline'}
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
@@ -251,8 +246,8 @@ function createAppRouter(data: TemplateData): string {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name={focused ? 'account' : 'account-outline'}
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
@@ -270,8 +265,8 @@ function createAppRouter(data: TemplateData): string {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name="api"
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
@@ -289,16 +284,15 @@ function createAppRouter(data: TemplateData): string {
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             name="graphql"
-            color={color}
-            size={size}
+            size={size as number}
+            style={{ color }}
           />
         ),
       } as TabBarScreenOptions,
     }`);
   }
 
-  return `import React from 'react';
-import { Icon } from '@idealyst/components';
+  return `import { Icon } from '@idealyst/components';
 import type { NavigatorParam, TabBarScreenOptions } from '@idealyst/navigation';
 
 // Screens
@@ -469,7 +463,7 @@ export default App;
   return `${imports.join('\n')}
 
 // API URL from environment configuration
-const API_URL = config.get('API_URL', 'http://localhost:3000');
+const API_URL = config.get('API_URL')!;
 
 /**
  * Main App component for ${data.appDisplayName}
@@ -577,7 +571,7 @@ async function generateSharedSrcFiles(
   // Create src/navigation/AppRouter.ts
   await fs.writeFile(
     path.join(sharedDir, 'src', 'navigation', 'AppRouter.ts'),
-    createAppRouter(data)
+    createFallbackAppRouter(data)
   );
 
   // Create src/navigation/index.ts
@@ -601,6 +595,19 @@ async function generateSharedSrcFiles(
     await fs.writeFile(
       path.join(sharedDir, 'src', 'utils', 'index.ts'),
       `export * from './trpc';\n`
+    );
+  }
+
+  // Create GraphQL client if enabled
+  if (data.hasGraphql) {
+    await fs.ensureDir(path.join(sharedDir, 'src', 'graphql'));
+    await fs.writeFile(
+      path.join(sharedDir, 'src', 'graphql', 'client.ts'),
+      createGraphqlClient(data)
+    );
+    await fs.writeFile(
+      path.join(sharedDir, 'src', 'graphql', 'index.ts'),
+      `export * from './client';\n`
     );
   }
 }
@@ -697,7 +704,6 @@ function createSharedIndex(data: TemplateData): string {
     ``,
     `// Re-export Idealyst components for convenience`,
     `export * from '@idealyst/components';`,
-    `export * from '@idealyst/theme';`,
   );
 
   return exports.join('\n') + '\n';
@@ -741,7 +747,10 @@ declare module '@idealyst/theme' {
 
 // Augment Unistyles with custom theme types
 declare module 'react-native-unistyles' {
-  export interface UnistylesThemes extends AppTheme {}
+  interface UnistylesThemes {
+    light: AppTheme;
+    dark: AppTheme;
+  }
   export interface UnistylesBreakpoints extends AppBreakpoints {}
 }
 
@@ -979,35 +988,80 @@ export default function About() {
  * Create App component with all providers
  */
 function createAppComponent(data: TemplateData): string {
-  if (data.hasTrpc) {
+  const hasTrpc = data.hasTrpc;
+  const hasGraphql = data.hasGraphql;
+  const hasApi = hasTrpc || hasGraphql;
+
+  // No API - simple app
+  if (!hasApi) {
     return `/**
  * Main App component with all providers
  * Platform packages wrap this with their specific router (e.g., BrowserRouter for web)
  */
 
-import { useMemo } from 'react';
-import { NavigatorProvider } from '@idealyst/navigation';
-import { config } from '@idealyst/config';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AppRouter } from './navigation';
-import { trpc, createTrpcClient } from './utils/trpc';
+// Initialize theme FIRST (configures unistyles before any StyleSheet.create)
+import './theme';
 
-// API URL from environment configuration
-const API_URL = config.get('API_URL', 'http://localhost:3000');
+import { NavigatorProvider } from '@idealyst/navigation';
+import { AppRouter } from './navigation';
 
 export default function App() {
-  const queryClient = useMemo(() => new QueryClient(), []);
-  const trpcClient = useMemo(() => createTrpcClient(API_URL), []);
-
-  return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <NavigatorProvider route={AppRouter} />
-      </QueryClientProvider>
-    </trpc.Provider>
-  );
+  return <NavigatorProvider route={AppRouter} />;
 }
 `;
+  }
+
+  // Build imports
+  const imports: string[] = [
+    `// Initialize theme FIRST (configures unistyles before any StyleSheet.create)`,
+    `import './theme';`,
+    ``,
+    `import { useMemo } from 'react';`,
+    `import { NavigatorProvider } from '@idealyst/navigation';`,
+    `import { config } from '@idealyst/config';`,
+    `import { QueryClient, QueryClientProvider } from '@tanstack/react-query';`,
+    `import { AppRouter } from './navigation';`,
+  ];
+
+  if (hasTrpc) {
+    imports.push(`import { trpc, createTrpcClient } from './utils/trpc';`);
+  }
+
+  if (hasGraphql) {
+    imports.push(`import { ApolloProvider } from '@apollo/client';`);
+    imports.push(`import { createApolloClient } from './graphql/client';`);
+  }
+
+  // Build state setup
+  const stateLines: string[] = [
+    `  const queryClient = useMemo(() => new QueryClient(), []);`,
+  ];
+
+  if (hasTrpc) {
+    stateLines.push(`  const trpcClient = useMemo(() => createTrpcClient(API_URL), []);`);
+  }
+
+  if (hasGraphql) {
+    stateLines.push(`  const apolloClient = useMemo(() => createApolloClient(\`\${API_URL}/graphql\`), []);`);
+  }
+
+  // Build JSX tree (innermost to outermost)
+  let jsx = `<NavigatorProvider route={AppRouter} />`;
+
+  if (hasGraphql) {
+    jsx = `<ApolloProvider client={apolloClient}>
+          ${jsx}
+        </ApolloProvider>`;
+  }
+
+  jsx = `<QueryClientProvider client={queryClient}>
+        ${jsx}
+      </QueryClientProvider>`;
+
+  if (hasTrpc) {
+    jsx = `<trpc.Provider client={trpcClient} queryClient={queryClient}>
+      ${jsx}
+    </trpc.Provider>`;
   }
 
   return `/**
@@ -1015,11 +1069,17 @@ export default function App() {
  * Platform packages wrap this with their specific router (e.g., BrowserRouter for web)
  */
 
-import { NavigatorProvider } from '@idealyst/navigation';
-import { AppRouter } from './navigation';
+${imports.join('\n')}
+
+// API URL from environment configuration
+const API_URL = config.get('API_URL')!;
 
 export default function App() {
-  return <NavigatorProvider route={AppRouter} />;
+${stateLines.join('\n')}
+
+  return (
+    ${jsx}
+  );
 }
 `;
 }
@@ -1052,5 +1112,274 @@ export function createTrpcClient(baseUrl: string) {
     ],
   });
 }
+`;
+}
+
+/**
+ * Create GraphQL/Apollo client for shared package
+ */
+function createGraphqlClient(data: TemplateData): string {
+  return `/**
+ * Apollo GraphQL client configuration
+ * Shared between web and mobile platforms
+ */
+
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+
+/**
+ * Create an Apollo client with the specified GraphQL URL
+ * @param graphqlUrl - The GraphQL endpoint URL (e.g., 'http://localhost:3000/graphql')
+ */
+export function createApolloClient(graphqlUrl: string) {
+  const httpLink = new HttpLink({
+    uri: graphqlUrl,
+  });
+
+  return new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache(),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+      },
+    },
+  });
+}
+
+// Re-export common hooks for convenience
+export { gql, useQuery, useMutation, useLazyQuery, ApolloProvider } from '@apollo/client';
+`;
+}
+
+/**
+ * Create simplified TRPCDemoScreen without database features
+ * Used when tRPC is enabled but Prisma is not
+ */
+function createSimpleTRPCDemoScreen(data: TemplateData): string {
+  return `import { useState } from 'react';
+import {
+  Screen,
+  View,
+  Text,
+  Card,
+  Button,
+  Icon,
+  Badge,
+  ActivityIndicator,
+  Alert,
+  TextInput,
+} from '@idealyst/components';
+import { trpc } from '../trpc/client';
+
+export const TRPCDemoScreen: React.FC = () => {
+  const [echoInput, setEchoInput] = useState('');
+
+  // Base tRPC queries (no database required)
+  const healthQuery = trpc.health.useQuery();
+  const counterQuery = trpc.counter.get.useQuery();
+
+  const echoQuery = trpc.echo.useQuery(
+    { message: echoInput },
+    { enabled: echoInput.length > 0 }
+  );
+
+  const incrementMutation = trpc.counter.increment.useMutation({
+    onSuccess: () => counterQuery.refetch(),
+  });
+
+  const decrementMutation = trpc.counter.decrement.useMutation({
+    onSuccess: () => counterQuery.refetch(),
+  });
+
+  const resetMutation = trpc.counter.reset.useMutation({
+    onSuccess: () => counterQuery.refetch(),
+  });
+
+  const isLoading = healthQuery.isLoading;
+  const hasError = healthQuery.isError;
+
+  return (
+    <Screen background="primary" padding="lg" scrollable>
+      <View gap="lg">
+        {/* Header */}
+        <View gap="sm">
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Icon name="api" size={28} intent="primary" />
+            <Text typography="h3">tRPC Demo</Text>
+          </View>
+          <Text color="secondary">
+            Type-safe API calls with full end-to-end type safety
+          </Text>
+        </View>
+
+        {/* Loading State */}
+        {isLoading && (
+          <Card type="outlined" padding="lg">
+            <View style={{ alignItems: 'center', gap: 12 }}>
+              <ActivityIndicator size="lg" intent="primary" />
+              <Text color="secondary">Connecting to API...</Text>
+            </View>
+          </Card>
+        )}
+
+        {/* Error State */}
+        {hasError && (
+          <Alert intent="danger" title="Connection Error">
+            Could not connect to the API. Make sure the server is running.
+          </Alert>
+        )}
+
+        {/* Base Routes Section */}
+        <View gap="sm">
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Icon name="lightning-bolt" size={20} intent="warning" />
+            <Text typography="h5" weight="semibold">API Routes</Text>
+            <Badge intent="warning" size="sm">In-Memory</Badge>
+          </View>
+          <Text typography="caption" color="secondary">
+            These routes work without any database setup
+          </Text>
+        </View>
+
+        {/* Health Check */}
+        {healthQuery.data && (
+          <Card type="elevated" padding="md" gap="sm">
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Icon name="heart-pulse" size={20} intent="success" />
+              <Text weight="semibold">Health Check</Text>
+              <Badge intent="success" size="sm">
+                {healthQuery.data.status}
+              </Badge>
+            </View>
+            <Text typography="caption" color="secondary">
+              Version: {healthQuery.data.version} | {healthQuery.data.timestamp}
+            </Text>
+          </Card>
+        )}
+
+        {/* Echo Demo */}
+        <Card type="outlined" padding="md" gap="md" style={{ minHeight: 180 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Icon name="message-reply-text" size={20} intent="primary" />
+            <Text weight="semibold">Echo Endpoint</Text>
+          </View>
+
+          <TextInput
+            placeholder="Type a message to echo..."
+            value={echoInput}
+            onChangeText={setEchoInput}
+          />
+
+          <View
+            background="secondary"
+            padding="md"
+            radius="md"
+            gap="xs"
+            style={{ height: 80 }}
+          >
+            {echoQuery.data ? (
+              <>
+                <Text typography="caption" color="secondary">Original: {echoQuery.data.original}</Text>
+                <Text typography="caption" color="secondary">Reversed: {echoQuery.data.reversed}</Text>
+                <Text typography="caption" color="secondary">Length: {echoQuery.data.length}</Text>
+              </>
+            ) : (
+              <Text typography="caption" color="secondary" style={{ opacity: 0.5 }}>
+                Type a message above to see the echo response...
+              </Text>
+            )}
+          </View>
+        </Card>
+
+        {/* Counter Demo */}
+        <Card type="outlined" padding="md" gap="md">
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Icon name="counter" size={20} intent="primary" />
+            <Text weight="semibold">In-Memory Counter</Text>
+          </View>
+
+          <View style={{ alignItems: 'center', gap: 12 }}>
+            <Text typography="h2" color="primary">
+              {counterQuery.data?.value ?? 0}
+            </Text>
+
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <Button
+                size="sm"
+                intent="danger"
+                leftIcon="minus"
+                onPress={() => decrementMutation.mutate()}
+                disabled={decrementMutation.isPending}
+              >
+                -1
+              </Button>
+              <Button
+                size="sm"
+                intent="neutral"
+                leftIcon="refresh"
+                onPress={() => resetMutation.mutate()}
+                disabled={resetMutation.isPending}
+              >
+                Reset
+              </Button>
+              <Button
+                size="sm"
+                intent="success"
+                leftIcon="plus"
+                onPress={() => incrementMutation.mutate()}
+                disabled={incrementMutation.isPending}
+              >
+                +1
+              </Button>
+            </View>
+          </View>
+
+          <Text typography="caption" color="secondary" style={{ textAlign: 'center' }}>
+            Server-side state - persists across page refreshes but resets on server restart
+          </Text>
+        </Card>
+
+        {/* Refetch Button */}
+        <Button
+          intent="primary"
+          leftIcon="refresh"
+          onPress={() => {
+            healthQuery.refetch();
+            counterQuery.refetch();
+            if (echoInput) echoQuery.refetch();
+          }}
+        >
+          Refetch All Data
+        </Button>
+
+        {/* Code Example */}
+        <Card type="outlined" padding="md" gap="sm">
+          <Text weight="semibold">tRPC Usage Examples</Text>
+          <View background="secondary" padding="md" radius="sm">
+            <Text
+              typography="caption"
+              style={{ fontFamily: 'monospace', lineHeight: 20 }}
+            >
+              {${'`'}// Query with full type inference
+const { data } = trpc.health.useQuery();
+const counter = trpc.counter.get.useQuery();
+
+// Mutations
+trpc.counter.increment.useMutation();
+trpc.echo.useQuery({ message: 'hello' });${'`'}}
+            </Text>
+          </View>
+        </Card>
+
+        {/* Database Info */}
+        <Alert intent="info" title="Want Database Features?">
+          Enable Prisma when creating your project to get full CRUD operations with persistent storage.
+        </Alert>
+      </View>
+    </Screen>
+  );
+};
+
+export default TRPCDemoScreen;
 `;
 }

@@ -3,6 +3,10 @@
  *
  * Manages mount/unmount animations by keeping elements in the DOM
  * during exit animations.
+ *
+ * NOTE: This hook uses double RAF for DOM synchronization. The actual
+ * animation uses CSS transitions (performant), but the RAF is needed
+ * to ensure proper timing of state changes.
  */
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
@@ -15,6 +19,19 @@ import type {
   TransformProperty,
 } from './types';
 import { isTransformObject, normalizeTransform } from './normalizeTransform';
+
+// Warn about RAF usage in development (once per session)
+let hasWarnedAboutPresenceRAF = false;
+function warnPresenceRAF() {
+  if (process.env.NODE_ENV === 'development' && !hasWarnedAboutPresenceRAF) {
+    hasWarnedAboutPresenceRAF = true;
+    console.warn(
+      `[@idealyst/animate] usePresence uses requestAnimationFrame for DOM synchronization. ` +
+        `The animation itself uses CSS transitions, but RAF is required to coordinate ` +
+        `mount/unmount timing with the browser's rendering cycle.`
+    );
+  }
+}
 
 /**
  * Hook that manages presence animations for mount/unmount.
@@ -61,6 +78,7 @@ export function usePresence(isVisible: boolean, options: UsePresenceOptions): Us
       // Entering: mount immediately, then animate in
       setIsPresent(true);
       // Use double RAF to ensure DOM is ready before animating
+      warnPresenceRAF();
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setIsEntering(true);

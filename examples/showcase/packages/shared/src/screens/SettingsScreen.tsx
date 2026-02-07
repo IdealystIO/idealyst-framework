@@ -13,6 +13,7 @@ import {
 } from '@idealyst/components';
 import { useNavigator } from '@idealyst/navigation';
 import { UnistylesRuntime } from 'react-native-unistyles';
+import { ThemeSettings } from '@idealyst/theme';
 
 export const SettingsScreen: React.FC = () => {
   const { goBack, canGoBack } = useNavigator();
@@ -22,12 +23,12 @@ export const SettingsScreen: React.FC = () => {
   const handleThemeToggle = () => {
     const newTheme = isDarkMode ? 'light' : 'dark';
     setTheme(newTheme);
-    UnistylesRuntime.setTheme(newTheme);
+    ThemeSettings.setTheme(newTheme, newTheme);
   };
 
   const selectTheme = (theme: 'light' | 'dark') => {
     setTheme(theme);
-    UnistylesRuntime.setTheme(theme);
+    ThemeSettings.setTheme(theme, theme);
   };
 
   return (
@@ -78,7 +79,7 @@ export const SettingsScreen: React.FC = () => {
                   <Icon
                     name={isDarkMode ? 'moon-waning-crescent' : 'white-balance-sunny'}
                     size={22}
-                    color={isDarkMode ? "primary" : "orange"}
+                    intent={isDarkMode ? 'primary' : 'warning'}
                   />
                 </View>
                 <View style={{ flex: 1 }}>
@@ -98,7 +99,6 @@ export const SettingsScreen: React.FC = () => {
               {/* Light Theme */}
               <Card
                 type="outlined"
-                clickable
                 onPress={() => selectTheme('light')}
                 intent={theme === 'light' ? 'primary' : 'neutral'}
                 style={{ flex: 1, padding: 0, overflow: 'hidden' }}
@@ -122,7 +122,6 @@ export const SettingsScreen: React.FC = () => {
               {/* Dark Theme */}
               <Card
                 type="outlined"
-                clickable
                 onPress={() => selectTheme('dark')}
                 intent={theme === 'dark' ? 'primary' : 'neutral'}
                 style={{ flex: 1, padding: 0, overflow: 'hidden' }}

@@ -28,6 +28,7 @@ const TEST_CONFIGURATIONS = [
     hasTrpc: true,
     hasGraphql: false,
     hasPrisma: false,
+    isBlank: false,
   },
   {
     name: 'trpc-with-db',
@@ -37,6 +38,7 @@ const TEST_CONFIGURATIONS = [
     hasTrpc: true,
     hasGraphql: false,
     hasPrisma: true,
+    isBlank: false,
   },
   {
     name: 'no-api',
@@ -46,6 +48,7 @@ const TEST_CONFIGURATIONS = [
     hasTrpc: false,
     hasGraphql: false,
     hasPrisma: false,
+    isBlank: false,
   },
   {
     name: 'graphql-no-db',
@@ -55,6 +58,7 @@ const TEST_CONFIGURATIONS = [
     hasTrpc: false,
     hasGraphql: true,
     hasPrisma: false,
+    isBlank: false,
   },
   {
     name: 'graphql-with-db',
@@ -64,6 +68,37 @@ const TEST_CONFIGURATIONS = [
     hasTrpc: false,
     hasGraphql: true,
     hasPrisma: true,
+    isBlank: false,
+  },
+  {
+    name: 'blank-no-api',
+    description: 'Blank project without API',
+    flags: `--blank ${COMMON_FLAGS}`,
+    hasApi: false,
+    hasTrpc: false,
+    hasGraphql: false,
+    hasPrisma: false,
+    isBlank: true,
+  },
+  {
+    name: 'blank-with-trpc',
+    description: 'Blank project with tRPC',
+    flags: `--blank --with-api --with-trpc ${COMMON_FLAGS}`,
+    hasApi: true,
+    hasTrpc: true,
+    hasGraphql: false,
+    hasPrisma: false,
+    isBlank: true,
+  },
+  {
+    name: 'blank-with-graphql',
+    description: 'Blank project with GraphQL',
+    flags: `--blank --with-api --with-graphql ${COMMON_FLAGS}`,
+    hasApi: true,
+    hasTrpc: false,
+    hasGraphql: true,
+    hasPrisma: false,
+    isBlank: true,
   },
 ];
 
@@ -211,23 +246,33 @@ describe('CLI Template Integration Tests', () => {
         const routerPath = path.join(projectPath, 'packages', 'shared', 'src', 'navigation', 'AppRouter.tsx');
         const routerContent = await fs.readFile(routerPath, 'utf8');
 
-        // Always present
+        // HomeScreen always present
         expect(routerContent).toContain('HomeScreen');
-        expect(routerContent).toContain('ExploreScreen');
-        expect(routerContent).toContain('ProfileScreen');
 
-        // tRPC screen only when tRPC enabled
-        if (config.hasTrpc) {
-          expect(routerContent).toContain('TRPCDemoScreen');
-        } else {
+        if (config.isBlank) {
+          // Blank projects only have HomeScreen
+          expect(routerContent).not.toContain('ExploreScreen');
+          expect(routerContent).not.toContain('ProfileScreen');
           expect(routerContent).not.toContain('TRPCDemoScreen');
-        }
-
-        // GraphQL screen only when GraphQL AND Prisma enabled
-        if (config.hasGraphql && config.hasPrisma) {
-          expect(routerContent).toContain('GraphQLDemoScreen');
-        } else {
           expect(routerContent).not.toContain('GraphQLDemoScreen');
+        } else {
+          // Showcase projects have all standard screens
+          expect(routerContent).toContain('ExploreScreen');
+          expect(routerContent).toContain('ProfileScreen');
+
+          // tRPC screen only when tRPC enabled
+          if (config.hasTrpc) {
+            expect(routerContent).toContain('TRPCDemoScreen');
+          } else {
+            expect(routerContent).not.toContain('TRPCDemoScreen');
+          }
+
+          // GraphQL screen only when GraphQL AND Prisma enabled
+          if (config.hasGraphql && config.hasPrisma) {
+            expect(routerContent).toContain('GraphQLDemoScreen');
+          } else {
+            expect(routerContent).not.toContain('GraphQLDemoScreen');
+          }
         }
       });
 
@@ -397,5 +442,27 @@ describe('Build Verification', () => {
         expect(fs.existsSync(dbPath)).toBe(true);
       }, TIMEOUT);
     }
+
+    it('should pass TypeScript type checking', () => {
+      // Skip if project doesn't exist (previous tests may have failed)
+      if (!fs.existsSync(projectPath)) {
+        console.log(`Skipping: ${projectPath} does not exist`);
+        return;
+      }
+
+      // Run tsc --noEmit to verify all TypeScript types are correct
+      const result = spawnSync('yarn', ['tsc', '--noEmit'], {
+        cwd: projectPath,
+        encoding: 'utf8',
+        timeout: TIMEOUT,
+        stdio: 'pipe',
+      });
+
+      if (result.status !== 0) {
+        console.error('TypeScript errors:', result.stdout, result.stderr);
+      }
+
+      expect(result.status).toBe(0);
+    }, TIMEOUT);
   });
 });

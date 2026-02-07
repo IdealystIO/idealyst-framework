@@ -447,6 +447,48 @@ UnistylesRegistry
   });
 \`\`\`
 
+## useTheme Hook
+
+Access the current theme in your components with full TypeScript inference:
+
+\`\`\`typescript
+import { useTheme } from '@idealyst/theme';
+
+function MyComponent() {
+  const theme = useTheme();
+
+  return (
+    <View style={{ backgroundColor: theme.colors.surface.primary }}>
+      <Text style={{ color: theme.colors.text.primary }}>
+        Hello
+      </Text>
+    </View>
+  );
+}
+\`\`\`
+
+The hook returns the properly typed theme based on your registered theme type:
+
+\`\`\`typescript
+const theme = useTheme();
+
+// Access intent colors
+const primaryColor = theme.intents.primary.primary;
+const successLight = theme.intents.success.light;
+
+// Access sizes
+const buttonPadding = theme.sizes.button.md.paddingHorizontal;
+
+// Access radii
+const borderRadius = theme.radii.md;
+
+// Access surface colors
+const screenBg = theme.colors.surface.screen;
+
+// Access text colors
+const textColor = theme.colors.text.primary;
+\`\`\`
+
 ## Platform-Specific Styles
 
 \`\`\`typescript

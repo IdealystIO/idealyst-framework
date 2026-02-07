@@ -269,6 +269,111 @@ const PresenceDemo: React.FC = () => {
 };
 
 // =============================================================================
+// Spring Animation Demo (Web CSS Approximation)
+// =============================================================================
+
+const SpringAnimationDemo: React.FC = () => {
+  const [isPressed, setIsPressed] = useState(false);
+  const [springType, setSpringType] = useState<'spring' | 'springStiff' | 'springBouncy'>('spring');
+
+  // Using spring easing - on web, this automatically uses CSS approximation
+  // On native, it uses actual Reanimated spring physics
+  const buttonStyle = useAnimatedStyle(
+    {
+      transform: { scale: isPressed ? 0.95 : 1 },
+    },
+    { easing: springType }
+  );
+
+  const cardStyle = useAnimatedStyle(
+    {
+      transform: { y: isPressed ? 4 : 0 },
+      opacity: isPressed ? 0.9 : 1,
+    },
+    { easing: springType }
+  );
+
+  return (
+    <Card padding="md" gap="md">
+      <Text typography="h4" weight="semibold">Spring Animations</Text>
+      <Text color="secondary">
+        Spring easings are automatically converted to CSS approximations on web,
+        providing GPU-accelerated animations that match native spring feel.
+      </Text>
+
+      <View direction="row" gap="sm" style={{ justifyContent: 'center' }}>
+        <Button
+          type={springType === 'spring' ? 'contained' : 'outlined'}
+          onPress={() => setSpringType('spring')}
+          size="sm"
+        >
+          Spring
+        </Button>
+        <Button
+          type={springType === 'springStiff' ? 'contained' : 'outlined'}
+          onPress={() => setSpringType('springStiff')}
+          size="sm"
+        >
+          Stiff
+        </Button>
+        <Button
+          type={springType === 'springBouncy' ? 'contained' : 'outlined'}
+          onPress={() => setSpringType('springBouncy')}
+          size="sm"
+        >
+          Bouncy
+        </Button>
+      </View>
+
+      <View style={{ alignItems: 'center', padding: 20 }}>
+        <View
+          style={{
+            width: 160,
+            height: 100,
+            backgroundColor: '#6366f1',
+            borderRadius: 12,
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: 'pointer',
+            ...buttonStyle,
+            ...cardStyle,
+          }}
+          // @ts-ignore - web events
+          onMouseDown={() => setIsPressed(true)}
+          onMouseUp={() => setIsPressed(false)}
+          onMouseLeave={() => setIsPressed(false)}
+        >
+          <Text style={{ color: '#fff' }} weight="semibold">Press Me</Text>
+          <Text style={{ color: 'rgba(255,255,255,0.8)' }} typography="caption">
+            {springType}
+          </Text>
+        </View>
+      </View>
+
+      <View background="secondary" padding="sm" radius="sm">
+        <Text typography="caption" style={{ fontFamily: 'monospace' }}>
+          {`// Spring easings work cross-platform!
+const style = useAnimatedStyle({
+  transform: { scale: isPressed ? 0.95 : 1 },
+}, { easing: '${springType}' });
+
+// Web: CSS cubic-bezier approximation
+// Native: Reanimated withSpring`}
+        </Text>
+      </View>
+
+      <View padding="sm" background="tertiary" radius="sm">
+        <Text typography="caption" color="secondary">
+          <Text weight="semibold">Web Performance: </Text>
+          Spring animations use CSS transitions with calculated bezier curves,
+          running entirely on the GPU compositor thread. No JavaScript RAF loops.
+        </Text>
+      </View>
+    </Card>
+  );
+};
+
+// =============================================================================
 // useGradientBorder Demo
 // =============================================================================
 
@@ -391,6 +496,7 @@ export const AnimateExamples: React.FC = () => {
         <Divider />
 
         <AnimatedStyleDemo />
+        <SpringAnimationDemo />
         <AnimatedValueDemo />
         <PresenceDemo />
         <GradientBorderDemo />

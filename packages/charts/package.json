@@ -1,0 +1,98 @@
+{
+  "name": "@idealyst/charts",
+  "version": "1.2.80",
+  "description": "Cross-platform animated charts for React and React Native with SVG and Skia renderers",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/charts"
+  },
+  "author": "Idealyst <contact@idealyst.io>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./examples": {
+      "import": "./src/examples/index.ts",
+      "require": "./src/examples/index.ts",
+      "types": "./src/examples/index.ts"
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "@idealyst/svg": "^1.2.80",
+    "@idealyst/theme": "^1.2.80",
+    "@shopify/react-native-skia": ">=1.0.0",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-gesture-handler": ">=2.0.0",
+    "react-native-reanimated": ">=3.0.0",
+    "react-native-svg": ">=13.0.0",
+    "react-native-unistyles": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    },
+    "react-native-reanimated": {
+      "optional": true
+    },
+    "react-native-svg": {
+      "optional": true
+    },
+    "@shopify/react-native-skia": {
+      "optional": true
+    },
+    "react-native-gesture-handler": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@idealyst/svg": "^1.2.80",
+    "@idealyst/theme": "^1.2.80",
+    "@shopify/react-native-skia": "^1.8.2",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-native": "^0.80.1",
+    "react-native-gesture-handler": "^2.29.0",
+    "react-native-reanimated": "^4.1.3",
+    "react-native-svg": "^15.14.0",
+    "react-native-unistyles": "^3.0.10",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "charts",
+    "graphs",
+    "visualization",
+    "svg",
+    "skia",
+    "animation",
+    "cross-platform",
+    "line-chart",
+    "bar-chart",
+    "pie-chart",
+    "candlestick",
+    "idealyst"
+  ]
+}
