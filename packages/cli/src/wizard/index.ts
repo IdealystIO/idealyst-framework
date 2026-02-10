@@ -29,12 +29,15 @@ export async function runWizard(
   console.log(chalk.gray('\nThis wizard will guide you through setting up your new project.'));
   console.log(chalk.gray('Press Ctrl+C at any time to cancel.\n'));
 
+  // Default to postgresql when devcontainer is enabled (since it includes PostgreSQL)
+  const defaultDbProvider = prefilledArgs.withDevcontainer ? 'postgresql' : 'sqlite';
+
   // Build partial config from prefilled args
   const config: Partial<ProjectConfig> = {
     extensions: {
       api: prefilledArgs.withApi ?? false,
       prisma: prefilledArgs.withPrisma ?? false,
-      databaseProvider: prefilledArgs.dbProvider ?? 'sqlite',
+      databaseProvider: prefilledArgs.dbProvider ?? defaultDbProvider,
       trpc: prefilledArgs.withTrpc ?? false,
       graphql: prefilledArgs.withGraphql ?? false,
       devcontainer: prefilledArgs.withDevcontainer ?? false,
@@ -102,6 +105,11 @@ export async function runWizard(
     config.extensions!.devcontainer = await devcontainerExtensionStep.prompt(config);
   }
 
+  // If devcontainer was enabled and no explicit db provider was set, default to postgresql
+  if (config.extensions!.devcontainer && !prefilledArgs.dbProvider) {
+    config.extensions!.databaseProvider = 'postgresql';
+  }
+
   // Summary and confirmation
   const confirmed = await summaryStep.prompt(config);
 
@@ -166,6 +174,9 @@ export function validateNonInteractiveArgs(args: CLIArgs): {
 export function buildConfigFromArgs(args: CLIArgs): ProjectConfig {
   const identifiers = generateIdentifiers(args.orgDomain!, args.projectName!);
 
+  // Default to postgresql when devcontainer is enabled (since it includes PostgreSQL)
+  const defaultDbProvider = args.withDevcontainer ? 'postgresql' : 'sqlite';
+
   return {
     projectName: args.projectName!,
     orgDomain: args.orgDomain!,
@@ -175,7 +186,7 @@ export function buildConfigFromArgs(args: CLIArgs): ProjectConfig {
     extensions: {
       api: args.withApi ?? false,
       prisma: args.withPrisma ?? false,
-      databaseProvider: args.dbProvider ?? 'sqlite',
+      databaseProvider: args.dbProvider ?? defaultDbProvider,
       trpc: args.withTrpc ?? false,
       graphql: args.withGraphql ?? false,
       devcontainer: args.withDevcontainer ?? false,

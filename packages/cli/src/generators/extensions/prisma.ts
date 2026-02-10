@@ -98,7 +98,9 @@ async function generatePrismaFiles(
   );
 
   // Create .env.example
+  // Shell environment DATABASE_URL takes precedence over .env file
   const envExample = `# Database connection URL
+# Note: Shell environment DATABASE_URL takes precedence over this file
 ${provider === 'postgresql'
     ? 'DATABASE_URL="postgresql://postgres:postgres@localhost:5432/app"'
     : 'DATABASE_URL="file:./dev.db"'}
@@ -214,10 +216,10 @@ model Item {
 
 /**
  * Create Prisma config file (Prisma 7+)
+ * Shell environment DATABASE_URL takes precedence over .env file
  */
 function createPrismaConfig(): string {
-  return `import 'dotenv/config';
-import { defineConfig, env } from 'prisma/config';
+  return `import { defineConfig, env } from 'prisma/config';
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',

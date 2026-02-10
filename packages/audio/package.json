@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/audio",
-  "version": "1.2.92",
+  "version": "1.2.95",
   "description": "Unified cross-platform audio for React and React Native - recording, playback, and PCM streaming",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/audio#readme",
   "readme": "README.md",

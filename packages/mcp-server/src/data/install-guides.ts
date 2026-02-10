@@ -974,6 +974,140 @@ export default {
   }
 }`,
   },
+
+  // ============================================================================
+  // FILE UPLOAD PACKAGE
+  // ============================================================================
+
+  "file-upload": {
+    packageName: "File Upload",
+    npmName: "@idealyst/file-upload",
+    description:
+      "Cross-platform file picker and upload for React and React Native",
+    platforms: ["web", "native"],
+    complexity: "moderate",
+    installation: {
+      yarn: "yarn add @idealyst/file-upload",
+      npm: "npm install @idealyst/file-upload",
+    },
+    peerDependencies: [
+      {
+        name: "react-native-document-picker",
+        required: true,
+        platforms: ["native"],
+        note: "Required for document selection on native",
+      },
+      {
+        name: "react-native-image-picker",
+        required: true,
+        platforms: ["native"],
+        note: "Required for image/video selection and camera capture",
+      },
+      {
+        name: "react-native-blob-util",
+        required: true,
+        platforms: ["native"],
+        note: "Required for file uploads with progress tracking and background support",
+      },
+    ],
+    ios: {
+      podInstallRequired: true,
+      infoPlistEntries: [
+        {
+          key: "NSPhotoLibraryUsageDescription",
+          value: "$(PRODUCT_NAME) needs access to your photo library to select images",
+          description: "Required for photo library access",
+        },
+        {
+          key: "NSCameraUsageDescription",
+          value: "$(PRODUCT_NAME) needs access to your camera to take photos",
+          description: "Required for camera capture",
+        },
+        {
+          key: "NSMicrophoneUsageDescription",
+          value: "$(PRODUCT_NAME) needs access to your microphone to record video",
+          description: "Required for video recording with audio",
+        },
+        {
+          key: "UIBackgroundModes",
+          value: "<array><string>fetch</string></array>",
+          description: "Required for background uploads (optional)",
+        },
+      ],
+      additionalSteps: [
+        "Run 'cd ios && pod install' after installing dependencies",
+        "For background uploads, add 'fetch' to UIBackgroundModes in Info.plist",
+      ],
+    },
+    android: {
+      permissions: [
+        {
+          permission: "android.permission.READ_EXTERNAL_STORAGE",
+          description: "Required for file access on Android 12 and below",
+        },
+        {
+          permission: "android.permission.READ_MEDIA_IMAGES",
+          description: "Required for image access on Android 13+",
+        },
+        {
+          permission: "android.permission.READ_MEDIA_VIDEO",
+          description: "Required for video access on Android 13+",
+        },
+        {
+          permission: "android.permission.CAMERA",
+          description: "Required for camera capture",
+        },
+      ],
+      additionalSteps: [
+        "Ensure minSdkVersion is at least 21 in android/build.gradle",
+        "For Android 13+, use granular media permissions",
+      ],
+    },
+    web: {
+      notes: [
+        "No additional configuration required for web",
+        "Drag and drop works automatically in the DropZone component",
+        "File picker uses native browser file input",
+      ],
+    },
+    verification: `import { useFilePicker, useFileUpload } from '@idealyst/file-upload';
+
+function Test() {
+  const { pick, files } = useFilePicker();
+  const { addFiles, uploads } = useFileUpload();
+
+  const handleUpload = async () => {
+    const result = await pick({ allowedTypes: ['image'] });
+    if (!result.cancelled) {
+      addFiles(result.files, { url: '/api/upload' });
+    }
+  };
+
+  return <Button onPress={handleUpload}>Upload</Button>;
+}`,
+    troubleshooting: [
+      {
+        issue: "File picker doesn't open on iOS",
+        solution:
+          "Ensure NSPhotoLibraryUsageDescription is set in Info.plist and permissions are granted",
+      },
+      {
+        issue: "File picker doesn't open on Android",
+        solution:
+          "Check that storage permissions are requested at runtime for Android 13+",
+      },
+      {
+        issue: "Upload progress not updating",
+        solution:
+          "Verify react-native-blob-util is installed and linked correctly",
+      },
+      {
+        issue: "Background uploads fail on iOS",
+        solution:
+          "Add 'fetch' to UIBackgroundModes array in Info.plist",
+      },
+    ],
+  },
 };
 
 /**

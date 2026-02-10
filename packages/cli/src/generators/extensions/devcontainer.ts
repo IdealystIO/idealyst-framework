@@ -231,7 +231,15 @@ async function createDockerCompose(
     volumes.push('postgres_data');
     appDependsOn.push(`      postgres:
         condition: service_healthy`);
-    appEnv.push(`DATABASE_URL: postgresql://postgres:postgres@postgres:5432/${dbName}`);
+    // Only set DATABASE_URL to postgres if the database provider is postgresql
+    if (data.databaseProvider === 'postgresql') {
+      appEnv.push(`DATABASE_URL: postgresql://postgres:postgres@postgres:5432/${dbName}`);
+    }
+  }
+
+  // Set DATABASE_URL for sqlite if that's the selected provider
+  if (data.databaseProvider === 'sqlite') {
+    appEnv.push('DATABASE_URL: file:./dev.db');
   }
 
   // Redis service
@@ -494,13 +502,20 @@ async function createSetupScript(
     'LOG_LEVEL=debug',
   ];
 
-  if (config.postgres) {
+  // Database configuration based on selected provider
+  if (data.databaseProvider === 'postgresql' && config.postgres) {
     envVars.unshift(
       '# Database Configuration',
       `DATABASE_URL=postgresql://postgres:postgres@postgres:5432/${dbName}`,
       `POSTGRES_DB=${dbName}`,
       'POSTGRES_USER=postgres',
       'POSTGRES_PASSWORD=postgres',
+      ''
+    );
+  } else if (data.databaseProvider === 'sqlite') {
+    envVars.unshift(
+      '# Database Configuration',
+      'DATABASE_URL=file:./dev.db',
       ''
     );
   }

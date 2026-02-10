@@ -216,13 +216,14 @@ describe('Prisma Extension Generator', () => {
       expect(content).toContain("seed: 'tsx prisma/seed.ts'");
     });
 
-    it('should import dotenv/config for env loading', async () => {
+    it('should use Prisma env() helper for DATABASE_URL', async () => {
       await applyPrismaExtension(TEST_DIR, baseTemplateData);
 
       const configPath = path.join(TEST_DIR, 'packages', 'database', 'prisma.config.ts');
       const content = await fs.readFile(configPath, 'utf8');
 
-      expect(content).toContain("import 'dotenv/config'");
+      expect(content).toContain("import { defineConfig, env } from 'prisma/config'");
+      expect(content).toContain("url: env('DATABASE_URL')");
     });
   });
 
@@ -363,6 +364,16 @@ describe('Prisma Extension Generator', () => {
       );
 
       expect(packageJson.dependencies).toHaveProperty('zod');
+    });
+
+    it('should NOT include dotenv in dependencies (Prisma env() is used instead)', async () => {
+      await applyPrismaExtension(TEST_DIR, baseTemplateData);
+
+      const packageJson = await fs.readJson(
+        path.join(TEST_DIR, 'packages', 'database', 'package.json')
+      );
+
+      expect(packageJson.dependencies).not.toHaveProperty('dotenv');
     });
 
     it('should set type to module', async () => {

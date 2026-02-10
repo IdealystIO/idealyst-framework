@@ -874,6 +874,80 @@ function AnimatedComponent() {
     ],
     relatedPackages: ["theme", "svg", "animate"],
   },
+
+  "file-upload": {
+    name: "File Upload",
+    npmName: "@idealyst/file-upload",
+    description:
+      "Cross-platform file picker and upload for React and React Native. Supports chunked uploads for large files, background uploads on native, progress tracking, and retry logic.",
+    category: "media",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation:
+      "yarn add @idealyst/file-upload react-native-document-picker react-native-image-picker react-native-blob-util",
+    peerDependencies: [
+      "react-native-document-picker (native)",
+      "react-native-image-picker (native)",
+      "react-native-blob-util (native)",
+    ],
+    features: [
+      "Cross-platform file picker with type filtering",
+      "Camera capture support (native)",
+      "Drag and drop support (web)",
+      "Upload queue with concurrency control",
+      "Progress tracking with speed and ETA",
+      "Chunked uploads for large files (>50MB)",
+      "Background uploads on native",
+      "Automatic retry with exponential backoff",
+      "Presets for common scenarios (avatar, documents, images)",
+      "TypeScript-first with full type definitions",
+    ],
+    quickStart: `import { useFilePicker, useFileUpload, FilePickerButton, UploadProgress } from '@idealyst/file-upload';
+
+function UploadForm() {
+  const { addFiles, uploads } = useFileUpload({ autoStart: true });
+
+  return (
+    <View>
+      <FilePickerButton
+        pickerConfig={{ allowedTypes: ['image'], multiple: true }}
+        onPick={(result) => {
+          if (!result.cancelled) {
+            addFiles(result.files, {
+              url: 'https://api.example.com/upload',
+              fieldName: 'file',
+            });
+          }
+        }}
+      >
+        Select Images
+      </FilePickerButton>
+
+      {uploads.map(upload => (
+        <UploadProgress
+          key={upload.id}
+          upload={upload}
+          showSpeed
+          showETA
+        />
+      ))}
+    </View>
+  );
+}`,
+    apiHighlights: [
+      "useFilePicker() - File selection hook",
+      "useFileUpload() - Upload management hook",
+      "FilePickerButton - Styled file picker button",
+      "DropZone - Drag and drop area (web)",
+      "UploadProgress - Progress indicator component",
+      "FILE_PICKER_PRESETS - Common file type configs",
+      "UPLOAD_PRESETS - Upload behavior presets",
+      "ChunkedUploader - Large file chunking",
+      "createFilePicker() - Factory for custom use",
+      "createFileUploader() - Factory for custom use",
+    ],
+    relatedPackages: ["components", "camera", "storage"],
+  },
 };
 
 /**

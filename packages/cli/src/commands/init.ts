@@ -84,6 +84,9 @@ export async function initCommand(
       // Build config directly from args
       const identifiers = generateIdentifiers(args.orgDomain!, args.projectName!);
 
+      // Default to postgresql when devcontainer is enabled (since it includes PostgreSQL)
+      const defaultDbProvider = args.withDevcontainer ? 'postgresql' : 'sqlite';
+
       config = {
         projectName: args.projectName!,
         orgDomain: args.orgDomain!,
@@ -93,7 +96,7 @@ export async function initCommand(
         extensions: {
           api: args.withApi ?? false,
           prisma: args.withPrisma ?? false,
-          databaseProvider: args.dbProvider ?? 'sqlite',
+          databaseProvider: args.dbProvider ?? defaultDbProvider,
           trpc: args.withTrpc ?? false,
           graphql: args.withGraphql ?? false,
           devcontainer: args.withDevcontainer ?? false,
