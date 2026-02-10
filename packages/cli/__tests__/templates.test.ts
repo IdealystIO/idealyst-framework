@@ -21,6 +21,8 @@ describe('Template Processing', () => {
     hasTrpc: false,
     hasGraphql: false,
     hasDevcontainer: false,
+    isBlank: false,
+    databaseProvider: 'sqlite',
   };
 
   describe('processTemplateContent', () => {

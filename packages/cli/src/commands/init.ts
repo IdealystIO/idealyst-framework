@@ -8,6 +8,7 @@ import {
   ProjectConfig,
   MissingArgumentsError,
   InvalidExtensionError,
+  DatabaseProvider,
 } from '../types';
 import { runWizard, validateNonInteractiveArgs } from '../wizard';
 import { generateProject } from '../generators';
@@ -21,6 +22,7 @@ export interface InitOptions {
   appName?: string;
   withApi?: boolean;
   withPrisma?: boolean;
+  dbProvider?: DatabaseProvider;
   withTrpc?: boolean;
   withGraphql?: boolean;
   withDevcontainer?: boolean;
@@ -44,6 +46,7 @@ export async function initCommand(
       appDisplayName: options.appName,
       withApi: options.withApi,
       withPrisma: options.withPrisma,
+      dbProvider: options.dbProvider,
       withTrpc: options.withTrpc,
       withGraphql: options.withGraphql,
       withDevcontainer: options.withDevcontainer,
@@ -90,6 +93,7 @@ export async function initCommand(
         extensions: {
           api: args.withApi ?? false,
           prisma: args.withPrisma ?? false,
+          databaseProvider: args.dbProvider ?? 'sqlite',
           trpc: args.withTrpc ?? false,
           graphql: args.withGraphql ?? false,
           devcontainer: args.withDevcontainer ?? false,

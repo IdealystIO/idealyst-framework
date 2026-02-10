@@ -367,12 +367,41 @@ describe('CLI Template Integration Tests', () => {
         });
 
         it('should have Prisma schema with correct output', async () => {
-          const schemaPath = path.join(projectPath, 'packages', 'database', 'schema.prisma');
+          const schemaPath = path.join(projectPath, 'packages', 'database', 'prisma', 'schema.prisma');
           const schemaContent = await fs.readFile(schemaPath, 'utf8');
 
           expect(schemaContent).toContain('generator client');
           expect(schemaContent).toContain('output');
           expect(schemaContent).toContain('./generated/client');
+        });
+
+        it('should have Prisma 7 schema format (no url in datasource)', async () => {
+          const schemaPath = path.join(projectPath, 'packages', 'database', 'prisma', 'schema.prisma');
+          const schemaContent = await fs.readFile(schemaPath, 'utf8');
+
+          // Extract datasource block and verify it doesn't contain url
+          const datasourceMatch = schemaContent.match(/datasource db \{[\s\S]*?\}/);
+          expect(datasourceMatch).not.toBeNull();
+          const datasourceBlock = datasourceMatch![0];
+          expect(datasourceBlock).not.toContain('url');
+          expect(datasourceBlock).toContain('provider');
+        });
+
+        it('should have prisma.config.ts with datasource url', async () => {
+          const configPath = path.join(projectPath, 'packages', 'database', 'prisma.config.ts');
+          expect(await fs.pathExists(configPath)).toBe(true);
+
+          const configContent = await fs.readFile(configPath, 'utf8');
+          expect(configContent).toContain('defineConfig');
+          expect(configContent).toContain("url: env('DATABASE_URL')");
+        });
+
+        it('should have .env with DATABASE_URL', async () => {
+          const envPath = path.join(projectPath, 'packages', 'database', '.env');
+          expect(await fs.pathExists(envPath)).toBe(true);
+
+          const envContent = await fs.readFile(envPath, 'utf8');
+          expect(envContent).toContain('DATABASE_URL=');
         });
 
         it('should have correct index.ts imports', async () => {
@@ -437,8 +466,8 @@ describe('Build Verification', () => {
           stdio: 'pipe',
         });
 
-        // Check that database was created
-        const dbPath = path.join(projectPath, 'packages', 'database', 'dev.db');
+        // Check that database was created (sqlite creates file relative to schema location)
+        const dbPath = path.join(projectPath, 'packages', 'database', 'prisma', 'dev.db');
         expect(fs.existsSync(dbPath)).toBe(true);
       }, TIMEOUT);
     }

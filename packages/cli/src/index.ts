@@ -26,6 +26,7 @@ program
   .option('--app-name <name>', 'Mobile app display name')
   .option('--with-api', 'Enable API server')
   .option('--with-prisma', 'Enable Prisma database')
+  .option('--db-provider <provider>', 'Database provider: sqlite, postgresql (default: sqlite)')
   .option('--with-trpc', 'Enable tRPC (requires --with-api)')
   .option('--with-graphql', 'Enable GraphQL (requires --with-api)')
   .option('--with-devcontainer', 'Enable devcontainer setup (Docker, PostgreSQL, Redis, Claude Code)')

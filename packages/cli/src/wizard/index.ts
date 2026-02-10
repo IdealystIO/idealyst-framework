@@ -34,6 +34,7 @@ export async function runWizard(
     extensions: {
       api: prefilledArgs.withApi ?? false,
       prisma: prefilledArgs.withPrisma ?? false,
+      databaseProvider: prefilledArgs.dbProvider ?? 'sqlite',
       trpc: prefilledArgs.withTrpc ?? false,
       graphql: prefilledArgs.withGraphql ?? false,
       devcontainer: prefilledArgs.withDevcontainer ?? false,
@@ -174,6 +175,7 @@ export function buildConfigFromArgs(args: CLIArgs): ProjectConfig {
     extensions: {
       api: args.withApi ?? false,
       prisma: args.withPrisma ?? false,
+      databaseProvider: args.dbProvider ?? 'sqlite',
       trpc: args.withTrpc ?? false,
       graphql: args.withGraphql ?? false,
       devcontainer: args.withDevcontainer ?? false,

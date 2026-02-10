@@ -194,7 +194,7 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
     if (!icon) return null;
 
     if (typeof icon === 'string' && isIconName(icon)) {
-      const iconStyle = (sliderStyles.thumbIcon as any)({ intent });
+      const iconStyle = (sliderStyles.thumbIcon as any);
       return (
         <MaterialDesignIcons
           name={icon}
@@ -208,8 +208,8 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
   };
 
   // Get dynamic styles
-  const containerStyle = (sliderStyles.container as any)({});
-  const trackStyle = (sliderStyles.track as any)({});
+  const containerStyle = (sliderStyles.container as any);
+  const trackStyle = (sliderStyles.track as any);
 
   return (
     <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
@@ -231,12 +231,12 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
           >
             {/* Filled track */}
             <Animated.View
-              style={[(sliderStyles.filledTrack as any)({ intent }), filledTrackAnimatedStyle]}
+              style={[(sliderStyles.filledTrack as any), filledTrackAnimatedStyle]}
             />
 
             {/* Marks */}
             {marks.length > 0 && trackWidthState > 0 && (
-              <View style={sliderStyles.marks}>
+              <View style={sliderStyles.marks as any}>
                 {marks.map((mark) => {
                   const markPercentage = ((mark.value - min) / (max - min)) * 100;
                   const markPosition = (markPercentage / 100) * trackWidthState;
@@ -244,14 +244,14 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
                     <View key={mark.value}>
                       <View
                         style={[
-                          sliderStyles.mark,
+                          sliderStyles.mark as any,
                           { left: markPosition },
                         ]}
                       />
                       {mark.label && (
                         <View
                           style={[
-                            sliderStyles.markLabel,
+                            sliderStyles.markLabel as any,
                             { left: markPosition },
                           ]}
                         >
@@ -267,7 +267,7 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
             {/* Thumb */}
             <Animated.View
               style={[
-                (sliderStyles.thumb as any)({ intent, disabled }),
+                (sliderStyles.thumb as any),
                 {
                   // Manual positioning/sizing for native layout
                   position: 'absolute',

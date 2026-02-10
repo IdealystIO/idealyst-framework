@@ -58,6 +58,7 @@ export async function addCommand(
       extensions: {
         api: false,
         prisma: false,
+        databaseProvider: 'sqlite',
         trpc: options.withTrpc ?? false,
         graphql: options.withGraphql ?? false,
         devcontainer: false,

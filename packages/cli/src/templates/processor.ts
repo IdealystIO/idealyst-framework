@@ -141,6 +141,7 @@ export function buildTemplateData(config: {
   extensions: {
     api: boolean;
     prisma: boolean;
+    databaseProvider: 'sqlite' | 'postgresql';
     trpc: boolean;
     graphql: boolean;
     devcontainer: boolean | { enabled: boolean };
@@ -168,5 +169,6 @@ export function buildTemplateData(config: {
     hasGraphql: config.extensions.graphql,
     hasDevcontainer,
     isBlank: config.blank ?? false,
+    databaseProvider: config.extensions.databaseProvider,
   };
 }

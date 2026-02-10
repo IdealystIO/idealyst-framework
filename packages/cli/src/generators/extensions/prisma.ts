@@ -4,7 +4,7 @@
 
 import fs from 'fs-extra';
 import path from 'path';
-import { TemplateData, PackageGeneratorResult } from '../../types';
+import { TemplateData, PackageGeneratorResult, DatabaseProvider } from '../../types';
 import { copyTemplateDirectory, getTemplatePath, templateHasContent } from '../../templates/copier';
 import { addScripts } from '../../templates/merger';
 import { DEPENDENCIES } from '../../constants';
@@ -47,18 +47,17 @@ export async function applyPrismaExtension(
 
 /**
  * Generate Prisma package files programmatically
+ * Creates a single schema.prisma with the selected provider
  */
 async function generatePrismaFiles(
   dbDir: string,
   data: TemplateData
 ): Promise<void> {
-  // Create directory structure
-  await fs.ensureDir(path.join(dbDir, 'prisma'));
+  const prismaDir = path.join(dbDir, 'prisma');
+  await fs.ensureDir(prismaDir);
   await fs.ensureDir(path.join(dbDir, 'src'));
 
-  // Determine database provider based on devcontainer setting
-  const usePostgres = data.hasDevcontainer;
-  const dbProvider = usePostgres ? 'postgresql' : 'sqlite';
+  const provider = data.databaseProvider;
 
   // Create package.json
   await fs.writeJson(
@@ -74,52 +73,17 @@ async function generatePrismaFiles(
     { spaces: 2 }
   );
 
-  // Try to use template schema.prisma, or generate programmatically
-  const templateSchemaPath = getTemplatePath('core', 'database', 'schema.prisma');
-  if (await fs.pathExists(templateSchemaPath)) {
-    // Read template schema and adjust provider
-    let schemaContent = await fs.readFile(templateSchemaPath, 'utf8');
+  // Create schema.prisma with selected provider
+  await fs.writeFile(
+    path.join(prismaDir, 'schema.prisma'),
+    createPrismaSchema(provider, data.hasGraphql)
+  );
 
-    // Replace provider based on devcontainer setting
-    if (usePostgres) {
-      schemaContent = schemaContent.replace(
-        /provider\s*=\s*"sqlite"/g,
-        'provider = "postgresql"'
-      );
-    }
-
-    // Add pothos generator if GraphQL is enabled
-    if (data.hasGraphql) {
-      // Insert pothos generator after the client generator
-      const pothosGenerator = `
-generator pothos {
-  provider     = "prisma-pothos-types"
-  output       = "./generated/pothos.ts"
-  clientOutput = "./client"
-}
-`;
-      schemaContent = schemaContent.replace(
-        /(generator client \{[^}]+\})/,
-        `$1\n${pothosGenerator}`
-      );
-    }
-
-    // Process template variables
-    const { processTemplateContent } = await import('../../templates/processor');
-    schemaContent = processTemplateContent(schemaContent, data);
-
-    await fs.writeFile(
-      path.join(dbDir, 'schema.prisma'),
-      schemaContent
-    );
-    logger.dim(`Using showcase schema with ${dbProvider} provider`);
-  } else {
-    // Generate schema programmatically
-    await fs.writeFile(
-      path.join(dbDir, 'schema.prisma'),
-      createPrismaSchema(dbProvider, data.hasGraphql)
-    );
-  }
+  // Create prisma.config.ts (Prisma 7+)
+  await fs.writeFile(
+    path.join(dbDir, 'prisma.config.ts'),
+    createPrismaConfig()
+  );
 
   // Create src/index.ts
   await fs.writeFile(
@@ -133,17 +97,21 @@ generator pothos {
     createZodSchemas()
   );
 
-  // Create .env.example with appropriate DATABASE_URL
-  const envExample = usePostgres
-    ? 'DATABASE_URL="postgresql://postgres:postgres@localhost:5432/app"\n'
-    : 'DATABASE_URL="file:./dev.db"\n';
+  // Create .env.example
+  const envExample = `# Database connection URL
+${provider === 'postgresql'
+    ? 'DATABASE_URL="postgresql://postgres:postgres@localhost:5432/app"'
+    : 'DATABASE_URL="file:./dev.db"'}
+`;
   await fs.writeFile(path.join(dbDir, '.env.example'), envExample);
 
   // Create .env with default value for local development
-  const envContent = usePostgres
+  const envContent = provider === 'postgresql'
     ? 'DATABASE_URL="postgresql://postgres:postgres@db:5432/app"\n'
     : 'DATABASE_URL="file:./dev.db"\n';
   await fs.writeFile(path.join(dbDir, '.env'), envContent);
+
+  logger.dim(`Created Prisma schema with ${provider} provider`);
 }
 
 /**
@@ -212,19 +180,19 @@ function createPrismaTsConfig(): Record<string, unknown> {
 }
 
 /**
- * Create Prisma schema
+ * Create Prisma schema file with selected provider
  */
-function createPrismaSchema(provider: 'sqlite' | 'postgresql' = 'sqlite', hasGraphql: boolean = false): string {
+function createPrismaSchema(provider: DatabaseProvider, hasGraphql: boolean = false): string {
   const pothosGenerator = hasGraphql ? `
 generator pothos {
   provider     = "prisma-pothos-types"
   output       = "./generated/pothos.ts"
-  clientOutput = "./client"
+  clientOutput = "./generated/client"
 }
 ` : '';
 
-  return `// This is your Prisma schema file
-// Learn more: https://pris.ly/d/prisma-schema
+  return `// Prisma schema - ${provider} provider
+// To change providers, regenerate the project with --db-provider flag
 
 generator client {
   provider = "prisma-client-js"
@@ -233,50 +201,34 @@ generator client {
 ${pothosGenerator}
 datasource db {
   provider = "${provider}"
-  url      = env("DATABASE_URL")
 }
 
-// Example models - customize for your app
-
-model User {
+model Item {
   id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  avatar    String?
-  bio       String?
-  posts     Post[]
-  settings  UserSettings?
+  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-model Post {
-  id        String    @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean   @default(false)
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String
-  comments  Comment[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+`;
 }
 
-model Comment {
-  id        String   @id @default(cuid())
-  content   String
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    String
-  createdAt DateTime @default(now())
-}
+/**
+ * Create Prisma config file (Prisma 7+)
+ */
+function createPrismaConfig(): string {
+  return `import 'dotenv/config';
+import { defineConfig, env } from 'prisma/config';
 
-model UserSettings {
-  id            String  @id @default(cuid())
-  user          User    @relation(fields: [userId], references: [id])
-  userId        String  @unique
-  theme         String  @default("light")
-  notifications Boolean @default(true)
-}
+export default defineConfig({
+  schema: 'prisma/schema.prisma',
+  migrations: {
+    path: 'prisma/migrations',
+    seed: 'tsx prisma/seed.ts',
+  },
+  datasource: {
+    url: env('DATABASE_URL'),
+  },
+});
 `;
 }
 
@@ -316,43 +268,15 @@ function createZodSchemas(): string {
 
 import { z } from 'zod';
 
-// User schemas
-export const createUserSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(1).optional(),
-  avatar: z.string().url().optional(),
-  bio: z.string().max(500).optional(),
+// Item schemas
+export const createItemSchema = z.object({
+  name: z.string().min(1),
 });
 
-export const updateUserSchema = createUserSchema.partial();
-
-// Post schemas
-export const createPostSchema = z.object({
-  title: z.string().min(1).max(200),
-  content: z.string().optional(),
-  published: z.boolean().default(false),
-});
-
-export const updatePostSchema = createPostSchema.partial();
-
-// Comment schemas
-export const createCommentSchema = z.object({
-  content: z.string().min(1).max(1000),
-  postId: z.string(),
-});
-
-// UserSettings schemas
-export const updateUserSettingsSchema = z.object({
-  theme: z.enum(['light', 'dark']).optional(),
-  notifications: z.boolean().optional(),
-});
+export const updateItemSchema = createItemSchema.partial();
 
 // Export types
-export type CreateUser = z.infer<typeof createUserSchema>;
-export type UpdateUser = z.infer<typeof updateUserSchema>;
-export type CreatePost = z.infer<typeof createPostSchema>;
-export type UpdatePost = z.infer<typeof updatePostSchema>;
-export type CreateComment = z.infer<typeof createCommentSchema>;
-export type UpdateUserSettings = z.infer<typeof updateUserSettingsSchema>;
+export type CreateItem = z.infer<typeof createItemSchema>;
+export type UpdateItem = z.infer<typeof updateItemSchema>;
 `;
 }

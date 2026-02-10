@@ -31,11 +31,17 @@ export interface ProjectConfig {
 }
 
 /**
+ * Database provider options
+ */
+export type DatabaseProvider = 'sqlite' | 'postgresql';
+
+/**
  * Extension configuration - which optional features are enabled
  */
 export interface ExtensionConfig {
   api: boolean;                  // Enable API server
   prisma: boolean;               // Enable Prisma database
+  databaseProvider: DatabaseProvider;  // Database provider (sqlite or postgresql)
   trpc: boolean;                 // Enable tRPC (requires api)
   graphql: boolean;              // Enable GraphQL (requires api)
   devcontainer: boolean | DevcontainerConfig;  // Enable devcontainer setup
@@ -99,6 +105,7 @@ export interface CLIArgs {
   appDisplayName?: string;
   withApi?: boolean;
   withPrisma?: boolean;
+  dbProvider?: DatabaseProvider;
   withTrpc?: boolean;
   withGraphql?: boolean;
   withDevcontainer?: boolean;
@@ -166,6 +173,7 @@ export interface TemplateData {
   hasGraphql: boolean;
   hasDevcontainer: boolean;
   isBlank: boolean;              // Create minimal Hello World app instead of showcase
+  databaseProvider: DatabaseProvider;  // Database provider (sqlite or postgresql)
 }
 
 /**
