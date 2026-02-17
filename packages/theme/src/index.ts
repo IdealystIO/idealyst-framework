@@ -28,6 +28,10 @@ export * from './useResponsiveStyle';
 // Color scheme utilities
 export * from './colorScheme';
 
+// Font scale utilities
+export { applyFontScale, contentSizeCategoryToScale, type ApplyFontScaleOptions } from './fontScale';
+export { updateFontScale, getFontScale, type UpdateFontScaleOptions } from './fontScaleRuntime';
+
 // Theme hook
 export { useTheme } from './useTheme';
 

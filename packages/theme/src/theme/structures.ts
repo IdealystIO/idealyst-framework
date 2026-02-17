@@ -259,3 +259,18 @@ export type ViewSizeValue = {
     padding: SizeValue;
     spacing: SizeValue;
 };
+
+/**
+ * Font scale configuration stored on the built theme.
+ * Allows runtime utilities to recompute scaled values from base values.
+ */
+export type FontScaleConfig = {
+    /** The current font scale factor (1.0 = no scaling) */
+    fontScale: number;
+    /** Whether icon sizes should be scaled alongside fonts */
+    scaleIcons: boolean;
+    /** Minimum allowed scale factor */
+    minScale: number;
+    /** Maximum allowed scale factor */
+    maxScale: number;
+};

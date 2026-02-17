@@ -6,7 +6,7 @@
  */
 
 // Main component
-export { default as Markdown, Markdown as MarkdownComponent } from './Markdown/Markdown.web';
+export { default as Markdown } from './Markdown/Markdown.web';
 
 // Types
 export type {

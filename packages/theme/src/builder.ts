@@ -30,7 +30,9 @@ import {
     TableSizeValue,
     TooltipSizeValue,
     ViewSizeValue,
+    FontScaleConfig,
 } from './theme/structures';
+import { applyFontScale, type ApplyFontScaleOptions } from './fontScale';
 
 /**
  * Mapping of component names to their size value types.
@@ -120,6 +122,14 @@ export type BuiltTheme<
     };
     interaction: InteractionConfig;
     breakpoints: Record<TBreakpoints, number>;
+    /** Font scale configuration. Undefined means no scaling (scale = 1.0). */
+    fontScaleConfig?: FontScaleConfig;
+    /**
+     * Unscaled base size values. Stored when fontScale != 1.0 so that
+     * runtime re-scaling can be done idempotently from the originals.
+     * @internal
+     */
+    __baseSizes?: Record<string, any>;
 };
 
 /**
@@ -135,7 +145,10 @@ type ThemeConfig<
     TBorder extends string,
     TSize extends string,
     TBreakpoints extends string,
-> = BuiltTheme<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>;
+> = BuiltTheme<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> & {
+    /** @internal Pending font scale to apply at build() time. Stored on config so it survives builder chaining. */
+    __pendingFontScale?: { scale: number; options?: ApplyFontScaleOptions };
+};
 
 /**
  * Fluent builder for creating themes with full TypeScript inference.
@@ -831,6 +844,54 @@ export class ThemeBuilder<
     }
 
     // =========================================================================
+    // Font Scale
+    // =========================================================================
+
+    /**
+     * Set a global font scale factor.
+     * When build() is called, all font-related size properties (fontSize, lineHeight,
+     * iconSize, etc.) will be multiplied by this factor.
+     *
+     * The unscaled base values are preserved on the built theme so that
+     * runtime re-scaling via applyFontScale() is idempotent.
+     *
+     * @param scale - The scale factor (1.0 = no change, 1.5 = 50% larger)
+     * @param options - Optional configuration
+     * @param options.scaleIcons - Whether to also scale iconSize properties (default: true)
+     * @param options.minScale - Minimum clamped scale (default: 0.5)
+     * @param options.maxScale - Maximum clamped scale (default: 3.0)
+     *
+     * @example
+     * ```typescript
+     * createTheme()
+     *   .setSizes({ ... })
+     *   .setFontScale(1.2)
+     *   .build();
+     * ```
+     *
+     * @example Using OS font scale at init
+     * ```typescript
+     * import { UnistylesRuntime } from 'react-native-unistyles';
+     *
+     * createTheme()
+     *   .setSizes({ ... })
+     *   .setFontScale(UnistylesRuntime.fontScale)
+     *   .build();
+     * ```
+     */
+    setFontScale(
+        scale: number,
+        options?: ApplyFontScaleOptions,
+    ): ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
+        const newBuilder = new ThemeBuilder<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints>();
+        newBuilder.config = {
+            ...this.config,
+            __pendingFontScale: { scale, options },
+        };
+        return newBuilder;
+    }
+
+    // =========================================================================
     // Build
     // =========================================================================
 
@@ -838,7 +899,11 @@ export class ThemeBuilder<
      * Build the final theme object.
      */
     build(): BuiltTheme<TIntents, TRadii, TShadows, TPallet, TSurface, TText, TBorder, TSize, TBreakpoints> {
-        return this.config;
+        const { __pendingFontScale, ...config } = this.config as any;
+        if (__pendingFontScale) {
+            return applyFontScale(config, __pendingFontScale.scale, __pendingFontScale.options);
+        }
+        return config;
     }
 }
 

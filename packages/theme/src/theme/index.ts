@@ -49,4 +49,5 @@ export type {
     TableSizeValue,
     TooltipSizeValue,
     ViewSizeValue,
+    FontScaleConfig,
 } from "./structures";

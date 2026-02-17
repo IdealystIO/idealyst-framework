@@ -1,10 +1,32 @@
-import { useState, useEffect, forwardRef, useMemo } from 'react';
+import { useState, useEffect, forwardRef, useMemo, memo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { CheckboxProps } from './types';
 import { checkboxStyles } from './Checkbox.styles';
 import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+
+/**
+ * Isolated checkmark icon component.
+ * Uses the resolved checkmark style as the single source of truth for sizing,
+ * reducing rerenders on the parent Checkbox component.
+ */
+const CheckmarkIcon = memo(({ indeterminate, checked }: { indeterminate: boolean; checked: boolean }) => {
+  const checkmarkStyle = (checkboxStyles.checkmark as any)({ checked });
+  const iconSize = (typeof checkmarkStyle?.width === 'number' ? checkmarkStyle.width : 14);
+
+  return (
+    <View style={checkmarkStyle}>
+      <MaterialDesignIcons
+        name={indeterminate ? 'minus' : 'check'}
+        size={iconSize}
+        color="#ffffff"
+      />
+    </View>
+  );
+});
+
+CheckmarkIcon.displayName = 'CheckmarkIcon';
 
 const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
   checked = false,
@@ -105,7 +127,6 @@ const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
   const wrapperStyle = (checkboxStyles.wrapper as any)({});
   const containerStyle = (checkboxStyles.container as any)({});
   const checkboxStyle = (checkboxStyles.checkbox as any)({ intent, checked: internalChecked, disabled, type: variant });
-  const checkmarkStyle = (checkboxStyles.checkmark as any)({ checked: internalChecked });
   const labelStyle = (checkboxStyles.label as any)({ disabled });
   const helperTextStyle = (checkboxStyles.helperText as any)({ error: !!error });
 
@@ -120,12 +141,7 @@ const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
       >
         <View style={checkboxStyle}>
           {(internalChecked || indeterminate) && (
-            <MaterialDesignIcons
-              name={indeterminate ? 'minus' : 'check'}
-              size={14}
-              color="#ffffff"
-              style={checkmarkStyle}
-            />
+            <CheckmarkIcon indeterminate={indeterminate} checked={internalChecked} />
           )}
         </View>
         {labelContent && (
