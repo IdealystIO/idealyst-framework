@@ -23,24 +23,9 @@ import {
   getFileExtension,
 } from '../utils';
 import { checkPermissions, requestPermissions } from '../permissions/permissions.native';
-
-// Lazy load native modules
-let DocumentPicker: typeof import('react-native-document-picker') | null = null;
-let ImagePicker: typeof import('react-native-image-picker') | null = null;
-
-async function getDocumentPicker() {
-  if (!DocumentPicker) {
-    DocumentPicker = await import('react-native-document-picker');
-  }
-  return DocumentPicker;
-}
-
-async function getImagePicker() {
-  if (!ImagePicker) {
-    ImagePicker = await import('react-native-image-picker');
-  }
-  return ImagePicker;
-}
+import DocumentPicker, { type DocumentPickerResponse } from 'react-native-document-picker';
+import { launchCamera, launchImageLibrary, type ImagePickerResponse } from 'react-native-image-picker';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 type FilePickerEvents = {
   stateChange: [FilePickerStatus];
@@ -119,9 +104,7 @@ export class NativeFilePicker implements IFilePicker {
     this._updateState('picking');
 
     try {
-      const imagePicker = await getImagePicker();
-
-      const result = await imagePicker.launchCamera({
+      const result = await launchCamera({
         mediaType: this._mapMediaType(options?.mediaType || 'photo'),
         quality: (options?.quality || 80) / 100,
         durationLimit: options?.maxDuration,
@@ -199,11 +182,9 @@ export class NativeFilePicker implements IFilePicker {
   }
 
   private async _pickMedia(config: FilePickerConfig): Promise<FilePickerResult> {
-    const imagePicker = await getImagePicker();
-
     const mediaType = this._getMediaTypeFromConfig(config);
 
-    const result = await imagePicker.launchImageLibrary({
+    const result = await launchImageLibrary({
       mediaType,
       selectionLimit: config.multiple ? (config.maxFiles || 0) : 1,
       quality: (config.imageQuality || 80) / 100,
@@ -239,12 +220,10 @@ export class NativeFilePicker implements IFilePicker {
   }
 
   private async _pickDocuments(config: FilePickerConfig): Promise<FilePickerResult> {
-    const docPicker = await getDocumentPicker();
-
     const types = this._buildDocumentPickerTypes(config);
 
     try {
-      const results = await docPicker.default.pick({
+      const results = await DocumentPicker.pick({
         type: types,
         allowMultiSelection: config.multiple,
         copyTo: 'cachesDirectory',
@@ -261,8 +240,7 @@ export class NativeFilePicker implements IFilePicker {
         rejected,
       };
     } catch (error) {
-      const dp = await getDocumentPicker();
-      if (dp.default.isCancel(error)) {
+      if (DocumentPicker.isCancel(error)) {
         this._updateState('idle');
         return { cancelled: true, files: [], rejected: [] };
       }
@@ -305,7 +283,7 @@ export class NativeFilePicker implements IFilePicker {
   }
 
   private async _transformImagePickerResponse(
-    response: import('react-native-image-picker').ImagePickerResponse,
+    response: ImagePickerResponse,
     config?: FilePickerConfig
   ): Promise<PickedFile[]> {
     const files: PickedFile[] = [];
@@ -334,7 +312,7 @@ export class NativeFilePicker implements IFilePicker {
   }
 
   private async _transformDocumentPickerResponse(
-    results: import('react-native-document-picker').DocumentPickerResponse[],
+    results: DocumentPickerResponse[],
     config?: FilePickerConfig
   ): Promise<PickedFile[]> {
     const files: PickedFile[] = [];
@@ -369,10 +347,8 @@ export class NativeFilePicker implements IFilePicker {
   }
 
   private async _readFileAsArrayBuffer(uri: string): Promise<ArrayBuffer> {
-    // Use react-native-blob-util for file reading
     try {
-      const BlobUtil = await import('react-native-blob-util');
-      const base64 = await BlobUtil.default.fs.readFile(uri.replace('file://', ''), 'base64');
+      const base64 = await ReactNativeBlobUtil.fs.readFile(uri.replace('file://', ''), 'base64');
       return this._base64ToArrayBuffer(base64);
     } catch {
       // Fallback: return empty buffer if reading fails
@@ -382,8 +358,7 @@ export class NativeFilePicker implements IFilePicker {
 
   private async _readFileAsBase64(uri: string): Promise<string> {
     try {
-      const BlobUtil = await import('react-native-blob-util');
-      return await BlobUtil.default.fs.readFile(uri.replace('file://', ''), 'base64');
+      return await ReactNativeBlobUtil.fs.readFile(uri.replace('file://', ''), 'base64');
     } catch {
       return '';
     }

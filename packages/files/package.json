@@ -1,8 +1,8 @@
 {
-  "name": "@idealyst/file-upload",
-  "version": "1.2.87",
-  "description": "Cross-platform file picker and upload for React and React Native",
-  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/file-upload#readme",
+  "name": "@idealyst/files",
+  "version": "1.2.98",
+  "description": "Cross-platform file picker, upload, and local file management for React and React Native",
+  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/files#readme",
   "readme": "README.md",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/IdealystIO/idealyst-framework.git",
-    "directory": "packages/file-upload"
+    "directory": "packages/files"
   },
   "author": "Idealyst <hello@idealyst.io>",
   "license": "MIT",
@@ -37,8 +37,8 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": ">=1.0.0",
-    "@idealyst/theme": ">=1.0.0",
+    "@idealyst/components": "^1.2.98",
+    "@idealyst/theme": "^1.2.98",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-document-picker": ">=9.0.0",
@@ -66,9 +66,13 @@
     }
   },
   "devDependencies": {
+    "@idealyst/components": "^1.2.98",
+    "@idealyst/theme": "^1.2.98",
     "@types/react": "^19.1.0",
     "@types/react-native": "^0.73.0",
+    "react": "^19.1.0",
     "react-native": "^0.80.0",
+    "react-native-unistyles": "^3.0.10",
     "typescript": "^5.0.0"
   },
   "files": [

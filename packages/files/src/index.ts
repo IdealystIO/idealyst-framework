@@ -23,7 +23,7 @@ export type {
   RetryDelayStrategy,
   UploadConfig,
   UploadState,
-  UploadProgress,
+  UploadProgressInfo,
   UploadResult,
   QueueStatus,
   IFileUploader,
@@ -135,8 +135,5 @@ export { UploadQueue, ChunkedUploader, createChunkedUploader, createFileUploader
 // Hooks
 export { useFilePicker, useFileUpload, createUseFilePickerHook, createUseFileUploadHook } from './hooks';
 
-// Components
-export { FilePickerButton, DropZone, UploadProgress } from './components';
-
-// Styles
+// Styles (components are platform-specific, exported from index.web.ts and index.native.ts)
 export { filePickerButtonStyles, dropZoneStyles, uploadProgressStyles } from './components';

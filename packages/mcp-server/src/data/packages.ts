@@ -875,16 +875,16 @@ function AnimatedComponent() {
     relatedPackages: ["theme", "svg", "animate"],
   },
 
-  "file-upload": {
-    name: "File Upload",
-    npmName: "@idealyst/file-upload",
+  "files": {
+    name: "Files",
+    npmName: "@idealyst/files",
     description:
-      "Cross-platform file picker and upload for React and React Native. Supports chunked uploads for large files, background uploads on native, progress tracking, and retry logic.",
+      "Cross-platform file picker, upload, and local file management for React and React Native. Supports chunked uploads for large files, background uploads on native, progress tracking, and retry logic.",
     category: "media",
     platforms: ["web", "native"],
     documentationStatus: "full",
     installation:
-      "yarn add @idealyst/file-upload react-native-document-picker react-native-image-picker react-native-blob-util",
+      "yarn add @idealyst/files react-native-document-picker react-native-image-picker react-native-blob-util",
     peerDependencies: [
       "react-native-document-picker (native)",
       "react-native-image-picker (native)",
@@ -902,7 +902,7 @@ function AnimatedComponent() {
       "Presets for common scenarios (avatar, documents, images)",
       "TypeScript-first with full type definitions",
     ],
-    quickStart: `import { useFilePicker, useFileUpload, FilePickerButton, UploadProgress } from '@idealyst/file-upload';
+    quickStart: `import { useFilePicker, useFileUpload, FilePickerButton, UploadProgress } from '@idealyst/files';
 
 function UploadForm() {
   const { addFiles, uploads } = useFileUpload({ autoStart: true });

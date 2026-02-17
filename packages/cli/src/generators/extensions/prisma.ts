@@ -143,7 +143,7 @@ function createPrismaPackageJson(data: TemplateData): Record<string, unknown> {
       './client': './src/index.ts',
       './schemas': './src/schemas.ts',
       // Export pothos types when GraphQL is enabled
-      ...(data.hasGraphql ? { './pothos': './generated/pothos.ts' } : {}),
+      ...(data.hasGraphql ? { './pothos': './prisma/generated/pothos.ts' } : {}),
     },
     scripts: {
       'build': 'tsc',
@@ -155,6 +155,7 @@ function createPrismaPackageJson(data: TemplateData): Record<string, unknown> {
     },
     dependencies: {
       ...DEPENDENCIES.prisma,
+      'dotenv': '^16.4.0',
       'zod': '^3.22.0',
     },
     devDependencies: devDeps,
@@ -176,7 +177,7 @@ function createPrismaTsConfig(): Record<string, unknown> {
       outDir: './dist',
       declaration: true,
     },
-    include: ['src/**/*', 'generated/**/*'],
+    include: ['src/**/*', 'prisma/generated/**/*'],
     exclude: ['node_modules', 'dist'],
   };
 }
@@ -206,20 +207,23 @@ datasource db {
 }
 
 model Item {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 `;
 }
 
 /**
  * Create Prisma config file (Prisma 7+)
- * Shell environment DATABASE_URL takes precedence over .env file
+ * Uses dotenv to load .env file before accessing DATABASE_URL
  */
 function createPrismaConfig(): string {
-  return `import { defineConfig, env } from 'prisma/config';
+  return `import 'dotenv/config';
+import { defineConfig } from 'prisma/config';
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
@@ -228,7 +232,7 @@ export default defineConfig({
     seed: 'tsx prisma/seed.ts',
   },
   datasource: {
-    url: env('DATABASE_URL'),
+    url: process.env.DATABASE_URL!,
   },
 });
 `;
@@ -242,7 +246,7 @@ function createPrismaIndex(): string {
  * Database package exports
  */
 
-import { PrismaClient } from '../generated/client/index.js';
+import { PrismaClient } from '../prisma/generated/client/index.js';
 
 // Prevent multiple instances of Prisma Client in development
 declare global {
@@ -256,7 +260,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export { PrismaClient };
-export * from '../generated/client/index.js';
+export * from '../prisma/generated/client/index.js';
 `;
 }
 
@@ -272,10 +276,16 @@ import { z } from 'zod';
 
 // Item schemas
 export const createItemSchema = z.object({
-  name: z.string().min(1),
+  title: z.string().min(1).max(200),
+  description: z.string().optional(),
+  completed: z.boolean().optional(),
 });
 
-export const updateItemSchema = createItemSchema.partial();
+export const updateItemSchema = z.object({
+  title: z.string().min(1).max(200).optional(),
+  description: z.string().nullable().optional(),
+  completed: z.boolean().optional(),
+});
 
 // Export types
 export type CreateItem = z.infer<typeof createItemSchema>;

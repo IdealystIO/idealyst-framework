@@ -33,6 +33,9 @@ export type ComponentName =
   | 'DateTimePicker'
   | 'Dialog'
   | 'Divider'
+  | 'DropZone'
+  | 'FilePickerButton'
+  | 'Grid'
   | 'Icon'
   | 'IconButton'
   | 'Image'
@@ -58,6 +61,7 @@ export type ComponentName =
   | 'TextInput'
   | 'TimePicker'
   | 'Tooltip'
+  | 'UploadProgress'
   | 'Video'
   | 'View';
 

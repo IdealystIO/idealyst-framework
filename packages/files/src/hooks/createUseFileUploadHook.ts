@@ -3,7 +3,7 @@ import type {
   UseFileUploadOptions,
   UseFileUploadResult,
   QueueStatus,
-  UploadProgress,
+  UploadProgressInfo,
   PickedFile,
   UploadConfig,
   IFileUploader,
@@ -22,7 +22,7 @@ export function createUseFileUploadHook(createFileUploader: CreateFileUploaderFa
     const configRef = useRef<Partial<Omit<UploadConfig, 'url'>>>(config);
 
     const [queueStatus, setQueueStatus] = useState<QueueStatus>(INITIAL_QUEUE_STATUS);
-    const [uploads, setUploads] = useState<UploadProgress[]>([]);
+    const [uploads, setUploads] = useState<UploadProgressInfo[]>([]);
 
     // Update config ref when it changes
     useEffect(() => {
@@ -146,7 +146,7 @@ export function createUseFileUploadHook(createFileUploader: CreateFileUploaderFa
     /**
      * Get specific upload.
      */
-    const getUpload = useCallback((uploadId: string): UploadProgress | undefined => {
+    const getUpload = useCallback((uploadId: string): UploadProgressInfo | undefined => {
       return uploaderRef.current?.getUpload(uploadId);
     }, []);
 

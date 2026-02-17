@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, Card, Screen, Select, Switch, Chip, Table, Divider } from '@idealyst/components';
+import { View, Text, Card, Screen, Select, Switch, Chip, Table, Grid, Divider } from '@idealyst/components';
 import * as Components from '@idealyst/components';
 import { componentRegistry, type PropDefinition } from '@idealyst/tooling';
 import { LivePreview } from '../../components/LivePreview';
@@ -34,6 +34,7 @@ import {
   breadcrumbPropConfig,
   accordionPropConfig,
   linkPropConfig,
+  gridPropConfig,
 } from '../../components/ComponentPlayground';
 
 // Map component names to their pre-configured prop configs
@@ -64,8 +65,30 @@ const propConfigMap: Record<string, PropConfig[]> = {
   Breadcrumb: breadcrumbPropConfig,
   Accordion: accordionPropConfig,
   Link: linkPropConfig,
+  Grid: gridPropConfig,
 };
 
+// Wrapper components for components that need demo content or prop coercion
+function DemoGrid(props: any) {
+  const { columns, ...rest } = props;
+  const numColumns = columns ? Number(columns) : 2;
+  return (
+    <Grid {...rest} columns={numColumns}>
+      {Array.from({ length: 6 }, (_, i) => (
+        <Card key={i} type="outlined" padding="md">
+          <Text weight="medium">Item {i + 1}</Text>
+        </Card>
+      ))}
+    </Grid>
+  );
+}
+
+const componentWrapperMap: Record<string, React.ComponentType<any>> = {
+  Grid: DemoGrid,
+};
+
+// Components that should not show children controls in the playground
+const noChildrenComponents = ['Icon', 'Divider', 'Progress', 'Slider', 'Avatar', 'Skeleton', 'Switch', 'Checkbox', 'RadioButton', 'Grid'];
 
 interface ComponentDocPageProps {
   componentName: string;
@@ -179,11 +202,11 @@ export function ComponentDocPage({ componentName }: ComponentDocPageProps) {
 
             <ComponentErrorBoundary componentName={componentName}>
               <ComponentPlayground
-                component={Component}
+                component={componentWrapperMap[componentName] || Component}
                 componentName={componentName}
                 propConfig={propConfigMap[componentName]}
                 defaultChildren={definition.sampleProps?.children ?? 'Example'}
-                showChildren={!['Icon', 'Divider', 'Progress', 'Slider', 'Avatar', 'Skeleton', 'Switch', 'Checkbox', 'RadioButton'].includes(componentName)}
+                showChildren={!noChildrenComponents.includes(componentName)}
                 fixedProps={definition.sampleProps?.props}
                 stateConfig={definition.sampleProps?.state}
               />

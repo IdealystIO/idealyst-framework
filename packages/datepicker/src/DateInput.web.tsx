@@ -8,6 +8,7 @@ import { DatePicker } from './DatePicker';
 import { dateTimeInputStyles } from './InputStyles';
 import type { DateInputProps } from './types';
 import { flattenStyle } from './flattenStyle';
+import type { Theme } from '@idealyst/theme';
 
 export const DateInput: React.FC<DateInputProps> = ({
   value,
@@ -35,7 +36,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   });
 
   // Get theme for icon size and color
-  const { theme } = useUnistyles();
+  const { theme } = useUnistyles() as { theme: Theme };
   const iconSize = theme.sizes.input[size].iconSize;
   const iconColor = theme.colors.text.secondary;
 

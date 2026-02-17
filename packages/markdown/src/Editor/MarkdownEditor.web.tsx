@@ -130,8 +130,8 @@ const MarkdownEditor = forwardRef<MarkdownEditorRef, MarkdownEditorProps>(
       content: '', // Start empty, we'll set content after creation
       editable,
       autofocus: autoFocus,
-      onUpdate: ({ editor: ed }) => {
-        const markdown = ed.storage.markdown.getMarkdown();
+      onUpdate: ({ editor: ed }: { editor: ReturnType<typeof useEditor> }) => {
+        const markdown = (ed as any).storage.markdown.getMarkdown();
         lastValueRef.current = markdown;
         onChange?.(markdown);
       },

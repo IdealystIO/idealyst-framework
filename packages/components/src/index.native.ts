@@ -89,6 +89,9 @@ export * from './Table/types';
 export { default as Menu } from './Menu';
 export * from './Menu/types';
 
+export { default as Grid } from './Grid';
+export * from './Grid/types';
+
 export { default as Image } from './Image';
 export * from './Image/types';
 
@@ -144,6 +147,7 @@ export type { AccordionProps, AccordionItem } from './Accordion/types';
 export type { ListProps, ListItemProps, ListSectionProps } from './List/types';
 export type { TableProps, TableColumn } from './Table/types';
 export type { MenuProps, MenuItem } from './Menu/types';
+export type { GridProps, ResponsiveColumns, GridGap } from './Grid/types';
 export type { ImageProps } from './Image/types';
 export type { VideoProps, VideoSource } from './Video/types';
 export type { AlertProps } from './Alert/types';

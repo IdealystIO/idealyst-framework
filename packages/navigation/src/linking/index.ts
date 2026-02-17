@@ -1,1 +1,1 @@
-export { Linking } from './Linking.native';
+export { Linking } from './Linking.web';

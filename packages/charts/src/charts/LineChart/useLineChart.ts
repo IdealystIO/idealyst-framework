@@ -235,7 +235,7 @@ export function useLineChart(options: UseLineChartOptions): UseLineChartResult {
 
         if (isNumericX) {
           const numericX = point.x instanceof Date ? point.x.getTime() : Number(point.x);
-          x = xScale(numericX);
+          x = (xScale as ReturnType<typeof createLinearScale>)(numericX) ?? 0;
         } else {
           // Band scale returns undefined for unknown values
           const bandX = (xScale as ReturnType<typeof createBandScale>)(String(point.x));

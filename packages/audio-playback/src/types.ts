@@ -141,7 +141,7 @@ export interface IAudioPlayer {
    * Must call loadPCMStream() first.
    * @param data Raw PCM samples as ArrayBuffer or Int16Array
    */
-  feedPCMData(data: ArrayBuffer | Int16Array): void;
+  feedPCMData(data: ArrayBufferLike | Int16Array): void;
 
   /**
    * Flush remaining buffered PCM data.
@@ -500,7 +500,7 @@ export interface UseAudioPlayerResult {
    * Feed PCM audio data for streaming playback.
    * @param data Raw PCM samples as ArrayBuffer or Int16Array
    */
-  feedPCMData: (data: ArrayBuffer | Int16Array) => void;
+  feedPCMData: (data: ArrayBufferLike | Int16Array) => void;
 
   /**
    * Flush remaining buffered PCM data.

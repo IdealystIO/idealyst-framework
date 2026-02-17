@@ -20,9 +20,6 @@
  * ```
  */
 
-// Main component
-export { default as Markdown, Markdown as MarkdownComponent } from './Markdown';
-
 // Types
 export type {
   MarkdownProps,
@@ -39,3 +36,5 @@ export type {
   MarkdownDynamicProps,
   MarkdownVariants,
 } from './Markdown/Markdown.styles';
+
+// Main component is platform-specific, exported from index.web.ts and index.native.ts

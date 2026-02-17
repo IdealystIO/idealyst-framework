@@ -235,7 +235,7 @@ export interface PhotoResult {
   metadata?: PhotoMetadata;
 
   /** Get photo as ArrayBuffer */
-  getArrayBuffer(): Promise<ArrayBuffer>;
+  getArrayBuffer(): Promise<ArrayBufferLike>;
 
   /** Get photo as Blob (web) or base64 string (native) */
   getData(): Promise<Blob | string>;
@@ -267,7 +267,7 @@ export interface VideoResult {
   hasAudio: boolean;
 
   /** Get video as ArrayBuffer */
-  getArrayBuffer(): Promise<ArrayBuffer>;
+  getArrayBuffer(): Promise<ArrayBufferLike>;
 
   /** Get video as Blob (web) or file path (native) */
   getData(): Promise<Blob | string>;

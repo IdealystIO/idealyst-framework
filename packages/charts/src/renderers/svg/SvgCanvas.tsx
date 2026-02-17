@@ -21,7 +21,6 @@ export const SvgCanvas: React.FC<CanvasProps> = ({
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       testID={testID}
-      // @ts-expect-error - aria-label is valid for SVG on web
       aria-label={accessibilityLabel}
     >
       {children}

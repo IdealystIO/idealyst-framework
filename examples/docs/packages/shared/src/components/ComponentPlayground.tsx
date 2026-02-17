@@ -1384,3 +1384,32 @@ export const linkPropConfig: PropConfig[] = [
     description: 'Disables the link',
   },
 ];
+
+export const gridPropConfig: PropConfig[] = [
+  {
+    name: 'columns',
+    type: 'select',
+    options: ['1', '2', '3', '4', '6'],
+    default: '2',
+    description: 'Number of columns (also supports responsive object)',
+    typeSignature: 'number | Partial<Record<Breakpoint, number>>',
+  },
+  {
+    name: 'gap',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: 'md',
+    description: 'Gap between grid items',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+  {
+    name: 'padding',
+    type: 'select',
+    options: ['xs', 'sm', 'md', 'lg', 'xl'],
+    default: undefined,
+    description: 'Padding on all sides',
+    typeSignature: 'Size',
+    themeExtensible: true,
+  },
+];

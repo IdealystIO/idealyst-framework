@@ -264,10 +264,10 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
 
   // Today styling - subtle background highlight
   todayDay: (_props: DatePickerDynamicProps) => ({
-    backgroundColor: theme.intents.primary.muted,
+    backgroundColor: theme.intents.primary.light,
     borderRadius: 6,
     _web: {
-      background: theme.intents.primary.muted,
+      background: theme.intents.primary.light,
     },
   }),
 

@@ -86,24 +86,30 @@ export default defineConfig({
     }),
   ],
   resolve: {
-    alias: {
+    alias: [
       // Use absolute path to resolve react-native-web properly
-      'react-native': path.resolve(__dirname, 'node_modules/react-native-web'),
-      'react-native-unistyles': path.resolve(__dirname, 'node_modules/react-native-unistyles'),
-      '@mdi/react': path.resolve(__dirname, 'node_modules/@mdi/react'),
-      '@mdi/js': path.resolve(__dirname, 'node_modules/@mdi/js'),
-      '@react-native/normalize-colors': path.resolve(__dirname, 'node_modules/@react-native/normalize-colors'),
+      { find: 'react-native', replacement: path.resolve(__dirname, 'node_modules/react-native-web') },
+      { find: 'react-native-unistyles', replacement: path.resolve(__dirname, 'node_modules/react-native-unistyles') },
+      { find: '@mdi/react', replacement: path.resolve(__dirname, 'node_modules/@mdi/react') },
+      { find: '@mdi/js', replacement: path.resolve(__dirname, 'node_modules/@mdi/js') },
+      { find: '@react-native/normalize-colors', replacement: path.resolve(__dirname, 'node_modules/@react-native/normalize-colors') },
       // Ensure we use the source code of our packages for live development
-      '@idealyst/audio': path.resolve(__dirname, '../../../../packages/audio/src'),
-      '@idealyst/components': path.resolve(__dirname, '../../../../packages/components/src'),
-      '@idealyst/navigation': path.resolve(__dirname, '../../../../packages/navigation/src'),
-      '@idealyst/theme': path.resolve(__dirname, '../../../../packages/theme/src'),
-      '@idealyst/datagrid': path.resolve(__dirname, '../../../../packages/datagrid/src'),
-      '@idealyst/datepicker': path.resolve(__dirname, '../../../../packages/datepicker/src'),
-      '@idealyst/translate': path.resolve(__dirname, '../../../../packages/translate/src'),
-      '@idealyst/tooling': path.resolve(__dirname, '../../../../packages/tooling/src'),
-      '@idealyst/markdown': path.resolve(__dirname, '../../../../packages/markdown/src'),
-    },
+      { find: '@idealyst/audio', replacement: path.resolve(__dirname, '../../../../packages/audio/src') },
+      { find: '@idealyst/components', replacement: path.resolve(__dirname, '../../../../packages/components/src') },
+      { find: '@idealyst/navigation', replacement: path.resolve(__dirname, '../../../../packages/navigation/src') },
+      { find: '@idealyst/theme', replacement: path.resolve(__dirname, '../../../../packages/theme/src') },
+      { find: '@idealyst/datagrid', replacement: path.resolve(__dirname, '../../../../packages/datagrid/src') },
+      { find: '@idealyst/datepicker', replacement: path.resolve(__dirname, '../../../../packages/datepicker/src') },
+      { find: '@idealyst/translate', replacement: path.resolve(__dirname, '../../../../packages/translate/src') },
+      { find: '@idealyst/tooling', replacement: path.resolve(__dirname, '../../../../packages/tooling/src') },
+      { find: '@idealyst/markdown', replacement: path.resolve(__dirname, '../../../../packages/markdown/src') },
+      // Packages imported transitively via @idealyst/navigation examples
+      { find: '@idealyst/animate', replacement: path.resolve(__dirname, '../../../../packages/animate/src') },
+      { find: '@idealyst/lottie', replacement: path.resolve(__dirname, '../../../../packages/lottie/src') },
+      { find: '@idealyst/blur', replacement: path.resolve(__dirname, '../../../../packages/blur/src') },
+      { find: '@idealyst/camera', replacement: path.resolve(__dirname, '../../../../packages/camera/src') },
+      { find: '@idealyst/microphone', replacement: path.resolve(__dirname, '../../../../packages/microphone/src') },
+    ],
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
     // Ensure proper resolution of package exports

@@ -7,8 +7,8 @@
  * - Handles padding/margin calculations
  */
 
-import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react';
-import { View, LayoutChangeEvent } from 'react-native';
+import React, { useMemo, useState, useCallback, useRef } from 'react';
+import { View, type LayoutChangeEvent } from '@idealyst/components';
 import type { Intent, Size } from '@idealyst/theme';
 import type { ChartPadding, ChartContextValue, RendererType } from '../../types';
 import { DEFAULT_PADDING } from '../../types';
@@ -112,7 +112,7 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
   // Track measured dimensions for responsive sizing
   const [measuredWidth, setMeasuredWidth] = useState<number>(0);
   const [measuredHeight, setMeasuredHeight] = useState<number>(0);
-  const containerRef = useRef<View>(null);
+  const containerRef = useRef(null);
 
   // Handle layout changes
   const onLayout = useCallback((event: LayoutChangeEvent) => {

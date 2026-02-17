@@ -33,14 +33,14 @@ export const dropZoneStyles = defineStyle('DropZone', (theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: active
-      ? theme.intents.primary.surface
+      ? theme.intents.primary.light
       : reject
-        ? theme.intents.error.surface
+        ? theme.intents.danger.light
         : theme.colors.surface.secondary,
     borderColor: active
       ? theme.intents.primary.primary
       : reject
-        ? theme.intents.error.primary
+        ? theme.intents.danger.primary
         : theme.colors.border.secondary,
     opacity: disabled ? 0.6 : 1,
     _web: {
@@ -50,15 +50,15 @@ export const dropZoneStyles = defineStyle('DropZone', (theme: Theme) => ({
     variants: {
       active: {
         true: {
-          backgroundColor: theme.intents.primary.surface,
+          backgroundColor: theme.intents.primary.light,
           borderColor: theme.intents.primary.primary,
         },
         false: {},
       },
       reject: {
         true: {
-          backgroundColor: theme.intents.error.surface,
-          borderColor: theme.intents.error.primary,
+          backgroundColor: theme.intents.danger.light,
+          borderColor: theme.intents.danger.primary,
         },
         false: {},
       },
@@ -78,7 +78,7 @@ export const dropZoneStyles = defineStyle('DropZone', (theme: Theme) => ({
     color: active
       ? theme.intents.primary.primary
       : reject
-        ? theme.intents.error.primary
+        ? theme.intents.danger.primary
         : theme.colors.text.secondary,
   }),
   text: ({ active = false, reject = false }: DropZoneDynamicProps) => ({
@@ -88,7 +88,7 @@ export const dropZoneStyles = defineStyle('DropZone', (theme: Theme) => ({
     color: active
       ? theme.intents.primary.primary
       : reject
-        ? theme.intents.error.primary
+        ? theme.intents.danger.primary
         : theme.colors.text.primary,
   }),
   hint: (_props: DropZoneDynamicProps) => ({

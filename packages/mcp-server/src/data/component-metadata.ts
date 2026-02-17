@@ -227,6 +227,24 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
     ],
   },
 
+  Grid: {
+    category: 'layout',
+    description: 'Cross-platform responsive grid layout for arranging items in columns',
+    features: [
+      'Responsive column count based on breakpoints',
+      'Theme-aware gap spacing',
+      'CSS Grid on web for optimal performance',
+      'Flexbox wrapping on native with percentage-based widths',
+      'Inherits container style props (padding, margin)',
+    ],
+    bestPractices: [
+      'Use responsive columns for adaptive layouts: { xs: 1, sm: 2, lg: 4 }',
+      'Prefer theme gap sizes over custom spacing for consistency',
+      'Each direct child becomes a grid cell - wrap complex content in View if needed',
+      'Use alongside Card or View children for content containers',
+    ],
+  },
+
   Icon: {
     category: 'display',
     description: 'Material Design icon component with extensive icon library',

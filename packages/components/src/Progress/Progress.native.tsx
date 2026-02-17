@@ -41,10 +41,8 @@ const Progress = forwardRef<IdealystElement, ProgressProps>(({
     rounded,
   });
 
-  // Compute dynamic styles with intent
-  const dynamicProps = { intent };
-  const linearBarStyle = (progressStyles.linearBar as any)(dynamicProps);
-  const indeterminateBarStyle = (progressStyles.indeterminateBar as any)(dynamicProps);
+  const linearBarStyle = (progressStyles.linearBar as any);
+  const indeterminateBarStyle = (progressStyles.indeterminateBar as any);
 
   // Animation values
   const animatedValue = useSharedValue(0);
@@ -163,8 +161,8 @@ const Progress = forwardRef<IdealystElement, ProgressProps>(({
   });
 
   // Get dynamic styles for extended styles
-  const containerStyle = (progressStyles.container as any)({});
-  const linearTrackStyle = (progressStyles.linearTrack as any)({});
+  const containerStyle = (progressStyles.container as any);
+  const linearTrackStyle = (progressStyles.linearTrack as any);
 
   return (
     <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID} accessibilityRole="progressbar">

@@ -106,7 +106,7 @@ export interface AudioSessionRouteChange {
  */
 export interface PCMData {
   /** Raw audio buffer */
-  buffer: ArrayBuffer;
+  buffer: ArrayBufferLike;
 
   /** Typed array of samples */
   samples: Int8Array | Int16Array | Float32Array;
@@ -232,7 +232,7 @@ export interface IPlayer {
 
   // PCM streaming
   loadPCMStream(config: AudioConfig): Promise<void>;
-  feedPCMData(data: ArrayBuffer | Int16Array): void;
+  feedPCMData(data: ArrayBufferLike | Int16Array): void;
   flush(): Promise<void>;
   clearBuffer(): void;
 
@@ -437,7 +437,7 @@ export interface UsePlayerResult {
 
   // PCM streaming
   loadPCMStream: (config: AudioConfig) => Promise<void>;
-  feedPCMData: (data: ArrayBuffer | Int16Array) => void;
+  feedPCMData: (data: ArrayBufferLike | Int16Array) => void;
   flush: () => Promise<void>;
   clearBuffer: () => void;
 

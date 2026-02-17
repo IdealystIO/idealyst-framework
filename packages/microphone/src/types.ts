@@ -32,7 +32,7 @@ export interface AudioConfig {
 
 export interface PCMData {
   /** Raw PCM samples as ArrayBuffer */
-  buffer: ArrayBuffer;
+  buffer: ArrayBufferLike;
 
   /** TypedArray view for easy sample access based on bit depth */
   samples: Int8Array | Int16Array | Float32Array;

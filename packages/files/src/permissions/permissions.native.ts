@@ -1,14 +1,5 @@
 import type { PermissionStatus, PermissionResult } from '../types';
-
-// Lazy load react-native-image-picker for permission checks
-let ImagePicker: typeof import('react-native-image-picker') | null = null;
-
-async function getImagePicker() {
-  if (!ImagePicker) {
-    ImagePicker = await import('react-native-image-picker');
-  }
-  return ImagePicker;
-}
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 /**
  * Map image picker permission to our PermissionStatus.
@@ -35,10 +26,8 @@ function mapPermissionStatus(status: string): PermissionStatus {
  */
 export async function checkPhotoLibraryPermission(): Promise<PermissionStatus> {
   try {
-    const imagePicker = await getImagePicker();
-
     // Check if the library exists and has the right method
-    if (typeof imagePicker.launchImageLibrary !== 'function') {
+    if (typeof launchImageLibrary !== 'function') {
       return 'unavailable';
     }
 
@@ -55,12 +44,10 @@ export async function checkPhotoLibraryPermission(): Promise<PermissionStatus> {
  */
 export async function requestPhotoLibraryPermission(): Promise<PermissionStatus> {
   try {
-    const imagePicker = await getImagePicker();
-
     // Launch the image library to trigger permission request
     // This is a common pattern since react-native-image-picker doesn't expose
     // a direct permission request API
-    const result = await imagePicker.launchImageLibrary({
+    const result = await launchImageLibrary({
       mediaType: 'mixed',
       selectionLimit: 0,
     });
@@ -91,9 +78,7 @@ export async function requestPhotoLibraryPermission(): Promise<PermissionStatus>
  */
 export async function checkCameraPermission(): Promise<PermissionStatus> {
   try {
-    const imagePicker = await getImagePicker();
-
-    if (typeof imagePicker.launchCamera !== 'function') {
+    if (typeof launchCamera !== 'function') {
       return 'unavailable';
     }
 
@@ -108,10 +93,8 @@ export async function checkCameraPermission(): Promise<PermissionStatus> {
  */
 export async function requestCameraPermission(): Promise<PermissionStatus> {
   try {
-    const imagePicker = await getImagePicker();
-
     // Launch camera to trigger permission request
-    const result = await imagePicker.launchCamera({
+    const result = await launchCamera({
       mediaType: 'photo',
       saveToPhotos: false,
     });

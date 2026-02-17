@@ -1,6 +1,5 @@
-import MarkdownComponent from './Markdown.web';
-
-export default MarkdownComponent;
-export { MarkdownComponent as Markdown };
+// Types only - component is platform-specific
 export * from './types';
 export type { MarkdownDynamicProps, MarkdownVariants } from './Markdown.styles';
+
+// Re-export nothing - platform-specific indexes handle components

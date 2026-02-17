@@ -976,19 +976,19 @@ export default {
   },
 
   // ============================================================================
-  // FILE UPLOAD PACKAGE
+  // FILES PACKAGE
   // ============================================================================
 
-  "file-upload": {
-    packageName: "File Upload",
-    npmName: "@idealyst/file-upload",
+  "files": {
+    packageName: "Files",
+    npmName: "@idealyst/files",
     description:
-      "Cross-platform file picker and upload for React and React Native",
+      "Cross-platform file picker, upload, and local file management for React and React Native",
     platforms: ["web", "native"],
     complexity: "moderate",
     installation: {
-      yarn: "yarn add @idealyst/file-upload",
-      npm: "npm install @idealyst/file-upload",
+      yarn: "yarn add @idealyst/files",
+      npm: "npm install @idealyst/files",
     },
     peerDependencies: [
       {
@@ -1070,7 +1070,7 @@ export default {
         "File picker uses native browser file input",
       ],
     },
-    verification: `import { useFilePicker, useFileUpload } from '@idealyst/file-upload';
+    verification: `import { useFilePicker, useFileUpload } from '@idealyst/files';
 
 function Test() {
   const { pick, files } = useFilePicker();

@@ -27,7 +27,7 @@ import {
   mdiMenuDown,
 } from '@mdi/js';
 import type { ToolbarItem } from './types';
-import type { Size, Intent } from '@idealyst/theme';
+import type { Size, Intent, Theme } from '@idealyst/theme';
 import type { Editor } from '@tiptap/react';
 
 interface EditorToolbarProps {
@@ -98,7 +98,7 @@ export const EditorToolbar = memo<EditorToolbarProps>(
     const [, setUpdateCounter] = useState(0);
 
     // Access theme directly
-    const theme = UnistylesRuntime.getTheme();
+    const theme = UnistylesRuntime.getTheme() as Theme;
 
     useEffect(() => {
       if (!editor) return;

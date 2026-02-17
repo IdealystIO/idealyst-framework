@@ -20,7 +20,8 @@
       "@idealyst/theme": ["packages/theme/src"],
       "@idealyst/components": ["packages/components/src"],
       "@idealyst/components/internal": ["packages/components/src/internal"],
-      "@idealyst/navigation": ["packages/navigation/src"]
+      "@idealyst/navigation": ["packages/navigation/src"],
+      "@idealyst/svg": ["packages/svg/src"]
     }
   },
   "include": [
@@ -36,6 +37,8 @@
     "**/*.old.tsx",
     "**/*.native.tsx",
     "**/*.native.ts",
+    "**/*.web.tsx",
+    "**/*.web.ts",
     "**/examples/**",
     "**/docs.ts",
     "tests/**"

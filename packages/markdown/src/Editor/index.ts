@@ -25,9 +25,6 @@
  * ```
  */
 
-// Main component
-export { default as MarkdownEditor } from './MarkdownEditor.web';
-
 // Types
 export type {
   MarkdownEditorProps,
@@ -41,3 +38,5 @@ export type {
   EditorDynamicProps,
   EditorVariants,
 } from './MarkdownEditor.styles';
+
+// Main component is platform-specific, exported from index.web.ts and index.native.ts

@@ -27,6 +27,29 @@ function getScreenWidth(): number {
 }
 
 /**
+ * Get breakpoints from UnistylesRuntime, falling back to the current theme's
+ * breakpoints if the runtime doesn't expose them (Unistyles v3 web).
+ */
+function getBreakpointsFromRuntime(): BreakpointsRecord {
+    const runtimeBps = UnistylesRuntime.breakpoints as BreakpointsRecord;
+    if (runtimeBps && Object.keys(runtimeBps).length > 0) {
+        return runtimeBps;
+    }
+
+    // Fallback: read breakpoints from the active theme
+    try {
+        const theme = UnistylesRuntime.getTheme();
+        if (theme && (theme as any).breakpoints && Object.keys((theme as any).breakpoints).length > 0) {
+            return (theme as any).breakpoints as BreakpointsRecord;
+        }
+    } catch {
+        // getTheme may throw if no theme is configured
+    }
+
+    return {} as BreakpointsRecord;
+}
+
+/**
  * Calculate the current breakpoint from screen width.
  */
 function calculateBreakpoint(
@@ -49,7 +72,7 @@ function calculateBreakpoint(
  * Returns both the current breakpoint and the screen width.
  */
 function useBreakpointChange(): { breakpoint: Breakpoint | undefined; screenWidth: number } {
-    const breakpoints = UnistylesRuntime.breakpoints as BreakpointsRecord;
+    const breakpoints = getBreakpointsFromRuntime();
 
     const [state, setState] = useState(() => {
         const width = getScreenWidth();
@@ -62,7 +85,8 @@ function useBreakpointChange(): { breakpoint: Breakpoint | undefined; screenWidt
     useEffect(() => {
         const handleResize = () => {
             const newWidth = getScreenWidth();
-            const newBreakpoint = calculateBreakpoint(newWidth, breakpoints);
+            const bps = getBreakpointsFromRuntime();
+            const newBreakpoint = calculateBreakpoint(newWidth, bps);
 
             // Only update state if breakpoint changed
             setState(prev => {
@@ -178,7 +202,7 @@ export function useResponsiveStyle(
 ): ViewStyle & TextStyle & ImageStyle {
     // Only re-render when breakpoint changes, not on every pixel
     const { breakpoint, screenWidth } = useBreakpointChange();
-    const breakpoints = UnistylesRuntime.breakpoints as BreakpointsRecord;
+    const breakpoints = getBreakpointsFromRuntime();
 
     // Sort breakpoints by value descending for cascade lookup
     const sortedBps = useMemo(() =>
@@ -255,7 +279,7 @@ export function useBreakpoint(): Breakpoint | undefined {
  */
 export function useBreakpointUp(targetBreakpoint: Breakpoint): boolean {
     const { screenWidth } = useBreakpointChange();
-    const breakpoints = UnistylesRuntime.breakpoints as BreakpointsRecord;
+    const breakpoints = getBreakpointsFromRuntime();
     return screenWidth >= breakpoints[targetBreakpoint];
 }
 

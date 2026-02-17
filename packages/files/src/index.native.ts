@@ -23,7 +23,7 @@ export type {
   RetryDelayStrategy,
   UploadConfig,
   UploadState,
-  UploadProgress,
+  UploadProgressInfo,
   UploadResult,
   QueueStatus,
   IFileUploader,

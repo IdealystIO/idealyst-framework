@@ -277,18 +277,7 @@ export interface CartesianChartProps extends BaseChartProps {
 // Path Commands
 // =============================================================================
 
-/**
- * SVG path command types
- */
-export type PathCommandType = 'M' | 'L' | 'C' | 'Q' | 'A' | 'Z';
-
-/**
- * A single path command
- */
-export interface PathCommand {
-  type: PathCommandType;
-  args: number[];
-}
+// Note: PathCommandType and PathCommand are exported from './core/path/commands'
 
 /**
  * Curve interpolation type for line/area charts

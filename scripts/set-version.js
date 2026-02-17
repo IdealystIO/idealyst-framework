@@ -47,6 +47,7 @@ const packagePaths = [
   "packages/blur/package.json",
   "packages/audio/package.json",
   "packages/svg/package.json",
+  'packages/files/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',

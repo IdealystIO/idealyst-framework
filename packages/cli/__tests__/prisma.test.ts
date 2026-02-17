@@ -80,21 +80,29 @@ describe('Prisma Extension Generator', () => {
       expect(await fs.pathExists(configPath)).toBe(true);
     });
 
-    it('should create tsconfig.json', async () => {
+    it('should create tsconfig.json with correct include paths', async () => {
       await applyPrismaExtension(TEST_DIR, baseTemplateData);
 
       const tsconfigPath = path.join(TEST_DIR, 'packages', 'database', 'tsconfig.json');
       expect(await fs.pathExists(tsconfigPath)).toBe(true);
+
+      const tsconfig = await fs.readJson(tsconfigPath);
+      expect(tsconfig.include).toContain('src/**/*');
+      expect(tsconfig.include).toContain('prisma/generated/**/*');
     });
 
-    it('should create src/index.ts', async () => {
+    it('should create src/index.ts with correct import paths', async () => {
       await applyPrismaExtension(TEST_DIR, baseTemplateData);
 
       const indexPath = path.join(TEST_DIR, 'packages', 'database', 'src', 'index.ts');
       expect(await fs.pathExists(indexPath)).toBe(true);
+
+      const content = await fs.readFile(indexPath, 'utf8');
+      // Import should be from prisma/generated/client (relative to schema location)
+      expect(content).toContain("from '../prisma/generated/client/index.js'");
     });
 
-    it('should create src/schemas.ts with Zod schemas', async () => {
+    it('should create src/schemas.ts with Zod schemas matching Item model', async () => {
       await applyPrismaExtension(TEST_DIR, baseTemplateData);
 
       const schemasPath = path.join(TEST_DIR, 'packages', 'database', 'src', 'schemas.ts');
@@ -103,6 +111,9 @@ describe('Prisma Extension Generator', () => {
       const content = await fs.readFile(schemasPath, 'utf8');
       expect(content).toContain('import { z } from \'zod\'');
       expect(content).toContain('createItemSchema');
+      expect(content).toContain('title: z.string()');
+      expect(content).toContain('description: z.string().optional()');
+      expect(content).toContain('completed: z.boolean().optional()');
     });
 
     it('should create .env file', async () => {
@@ -163,17 +174,19 @@ describe('Prisma Extension Generator', () => {
       expect(datasource).not.toContain('url');
     });
 
-    it('should include Item model', async () => {
+    it('should include Item model with tRPC-compatible fields', async () => {
       await applyPrismaExtension(TEST_DIR, baseTemplateData);
 
       const schemaPath = path.join(TEST_DIR, 'packages', 'database', 'prisma', 'schema.prisma');
       const content = await fs.readFile(schemaPath, 'utf8');
 
       expect(content).toContain('model Item');
-      expect(content).toContain('id        String');
-      expect(content).toContain('name      String');
-      expect(content).toContain('createdAt DateTime');
-      expect(content).toContain('updatedAt DateTime');
+      expect(content).toContain('id          String');
+      expect(content).toContain('title       String');
+      expect(content).toContain('description String?');
+      expect(content).toContain('completed   Boolean');
+      expect(content).toContain('createdAt   DateTime');
+      expect(content).toContain('updatedAt   DateTime');
     });
   });
 
@@ -184,7 +197,8 @@ describe('Prisma Extension Generator', () => {
       const configPath = path.join(TEST_DIR, 'packages', 'database', 'prisma.config.ts');
       const content = await fs.readFile(configPath, 'utf8');
 
-      expect(content).toContain("import { defineConfig, env } from 'prisma/config'");
+      expect(content).toContain("import 'dotenv/config'");
+      expect(content).toContain("import { defineConfig } from 'prisma/config'");
       expect(content).toContain('export default defineConfig');
     });
 
@@ -197,13 +211,13 @@ describe('Prisma Extension Generator', () => {
       expect(content).toContain("schema: 'prisma/schema.prisma'");
     });
 
-    it('should configure datasource url via env() in config', async () => {
+    it('should configure datasource url via process.env in config', async () => {
       await applyPrismaExtension(TEST_DIR, baseTemplateData);
 
       const configPath = path.join(TEST_DIR, 'packages', 'database', 'prisma.config.ts');
       const content = await fs.readFile(configPath, 'utf8');
 
-      expect(content).toContain("url: env('DATABASE_URL')");
+      expect(content).toContain('url: process.env.DATABASE_URL!');
     });
 
     it('should configure migrations path and seed', async () => {
@@ -216,14 +230,14 @@ describe('Prisma Extension Generator', () => {
       expect(content).toContain("seed: 'tsx prisma/seed.ts'");
     });
 
-    it('should use Prisma env() helper for DATABASE_URL', async () => {
+    it('should use dotenv to load .env file for DATABASE_URL', async () => {
       await applyPrismaExtension(TEST_DIR, baseTemplateData);
 
       const configPath = path.join(TEST_DIR, 'packages', 'database', 'prisma.config.ts');
       const content = await fs.readFile(configPath, 'utf8');
 
-      expect(content).toContain("import { defineConfig, env } from 'prisma/config'");
-      expect(content).toContain("url: env('DATABASE_URL')");
+      expect(content).toContain("import 'dotenv/config'");
+      expect(content).toContain('url: process.env.DATABASE_URL!');
     });
   });
 
@@ -307,7 +321,7 @@ describe('Prisma Extension Generator', () => {
         path.join(TEST_DIR, 'packages', 'database', 'package.json')
       );
 
-      expect(packageJson.exports['./pothos']).toBe('./generated/pothos.ts');
+      expect(packageJson.exports['./pothos']).toBe('./prisma/generated/pothos.ts');
     });
 
     it('should NOT include pothos generator when GraphQL is disabled', async () => {
@@ -366,14 +380,14 @@ describe('Prisma Extension Generator', () => {
       expect(packageJson.dependencies).toHaveProperty('zod');
     });
 
-    it('should NOT include dotenv in dependencies (Prisma env() is used instead)', async () => {
+    it('should include dotenv in dependencies (for loading .env in prisma.config.ts)', async () => {
       await applyPrismaExtension(TEST_DIR, baseTemplateData);
 
       const packageJson = await fs.readJson(
         path.join(TEST_DIR, 'packages', 'database', 'package.json')
       );
 
-      expect(packageJson.dependencies).not.toHaveProperty('dotenv');
+      expect(packageJson.dependencies).toHaveProperty('dotenv');
     });
 
     it('should set type to module', async () => {

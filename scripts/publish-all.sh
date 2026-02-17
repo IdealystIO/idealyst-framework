@@ -29,6 +29,7 @@ PACKAGES=(
   "blur"
   "audio"
   "svg"
+  "files"
 )
 
 for pkg in "${PACKAGES[@]}"; do

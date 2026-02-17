@@ -51,7 +51,7 @@ export interface PickedFile {
   thumbnailUri?: string;
 
   /** Get file as ArrayBuffer */
-  getArrayBuffer(): Promise<ArrayBuffer>;
+  getArrayBuffer(): Promise<ArrayBufferLike>;
 
   /** Get file as Blob (web) or base64 (native) */
   getData(): Promise<Blob | string>;
@@ -326,7 +326,7 @@ export type UploadState =
 /**
  * Upload progress information.
  */
-export interface UploadProgress {
+export interface UploadProgressInfo {
   /** Upload ID */
   id: string;
 
@@ -393,7 +393,7 @@ export interface UploadResult {
   error?: UploadError;
 
   /** Final progress state */
-  progress: UploadProgress;
+  progress: UploadProgressInfo;
 }
 
 // ============================================
@@ -447,7 +447,7 @@ export interface IFileUploader {
   readonly queueStatus: QueueStatus;
 
   /** All uploads */
-  readonly uploads: Map<string, UploadProgress>;
+  readonly uploads: Map<string, UploadProgressInfo>;
 
   /** Add file(s) to upload queue */
   add(files: PickedFile | PickedFile[], config: UploadConfig): string[];
@@ -480,13 +480,13 @@ export interface IFileUploader {
   clearCompleted(): void;
 
   /** Get upload by ID */
-  getUpload(uploadId: string): UploadProgress | undefined;
+  getUpload(uploadId: string): UploadProgressInfo | undefined;
 
   /** Subscribe to queue status changes */
   onQueueChange(callback: (status: QueueStatus) => void): () => void;
 
   /** Subscribe to individual upload progress */
-  onProgress(uploadId: string, callback: (progress: UploadProgress) => void): () => void;
+  onProgress(uploadId: string, callback: (progress: UploadProgressInfo) => void): () => void;
 
   /** Subscribe to upload completion */
   onComplete(callback: (result: UploadResult) => void): () => void;
@@ -659,7 +659,7 @@ export interface UseFileUploadResult {
   queueStatus: QueueStatus;
 
   /** All uploads as array */
-  uploads: UploadProgress[];
+  uploads: UploadProgressInfo[];
 
   // Derived state
   /** Whether any upload is in progress */
@@ -703,7 +703,7 @@ export interface UseFileUploadResult {
   clearCompleted: () => void;
 
   /** Get specific upload */
-  getUpload: (uploadId: string) => UploadProgress | undefined;
+  getUpload: (uploadId: string) => UploadProgressInfo | undefined;
 
   // Ref
   /** File uploader instance ref */
@@ -826,7 +826,7 @@ export type ProgressVariant = 'linear' | 'circular';
  */
 export interface UploadProgressProps {
   /** Upload progress data */
-  upload: UploadProgress;
+  upload: UploadProgressInfo;
 
   /** Show file name */
   showFileName?: boolean;

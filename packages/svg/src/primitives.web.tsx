@@ -27,6 +27,13 @@ import type {
 } from './types';
 
 /**
+ * Helper to cast forwardRef refs to native element refs.
+ * Works around React 19's stricter ref callback types.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const asRef = <T,>(ref: unknown): any => ref;
+
+/**
  * Helper to convert props to native SVG attributes
  */
 function convertCommonProps(props: Record<string, unknown>): ReactSVGProps<SVGElement> {
@@ -90,7 +97,7 @@ export const Svg = forwardRef<SVGSVGElement, SvgProps>(
 
     return (
       <svg
-        ref={ref}
+        ref={asRef<SVGSVGElement>(ref)}
         xmlns={xmlns}
         xmlnsXlink={xmlnsXlink}
         style={color ? { color } : undefined}
@@ -129,7 +136,7 @@ export const G = forwardRef<SVGGElement, GProps>(
 
     return (
       <g
-        ref={ref}
+        ref={asRef<SVGGElement>(ref)}
         transform={transform.trim() || undefined}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(gProps as ReactSVGProps<SVGGElement>)}
@@ -150,7 +157,7 @@ export const Path = forwardRef<SVGPathElement, PathProps>(
 
     return (
       <path
-        ref={ref}
+        ref={asRef<SVGPathElement>(ref)}
         d={d}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(pathProps as ReactSVGProps<SVGPathElement>)}
@@ -169,7 +176,7 @@ export const Rect = forwardRef<SVGRectElement, RectProps>(
 
     return (
       <rect
-        ref={ref}
+        ref={asRef<SVGRectElement>(ref)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(rectProps as ReactSVGProps<SVGRectElement>)}
       />
@@ -187,7 +194,7 @@ export const Circle = forwardRef<SVGCircleElement, CircleProps>(
 
     return (
       <circle
-        ref={ref}
+        ref={asRef<SVGCircleElement>(ref)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(circleProps as ReactSVGProps<SVGCircleElement>)}
       />
@@ -205,7 +212,7 @@ export const Ellipse = forwardRef<SVGEllipseElement, EllipseProps>(
 
     return (
       <ellipse
-        ref={ref}
+        ref={asRef<SVGEllipseElement>(ref)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(ellipseProps as ReactSVGProps<SVGEllipseElement>)}
       />
@@ -223,7 +230,7 @@ export const Line = forwardRef<SVGLineElement, LineProps>(
 
     return (
       <line
-        ref={ref}
+        ref={asRef<SVGLineElement>(ref)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(lineProps as ReactSVGProps<SVGLineElement>)}
       />
@@ -241,7 +248,7 @@ export const Polyline = forwardRef<SVGPolylineElement, PolylineProps>(
 
     return (
       <polyline
-        ref={ref}
+        ref={asRef<SVGPolylineElement>(ref)}
         points={convertPoints(points)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(polylineProps as ReactSVGProps<SVGPolylineElement>)}
@@ -260,7 +267,7 @@ export const Polygon = forwardRef<SVGPolygonElement, PolygonProps>(
 
     return (
       <polygon
-        ref={ref}
+        ref={asRef<SVGPolygonElement>(ref)}
         points={convertPoints(points)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(polygonProps as ReactSVGProps<SVGPolygonElement>)}
@@ -279,7 +286,7 @@ export const Text = forwardRef<SVGTextElement, TextProps>(
 
     return (
       <text
-        ref={ref}
+        ref={asRef<SVGTextElement>(ref)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(textProps as ReactSVGProps<SVGTextElement>)}
       >
@@ -299,7 +306,7 @@ export const TSpan = forwardRef<SVGTSpanElement, TSpanProps>(
 
     return (
       <tspan
-        ref={ref}
+        ref={asRef<SVGTSpanElement>(ref)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(tspanProps as ReactSVGProps<SVGTSpanElement>)}
       >
@@ -319,7 +326,7 @@ export const TextPath = forwardRef<SVGTextPathElement, TextPathProps>(
 
     return (
       <textPath
-        ref={ref}
+        ref={asRef<SVGTextPathElement>(ref)}
         href={href}
         path={path}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
@@ -341,7 +348,7 @@ export const Use = forwardRef<SVGUseElement, UseProps>(
 
     return (
       <use
-        ref={ref}
+        ref={asRef<SVGUseElement>(ref)}
         href={href}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(useProps as ReactSVGProps<SVGUseElement>)}
@@ -360,7 +367,7 @@ export const Symbol = forwardRef<SVGSymbolElement, SymbolProps>(
 
     return (
       <symbol
-        ref={ref}
+        ref={asRef<SVGSymbolElement>(ref)}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(symbolProps as ReactSVGProps<SVGSymbolElement>)}
       >
@@ -379,7 +386,7 @@ export const Defs = forwardRef<SVGDefsElement, DefsProps>(
     const defsProps = convertCommonProps(props);
 
     return (
-      <defs ref={ref} {...(defsProps as ReactSVGProps<SVGDefsElement>)}>
+      <defs ref={asRef<SVGDefsElement>(ref)} {...(defsProps as ReactSVGProps<SVGDefsElement>)}>
         {children}
       </defs>
     );
@@ -396,7 +403,7 @@ export const Image = forwardRef<SVGImageElement, ImageProps>(
 
     return (
       <image
-        ref={ref}
+        ref={asRef<SVGImageElement>(ref)}
         href={href}
         strokeDasharray={convertStrokeDasharray(strokeDasharray)}
         {...(imageProps as ReactSVGProps<SVGImageElement>)}
@@ -414,7 +421,7 @@ export const ClipPath = forwardRef<SVGClipPathElement, ClipPathProps>(
     const clipPathProps = convertCommonProps(props);
 
     return (
-      <clipPath ref={ref} {...(clipPathProps as ReactSVGProps<SVGClipPathElement>)}>
+      <clipPath ref={asRef<SVGClipPathElement>(ref)} {...(clipPathProps as ReactSVGProps<SVGClipPathElement>)}>
         {children}
       </clipPath>
     );
@@ -430,7 +437,7 @@ export const Mask = forwardRef<SVGMaskElement, MaskProps>(
     const maskProps = convertCommonProps(props);
 
     return (
-      <mask ref={ref} {...(maskProps as ReactSVGProps<SVGMaskElement>)}>
+      <mask ref={asRef<SVGMaskElement>(ref)} {...(maskProps as ReactSVGProps<SVGMaskElement>)}>
         {children}
       </mask>
     );
@@ -446,7 +453,7 @@ export const LinearGradient = forwardRef<SVGLinearGradientElement, LinearGradien
     const linearGradientProps = convertCommonProps(props);
 
     return (
-      <linearGradient ref={ref} {...(linearGradientProps as ReactSVGProps<SVGLinearGradientElement>)}>
+      <linearGradient ref={asRef<SVGLinearGradientElement>(ref)} {...(linearGradientProps as ReactSVGProps<SVGLinearGradientElement>)}>
         {children}
       </linearGradient>
     );
@@ -462,7 +469,7 @@ export const RadialGradient = forwardRef<SVGRadialGradientElement, RadialGradien
     const radialGradientProps = convertCommonProps(props);
 
     return (
-      <radialGradient ref={ref} {...(radialGradientProps as ReactSVGProps<SVGRadialGradientElement>)}>
+      <radialGradient ref={asRef<SVGRadialGradientElement>(ref)} {...(radialGradientProps as ReactSVGProps<SVGRadialGradientElement>)}>
         {children}
       </radialGradient>
     );
@@ -477,7 +484,7 @@ export const Stop = forwardRef<SVGStopElement, StopProps>(
   ({ offset, stopColor, stopOpacity, ...props }, ref) => {
     return (
       <stop
-        ref={ref}
+        ref={asRef<SVGStopElement>(ref)}
         offset={offset}
         stopColor={stopColor}
         stopOpacity={stopOpacity}
@@ -496,7 +503,7 @@ export const Pattern = forwardRef<SVGPatternElement, PatternProps>(
     const patternProps = convertCommonProps(props);
 
     return (
-      <pattern ref={ref} {...(patternProps as ReactSVGProps<SVGPatternElement>)}>
+      <pattern ref={asRef<SVGPatternElement>(ref)} {...(patternProps as ReactSVGProps<SVGPatternElement>)}>
         {children}
       </pattern>
     );
@@ -512,7 +519,7 @@ export const Marker = forwardRef<SVGMarkerElement, MarkerProps>(
     const markerProps = convertCommonProps(props);
 
     return (
-      <marker ref={ref} {...(markerProps as ReactSVGProps<SVGMarkerElement>)}>
+      <marker ref={asRef<SVGMarkerElement>(ref)} {...(markerProps as ReactSVGProps<SVGMarkerElement>)}>
         {children}
       </marker>
     );
@@ -528,7 +535,7 @@ export const ForeignObject = forwardRef<SVGForeignObjectElement, ForeignObjectPr
     const foreignObjectProps = convertCommonProps(props);
 
     return (
-      <foreignObject ref={ref} {...(foreignObjectProps as ReactSVGProps<SVGForeignObjectElement>)}>
+      <foreignObject ref={asRef<SVGForeignObjectElement>(ref)} {...(foreignObjectProps as ReactSVGProps<SVGForeignObjectElement>)}>
         {children}
       </foreignObject>
     );

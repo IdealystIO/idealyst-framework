@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 
-import type { IntentValue, ShadowValue, Shade, ColorValue, InteractionConfig, ButtonSizeValue, ChipSizeValue, BadgeSizeValue, IconSizeValue, InputSizeValue, RadioButtonSizeValue, SelectSizeValue, SliderSizeValue, SwitchSizeValue, TextAreaSizeValue, AvatarSizeValue, ProgressSizeValue, AccordionSizeValue, ActivityIndicatorSizeValue, AlertSizeValue, BreadcrumbSizeValue, ListSizeValue, MenuSizeValue, TextSizeValue, TabBarSizeValue, TableSizeValue, TooltipSizeValue, ViewSizeValue, Typography, TypographyValue } from './structures';
+import type { IntentValue, ShadowValue, Shade, ColorValue, InteractionConfig, ButtonSizeValue, IconButtonSizeValue, ChipSizeValue, BadgeSizeValue, IconSizeValue, InputSizeValue, RadioButtonSizeValue, SelectSizeValue, SliderSizeValue, SwitchSizeValue, TextAreaSizeValue, AvatarSizeValue, ProgressSizeValue, AccordionSizeValue, ActivityIndicatorSizeValue, AlertSizeValue, BreadcrumbSizeValue, ListSizeValue, MenuSizeValue, TextSizeValue, TabBarSizeValue, TableSizeValue, TooltipSizeValue, ViewSizeValue, Typography, TypographyValue } from './structures';
 
 /**
  * Default fallback theme structure.
@@ -22,7 +22,7 @@ export interface DefaultTheme {
         chip: Record<string, ChipSizeValue>;
         badge: Record<string, BadgeSizeValue>;
         icon: Record<string, IconSizeValue>;
-        iconButton: Record<string, IconSizeValue>;
+        iconButton: Record<string, IconButtonSizeValue>;
         input: Record<string, InputSizeValue>;
         radioButton: Record<string, RadioButtonSizeValue>;
         select: Record<string, SelectSizeValue>;

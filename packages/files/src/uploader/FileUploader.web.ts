@@ -2,7 +2,7 @@ import type {
   IFileUploader,
   PickedFile,
   UploadConfig,
-  UploadProgress,
+  UploadProgressInfo,
   QueueStatus,
   UploadResult,
   UploadError,
@@ -35,7 +35,7 @@ export class WebFileUploader implements IFileUploader {
     return this._queue.queueStatus;
   }
 
-  get uploads(): Map<string, UploadProgress> {
+  get uploads(): Map<string, UploadProgressInfo> {
     return this._queue.uploads;
   }
 
@@ -94,7 +94,7 @@ export class WebFileUploader implements IFileUploader {
     this._queue.clearCompleted();
   }
 
-  getUpload(uploadId: string): UploadProgress | undefined {
+  getUpload(uploadId: string): UploadProgressInfo | undefined {
     return this._queue.getUpload(uploadId);
   }
 
@@ -102,7 +102,7 @@ export class WebFileUploader implements IFileUploader {
     return this._queue.onQueueChange(callback);
   }
 
-  onProgress(uploadId: string, callback: (progress: UploadProgress) => void): () => void {
+  onProgress(uploadId: string, callback: (progress: UploadProgressInfo) => void): () => void {
     return this._queue.onProgress(uploadId, callback);
   }
 
@@ -138,7 +138,7 @@ export class WebFileUploader implements IFileUploader {
     }
   }
 
-  private async _startUpload(upload: UploadProgress): Promise<void> {
+  private async _startUpload(upload: UploadProgressInfo): Promise<void> {
     const { id, file, config } = upload;
 
     this._queue.markStarted(id);
@@ -151,7 +151,7 @@ export class WebFileUploader implements IFileUploader {
     }
   }
 
-  private async _startSimpleUpload(upload: UploadProgress): Promise<void> {
+  private async _startSimpleUpload(upload: UploadProgressInfo): Promise<void> {
     const { id, file, config } = upload;
 
     const xhr = new XMLHttpRequest();
@@ -267,7 +267,7 @@ export class WebFileUploader implements IFileUploader {
     }
   }
 
-  private async _startChunkedUpload(upload: UploadProgress): Promise<void> {
+  private async _startChunkedUpload(upload: UploadProgressInfo): Promise<void> {
     const { id, file, config } = upload;
 
     const chunkedUploader = new ChunkedUploader(config.chunkSize);

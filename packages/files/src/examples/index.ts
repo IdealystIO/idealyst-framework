@@ -1,11 +1,11 @@
 /**
- * File Upload Examples
+ * Files Package Examples
  *
- * This file demonstrates common usage patterns for @idealyst/file-upload.
+ * This file demonstrates common usage patterns for @idealyst/files.
  */
 
 export const basicUploadExample = `
-import { useFilePicker, useFileUpload, FilePickerButton, UploadProgress } from '@idealyst/file-upload';
+import { useFilePicker, useFileUpload, FilePickerButton, UploadProgress } from '@idealyst/files';
 import { View } from 'react-native';
 
 function BasicUploadExample() {
@@ -45,7 +45,7 @@ function BasicUploadExample() {
 `;
 
 export const dropZoneExample = `
-import { DropZone, useFileUpload } from '@idealyst/file-upload';
+import { DropZone, useFileUpload } from '@idealyst/files';
 import { View, Text } from 'react-native';
 
 function DropZoneExample() {
@@ -79,7 +79,7 @@ function DropZoneExample() {
 `;
 
 export const chunkedUploadExample = `
-import { useFilePicker, useFileUpload, UPLOAD_PRESETS } from '@idealyst/file-upload';
+import { useFilePicker, useFileUpload, UPLOAD_PRESETS } from '@idealyst/files';
 import { View, Button } from 'react-native';
 
 function LargeFileUploadExample() {
@@ -114,7 +114,7 @@ function LargeFileUploadExample() {
 `;
 
 export const backgroundUploadExample = `
-import { useFilePicker, useFileUpload, UPLOAD_PRESETS } from '@idealyst/file-upload';
+import { useFilePicker, useFileUpload, UPLOAD_PRESETS } from '@idealyst/files';
 import { View, Button, Text } from 'react-native';
 
 function BackgroundUploadExample() {
@@ -146,7 +146,7 @@ function BackgroundUploadExample() {
 `;
 
 export const customValidationExample = `
-import { useFilePicker, FILE_PICKER_PRESETS } from '@idealyst/file-upload';
+import { useFilePicker, FILE_PICKER_PRESETS } from '@idealyst/files';
 import { View, Button, Text } from 'react-native';
 
 function AvatarUploadExample() {

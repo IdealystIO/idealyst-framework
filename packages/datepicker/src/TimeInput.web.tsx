@@ -7,6 +7,7 @@ import { IconSvg } from './IconSvg.web';
 import { TimePicker } from './TimePicker';
 import { dateTimeInputStyles } from './InputStyles';
 import type { TimeInputProps } from './types';
+import type { Theme } from '@idealyst/theme';
 
 export const TimeInput: React.FC<TimeInputProps> = ({
   value,
@@ -34,7 +35,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
   });
 
   // Get theme for icon size and color
-  const { theme } = useUnistyles();
+  const { theme } = useUnistyles() as { theme: Theme };
   const iconSize = theme.sizes.input[size].iconSize;
   const iconColor = theme.colors.text.secondary;
 

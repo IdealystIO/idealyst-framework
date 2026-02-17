@@ -32,4 +32,5 @@ export { AlertExamples } from './AlertExamples';
 export { SkeletonExamples } from './SkeletonExamples';
 export { ChipExamples } from './ChipExamples';
 export { BreadcrumbExamples } from './BreadcrumbExamples';
+export { GridExamples } from './GridExamples';
 export { ThemeExtensionExamples } from './ThemeExtensionExamples';

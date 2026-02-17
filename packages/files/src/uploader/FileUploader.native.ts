@@ -2,7 +2,7 @@ import type {
   IFileUploader,
   PickedFile,
   UploadConfig,
-  UploadProgress,
+  UploadProgressInfo,
   QueueStatus,
   UploadResult,
   UploadError,
@@ -16,16 +16,7 @@ import {
 } from '../utils';
 import { UploadQueue } from './UploadQueue';
 import { ChunkedUploader } from './ChunkedUploader';
-
-// Lazy load react-native-blob-util
-let BlobUtil: typeof import('react-native-blob-util') | null = null;
-
-async function getBlobUtil() {
-  if (!BlobUtil) {
-    BlobUtil = await import('react-native-blob-util');
-  }
-  return BlobUtil.default;
-}
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 interface UploadTask {
   cancel: () => void;
@@ -49,7 +40,7 @@ export class NativeFileUploader implements IFileUploader {
     return this._queue.queueStatus;
   }
 
-  get uploads(): Map<string, UploadProgress> {
+  get uploads(): Map<string, UploadProgressInfo> {
     return this._queue.uploads;
   }
 
@@ -108,7 +99,7 @@ export class NativeFileUploader implements IFileUploader {
     this._queue.clearCompleted();
   }
 
-  getUpload(uploadId: string): UploadProgress | undefined {
+  getUpload(uploadId: string): UploadProgressInfo | undefined {
     return this._queue.getUpload(uploadId);
   }
 
@@ -116,7 +107,7 @@ export class NativeFileUploader implements IFileUploader {
     return this._queue.onQueueChange(callback);
   }
 
-  onProgress(uploadId: string, callback: (progress: UploadProgress) => void): () => void {
+  onProgress(uploadId: string, callback: (progress: UploadProgressInfo) => void): () => void {
     return this._queue.onProgress(uploadId, callback);
   }
 
@@ -152,7 +143,7 @@ export class NativeFileUploader implements IFileUploader {
     }
   }
 
-  private async _startUpload(upload: UploadProgress): Promise<void> {
+  private async _startUpload(upload: UploadProgressInfo): Promise<void> {
     const { id, file, config } = upload;
 
     this._queue.markStarted(id);
@@ -167,12 +158,10 @@ export class NativeFileUploader implements IFileUploader {
     }
   }
 
-  private async _startSimpleUpload(upload: UploadProgress): Promise<void> {
+  private async _startSimpleUpload(upload: UploadProgressInfo): Promise<void> {
     const { id, file, config } = upload;
 
     try {
-      const RNBlobUtil = await getBlobUtil();
-
       // Get file path
       const filePath = file.uri.replace('file://', '');
 
@@ -182,7 +171,7 @@ export class NativeFileUploader implements IFileUploader {
           name: config.fieldName,
           filename: file.name,
           type: file.type,
-          data: RNBlobUtil.wrap(filePath),
+          data: ReactNativeBlobUtil.wrap(filePath),
         },
       ];
 
@@ -197,7 +186,7 @@ export class NativeFileUploader implements IFileUploader {
       }
 
       // Create upload task
-      const task = RNBlobUtil.fetch(
+      const task = ReactNativeBlobUtil.fetch(
         config.method,
         config.url,
         {
@@ -262,17 +251,15 @@ export class NativeFileUploader implements IFileUploader {
     this._processQueue();
   }
 
-  private async _startBackgroundUpload(upload: UploadProgress): Promise<void> {
+  private async _startBackgroundUpload(upload: UploadProgressInfo): Promise<void> {
     const { id, file, config } = upload;
 
     try {
-      const RNBlobUtil = await getBlobUtil();
-
       // Get file path
       const filePath = file.uri.replace('file://', '');
 
       // Configure for background upload
-      const sessionConfig = RNBlobUtil.config({
+      const sessionConfig = ReactNativeBlobUtil.config({
         IOSBackgroundTask: true,
         indicator: true,
         timeout: config.timeout,
@@ -284,7 +271,7 @@ export class NativeFileUploader implements IFileUploader {
           name: config.fieldName,
           filename: file.name,
           type: file.type,
-          data: RNBlobUtil.wrap(filePath),
+          data: ReactNativeBlobUtil.wrap(filePath),
         },
       ];
 
@@ -363,7 +350,7 @@ export class NativeFileUploader implements IFileUploader {
     this._processQueue();
   }
 
-  private async _startChunkedUpload(upload: UploadProgress): Promise<void> {
+  private async _startChunkedUpload(upload: UploadProgressInfo): Promise<void> {
     const { id, file, config } = upload;
 
     const chunkedUploader = new ChunkedUploader(config.chunkSize);

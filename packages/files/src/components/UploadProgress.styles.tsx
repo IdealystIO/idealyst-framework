@@ -78,13 +78,13 @@ export const uploadProgressStyles = defineStyle('UploadProgress', (theme: Theme)
       cursor: 'pointer',
     },
   }),
-  actionIcon: ({ intent = 'secondary' }: UploadProgressDynamicProps) => ({
+  actionIcon: ({ intent = 'neutral' }: UploadProgressDynamicProps) => ({
     fontSize: 20,
     color: theme.intents[intent].primary,
   }),
   errorText: (_props: UploadProgressDynamicProps) => ({
     fontSize: 12,
-    color: theme.intents.error.primary,
+    color: theme.intents.danger.primary,
     marginTop: 4,
   }),
 }));

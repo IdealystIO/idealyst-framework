@@ -1,7 +1,7 @@
 import type {
   PickedFile,
   UploadConfig,
-  UploadProgress,
+  UploadProgressInfo,
   UploadState,
   UploadResult,
   QueueStatus,
@@ -19,7 +19,7 @@ import {
 
 type QueueEvents = {
   queueChange: [QueueStatus];
-  progress: [string, UploadProgress];
+  progress: [string, UploadProgressInfo];
   complete: [UploadResult];
   error: [UploadError, string];
 };
@@ -28,7 +28,7 @@ type QueueEvents = {
  * Manages upload queue with concurrency control, retry logic, and progress tracking.
  */
 export class UploadQueue {
-  private _uploads = new Map<string, UploadProgress>();
+  private _uploads = new Map<string, UploadProgressInfo>();
   private _queue: string[] = [];
   private _activeUploads = new Set<string>();
   private _speedCalculators = new Map<string, SpeedCalculator>();
@@ -47,7 +47,7 @@ export class UploadQueue {
     return { ...this._status };
   }
 
-  get uploads(): Map<string, UploadProgress> {
+  get uploads(): Map<string, UploadProgressInfo> {
     return new Map(this._uploads);
   }
 
@@ -61,7 +61,7 @@ export class UploadQueue {
     for (const file of fileArray) {
       const id = generateId('upload');
 
-      const progress: UploadProgress = {
+      const progress: UploadProgressInfo = {
         id,
         file,
         state: 'pending',
@@ -226,7 +226,7 @@ export class UploadQueue {
   /**
    * Get a specific upload.
    */
-  getUpload(uploadId: string): UploadProgress | undefined {
+  getUpload(uploadId: string): UploadProgressInfo | undefined {
     return this._uploads.get(uploadId);
   }
 
@@ -236,7 +236,7 @@ export class UploadQueue {
   updateProgress(
     uploadId: string,
     bytesUploaded: number,
-    additionalData?: Partial<Pick<UploadProgress, 'currentChunk' | 'totalChunks'>>
+    additionalData?: Partial<Pick<UploadProgressInfo, 'currentChunk' | 'totalChunks'>>
   ): void {
     const upload = this._uploads.get(uploadId);
     if (!upload) return;
@@ -289,7 +289,7 @@ export class UploadQueue {
     const upload = this._uploads.get(uploadId);
     if (!upload) return;
 
-    const updatedUpload: UploadProgress = {
+    const updatedUpload: UploadProgressInfo = {
       ...upload,
       state: 'completed',
       bytesUploaded: upload.bytesTotal,
@@ -380,7 +380,7 @@ export class UploadQueue {
   /**
    * Get the next upload to process.
    */
-  getNextUpload(): UploadProgress | undefined {
+  getNextUpload(): UploadProgressInfo | undefined {
     if (this._isPaused || this._disposed) return undefined;
     if (this._activeUploads.size >= this._concurrency) return undefined;
 
@@ -406,7 +406,7 @@ export class UploadQueue {
   /**
    * Subscribe to individual upload progress.
    */
-  onProgress(uploadId: string, callback: (progress: UploadProgress) => void): () => void {
+  onProgress(uploadId: string, callback: (progress: UploadProgressInfo) => void): () => void {
     return this._events.on('progress', (id, progress) => {
       if (id === uploadId) {
         callback(progress);

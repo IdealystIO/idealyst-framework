@@ -4,6 +4,8 @@ import type { StyleProp, ViewStyle } from 'react-native';
 import { ContainerStyleProps } from '../utils/viewStyleProps';
 import type { LayoutChangeEvent } from '../hooks/useWebLayout';
 
+export type { LayoutChangeEvent };
+
 /**
  * Style prop type that accepts both regular styles and responsive styles.
  * Responsive styles allow breakpoint-based values:
