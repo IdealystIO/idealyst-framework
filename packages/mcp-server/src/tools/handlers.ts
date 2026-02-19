@@ -364,26 +364,63 @@ export function searchIcons(args: SearchIconsArgs): ToolResponse {
   // This prevents "lock" from matching "clock", "ash" from matching "flash", etc.
   const queryWords = query.split(/\s+/).filter(Boolean);
   const hyphenatedQuery = queryWords.join("-");
-  const matchingIcons = iconsData.icons.filter((icon: string) => {
-    const lower = icon.toLowerCase();
+
+  // Helper: check if an icon matches a single word on segment boundaries
+  const matchesWord = (segments: string[], word: string) =>
+    segments.some((seg) => seg === word || seg.startsWith(word));
+
+  // Helper: check if an icon matches the full hyphenated query on boundaries
+  const matchesHyphenated = (lower: string) => {
+    if (!lower.includes(hyphenatedQuery)) return false;
+    const idx = lower.indexOf(hyphenatedQuery);
+    const before = idx === 0 || lower[idx - 1] === "-";
+    const after =
+      idx + hyphenatedQuery.length === lower.length ||
+      lower[idx + hyphenatedQuery.length] === "-";
+    return before && after;
+  };
+
+  // First pass: AND match (all words must match)
+  const andMatches: string[] = [];
+  // Second pass: OR match (any word matches) — used as fallback for multi-word queries
+  const orOnlyMatches: string[] = [];
+
+  for (const icon of iconsData.icons) {
+    const lower = (icon as string).toLowerCase();
     const segments = lower.split("-");
-    // Exact hyphenated match (e.g. "arrow down" -> "arrow-down" matches "arrow-down-bold")
-    if (lower.includes(hyphenatedQuery)) {
-      // Verify the hyphenated query aligns on segment boundaries
-      const idx = lower.indexOf(hyphenatedQuery);
-      const before = idx === 0 || lower[idx - 1] === "-";
-      const after =
-        idx + hyphenatedQuery.length === lower.length ||
-        lower[idx + hyphenatedQuery.length] === "-";
-      if (before && after) return true;
+
+    if (matchesHyphenated(lower)) {
+      andMatches.push(icon as string);
+    } else if (queryWords.every((word) => matchesWord(segments, word))) {
+      andMatches.push(icon as string);
+    } else if (queryWords.length > 1 && queryWords.some((word) => matchesWord(segments, word))) {
+      orOnlyMatches.push(icon as string);
     }
-    // Fall back to requiring all individual words to match on segment boundaries
-    // Each query word must match the START of at least one segment
-    return queryWords.every((word) =>
-      segments.some(
-        (seg) => seg === word || seg.startsWith(word)
-      )
-    );
+  }
+
+  // Combine: AND matches first, then OR-only matches as fallback
+  const matchingIcons = [...andMatches, ...orOnlyMatches];
+
+  // Sort by relevance: shorter names (more specific) first, then alphabetical.
+  // This ensures "lock" and "lock-outline" appear before "account-lock-open-outline".
+  // AND matches always sort before OR-only matches.
+  const andMatchSet = new Set(andMatches);
+  matchingIcons.sort((a: string, b: string) => {
+    // AND matches always first
+    const aIsAnd = andMatchSet.has(a) ? 0 : 1;
+    const bIsAnd = andMatchSet.has(b) ? 0 : 1;
+    if (aIsAnd !== bIsAnd) return aIsAnd - bIsAnd;
+
+    const aSegments = a.split("-").length;
+    const bSegments = b.split("-").length;
+    // Icons that START with the query get highest priority
+    const aStarts = a.startsWith(hyphenatedQuery) ? 0 : 1;
+    const bStarts = b.startsWith(hyphenatedQuery) ? 0 : 1;
+    if (aStarts !== bStarts) return aStarts - bStarts;
+    // Then sort by number of segments (fewer = more specific)
+    if (aSegments !== bSegments) return aSegments - bSegments;
+    // Then alphabetical
+    return a.localeCompare(b);
   });
 
   // Limit results

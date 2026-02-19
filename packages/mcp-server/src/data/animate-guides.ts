@@ -29,12 +29,23 @@ yarn add @idealyst/animate
 import {
   useAnimatedStyle,    // Animate style changes
   useAnimatedValue,    // Animated numeric value with interpolation
-  useSequence,         // Multi-step animation sequences
-  useKeyframes,        // CSS keyframe-like animations
   usePresence,         // Enter/exit animations
   useGradientBorder,   // Animated gradient borders
+  withAnimated,        // HOC to wrap any component for animation
 } from '@idealyst/animate';
 \`\`\`
+
+> **There is NO \`useSequence\` or \`useKeyframes\` export.** For multi-step animations, chain \`useAnimatedStyle\` calls with state changes. For looping animations, use \`useAnimatedValue\` with repeated \`set()\` calls.
+
+## Easing Values
+
+Easing values use **camelCase** (NOT CSS hyphenated format). Available values:
+\`\`\`
+'ease' | 'linear' | 'easeIn' | 'easeOut' | 'easeInOut' |
+'spring' | 'standard' | 'accelerate' | 'decelerate' |
+'springStiff' | 'springBouncy'
+\`\`\`
+> **IMPORTANT:** Use \`'easeOut'\` — NOT \`'ease-out'\`. All easing values are camelCase.
 
 ## Key Concepts
 
@@ -69,7 +80,7 @@ interface UseAnimatedStyleOptions extends AnimationOptions {
 \`\`\`tsx
 const style = useAnimatedStyle(
   { opacity: isVisible ? 1 : 0, transform: { y: isVisible ? 0 : 20 } },
-  { duration: 300, easing: 'ease-out' }
+  { duration: 300, easing: 'easeOut' }
 );
 // Apply: <View style={style} />
 \`\`\`
@@ -96,59 +107,6 @@ interface InterpolationConfig<T> {
   extrapolate?: 'extend' | 'clamp' | 'identity';
 }
 \`\`\`
-
----
-
-### useSequence(steps, options?)
-
-Multi-step animation sequence.
-
-\`\`\`typescript
-interface SequenceStep {
-  style?: AnimatableProperties;
-  duration?: Duration;
-  easing?: EasingKey;
-  delay?: number;
-}
-\`\`\`
-
-**Returns \`UseSequenceResult\`:**
-
-| Property | Type | Description |
-|----------|------|-------------|
-| style | AnimatableStyle | Current animated style |
-| play | () => void | Start/restart sequence |
-| reset | () => void | Reset to initial state |
-| pause | () => void | Pause (web only) |
-| isPlaying | boolean | Whether playing |
-
----
-
-### useKeyframes(keyframes, options?)
-
-CSS keyframe-like animations.
-
-\`\`\`typescript
-type KeyframePercentage = \`\${number}%\` | 'from' | 'to';
-type KeyframeDefinition = Partial<Record<KeyframePercentage, AnimatableProperties>>;
-
-interface UseKeyframesOptions extends AnimationOptions {
-  iterations?: number | 'infinite';
-  direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse';
-  fillMode?: 'none' | 'forwards' | 'backwards' | 'both';
-  autoPlay?: boolean;
-}
-\`\`\`
-
-**Returns \`UseKeyframesResult\`:**
-
-| Property | Type | Description |
-|----------|------|-------------|
-| style | AnimatableStyle | Animated style |
-| play | () => void | Start animation |
-| pause | () => void | Pause animation |
-| reset | () => void | Reset to initial |
-| isPlaying | boolean | Whether playing |
 
 ---
 
@@ -240,7 +198,7 @@ function FadeExample() {
 
   const style = useAnimatedStyle(
     { opacity: visible ? 1 : 0, transform: { y: visible ? 0 : -10 } },
-    { duration: 300, easing: 'ease-out' }
+    { duration: 300, easing: 'easeOut' }
   );
 
   return (
@@ -268,7 +226,7 @@ function AnimatedCounter() {
   const increment = useCallback(() => {
     const next = count + 1;
     setCount(next);
-    animValue.set(next, { duration: 500, easing: 'ease-out' });
+    animValue.set(next, { duration: 500, easing: 'easeOut' });
   }, [count]);
 
   const color = animValue.interpolate({
@@ -288,26 +246,31 @@ function AnimatedCounter() {
 }
 \`\`\`
 
-## Sequence Animation
+## Multi-Step Animation (using state + useAnimatedStyle)
 
 \`\`\`tsx
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Button } from '@idealyst/components';
-import { useSequence } from '@idealyst/animate';
+import { useAnimatedStyle } from '@idealyst/animate';
 
-function SequenceExample() {
-  const { style, play, reset } = useSequence([
-    { style: { opacity: 1, transform: { scale: 1 } }, duration: 0 },
-    { style: { transform: { scale: 1.2 } }, duration: 200, easing: 'ease-out' },
-    { style: { transform: { scale: 0.9 } }, duration: 150, easing: 'ease-in' },
-    { style: { transform: { scale: 1 } }, duration: 200, easing: 'ease-out' },
-  ]);
+function BounceExample() {
+  const [scale, setScale] = useState(1);
+
+  const style = useAnimatedStyle(
+    { transform: { scale } },
+    { duration: 200, easing: 'easeOut' }
+  );
+
+  const bounce = useCallback(() => {
+    setScale(1.2);
+    setTimeout(() => setScale(0.9), 200);
+    setTimeout(() => setScale(1), 350);
+  }, []);
 
   return (
-    <View padding="md" gap="md" align="center">
+    <View padding="md" gap="md" style={{ alignItems: 'center' }}>
       <View style={[{ width: 100, height: 100, backgroundColor: '#4CAF50', borderRadius: 12 }, style]} />
-      <Button onPress={play}>Bounce</Button>
-      <Button onPress={reset} intent="secondary">Reset</Button>
+      <Button onPress={bounce}>Bounce</Button>
     </View>
   );
 }
@@ -326,7 +289,7 @@ function PresenceExample() {
     enter: { opacity: 1, transform: { y: 0, scale: 1 } },
     exit: { opacity: 0, transform: { y: -20, scale: 0.95 } },
     duration: 250,
-    easing: 'ease-out',
+    easing: 'easeOut',
   });
 
   return (
@@ -344,25 +307,30 @@ function PresenceExample() {
 }
 \`\`\`
 
-## Keyframe Animation
+## Pulsing Animation (using useAnimatedValue)
 
 \`\`\`tsx
-import React from 'react';
-import { View, Button } from '@idealyst/components';
-import { useKeyframes } from '@idealyst/animate';
+import React, { useEffect, useRef } from 'react';
+import { View } from '@idealyst/components';
+import { useAnimatedValue } from '@idealyst/animate';
 
 function PulseAnimation() {
-  const { style, play } = useKeyframes(
-    {
-      'from': { transform: { scale: 1 }, opacity: 1 },
-      '50%': { transform: { scale: 1.1 }, opacity: 0.7 },
-      'to': { transform: { scale: 1 }, opacity: 1 },
-    },
-    { duration: 1000, iterations: 'infinite', autoPlay: true }
-  );
+  const pulse = useAnimatedValue(1);
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+
+  useEffect(() => {
+    let growing = true;
+    intervalRef.current = setInterval(() => {
+      pulse.set(growing ? 1.1 : 1, { duration: 500, easing: 'easeInOut' });
+      growing = !growing;
+    }, 500);
+    return () => clearInterval(intervalRef.current);
+  }, []);
+
+  const style = { transform: [{ scale: pulse.value }] };
 
   return (
-    <View padding="md" align="center">
+    <View padding="md" style={{ alignItems: 'center' }}>
       <View
         style={[
           { width: 80, height: 80, borderRadius: 40, backgroundColor: '#2196F3' },

@@ -58,7 +58,7 @@ const data = [
 function SalesChart() {
   return (
     <LineChart
-      data={[{ data, label: 'Sales' }]}
+      data={[{ id: 'sales', name: 'Sales', data }]}
       height={300}
       animated
     />
@@ -87,12 +87,16 @@ interface DataPoint {
 
 \`\`\`typescript
 interface ChartDataSeries {
+  id: string;             // Unique identifier for this series
+  name: string;           // Display name (shown in legend/tooltip)
   data: DataPoint[];
-  label?: string;
-  color?: string;
-  // Styling per-series
+  color?: string;         // Custom color for this series
+  intent?: Intent;        // Theme intent for automatic coloring
+  visible?: boolean;      // Whether this series is visible
 }
 \`\`\`
+
+> **IMPORTANT:** \`id\` and \`name\` are **required**. There is NO \`label\` property — use \`name\` instead.
 
 ### PieDataPoint
 
@@ -138,15 +142,17 @@ interface CartesianChartProps extends BaseChartProps {
 
 \`\`\`typescript
 interface AxisConfig {
-  visible?: boolean;
-  label?: string;
-  tickCount?: number;
-  tickFormat?: (value: any) => string;
-  gridLines?: boolean;
-  min?: number;
-  max?: number;
+  show?: boolean;           // Whether to show the axis
+  label?: string;           // Axis label text
+  tickCount?: number;       // Number of ticks to show
+  tickFormat?: (value: number | string | Date) => string;  // Custom tick formatter
+  gridLines?: boolean;      // Whether to show grid lines
+  min?: number;             // Minimum value (auto if not set)
+  max?: number;             // Maximum value (auto if not set)
 }
 \`\`\`
+
+> **Note:** The property is \`show\` (NOT \`visible\`). The \`tickFormat\` parameter type is \`number | string | Date\` (NOT \`any\` or just \`number\`).
 
 ---
 
@@ -229,9 +235,9 @@ const monthlySales = [
 function SalesOverview() {
   return (
     <View padding="md" gap="md">
-      <Text size="lg" weight="bold">Monthly Sales</Text>
+      <Text typography="h6" weight="bold">Monthly Sales</Text>
       <LineChart
-        data={[{ data: monthlySales, label: 'Revenue', color: '#4CAF50' }]}
+        data={[{ id: 'revenue', name: 'Revenue', data: monthlySales, color: '#4CAF50' }]}
         height={300}
         curve="monotone"
         showDots
@@ -239,7 +245,7 @@ function SalesOverview() {
         areaOpacity={0.15}
         animated
         xAxis={{ label: 'Month' }}
-        yAxis={{ label: 'Revenue ($)', tickFormat: (v) => \`$\${v / 1000}k\` }}
+        yAxis={{ label: 'Revenue ($)', tickFormat: (v: number | string | Date) => \`$\${Number(v) / 1000}k\` }}
       />
     </View>
   );
@@ -254,23 +260,25 @@ import { LineChart } from '@idealyst/charts';
 
 const series = [
   {
+    id: 'product-a',
+    name: 'Product A',
     data: [
       { x: 'Q1', y: 120 },
       { x: 'Q2', y: 150 },
       { x: 'Q3', y: 180 },
       { x: 'Q4', y: 210 },
     ],
-    label: 'Product A',
     color: '#2196F3',
   },
   {
+    id: 'product-b',
+    name: 'Product B',
     data: [
       { x: 'Q1', y: 80 },
       { x: 'Q2', y: 110 },
       { x: 'Q3', y: 95 },
       { x: 'Q4', y: 140 },
     ],
-    label: 'Product B',
     color: '#FF9800',
   },
 ];
@@ -306,13 +314,13 @@ const categories = [
 function CategoryBreakdown() {
   return (
     <View padding="md" gap="md">
-      <Text size="lg" weight="bold">Sales by Category</Text>
+      <Text typography="h6" weight="bold">Sales by Category</Text>
       <BarChart
-        data={[{ data: categories, label: 'Units Sold' }]}
+        data={[{ id: 'units', name: 'Units Sold', data: categories }]}
         height={300}
         borderRadius={4}
         animated
-        yAxis={{ tickFormat: (v) => \`\${v} units\` }}
+        yAxis={{ tickFormat: (v: number | string | Date) => \`\${v} units\` }}
       />
     </View>
   );
@@ -330,21 +338,23 @@ function StackedBarExample() {
     <BarChart
       data={[
         {
+          id: 'online',
+          name: 'Online',
           data: [
             { x: 'Q1', y: 100 },
             { x: 'Q2', y: 120 },
             { x: 'Q3', y: 90 },
           ],
-          label: 'Online',
           color: '#4CAF50',
         },
         {
+          id: 'in-store',
+          name: 'In-Store',
           data: [
             { x: 'Q1', y: 60 },
             { x: 'Q2', y: 80 },
             { x: 'Q3', y: 70 },
           ],
-          label: 'In-Store',
           color: '#2196F3',
         },
       ]}
@@ -372,7 +382,7 @@ function HorizontalBarExample() {
 
   return (
     <BarChart
-      data={[{ data, label: 'Popularity' }]}
+      data={[{ id: 'popularity', name: 'Popularity', data }]}
       height={250}
       orientation="horizontal"
       animated

@@ -99,7 +99,7 @@ const MCP_TOOLS = [
  * Project scenarios can also get Bash, Read, Glob.
  */
 function getAllowedTools(scenario: EvalScenario): string[] {
-  const tools = [...MCP_TOOLS, "Write"];
+  const tools = [...MCP_TOOLS, "Write", "Edit", "Read"];
 
   if (scenario.type === "project" && scenario.additionalAllowedTools) {
     tools.push(...scenario.additionalAllowedTools);

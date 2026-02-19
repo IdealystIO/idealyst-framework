@@ -26,6 +26,15 @@ const IDEALYST_PACKAGES = [
   "camera",
   "audio",
   "files",
+  "animate",
+  "charts",
+  "config",
+  "datagrid",
+  "datepicker",
+  "markdown",
+  "oauth-client",
+  "lottie",
+  "svg",
 ];
 
 /**

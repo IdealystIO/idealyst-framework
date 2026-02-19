@@ -501,7 +501,10 @@ export function detectIssues(
       severity: log.typecheckResult.errorCount > 5 ? "critical" : "major",
       category: "typecheck_failure",
       description: `TypeScript compilation failed with ${log.typecheckResult.errorCount} error(s)`,
-      evidence: log.typecheckResult.rawOutput.slice(0, 300),
+      evidence: log.typecheckResult.errors
+        .map((e) => `${e.file}:${e.line} — ${e.code}: ${e.message}`)
+        .join("\n")
+        .slice(0, 500),
     });
   }
 

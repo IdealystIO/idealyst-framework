@@ -191,17 +191,17 @@ function ArticleView({ content }: { content: string }) {
 \`\`\`tsx
 import React from 'react';
 import { Markdown } from '@idealyst/markdown';
-import { useNavigation } from '@idealyst/navigation';
+import { useNavigator } from '@idealyst/navigation';
 
 function DocumentView({ markdown }: { markdown: string }) {
-  const { navigate } = useNavigation();
+  const { navigate } = useNavigator();
 
   return (
     <Markdown
       linkHandler={{
         onLinkPress: (url) => {
           if (url.startsWith('/')) {
-            navigate(url);
+            navigate({ path: url });
             return true; // Prevent default browser behavior
           }
           return false; // Allow external links to open normally
