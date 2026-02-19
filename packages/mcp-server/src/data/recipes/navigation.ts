@@ -12,83 +12,94 @@ export const navigationRecipes: Record<string, Recipe> = {
     difficulty: "beginner",
     packages: ["@idealyst/components", "@idealyst/navigation"],
     code: `import React from 'react';
-import { Router } from '@idealyst/navigation';
-import { Icon, Badge, View, Text } from '@idealyst/components';
+import { NavigatorProvider } from '@idealyst/navigation';
+import type { TabNavigatorParam } from '@idealyst/navigation';
+import { Icon, View, Text } from '@idealyst/components';
 
 function HomeScreen() {
-  return <View><Text>Home</Text></View>;
+  return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text typography="h5">Home</Text></View>;
 }
 
 function SearchScreen() {
-  return <View><Text>Search</Text></View>;
+  return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text typography="h5">Search</Text></View>;
 }
 
 function NotificationsScreen() {
-  return <View><Text>Notifications</Text></View>;
+  return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text typography="h5">Notifications</Text></View>;
 }
 
 function ProfileScreen() {
-  return <View><Text>Profile</Text></View>;
+  return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text typography="h5">Profile</Text></View>;
 }
 
-const routes = {
-  home: {
-    path: '/',
-    screen: HomeScreen,
-    options: {
-      title: 'Home',
-      tabBarIcon: ({ focused }: { focused: boolean }) => (
-        <Icon name={focused ? 'home' : 'home-outline'} size={24} />
-      ),
+const route: TabNavigatorParam = {
+  type: 'navigator',
+  path: '/',
+  layout: 'tab',
+  routes: [
+    {
+      type: 'screen',
+      path: '/',
+      component: HomeScreen,
+      options: {
+        title: 'Home',
+        tabBarIcon: ({ focused }) => (
+          <Icon name={focused ? 'home' : 'home-outline'} size="sm" />
+        ),
+      },
     },
-  },
-  search: {
-    path: '/search',
-    screen: SearchScreen,
-    options: {
-      title: 'Search',
-      tabBarIcon: ({ focused }: { focused: boolean }) => (
-        <Icon name="magnify" size={24} />
-      ),
+    {
+      type: 'screen',
+      path: '/search',
+      component: SearchScreen,
+      options: {
+        title: 'Search',
+        tabBarIcon: ({ focused }) => (
+          <Icon name="magnify" size="sm" />
+        ),
+      },
     },
-  },
-  notifications: {
-    path: '/notifications',
-    screen: NotificationsScreen,
-    options: {
-      title: 'Notifications',
-      tabBarIcon: ({ focused }: { focused: boolean }) => (
-        <View>
-          <Icon name={focused ? 'bell' : 'bell-outline'} size={24} />
-          <Badge count={3} style={{ position: 'absolute', top: -4, right: -8 }} />
-        </View>
-      ),
+    {
+      type: 'screen',
+      path: '/notifications',
+      component: NotificationsScreen,
+      options: {
+        title: 'Notifications',
+        tabBarIcon: ({ focused }) => (
+          <Icon name={focused ? 'bell' : 'bell-outline'} size="sm" />
+        ),
+        tabBarBadge: 3,
+      },
     },
-  },
-  profile: {
-    path: '/profile',
-    screen: ProfileScreen,
-    options: {
-      title: 'Profile',
-      tabBarIcon: ({ focused }: { focused: boolean }) => (
-        <Icon name={focused ? 'account' : 'account-outline'} size={24} />
-      ),
+    {
+      type: 'screen',
+      path: '/profile',
+      component: ProfileScreen,
+      options: {
+        title: 'Profile',
+        tabBarIcon: ({ focused }) => (
+          <Icon name={focused ? 'account' : 'account-outline'} size="sm" />
+        ),
+      },
     },
-  },
+  ],
 };
 
 export function App() {
-  return <Router routes={routes} navigator="tabs" tabBarPosition="bottom" />;
+  return <NavigatorProvider route={route} />;
 }`,
     explanation: `Tab navigation setup with:
-- Four tabs with icons that change when focused
-- Badge on notifications tab for unread count
-- Type-safe route configuration
+- NavigatorProvider wraps the app with a route configuration object
+- TabNavigatorParam defines the tab layout with routes array
+- Each route has type: 'screen', a path, component, and options
+- tabBarIcon renders icons that change when focused
+- tabBarBadge shows a badge count on the tab
 - Works on both web and native`,
     tips: [
       "Use outline/filled icon variants to indicate focus state",
       "Keep tab count to 3-5 for best usability",
-      "Consider hiding tabs on certain screens (like detail views)",
+      "Use tabBarBadge for notification counts instead of manual Badge component",
+      "Nest a StackNavigatorParam inside a tab route for detail screens",
     ],
     relatedRecipes: ["drawer-navigation", "responsive-navigation"],
   },
@@ -100,40 +111,53 @@ export function App() {
     difficulty: "intermediate",
     packages: ["@idealyst/components", "@idealyst/navigation"],
     code: `import React from 'react';
-import { Router, useNavigator } from '@idealyst/navigation';
+import { NavigatorProvider, useNavigator } from '@idealyst/navigation';
+import type { DrawerNavigatorParam, DrawerSidebarProps } from '@idealyst/navigation';
 import { View, Text, Icon, Avatar, Pressable, Divider } from '@idealyst/components';
+import type { IconName } from '@idealyst/components';
 
-function DrawerContent() {
-  const { navigate, currentRoute } = useNavigator();
+function HomeScreen() {
+  return <View style={{ flex: 1, padding: 16 }}><Text typography="h5">Home</Text></View>;
+}
 
-  const menuItems = [
-    { route: 'home', icon: 'home', label: 'Home' },
-    { route: 'dashboard', icon: 'view-dashboard', label: 'Dashboard' },
-    { route: 'settings', icon: 'cog', label: 'Settings' },
+function DashboardScreen() {
+  return <View style={{ flex: 1, padding: 16 }}><Text typography="h5">Dashboard</Text></View>;
+}
+
+function SettingsScreen() {
+  return <View style={{ flex: 1, padding: 16 }}><Text typography="h5">Settings</Text></View>;
+}
+
+function DrawerContent(props: DrawerSidebarProps) {
+  const { navigate } = useNavigator();
+
+  const menuItems: { path: string; icon: IconName; label: string }[] = [
+    { path: '/', icon: 'home', label: 'Home' },
+    { path: '/dashboard', icon: 'view-dashboard', label: 'Dashboard' },
+    { path: '/settings', icon: 'cog', label: 'Settings' },
   ];
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <View style={{ flex: 1, padding: 16, paddingTop: (props.insets?.top ?? 0) + 16 }}>
       <View style={{ alignItems: 'center', paddingVertical: 24 }}>
         <Avatar source={{ uri: 'https://example.com/avatar.jpg' }} size="lg" />
-        <Text variant="title" style={{ marginTop: 12 }}>John Doe</Text>
+        <Text typography="h6" weight="semibold" style={{ marginTop: 12 }}>John Doe</Text>
       </View>
 
       <Divider style={{ marginVertical: 16 }} />
 
       <View style={{ gap: 4 }}>
         {menuItems.map((item) => (
-          <Pressable key={item.route} onPress={() => navigate(item.route)}>
+          <Pressable key={item.path} onPress={() => navigate({ path: item.path })}>
             <View style={{
               flexDirection: 'row',
               alignItems: 'center',
               gap: 16,
               padding: 12,
               borderRadius: 8,
-              backgroundColor: currentRoute === item.route ? 'rgba(0,0,0,0.1)' : 'transparent',
             }}>
-              <Icon name={item.icon} size={24} />
-              <Text>{item.label}</Text>
+              <Icon name={item.icon} size="sm" />
+              <Text typography="body1">{item.label}</Text>
             </View>
           </Pressable>
         ))}
@@ -142,24 +166,32 @@ function DrawerContent() {
   );
 }
 
-const routes = {
-  home: { path: '/', screen: HomeScreen },
-  dashboard: { path: '/dashboard', screen: DashboardScreen },
-  settings: { path: '/settings', screen: SettingsScreen },
+const route: DrawerNavigatorParam = {
+  type: 'navigator',
+  path: '/',
+  layout: 'drawer',
+  sidebarComponent: DrawerContent,
+  routes: [
+    { type: 'screen', path: '/', component: HomeScreen, options: { title: 'Home' } },
+    { type: 'screen', path: '/dashboard', component: DashboardScreen, options: { title: 'Dashboard' } },
+    { type: 'screen', path: '/settings', component: SettingsScreen, options: { title: 'Settings' } },
+  ],
 };
 
 export function App() {
-  return <Router routes={routes} navigator="drawer" drawerContent={DrawerContent} />;
+  return <NavigatorProvider route={route} />;
 }`,
     explanation: `Drawer navigation includes:
-- Custom drawer content with user profile
-- Active state highlighting for current route
-- Grouped menu items with icons
+- NavigatorProvider with a DrawerNavigatorParam configuration
+- Custom sidebarComponent for the drawer content
+- DrawerSidebarProps provides safe area insets on mobile
+- useNavigator() hook to navigate between screens
+- navigate() takes an object: { path: '/settings' }
 - Works on both web (sidebar) and native (slide-out drawer)`,
     tips: [
-      "Add a hamburger menu button to open drawer on native",
-      "Consider using drawer on tablet/desktop, tabs on mobile",
-      "Add gesture support for swipe-to-open on native",
+      "Use DrawerSidebarProps insets to avoid notches and status bars",
+      "Type icon props as IconName (from @idealyst/components) not string",
+      "navigate() always takes an object with a 'path' key",
     ],
     relatedRecipes: ["tab-navigation", "responsive-navigation"],
   },
@@ -170,26 +202,69 @@ export function App() {
     category: "navigation",
     difficulty: "intermediate",
     packages: ["@idealyst/components", "@idealyst/navigation", "@idealyst/theme"],
-    code: `import React from 'react';
-import { Router } from '@idealyst/navigation';
-import { useBreakpoint } from '@idealyst/theme';
+    code: `import React, { useMemo } from 'react';
+import { NavigatorProvider } from '@idealyst/navigation';
+import type { TabNavigatorParam, DrawerNavigatorParam, ScreenParam, TabBarScreenOptions } from '@idealyst/navigation';
+import { useResponsiveStyle } from '@idealyst/theme';
+import { Icon, View, Text } from '@idealyst/components';
+
+function HomeScreen() {
+  return <View style={{ flex: 1, padding: 16 }}><Text typography="h5">Home</Text></View>;
+}
+
+function SearchScreen() {
+  return <View style={{ flex: 1, padding: 16 }}><Text typography="h5">Search</Text></View>;
+}
+
+// Shared screen definitions
+const screens: ScreenParam<TabBarScreenOptions>[] = [
+  {
+    type: 'screen',
+    path: '/',
+    component: HomeScreen,
+    options: {
+      title: 'Home',
+      tabBarIcon: ({ focused }) => <Icon name={focused ? 'home' : 'home-outline'} size="sm" />,
+    },
+  },
+  {
+    type: 'screen',
+    path: '/search',
+    component: SearchScreen,
+    options: {
+      title: 'Search',
+      tabBarIcon: ({ focused }) => <Icon name="magnify" size="sm" />,
+    },
+  },
+];
 
 export function App() {
-  const breakpoint = useBreakpoint();
-  const isLargeScreen = breakpoint === 'lg' || breakpoint === 'xl';
+  // useResponsiveStyle returns different values based on breakpoint
+  const isLargeScreen = useResponsiveStyle({ base: false, md: true });
 
-  return (
-    <Router
-      routes={routes}
-      navigator={isLargeScreen ? 'drawer' : 'tabs'}
-      drawerContent={isLargeScreen ? DrawerContent : undefined}
-      tabBarPosition="bottom"
-    />
-  );
+  const route = useMemo(() => {
+    if (isLargeScreen) {
+      return {
+        type: 'navigator' as const,
+        path: '/',
+        layout: 'drawer' as const,
+        routes: screens,
+      } satisfies DrawerNavigatorParam;
+    }
+    return {
+      type: 'navigator' as const,
+      path: '/',
+      layout: 'tab' as const,
+      routes: screens,
+    } satisfies TabNavigatorParam;
+  }, [isLargeScreen]);
+
+  return <NavigatorProvider route={route} />;
 }`,
     explanation: `Responsive navigation that:
 - Uses tabs on mobile/small screens
 - Switches to drawer on tablet/desktop
+- Shares screen definitions between layouts
 - Adapts automatically based on breakpoints`,
     tips: [
       "Test on various screen sizes",

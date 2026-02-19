@@ -21,6 +21,17 @@ import {
 import { cliCommands } from "../data/cli-commands.js";
 import { translateGuides } from "../data/translate-guides.js";
 import { storageGuides } from "../data/storage-guides.js";
+import { audioGuides } from "../data/audio-guides.js";
+import { cameraGuides } from "../data/camera-guides.js";
+import { filesGuides } from "../data/files-guides.js";
+import { oauthClientGuides } from "../data/oauth-client-guides.js";
+import { animateGuides } from "../data/animate-guides.js";
+import { datagridGuides } from "../data/datagrid-guides.js";
+import { datepickerGuides } from "../data/datepicker-guides.js";
+import { lottieGuides } from "../data/lottie-guides.js";
+import { markdownGuides } from "../data/markdown-guides.js";
+import { configGuides } from "../data/config-guides.js";
+import { chartsGuides } from "../data/charts-guides.js";
 import {
   packages,
   getPackageSummary,
@@ -38,6 +49,7 @@ import {
   getInstallGuide as getInstallGuideData,
   formatInstallGuideMarkdown,
 } from "../data/install-guides.js";
+import { idealystIntro } from "../data/intro.js";
 import iconsData from "../data/icons.json" with { type: "json" };
 import {
   getComponentTypes as getTypesFromFile,
@@ -60,6 +72,17 @@ import type {
   GetNavigationTypesArgs,
   GetTranslateGuideArgs,
   GetStorageGuideArgs,
+  GetAudioGuideArgs,
+  GetCameraGuideArgs,
+  GetFilesGuideArgs,
+  GetOauthClientGuideArgs,
+  GetAnimateGuideArgs,
+  GetDatagridGuideArgs,
+  GetDatepickerGuideArgs,
+  GetLottieGuideArgs,
+  GetMarkdownGuideArgs,
+  GetConfigGuideArgs,
+  GetChartsGuideArgs,
   ListPackagesArgs,
   GetPackageDocsArgs,
   SearchPackagesArgs,
@@ -67,6 +90,7 @@ import type {
   GetRecipeArgs,
   SearchRecipesArgs,
   GetInstallGuideArgs,
+  GetIntroArgs,
 } from "./types.js";
 
 // ============================================================================
@@ -336,9 +360,31 @@ export function searchIcons(args: SearchIconsArgs): ToolResponse {
   }
 
   // Filter icons that match the query
-  const matchingIcons = iconsData.icons.filter((icon: string) =>
-    icon.toLowerCase().includes(query)
-  );
+  // Use word-boundary matching: split icon names on hyphens, match query words against segments.
+  // This prevents "lock" from matching "clock", "ash" from matching "flash", etc.
+  const queryWords = query.split(/\s+/).filter(Boolean);
+  const hyphenatedQuery = queryWords.join("-");
+  const matchingIcons = iconsData.icons.filter((icon: string) => {
+    const lower = icon.toLowerCase();
+    const segments = lower.split("-");
+    // Exact hyphenated match (e.g. "arrow down" -> "arrow-down" matches "arrow-down-bold")
+    if (lower.includes(hyphenatedQuery)) {
+      // Verify the hyphenated query aligns on segment boundaries
+      const idx = lower.indexOf(hyphenatedQuery);
+      const before = idx === 0 || lower[idx - 1] === "-";
+      const after =
+        idx + hyphenatedQuery.length === lower.length ||
+        lower[idx + hyphenatedQuery.length] === "-";
+      if (before && after) return true;
+    }
+    // Fall back to requiring all individual words to match on segment boundaries
+    // Each query word must match the START of at least one segment
+    return queryWords.every((word) =>
+      segments.some(
+        (seg) => seg === word || seg.startsWith(word)
+      )
+    );
+  });
 
   // Limit results
   const limitedResults = matchingIcons.slice(0, limit);
@@ -422,6 +468,193 @@ export function getStorageGuide(args: GetStorageGuideArgs): ToolResponse {
   const topic = args.topic;
   const uri = `idealyst://storage/${topic}`;
   const guide = storageGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the audio package
+ */
+export function getAudioGuide(args: GetAudioGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://audio/${topic}`;
+  const guide = audioGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the camera package
+ */
+export function getCameraGuide(args: GetCameraGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://camera/${topic}`;
+  const guide = cameraGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the files package
+ */
+export function getFilesGuide(args: GetFilesGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://files/${topic}`;
+  const guide = filesGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the oauth-client package
+ */
+export function getOauthClientGuide(args: GetOauthClientGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://oauth-client/${topic}`;
+  const guide = oauthClientGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the animate package
+ */
+export function getAnimateGuide(args: GetAnimateGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://animate/${topic}`;
+  const guide = animateGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the datagrid package
+ */
+export function getDatagridGuide(args: GetDatagridGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://datagrid/${topic}`;
+  const guide = datagridGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the datepicker package
+ */
+export function getDatepickerGuide(args: GetDatepickerGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://datepicker/${topic}`;
+  const guide = datepickerGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the lottie package
+ */
+export function getLottieGuide(args: GetLottieGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://lottie/${topic}`;
+  const guide = lottieGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the markdown package
+ */
+export function getMarkdownGuide(args: GetMarkdownGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://markdown/${topic}`;
+  const guide = markdownGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the config package
+ */
+export function getConfigGuide(args: GetConfigGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://config/${topic}`;
+  const guide = configGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the charts package
+ */
+export function getChartsGuide(args: GetChartsGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://charts/${topic}`;
+  const guide = chartsGuides[uri];
 
   if (!guide) {
     return textResponse(
@@ -742,6 +975,17 @@ export function getInstallGuide(args: GetInstallGuideArgs): ToolResponse {
 }
 
 // ============================================================================
+// Intro Tool Handlers
+// ============================================================================
+
+/**
+ * Get a comprehensive introduction to the Idealyst framework
+ */
+export function getIntro(_args: GetIntroArgs = {}): ToolResponse {
+  return textResponse(idealystIntro);
+}
+
+// ============================================================================
 // Handler Registry
 // ============================================================================
 
@@ -762,6 +1006,17 @@ export const toolHandlers: Record<string, (args: any) => ToolResponse> = {
   get_navigation_types: getNavigationTypes,
   get_translate_guide: getTranslateGuide,
   get_storage_guide: getStorageGuide,
+  get_audio_guide: getAudioGuide,
+  get_camera_guide: getCameraGuide,
+  get_files_guide: getFilesGuide,
+  get_oauth_client_guide: getOauthClientGuide,
+  get_animate_guide: getAnimateGuide,
+  get_datagrid_guide: getDatagridGuide,
+  get_datepicker_guide: getDatepickerGuide,
+  get_lottie_guide: getLottieGuide,
+  get_markdown_guide: getMarkdownGuide,
+  get_config_guide: getConfigGuide,
+  get_charts_guide: getChartsGuide,
   list_packages: listPackages,
   get_package_docs: getPackageDocs,
   search_packages: searchPackages,
@@ -769,6 +1024,7 @@ export const toolHandlers: Record<string, (args: any) => ToolResponse> = {
   get_recipe: getRecipe,
   search_recipes: searchRecipes,
   get_install_guide: getInstallGuide,
+  get_intro: getIntro,
 };
 
 /**

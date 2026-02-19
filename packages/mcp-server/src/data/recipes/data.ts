@@ -12,8 +12,7 @@ export const dataRecipes: Record<string, Recipe> = {
     difficulty: "beginner",
     packages: ["@idealyst/components"],
     code: `import React, { useState, useEffect, useCallback } from 'react';
-import { FlatList, RefreshControl } from 'react-native';
-import { View, Text, Card, ActivityIndicator } from '@idealyst/components';
+import { View, Text, Card, List, ActivityIndicator } from '@idealyst/components';
 
 interface Item {
   id: string;
@@ -24,7 +23,6 @@ interface Item {
 export function DataList() {
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchData = async () => {
     // Simulated API call
@@ -47,16 +45,6 @@ export function DataList() {
     }
   };
 
-  const onRefresh = useCallback(async () => {
-    setIsRefreshing(true);
-    try {
-      const data = await fetchData();
-      setItems(data);
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, []);
-
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -66,37 +54,33 @@ export function DataList() {
   }
 
   return (
-    <FlatList
-      data={items}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <Card style={{ margin: 8 }}>
-          <Text variant="subtitle">{item.title}</Text>
-          <Text>{item.description}</Text>
-        </Card>
-      )}
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-      }
-      ListEmptyComponent={
+    <View style={{ flex: 1 }}>
+      {items.length === 0 ? (
         <View style={{ padding: 32, alignItems: 'center' }}>
-          <Text>No items found</Text>
+          <Text typography="body1" color="tertiary">No items found</Text>
         </View>
-      }
-    />
+      ) : (
+        items.map((item) => (
+          <Card key={item.id} style={{ margin: 8 }}>
+            <Text typography="subtitle1" weight="semibold">{item.title}</Text>
+            <Text typography="body2" color="secondary">{item.description}</Text>
+          </Card>
+        ))
+      )}
+    </View>
   );
 }`,
     explanation: `Data list with:
 - Loading state with ActivityIndicator
-- Pull-to-refresh functionality
 - Empty state handling
-- Efficient FlatList rendering`,
+- Card-based list items with proper typography
+- Uses only @idealyst/components (no react-native imports)`,
     tips: [
-      "Use getItemLayout for fixed-height items to improve performance",
+      "Use the List component for virtualized rendering of large datasets",
       "Consider pagination for large datasets",
       "Add error state handling for failed requests",
     ],
-    relatedRecipes: ["search-filter", "infinite-scroll"],
+    relatedRecipes: ["search-filter"],
   },
 
   "search-filter": {
@@ -106,7 +90,7 @@ export function DataList() {
     difficulty: "intermediate",
     packages: ["@idealyst/components"],
     code: `import React, { useState, useMemo } from 'react';
-import { View, Input, Chip, Text, Card } from '@idealyst/components';
+import { View, TextInput, Chip, Text, Card, Icon } from '@idealyst/components';
 
 interface Item {
   id: string;
@@ -134,13 +118,10 @@ export function SearchFilter({ items }: { items: Item[] }) {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ padding: 16, gap: 12 }}>
-        <Input
+        <TextInput
           placeholder="Search..."
           value={searchQuery}
           onChangeText={setSearchQuery}
-          leftIcon="magnify"
-          rightIcon={searchQuery ? 'close' : undefined}
-          onRightIconPress={() => setSearchQuery('')}
         />
 
         <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
@@ -156,13 +137,13 @@ export function SearchFilter({ items }: { items: Item[] }) {
       </View>
 
       <View style={{ padding: 16, gap: 8 }}>
-        <Text size="sm" style={{ opacity: 0.7 }}>
+        <Text typography="caption" color="tertiary">
           {filteredItems.length} results
         </Text>
 
         {filteredItems.map((item) => (
           <Card key={item.id}>
-            <Text>{item.title}</Text>
+            <Text typography="body1">{item.title}</Text>
             <Chip label={item.category} size="sm" />
           </Card>
         ))}
@@ -171,7 +152,7 @@ export function SearchFilter({ items }: { items: Item[] }) {
   );
 }`,
     explanation: `Search and filter functionality:
-- Real-time search with debounced input
+- Real-time search with TextInput
 - Category filter chips
 - Combined filtering with useMemo for performance
 - Results count display`,
@@ -180,6 +161,6 @@ export function SearchFilter({ items }: { items: Item[] }) {
       "Consider fuzzy matching for better search results",
       "Save filter state for persistence across navigation",
     ],
-    relatedRecipes: ["data-list", "infinite-scroll"],
+    relatedRecipes: ["data-list"],
   },
 };

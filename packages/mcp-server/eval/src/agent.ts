@@ -24,6 +24,7 @@ import type {
   ToolCall,
   ToolResult,
 } from "./types.js";
+import type { ScenarioLogger } from "./logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -52,6 +53,8 @@ export interface AgentOptions {
   onProgress?: (progress: AgentProgress) => void;
   /** Absolute path to the eval workspace where the agent should write files */
   workspacePath?: string;
+  /** Per-scenario file logger (replaces console.log for parallel execution) */
+  logger?: ScenarioLogger;
 }
 
 /** MCP documentation tools — always available to the agent */
@@ -75,6 +78,19 @@ const MCP_TOOLS = [
   "mcp__idealyst__get_recipe",
   "mcp__idealyst__search_recipes",
   "mcp__idealyst__get_install_guide",
+  "mcp__idealyst__get_intro",
+  // Dedicated package guide tools
+  "mcp__idealyst__get_audio_guide",
+  "mcp__idealyst__get_camera_guide",
+  "mcp__idealyst__get_files_guide",
+  "mcp__idealyst__get_oauth_client_guide",
+  "mcp__idealyst__get_animate_guide",
+  "mcp__idealyst__get_datagrid_guide",
+  "mcp__idealyst__get_datepicker_guide",
+  "mcp__idealyst__get_lottie_guide",
+  "mcp__idealyst__get_markdown_guide",
+  "mcp__idealyst__get_config_guide",
+  "mcp__idealyst__get_charts_guide",
 ];
 
 /**
@@ -140,8 +156,12 @@ export async function runAgentLoop(
   // CWD = repo root where .mcp.json lives
   const cwd = path.resolve(__dirname, "../../../..");
 
-  // Build the system prompt — inject workspace path if available
+  // Build the system prompt — inject workspace path
   let systemPrompt = scenario.systemPrompt;
+
+  // Prepend universal intro instruction to the task prompt so it's the first thing the agent sees
+  const taskPrompt = `IMPORTANT: Before doing anything else, call the get_intro tool to get a comprehensive overview of the Idealyst framework's conventions, correct prop names, and common mistakes to avoid. Do this FIRST, before searching for components or writing any code.\n\n${scenario.taskPrompt}`;
+
   if (options.workspacePath) {
     const srcDir = path.join(options.workspacePath, "src");
     systemPrompt += `\n\nIMPORTANT — FILE OUTPUT:
@@ -154,7 +174,7 @@ You may create multiple files if the task requires it.`;
 
   const args = [
     "-p",
-    scenario.taskPrompt,
+    taskPrompt,
     "--output-format",
     "stream-json",
     "--model",
@@ -162,6 +182,7 @@ You may create multiple files if the task requires it.`;
     "--max-turns",
     String(options.maxTurns),
     "--verbose",
+    "--no-session-persistence",
     "--append-system-prompt",
     systemPrompt,
     // --allowedTools takes space-separated tool names
@@ -169,11 +190,10 @@ You may create multiple files if the task requires it.`;
     ...getAllowedTools(scenario),
   ];
 
-  if (options.verbose) {
-    console.log(
-      `  Spawning: claude -p "<task>" --output-format stream-json --model ${options.model} --max-turns ${options.maxTurns}`
-    );
-  }
+  const logger = options.logger;
+  logger?.log(
+    `Spawning: claude -p "<task>" --output-format stream-json --model ${options.model} --max-turns ${options.maxTurns}`
+  );
 
   const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
@@ -186,9 +206,7 @@ You may create multiple files if the task requires it.`;
 
     // Wall-clock timeout — kill the child if the scenario takes too long
     const timer = setTimeout(() => {
-      if (options.verbose) {
-        console.log(`  [Timeout] Killing agent after ${timeoutMs / 1000}s`);
-      }
+      logger?.log(`[Timeout] Killing agent after ${timeoutMs / 1000}s`);
       log.agentStoppedReason = "timeout";
       emitProgress("timeout");
       child.kill("SIGTERM");
@@ -217,7 +235,7 @@ You may create multiple files if the task requires it.`;
           continue;
         }
 
-        processMessage(parsed, log, options, startTime, (toolName) => {
+        processMessage(parsed, log, logger, startTime, (toolName) => {
           lastToolCall = toolName;
           emitProgress();
         });
@@ -253,7 +271,7 @@ You may create multiple files if the task requires it.`;
       if (buffer.trim()) {
         try {
           const parsed = JSON.parse(buffer.trim());
-          processMessage(parsed, log, options, startTime, (toolName) => {
+          processMessage(parsed, log, logger, startTime, (toolName) => {
             lastToolCall = toolName;
           });
         } catch {
@@ -280,15 +298,15 @@ You may create multiple files if the task requires it.`;
         log.writtenFiles = hasSrcDir
           ? collectWrittenFiles(srcDir)
           : collectProjectFiles(options.workspacePath);
-        if (options.verbose && log.writtenFiles.length > 0) {
-          console.log(`  [Files] ${log.writtenFiles.join(", ")}`);
+        if (log.writtenFiles.length > 0) {
+          logger?.log(`[Files] ${log.writtenFiles.join(", ")}`);
         }
       }
 
       if (code !== 0 && log.agentStoppedReason === "completed") {
         log.agentStoppedReason = "error";
-        if (options.verbose && stderrOutput) {
-          console.error(`  stderr: ${stderrOutput.slice(0, 500)}`);
+        if (stderrOutput) {
+          logger?.error(`stderr: ${stderrOutput.slice(0, 500)}`);
         }
       }
 
@@ -312,7 +330,7 @@ You may create multiple files if the task requires it.`;
 function processMessage(
   parsed: Record<string, unknown>,
   log: EvalConversationLog,
-  options: AgentOptions,
+  logger: ScenarioLogger | undefined,
   startTime: number,
   onToolCall: (shortName: string) => void
 ): void {
@@ -365,11 +383,9 @@ function processMessage(
             turnIndex: log.totalTurns,
           });
 
-          if (options.verbose) {
-            const preview =
-              text.length > 200 ? text.slice(0, 200) + "..." : text;
-            console.log(`  [Turn ${log.totalTurns}] ${preview}`);
-          }
+          const preview =
+            text.length > 200 ? text.slice(0, 200) + "..." : text;
+          logger?.log(`[Turn ${log.totalTurns}] ${preview}`);
         }
       } else if (blockType === "tool_use") {
         const toolName = (block.name as string) || "";
@@ -389,11 +405,9 @@ function processMessage(
         const short = shortToolName(toolName);
         onToolCall(short);
 
-        if (options.verbose) {
-          console.log(
-            `  [Tool] ${short}(${JSON.stringify(args).slice(0, 100)})`
-          );
-        }
+        logger?.log(
+          `[Tool] ${short}(${JSON.stringify(args).slice(0, 100)})`
+        );
       }
     }
     return;

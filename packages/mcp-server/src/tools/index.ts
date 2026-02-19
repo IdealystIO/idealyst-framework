@@ -53,6 +53,17 @@ export type {
   // Guide tool types
   GetTranslateGuideArgs,
   GetStorageGuideArgs,
+  GetAudioGuideArgs,
+  GetCameraGuideArgs,
+  GetFilesGuideArgs,
+  GetOauthClientGuideArgs,
+  GetAnimateGuideArgs,
+  GetDatagridGuideArgs,
+  GetDatepickerGuideArgs,
+  GetLottieGuideArgs,
+  GetMarkdownGuideArgs,
+  GetConfigGuideArgs,
+  GetChartsGuideArgs,
   // Package tool types
   ListPackagesArgs,
   GetPackageDocsArgs,
@@ -63,6 +74,8 @@ export type {
   SearchRecipesArgs,
   // Install guide tool types
   GetInstallGuideArgs,
+  // Intro tool types
+  GetIntroArgs,
 } from "./types.js";
 
 // Re-export all definitions
@@ -80,6 +93,17 @@ export {
   getNavigationTypesDefinition,
   getTranslateGuideDefinition,
   getStorageGuideDefinition,
+  getAudioGuideDefinition,
+  getCameraGuideDefinition,
+  getFilesGuideDefinition,
+  getOauthClientGuideDefinition,
+  getAnimateGuideDefinition,
+  getDatagridGuideDefinition,
+  getDatepickerGuideDefinition,
+  getLottieGuideDefinition,
+  getMarkdownGuideDefinition,
+  getConfigGuideDefinition,
+  getChartsGuideDefinition,
   listPackagesDefinition,
   getPackageDocsDefinition,
   searchPackagesDefinition,
@@ -88,6 +112,8 @@ export {
   searchRecipesDefinition,
   // Install guide definitions
   getInstallGuideDefinition,
+  // Intro definitions
+  getIntroDefinition,
   // Collections
   toolDefinitions,
   toolDefinitionMap,
@@ -108,6 +134,17 @@ export {
   getNavigationTypes,
   getTranslateGuide,
   getStorageGuide,
+  getAudioGuide,
+  getCameraGuide,
+  getFilesGuide,
+  getOauthClientGuide,
+  getAnimateGuide,
+  getDatagridGuide,
+  getDatepickerGuide,
+  getLottieGuide,
+  getMarkdownGuide,
+  getConfigGuide,
+  getChartsGuide,
   listPackages,
   getPackageDocs,
   searchPackages,
@@ -116,6 +153,8 @@ export {
   searchRecipes,
   // Install guide handlers
   getInstallGuide,
+  // Intro handlers
+  getIntro,
   // Handler registry and dispatcher
   toolHandlers,
   callTool,

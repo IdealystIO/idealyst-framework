@@ -19,10 +19,13 @@ import type {
   FrameworkIssue,
 } from "./types.js";
 import { DEFAULT_CRITERIA, type SupervisorCriterion } from "./criteria.js";
+import type { ScenarioLogger } from "./logger.js";
 
 export interface SupervisorOptions {
   model: string;
   verbose?: boolean;
+  /** Per-scenario file logger (replaces console.log for parallel execution) */
+  logger?: ScenarioLogger;
 }
 
 // ============================================================================
@@ -399,11 +402,10 @@ export async function runSupervisorEvaluation(
   // Build the prompt
   const prompt = buildSupervisorPrompt(log, scenario, writtenFileContents, criteria);
 
-  if (options.verbose) {
-    console.log(`  [Supervisor] Evaluating with ${options.model}...`);
-    console.log(`  [Supervisor] Prompt length: ${prompt.length} chars`);
-    console.log(`  [Supervisor] Criteria: ${criteria.map((c) => c.id).join(", ")}`);
-  }
+  const logger = options.logger;
+  logger?.log(`[Supervisor] Evaluating with ${options.model}...`);
+  logger?.log(`[Supervisor] Prompt length: ${prompt.length} chars`);
+  logger?.log(`[Supervisor] Criteria: ${criteria.map((c) => c.id).join(", ")}`);
 
   // Write empty MCP config to temp file (supervisor needs NO tools)
   const emptyMcpConfig = path.join(os.tmpdir(), `eval-supervisor-mcp-${Date.now()}.json`);
@@ -437,9 +439,7 @@ export async function runSupervisorEvaluation(
         }
       );
 
-      if (options.verbose) {
-        console.log(`  [Supervisor] Raw response (first 200 chars): ${raw.slice(0, 200)}`);
-      }
+      logger?.log(`[Supervisor] Raw response (first 200 chars): ${raw.slice(0, 200)}`);
 
       const parsed = parseSupervisorResponse(raw, scenario.id, criteria);
 
@@ -454,12 +454,10 @@ export async function runSupervisorEvaluation(
         rawResponse: raw,
       };
 
-      if (options.verbose) {
-        console.log(
-          `  [Supervisor] Score: ${evaluation.qualitativeScore}/100 (${(evaluation.durationMs / 1000).toFixed(1)}s)`
-        );
-        console.log(`  [Supervisor] Issues: ${evaluation.frameworkIssues.length} framework issues`);
-      }
+      logger?.log(
+        `[Supervisor] Score: ${evaluation.qualitativeScore}/100 (${(evaluation.durationMs / 1000).toFixed(1)}s)`
+      );
+      logger?.log(`[Supervisor] Issues: ${evaluation.frameworkIssues.length} framework issues`);
 
       // Clean up temp MCP config
       try { fs.unlinkSync(emptyMcpConfig); } catch { /* ignore */ }
@@ -467,18 +465,16 @@ export async function runSupervisorEvaluation(
       return evaluation;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      if (options.verbose) {
-        console.warn(
-          `  [Supervisor] Attempt ${attempt} failed: ${lastError.message.slice(0, 200)}`
-        );
-        // If execSync threw, check if there's stdout/stderr on the error
-        const execError = error as { stdout?: string; stderr?: string };
-        if (execError.stdout) {
-          console.warn(`  [Supervisor] stdout: ${execError.stdout.slice(0, 300)}`);
-        }
-        if (execError.stderr) {
-          console.warn(`  [Supervisor] stderr: ${execError.stderr.slice(0, 300)}`);
-        }
+      logger?.warn(
+        `[Supervisor] Attempt ${attempt} failed: ${lastError.message.slice(0, 200)}`
+      );
+      // If execSync threw, check if there's stdout/stderr on the error
+      const execError = error as { stdout?: string; stderr?: string };
+      if (execError.stdout) {
+        logger?.warn(`[Supervisor] stdout: ${execError.stdout.slice(0, 300)}`);
+      }
+      if (execError.stderr) {
+        logger?.warn(`[Supervisor] stderr: ${execError.stderr.slice(0, 300)}`);
       }
       if (attempt < 3) continue;
     }
@@ -487,10 +483,8 @@ export async function runSupervisorEvaluation(
   // Clean up temp MCP config
   try { fs.unlinkSync(emptyMcpConfig); } catch { /* ignore */ }
 
-  // Both attempts failed — return a degraded evaluation
-  if (options.verbose) {
-    console.error(`  [Supervisor] All attempts failed, returning degraded evaluation`);
-  }
+  // All attempts failed — return a degraded evaluation
+  logger?.error(`[Supervisor] All attempts failed, returning degraded evaluation`);
 
   return {
     scenarioId: scenario.id,

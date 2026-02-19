@@ -271,26 +271,31 @@ function MyComponent() {
       "Zoom support",
       "Permission handling",
     ],
-    quickStart: `import { Camera, useCameraPermission } from '@idealyst/camera';
+    quickStart: `import { useCamera, CameraPreview, requestPermission } from '@idealyst/camera';
 
 function CameraScreen() {
-  const { hasPermission, requestPermission } = useCameraPermission();
+  const camera = useCamera({ autoRequestPermission: true });
 
-  if (!hasPermission) {
-    return <Button onPress={requestPermission}>Grant Permission</Button>;
-  }
+  const handleTakePhoto = async () => {
+    const photo = await camera.takePhoto();
+    console.log('Photo taken:', photo.uri);
+  };
 
   return (
-    <Camera
-      onCapture={(photo) => console.log('Photo taken:', photo)}
-    />
+    <View style={{ flex: 1 }}>
+      <CameraPreview camera={camera.cameraRef.current} style={{ flex: 1 }} />
+      <Button onPress={handleTakePhoto} intent="primary">Take Photo</Button>
+    </View>
   );
 }`,
     apiHighlights: [
-      "Camera component",
-      "useCameraPermission()",
-      "useCamera()",
-      "Photo/Video capture callbacks",
+      "CameraPreview component (NOT Camera)",
+      "useCamera() hook — returns status, takePhoto, startRecording, stopRecording, cameraRef",
+      "requestPermission() — standalone function (NOT useCameraPermission or requestCameraPermission)",
+      "CameraStatus is an INTERFACE { state: CameraState, permission, isActive, error } — NOT a string enum",
+      "CameraState = 'idle' | 'initializing' | 'ready' | 'recording' | 'capturing'",
+      "PhotoResult { uri, width, height, metadata }",
+      "VideoResult { uri, duration }",
     ],
     relatedPackages: ["components", "storage"],
   },
@@ -316,31 +321,47 @@ function CameraScreen() {
       "Audio profiles (speech, music, phone)",
     ],
     quickStart: `import { useRecorder, usePlayer, AUDIO_PROFILES } from '@idealyst/audio';
+import type { PCMData } from '@idealyst/audio';
 
 function AudioApp() {
   const recorder = useRecorder({ config: AUDIO_PROFILES.speech });
   const player = usePlayer();
+  const chunksRef = useRef<ArrayBuffer[]>([]);
 
-  // Record audio
+  // Subscribe to PCM data chunks during recording
+  useEffect(() => {
+    // subscribeToData receives PCMData objects (NOT strings)
+    // PCMData has: buffer (ArrayBufferLike), samples (Int16Array), timestamp, config, toBase64()
+    const unsubscribe = recorder.subscribeToData((data: PCMData) => {
+      chunksRef.current.push(data.buffer as ArrayBuffer);
+    });
+    return unsubscribe;
+  }, [recorder.subscribeToData]);
+
   const handleRecord = async () => {
     if (recorder.isRecording) {
-      await recorder.stop();
+      await recorder.stop(); // stop() returns void — data comes via subscribeToData
     } else {
+      chunksRef.current = [];
       await recorder.start();
     }
   };
 
-  // Play file
-  const handlePlay = async () => {
-    await player.loadFile('/audio/music.mp3');
-    await player.play();
-  };
-
-  // Stream PCM (e.g., from TTS API)
-  const handleStream = async () => {
+  // Play back recorded PCM data
+  const handlePlayback = async () => {
     await player.loadPCMStream(AUDIO_PROFILES.speech);
     await player.play();
-    player.feedPCMData(pcmData); // Feed PCM chunks
+    // feedPCMData accepts ArrayBufferLike | Int16Array (NOT strings)
+    for (const chunk of chunksRef.current) {
+      player.feedPCMData(chunk);
+    }
+    await player.flush();
+  };
+
+  // Play an audio file (mp3, wav, etc.)
+  const handlePlayFile = async () => {
+    await player.loadFile('/audio/music.mp3');
+    await player.play();
   };
 
   return (
@@ -348,16 +369,20 @@ function AudioApp() {
       <Button onPress={handleRecord}>
         {recorder.isRecording ? 'Stop' : 'Record'}
       </Button>
-      <Button onPress={handlePlay}>Play File</Button>
+      <Text typography="body2">Duration: {recorder.duration}ms</Text>
+      <Button onPress={handlePlayback} disabled={chunksRef.current.length === 0}>
+        Play Recording
+      </Button>
     </View>
   );
 }`,
     apiHighlights: [
-      "useRecorder() - Recording with PCM streaming",
-      "usePlayer() - File and PCM playback",
-      "useAudio() - Session management",
-      "AUDIO_PROFILES - Pre-configured audio settings",
-      "SESSION_PRESETS - Audio session configurations",
+      "useRecorder() — PCM streaming recorder. stop() returns void. Use subscribeToData(cb) to receive PCMData chunks",
+      "usePlayer() — File playback (loadFile) and PCM streaming (loadPCMStream + feedPCMData)",
+      "PCMData type — { buffer: ArrayBufferLike, samples: Int16Array, timestamp, config, toBase64() }",
+      "feedPCMData() accepts ArrayBufferLike | Int16Array — NOT strings",
+      "useAudio() — Session management (iOS/Android)",
+      "AUDIO_PROFILES — Pre-configured configs: speech, highQuality, studio, phone",
     ],
     relatedPackages: ["camera", "components"],
   },
@@ -935,16 +960,16 @@ function UploadForm() {
   );
 }`,
     apiHighlights: [
-      "useFilePicker() - File selection hook",
+      "useFilePicker() - File selection hook. Returns { pick, files, isPicking }. Method is pick() — NOT pickFiles()",
       "useFileUpload() - Upload management hook",
       "FilePickerButton - Styled file picker button",
       "DropZone - Drag and drop area (web)",
       "UploadProgress - Progress indicator component",
+      "FileType = 'image' | 'video' | 'audio' | 'document' | 'archive' | 'any' — NOT 'pdf', 'doc', 'xlsx'",
+      "PickedFile has dimensions?: { width, height } — NOT top-level width/height",
       "FILE_PICKER_PRESETS - Common file type configs",
       "UPLOAD_PRESETS - Upload behavior presets",
-      "ChunkedUploader - Large file chunking",
-      "createFilePicker() - Factory for custom use",
-      "createFileUploader() - Factory for custom use",
+      "Use customMimeTypes for specific formats like 'application/pdf'",
     ],
     relatedPackages: ["components", "camera", "storage"],
   },

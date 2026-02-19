@@ -328,12 +328,15 @@ export const installGuides: Record<string, InstallGuide> = {
         "User must grant camera permission in browser",
       ],
     },
-    verification: `import { Camera, useCameraPermission } from '@idealyst/camera';
+    verification: `import { useCamera, CameraPreview, requestPermission } from '@idealyst/camera';
 
-const { hasPermission, requestPermission } = useCameraPermission();
-if (!hasPermission) {
-  await requestPermission();
-}`,
+// Request permission
+const result = await requestPermission();
+// result.granted === true if permission was given
+
+// In a component:
+const camera = useCamera({ autoRequestPermission: true });
+// camera.permission?.granted, camera.takePhoto(), camera.cameraRef`,
     troubleshooting: [
       {
         issue: "Camera not showing on iOS",

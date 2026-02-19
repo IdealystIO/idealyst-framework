@@ -341,4 +341,6 @@ export interface RunOptions {
   compare: boolean;
   /** Filter scenarios by type */
   scenarioType: ScenarioType | "all";
+  /** Max concurrent scenarios (default: 5) */
+  concurrency: number;
 }

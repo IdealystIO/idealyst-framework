@@ -247,6 +247,204 @@ export const getStorageGuideDefinition: ToolDefinition = {
   },
 };
 
+export const getAudioGuideDefinition: ToolDefinition = {
+  name: "get_audio_guide",
+  description:
+    "Get documentation for @idealyst/audio PCM audio streaming package. Covers recorder, player, PCM data types, and examples. IMPORTANT: This is a PCM streaming library, NOT file-based recording.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getCameraGuideDefinition: ToolDefinition = {
+  name: "get_camera_guide",
+  description:
+    "Get documentation for @idealyst/camera photo and video capture package. Covers CameraPreview component, useCamera hook, permissions, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getFilesGuideDefinition: ToolDefinition = {
+  name: "get_files_guide",
+  description:
+    "Get documentation for @idealyst/files file picking and upload package. Covers useFilePicker, useFileUpload, DropZone, FilePickerButton, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getOauthClientGuideDefinition: ToolDefinition = {
+  name: "get_oauth_client_guide",
+  description:
+    "Get documentation for @idealyst/oauth-client OAuth2 authentication package. Covers createOAuthClient, configuration, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getAnimateGuideDefinition: ToolDefinition = {
+  name: "get_animate_guide",
+  description:
+    "Get documentation for @idealyst/animate cross-platform animation hooks. Covers useAnimatedStyle, useSequence, useKeyframes, usePresence, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getDatagridGuideDefinition: ToolDefinition = {
+  name: "get_datagrid_guide",
+  description:
+    "Get documentation for @idealyst/datagrid virtualized data grid package. Covers DataGrid component, Column configuration, sorting, selection, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getDatepickerGuideDefinition: ToolDefinition = {
+  name: "get_datepicker_guide",
+  description:
+    "Get documentation for @idealyst/datepicker date and time picker components. Covers DatePicker, TimePicker, DateInput, TimeInput, DateTimePicker, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getLottieGuideDefinition: ToolDefinition = {
+  name: "get_lottie_guide",
+  description:
+    "Get documentation for @idealyst/lottie Lottie animation component. Covers LottieProps, LottieRef imperative methods, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getMarkdownGuideDefinition: ToolDefinition = {
+  name: "get_markdown_guide",
+  description:
+    "Get documentation for @idealyst/markdown cross-platform Markdown renderer. Covers MarkdownProps, style overrides, link/image handling, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getConfigGuideDefinition: ToolDefinition = {
+  name: "get_config_guide",
+  description:
+    "Get documentation for @idealyst/config cross-platform environment variable management. Covers IConfig API, key naming, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getChartsGuideDefinition: ToolDefinition = {
+  name: "get_charts_guide",
+  description:
+    "Get documentation for @idealyst/charts animated charting library. Covers LineChart, BarChart, data types, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
 // ============================================================================
 // Package Tool Definitions
 // ============================================================================
@@ -394,6 +592,20 @@ export const getInstallGuideDefinition: ToolDefinition = {
 };
 
 // ============================================================================
+// Intro Tool Definitions
+// ============================================================================
+
+export const getIntroDefinition: ToolDefinition = {
+  name: "get_intro",
+  description:
+    "Get a comprehensive introduction to the Idealyst framework. Returns an overview of the component paradigm, correct prop conventions, available packages, and common mistakes to avoid. **Call this first** before writing any Idealyst code.",
+  inputSchema: {
+    type: "object",
+    properties: {},
+  },
+};
+
+// ============================================================================
 // All Tool Definitions Array
 // ============================================================================
 
@@ -420,6 +632,17 @@ export const toolDefinitions: ToolDefinition[] = [
   // Guide tools
   getTranslateGuideDefinition,
   getStorageGuideDefinition,
+  getAudioGuideDefinition,
+  getCameraGuideDefinition,
+  getFilesGuideDefinition,
+  getOauthClientGuideDefinition,
+  getAnimateGuideDefinition,
+  getDatagridGuideDefinition,
+  getDatepickerGuideDefinition,
+  getLottieGuideDefinition,
+  getMarkdownGuideDefinition,
+  getConfigGuideDefinition,
+  getChartsGuideDefinition,
   // Package tools
   listPackagesDefinition,
   getPackageDocsDefinition,
@@ -430,6 +653,8 @@ export const toolDefinitions: ToolDefinition[] = [
   searchRecipesDefinition,
   // Install guide tools
   getInstallGuideDefinition,
+  // Intro tool
+  getIntroDefinition,
 ];
 
 /**

@@ -146,6 +146,7 @@ function createPrismaPackageJson(data: TemplateData): Record<string, unknown> {
       ...(data.hasGraphql ? { './pothos': './prisma/generated/pothos.ts' } : {}),
     },
     scripts: {
+      'postinstall': 'prisma generate',
       'build': 'tsc',
       'db:generate': 'prisma generate',
       'db:push': 'prisma db push',

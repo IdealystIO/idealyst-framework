@@ -328,6 +328,55 @@ export function getNavigationTypes(format: 'typescript' | 'json' | 'both' = 'bot
 }
 
 /**
+ * Synthesize a TypeScript interface string from a component's properties array.
+ * Used as a fallback when typeDefinition is not available (e.g. dynamic generation
+ * without ts-morph).
+ */
+function synthesizeTypeDefinition(component: any): string {
+  const interfaceName = component.propsInterface || 'Props';
+  const props: any[] = component.props || [];
+
+  if (props.length === 0) {
+    return `interface ${interfaceName} {}`;
+  }
+
+  const lines: string[] = [];
+  lines.push(`interface ${interfaceName} {`);
+
+  for (const prop of props) {
+    // Add JSDoc comment with description and default value
+    const docParts: string[] = [];
+    if (prop.description) {
+      docParts.push(prop.description);
+    }
+    if (prop.defaultValue !== undefined && prop.defaultValue !== null) {
+      docParts.push(`@default ${prop.defaultValue}`);
+    } else if (prop.default !== undefined && prop.default !== null) {
+      docParts.push(`@default ${prop.default}`);
+    }
+
+    if (docParts.length > 0) {
+      if (docParts.length === 1) {
+        lines.push(`  /** ${docParts[0]} */`);
+      } else {
+        lines.push('  /**');
+        for (const part of docParts) {
+          lines.push(`   * ${part}`);
+        }
+        lines.push('   */');
+      }
+    }
+
+    const optional = prop.required ? '' : '?';
+    const propType = prop.type || 'unknown';
+    lines.push(`  ${prop.name}${optional}: ${propType};`);
+  }
+
+  lines.push('}');
+  return lines.join('\n');
+}
+
+/**
  * Format TypeScript output for better readability
  */
 function formatTypeScriptOutput(component: any): string {
@@ -335,7 +384,13 @@ function formatTypeScriptOutput(component: any): string {
 
   // Main props interface
   sections.push(`// ${component.propsInterface}`);
-  sections.push(component.typeDefinition);
+
+  if (component.typeDefinition) {
+    sections.push(component.typeDefinition);
+  } else {
+    // typeDefinition is empty — synthesize from properties data
+    sections.push(synthesizeTypeDefinition(component));
+  }
 
   // Related types
   if (Object.keys(component.relatedTypes).length > 0) {

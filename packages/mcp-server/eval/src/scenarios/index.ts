@@ -21,6 +21,14 @@ import { themeStylingScenario } from "./theme-styling.js";
 import { mediaCameraScenario } from "./media-camera.js";
 import { fileUploadScenario } from "./file-upload.js";
 import { recipeDiscoveryScenario } from "./recipe-discovery.js";
+import { animateTransitionsScenario } from "./animate-transitions.js";
+import { datagridAnalyticsScenario } from "./datagrid-analytics.js";
+import { datepickerBookingScenario } from "./datepicker-booking.js";
+import { oauthConfigLoginScenario } from "./oauth-config-login.js";
+import { chartsDashboardScenario } from "./charts-dashboard.js";
+import { markdownContentScenario } from "./markdown-content.js";
+import { fullAppNoContextScenario } from "./full-app-no-context.js";
+import { guideToolDiscoveryScenario } from "./guide-tool-discovery.js";
 
 export const scenarios: Record<string, EvalScenario> = {
   // Component scenarios (symlinked workspace)
@@ -37,6 +45,14 @@ export const scenarios: Record<string, EvalScenario> = {
   "media-camera": mediaCameraScenario,
   "file-upload": fileUploadScenario,
   "recipe-discovery": recipeDiscoveryScenario,
+  "animate-transitions": animateTransitionsScenario,
+  "datagrid-analytics": datagridAnalyticsScenario,
+  "datepicker-booking": datepickerBookingScenario,
+  "oauth-config-login": oauthConfigLoginScenario,
+  "charts-dashboard": chartsDashboardScenario,
+  "markdown-content": markdownContentScenario,
+  "full-app-no-context": fullAppNoContextScenario,
+  "guide-tool-discovery": guideToolDiscoveryScenario,
 
   // Project scenarios (idealyst-cli scaffolded)
   "project-scaffold": projectScaffoldScenario,

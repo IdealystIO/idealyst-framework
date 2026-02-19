@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/animate",
-  "version": "1.2.101",
+  "version": "1.2.102",
   "description": "Cross-platform animation hooks for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",
@@ -30,7 +30,7 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/theme": "^1.2.101",
+    "@idealyst/theme": "^1.2.102",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-reanimated": ">=3.0.0",
@@ -48,7 +48,7 @@
     }
   },
   "devDependencies": {
-    "@idealyst/theme": "^1.2.101",
+    "@idealyst/theme": "^1.2.102",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",
     "react-native": "^0.80.1",

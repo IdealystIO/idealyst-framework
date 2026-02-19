@@ -62,7 +62,7 @@ const Grid = forwardRef<IdealystElement, GridProps>(({
         marginHorizontal,
     });
 
-    const webProps = getWebProps([gridStyles.grid, flattenStyle(style)]);
+    const webProps = getWebProps(gridStyles.grid);
     const mergedRef = useMergeRefs(ref, webProps.ref, layoutRef);
 
     const gridTemplateColumns = `repeat(${resolvedColumns}, 1fr)`;
@@ -74,7 +74,7 @@ const Grid = forwardRef<IdealystElement, GridProps>(({
             id={id}
             data-testid={testID}
             style={{
-                ...webProps.style,
+                ...flattenStyle(style),
                 gridTemplateColumns,
             }}
         >

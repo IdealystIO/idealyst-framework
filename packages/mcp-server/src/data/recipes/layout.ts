@@ -72,9 +72,9 @@ function App() {
       <Button onPress={() => setIsOpen(true)}>Open Modal</Button>
 
       <AnimatedModal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <Text variant="title">Modal Title</Text>
-        <Text>Modal content goes here.</Text>
-        <Button onPress={() => setIsOpen(false)}>Close</Button>
+        <Text typography="h5" weight="bold">Modal Title</Text>
+        <Text typography="body1" style={{ marginTop: 8 }}>Modal content goes here.</Text>
+        <Button onPress={() => setIsOpen(false)} style={{ marginTop: 16 }}>Close</Button>
       </AnimatedModal>
     </View>
   );
@@ -101,10 +101,8 @@ function App() {
     code: `import React from 'react';
 import { View, Text, Pressable } from '@idealyst/components';
 import { withAnimated, usePresence } from '@idealyst/animate';
-import { Dimensions } from 'react-native';
 
 const AnimatedView = withAnimated(View);
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface SheetProps {
   isOpen: boolean;
@@ -121,7 +119,7 @@ export function SlideUpSheet({ isOpen, onClose, children }: SheetProps) {
 
   const sheet = usePresence(isOpen, {
     enter: { transform: { y: 0 } },
-    exit: { transform: { y: SCREEN_HEIGHT * 0.6 } },
+    exit: { transform: { y: 400 } },
     duration: 'normal',
     easing: 'easeOut',
   });
@@ -170,51 +168,40 @@ export function SlideUpSheet({ isOpen, onClose, children }: SheetProps) {
     category: "layout",
     difficulty: "beginner",
     packages: ["@idealyst/components"],
-    code: `import React, { useEffect, useRef } from 'react';
-import { Animated, View as RNView, StyleSheet } from 'react-native';
-import { View, Text } from '@idealyst/components';
+    code: `import React from 'react';
+import { View, Skeleton } from '@idealyst/components';
 
-function Skeleton({ width, height, style }: { width: number | string; height: number; style?: any }) {
-  const shimmer = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.loop(
-      Animated.timing(shimmer, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      })
-    ).start();
-  }, []);
-
-  const translateX = shimmer.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-200, 200],
-  });
-
-  return (
-    <RNView style={[{ width, height, backgroundColor: '#e5e7eb', borderRadius: 4, overflow: 'hidden' }, style]}>
-      <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: '#f3f4f6', transform: [{ translateX }] }]} />
-    </RNView>
-  );
-}
-
+// Card-shaped skeleton placeholder
 export function CardSkeleton() {
   return (
     <View style={{ padding: 16, gap: 12, backgroundColor: '#fff', borderRadius: 8 }}>
-      <Skeleton width="60%" height={20} />
-      <Skeleton width="100%" height={14} />
-      <Skeleton width="80%" height={14} />
+      <Skeleton width="60%" height={20} animation="pulse" />
+      <Skeleton width="100%" height={14} animation="pulse" />
+      <Skeleton width="80%" height={14} animation="pulse" />
     </View>
   );
 }
 
+// List of skeleton cards
 export function ListSkeleton({ count = 3 }: { count?: number }) {
   return (
     <View style={{ gap: 12 }}>
       {Array.from({ length: count }).map((_, i) => (
         <CardSkeleton key={i} />
       ))}
+    </View>
+  );
+}
+
+// Profile-style skeleton with avatar
+export function ProfileSkeleton() {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+      <Skeleton width={48} height={48} shape="circle" />
+      <View style={{ flex: 1, gap: 8 }}>
+        <Skeleton width="50%" height={16} />
+        <Skeleton width="30%" height={12} />
+      </View>
     </View>
   );
 }
@@ -229,16 +216,18 @@ function DataScreen() {
 
   return <ActualContent data={data} />;
 }`,
-    explanation: `Skeleton loading with:
-- Shimmer animation effect
-- Composable skeleton components
-- Matches actual content dimensions`,
+    explanation: `Skeleton loading using @idealyst/components Skeleton:
+- Built-in pulse/wave animations (no manual Animated API needed)
+- shape: 'rectangle' | 'circle' | 'rounded'
+- animation: 'pulse' | 'wave' | 'none'
+- Composable for any layout pattern`,
     tips: [
-      "Match skeleton dimensions to actual content",
-      "Use subtle gray colors (#e5e7eb background, #f3f4f6 shimmer)",
-      "Show multiple skeletons to indicate list",
+      "Match skeleton dimensions to actual content for seamless transition",
+      "Use shape='circle' for avatar placeholders",
+      "Use animation='wave' for a shimmer effect, 'pulse' for fade",
+      "Wrap multiple skeletons in a View with gap for consistent spacing",
     ],
-    relatedRecipes: ["data-list", "fade-in-component"],
+    relatedRecipes: ["data-list"],
   },
 
   "shadow-card": {
@@ -247,7 +236,8 @@ function DataScreen() {
     category: "layout",
     difficulty: "beginner",
     packages: ["@idealyst/components", "@idealyst/theme"],
-    code: `import { View, Text } from '@idealyst/components';
+    code: `import React from 'react';
+import { View, Text } from '@idealyst/components';
 import { shadow } from '@idealyst/theme';
 
 // Basic shadowed card
@@ -281,7 +271,7 @@ export function AccentCard({ children }: { children: React.ReactNode }) {
       { backgroundColor: '#3b82f6', borderRadius: 12, padding: 16 },
       shadow({ radius: 16, y: 6, color: '#3b82f6', opacity: 0.4 }),
     ]}>
-      <Text style={{ color: '#ffffff' }}>{children}</Text>
+      <Text color="inverse">{children}</Text>
     </View>
   );
 }`,
@@ -315,7 +305,9 @@ export function AccentCard({ children }: { children: React.ReactNode }) {
     packages: ["@idealyst/components", "@idealyst/animate"],
     code: `import React, { createContext, useContext, useState, useCallback } from 'react';
 import { View, Text, Icon, Pressable } from '@idealyst/components';
+import type { IconName } from '@idealyst/components';
 import { withAnimated, usePresence } from '@idealyst/animate';
+import { shadow } from '@idealyst/theme';
 
 const AnimatedView = withAnimated(View);
 
@@ -326,6 +318,13 @@ interface Toast {
   message: string;
   type: ToastType;
 }
+
+const toastConfig: Record<ToastType, { icon: IconName; color: string }> = {
+  success: { icon: 'check-circle', color: '#22c55e' },
+  error: { icon: 'alert-circle', color: '#ef4444' },
+  info: { icon: 'information', color: '#3b82f6' },
+  warning: { icon: 'alert', color: '#f59e0b' },
+};
 
 const ToastContext = createContext<{
   showToast: (message: string, type?: ToastType) => void;
@@ -361,8 +360,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
     duration: 'fast',
   });
 
-  const icons = { success: 'check-circle', error: 'alert-circle', info: 'information', warning: 'alert' };
-  const colors = { success: '#22c55e', error: '#ef4444', info: '#3b82f6', warning: '#f59e0b' };
+  const config = toastConfig[toast.type];
 
   return (
     <AnimatedView style={[{
@@ -372,14 +370,10 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
       padding: 12,
       borderRadius: 8,
       borderLeftWidth: 4,
-      borderLeftColor: colors[toast.type],
-      shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowRadius: 8,
-      elevation: 3,
-    }, style]}>
-      <Icon name={icons[toast.type]} size={20} color={colors[toast.type]} />
-      <Text style={{ flex: 1, marginLeft: 12 }}>{toast.message}</Text>
+      borderLeftColor: config.color,
+    }, shadow({ radius: 8, y: 2, opacity: 0.1 }), style]}>
+      <Icon name={config.icon} size={20} />
+      <Text typography="body2" style={{ flex: 1, marginLeft: 12 }}>{toast.message}</Text>
       <Pressable onPress={onDismiss}>
         <Icon name="close" size={16} />
       </Pressable>
@@ -395,12 +389,14 @@ export function useToast() {
     explanation: `Toast notification system with:
 - Context-based toast management
 - Auto-dismiss after 3 seconds
-- Multiple toast types with colors
-- Slide-in animation`,
+- Multiple toast types with colors and icons
+- Slide-in animation
+- Uses IconName type for type-safe icon references`,
     tips: [
       "Position at top for mobile, bottom-right for desktop",
       "Limit to 3-5 visible toasts",
       "Allow manual dismiss",
+      "Type icon props as IconName, never as string",
     ],
     relatedRecipes: ["modal-animation", "slide-up-sheet"],
   },

@@ -15,7 +15,6 @@ export interface DefaultTheme {
         surface: Record<string, ColorValue>;
         text: Record<string, ColorValue>;
         border: Record<string, ColorValue>;
-        card: Record<string, ColorValue>;
     };
     sizes: {
         button: Record<string, ButtonSizeValue>;

@@ -126,6 +126,50 @@ export interface GetStorageGuideArgs {
   topic: "overview" | "api" | "examples";
 }
 
+export interface GetAudioGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetCameraGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetFilesGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetOauthClientGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetAnimateGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetDatagridGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetDatepickerGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetLottieGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetMarkdownGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetConfigGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetChartsGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
 // ============================================================================
 // Package Tool Types
 // ============================================================================
@@ -169,6 +213,12 @@ export interface GetInstallGuideArgs {
 }
 
 // ============================================================================
+// Intro Tool Types
+// ============================================================================
+
+export interface GetIntroArgs {}
+
+// ============================================================================
 // Union Types
 // ============================================================================
 
@@ -185,13 +235,25 @@ export type ToolName =
   | "get_navigation_types"
   | "get_translate_guide"
   | "get_storage_guide"
+  | "get_audio_guide"
+  | "get_camera_guide"
+  | "get_files_guide"
+  | "get_oauth_client_guide"
+  | "get_animate_guide"
+  | "get_datagrid_guide"
+  | "get_datepicker_guide"
+  | "get_lottie_guide"
+  | "get_markdown_guide"
+  | "get_config_guide"
+  | "get_charts_guide"
   | "list_packages"
   | "get_package_docs"
   | "search_packages"
   | "list_recipes"
   | "get_recipe"
   | "search_recipes"
-  | "get_install_guide";
+  | "get_install_guide"
+  | "get_intro";
 
 export type ToolArgs =
   | ListComponentsArgs
@@ -206,10 +268,22 @@ export type ToolArgs =
   | GetNavigationTypesArgs
   | GetTranslateGuideArgs
   | GetStorageGuideArgs
+  | GetAudioGuideArgs
+  | GetCameraGuideArgs
+  | GetFilesGuideArgs
+  | GetOauthClientGuideArgs
+  | GetAnimateGuideArgs
+  | GetDatagridGuideArgs
+  | GetDatepickerGuideArgs
+  | GetLottieGuideArgs
+  | GetMarkdownGuideArgs
+  | GetConfigGuideArgs
+  | GetChartsGuideArgs
   | ListPackagesArgs
   | GetPackageDocsArgs
   | SearchPackagesArgs
   | ListRecipesArgs
   | GetRecipeArgs
   | SearchRecipesArgs
-  | GetInstallGuideArgs;
+  | GetInstallGuideArgs
+  | GetIntroArgs;

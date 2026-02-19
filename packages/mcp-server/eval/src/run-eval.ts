@@ -29,6 +29,7 @@ import { runTypecheck } from "./typecheck.js";
 import { runSupervisorEvaluation } from "./supervisor.js";
 import { DEFAULT_CRITERIA } from "./criteria.js";
 import { tryOpenDatabase, type EvalDatabase } from "./db.js";
+import { ScenarioLogger } from "./logger.js";
 import type {
   EvalReport,
   EvalScenario,
@@ -232,6 +233,7 @@ function parseArgs(): RunOptions {
     dbPath: path.resolve(__dirname, "../data/eval-history.sqlite3"),
     compare: false,
     scenarioType: "all",
+    concurrency: 5,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -294,6 +296,13 @@ function parseArgs(): RunOptions {
           i++;
         }
         break;
+      case "--concurrency":
+      case "-j":
+        if (next) {
+          options.concurrency = Math.max(1, parseInt(next, 10) || 5);
+          i++;
+        }
+        break;
       case "--help":
       case "-h":
         printHelp();
@@ -334,6 +343,7 @@ Options:
   --supervisor-model <model>  Model for supervisor (default: same as task model)
   --db-path <path>            SQLite database path (default: eval/data/eval-history.sqlite3)
   --compare                   Show comparison with previous run
+  --concurrency, -j N         Max concurrent scenarios (default: 5)
   --type <component|project|all>  Filter scenarios by type (default: all)
   --list, -l                  List all available scenarios
   --help, -h                  Show this help
@@ -794,33 +804,33 @@ function generateCompareResults(db: EvalDatabase): string {
 async function runScenario(
   scenario: EvalScenario,
   options: RunOptions,
-  display: LiveDisplay
+  display: LiveDisplay,
+  evalRunId: string
 ): Promise<ScenarioResult | null> {
   let workspace: { path: string; srcDir?: string; cleanup: () => void } | null = null;
+
+  // Create per-scenario logger (always — used for file output)
+  const logger = options.verbose
+    ? new ScenarioLogger(options.outputDir, evalRunId, scenario.id)
+    : undefined;
 
   try {
     const runId = `${scenario.id}-${Date.now()}`;
 
     // Scaffold workspace based on scenario type
     if (scenario.type === "project") {
-      if (options.verbose) {
-        console.log(`  Scaffolding project workspace...`);
-      }
+      logger?.log(`Scaffolding project workspace...`);
       const projectWorkspace = scaffoldProjectWorkspace(scenario, runId);
       workspace = {
         path: projectWorkspace.projectRoot,
         cleanup: projectWorkspace.cleanup,
       };
-      if (options.verbose) {
-        console.log(`  Project workspace: ${projectWorkspace.projectRoot}`);
-      }
+      logger?.log(`Project workspace: ${projectWorkspace.projectRoot}`);
     } else {
       // Component scenario — use symlinked workspace
       const componentWorkspace = scaffoldWorkspace(runId);
       workspace = componentWorkspace;
-      if (options.verbose) {
-        console.log(`  Workspace: ${componentWorkspace.path}`);
-      }
+      logger?.log(`Workspace: ${componentWorkspace.path}`);
     }
 
     const log = await runAgentLoop(scenario, {
@@ -828,33 +838,28 @@ async function runScenario(
       maxTurns: scenario.maxTurns,
       verbose: options.verbose,
       workspacePath: workspace.path,
-      onProgress: options.verbose
-        ? undefined
-        : (progress) => display.updateProgress(scenario.id, progress),
+      logger,
+      onProgress: (progress) => display.updateProgress(scenario.id, progress),
     });
 
     // Run TypeScript compilation on the workspace
     if (log.writtenFiles.length > 0) {
-      if (options.verbose) {
-        console.log(`  Written files: ${log.writtenFiles.join(", ")}`);
-        console.log(`  Running tsc --noEmit...`);
-      }
+      logger?.log(`Written files: ${log.writtenFiles.join(", ")}`);
+      logger?.log(`Running tsc --noEmit...`);
       log.typecheckResult = await runTypecheck(workspace.path);
-      if (options.verbose) {
-        if (log.typecheckResult.success) {
-          console.log(`  TypeScript: PASS (0 errors)`);
-        } else {
-          console.log(`  TypeScript: FAIL (${log.typecheckResult.errorCount} errors)`);
-          for (const err of log.typecheckResult.errors.slice(0, 5)) {
-            console.log(`    ${err.file}:${err.line} - ${err.code}: ${err.message}`);
-          }
-          if (log.typecheckResult.errors.length > 5) {
-            console.log(`    ... and ${log.typecheckResult.errors.length - 5} more`);
-          }
+      if (log.typecheckResult.success) {
+        logger?.log(`TypeScript: PASS (0 errors)`);
+      } else {
+        logger?.log(`TypeScript: FAIL (${log.typecheckResult.errorCount} errors)`);
+        for (const err of log.typecheckResult.errors.slice(0, 5)) {
+          logger?.log(`  ${err.file}:${err.line} - ${err.code}: ${err.message}`);
+        }
+        if (log.typecheckResult.errors.length > 5) {
+          logger?.log(`  ... and ${log.typecheckResult.errors.length - 5} more`);
         }
       }
-    } else if (options.verbose) {
-      console.log(`  No files written — skipping typecheck`);
+    } else {
+      logger?.log(`No files written — skipping typecheck`);
     }
 
     // Heuristic grading
@@ -863,77 +868,70 @@ async function runScenario(
     // Supervisor evaluation
     let supervisorEval = null;
     if (!options.skipSupervisor) {
-      if (options.verbose) {
-        console.log(`  Running supervisor evaluation...`);
-      }
+      logger?.log(`Running supervisor evaluation...`);
       try {
         supervisorEval = await runSupervisorEvaluation(log, scenario, {
           model: options.supervisorModel,
           verbose: options.verbose,
+          logger,
         });
       } catch (error) {
         const msg = error instanceof Error ? error.message : String(error);
-        if (options.verbose) {
-          console.warn(`  Supervisor failed: ${msg.slice(0, 200)}`);
-        }
+        logger?.warn(`Supervisor failed: ${msg.slice(0, 200)}`);
       }
     }
 
     const result: ScenarioResult = { log, grade, supervisorEval };
     display.setResult(scenario.id, result);
 
-    // Verbose mode: print details inline
-    if (options.verbose) {
-      console.log(`  Heuristic score: ${grade.overallScore}/100`);
-      if (supervisorEval) {
-        console.log(`  Supervisor score: ${supervisorEval.qualitativeScore}/100`);
-        console.log(`  Framework issues: ${supervisorEval.frameworkIssues.length}`);
-      }
-      console.log(
-        `  Turns: ${log.totalTurns}, Tool calls: ${log.totalToolCalls}, Messages: ${log.messages.length}`
-      );
-      console.log(
-        `  Issues: ${grade.issues.length} (${grade.issues.filter((i) => i.severity === "critical").length} critical)`
-      );
-      console.log(`  Duration: ${(log.totalDurationMs / 1000).toFixed(1)}s`);
-      console.log(`  Stop: ${log.agentStoppedReason}`);
+    // Log summary to file
+    logger?.log(`Heuristic score: ${grade.overallScore}/100`);
+    if (supervisorEval) {
+      logger?.log(`Supervisor score: ${supervisorEval.qualitativeScore}/100`);
+      logger?.log(`Framework issues: ${supervisorEval.frameworkIssues.length}`);
+    }
+    logger?.log(
+      `Turns: ${log.totalTurns}, Tool calls: ${log.totalToolCalls}, Messages: ${log.messages.length}`
+    );
+    logger?.log(
+      `Issues: ${grade.issues.length} (${grade.issues.filter((i) => i.severity === "critical").length} critical)`
+    );
+    logger?.log(`Duration: ${(log.totalDurationMs / 1000).toFixed(1)}s`);
+    logger?.log(`Stop: ${log.agentStoppedReason}`);
 
+    if (
+      log.agentStoppedReason === "error" ||
+      log.agentStoppedReason === "timeout"
+    ) {
+      const output = log.finalOutput || "";
       if (
-        log.agentStoppedReason === "error" ||
-        log.agentStoppedReason === "timeout"
+        output.toLowerCase().includes("api key") ||
+        output.toLowerCase().includes("auth")
       ) {
-        const output = log.finalOutput || "";
-        if (
-          output.toLowerCase().includes("api key") ||
-          output.toLowerCase().includes("auth")
-        ) {
-          console.error(`  Auth error: ${output}`);
-          console.error(
-            `    Set ANTHROPIC_API_KEY in packages/mcp-server/.env or ensure Claude Code is authenticated.`
-          );
-        } else if (output) {
-          console.error(`  Error output: ${output.slice(0, 300)}`);
-        }
+        logger?.error(`Auth error: ${output}`);
+        logger?.error(
+          `Set ANTHROPIC_API_KEY in packages/mcp-server/.env or ensure Claude Code is authenticated.`
+        );
+      } else if (output) {
+        logger?.error(`Error output: ${output.slice(0, 300)}`);
       }
-      console.log("");
     }
 
     // Cleanup workspace (unless verbose — preserve for debugging)
     if (!options.verbose && workspace) {
       workspace.cleanup();
-    } else if (options.verbose && workspace) {
-      console.log(`  Workspace preserved for debugging: ${workspace.path}`);
+    } else if (workspace) {
+      logger?.log(`Workspace preserved for debugging: ${workspace.path}`);
     }
 
+    logger?.close();
     return result;
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
     display.setError(scenario.id, msg);
 
-    if (options.verbose) {
-      console.error(`  FAILED: ${msg}`);
-      console.error("");
-    }
+    logger?.error(`FAILED: ${msg}`);
+    logger?.close();
 
     // Cleanup even on error (unless verbose)
     if (!options.verbose && workspace) {
@@ -1012,9 +1010,16 @@ async function main() {
     process.exit(1);
   }
 
-  const parallel = selectedScenarios.length > 1 && !options.verbose;
-  console.log(`Mode: ${parallel ? "parallel" : "sequential"}`);
+  const parallel = selectedScenarios.length > 1;
+  const concurrency = Math.min(options.concurrency, selectedScenarios.length);
+  console.log(`Mode: ${parallel ? `parallel (concurrency: ${concurrency})` : "sequential"}`);
+  if (options.verbose) {
+    console.log(`Verbose: per-scenario logs → ${options.outputDir}/logs/`);
+  }
   console.log("");
+
+  // Generate a run ID for log files
+  const evalRunId = `eval-${Date.now()}`;
 
   // Create live display
   const display = new LiveDisplay(selectedScenarios);
@@ -1023,35 +1028,47 @@ async function main() {
   let results: ScenarioResult[];
 
   if (parallel) {
-    // Parallel: launch all scenarios at once, live display updates
+    // Parallel with concurrency limit to avoid API rate limits
+    const CONCURRENCY = concurrency;
     display.init();
 
-    const promises = selectedScenarios.map((scenario) =>
-      runScenario(scenario, options, display)
-    );
-    const settled = await Promise.all(promises);
-    results = settled.filter((r): r is ScenarioResult => r !== null);
+    const queue = [...selectedScenarios];
+    const allResults: (ScenarioResult | null)[] = [];
+    const running = new Set<Promise<void>>();
+
+    while (queue.length > 0 || running.size > 0) {
+      while (running.size < CONCURRENCY && queue.length > 0) {
+        const scenario = queue.shift()!;
+        const p = runScenario(scenario, options, display, evalRunId).then(
+          (result) => {
+            allResults.push(result);
+            running.delete(p);
+          }
+        );
+        running.add(p);
+      }
+      if (running.size > 0) {
+        await Promise.race(running);
+      }
+    }
+    results = allResults.filter((r): r is ScenarioResult => r !== null);
 
     // Final render
     display.printFinalSummary();
   } else {
-    // Sequential (verbose mode or single scenario)
+    // Sequential (single scenario)
     results = [];
+    display.init();
     for (const scenario of selectedScenarios) {
-      if (options.verbose) {
-        console.log(
-          `Running: ${scenario.name} (${scenario.id}) [${scenario.type}, ${scenario.difficulty}]`
-        );
-      } else {
-        display.init();
-      }
-
-      const result = await runScenario(scenario, options, display);
+      const result = await runScenario(scenario, options, display, evalRunId);
       if (result) results.push(result);
     }
-    if (!options.verbose) {
-      display.printFinalSummary();
-    }
+    display.printFinalSummary();
+  }
+
+  if (options.verbose) {
+    const logDir = path.join(options.outputDir, "logs", evalRunId);
+    console.log(`\nVerbose logs: ${logDir}/`);
   }
 
   if (results.length === 0) {

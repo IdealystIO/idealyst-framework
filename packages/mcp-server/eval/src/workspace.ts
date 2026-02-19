@@ -23,6 +23,9 @@ const IDEALYST_PACKAGES = [
   "theme",
   "storage",
   "translate",
+  "camera",
+  "audio",
+  "files",
 ];
 
 /**
@@ -48,6 +51,29 @@ const PEER_DEPS: Array<[string, string[]]> = [
   [
     "react-i18next",
     ["packages/translate/node_modules", "node_modules"],
+  ],
+  // Camera package peer deps
+  [
+    "react-native-vision-camera",
+    ["packages/camera/node_modules", "node_modules"],
+  ],
+  // Audio package peer deps
+  [
+    "react-native-audio-api",
+    ["packages/audio/node_modules", "node_modules"],
+  ],
+  // Files package peer deps (optional — may not be installed)
+  [
+    "react-native-blob-util",
+    ["packages/files/node_modules", "node_modules"],
+  ],
+  [
+    "react-native-document-picker",
+    ["packages/files/node_modules", "node_modules"],
+  ],
+  [
+    "react-native-image-picker",
+    ["packages/files/node_modules", "node_modules"],
   ],
 ];
 

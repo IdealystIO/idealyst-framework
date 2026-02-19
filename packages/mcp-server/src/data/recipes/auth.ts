@@ -270,7 +270,7 @@ export function SignupForm({ onSubmit, onTermsPress }: SignupFormProps) {
         >
           <Text typography="body2">
             I agree to the{' '}
-            <Link onPress={onTermsPress}>Terms and Conditions</Link>
+            <Link to="/terms" onPress={onTermsPress}>Terms and Conditions</Link>
           </Text>
         </Checkbox>
 

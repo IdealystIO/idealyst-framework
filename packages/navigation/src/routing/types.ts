@@ -92,7 +92,12 @@ export type NotFoundComponentProps = {
 export type BaseNavigatorParam = {
     path: string
     type: 'navigator'
-    options?: NavigatorOptions
+    /**
+     * Navigator options. When this navigator is nested inside a tab or drawer,
+     * you can include TabBarScreenOptions (tabBarIcon, tabBarLabel, tabBarBadge)
+     * so the parent layout can render the tab/drawer entry for this navigator.
+     */
+    options?: TabBarScreenOptions
     /**
      * Handler called when an invalid route is accessed.
      * - Return NavigateParams to redirect to a different route
