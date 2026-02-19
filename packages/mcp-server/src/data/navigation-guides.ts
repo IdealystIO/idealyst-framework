@@ -317,6 +317,45 @@ Full paths are automatically computed:
 - \`/dashboard/reports\`
 - \`/settings\`
 
+## Adding a New Screen to an Existing App
+
+When adding a new screen to a scaffolded project, you must complete ALL three steps:
+
+### Step 1: Create the screen component
+\`\`\`tsx
+// packages/shared/src/screens/TodoListScreen.tsx
+import { View, Text } from '@idealyst/components';
+
+export function TodoListScreen() {
+  return <View padding="md"><Text typography="h5">Todo List</Text></View>;
+}
+\`\`\`
+
+### Step 2: Register in the route config
+\`\`\`tsx
+// In your AppRouter.ts or route configuration file
+import { TodoListScreen } from '../screens/TodoListScreen';
+
+const appRouter: RouteParam = {
+  path: "/",
+  type: 'navigator',
+  layout: 'stack',
+  routes: [
+    { path: "", type: 'screen', component: HomeScreen },
+    { path: "todos", type: 'screen', component: TodoListScreen }, // Add this
+  ]
+};
+\`\`\`
+
+### Step 3: Navigate to the new screen
+\`\`\`tsx
+// In any existing screen
+const { navigate } = useNavigator();
+<Button onPress={() => navigate({ path: '/todos' })}>View Todos</Button>
+\`\`\`
+
+> **CRITICAL:** A screen component that is NOT registered in the route config is unreachable. Writing a screen without adding it to routes is a common mistake.
+
 ## Best Practices
 
 1. **Use relative paths** for child routes
@@ -589,7 +628,7 @@ header={{
   height: 80,
   content: (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 16 }}>
-      <Text size="lg" weight="bold">Dashboard</Text>
+      <Text typography="h6" weight="bold">Dashboard</Text>
       <UserMenu />
     </View>
   )
@@ -784,7 +823,7 @@ export const DashboardLayout: React.FC<StackLayoutProps> = ({
             alignItems: 'center',
             padding: 16
           }}>
-            <Text size="xl" weight="bold">Dashboard</Text>
+            <Text typography="h5" weight="bold">Dashboard</Text>
             <View style={{ flexDirection: 'row', gap: 16 }}>
               <NotificationBell />
               <UserAvatar />
@@ -930,14 +969,20 @@ navigator.navigate({ path: '/new-location', replace: true });
 
 ## useParams Hook
 
-Access current route path parameters:
+Access current route path parameters. Returns \`Record<string, string>\`.
+
+> **WARNING:** \`useParams()\` does NOT accept generic type arguments. Do NOT write \`useParams<{ id: string }>()\` — this causes TS2558. Access params by key from the returned record instead.
 
 \`\`\`tsx
 import { useParams } from '@idealyst/navigation';
 
 function UserScreen() {
+  // CORRECT — no type argument
   const params = useParams();
   const userId = params.id;        // Path param from /user/:id
+
+  // WRONG — useParams does NOT accept generics
+  // const params = useParams<{ id: string }>();  // TS2558 error!
 
   return <Text>User ID: {userId}</Text>;
 }
@@ -1294,7 +1339,7 @@ const { canGoBack, goBack } = useNavigator();
 
 {canGoBack() && (
   <Button
-    icon="arrow-left"
+    leftIcon="arrow-left"
     onPress={goBack}
   >
     Back
@@ -1372,11 +1417,11 @@ import { NavigatorParam, NotFoundComponentProps } from '@idealyst/navigation';
 const NotFoundPage = ({ path, params }: NotFoundComponentProps) => (
   <Screen>
     <View style={{ alignItems: 'center', padding: 24 }}>
-      <Icon name="alert-circle" size={64} color="red" />
-      <Text size="xl">Page Not Found</Text>
+      <Icon name="alert-circle" size="xl" intent="danger" />
+      <Text typography="h5">Page Not Found</Text>
       <Text color="secondary">The path "{path}" doesn't exist.</Text>
       {params && Object.keys(params).length > 0 && (
-        <Text size="sm">Params: {JSON.stringify(params)}</Text>
+        <Text typography="caption">Params: {JSON.stringify(params)}</Text>
       )}
     </View>
   </Screen>
@@ -1415,7 +1460,7 @@ const NotFoundPage = ({ path, params }: NotFoundComponentProps) => {
   return (
     <Screen>
       <View style={{ padding: 16, gap: 24 }}>
-        <Text size="xl">404 - Page Not Found</Text>
+        <Text typography="h5">404 - Page Not Found</Text>
         <Text>Attempted: {path}</Text>
         {params?.id && <Text>User ID: {params.id}</Text>}
         <Button onPress={() => navigate({ path: '/', replace: true })}>
@@ -1481,7 +1526,7 @@ Each navigator can have its own 404 handling:
 const SettingsNotFound = ({ path }: NotFoundComponentProps) => (
   <Screen>
     <View style={{ alignItems: 'center' }}>
-      <Icon name="cog-off" size={48} color="orange" />
+      <Icon name="cog-off" size="lg" intent="warning" />
       <Text>Settings page not found: {path}</Text>
     </View>
   </Screen>
@@ -1573,17 +1618,17 @@ const GlobalNotFound = ({ path, params }: NotFoundComponentProps) => {
   return (
     <Screen>
       <View style={{ padding: 24, gap: 24, alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-        <Icon name="alert-circle-outline" size={64} color="red" />
-        <Text size="xl" weight="bold">Page Not Found</Text>
+        <Icon name="alert-circle-outline" size="xl" intent="danger" />
+        <Text typography="h5" weight="bold">Page Not Found</Text>
         <Text color="secondary">The page you're looking for doesn't exist.</Text>
 
         <Card style={{ marginTop: 16, padding: 16 }}>
-          <Text size="sm" weight="semibold">Attempted path:</Text>
-          <Text size="sm" color="secondary">{path}</Text>
+          <Text typography="caption" weight="semibold">Attempted path:</Text>
+          <Text typography="caption" color="secondary">{path}</Text>
           {params && Object.keys(params).length > 0 && (
             <>
-              <Text size="sm" weight="semibold" style={{ marginTop: 8 }}>Params:</Text>
-              <Text size="sm" color="secondary">{JSON.stringify(params)}</Text>
+              <Text typography="caption" weight="semibold" style={{ marginTop: 8 }}>Params:</Text>
+              <Text typography="caption" color="secondary">{JSON.stringify(params)}</Text>
             </>
           )}
         </Card>
@@ -1602,9 +1647,9 @@ const AdminNotFound = ({ path }: NotFoundComponentProps) => {
 
   return (
     <Screen>
-      <View padding={16} style={{ alignItems: 'center' }}>
-        <Icon name="shield-off" size={48} color="orange" />
-        <Text size="lg">Admin page not found</Text>
+      <View padding="md" style={{ alignItems: 'center' }}>
+        <Icon name="shield-off" size="lg" intent="warning" />
+        <Text typography="h6">Admin page not found</Text>
         <Button
           type="outlined"
           size="sm"
@@ -1885,16 +1930,17 @@ export function TabLayout({ routes, currentPath }: TabLayoutProps) {
                 })}
                 {options?.tabBarBadge && (
                   <Badge
-                    count={options.tabBarBadge}
                     style={{ position: 'absolute', top: -4, right: -8 }}
-                  />
+                  >
+                    {options.tabBarBadge}
+                  </Badge>
                 )}
               </View>
 
               {/* Label */}
               {options?.tabBarLabel && (
                 <Text
-                  size="xs"
+                  typography="caption"
                   style={{
                     marginTop: 4,
                     color: isActive ? '#007AFF' : '#8E8E93',
@@ -1982,7 +2028,7 @@ export function DrawerLayout({ routes, currentPath, options }: StackLayoutProps)
           onPress={() => setIsCollapsed(!isCollapsed)}
           style={{ padding: 12, marginTop: 'auto' }}
         >
-          <Icon name={isCollapsed ? 'chevron-right' : 'chevron-left'} size={24} />
+          <Icon name={isCollapsed ? 'chevron-right' : 'chevron-left'} size="sm" />
         </Pressable>
       </View>
 

@@ -828,12 +828,12 @@ import { View, Card, Text } from '@idealyst/components';
 ### Form Input Spacing
 
 \`\`\`tsx
-import { Input, Checkbox, View } from '@idealyst/components';
+import { TextInput, Checkbox, View } from '@idealyst/components';
 
 // Use margin to space form fields
 <View>
-  <Input placeholder="Email" marginVertical="sm" />
-  <Input placeholder="Password" marginVertical="sm" />
+  <TextInput placeholder="Email" marginVertical="sm" />
+  <TextInput placeholder="Password" marginVertical="sm" />
   <Checkbox label="Remember me" marginVertical="md" />
 </View>
 \`\`\`

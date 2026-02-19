@@ -14,10 +14,19 @@ export const navigationRecipes: Record<string, Recipe> = {
     code: `import React from 'react';
 import { NavigatorProvider } from '@idealyst/navigation';
 import type { TabNavigatorParam } from '@idealyst/navigation';
-import { Icon, View, Text } from '@idealyst/components';
+import { Icon, View, Text, Card } from '@idealyst/components';
 
 function HomeScreen() {
-  return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}><Text typography="h5">Home</Text></View>;
+  return (
+    <View style={{ flex: 1, padding: 16 }} gap="md">
+      <Text typography="h5" weight="bold">Home</Text>
+      {/* Card is a simple container — NO Card.Content, Card.Header, etc. Just put children inside */}
+      <Card padding="md" gap="sm">
+        <Text typography="subtitle1" weight="semibold">Welcome</Text>
+        <Text typography="body2" color="secondary">This is the home screen</Text>
+      </Card>
+    </View>
+  );
 }
 
 function SearchScreen() {
@@ -100,6 +109,7 @@ export function App() {
       "Keep tab count to 3-5 for best usability",
       "Use tabBarBadge for notification counts instead of manual Badge component",
       "Nest a StackNavigatorParam inside a tab route for detail screens",
+      "Card is a plain container — put children directly inside <Card>. There are NO Card.Content, Card.Header, or Card.Body sub-components",
     ],
     relatedRecipes: ["drawer-navigation", "responsive-navigation"],
   },
@@ -140,7 +150,7 @@ function DrawerContent(props: DrawerSidebarProps) {
   return (
     <View style={{ flex: 1, padding: 16, paddingTop: (props.insets?.top ?? 0) + 16 }}>
       <View style={{ alignItems: 'center', paddingVertical: 24 }}>
-        <Avatar source={{ uri: 'https://example.com/avatar.jpg' }} size="lg" />
+        <Avatar src="https://example.com/avatar.jpg" size="lg" />
         <Text typography="h6" weight="semibold" style={{ marginTop: 12 }}>John Doe</Text>
       </View>
 

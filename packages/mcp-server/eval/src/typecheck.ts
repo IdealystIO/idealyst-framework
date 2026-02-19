@@ -6,9 +6,12 @@
  */
 
 import fs from "fs";
-import { execSync } from "child_process";
+import { exec } from "child_process";
+import { promisify } from "util";
 import path from "path";
 import { fileURLToPath } from "url";
+
+const execAsync = promisify(exec);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "../../../..");
@@ -32,13 +35,13 @@ export interface TypecheckResult {
   rawOutput: string;
 }
 
-export function runTypecheck(workspacePath: string): TypecheckResult {
+export async function runTypecheck(workspacePath: string): Promise<TypecheckResult> {
   // Use tsc from the repo's node_modules
   const tscPath = findTsc();
   const tsconfigPath = path.join(workspacePath, "tsconfig.json");
 
   try {
-    const output = execSync(
+    const { stdout: output } = await execAsync(
       `"${tscPath}" --noEmit --project "${tsconfigPath}" --pretty false 2>&1`,
       {
         encoding: "utf-8",

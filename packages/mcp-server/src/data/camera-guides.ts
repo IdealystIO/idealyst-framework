@@ -310,7 +310,7 @@ function PhotoCaptureScreen() {
   if (photo) {
     return (
       <View style={{ flex: 1 }}>
-        <Image src={photo.uri} style={{ flex: 1 }} contentFit="contain" />
+        <Image source={photo.uri} style={{ flex: 1 }} objectFit="contain" />
         <View style={{ flexDirection: 'row', justifyContent: 'center' }} gap="md" padding="md">
           <Button onPress={() => setPhoto(null)} intent="secondary">Retake</Button>
           <Button onPress={() => console.log('Save:', photo.uri)} intent="primary">Use Photo</Button>

@@ -785,9 +785,9 @@ export function WelcomeScreen() {
   const { t } = useTranslation('common');
 
   return (
-    <View>
-      <Text variant="h1">{t('welcome.title')}</Text>
-      <Text>{t('welcome.subtitle')}</Text>
+    <View padding="md" gap="md">
+      <Text typography="h4" weight="bold">{t('welcome.title')}</Text>
+      <Text typography="body1">{t('welcome.subtitle')}</Text>
       <Button onPress={() => {}}>
         {t('buttons.getStarted')}
       </Button>
@@ -800,24 +800,25 @@ export function WelcomeScreen() {
 
 \`\`\`tsx
 // components/LanguageSwitcher.tsx
-import { Select } from '@idealyst/components';
+import { View, Text, Button } from '@idealyst/components';
 import { useLanguage } from '@idealyst/translate';
 
 export function LanguageSwitcher() {
   const { language, languages, setLanguage, getDisplayName } = useLanguage();
 
-  const options = languages.map((lang) => ({
-    value: lang,
-    label: getDisplayName(lang),
-  }));
-
   return (
-    <Select
-      value={language}
-      options={options}
-      onChange={(value) => setLanguage(value)}
-      label="Language"
-    />
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      {languages.map((lang) => (
+        <Button
+          key={lang}
+          type={language === lang ? 'contained' : 'outlined'}
+          size="sm"
+          onPress={() => setLanguage(lang)}
+        >
+          {getDisplayName(lang)}
+        </Button>
+      ))}
+    </View>
   );
 }
 \`\`\`
@@ -826,12 +827,14 @@ export function LanguageSwitcher() {
 
 \`\`\`tsx
 // components/LoginForm.tsx
-import { View, Input, Button, Text } from '@idealyst/components';
+import { View, TextInput, Button, Text } from '@idealyst/components';
 import { useTranslation } from '@idealyst/translate';
 import { useState } from 'react';
 
 export function LoginForm() {
   const { t } = useTranslation('auth');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
@@ -843,22 +846,32 @@ export function LoginForm() {
   };
 
   return (
-    <View>
-      <Text variant="h2">{t('login.title')}</Text>
+    <View padding="md" gap="md">
+      <Text typography="h5" weight="bold">{t('login.title')}</Text>
 
-      <Input
-        label={t('login.email')}
-        placeholder={t('login.emailPlaceholder')}
-        keyboardType="email-address"
-      />
+      <View gap="xs">
+        <Text typography="caption" weight="medium">{t('login.email')}</Text>
+        <TextInput
+          value={email}
+          onChangeText={setEmail}
+          placeholder={t('login.emailPlaceholder')}
+          inputMode="email"
+          textContentType="emailAddress"
+        />
+      </View>
 
-      <Input
-        label={t('login.password')}
-        placeholder={t('login.passwordPlaceholder')}
-        secureTextEntry
-      />
+      <View gap="xs">
+        <Text typography="caption" weight="medium">{t('login.password')}</Text>
+        <TextInput
+          value={password}
+          onChangeText={setPassword}
+          placeholder={t('login.passwordPlaceholder')}
+          secureTextEntry
+          textContentType="password"
+        />
+      </View>
 
-      {error && <Text intent="danger">{error}</Text>}
+      {error && <Text color="red">{error}</Text>}
 
       <Button onPress={handleSubmit}>
         {t('login.submit')}
@@ -971,6 +984,7 @@ export function usePersistedLanguage() {
 
 \`\`\`tsx
 // components/UserProfile.tsx
+import { View, Text, Button } from '@idealyst/components';
 import { useTranslation } from '@idealyst/translate';
 
 export function UserProfile() {
@@ -978,9 +992,9 @@ export function UserProfile() {
   const { t } = useTranslation(['common', 'user']);
 
   return (
-    <View>
+    <View padding="md" gap="md">
       {/* Use namespace prefix */}
-      <Text variant="h1">{t('user:profile.title')}</Text>
+      <Text typography="h5" weight="bold">{t('user:profile.title')}</Text>
       <Button>{t('common:buttons.edit')}</Button>
     </View>
   );

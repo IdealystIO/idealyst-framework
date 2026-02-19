@@ -216,9 +216,10 @@ export const getTranslateGuideDefinition: ToolDefinition = {
       topic: {
         type: "string",
         description:
-          "Topic to get docs for: 'overview', 'runtime-api', 'babel-plugin', 'translation-files', 'examples'",
+          "Topic to get docs for: 'overview', 'api' (or 'runtime-api'), 'babel-plugin', 'translation-files', 'examples'",
         enum: [
           "overview",
+          "api",
           "runtime-api",
           "babel-plugin",
           "translation-files",

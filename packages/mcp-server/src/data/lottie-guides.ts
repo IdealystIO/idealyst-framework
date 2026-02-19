@@ -112,7 +112,7 @@ type LottieSource = string | LottieJSON | { uri: string };
 
 ### LottieRef (imperative methods)
 
-Access via \`useRef<LottieRef>()\` and \`ref\` prop.
+Access via \`useRef<LottieRef>(null)\` and \`ref\` prop. **Note:** In React 19, \`useRef\` requires an initial argument — always pass \`null\`.
 
 | Method | Description |
 |--------|-------------|

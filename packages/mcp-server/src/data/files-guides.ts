@@ -339,7 +339,7 @@ function DocumentPicker() {
         {picker.files.map(file => (
           <View key={file.id} style={{ flexDirection: 'row', justifyContent: 'space-between' }} padding="sm">
             <Text>{file.name}</Text>
-            <Text size="sm" color="secondary">{Math.round(file.size / 1024)}KB</Text>
+            <Text typography="caption" color="secondary">{Math.round(file.size / 1024)}KB</Text>
           </View>
         ))}
       </List>
@@ -367,9 +367,9 @@ function ImagePicker() {
         {picker.files.map(file => (
           <Image
             key={file.id}
-            src={file.uri}
+            source={file.uri}
             style={{ width: 100, height: 100, borderRadius: 8 }}
-            contentFit="cover"
+            objectFit="cover"
           />
         ))}
       </View>
@@ -420,7 +420,7 @@ function FileUploadScreen() {
         <View key={upload.id} gap="xs">
           <Text>{upload.file.name}</Text>
           <Progress value={upload.percentage} />
-          <Text size="sm">{upload.state} — {upload.percentage}%</Text>
+          <Text typography="caption">{upload.state} — {upload.percentage}%</Text>
         </View>
       ))}
     </View>

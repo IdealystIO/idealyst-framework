@@ -24,8 +24,11 @@
 import http from "http";
 import fs from "fs";
 import path from "path";
-import { execSync } from "child_process";
+import { exec } from "child_process";
+import { promisify } from "util";
 import { fileURLToPath } from "url";
+
+const execAsync = promisify(exec);
 import { runAgentLoop } from "./agent.js";
 import { gradeConversation } from "./grading/index.js";
 import { scenarios, getScenariosByType } from "./scenarios/index.js";
@@ -84,6 +87,27 @@ function loadEnvFile(): void {
 loadEnvFile();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// ============================================================================
+// Cached CLI Version (resolved once at startup to avoid blocking the event loop)
+// ============================================================================
+
+let cachedCliVersion = "unknown";
+
+async function resolveCliVersion(): Promise<void> {
+  try {
+    const { stdout } = await execAsync("claude --version 2>/dev/null", {
+      encoding: "utf-8",
+      timeout: 5_000,
+    });
+    cachedCliVersion = stdout.trim();
+  } catch {
+    // CLI not found or timed out — keep "unknown"
+  }
+}
+
+// Fire on startup (non-blocking)
+resolveCliVersion();
 
 // ============================================================================
 // Run State
@@ -392,19 +416,10 @@ function handleHealth(
   _req: http.IncomingMessage,
   res: http.ServerResponse
 ): void {
-  let cliVersion = "unknown";
-  try {
-    cliVersion = execSync("claude --version 2>/dev/null", {
-      encoding: "utf-8",
-    }).trim();
-  } catch {
-    // CLI not found
-  }
-
   json(res, {
     status: "ok",
     timestamp: new Date().toISOString(),
-    cliVersion,
+    cliVersion: cachedCliVersion,
     scenarioCount: Object.keys(scenarios).length,
     activeRuns: [...runs.values()].filter((r) => r.status === "running").length,
   });

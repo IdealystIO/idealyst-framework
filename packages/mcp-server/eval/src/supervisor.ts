@@ -10,7 +10,8 @@
 import fs from "fs";
 import os from "os";
 import path from "path";
-import { execFileSync } from "child_process";
+import { spawn } from "child_process";
+
 import type {
   EvalConversationLog,
   EvalScenario,
@@ -415,30 +416,70 @@ export async function runSupervisorEvaluation(
   let lastError: Error | null = null;
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
-      // Use execFileSync with --tools "" to disable ALL tools (built-in + MCP)
-      // and --strict-mcp-config to prevent MCP server loading.
-      // Without this, Claude tries to use tools and exhausts the turn budget.
-      const raw = execFileSync(
-        "claude",
-        [
-          "-p", "-",
-          "--model", options.model,
-          "--output-format", "text",
-          "--max-turns", "5",
-          "--no-session-persistence",
-          "--mcp-config", emptyMcpConfig,
-          "--strict-mcp-config",
-          "--tools", "",
-        ],
-        {
-          input: prompt,
-          encoding: "utf-8",
-          timeout: 300_000, // 5 minute timeout for supervisor
-          cwd: process.cwd(),
-          maxBuffer: 10 * 1024 * 1024, // 10MB
-          env: { ...process.env, CLAUDECODE: undefined },
-        }
-      );
+      // Use spawn + stdin pipe to invoke claude CLI.
+      // promisify(execFile) does NOT support the `input` option, so we
+      // must use spawn and manually write to stdin.
+      // --tools "" disables ALL tools (built-in + MCP) and
+      // --strict-mcp-config prevents MCP server loading.
+      const raw = await new Promise<string>((resolve, reject) => {
+        const child = spawn(
+          "claude",
+          [
+            "-p", "-",
+            "--model", options.model,
+            "--output-format", "text",
+            "--max-turns", "5",
+            "--no-session-persistence",
+            "--mcp-config", emptyMcpConfig,
+            "--strict-mcp-config",
+            "--tools", "",
+          ],
+          {
+            cwd: process.cwd(),
+            env: { ...process.env, CLAUDECODE: undefined },
+            stdio: ["pipe", "pipe", "pipe"],
+          }
+        );
+
+        const chunks: Buffer[] = [];
+        const errChunks: Buffer[] = [];
+        let killed = false;
+
+        child.stdout.on("data", (chunk: Buffer) => chunks.push(chunk));
+        child.stderr.on("data", (chunk: Buffer) => errChunks.push(chunk));
+
+        const timer = setTimeout(() => {
+          killed = true;
+          child.kill("SIGTERM");
+          reject(new Error("Supervisor timed out after 5 minutes"));
+        }, 300_000);
+
+        child.on("error", (err) => {
+          clearTimeout(timer);
+          reject(err);
+        });
+
+        child.on("close", (code) => {
+          clearTimeout(timer);
+          if (killed) return; // already rejected by timeout
+          const stdout = Buffer.concat(chunks).toString("utf-8");
+          const stderr = Buffer.concat(errChunks).toString("utf-8");
+          if (code !== 0) {
+            const err = new Error(
+              `Command failed with exit code ${code}: claude -p - --model ${options.model}`
+            );
+            (err as any).stdout = stdout;
+            (err as any).stderr = stderr;
+            reject(err);
+          } else {
+            resolve(stdout);
+          }
+        });
+
+        // Write prompt to stdin and close
+        child.stdin.write(prompt);
+        child.stdin.end();
+      });
 
       logger?.log(`[Supervisor] Raw response (first 200 chars): ${raw.slice(0, 200)}`);
 
@@ -469,7 +510,7 @@ export async function runSupervisorEvaluation(
       logger?.warn(
         `[Supervisor] Attempt ${attempt} failed: ${lastError.message.slice(0, 200)}`
       );
-      // If execSync threw, check if there's stdout/stderr on the error
+      // If execFile threw, check if there's stdout/stderr on the error
       const execError = error as { stdout?: string; stderr?: string };
       if (execError.stdout) {
         logger?.warn(`[Supervisor] stdout: ${execError.stdout.slice(0, 300)}`);

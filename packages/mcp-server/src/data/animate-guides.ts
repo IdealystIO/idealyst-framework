@@ -110,29 +110,62 @@ interface UseAnimatedStyleOptions extends AnimationOptions {
 }
 \`\`\`
 
+**How it works:** The hook watches the style object for changes. When any value changes (e.g., opacity goes from 0 to 1), it animates the transition. On mount, the initial values are applied immediately without animation. To create entrance animations, use \`usePresence\` instead, or toggle state after mount with \`useEffect\`.
+
 **Usage:**
 \`\`\`tsx
+// Reactive: style changes animate automatically
 const style = useAnimatedStyle(
   { opacity: isVisible ? 1 : 0, transform: { y: isVisible ? 0 : 20 } },
   { duration: 300, easing: 'easeOut' }
 );
 // Apply: <View style={style} />
+
+// Entrance animation pattern: start hidden, toggle after mount
+const [ready, setReady] = useState(false);
+useEffect(() => { setReady(true); }, []);
+const entranceStyle = useAnimatedStyle(
+  { opacity: ready ? 1 : 0, transform: { y: ready ? 0 : 20 } },
+  { duration: 400, easing: 'easeOut' }
+);
 \`\`\`
 
 ---
 
-### useAnimatedValue(initialValue)
+### useAnimatedValue(initialValue: number)
 
-Create an animated numeric value with interpolation support.
+Create an animated numeric value with interpolation support. Best for **continuous/looping** animations where you control timing with \`set()\` calls.
+
+> **REQUIRED:** The \`initialValue\` argument is mandatory. Calling \`useAnimatedValue()\` without an argument causes TS2554. Always pass an initial number: \`useAnimatedValue(0)\` or \`useAnimatedValue(1)\`.
 
 **Returns \`AnimatedValue\`:**
 
 | Property | Type | Description |
 |----------|------|-------------|
-| value | number (readonly) | Current value |
+| value | number (readonly) | Current snapshot (NOT a live binding) |
 | set | (target, options?) => void | Animate to target value |
 | setImmediate | (target) => void | Set value without animation |
 | interpolate | (config) => T | Interpolate to another range |
+
+> **WARNING:** \`animatedValue.value\` is a plain number snapshot. Do NOT use it directly in inline styles — it will not update during animation. Instead, use \`useAnimatedStyle\` with state for reactive animations, or use \`interpolate()\` for derived animated values.
+
+\`\`\`tsx
+// WRONG: pulse.value is a snapshot, not a live animated binding
+// <View style={{ transform: { scale: pulse.value } }} />  // Will NOT animate
+
+// CORRECT: Use useAnimatedStyle with state for pulsing animations
+const [scale, setScale] = useState(1);
+const style = useAnimatedStyle(
+  { transform: { scale } },
+  { duration: 600, easing: 'easeInOut' }
+);
+// Then toggle: setScale(1.3) / setScale(1) in setInterval
+
+// CORRECT: Use useAnimatedValue for interpolation
+const progress = useAnimatedValue(0);
+// progress.set(1, { duration: 1000 }); // animate 0 -> 1
+// const opacity = progress.interpolate({ inputRange: [0, 1], outputRange: [0.5, 1] });
+\`\`\`
 
 \`\`\`typescript
 interface InterpolationConfig<T> {
@@ -191,6 +224,47 @@ interface UseGradientBorderOptions {
 
 ---
 
+## Import Checklist (copy this pattern)
+
+When writing animation code, start with this import and ONLY use these hooks:
+
+\`\`\`tsx
+// CORRECT — the ONLY available imports from @idealyst/animate
+import { useAnimatedStyle, useAnimatedValue, usePresence, useGradientBorder, withAnimated } from '@idealyst/animate';
+
+// WRONG — these do NOT exist and will cause TS2305 errors:
+// import { useSequence } from '@idealyst/animate';     // DOES NOT EXIST
+// import { useKeyframes } from '@idealyst/animate';    // DOES NOT EXIST
+// import { useSpring } from '@idealyst/animate';       // DOES NOT EXIST
+// import { useTransition } from '@idealyst/animate';   // DOES NOT EXIST
+\`\`\`
+
+**How to achieve common patterns WITHOUT the non-existent hooks:**
+- **Sequence/multi-step**: Use \`useAnimatedStyle\` + \`setTimeout\` to change state at each step
+- **Keyframes/looping**: Use \`useAnimatedValue\` + \`setInterval\` to call \`.set()\` repeatedly
+- **Spring**: Use \`useAnimatedStyle\` with \`easing: 'spring'\` or \`easing: 'springBouncy'\`
+
+---
+
+## Animatable Properties
+
+Only certain CSS properties animate smoothly. Stick to these for best results:
+
+| Animatable | NOT animatable (avoid in useAnimatedStyle) |
+|---|---|
+| \`opacity\` | \`overflow\` |
+| \`transform\` (x, y, scale, rotate) | \`display\` |
+| \`backgroundColor\` | \`position\` |
+| \`borderColor\` | \`zIndex\` |
+| \`maxHeight\` (use for expand/collapse) | \`pointerEvents\` |
+| \`width\`, \`height\` | \`justifyContent\`, \`alignItems\` |
+| \`borderRadius\` | \`flexDirection\` |
+| \`padding\`, \`margin\` | |
+
+For expand/collapse, animate \`opacity\` + \`maxHeight\` together. Do NOT include \`overflow: 'hidden'\` inside the animated style object — set it as a static style on the parent View instead.
+
+---
+
 ## Transform Syntax
 
 Use simplified object syntax instead of React Native arrays:
@@ -219,6 +293,14 @@ transform: [{ translateX: 10 }, { translateY: 20 }, { scale: 1.2 }]
 `,
 
   "idealyst://animate/examples": `# @idealyst/animate — Examples
+
+> **STOP — Before writing animation code, verify your imports and these critical rules.**
+> The ONLY hooks exported from \`@idealyst/animate\` are: \`useAnimatedStyle\`, \`useAnimatedValue\`, \`usePresence\`, \`useGradientBorder\`, \`withAnimated\`.
+> There is NO \`useSequence\`, \`useKeyframes\`, \`useSpring\`, or \`useTransition\`.
+> Easing values are camelCase: \`'easeOut'\`, NOT \`'ease-out'\`.
+> \`useAnimatedValue\` REQUIRES an initial number argument: \`useAnimatedValue(0)\` — calling \`useAnimatedValue()\` without arguments causes TS2554.
+> \`useRef\` REQUIRES an initial argument in React 19: \`useRef<T | null>(null)\` — writing \`useRef<T>()\` causes TS2554.
+> For expand/collapse: NEVER use \`{condition && <View style={animStyle}>}\` — this destroys the element before exit animations run. Always render the element and animate opacity/maxHeight.
 
 ## Fade In/Out
 
@@ -280,7 +362,9 @@ function AnimatedCounter() {
 }
 \`\`\`
 
-## Multi-Step Animation (using state + useAnimatedStyle)
+## Bounce / Sequence Animation (NO useSequence — use state + setTimeout)
+
+> **There is no \`useSequence\` hook.** For multi-step animations, change state with \`setTimeout\` and let \`useAnimatedStyle\` animate each change.
 
 \`\`\`tsx
 import React, { useState, useCallback } from 'react';
@@ -295,6 +379,7 @@ function BounceExample() {
     { duration: 200, easing: 'easeOut' }
   );
 
+  // Sequence: scale up -> overshoot -> settle. Just change state at each step.
   const bounce = useCallback(() => {
     setScale(1.2);
     setTimeout(() => setScale(0.9), 200);
@@ -341,39 +426,106 @@ function PresenceExample() {
 }
 \`\`\`
 
-## Pulsing Animation (using useAnimatedValue)
+## Pulsing / Looping / Keyframe-like Animation (NO useKeyframes — use useAnimatedValue + setInterval)
+
+> **There is no \`useKeyframes\` hook.** For continuous/looping animations, use \`useAnimatedValue\` with \`setInterval\` to repeatedly call \`.set()\`.
 
 \`\`\`tsx
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View } from '@idealyst/components';
-import { useAnimatedValue } from '@idealyst/animate';
+import { useAnimatedStyle } from '@idealyst/animate';
 
 function PulseAnimation() {
-  const pulse = useAnimatedValue(1);
-  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+  const [scale, setScale] = useState(1);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const animStyle = useAnimatedStyle(
+    { transform: { scale } },
+    { duration: 500, easing: 'easeInOut' }
+  );
 
   useEffect(() => {
     let growing = true;
     intervalRef.current = setInterval(() => {
-      pulse.set(growing ? 1.1 : 1, { duration: 500, easing: 'easeInOut' });
+      setScale(growing ? 1.1 : 1);
       growing = !growing;
     }, 500);
-    return () => clearInterval(intervalRef.current);
+    return () => clearInterval(intervalRef.current!);
   }, []);
-
-  const style = { transform: [{ scale: pulse.value }] };
 
   return (
     <View padding="md" style={{ alignItems: 'center' }}>
       <View
-        style={[
-          { width: 80, height: 80, borderRadius: 40, backgroundColor: '#2196F3' },
-          style,
-        ]}
+        style={[{
+          width: 80,
+          height: 80,
+          borderRadius: 40,
+          backgroundColor: '#2196F3',
+        }, animStyle]}
       />
     </View>
   );
 }
+\`\`\`
+
+## Expand / Collapse (animate height + opacity — do NOT use conditional rendering)
+
+> **Do NOT use \`{expanded && <View style={animStyle}>...}</View>}\`** — conditional rendering removes the element before the exit animation runs. Instead, always render the content and animate its height/opacity.
+
+\`\`\`tsx
+import React, { useState } from 'react';
+import { View, Button, Text, Card, Pressable, Icon } from '@idealyst/components';
+import { useAnimatedStyle } from '@idealyst/animate';
+
+function ExpandableSection({ title, children }: { title: string; children: React.ReactNode }) {
+  const [expanded, setExpanded] = useState(false);
+
+  // Animate opacity + maxHeight. overflow is NOT animatable — set it as a static style.
+  const contentStyle = useAnimatedStyle(
+    {
+      opacity: expanded ? 1 : 0,
+      maxHeight: expanded ? 500 : 0,
+    },
+    { duration: 300, easing: 'easeOut' }
+  );
+
+  const iconStyle = useAnimatedStyle(
+    { transform: { rotate: expanded ? 180 : 0 } },
+    { duration: 200, easing: 'easeOut' }
+  );
+
+  return (
+    <Card>
+      <Pressable onPress={() => setExpanded(!expanded)}>
+        <View padding="md" style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Text typography="subtitle1" weight="bold">{title}</Text>
+          <View style={iconStyle}>
+            <Icon name="chevron-down" />
+          </View>
+        </View>
+      </Pressable>
+      {/* Always render — animate opacity + maxHeight instead of conditional rendering */}
+      <View style={[{ overflow: 'hidden' }, contentStyle]} padding="md" paddingVertical="sm">
+        {children}
+      </View>
+    </Card>
+  );
+}
+\`\`\`
+
+## useRef in React 19
+
+> **React 19 requires an initial argument for useRef.** Writing \`useRef<T>()\` causes TS2554. Always pass an initial value.
+
+\`\`\`typescript
+// CORRECT
+const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+const countRef = useRef<number>(0);
+const lottieRef = useRef<LottieRef>(null);
+
+// WRONG — TS2554: Expected 1 arguments, but got 0
+// const intervalRef = useRef<ReturnType<typeof setInterval>>();
+// const countRef = useRef<number>();
 \`\`\`
 
 ## Gradient Border

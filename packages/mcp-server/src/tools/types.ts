@@ -119,7 +119,7 @@ export interface GetNavigationTypesArgs {
 // ============================================================================
 
 export interface GetTranslateGuideArgs {
-  topic: "overview" | "runtime-api" | "babel-plugin" | "translation-files" | "examples";
+  topic: "overview" | "api" | "runtime-api" | "babel-plugin" | "translation-files" | "examples";
 }
 
 export interface GetStorageGuideArgs {

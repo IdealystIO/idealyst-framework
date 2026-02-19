@@ -6,7 +6,9 @@ Idealyst uses Material Design Icons (@mdi/react) with **7,447 icons** available.
 
 ### TypeScript Type — CRITICAL
 
-Icon names are typed as \`IconName\`, NOT \`string\`. When you create helper functions that return icon names, you MUST type them as \`IconName\`:
+Icon names are typed as \`IconName\`, NOT \`string\`. Use **bare names** like \`'home'\`, \`'check-circle'\` — do NOT add an \`'mdi:'\` prefix.
+
+When you create helper functions that return icon names, you MUST type them as \`IconName\`:
 
 \`\`\`tsx
 import type { IconName } from '@idealyst/components';
@@ -22,6 +24,30 @@ function getStatusIcon(status: string): IconName {
 
 // WRONG: return type 'string' will cause TS2322 error when passed to icon props
 // function getStatusIcon(status: string): string { ... }  // ❌
+
+// For icon lookup maps, type the values as IconName:
+const FILE_TYPE_ICONS: Record<string, IconName> = {
+  'image': 'file-image',
+  'video': 'file-video',
+  'audio': 'file-music',
+  'document': 'file-document',
+  'default': 'file',
+};
+
+function getFileIcon(type: string): IconName {
+  return FILE_TYPE_ICONS[type] ?? FILE_TYPE_ICONS['default'];
+}
+\`\`\`
+
+### When to Import \`Icon\` vs Use \`IconName\` Type
+
+- Import the \`Icon\` component only when rendering a standalone icon as JSX: \`<Icon name="home" />\`
+- For component props like \`leftIcon\` on Button, \`leading\`/\`trailing\` on ListItem — pass bare string names. Do NOT import the \`Icon\` component for this use.
+- Import ONLY the \`IconName\` type (not the component) when you need a typed variable for an icon name:
+
+\`\`\`tsx
+import type { IconName } from '@idealyst/components';
+const myIcon: IconName = 'home';  // Correct: type-only import
 \`\`\`
 
 ### In Components

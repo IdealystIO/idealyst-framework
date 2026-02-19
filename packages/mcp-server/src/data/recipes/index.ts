@@ -60,17 +60,75 @@ export function getRecipesForCategory(category: string): Recipe[] {
 }
 
 /**
- * Search recipes by query
+ * Keyword synonyms for recipe search.
+ * When a user searches for a term on the left, also match terms on the right.
+ */
+const searchSynonyms: Record<string, string[]> = {
+  profile: ['settings', 'account', 'user', 'avatar', 'edit'],
+  account: ['profile', 'settings', 'user'],
+  user: ['profile', 'account', 'avatar'],
+  preferences: ['settings'],
+  dark: ['theme', 'appearance'],
+  light: ['theme', 'appearance'],
+  appearance: ['theme'],
+  register: ['signup', 'sign-up'],
+  signin: ['login', 'sign-in'],
+  'sign-in': ['login'],
+  'sign-up': ['signup'],
+  modal: ['overlay', 'dialog', 'sheet'],
+  popup: ['modal', 'dialog', 'overlay'],
+  table: ['datagrid', 'data', 'list'],
+  grid: ['datagrid', 'data', 'list'],
+  upload: ['file', 'image', 'media'],
+  picker: ['file', 'image', 'select'],
+  loading: ['skeleton'],
+  spinner: ['loading', 'skeleton'],
+  api: ['trpc', 'backend', 'router', 'server'],
+  backend: ['trpc', 'api', 'router', 'server'],
+  server: ['api', 'backend', 'trpc'],
+  router: ['trpc', 'api'],
+  database: ['prisma', 'trpc', 'data'],
+  prisma: ['database', 'trpc'],
+  crud: ['trpc', 'data', 'list'],
+  todo: ['trpc', 'data'],
+};
+
+/**
+ * Search recipes by query.
+ * Matches against recipe ID (slug), name, description, packages, and category.
+ * Also supports multi-word queries and synonym expansion.
  */
 export function searchRecipes(query: string): Recipe[] {
   const lowerQuery = query.toLowerCase();
-  return Object.values(recipes).filter(
-    (r) =>
-      r.name.toLowerCase().includes(lowerQuery) ||
-      r.description.toLowerCase().includes(lowerQuery) ||
-      r.packages.some((p: string) => p.toLowerCase().includes(lowerQuery)) ||
-      r.category.toLowerCase().includes(lowerQuery)
-  );
+  const queryWords = lowerQuery.split(/\s+/).filter(Boolean);
+
+  // Expand query with synonyms
+  const expandedWords = new Set(queryWords);
+  for (const word of queryWords) {
+    const syns = searchSynonyms[word];
+    if (syns) {
+      for (const syn of syns) expandedWords.add(syn);
+    }
+  }
+
+  return Object.entries(recipes)
+    .filter(([id, r]) => {
+      const searchText = `${id} ${r.name} ${r.description} ${r.packages.join(' ')} ${r.category} ${(r.relatedRecipes || []).join(' ')}`.toLowerCase();
+
+      // Exact substring match
+      if (searchText.includes(lowerQuery)) return true;
+
+      // All words match (supports "navigation tabs" matching "tab-navigation")
+      if (queryWords.length > 1 && queryWords.every(w => searchText.includes(w))) return true;
+
+      // Synonym-expanded match: any expanded word matches
+      for (const word of expandedWords) {
+        if (searchText.includes(word)) return true;
+      }
+
+      return false;
+    })
+    .map(([_, r]) => r);
 }
 
 /**

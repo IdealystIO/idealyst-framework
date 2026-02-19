@@ -40,7 +40,7 @@ export const packages: Record<string, PackageInfo> = {
     quickStart: `import { Button, Card, Text } from '@idealyst/components';
 
 <Card>
-  <Text variant="headline">Hello World</Text>
+  <Text typography="h5" weight="bold">Hello World</Text>
   <Button onPress={() => console.log('Pressed!')}>
     Click Me
   </Button>
@@ -48,7 +48,7 @@ export const packages: Record<string, PackageInfo> = {
     apiHighlights: [
       "Button, IconButton, FAB",
       "Card, View, Screen",
-      "Input, Select, Checkbox, Switch",
+      "TextInput, TextArea, Checkbox, Switch",
       "Dialog, Popover, Menu",
       "Text, Link, Badge, Chip",
     ],

@@ -20,23 +20,25 @@ export interface ComponentMetadata {
 export const componentMetadata: Record<string, ComponentMetadata> = {
   Accordion: {
     category: 'display',
-    description: 'Expandable content sections that show/hide content on user interaction',
+    description: 'Expandable content sections that show/hide content on user interaction. Takes an `items` array of `AccordionItem` objects: `{ id: string; title: string; content: React.ReactNode; disabled?: boolean }`.',
     features: [
       'Single or multiple expanded sections',
       'Customizable icons',
       'Disabled state support',
       'Controlled and uncontrolled modes',
+      'items prop: AccordionItem[] — each item has { id: string, title: string, content: ReactNode, disabled?: boolean }',
     ],
     bestPractices: [
       'Use for organizing related content into collapsible sections',
       'Keep section titles concise and descriptive',
       'Consider single-expand mode for sequential content',
+      'AccordionItem interface: { id: string; title: string; content: React.ReactNode; disabled?: boolean }',
     ],
   },
 
   ActivityIndicator: {
     category: 'feedback',
-    description: 'Loading spinner to indicate ongoing operations',
+    description: 'Loading spinner (also known as loader or activity indicator) to indicate ongoing operations',
     features: [
       'Multiple sizes',
       'Intent colors',
@@ -140,18 +142,20 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
 
   Card: {
     category: 'layout',
-    description: 'Container component for grouping related content with optional elevation and borders',
+    description: 'Container component for grouping related content with optional elevation and borders. Card does NOT have sub-components — there is no Card.Content, Card.Header, Card.Body, or Card.Footer. Just use children directly: <Card padding="md"><Text>...</Text></Card>.',
     features: [
       'Multiple type variants (outlined, elevated, filled)',
       'Pressable when onPress is provided',
       'Customizable border radius',
       'Intent colors',
+      'NO compound sub-components — use children directly, NOT Card.Content/Card.Header',
     ],
     bestPractices: [
       'Use for grouping related content',
       'Keep card content focused on a single topic',
       "Use 'elevated' type sparingly for emphasis",
       'Simply add onPress to make a card interactive',
+      'Do NOT use Card.Content, Card.Header, Card.Body, Card.Footer — they do not exist. Use <Card padding="md"><View>...</View></Card> instead',
     ],
   },
 
@@ -431,16 +435,18 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
 
   Skeleton: {
     category: 'feedback',
-    description: 'Placeholder loading state for content',
+    description: 'Placeholder loading state for content. Uses `shape` prop (NOT `variant`).',
     features: [
-      'Multiple shapes (text, circle, rectangle)',
-      'Customizable dimensions',
-      'Animation support',
+      'shape prop: \'rectangle\' | \'circle\' | \'rounded\' (NOT variant)',
+      'animation prop: \'pulse\' | \'wave\' | \'none\'',
+      'Customizable width/height dimensions',
+      'Built-in pulse and shimmer animations (no manual Animated API needed)',
     ],
     bestPractices: [
-      'Match skeleton shape to actual content',
-      'Use for predictable content layouts',
-      'Avoid for dynamic or unknown layouts',
+      'Match skeleton dimensions to actual content for seamless transition',
+      'Use shape=\'circle\' for avatar placeholders, \'rounded\' for cards',
+      'Use animation=\'wave\' for shimmer effect, \'pulse\' for fade',
+      'Import Skeleton from @idealyst/components (do NOT build custom with react-native Animated)',
     ],
   },
 
@@ -586,7 +592,7 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
       'Multiple sizes',
       'Left and right icons',
       'Password visibility toggle',
-      'Input modes (text, email, number, etc.)',
+      "Input modes: 'text' | 'email' | 'password' | 'number' (these 4 ONLY, NOT 'decimal' or 'tel')",
       'Error state with helper text',
     ],
     bestPractices: [
@@ -650,6 +656,17 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
  */
 const componentAliases: Record<string, string> = {
   input: "TextInput",
+  spinner: "ActivityIndicator",
+  loader: "ActivityIndicator",
+  loading: "ActivityIndicator",
+  toggle: "Switch",
+  dropdown: "Select",
+  touchable: "Pressable",
+  touchableopacity: "Pressable",
+  fab: "IconButton",
+  modal: "Dialog",
+  tooltip: "Tooltip",
+  snackbar: "Toast",
 };
 
 /**
@@ -692,6 +709,10 @@ export function getComponentNames(): string[] {
  */
 export function searchComponents(query: string, category?: string): string[] {
   const lowerQuery = query.toLowerCase();
+  const queryWords = lowerQuery.split(/\s+/).filter(Boolean);
+
+  // Check aliases first — if the query is a known alias, include that component
+  const aliasMatch = componentAliases[lowerQuery];
 
   return Object.entries(componentMetadata)
     .filter(([name, meta]) => {
@@ -699,11 +720,18 @@ export function searchComponents(query: string, category?: string): string[] {
         return false;
       }
 
-      return (
-        name.toLowerCase().includes(lowerQuery) ||
-        meta.description.toLowerCase().includes(lowerQuery) ||
-        meta.features.some(f => f.toLowerCase().includes(lowerQuery))
-      );
+      // Direct alias match
+      if (aliasMatch && name === aliasMatch) return true;
+
+      const searchText = `${name} ${meta.description} ${meta.features.join(' ')}`.toLowerCase();
+
+      // Exact substring match
+      if (searchText.includes(lowerQuery)) return true;
+
+      // All words match (supports multi-word queries like "spinner loading")
+      if (queryWords.length > 1 && queryWords.every(w => searchText.includes(w))) return true;
+
+      return false;
     })
     .map(([name]) => name);
 }

@@ -179,7 +179,7 @@ interface PCMData {
   samples: Int8Array | Int16Array | Float32Array;  // Typed sample array
   timestamp: number;                               // Capture timestamp
   config: AudioConfig;                             // Audio config used
-  toBase64(): string;                              // Convert to base64
+  toBase64(): string;                              // For external APIs (e.g., speech-to-text HTTP). Do NOT pass to feedPCMData().
 }
 \`\`\`
 

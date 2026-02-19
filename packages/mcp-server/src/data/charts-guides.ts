@@ -60,7 +60,7 @@ function SalesChart() {
     <LineChart
       data={[{ id: 'sales', name: 'Sales', data }]}
       height={300}
-      animated
+      animate
     />
   );
 }
@@ -118,15 +118,22 @@ interface PieDataPoint {
 
 \`\`\`typescript
 interface BaseChartProps {
-  data: ChartDataSeries[];
+  data: ChartDataSeries[] | ChartDataSeries;
   height?: number | string;
   width?: number | string;
-  padding?: ChartPadding;     // { top, right, bottom, left }
-  animated?: boolean;
-  animation?: AnimationConfig; // { duration, delay, easing }
-  style?: ViewStyle;
+  padding?: Partial<ChartPadding> | number;
+  animate?: boolean;         // NOTE: 'animate' — NOT 'animated'
+  animationDuration?: number;
+  animationDelay?: number;
+  intent?: Intent;
+  showLegend?: boolean;
+  legendPosition?: 'top' | 'bottom' | 'left' | 'right';
+  interactive?: boolean;
+  showTooltip?: boolean;
 }
 \`\`\`
+
+> **IMPORTANT:** The prop is \`animate\` — NOT \`animated\`. Using \`animated\` will cause a TS error.
 
 ### CartesianChartProps (extends BaseChartProps)
 
@@ -136,7 +143,9 @@ For charts with X/Y axes (Line, Bar, etc.):
 interface CartesianChartProps extends BaseChartProps {
   xAxis?: AxisConfig;
   yAxis?: AxisConfig;
-  tooltip?: TooltipConfig;
+  showXAxis?: boolean;      // Shorthand for xAxis.show
+  showYAxis?: boolean;      // Shorthand for yAxis.show
+  showGrid?: boolean;       // Shorthand for grid lines
 }
 \`\`\`
 
@@ -172,11 +181,13 @@ interface LineChartProps extends CartesianChartProps {
   curve?: CurveType;        // 'linear' | 'monotone' | 'cardinal' | 'step' | ...
   strokeWidth?: number;
   showDots?: boolean;
-  dotSize?: number;
-  area?: boolean;            // Fill area under line
+  dotRadius?: number;        // NOTE: 'dotRadius' — NOT 'dotSize'
+  showArea?: boolean;        // NOTE: 'showArea' — NOT 'area'
   areaOpacity?: number;
 }
 \`\`\`
+
+> **Common mistakes:** Use \`showArea\` (NOT \`area\`), \`dotRadius\` (NOT \`dotSize\`), \`animate\` (NOT \`animated\`).
 
 ### BarChart
 
@@ -185,11 +196,13 @@ interface BarChartProps extends CartesianChartProps {
   orientation?: 'vertical' | 'horizontal';
   grouped?: boolean;         // Side-by-side bars for multiple series
   stacked?: boolean;         // Stacked bars for multiple series
-  barWidth?: number;
-  borderRadius?: number;
-  gap?: number;              // Gap between bars
+  barRadius?: number;        // NOTE: 'barRadius' — NOT 'borderRadius'
+  barPadding?: number;       // Padding between bars (0-1)
+  groupPadding?: number;     // Padding between bar groups (0-1)
 }
 \`\`\`
+
+> **Common mistakes:** Use \`barRadius\` (NOT \`borderRadius\`), \`barPadding\` (NOT \`gap\` or \`barWidth\`).
 
 ---
 
@@ -223,12 +236,19 @@ type CurveType =
 
   "idealyst://charts/examples": `# @idealyst/charts — Examples
 
+> **Before writing chart code, remember these rules:**
+> - Series uses \`name\` (NOT \`label\`). Adding \`label\` to \`ChartDataSeries\` causes TS2353.
+> - Use \`animate\` (NOT \`animated\`), \`showArea\` (NOT \`area\`), \`dotRadius\` (NOT \`dotSize\`), \`barRadius\` (NOT \`borderRadius\`).
+> - \`tickFormat\` signature is \`(value: number | string | Date) => string\` — NOT \`(v: number) => string\`.
+> - \`AxisConfig\` uses \`show\` (NOT \`visible\`) to control axis visibility.
+
 ## Line Chart
 
 \`\`\`tsx
 import React from 'react';
 import { View, Text } from '@idealyst/components';
 import { LineChart } from '@idealyst/charts';
+import type { ChartDataSeries } from '@idealyst/charts';
 
 const monthlySales = [
   { x: 'Jan', y: 4200 },
@@ -239,20 +259,29 @@ const monthlySales = [
   { x: 'Jun', y: 7100 },
 ];
 
+// Series uses 'name' for display — NOT 'label'
+const revenueData: ChartDataSeries[] = [
+  { id: 'revenue', name: 'Revenue', data: monthlySales, color: '#4CAF50' },
+];
+
 function SalesOverview() {
   return (
     <View padding="md" gap="md">
       <Text typography="h6" weight="bold">Monthly Sales</Text>
       <LineChart
-        data={[{ id: 'revenue', name: 'Revenue', data: monthlySales, color: '#4CAF50' }]}
+        data={revenueData}
         height={300}
         curve="monotone"
         showDots
-        area
+        showArea
         areaOpacity={0.15}
-        animated
+        animate
         xAxis={{ label: 'Month' }}
-        yAxis={{ label: 'Revenue ($)', tickFormat: (v: number | string | Date) => \`$\${Number(v) / 1000}k\` }}
+        yAxis={{
+          label: 'Revenue ($)',
+          // tickFormat param type is (value: number | string | Date) => string
+          tickFormat: (value: number | string | Date) => \`$\${Number(value) / 1000}k\`,
+        }}
       />
     </View>
   );
@@ -264,11 +293,13 @@ function SalesOverview() {
 \`\`\`tsx
 import React from 'react';
 import { LineChart } from '@idealyst/charts';
+import type { ChartDataSeries } from '@idealyst/charts';
 
-const series = [
+// Each series has: id, name, data, color? — NO 'label' property
+const series: ChartDataSeries[] = [
   {
     id: 'product-a',
-    name: 'Product A',
+    name: 'Product A',   // Use 'name' — NOT 'label'
     data: [
       { x: 'Q1', y: 120 },
       { x: 'Q2', y: 150 },
@@ -279,7 +310,7 @@ const series = [
   },
   {
     id: 'product-b',
-    name: 'Product B',
+    name: 'Product B',   // Use 'name' — NOT 'label'
     data: [
       { x: 'Q1', y: 80 },
       { x: 'Q2', y: 110 },
@@ -297,7 +328,7 @@ function ComparisonChart() {
       height={350}
       curve="monotone"
       showDots
-      animated
+      animate
     />
   );
 }
@@ -325,9 +356,9 @@ function CategoryBreakdown() {
       <BarChart
         data={[{ id: 'units', name: 'Units Sold', data: categories }]}
         height={300}
-        borderRadius={4}
-        animated
-        yAxis={{ tickFormat: (v: number | string | Date) => \`\${v} units\` }}
+        barRadius={4}
+        animate
+        yAxis={{ tickFormat: (value: number | string | Date) => \`\${value} units\` }}
       />
     </View>
   );
@@ -367,7 +398,7 @@ function StackedBarExample() {
       ]}
       height={300}
       stacked
-      animated
+      animate
     />
   );
 }
@@ -392,7 +423,7 @@ function HorizontalBarExample() {
       data={[{ id: 'popularity', name: 'Popularity', data }]}
       height={250}
       orientation="horizontal"
-      animated
+      animate
     />
   );
 }

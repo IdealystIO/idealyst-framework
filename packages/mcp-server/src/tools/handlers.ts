@@ -178,10 +178,29 @@ ${examples}
 \`\`\``;
   }
 
+  // Add component-specific warnings
+  let warningSection = "";
+  if (canonicalName === "Card") {
+    warningSection = `
+## WARNING: No Compound Components
+
+Card is a **simple container** component. There are NO sub-components like \`Card.Content\`, \`Card.Header\`, \`Card.Body\`, \`Card.Footer\`, or \`Card.Title\`. Using these will cause TS2339 errors.
+
+**Correct usage:** Put children directly inside \`<Card>...</Card>\`:
+\`\`\`tsx
+<Card padding="md">
+  <Text typography="h6" weight="bold">Title</Text>
+  <Text typography="body2">Body content</Text>
+  <Button onPress={handler}>Action</Button>
+</Card>
+\`\`\`
+`;
+  }
+
   const docs = `# ${canonicalName}
 
 ${meta.description}
-
+${warningSection}
 ## Category
 ${meta.category}
 
@@ -262,6 +281,35 @@ export function getComponentTypes(args: GetComponentTypesArgs): ToolResponse {
 
   try {
     const result = getTypesFromFile(componentName, format);
+
+    // Add Card-specific guidance to prevent compound component hallucination
+    if (componentName.toLowerCase() === 'card') {
+      if (typeof result === 'object' && result !== null) {
+        (result as any).usageNote = "⚠️ Card is a SIMPLE CONTAINER — there are NO compound components. " +
+          "Do NOT use Card.Content, Card.Header, Card.Body, Card.Footer, Card.Title — they do NOT exist and will cause TS2339. " +
+          "Just put children directly inside <Card>...</Card>. Example: <Card padding=\"md\"><Text>Title</Text><Text>Body</Text></Card>";
+      }
+    }
+
+    // Add IconName guidance for components that use icon props
+    const resultStr = JSON.stringify(result);
+    if (resultStr.includes('IconName') || resultStr.includes('mdi:')) {
+      const iconNote = "\n\n⚠️ ICON NAME FORMAT: The `name` prop type shows `IconName | \"mdi:...\"` variants. " +
+        "Both formats work in JSX props. However, when you store icon names in variables, type them as `IconName` " +
+        "and use BARE names (without 'mdi:' prefix):\n" +
+        "```tsx\n" +
+        "import type { IconName } from '@idealyst/components';\n" +
+        "const icon: IconName = 'home';        // CORRECT\n" +
+        "const icon: IconName = 'mdi:home';    // WRONG — TS error\n" +
+        "const icon: string = 'home';          // WRONG — won't match IconName props\n" +
+        "```\n" +
+        "Always use bare names like 'home', 'check-circle', 'arrow-left' — never 'mdi:home'.";
+
+      if (typeof result === 'object' && result !== null) {
+        (result as any).iconNameNote = iconNote;
+      }
+    }
+
     return jsonResponse(result);
   } catch (error) {
     return textResponse(
@@ -351,18 +399,118 @@ ${command.examples.map((ex: string) => `\`\`\`bash\n${ex}\n\`\`\``).join("\n\n")
 /**
  * Search for Material Design Icons
  */
+/**
+ * Icon search term aliases — maps common search terms to their MDI equivalents.
+ * Agents often search for generic terms; this maps them to actual icon names.
+ */
+const iconSearchAliases: Record<string, string[]> = {
+  back: ['arrow-left', 'chevron-left'],
+  forward: ['arrow-right', 'chevron-right'],
+  next: ['arrow-right', 'chevron-right', 'skip-next'],
+  previous: ['arrow-left', 'chevron-left', 'skip-previous'],
+  user: ['account'],
+  profile: ['account', 'account-circle'],
+  search: ['magnify'],
+  settings: ['cog'],
+  password: ['lock', 'key'],
+  mail: ['email'],
+  notification: ['bell'],
+  notifications: ['bell'],
+  spinner: ['loading'],
+  send: ['send'],
+  save: ['content-save'],
+  edit: ['pencil'],
+  copy: ['content-copy'],
+  paste: ['content-paste'],
+  trash: ['delete'],
+  remove: ['delete', 'close'],
+  add: ['plus'],
+  create: ['plus'],
+  photo: ['camera', 'image'],
+  picture: ['image'],
+  like: ['heart', 'thumb-up'],
+  favorite: ['heart', 'star'],
+  error: ['alert-circle', 'close-circle'],
+  warning: ['alert'],
+  success: ['check-circle'],
+  info: ['information'],
+  expand: ['chevron-down'],
+  collapse: ['chevron-up'],
+  more: ['dots-vertical', 'dots-horizontal'],
+  options: ['dots-vertical'],
+  refresh: ['refresh'],
+  reload: ['refresh'],
+  dark: ['weather-night'],
+  light: ['weather-sunny', 'white-balance-sunny'],
+  theme: ['theme-light-dark', 'palette'],
+  phone: ['phone', 'cellphone'],
+  call: ['phone', 'phone-outline'],
+  check: ['check', 'check-circle', 'check-bold'],
+  tick: ['check', 'check-circle'],
+  close: ['close', 'close-circle'],
+  dismiss: ['close', 'close-circle'],
+  x: ['close'],
+  lock: ['lock', 'lock-outline'],
+  security: ['lock', 'shield'],
+  eye: ['eye', 'eye-off', 'eye-outline'],
+  visibility: ['eye', 'eye-off'],
+  sort: ['sort', 'sort-ascending', 'sort-descending'],
+  filter: ['filter', 'filter-outline'],
+  calendar: ['calendar', 'calendar-month'],
+  date: ['calendar', 'calendar-month'],
+  location: ['map-marker', 'map-marker-outline'],
+  pin: ['map-marker', 'pin'],
+  share: ['share', 'share-variant'],
+  download: ['download', 'cloud-download'],
+  upload: ['upload', 'cloud-upload'],
+  play: ['play', 'play-circle'],
+  pause: ['pause', 'pause-circle'],
+  stop: ['stop', 'stop-circle'],
+  record: ['record', 'microphone'],
+  microphone: ['microphone', 'microphone-outline'],
+  mic: ['microphone', 'microphone-outline'],
+  menu: ['menu', 'hamburger'],
+  list: ['format-list-bulleted', 'view-list'],
+  grid: ['view-grid', 'grid'],
+  time: ['clock', 'clock-outline'],
+  clock: ['clock', 'clock-outline'],
+  link: ['link', 'link-variant'],
+  attach: ['paperclip', 'attachment'],
+  logout: ['logout', 'exit-to-app'],
+  login: ['login', 'account-arrow-right'],
+};
+
 export function searchIcons(args: SearchIconsArgs): ToolResponse {
   const query = args.query?.toLowerCase() || "";
-  const limit = args.limit || 20;
+  const limit = args.limit || 40;
 
   if (!query) {
     return textResponse("Please provide a search query.");
   }
 
+  // Resolve aliases: if the query is a known alias, include those icons directly
+  const aliasMatches: string[] = [];
+  const queryWords = query.split(/\s+/).filter(Boolean);
+  for (const word of queryWords) {
+    const aliases = iconSearchAliases[word];
+    if (aliases) {
+      for (const alias of aliases) {
+        // Find all icons that match the alias using boundary matching
+        for (const icon of iconsData.icons) {
+          const lower = (icon as string).toLowerCase();
+          if (lower === alias || lower.startsWith(alias + '-')) {
+            if (!aliasMatches.includes(icon as string)) {
+              aliasMatches.push(icon as string);
+            }
+          }
+        }
+      }
+    }
+  }
+
   // Filter icons that match the query
   // Use word-boundary matching: split icon names on hyphens, match query words against segments.
   // This prevents "lock" from matching "clock", "ash" from matching "flash", etc.
-  const queryWords = query.split(/\s+/).filter(Boolean);
   const hyphenatedQuery = queryWords.join("-");
 
   // Helper: check if an icon matches a single word on segment boundaries
@@ -398,26 +546,35 @@ export function searchIcons(args: SearchIconsArgs): ToolResponse {
     }
   }
 
-  // Combine: AND matches first, then OR-only matches as fallback
-  const matchingIcons = [...andMatches, ...orOnlyMatches];
+  // Combine: alias matches first, then AND matches, then OR matches (deduplicated)
+  const seen = new Set<string>();
+  const matchingIcons: string[] = [];
+  for (const list of [aliasMatches, andMatches, orOnlyMatches]) {
+    for (const icon of list) {
+      if (!seen.has(icon)) {
+        seen.add(icon);
+        matchingIcons.push(icon);
+      }
+    }
+  }
 
-  // Sort by relevance: shorter names (more specific) first, then alphabetical.
-  // This ensures "lock" and "lock-outline" appear before "account-lock-open-outline".
-  // AND matches always sort before OR-only matches.
+  // Sort by relevance: alias matches first, then AND matches, then OR matches.
+  // Within each tier, shorter names (more specific) first, then alphabetical.
+  const aliasMatchSet = new Set(aliasMatches);
   const andMatchSet = new Set(andMatches);
   matchingIcons.sort((a: string, b: string) => {
-    // AND matches always first
-    const aIsAnd = andMatchSet.has(a) ? 0 : 1;
-    const bIsAnd = andMatchSet.has(b) ? 0 : 1;
-    if (aIsAnd !== bIsAnd) return aIsAnd - bIsAnd;
+    // Tier: alias (0) > AND (1) > OR (2)
+    const aTier = aliasMatchSet.has(a) ? 0 : andMatchSet.has(a) ? 1 : 2;
+    const bTier = aliasMatchSet.has(b) ? 0 : andMatchSet.has(b) ? 1 : 2;
+    if (aTier !== bTier) return aTier - bTier;
 
-    const aSegments = a.split("-").length;
-    const bSegments = b.split("-").length;
     // Icons that START with the query get highest priority
     const aStarts = a.startsWith(hyphenatedQuery) ? 0 : 1;
     const bStarts = b.startsWith(hyphenatedQuery) ? 0 : 1;
     if (aStarts !== bStarts) return aStarts - bStarts;
     // Then sort by number of segments (fewer = more specific)
+    const aSegments = a.split("-").length;
+    const bSegments = b.split("-").length;
     if (aSegments !== bSegments) return aSegments - bSegments;
     // Then alphabetical
     return a.localeCompare(b);
@@ -432,7 +589,7 @@ export function searchIcons(args: SearchIconsArgs): ToolResponse {
     matches: matchingIcons.length,
     returned: limitedResults.length,
     icons: limitedResults,
-    usage: "IMPORTANT: These icon names are of type `IconName` from '@idealyst/components'. When building helper functions that return icon names, always type the return as `IconName` — never as `string`. Example: `function getIcon(status: string): IconName { ... }`. Using `string` as the return type will cause a TypeScript compilation error (TS2322).",
+    usage: "IMPORTANT: These icon names are of type `IconName` from '@idealyst/components'. Use them WITHOUT any 'mdi:' prefix — just use the bare name (e.g., 'home', not 'mdi:home'). When building helper functions that return icon names, always type the return as `IconName` — never as `string`. Example: `const icon: IconName = 'home'; function getIcon(status: string): IconName { return 'check'; }`. Using `string` as the return type or adding an 'mdi:' prefix will cause TypeScript compilation errors.",
   };
 
   return jsonResponse(result);
@@ -486,13 +643,19 @@ export function getNavigationTypes(args: GetNavigationTypesArgs = {}): ToolRespo
  * Get documentation for the translate package
  */
 export function getTranslateGuide(args: GetTranslateGuideArgs): ToolResponse {
-  const topic = args.topic;
+  let topic = args.topic;
+
+  // Allow 'api' as alias for 'runtime-api' (consistent with other guide tools)
+  if (topic === 'api') {
+    topic = 'runtime-api';
+  }
+
   const uri = `idealyst://translate/${topic}`;
   const guide = translateGuides[uri];
 
   if (!guide) {
     return textResponse(
-      `Topic "${topic}" not found. Available topics: overview, runtime-api, babel-plugin, translation-files, examples`
+      `Topic "${topic}" not found. Available topics: overview, runtime-api (or 'api'), babel-plugin, translation-files, examples`
     );
   }
 
@@ -967,8 +1130,9 @@ export function searchRecipes(args: SearchRecipesArgs): ToolResponse {
   const results = searchRecipesData(query);
 
   if (results.length === 0) {
+    const allRecipeIds = Object.keys(recipes);
     return textResponse(
-      `No recipes found matching "${query}". Try searching for: login, form, navigation, settings, auth, list, modal, etc.`
+      `No recipes found matching "${query}". Available recipes: ${allRecipeIds.join(', ')}. Try searching by category (auth, forms, navigation, settings, layout, data, media) or use list_recipes to see all.`
     );
   }
 

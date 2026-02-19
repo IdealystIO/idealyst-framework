@@ -372,10 +372,10 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
       borderLeftWidth: 4,
       borderLeftColor: config.color,
     }, shadow({ radius: 8, y: 2, opacity: 0.1 }), style]}>
-      <Icon name={config.icon} size={20} />
+      <Icon name={config.icon} size="sm" />
       <Text typography="body2" style={{ flex: 1, marginLeft: 12 }}>{toast.message}</Text>
       <Pressable onPress={onDismiss}>
-        <Icon name="close" size={16} />
+        <Icon name="close" size="xs" />
       </Pressable>
     </AnimatedView>
   );

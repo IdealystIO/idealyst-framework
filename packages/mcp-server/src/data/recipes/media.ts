@@ -7,120 +7,113 @@ import { Recipe } from "./types.js";
 export const mediaRecipes: Record<string, Recipe> = {
   "image-upload": {
     name: "Image Upload",
-    description: "Image picker with preview and upload progress",
+    description: "Image picker with preview and upload progress using @idealyst/files",
     category: "media",
     difficulty: "intermediate",
-    packages: ["@idealyst/components", "@idealyst/camera"],
-    code: `import React, { useState } from 'react';
+    packages: ["@idealyst/components", "@idealyst/files"],
+    code: `import React from 'react';
 import { View, Text, Button, Image, Pressable, Icon, Progress } from '@idealyst/components';
-import { useCamera, useImagePicker } from '@idealyst/camera';
+import type { IconName } from '@idealyst/components';
+import { useFilePicker, useFileUpload, FILE_PICKER_PRESETS } from '@idealyst/files';
 
-interface UploadedImage {
-  uri: string;
-  width: number;
-  height: number;
-}
+const closeIcon: IconName = 'close';
+const imagePlusIcon: IconName = 'image-plus';
 
-export function ImageUpload({ onUpload }: { onUpload: (image: UploadedImage) => Promise<string> }) {
-  const [image, setImage] = useState<UploadedImage | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
+export function ImageUpload({ uploadUrl }: { uploadUrl: string }) {
+  const picker = useFilePicker({ config: FILE_PICKER_PRESETS.images });
+  const uploader = useFileUpload({ autoStart: false, concurrency: 1 });
 
-  const { pickImage } = useImagePicker();
-  const { takePhoto } = useCamera();
-
-  const handlePickImage = async () => {
-    const result = await pickImage({
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
-    });
-
-    if (result) {
-      setImage(result);
+  const handlePickImages = async () => {
+    const result = await picker.pick();
+    if (!result.cancelled && result.files.length > 0) {
+      // Images are now in picker.files
     }
   };
 
-  const handleTakePhoto = async () => {
-    const result = await takePhoto({
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
+  const handleUpload = () => {
+    if (picker.files.length === 0) return;
+    uploader.addFiles(picker.files, {
+      url: uploadUrl,
+      method: 'POST',
+      fieldName: 'file',
+      multipart: true,
+      concurrency: 1,
+      timeout: 30000,
+      retryEnabled: true,
+      maxRetries: 3,
+      retryDelay: 'exponential',
+      retryDelayMs: 1000,
+      chunkedUpload: false,
+      chunkSize: 10 * 1024 * 1024,
+      chunkedUploadThreshold: 50 * 1024 * 1024,
+      backgroundUpload: false,
     });
-
-    if (result) {
-      setImage(result);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!image) return;
-
-    setIsUploading(true);
-    setUploadProgress(0);
-
-    try {
-      // Simulate upload progress
-      const interval = setInterval(() => {
-        setUploadProgress((prev) => Math.min(prev + 10, 90));
-      }, 200);
-
-      const url = await onUpload(image);
-
-      clearInterval(interval);
-      setUploadProgress(100);
-
-      // Reset after success
-      setTimeout(() => {
-        setImage(null);
-        setUploadProgress(0);
-      }, 1000);
-    } finally {
-      setIsUploading(false);
-    }
+    uploader.start();
   };
 
   return (
-    <View style={{ gap: 16 }}>
-      {image ? (
-        <View style={{ alignItems: 'center' }}>
-          <View style={{ position: 'relative' }}>
-            <Image
-              source={{ uri: image.uri }}
-              style={{ width: 200, height: 200, borderRadius: 8 }}
-            />
-            <Pressable
-              onPress={() => setImage(null)}
-              style={{
-                position: 'absolute',
-                top: -8,
-                right: -8,
-                backgroundColor: '#ef4444',
-                borderRadius: 12,
-                padding: 4,
-              }}
-            >
-              <Icon name="close" size={16} color="#fff" />
-            </Pressable>
+    <View gap="md" padding="md">
+      {picker.files.length > 0 ? (
+        <View style={{ alignItems: 'center' }} gap="md">
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }} gap="sm">
+            {picker.files.map((file) => (
+              <View key={file.id} style={{ position: 'relative' }}>
+                <Image
+                  source={file.uri}
+                  width={120}
+                  height={120}
+                  objectFit="cover"
+                  borderRadius={8}
+                />
+                <Pressable
+                  onPress={() => picker.clear()}
+                  style={{
+                    position: 'absolute',
+                    top: -8,
+                    right: -8,
+                    backgroundColor: '#ef4444',
+                    borderRadius: 12,
+                    padding: 4,
+                  }}
+                >
+                  <Icon name={closeIcon} size="xs" />
+                </Pressable>
+              </View>
+            ))}
           </View>
 
-          {isUploading && (
-            <Progress value={uploadProgress} style={{ width: 200, marginTop: 12 }} />
-          )}
+          {uploader.uploads.map((upload) => (
+            <View key={upload.id} gap="xs" style={{ width: '100%' }}>
+              <Text typography="caption">{upload.file.name}</Text>
+              <Progress value={upload.percentage} />
+              <Text typography="caption" color="secondary">
+                {upload.state} — {upload.percentage}%
+              </Text>
+            </View>
+          ))}
 
-          <Button
-            onPress={handleUpload}
-            disabled={isUploading}
-            loading={isUploading}
-            style={{ marginTop: 16 }}
-          >
-            {isUploading ? 'Uploading...' : 'Upload Image'}
-          </Button>
+          <View style={{ flexDirection: 'row' }} gap="sm">
+            <Button
+              onPress={() => picker.clear()}
+              type="outlined"
+              intent="secondary"
+            >
+              Clear
+            </Button>
+            <Button
+              onPress={handleUpload}
+              disabled={uploader.isUploading}
+              loading={uploader.isUploading}
+              leftIcon="upload"
+            >
+              Upload
+            </Button>
+          </View>
         </View>
       ) : (
-        <View style={{ gap: 12 }}>
+        <View gap="sm">
           <Pressable
-            onPress={handlePickImage}
+            onPress={handlePickImages}
             style={{
               borderWidth: 2,
               borderStyle: 'dashed',
@@ -130,31 +123,28 @@ export function ImageUpload({ onUpload }: { onUpload: (image: UploadedImage) => 
               alignItems: 'center',
             }}
           >
-            <Icon name="image-plus" size={48} color="#999" />
-            <Text style={{ marginTop: 8, color: '#666' }}>
-              Tap to select an image
+            <Icon name={imagePlusIcon} size="lg" />
+            <Text typography="body2" color="secondary" style={{ marginTop: 8 }}>
+              Tap to select images
             </Text>
           </Pressable>
-
-          <Button type="outlined" onPress={handleTakePhoto} leftIcon="camera">
-            Take Photo
-          </Button>
         </View>
       )}
     </View>
   );
 }`,
-    explanation: `Image upload with:
-- Image picker from gallery
-- Camera capture option
-- Image preview with remove button
-- Upload progress indicator
-- Aspect ratio cropping`,
+    explanation: `Image upload with @idealyst/files:
+- useFilePicker with FILE_PICKER_PRESETS.images for image selection
+- useFileUpload for upload queue with progress tracking
+- Image previews using Image component with source prop
+- Icon uses size="xs"/"sm"/"md"/"lg" — NOT numeric values
+- Pressable for interactive areas (NOT View with onPress)`,
     tips: [
-      "Compress images before upload to reduce bandwidth",
-      "Add file size validation",
-      "Support multiple image selection",
-      "Consider image caching for better performance",
+      "Use FILE_PICKER_PRESETS for common configs (images, documents, etc.)",
+      "useFilePicker.pick() returns { cancelled, files, rejected }",
+      "Image uses 'source' prop (string or { uri }) — NOT 'src'",
+      "Image uses 'objectFit' — NOT 'contentFit'",
+      "Icon size is always a Size string: 'xs' | 'sm' | 'md' | 'lg' | 'xl'",
     ],
     relatedRecipes: ["profile-screen", "form-with-validation"],
   },

@@ -95,6 +95,113 @@ function findPackagePaths(): { componentsPath: string; themePath: string } | nul
 }
 
 /**
+ * Static navigation types - hardcoded since dynamic extraction requires ts-morph.
+ * These map to the actual exports from @idealyst/navigation.
+ */
+function getStaticNavigationTypes(): Record<string, string> {
+  return {
+    NavigatorProvider: `// NavigatorProvider — Root navigation component
+import type { NavigatorParam } from '@idealyst/navigation';
+
+type NavigatorProviderProps = {
+  route: NavigatorParam;
+  floatingComponent?: React.ReactNode;
+};
+
+// Usage: <NavigatorProvider route={routeConfig} />`,
+
+    NavigateParams: `// NavigateParams — Used with navigate() and replace()
+type NavigateParams = {
+  path: string;
+  vars?: Record<string, string>;
+  replace?: boolean;
+  state?: Record<string, string | number | boolean>;
+};`,
+
+    useNavigator: `// useNavigator() — Navigation hook
+// Returns: { navigate, replace, canGoBack, goBack }
+type NavigatorContextValue = {
+  navigate: (params: NavigateParams) => void;
+  replace: (params: Omit<NavigateParams, 'replace'>) => void;
+  canGoBack: () => boolean;
+  goBack: () => void;
+};
+
+// Usage:
+// const { navigate, goBack, canGoBack } = useNavigator();
+// navigate({ path: '/detail', vars: { id: '123' } });
+// navigate({ path: '/home', state: { tab: 'recent' } });`,
+
+    useParams: `// useParams() — Get route parameters
+// Returns Record<string, string | undefined>
+// NOTE: Does NOT accept type parameters. Use type assertion if needed.
+// const params = useParams();
+// const id = params.id; // string | undefined`,
+
+    useNavigationState: `// useNavigationState<T>() — Get navigation state data
+// Returns T (defaults to Record<string, unknown>)
+// Always provide a type parameter:
+// const state = useNavigationState<{ autostart?: boolean }>();`,
+
+    useCurrentPath: `// useCurrentPath() — Get current route path as string
+// const path = useCurrentPath(); // '/users/123'`,
+
+    RouteConfig: `// Route Configuration Types
+type ScreenParam = {
+  path: string;
+  type: 'screen';
+  component: React.ComponentType;
+  options?: ScreenOptions;
+};
+
+type ScreenOptions = {
+  title?: string;
+  headerShown?: boolean;
+  fullScreen?: boolean;
+  headerTitle?: React.ComponentType | React.ReactElement | string;
+  headerLeft?: React.ComponentType | React.ReactElement;
+  headerRight?: React.ComponentType | React.ReactElement;
+  headerBackVisible?: boolean;
+};
+
+type TabBarScreenOptions = ScreenOptions & {
+  tabBarIcon?: (props: { focused: boolean; color: string; size: string | number }) => React.ReactElement;
+  tabBarLabel?: string;
+  tabBarBadge?: string | number;
+  tabBarVisible?: boolean;
+};
+
+type TabNavigatorParam = {
+  path: string;
+  type: 'navigator';
+  layout: 'tab';
+  routes: RouteParam[];
+  options?: TabBarScreenOptions;
+};
+
+type StackNavigatorParam = {
+  path: string;
+  type: 'navigator';
+  layout: 'stack';
+  routes: RouteParam[];
+  options?: ScreenOptions;
+};
+
+type DrawerNavigatorParam = {
+  path: string;
+  type: 'navigator';
+  layout: 'drawer';
+  routes: RouteParam[];
+  options?: TabBarScreenOptions;
+  sidebarComponent?: React.ComponentType;
+};
+
+type NavigatorParam = TabNavigatorParam | StackNavigatorParam | DrawerNavigatorParam;
+type RouteParam = NavigatorParam | ScreenParam;`,
+  };
+}
+
+/**
  * Generate types dynamically using @idealyst/tooling
  */
 function generateTypes(): TypesData {
@@ -157,8 +264,10 @@ function generateTypes(): TypesData {
     };
 
     // Extract size keys from the first size group
-    const sizeKeys = Object.keys(themeValues.sizes)[0]
-      ? Object.keys(themeValues.sizes[Object.keys(themeValues.sizes)[0]])
+    // themeValues.sizes is Record<string, string[]> — the values are string arrays, not objects
+    const firstSizeGroup = Object.keys(themeValues.sizes)[0];
+    const sizeKeys = firstSizeGroup
+      ? (themeValues.sizes as Record<string, string[]>)[firstSizeGroup]
       : ['xs', 'sm', 'md', 'lg', 'xl'];
     theme.Size = {
       name: 'Size',
@@ -172,7 +281,7 @@ function generateTypes(): TypesData {
     extractedAt: new Date().toISOString(),
     components,
     theme,
-    navigation: {}, // Navigation types require ts-morph, not available dynamically
+    navigation: getStaticNavigationTypes(),
     registry: {
       components: componentRegistry,
       themeValues,
@@ -188,8 +297,9 @@ function loadTypes(): TypesData {
     return cachedTypes;
   }
 
-  // Try to load pre-generated types first
-  const typesPath = path.join(__dirname, '../generated/types.json');
+  // Try to load pre-generated types first (works for both bundled and source)
+  const pkgRoot = findPackageRoot();
+  const typesPath = path.join(pkgRoot, 'src/generated/types.json');
 
   if (fs.existsSync(typesPath)) {
     try {
@@ -412,10 +522,38 @@ export function getAvailableComponents() {
 }
 
 /**
+ * Find the mcp-server package root directory.
+ * After bundling, __dirname points to dist/ (one level deep), but the source
+ * code assumes dist/tools/ (two levels deep). This helper finds the package
+ * root reliably regardless of bundling by walking up from __dirname.
+ */
+function findPackageRoot(): string {
+  let dir = __dirname;
+  for (let i = 0; i < 5; i++) {
+    const pkgPath = path.join(dir, 'package.json');
+    if (fs.existsSync(pkgPath)) {
+      try {
+        const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+        if (pkg.name === '@idealyst/mcp-server') {
+          return dir;
+        }
+      } catch {
+        // continue
+      }
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  // Fallback: assume __dirname is dist/ or src/tools/
+  return path.resolve(__dirname, '../..');
+}
+
+/**
  * Find the correct example file name (case-insensitive)
  */
 function findExampleFile(componentName: string): string | null {
-  const examplesDir = path.join(__dirname, '../../examples/components');
+  const examplesDir = path.join(findPackageRoot(), 'examples/components');
 
   // Direct match first (fast path)
   const directPath = path.join(examplesDir, `${componentName}.examples.tsx`);
