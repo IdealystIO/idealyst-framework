@@ -12,7 +12,7 @@ export const authRecipes: Record<string, Recipe> = {
     difficulty: "beginner",
     packages: ["@idealyst/components", "@idealyst/theme"],
     code: `import React, { useState } from 'react';
-import { Button, Input, Card, Text, View } from '@idealyst/components';
+import { Button, TextInput, Card, Text, View } from '@idealyst/components';
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
@@ -62,37 +62,43 @@ export function LoginForm({ onSubmit, onForgotPassword }: LoginFormProps) {
 
   return (
     <Card padding="lg">
-      <Text variant="headline" style={{ marginBottom: 24 }}>
+      <Text typography="h5" weight="bold" style={{ marginBottom: 24 }}>
         Sign In
       </Text>
 
       {submitError && (
         <View style={{ marginBottom: 16 }}>
-          <Text intent="danger">{submitError}</Text>
+          <Text typography="body2" color="danger">{submitError}</Text>
         </View>
       )}
 
       <View style={{ gap: 16 }}>
-        <Input
-          label="Email"
-          placeholder="you@example.com"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          error={errors.email}
-        />
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Email</Text>
+          <TextInput
+            placeholder="you@example.com"
+            value={email}
+            onChangeText={setEmail}
+            inputMode="email"
+            autoCapitalize="none"
+            textContentType="emailAddress"
+            intent={errors.email ? 'danger' : undefined}
+          />
+          {errors.email && <Text typography="body2" color="danger">{errors.email}</Text>}
+        </View>
 
-        <Input
-          label="Password"
-          placeholder="Enter your password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoComplete="current-password"
-          error={errors.password}
-        />
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Password</Text>
+          <TextInput
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            textContentType="password"
+            intent={errors.password ? 'danger' : undefined}
+          />
+          {errors.password && <Text typography="body2" color="danger">{errors.password}</Text>}
+        </View>
 
         <Button
           onPress={handleSubmit}
@@ -132,7 +138,7 @@ export function LoginForm({ onSubmit, onForgotPassword }: LoginFormProps) {
     difficulty: "beginner",
     packages: ["@idealyst/components", "@idealyst/theme"],
     code: `import React, { useState } from 'react';
-import { Button, Input, Card, Text, View, Checkbox, Link } from '@idealyst/components';
+import { Button, TextInput, Card, Text, View, Checkbox, Link } from '@idealyst/components';
 
 interface SignupFormProps {
   onSubmit: (data: { name: string; email: string; password: string }) => Promise<void>;
@@ -194,68 +200,79 @@ export function SignupForm({ onSubmit, onTermsPress }: SignupFormProps) {
 
   return (
     <Card padding="lg">
-      <Text variant="headline" style={{ marginBottom: 24 }}>
+      <Text typography="h5" weight="bold" style={{ marginBottom: 24 }}>
         Create Account
       </Text>
 
       {errors.submit && (
         <View style={{ marginBottom: 16 }}>
-          <Text intent="danger">{errors.submit}</Text>
+          <Text typography="body2" color="danger">{errors.submit}</Text>
         </View>
       )}
 
       <View style={{ gap: 16 }}>
-        <Input
-          label="Full Name"
-          placeholder="John Doe"
-          value={name}
-          onChangeText={setName}
-          autoComplete="name"
-          error={errors.name}
-        />
-
-        <Input
-          label="Email"
-          placeholder="you@example.com"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          error={errors.email}
-        />
-
-        <Input
-          label="Password"
-          placeholder="At least 8 characters"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoComplete="new-password"
-          error={errors.password}
-        />
-
-        <Input
-          label="Confirm Password"
-          placeholder="Confirm your password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-          autoComplete="new-password"
-          error={errors.confirmPassword}
-        />
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-          <Checkbox
-            checked={acceptedTerms}
-            onChange={setAcceptedTerms}
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Full Name</Text>
+          <TextInput
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            textContentType="name"
+            intent={errors.name ? 'danger' : undefined}
           />
-          <Text>
+          {errors.name && <Text typography="body2" color="danger">{errors.name}</Text>}
+        </View>
+
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Email</Text>
+          <TextInput
+            placeholder="you@example.com"
+            value={email}
+            onChangeText={setEmail}
+            inputMode="email"
+            autoCapitalize="none"
+            textContentType="emailAddress"
+            intent={errors.email ? 'danger' : undefined}
+          />
+          {errors.email && <Text typography="body2" color="danger">{errors.email}</Text>}
+        </View>
+
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Password</Text>
+          <TextInput
+            placeholder="At least 8 characters"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            textContentType="newPassword"
+            intent={errors.password ? 'danger' : undefined}
+          />
+          {errors.password && <Text typography="body2" color="danger">{errors.password}</Text>}
+        </View>
+
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Confirm Password</Text>
+          <TextInput
+            placeholder="Confirm your password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+            textContentType="newPassword"
+            intent={errors.confirmPassword ? 'danger' : undefined}
+          />
+          {errors.confirmPassword && <Text typography="body2" color="danger">{errors.confirmPassword}</Text>}
+        </View>
+
+        <Checkbox
+          checked={acceptedTerms}
+          onChange={setAcceptedTerms}
+          error={errors.terms}
+        >
+          <Text typography="body2">
             I agree to the{' '}
             <Link onPress={onTermsPress}>Terms and Conditions</Link>
           </Text>
-        </View>
-        {errors.terms && <Text intent="danger" size="sm">{errors.terms}</Text>}
+        </Checkbox>
 
         <Button
           onPress={handleSubmit}
@@ -289,7 +306,7 @@ export function SignupForm({ onSubmit, onTermsPress }: SignupFormProps) {
     packages: ["@idealyst/components", "@idealyst/navigation"],
     code: `import React, { useEffect } from 'react';
 import { View, ActivityIndicator } from '@idealyst/components';
-import { useNavigate } from '@idealyst/navigation';
+import { useNavigator } from '@idealyst/navigation';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -304,11 +321,11 @@ export function ProtectedRoute({
   isLoading = false,
   redirectTo = '/login',
 }: ProtectedRouteProps) {
-  const navigate = useNavigate();
+  const { navigate } = useNavigator();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate(redirectTo, { replace: true });
+      navigate({ path: redirectTo, replace: true });
     }
   }, [isAuthenticated, isLoading, navigate, redirectTo]);
 

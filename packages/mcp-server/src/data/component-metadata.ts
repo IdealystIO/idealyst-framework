@@ -545,15 +545,19 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
     category: 'display',
     description: 'Typography component for displaying text with consistent styling',
     features: [
-      'Multiple typography variants',
-      'Font weight options',
-      'Color variants',
-      'Text alignment',
+      'Typography presets: h1-h6, subtitle1-2, body1-2, button, caption, overline',
+      'Font weight control: light, normal, medium, semibold, bold',
+      'Theme text colors: primary, secondary, tertiary, inverse',
+      'Text alignment: left, center, right',
+      'Cross-platform text rendering',
     ],
     bestPractices: [
-      'Use typography variants consistently',
-      'Maintain hierarchy with size and weight',
-      'Use semantic colors for meaning',
+      'Use the `typography` prop for text sizing (NOT `variant` or `size`)',
+      'Valid typography values: h1, h2, h3, h4, h5, h6, subtitle1, subtitle2, body1, body2, button, caption, overline',
+      'Use the `weight` prop for font weight (light, normal, medium, semibold, bold)',
+      'Use the `color` prop for theme text colors (primary, secondary, tertiary, inverse)',
+      'For custom colors beyond theme text colors, use the `style` prop: style={{ color: "#hex" }}',
+      'Text does NOT have `variant`, `intent`, or `size` props — use `typography`, `weight`, `color`, and `style` instead',
     ],
   },
 
@@ -641,7 +645,15 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
 };
 
 /**
- * Find the canonical component name (case-insensitive lookup)
+ * Aliases for deprecated or commonly confused component names.
+ * Maps lowercase alias → canonical component name.
+ */
+const componentAliases: Record<string, string> = {
+  input: "TextInput",
+};
+
+/**
+ * Find the canonical component name (case-insensitive lookup with alias support)
  */
 export function findComponentName(componentName: string): string | undefined {
   // Direct match first (fast path)
@@ -651,9 +663,13 @@ export function findComponentName(componentName: string): string | undefined {
 
   // Case-insensitive lookup
   const lowerName = componentName.toLowerCase();
-  return Object.keys(componentMetadata).find(
+  const directMatch = Object.keys(componentMetadata).find(
     (name) => name.toLowerCase() === lowerName
   );
+  if (directMatch) return directMatch;
+
+  // Alias lookup (e.g. "Input" → "TextInput")
+  return componentAliases[lowerName];
 }
 
 /**

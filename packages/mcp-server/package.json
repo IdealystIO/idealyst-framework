@@ -33,7 +33,11 @@
     "prebuild": "yarn extract-types && yarn validate-examples",
     "build": "tsup && mkdir -p dist/generated && cp -r src/generated/* dist/generated/",
     "dev": "tsup --watch",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "eval": "tsx eval/src/run-eval.ts",
+    "eval:all": "tsx eval/src/run-eval.ts --scenarios all",
+    "eval:quick": "tsx eval/src/run-eval.ts --scenarios login-screen --verbose",
+    "eval:list": "tsx eval/src/run-eval.ts --list"
   },
   "publishConfig": {
     "access": "public",
@@ -56,8 +60,10 @@
     "@modelcontextprotocol/sdk": "^1.0.4"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^20.0.0",
     "@types/react": "^19.1.0",
+    "better-sqlite3": "^11.7.0",
     "chalk": "^5.3.0",
     "react": "^19.1.0",
     "react-native": "^0.80.1",

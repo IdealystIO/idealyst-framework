@@ -12,7 +12,7 @@ export const formsRecipes: Record<string, Recipe> = {
     difficulty: "intermediate",
     packages: ["@idealyst/components"],
     code: `import React, { useState } from 'react';
-import { View, Text, Input, Select, Button, Card } from '@idealyst/components';
+import { View, Text, TextInput, TextArea, Select, Button, Card } from '@idealyst/components';
 
 interface FormData {
   name: string;
@@ -101,62 +101,76 @@ export function ContactForm({ onSubmit }: { onSubmit: (data: FormData) => Promis
 
   return (
     <Card padding="lg">
-      <Text variant="title" style={{ marginBottom: 24 }}>Contact Us</Text>
+      <Text typography="subtitle1" weight="bold" style={{ marginBottom: 24 }}>Contact Us</Text>
 
       <View style={{ gap: 16 }}>
-        <Input
-          label="Name"
-          value={data.name}
-          onChangeText={(v) => handleChange('name', v)}
-          onBlur={() => handleBlur('name')}
-          error={touched.has('name') ? errors.name : undefined}
-          required
-        />
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Name</Text>
+          <TextInput
+            value={data.name}
+            onChangeText={(v) => handleChange('name', v)}
+            onBlur={() => handleBlur('name')}
+            placeholder="Your name"
+            intent={touched.has('name') && errors.name ? 'danger' : undefined}
+          />
+          {touched.has('name') && errors.name && (
+            <Text typography="body2" color="danger">{errors.name}</Text>
+          )}
+        </View>
 
-        <Input
-          label="Email"
-          value={data.email}
-          onChangeText={(v) => handleChange('email', v)}
-          onBlur={() => handleBlur('email')}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          error={touched.has('email') ? errors.email : undefined}
-          required
-        />
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Email</Text>
+          <TextInput
+            value={data.email}
+            onChangeText={(v) => handleChange('email', v)}
+            onBlur={() => handleBlur('email')}
+            placeholder="you@example.com"
+            inputMode="email"
+            autoCapitalize="none"
+            intent={touched.has('email') && errors.email ? 'danger' : undefined}
+          />
+          {touched.has('email') && errors.email && (
+            <Text typography="body2" color="danger">{errors.email}</Text>
+          )}
+        </View>
 
-        <Input
-          label="Phone (optional)"
-          value={data.phone}
-          onChangeText={(v) => handleChange('phone', v)}
-          onBlur={() => handleBlur('phone')}
-          keyboardType="phone-pad"
-          error={touched.has('phone') ? errors.phone : undefined}
-        />
+        <View>
+          <Text typography="body2" weight="semibold" style={{ marginBottom: 4 }}>Phone (optional)</Text>
+          <TextInput
+            value={data.phone}
+            onChangeText={(v) => handleChange('phone', v)}
+            onBlur={() => handleBlur('phone')}
+            placeholder="+1 234 567 8900"
+            inputMode="number"
+            intent={touched.has('phone') && errors.phone ? 'danger' : undefined}
+          />
+          {touched.has('phone') && errors.phone && (
+            <Text typography="body2" color="danger">{errors.phone}</Text>
+          )}
+        </View>
 
         <Select
           label="Country"
           value={data.country}
           onChange={(v) => handleChange('country', v)}
-          onBlur={() => handleBlur('country')}
+          placeholder="Select a country"
           options={[
             { label: 'United States', value: 'us' },
             { label: 'Canada', value: 'ca' },
             { label: 'United Kingdom', value: 'uk' },
             { label: 'Australia', value: 'au' },
           ]}
-          error={touched.has('country') ? errors.country : undefined}
-          required
+          error={touched.has('country') && !!errors.country}
+          helperText={touched.has('country') ? errors.country : undefined}
         />
 
-        <Input
+        <TextArea
           label="Message"
           value={data.message}
-          onChangeText={(v) => handleChange('message', v)}
-          onBlur={() => handleBlur('message')}
-          multiline
-          numberOfLines={4}
+          onChange={(v) => handleChange('message', v)}
+          placeholder="Tell us what you need..."
+          rows={4}
           error={touched.has('message') ? errors.message : undefined}
-          required
         />
 
         <Button onPress={handleSubmit} loading={isSubmitting} disabled={isSubmitting}>

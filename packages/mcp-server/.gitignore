@@ -25,6 +25,14 @@ yarn-error.log*
 *.swo
 *~
 
+# Eval output (per-run reports)
+eval/output/*.json
+eval/output/*.md
+
+# Eval SQLite WAL/SHM files (the .sqlite3 DB itself IS version controlled)
+eval/data/*.sqlite3-wal
+eval/data/*.sqlite3-shm
+
 # OS
 .DS_Store
 Thumbs.db

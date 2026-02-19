@@ -53,29 +53,28 @@ export function TextAlignment() {
 export function TextWithColor() {
   return (
     <View spacing="md">
-      <Text >Blue text</Text>
-      <Text >Green text</Text>
-      <Text >Red text</Text>
-      <Text >Gray text</Text>
-      <Text >Purple text</Text>
+      <Text color="primary">Primary text color</Text>
+      <Text color="secondary">Secondary text color</Text>
+      <Text color="tertiary">Tertiary text color</Text>
+      <Text color="inverse">Inverse text color</Text>
     </View>
   );
 }
 
-// Example 6: Combining Size, Weight, and Color
+// Example 6: Combining Typography, Weight, and Color
 export function CombinedTextStyles() {
   return (
     <View spacing="md">
-      <Text typography="h5" weight="bold">
+      <Text typography="h5" weight="bold" color="primary">
         Heading 1
       </Text>
-      <Text typography="subtitle1" weight="semibold">
+      <Text typography="subtitle1" weight="semibold" color="primary">
         Heading 2
       </Text>
-      <Text typography="body1" weight="medium">
+      <Text typography="body1" weight="medium" color="secondary">
         Subheading
       </Text>
-      <Text typography="body2" weight="normal">
+      <Text typography="body2" weight="normal" color="tertiary">
         Body text
       </Text>
     </View>

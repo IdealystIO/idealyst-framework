@@ -50,19 +50,19 @@
     "@idealyst/components": {
       "optional": true
     },
+    "@shopify/react-native-skia": {
+      "optional": true
+    },
     "react-native": {
+      "optional": true
+    },
+    "react-native-gesture-handler": {
       "optional": true
     },
     "react-native-reanimated": {
       "optional": true
     },
     "react-native-svg": {
-      "optional": true
-    },
-    "@shopify/react-native-skia": {
-      "optional": true
-    },
-    "react-native-gesture-handler": {
       "optional": true
     }
   },

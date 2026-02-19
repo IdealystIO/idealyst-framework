@@ -209,17 +209,30 @@ function loadTypes(): TypesData {
 /**
  * Find the canonical component name from types data (case-insensitive)
  */
+/** Deprecated component names that should redirect to their replacements */
+const deprecatedAliases: Record<string, string> = {
+  Input: "TextInput",
+};
+
 function findComponentNameInTypes(types: TypesData, componentName: string): string | undefined {
   // Direct match first (fast path)
   if (types.components[componentName]) {
-    return componentName;
+    // Redirect deprecated components to their replacements
+    return deprecatedAliases[componentName] ?? componentName;
   }
 
   // Case-insensitive lookup
   const lowerName = componentName.toLowerCase();
-  return Object.keys(types.components).find(
+  const match = Object.keys(types.components).find(
     (name) => name.toLowerCase() === lowerName
   );
+
+  if (match) {
+    // Redirect deprecated components to their replacements
+    return deprecatedAliases[match] ?? match;
+  }
+
+  return undefined;
 }
 
 /**

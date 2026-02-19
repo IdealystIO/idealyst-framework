@@ -1,7 +1,9 @@
 import BaseStorage from './storage';
 
-// For non-platform-specific imports, export the class (not an instance)
-// Platform-specific entry points (index.native.ts, index.web.ts) export instances
-export { BaseStorage };
+// Platform-specific entry points (index.native.ts, index.web.ts) replace this with real instances
+// This provides type compatibility for `import { storage } from '@idealyst/storage'`
+const storage = null as unknown as BaseStorage;
+
+export { BaseStorage, storage, storage as Storage };
 export default BaseStorage;
 export * from './types';
