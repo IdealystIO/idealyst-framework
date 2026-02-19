@@ -9,12 +9,17 @@
 - Component types: `packages/components/src/*/types.ts`
 - Recipes: `packages/mcp-server/src/data/recipes/`
 
-## Eval Commands
-- Full run: `cd packages/mcp-server && yarn build && yarn eval:all -v -j 5`
-- Single: `yarn eval -s <scenario-name> -v`
-- List: `yarn eval --list`
-- Build exits 1 on "No matches found: src/generated/*" but build IS successful
-- CANNOT run eval from within Claude Code (nested session restriction). Must be run from external terminal.
+## Eval Server (http://localhost:4242)
+- User starts server in separate terminal: `cd packages/mcp-server && yarn eval:server`
+- **Health check**: `curl -s http://localhost:4242/health`
+- **List scenarios**: `curl -s http://localhost:4242/scenarios`
+- **Start run**: `curl -s -X POST http://localhost:4242/runs -H "Content-Type: application/json" -d '{"scenarios":["all"],"verbose":true}'`
+- **Poll progress**: `curl -s http://localhost:4242/runs/<runId>`
+- **Get report**: `curl -s http://localhost:4242/runs/<runId>/report`
+- **History**: `curl -s http://localhost:4242/history`
+- POST /runs returns immediately with runId (async). Poll until status is "completed" or "failed".
+- Server writes output files to `eval/output/` and saves to SQLite, same as CLI.
+- Build exits 1 on "No matches found: src/generated/*" but build IS successful.
 - If a failed eval run pollutes COMPARE_RESULTS.md/sqlite, restore with `git checkout`
 
 ## Baseline Scores (eval-17715163222)

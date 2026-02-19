@@ -20,23 +20,66 @@ Your goal is to reduce friction, errors, and mistakes so that even a minimally-p
 
 ## Understanding the Evaluation System
 
-The evaluation system lives in the MCP server package. Key commands:
+The evaluation system lives in the MCP server package and runs as an **HTTP server** that you interact with via `curl`. This avoids the nested Claude Code session limitation — the eval server runs in a separate terminal and you control it over HTTP.
+
+### Eval Server API (http://localhost:4242)
+
+The user starts the server in a separate terminal with `yarn eval:server` (in `packages/mcp-server/`). You interact with it using `curl`:
 
 ```bash
-# Run all scenarios with verbose output, 5 parallel jobs
-yarn eval -s all -v -j 5
+# Check if the server is running
+curl -s http://localhost:4242/health
 
-# Run a specific scenario
-yarn eval -s <scenario-name> -v
+# List all available scenarios
+curl -s http://localhost:4242/scenarios
 
-# List available scenarios
-yarn eval --list
+# Start an eval run (async — returns immediately with a runId)
+curl -s -X POST http://localhost:4242/runs \
+  -H "Content-Type: application/json" \
+  -d '{"scenarios":["all"],"verbose":true}'
 
-# Run with different configurations
-yarn eval -s all -v -j 3 --timeout 120
+# Start a targeted eval (specific scenarios)
+curl -s -X POST http://localhost:4242/runs \
+  -H "Content-Type: application/json" \
+  -d '{"scenarios":["login-screen","navigation"],"skipSupervisor":false}'
+
+# Poll run status and live progress
+curl -s http://localhost:4242/runs/<runId>
+
+# Get the full report when complete
+curl -s http://localhost:4242/runs/<runId>/report
+
+# List all runs tracked this session
+curl -s http://localhost:4242/runs
+
+# Query historical runs and open issues from SQLite
+curl -s http://localhost:4242/history
 ```
 
-Explore the eval script's options thoroughly before running. The eval outputs summary files that you can analyze while additional scenarios complete in parallel.
+### POST /runs body options
+
+All fields are optional with sensible defaults:
+
+```json
+{
+  "scenarios": ["all"],           // scenario IDs or ["all"] (default: ["login-screen"])
+  "model": "claude-opus-4-6",    // model for the naive agent (default: "claude-opus-4-6")
+  "concurrency": 5,              // max parallel scenarios (default: 5)
+  "skipSupervisor": false,       // skip supervisor evaluation (default: false)
+  "verbose": true                // write per-scenario log files (default: true)
+}
+```
+
+### Run lifecycle
+
+1. `POST /runs` returns `{"runId": "...", "status": "pending", "pollUrl": "/runs/<id>"}` with HTTP 202
+2. Poll `GET /runs/<id>` — the `scenarioProgress` array shows live per-scenario status (turns, tool calls, elapsed time)
+3. When `status` becomes `"completed"`, fetch `GET /runs/<id>/report` for the full `EvalReport` JSON
+4. The server also writes output files to `packages/mcp-server/eval/output/` and saves to SQLite, same as the CLI
+
+### Important: Check server health first
+
+Before starting a run, always `curl -s http://localhost:4242/health` to confirm the server is up. If it's not running, tell the user to start it with `yarn eval:server` in a separate terminal.
 
 ## Success Criteria Rubric
 
@@ -96,42 +139,55 @@ If you encounter problems that **cannot be resolved** through documentation or b
 
 Each improvement cycle follows a **parallel streaming** approach — you start analyzing and fixing as soon as individual scenario results come in, rather than waiting for the entire eval to finish.
 
-### Step 1: Launch the Eval in the Background
+### Step 1: Check Server Health and Launch an Eval Run
 
-Start the eval run using Bash with `run_in_background: true`:
+First, confirm the eval server is running:
 
 ```bash
-cd packages/mcp-server && yarn eval -s all -v -j 5
+curl -s http://localhost:4242/health
 ```
 
-Note the **run ID** from the output (format: `eval-<timestamp>`). This is your session identifier — all output files for this run live under:
-- **Per-scenario logs:** `packages/mcp-server/eval/output/logs/<runId>/<scenarioId>.log`
-- **Final summary** (written only after ALL scenarios complete): `packages/mcp-server/eval/output/<runId>.summary.md`
-- **Final JSON** (written only after ALL scenarios complete): `packages/mcp-server/eval/output/<runId>.json`
+If you get a connection error, tell the user to start the server: `cd packages/mcp-server && yarn eval:server`
+
+Then launch the eval run:
+
+```bash
+curl -s -X POST http://localhost:4242/runs \
+  -H "Content-Type: application/json" \
+  -d '{"scenarios":["all"],"verbose":true}'
+```
+
+This returns immediately with a `runId`. Save this — it's your handle for polling.
+
+Output files for this run also live at:
+- **Per-scenario logs:** `packages/mcp-server/eval/output/logs/<evalId>/<scenarioId>.log`
+- **Final summary** (written only after ALL scenarios complete): `packages/mcp-server/eval/output/<evalId>.summary.md`
+- **Final JSON** (written only after ALL scenarios complete): `packages/mcp-server/eval/output/<evalId>.json`
 
 ### Step 2: Monitor and Analyze as Scenarios Complete
 
-While the eval runs, poll the log directory to discover completed scenarios:
+Poll the run status to see live per-scenario progress:
 
 ```bash
-# List completed scenario logs for this run
-ls packages/mcp-server/eval/output/logs/<runId>/
+curl -s http://localhost:4242/runs/<runId>
 ```
 
-A scenario log file is **complete** when it contains a line matching `Heuristic score:` or `FAILED:` near the end. Check with:
+The `scenarioProgress` array shows each scenario's status (`waiting`, `running`, `completed`, `failed`) along with turns, tool calls, elapsed time, and scores (when done).
+
+**As each scenario completes** (shown by `"status": "completed"` with `heuristicScore`/`supervisorScore`), read its log file for detailed analysis:
 
 ```bash
-# Check if a scenario log is done
-tail -5 packages/mcp-server/eval/output/logs/<runId>/<scenarioId>.log
+# Read a completed scenario's log
+cat packages/mcp-server/eval/output/logs/<evalId>/<scenarioId>.log
 ```
 
-Each completed log contains:
+Each log contains:
 - The full agent conversation (tool calls, responses, written code)
 - Heuristic score, supervisor score, framework issues
 - TypeScript compilation results
 - Turn count, tool call count, duration, stop reason
 
-**As each scenario finishes**, read its log and start analyzing:
+Analyze completed scenarios immediately:
 - What went wrong? (wrong API usage, hallucinated props, missing info, etc.)
 - What's the root cause? (missing docs? bad tool response? framework bug?)
 - Is this a pattern you've seen in other completed scenarios?
@@ -146,18 +202,23 @@ Don't wait for all scenarios — start fixing issues as soon as you identify pat
 - Test your changes make sense by reading the surrounding context
 - For complex or multi-file fixes, use the **Task tool** to launch the **idealyst-framework-engineer** agent to handle the implementation. This lets you delegate the fix while you continue analyzing other issues or monitoring progress. Give the agent clear context: what the problem is, which files are involved, and what the expected outcome looks like.
 
-### Step 4: Read the Full Summary (After All Scenarios Finish)
+### Step 4: Read the Full Report (After All Scenarios Finish)
 
-Once the background eval completes, read the final summary for aggregate analysis:
+Once `GET /runs/<runId>` shows `"status": "completed"`, fetch the full report:
 
 ```bash
-# The summary markdown with scores, tool usage, and framework issues
-cat packages/mcp-server/eval/output/<runId>.summary.md
+# Full structured report (JSON)
+curl -s http://localhost:4242/runs/<runId>/report
 ```
 
-Also check the comparison file for trends vs previous runs:
+You can also read the markdown summary and comparison files:
 ```bash
 cat packages/mcp-server/eval/COMPARE_RESULTS.md
+```
+
+Or query historical data from the server:
+```bash
+curl -s http://localhost:4242/history
 ```
 
 Use the aggregate data to:
@@ -177,15 +238,15 @@ Keep commit messages concise but descriptive (e.g., "convergence: improve Button
 
 ### Step 6: Next Iteration
 
-Go back to Step 1. Launch a new eval to measure the impact of your fixes. Compare against the previous run using `COMPARE_RESULTS.md`.
+Go back to Step 1. Launch a new eval run to measure the impact of your fixes. Compare against the previous run using `GET /history` or `COMPARE_RESULTS.md`.
 
 ### Important: Only Reference the CURRENT Eval
 
-Always work from the eval run you just launched. Do NOT analyze stale reports from previous sessions. Each iteration should:
-- Launch a **fresh** eval run
-- Track that specific run ID
-- Read only logs/summaries from that run
-- Compare against the previous run via `COMPARE_RESULTS.md` for trend analysis
+Always work from the eval run you just launched via `POST /runs`. Do NOT analyze stale reports from previous sessions. Each iteration should:
+- Launch a **fresh** eval run via the server
+- Track that specific `runId` from the POST response
+- Poll `GET /runs/<runId>` for progress and read logs from that run only
+- Compare against previous runs via `GET /history` or `COMPARE_RESULTS.md`
 
 ## Key Principles
 
