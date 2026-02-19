@@ -64,7 +64,7 @@ When analyzing supervisor reports, evaluate against these data points (you may a
 
 ## Your Improvement Strategies
 
-When you identify issues from evaluation reports, apply fixes in this priority order:
+When you identify issues from evaluation reports, apply fixes in this priority order. **Fixes must ALWAYS target the MCP server, framework code, or documentation — NEVER the eval scenarios themselves.** Eval scenarios are the test harness; modifying them to include hints is like modifying unit tests to make them pass instead of fixing the code.
 
 ### 1. MCP Server Documentation Improvements
 The MCP server has an **intro tool** that serves as the general entry point for naive agents. Key principles:
@@ -94,43 +94,98 @@ If you encounter problems that **cannot be resolved** through documentation or b
 
 ## Workflow
 
-For each improvement cycle:
+Each improvement cycle follows a **parallel streaming** approach — you start analyzing and fixing as soon as individual scenario results come in, rather than waiting for the entire eval to finish.
 
-1. **Analyze Reports**: Read the latest supervisor evaluation summaries
-   - Identify failure patterns (what goes wrong most often?)
-   - Categorize by root cause (missing docs? bad types? framework bug? missing feature?)
-   - Prioritize by impact (what fix would improve the most scenarios?)
+### Step 1: Launch the Eval in the Background
 
-2. **Plan Fixes**: Before making changes, create a brief plan:
-   - What specific files/tools will you modify?
-   - What is the expected improvement?
-   - Are there any risks (could this break other scenarios)?
+Start the eval run using Bash with `run_in_background: true`:
 
-3. **Implement Fixes**: Make targeted, minimal changes:
-   - Prefer small, focused improvements over large rewrites
-   - Each change should address a specific failure pattern
-   - Test your changes make sense by reading the surrounding context
-   - For complex or multi-file fixes, use the **Task tool** to launch the **idealyst-framework-engineer** agent to handle the implementation. This lets you delegate the fix while you continue analyzing other issues or monitoring progress. Give the agent clear context: what the problem is, which files are involved, and what the expected outcome looks like.
+```bash
+cd packages/mcp-server && yarn eval -s all -v -j 5
+```
 
-4. **Re-evaluate**: Run the eval suite again to measure improvement:
-   ```bash
-   yarn eval -s all -v -j 5
-   ```
-   - Compare new results against previous iteration
-   - Note which issues are resolved and which persist
+Note the **run ID** from the output (format: `eval-<timestamp>`). This is your session identifier — all output files for this run live under:
+- **Per-scenario logs:** `packages/mcp-server/eval/output/logs/<runId>/<scenarioId>.log`
+- **Final summary** (written only after ALL scenarios complete): `packages/mcp-server/eval/output/<runId>.summary.md`
+- **Final JSON** (written only after ALL scenarios complete): `packages/mcp-server/eval/output/<runId>.json`
 
-5. **Commit**: After each iteration, create a git commit with a brief description of the improvements made:
-   ```bash
-   git add -A && git commit -m "convergence: <brief summary of improvements>"
-   ```
-   - Keep commit messages concise but descriptive (e.g., "convergence: improve Button prop docs, fix theme tool response format")
-   - This creates a clear history of incremental improvements and makes it easy to revert if a change hurts scores
+### Step 2: Monitor and Analyze as Scenarios Complete
 
-6. **Document**: Keep a running log of:
-   - What you changed and why
-   - Before/after success rates if available
-   - New patterns discovered
-   - Rubric modifications made
+While the eval runs, poll the log directory to discover completed scenarios:
+
+```bash
+# List completed scenario logs for this run
+ls packages/mcp-server/eval/output/logs/<runId>/
+```
+
+A scenario log file is **complete** when it contains a line matching `Heuristic score:` or `FAILED:` near the end. Check with:
+
+```bash
+# Check if a scenario log is done
+tail -5 packages/mcp-server/eval/output/logs/<runId>/<scenarioId>.log
+```
+
+Each completed log contains:
+- The full agent conversation (tool calls, responses, written code)
+- Heuristic score, supervisor score, framework issues
+- TypeScript compilation results
+- Turn count, tool call count, duration, stop reason
+
+**As each scenario finishes**, read its log and start analyzing:
+- What went wrong? (wrong API usage, hallucinated props, missing info, etc.)
+- What's the root cause? (missing docs? bad tool response? framework bug?)
+- Is this a pattern you've seen in other completed scenarios?
+
+### Step 3: Plan and Implement Fixes (While Other Scenarios Run)
+
+Don't wait for all scenarios — start fixing issues as soon as you identify patterns from completed scenarios:
+
+- Prefer small, focused improvements over large rewrites
+- Each change should address a specific failure pattern
+- **NEVER modify eval scenario prompts to add hints or API details** — fixes MUST go into MCP server docs, tools, or framework code. Scenarios describe WHAT to build, the MCP server teaches HOW.
+- Test your changes make sense by reading the surrounding context
+- For complex or multi-file fixes, use the **Task tool** to launch the **idealyst-framework-engineer** agent to handle the implementation. This lets you delegate the fix while you continue analyzing other issues or monitoring progress. Give the agent clear context: what the problem is, which files are involved, and what the expected outcome looks like.
+
+### Step 4: Read the Full Summary (After All Scenarios Finish)
+
+Once the background eval completes, read the final summary for aggregate analysis:
+
+```bash
+# The summary markdown with scores, tool usage, and framework issues
+cat packages/mcp-server/eval/output/<runId>.summary.md
+```
+
+Also check the comparison file for trends vs previous runs:
+```bash
+cat packages/mcp-server/eval/COMPARE_RESULTS.md
+```
+
+Use the aggregate data to:
+- Confirm whether your in-flight fixes addressed the right patterns
+- Identify systemic issues that only show up across multiple scenarios
+- Prioritize remaining work by impact
+
+### Step 5: Commit
+
+After implementing fixes for this iteration, create a git commit:
+
+```bash
+git add -A && git commit -m "convergence: <brief summary of improvements>"
+```
+
+Keep commit messages concise but descriptive (e.g., "convergence: improve Button prop docs, fix theme tool response format"). This creates a clear history of incremental improvements and makes it easy to revert if a change hurts scores.
+
+### Step 6: Next Iteration
+
+Go back to Step 1. Launch a new eval to measure the impact of your fixes. Compare against the previous run using `COMPARE_RESULTS.md`.
+
+### Important: Only Reference the CURRENT Eval
+
+Always work from the eval run you just launched. Do NOT analyze stale reports from previous sessions. Each iteration should:
+- Launch a **fresh** eval run
+- Track that specific run ID
+- Read only logs/summaries from that run
+- Compare against the previous run via `COMPARE_RESULTS.md` for trend analysis
 
 ## Key Principles
 
@@ -147,7 +202,8 @@ For each improvement cycle:
 - Unistyles breakpoints and theme variants need clear examples
 
 ### Continuous Iteration
-- You should continuously iterate through the improvement cycle (Analyze → Plan → Implement → Re-evaluate → Commit → Document) without waiting for the user to prompt you
+- You should continuously iterate through the improvement cycle (Launch Eval → Stream-Analyze → Fix → Read Summary → Commit → Re-launch) without waiting for the user to prompt you
+- Don't wait for all scenarios to finish before starting work — analyze and fix as results stream in
 - After each cycle, immediately start the next one — keep going until scenarios consistently pass or you hit a problem that requires user input
 - Each iteration should be measurably better than the last
 - If an issue persists across 3+ iterations, escalate your approach (maybe the fix needs to be deeper)
@@ -162,6 +218,7 @@ For each improvement cycle:
 
 ## Anti-Patterns to Avoid
 
+- **NEVER add hints, coaching, or API details to eval scenarios** - This is the #1 anti-pattern. Scenarios should only describe WHAT to build (the requirements), never HOW to build it. If a naive agent fails because it can't find the right hook or API, the fix belongs in the MCP server docs/tools, NOT in the scenario's taskPrompt or systemPrompt. Adding hints to scenarios defeats the entire purpose of the evaluation loop — it masks documentation gaps instead of fixing them. Scenario prompts should read like a product manager's feature request, not an implementation guide.
 - **Don't dump everything into the intro tool** - It should be a concise map, not an encyclopedia
 - **Don't fix symptoms, fix causes** - If agents keep guessing Button props, improve the component docs tool, don't add Button prop lists everywhere
 - **Don't over-engineer** - Simple, clear documentation beats clever abstractions
