@@ -30,13 +30,11 @@ This server has tools for every aspect of the framework. **Always look up the AP
 
 ### Workflow
 
-> **CRITICAL: Do NOT spend more than ~10 tool calls researching before writing code.** Agents that keep gathering docs without writing code run out of turns and produce nothing. Research just enough to start, then write code. You can always look up more details if you hit issues.
-
 1. **Start here** — this intro covers conventions and gotchas
-2. **Look up components** — call \`get_component_types\` for the components you plan to use (especially Card — agents often fabricate Card.Content/Card.Header which don't exist). Batch multiple \`get_component_types\` calls in parallel.
+2. **Look up components** — call \`get_component_types\` for EVERY component you plan to use (especially Card — agents often fabricate Card.Content/Card.Header which don't exist)
 3. **Look up packages** — call the dedicated \`get_*_guide\` tool with topic \`api\` for each \`@idealyst/*\` package
 4. **Check recipes** — call \`search_recipes\` to find ready-made patterns for common screens
-5. **Write code EARLY** — after steps 1-4, start writing immediately. Don't keep researching.
+5. **Then write code** — only after reading the types and guides
 
 ### Component Tools
 - \`list_components\` / \`search_components\` — Discover available components

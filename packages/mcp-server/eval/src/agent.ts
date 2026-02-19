@@ -28,8 +28,8 @@ import type { ScenarioLogger } from "./logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-/** Default per-scenario wall-clock timeout (5 minutes) */
-const DEFAULT_TIMEOUT_MS = 5 * 60 * 1000;
+/** Default per-scenario wall-clock timeout (10 minutes) */
+const DEFAULT_TIMEOUT_MS = 10 * 60 * 1000;
 
 /** Progress update emitted during agent execution */
 export interface AgentProgress {
