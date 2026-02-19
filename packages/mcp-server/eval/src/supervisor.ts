@@ -436,6 +436,7 @@ export async function runSupervisorEvaluation(
           timeout: 300_000, // 5 minute timeout for supervisor
           cwd: process.cwd(),
           maxBuffer: 10 * 1024 * 1024, // 10MB
+          env: { ...process.env, CLAUDECODE: undefined },
         }
       );
 

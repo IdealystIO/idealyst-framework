@@ -201,7 +201,7 @@ You may create multiple files if the task requires it.`;
     const child = spawn("claude", args, {
       cwd,
       stdio: ["inherit", "pipe", "pipe"],
-      env: { ...process.env },
+      env: { ...process.env, CLAUDECODE: undefined },
     });
 
     // Wall-clock timeout — kill the child if the scenario takes too long

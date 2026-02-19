@@ -88,7 +88,7 @@ interface ScenarioDisplay {
   error: string | null;
 }
 
-function formatDuration(ms: number): string {
+export function formatDuration(ms: number): string {
   const s = Math.floor(ms / 1000);
   return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m${s % 60}s`;
 }
@@ -388,7 +388,7 @@ function listScenarios(): void {
 // Report Generation
 // ============================================================================
 
-function computeToolStats(
+export function computeToolStats(
   results: ScenarioResult[]
 ): Record<string, ToolUsageStat> {
   const stats: Record<
@@ -426,7 +426,7 @@ function computeToolStats(
   return output;
 }
 
-function computeAggregateScores(
+export function computeAggregateScores(
   results: ScenarioResult[]
 ): Record<string, number> {
   if (results.length === 0) return {};
@@ -464,7 +464,7 @@ function computeAggregateScores(
   return output;
 }
 
-function computeSupervisorAggregateScores(
+export function computeSupervisorAggregateScores(
   results: ScenarioResult[]
 ): Record<string, number> | null {
   const withSupervisor = results.filter((r) => r.supervisorEval !== null);
@@ -503,7 +503,7 @@ function computeSupervisorAggregateScores(
   return output;
 }
 
-function collectAllFrameworkIssues(results: ScenarioResult[]): FrameworkIssue[] {
+export function collectAllFrameworkIssues(results: ScenarioResult[]): FrameworkIssue[] {
   const issues: FrameworkIssue[] = [];
   const seen = new Set<string>();
 
@@ -520,7 +520,7 @@ function collectAllFrameworkIssues(results: ScenarioResult[]): FrameworkIssue[] 
   return issues;
 }
 
-function generateMarkdownSummary(report: EvalReport): string {
+export function generateMarkdownSummary(report: EvalReport): string {
   const lines: string[] = [];
 
   lines.push("# MCP Server Evaluation Report");
@@ -681,7 +681,7 @@ function generateMarkdownSummary(report: EvalReport): string {
 // COMPARE_RESULTS.md Generation
 // ============================================================================
 
-function generateCompareResults(db: EvalDatabase): string {
+export function generateCompareResults(db: EvalDatabase): string {
   const runs = db.getRunHistory(10);
   if (runs.length === 0) return "# Evaluation Comparison\n\nNo runs recorded yet.\n";
 

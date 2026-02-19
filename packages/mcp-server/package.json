@@ -37,7 +37,8 @@
     "eval": "tsx eval/src/run-eval.ts",
     "eval:all": "tsx eval/src/run-eval.ts --scenarios all",
     "eval:quick": "tsx eval/src/run-eval.ts --scenarios login-screen --verbose",
-    "eval:list": "tsx eval/src/run-eval.ts --list"
+    "eval:list": "tsx eval/src/run-eval.ts --list",
+    "eval:server": "tsx eval/src/server.ts"
   },
   "publishConfig": {
     "access": "public",
