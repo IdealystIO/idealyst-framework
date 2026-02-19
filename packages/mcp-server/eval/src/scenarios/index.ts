@@ -15,6 +15,12 @@ import { errorRecoveryScenario } from "./error-recovery.js";
 import { projectScaffoldScenario } from "./project-scaffold.js";
 import { apiBackendScenario } from "./api-backend.js";
 import { noContextAudioScenario } from "./no-context-audio.js";
+import { dataDisplayScenario } from "./data-display.js";
+import { overlayComponentsScenario } from "./overlay-components.js";
+import { themeStylingScenario } from "./theme-styling.js";
+import { mediaCameraScenario } from "./media-camera.js";
+import { fileUploadScenario } from "./file-upload.js";
+import { recipeDiscoveryScenario } from "./recipe-discovery.js";
 
 export const scenarios: Record<string, EvalScenario> = {
   // Component scenarios (symlinked workspace)
@@ -25,6 +31,12 @@ export const scenarios: Record<string, EvalScenario> = {
   "multi-package": multiPackageScenario,
   "error-recovery": errorRecoveryScenario,
   "no-context-audio": noContextAudioScenario,
+  "data-display": dataDisplayScenario,
+  "overlay-components": overlayComponentsScenario,
+  "theme-styling": themeStylingScenario,
+  "media-camera": mediaCameraScenario,
+  "file-upload": fileUploadScenario,
+  "recipe-discovery": recipeDiscoveryScenario,
 
   // Project scenarios (idealyst-cli scaffolded)
   "project-scaffold": projectScaffoldScenario,
