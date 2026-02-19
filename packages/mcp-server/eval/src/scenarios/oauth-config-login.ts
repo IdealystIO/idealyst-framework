@@ -8,19 +8,19 @@ export const oauthConfigLoginScenario: ComponentScenario = {
     "Tests integration of @idealyst/oauth-client, @idealyst/config, and @idealyst/storage for a complete auth flow",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
 You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about each package's API before writing any code.
-Always read the dedicated guide tools for packages (get_*_guide) to get accurate API references.
+Use these tools to learn about the framework before writing any code.
+Always check component documentation and types before using them in your code.
 Write your component code as real files using the Write tool to the workspace path provided.`,
   taskPrompt: `Build a login screen with social OAuth authentication. Requirements:
 
 1. **OAuth Configuration** — Use @idealyst/config to read API_URL and OAUTH_REDIRECT_URL from environment variables
-2. **OAuth Clients** — Use @idealyst/oauth-client to create Google and Apple OAuth clients using createOAuthClient()
-3. **Auth Flow** — When a user taps "Sign in with Google" or "Sign in with Apple", call the appropriate client's authorize() method
-4. **Session Storage** — After successful auth, store the auth code in @idealyst/storage using storage.setItem()
-5. **UI** — Use Idealyst components: Button with leftIcon for social login buttons, ActivityIndicator while authenticating, Alert for errors, View/Text for layout
-6. **Error Handling** — Catch auth errors and display them in an Alert with danger intent
+2. **OAuth Clients** — Use @idealyst/oauth-client to set up Google and Apple OAuth clients
+3. **Auth Flow** — When a user taps "Sign in with Google" or "Sign in with Apple", initiate the OAuth authorization flow
+4. **Session Storage** — After successful auth, persist the auth credentials using @idealyst/storage
+5. **UI** — Use Idealyst components for social login buttons with icons, a loading indicator while authenticating, error display, and layout
+6. **Error Handling** — Catch auth errors and display them appropriately
 
-Look up the oauth-client guide, config guide, and storage guide using the dedicated get_*_guide tools. Read the API topic for each to understand the exact function signatures.`,
+Look up the documentation for each package before writing code.`,
   expectedToolUsage: [
     "get_oauth_client_guide",
     "get_config_guide",

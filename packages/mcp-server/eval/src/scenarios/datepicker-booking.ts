@@ -9,7 +9,7 @@ export const datepickerBookingScenario: ComponentScenario = {
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
 You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
 Use these tools to learn about the framework before writing any code.
-Always check package guides and component types before using them in code.
+Always check component documentation and types before using them in your code.
 Write your component code as real files using the Write tool to the workspace path provided.`,
   taskPrompt: `Build a meeting scheduler form. Requirements:
 
@@ -20,7 +20,7 @@ Write your component code as real files using the Write tool to the workspace pa
 5. **Submit Button** — A Button that shows all selected values in a summary Text below the form
 6. **Validation** — Show error messages using the error prop on DateInput when dates are invalid
 
-Look up the datepicker guide for the DateInput, TimePicker, and DateTimePicker APIs. Note that these are DIFFERENT from TextInput — they are date-specific components from @idealyst/datepicker.`,
+Look up the datepicker documentation for the DateInput, TimePicker, and DateTimePicker APIs.`,
   expectedToolUsage: [
     "get_datepicker_guide",
     "get_component_docs",

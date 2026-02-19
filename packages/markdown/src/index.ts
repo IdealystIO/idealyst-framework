@@ -37,4 +37,7 @@ export type {
   MarkdownVariants,
 } from './Markdown/Markdown.styles';
 
-// Main component is platform-specific, exported from index.web.ts and index.native.ts
+// Main component — platform-specific implementations are in index.web.ts and index.native.ts.
+// This base index re-exports the web version as the default for bundlers that don't
+// resolve "browser" or "react-native" conditions (e.g., plain tsc with types resolution).
+export { default as Markdown } from './Markdown/Markdown.web';

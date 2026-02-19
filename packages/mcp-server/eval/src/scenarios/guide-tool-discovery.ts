@@ -8,25 +8,18 @@ export const guideToolDiscoveryScenario: ComponentScenario = {
     "Tests whether the agent discovers and uses dedicated get_*_guide tools instead of relying on generic get_package_docs",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
 You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-
-IMPORTANT: For detailed API documentation on specific packages, use the dedicated guide tools (like get_camera_guide, get_files_guide, get_animate_guide) with topic "api". These have complete, accurate API references. The generic get_package_docs tool only has summaries.
-
-Use these tools to learn about each package's exact API before writing any code.
+Use these tools to learn about the framework before writing any code.
+Always check component documentation and types before using them in your code.
 Write your component code as real files using the Write tool to the workspace path provided.`,
   taskPrompt: `Build a media upload screen that combines camera capture, file picking, and upload animations. Requirements:
 
-1. **Camera Capture** — Use @idealyst/camera to let users take a photo. Use the CameraPreview component and useCamera hook. Check permissions first with requestPermission.
-2. **File Picking** — Use @idealyst/files to let users pick images from their gallery. Use useFilePicker with the pick() method (NOT pickFiles).
-3. **Upload Animation** — Use @idealyst/animate to animate each media item as it uploads: fade in when added, progress animation while uploading, and a bounce sequence on completion.
-4. **Media Preview Grid** — Show captured/picked media in a grid using View components with Image thumbnails
-5. **Upload Button** — A Button to upload all selected media with a loading state
+1. **Camera Capture** — Let users take a photo using the camera with proper permission handling
+2. **File Picking** — Let users pick images from their gallery as an alternative to capturing
+3. **Upload Animation** — Animate each media item as it's added (fade in) and when upload completes (scale bounce)
+4. **Media Preview Grid** — Show captured/picked media in a grid with image thumbnails
+5. **Upload Button** — A button to upload all selected media with a loading state
 
-For EACH package, call the dedicated guide tool with topic "api" BEFORE writing code:
-- get_camera_guide with topic "api" for camera types
-- get_files_guide with topic "api" for file picker types
-- get_animate_guide with topic "api" for animation hooks
-
-Do NOT guess the APIs. The guide tools have the exact TypeScript interfaces.`,
+Use the appropriate Idealyst packages for camera, file picking, and animations alongside the component library for UI elements.`,
   expectedToolUsage: [
     "get_camera_guide",
     "get_files_guide",
@@ -41,7 +34,7 @@ Do NOT guess the APIs. The guide tools have the exact TypeScript interfaces.`,
     /import.*from\s+['"]@idealyst\/components['"]/,
     /useCamera|CameraPreview/,
     /useFilePicker|pick/,
-    /useAnimatedStyle|usePresence|useSequence/,
+    /useAnimatedStyle|usePresence|useAnimatedValue/,
   ],
   expectedFiles: {
     "MediaUpload.tsx":

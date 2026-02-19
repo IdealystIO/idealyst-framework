@@ -5,21 +5,21 @@ export const animateTransitionsScenario: ComponentScenario = {
   id: "animate-transitions",
   name: "Animation & Transitions",
   description:
-    "Tests discovery and usage of @idealyst/animate hooks: useAnimatedStyle, usePresence, useSequence, useKeyframes, and transform syntax",
+    "Tests discovery and usage of @idealyst/animate hooks: useAnimatedStyle, useAnimatedValue, usePresence, useGradientBorder, and transform syntax",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
 You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
 Use these tools to learn about the framework before writing any code.
-Always check package guides and component types before using them in code.
+Always check component documentation and types before using them in your code.
 Write your component code as real files using the Write tool to the workspace path provided.`,
   taskPrompt: `Build an animated notification center screen. Requirements:
 
-1. **Notification Cards** — Each notification card should animate in when it appears using enter/exit animations (fade + slide up). When dismissed, it should animate out.
-2. **Pulsing Badge** — A badge on the notification bell icon that continuously pulses using a keyframe animation to draw attention.
-3. **Expandable Details** — When a notification is tapped, its card expands to show details with a smooth height/opacity animation sequence.
-4. **Mark All Read Button** — A button that, when pressed, triggers a bounce animation sequence (scale up → scale down → settle).
-5. **Gradient Border** — The most recent notification should have an animated gradient border to highlight it.
+1. **Notification Cards** — Each notification card should animate in when it appears (fade + slide up) and animate out when dismissed
+2. **Pulsing Badge** — A badge on the notification bell icon that continuously pulses to draw attention
+3. **Expandable Details** — When a notification is tapped, its card expands to show details with a smooth animation
+4. **Mark All Read Button** — A button that triggers a bounce animation (scale up then settle) when pressed
+5. **Gradient Border** — The most recent notification should have an animated gradient border to highlight it
 
-Use the @idealyst/animate package for ALL animations. Look up the animate guide to understand the available hooks (useAnimatedStyle, usePresence, useSequence, useKeyframes, useGradientBorder) and the simplified transform syntax ({ x, y, scale } not arrays). Do NOT use React Native's Animated API.`,
+Use the @idealyst/animate package for all animations and @idealyst/components for UI elements.`,
   expectedToolUsage: [
     "get_animate_guide",
     "get_component_docs",
@@ -29,7 +29,7 @@ Use the @idealyst/animate package for ALL animations. Look up the animate guide 
   expectedOutputPatterns: [
     /import.*from\s+['"]@idealyst\/animate['"]/,
     /import.*from\s+['"]@idealyst\/components['"]/,
-    /usePresence|useAnimatedStyle|useSequence|useKeyframes|useGradientBorder/,
+    /usePresence|useAnimatedStyle|useAnimatedValue|useGradientBorder/,
     /transform.*\{|opacity/,
     /Button/,
   ],

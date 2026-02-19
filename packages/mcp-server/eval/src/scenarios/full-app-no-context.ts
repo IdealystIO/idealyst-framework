@@ -12,10 +12,10 @@ export const fullAppNoContextScenario: ComponentScenario = {
 1. **Workout Log** — A list of today's completed exercises showing name, sets, reps, and a completion checkmark
 2. **Active Timer** — A large countdown timer display for the current exercise rest period, with start/pause/reset buttons. The timer digits should animate when changing.
 3. **Weekly Progress Chart** — A chart showing workout minutes per day for the past 7 days
-4. **Animated Progress Ring** — An animated circular progress indicator showing "3 of 5 exercises completed" that fills up as exercises are done, using a keyframe animation
+4. **Animated Progress Ring** — An animated progress indicator showing "3 of 5 exercises completed" that fills up smoothly as exercises are done
 5. **Quick Stats Cards** — Cards showing today's stats: total time, calories burned, exercises completed
 
-Use the MCP tools to discover what framework you're working with, what components are available, what packages exist for charts and animations, and read their documentation before writing code. Do NOT guess any API — look everything up first.`,
+Use the MCP tools to discover what framework you're working with, what components and packages are available, and read their documentation before writing code.`,
   expectedToolUsage: [
     "get_intro",
     "list_packages",
@@ -29,7 +29,7 @@ Use the MCP tools to discover what framework you're working with, what component
     /import.*from\s+['"]@idealyst\/charts['"]/,
     /import.*from\s+['"]@idealyst\/animate['"]/,
     /LineChart|BarChart/,
-    /useAnimatedStyle|useKeyframes|useSequence/,
+    /useAnimatedStyle|useAnimatedValue|usePresence/,
     /Button/,
   ],
   expectedFiles: {

@@ -18,7 +18,7 @@ Write your component code as real files using the Write tool to the workspace pa
 3. Import from "@idealyst/forms" package (check if this package exists)
 4. The form should have: name field, email field, and a submit button
 
-Use the MCP tools to verify what actually exists before writing code. Do NOT hallucinate components or packages — only use what the tools confirm is available.`,
+Use the MCP tools to verify what actually exists before writing code.`,
   expectedToolUsage: [
     "get_component_docs",
     "search_recipes",

@@ -19,7 +19,7 @@ Write your component code as real files using the Write tool to the workspace pa
 4. **Card Styling** — Cards with different padding sizes and shadow variants
 5. **Icon Sizes** — Icons at different size values
 
-Look up the theme types to see exactly what Size, Intent, and other theme values are available. Use the actual values — do NOT guess.`,
+Look up the theme types to see what Size, Intent, and other theme values are available.`,
   expectedToolUsage: [
     "get_theme_types",
     "get_component_types",
