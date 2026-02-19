@@ -144,7 +144,7 @@ import { Lottie } from '@idealyst/lottie';
 
 function SuccessAnimation() {
   return (
-    <View align="center" padding="lg">
+    <View style={{ alignItems: 'center' }} padding="lg">
       <Lottie
         source="https://assets.lottiefiles.com/packages/lf20_success.json"
         autoPlay
@@ -189,7 +189,7 @@ function ControlledAnimation() {
   const lottieRef = useRef<LottieRef>(null);
 
   return (
-    <View padding="md" gap="md" align="center">
+    <View padding="md" gap="md" style={{ alignItems: 'center' }}>
       <Lottie
         ref={lottieRef}
         source="https://assets.lottiefiles.com/packages/lf20_animation.json"
@@ -197,12 +197,12 @@ function ControlledAnimation() {
         loop
         style={{ width: 200, height: 200 }}
       />
-      <View direction="row" gap="sm">
+      <View style={{ flexDirection: 'row' }} gap="sm">
         <Button onPress={() => lottieRef.current?.play()} size="sm">Play</Button>
         <Button onPress={() => lottieRef.current?.pause()} size="sm">Pause</Button>
         <Button onPress={() => lottieRef.current?.stop()} size="sm">Stop</Button>
       </View>
-      <View direction="row" gap="sm">
+      <View style={{ flexDirection: 'row' }} gap="sm">
         <Button
           onPress={() => lottieRef.current?.setSpeed(2)}
           size="sm"
@@ -249,7 +249,7 @@ function ScrollLinkedAnimation() {
         style={{ width: 300, height: 200 }}
       />
       {/* Slider to simulate scroll progress */}
-      <View direction="row" align="center" gap="sm">
+      <View style={{ flexDirection: 'row', alignItems: 'center' }} gap="sm">
         <Text>0%</Text>
         <input
           type="range"

@@ -344,7 +344,7 @@ const columns: Column<User>[] = [
     header: 'User',
     width: 250,
     render: (_, row) => (
-      <View direction="row" align="center" gap="sm">
+      <View style={{ flexDirection: 'row', alignItems: 'center' }} gap="sm">
         <Avatar src={row.avatar} size="sm" fallback={row.name.charAt(0)} />
         <Text>{row.name}</Text>
       </View>

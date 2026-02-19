@@ -1800,7 +1800,7 @@ export function StackLayout({ options, currentPath }: StackLayoutProps) {
           {/* Title - centered or left-aligned */}
           <View style={{ flex: 1 }}>
             {typeof options?.headerTitle === 'string' ? (
-              <Text variant="title">{options.headerTitle}</Text>
+              <Text typography="h6" weight="bold">{options.headerTitle}</Text>
             ) : (
               options?.headerTitle
             )}
@@ -1946,7 +1946,7 @@ export function DrawerLayout({ routes, currentPath, options }: StackLayoutProps)
       }}>
         {/* Logo/Header */}
         <View style={{ height: 56, justifyContent: 'center', paddingHorizontal: 16 }}>
-          {!isCollapsed && <Text variant="title">My App</Text>}
+          {!isCollapsed && <Text typography="h6" weight="bold">My App</Text>}
         </View>
 
         {/* Menu Items */}
@@ -2010,7 +2010,7 @@ export function AppLayout({ options, routes, currentPath, children }: StackLayou
         height: 56,
         content: (
           <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-            <Text variant="title">{options?.headerTitle || 'App'}</Text>
+            <Text typography="h6" weight="bold">{options?.headerTitle || 'App'}</Text>
             <View style={{ marginLeft: 'auto' }}>{options?.headerRight}</View>
           </View>
         ),

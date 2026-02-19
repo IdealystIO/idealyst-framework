@@ -311,7 +311,7 @@ function PhotoCaptureScreen() {
     return (
       <View style={{ flex: 1 }}>
         <Image src={photo.uri} style={{ flex: 1 }} contentFit="contain" />
-        <View direction="row" justify="center" gap="md" padding="md">
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }} gap="md" padding="md">
           <Button onPress={() => setPhoto(null)} intent="secondary">Retake</Button>
           <Button onPress={() => console.log('Save:', photo.uri)} intent="primary">Use Photo</Button>
         </View>
@@ -322,7 +322,7 @@ function PhotoCaptureScreen() {
   return (
     <View style={{ flex: 1 }}>
       <CameraPreview camera={camera.cameraRef.current} style={{ flex: 1 }} />
-      <View direction="row" justify="space-between" align="center" padding="md">
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }} padding="md">
         <IconButton
           icon={camera.torchActive ? 'flash' : 'flash-off'}
           onPress={() => camera.setTorch(!camera.torchActive)}
@@ -402,7 +402,7 @@ function CameraWithPermissions() {
 
   if (camera.permission?.camera !== 'granted') {
     return (
-      <View padding="lg" gap="md" align="center">
+      <View padding="lg" gap="md" style={{ alignItems: 'center' }}>
         <Text>Camera permission is required</Text>
         <Button onPress={handleRequestPermission} intent="primary">
           Grant Permission

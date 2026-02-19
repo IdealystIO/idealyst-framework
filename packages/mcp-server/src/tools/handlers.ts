@@ -432,6 +432,7 @@ export function searchIcons(args: SearchIconsArgs): ToolResponse {
     matches: matchingIcons.length,
     returned: limitedResults.length,
     icons: limitedResults,
+    usage: "IMPORTANT: These icon names are of type `IconName` from '@idealyst/components'. When building helper functions that return icon names, always type the return as `IconName` — never as `string`. Example: `function getIcon(status: string): IconName { ... }`. Using `string` as the return type will cause a TypeScript compilation error (TS2322).",
   };
 
   return jsonResponse(result);

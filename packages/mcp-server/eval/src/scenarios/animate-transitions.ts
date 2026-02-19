@@ -5,7 +5,7 @@ export const animateTransitionsScenario: ComponentScenario = {
   id: "animate-transitions",
   name: "Animation & Transitions",
   description:
-    "Tests discovery and usage of @idealyst/animate hooks: useAnimatedStyle, useAnimatedValue, usePresence, useGradientBorder, and transform syntax",
+    "Tests discovery and usage of @idealyst/animate hooks (useAnimatedStyle, useAnimatedValue, usePresence, useGradientBorder) with correct easing values",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
 You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
 Use these tools to learn about the framework before writing any code.
@@ -35,7 +35,7 @@ Use the @idealyst/animate package for all animations and @idealyst/components fo
   ],
   expectedFiles: {
     "NotificationCenter.tsx":
-      "Animated notification center with enter/exit, pulse, sequence, and gradient border animations",
+      "Animated notification center with enter/exit, pulse, bounce, and gradient border animations",
   },
   maxTurns: 50,
   difficulty: "intermediate",

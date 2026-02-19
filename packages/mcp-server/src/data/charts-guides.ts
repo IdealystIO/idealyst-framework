@@ -77,7 +77,7 @@ function SalesChart() {
 interface DataPoint {
   x: string | number | Date;
   y: number;
-  label?: string;
+  label?: string;     // Optional label for THIS individual point
   color?: string;
   metadata?: Record<string, unknown>;
 }
@@ -85,18 +85,20 @@ interface DataPoint {
 
 ### ChartDataSeries
 
+A series is a named collection of data points. It has EXACTLY these properties:
+
 \`\`\`typescript
 interface ChartDataSeries {
-  id: string;             // Unique identifier for this series
-  name: string;           // Display name (shown in legend/tooltip)
-  data: DataPoint[];
-  color?: string;         // Custom color for this series
-  intent?: Intent;        // Theme intent for automatic coloring
-  visible?: boolean;      // Whether this series is visible
+  id: string;             // REQUIRED — Unique identifier for this series
+  name: string;           // REQUIRED — Display name (shown in legend/tooltip)
+  data: DataPoint[];      // REQUIRED — Array of data points
+  color?: string;         // Optional — Custom color for this series
+  intent?: Intent;        // Optional — Theme intent for automatic coloring
+  visible?: boolean;      // Optional — Whether this series is visible
 }
 \`\`\`
 
-> **IMPORTANT:** \`id\` and \`name\` are **required**. There is NO \`label\` property — use \`name\` instead.
+> **WARNING:** \`ChartDataSeries\` has NO \`label\` property. Use \`name\` for the series display name. Only \`DataPoint\` has \`label\` (for individual point labels). Adding \`label\` to a series object will cause a TypeScript error (TS2353: excess property check).
 
 ### PieDataPoint
 
@@ -142,7 +144,7 @@ interface CartesianChartProps extends BaseChartProps {
 
 \`\`\`typescript
 interface AxisConfig {
-  show?: boolean;           // Whether to show the axis
+  show?: boolean;           // Use 'show' — NOT 'visible'
   label?: string;           // Axis label text
   tickCount?: number;       // Number of ticks to show
   tickFormat?: (value: number | string | Date) => string;  // Custom tick formatter
@@ -152,7 +154,12 @@ interface AxisConfig {
 }
 \`\`\`
 
-> **Note:** The property is \`show\` (NOT \`visible\`). The \`tickFormat\` parameter type is \`number | string | Date\` (NOT \`any\` or just \`number\`).
+> **Common mistakes:**
+> - Use \`show\` — NOT \`visible\`. \`{ visible: true }\` will cause a TS error.
+> - \`tickFormat\` parameter is \`number | string | Date\` — NOT just \`number\`. Example:
+>   \`\`\`typescript
+>   tickFormat: (value: number | string | Date) => \`$\${Number(value) / 1000}k\`
+>   \`\`\`
 
 ---
 

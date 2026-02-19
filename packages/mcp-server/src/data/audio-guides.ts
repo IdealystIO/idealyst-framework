@@ -385,7 +385,7 @@ function AudioFilePlayer({ uri }: { uri: string }) {
       <Text>
         {Math.round(player.position / 1000)}s / {Math.round(player.duration / 1000)}s
       </Text>
-      <View direction="row" gap="sm">
+      <View style={{ flexDirection: 'row' }} gap="sm">
         <Button onPress={() => player.pause()} disabled={!player.isPlaying} size="sm">
           Pause
         </Button>

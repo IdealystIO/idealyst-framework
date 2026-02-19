@@ -4,15 +4,33 @@ Idealyst uses Material Design Icons (@mdi/react) with **7,447 icons** available.
 
 ## Icon Usage
 
-### In Components
+### TypeScript Type — CRITICAL
 
-Icons can be used by providing the icon name as a string:
+Icon names are typed as \`IconName\`, NOT \`string\`. When you create helper functions that return icon names, you MUST type them as \`IconName\`:
+
+\`\`\`tsx
+import type { IconName } from '@idealyst/components';
+
+// CORRECT: return type is IconName
+function getStatusIcon(status: string): IconName {
+  switch (status) {
+    case 'active': return 'check-circle';
+    case 'pending': return 'clock-outline';
+    default: return 'help-circle';
+  }
+}
+
+// WRONG: return type 'string' will cause TS2322 error when passed to icon props
+// function getStatusIcon(status: string): string { ... }  // ❌
+\`\`\`
+
+### In Components
 
 \`\`\`tsx
 import { Button, Icon, List, Badge } from '@idealyst/components';
 
-// Button with icon
-<Button icon="check">Save</Button>
+// Button with icon (use leftIcon, NOT icon)
+<Button leftIcon="check">Save</Button>
 
 // Standalone Icon
 <Icon name="home" size="md" color="primary" />
@@ -28,7 +46,7 @@ import { Button, Icon, List, Badge } from '@idealyst/components';
 
 \`\`\`tsx
 <Icon
-  name="home"                    // Icon name (required)
+  name="home"                    // Icon name (required) — type: IconName
   size="xs|sm|md|lg|xl|number"   // Icon size
   color="primary|secondary|..."   // Theme color
 />
@@ -253,11 +271,12 @@ Icons follow naming patterns:
 
 ### Button Icons
 \`\`\`tsx
-<Button icon="content-save">Save</Button>
-<Button icon="delete" intent="danger">Delete</Button>
-<Button icon="pencil">Edit</Button>
-<Button icon="plus">Add New</Button>
+<Button leftIcon="content-save">Save</Button>
+<Button leftIcon="delete" intent="danger">Delete</Button>
+<Button leftIcon="pencil">Edit</Button>
+<Button leftIcon="plus">Add New</Button>
 \`\`\`
+> **Note:** Button uses \`leftIcon\` and \`rightIcon\` — NOT \`icon\`.
 
 ### List Icons
 \`\`\`tsx
@@ -269,9 +288,9 @@ Icons follow naming patterns:
 
 ### Navigation Icons
 \`\`\`tsx
-<Button icon="arrow-left" variant="text">Back</Button>
-<Button icon="menu" variant="text">Menu</Button>
-<Button icon="close" variant="text">Close</Button>
+<Button leftIcon="arrow-left" type="text">Back</Button>
+<Button leftIcon="menu" type="text">Menu</Button>
+<Button leftIcon="close" type="text">Close</Button>
 \`\`\`
 
 ### Status Icons

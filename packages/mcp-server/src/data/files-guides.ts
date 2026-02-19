@@ -337,7 +337,7 @@ function DocumentPicker() {
       </Button>
       <List>
         {picker.files.map(file => (
-          <View key={file.id} direction="row" justify="space-between" padding="sm">
+          <View key={file.id} style={{ flexDirection: 'row', justifyContent: 'space-between' }} padding="sm">
             <Text>{file.name}</Text>
             <Text size="sm" color="secondary">{Math.round(file.size / 1024)}KB</Text>
           </View>
@@ -363,7 +363,7 @@ function ImagePicker() {
       <Button onPress={() => picker.pick()} leftIcon="image-multiple">
         Select Images
       </Button>
-      <View direction="row" gap="sm" style={{ flexWrap: 'wrap' }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }} gap="sm">
         {picker.files.map(file => (
           <Image
             key={file.id}
@@ -462,7 +462,7 @@ function FileDropArea() {
       {(state) => (
         <View
           padding="xl"
-          align="center"
+          style={{ alignItems: 'center' }}
           border={state.isDragActive ? 'thick' : 'thin'}
         >
           <Text>{state.isDragActive ? 'Drop files here' : 'Drag files here or click to browse'}</Text>

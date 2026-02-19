@@ -57,6 +57,40 @@ Easing values use **camelCase** (NOT CSS hyphenated format). Available values:
 
   "idealyst://animate/api": `# @idealyst/animate — API Reference
 
+## Available Exports (COMPLETE LIST)
+
+\`\`\`typescript
+import {
+  useAnimatedStyle,    // Animate style changes
+  useAnimatedValue,    // Animated numeric value with interpolation
+  usePresence,         // Enter/exit animations
+  useGradientBorder,   // Animated gradient borders
+  withAnimated,        // HOC to wrap any component for animation
+} from '@idealyst/animate';
+\`\`\`
+
+> **There are exactly 5 exports.** There is NO \`useSequence\`, \`useKeyframes\`, \`useSpring\`, or \`useTransition\`.
+> For multi-step animations, use \`useAnimatedStyle\` with state changes. For looping, use \`useAnimatedValue\` with repeated \`set()\` calls.
+
+## Easing Values (EXACT string literals)
+
+Easing values are **camelCase** — NOT CSS kebab-case. Using \`'ease-out'\` will cause a TypeScript error.
+
+| Valid (use these) | INVALID (do NOT use) |
+|---|---|
+| \`'easeOut'\` | ~~\`'ease-out'\`~~ |
+| \`'easeIn'\` | ~~\`'ease-in'\`~~ |
+| \`'easeInOut'\` | ~~\`'ease-in-out'\`~~ |
+
+All valid easing values:
+\`\`\`typescript
+type EasingKey = 'ease' | 'linear' | 'easeIn' | 'easeOut' | 'easeInOut'
+  | 'spring' | 'standard' | 'accelerate' | 'decelerate'
+  | 'springStiff' | 'springBouncy';
+\`\`\`
+
+---
+
 ## Hooks
 
 ### useAnimatedStyle(style, options?)
