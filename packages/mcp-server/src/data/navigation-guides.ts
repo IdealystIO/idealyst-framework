@@ -203,6 +203,8 @@ type TabBarScreenOptions = {
 } & ScreenOptions;
 \`\`\`
 
+> **Nested navigators:** When a Stack is nested inside a Tab, the **stack's root route** still uses \`TabBarScreenOptions\` for its \`options\` (it needs tabBarIcon/tabBarLabel for the tab bar). Type it as \`options: TabBarScreenOptions\` on the stack wrapper route.
+
 Example:
 \`\`\`tsx
 {

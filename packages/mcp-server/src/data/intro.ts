@@ -28,20 +28,21 @@ import { View, Text, Button, TextInput, Card, Icon, ... } from '@idealyst/compon
 
 This server has tools for every aspect of the framework. **Always look up the API before writing code.**
 
-### Workflow
+### Workflow (be efficient — minimize tool calls)
 
 1. **Start here** — this intro covers conventions and gotchas
-2. **Look up components** — call \`get_component_types\` for EVERY component you plan to use (especially Card — agents often fabricate Card.Content/Card.Header which don't exist)
+2. **Look up components** — call \`get_component_types\` for EVERY component you plan to use. **Batch them in one call**: \`get_component_types({ component: "Button,Card,Text,View" })\` returns all types at once. (Card has NO compound components — no Card.Content/Card.Header)
 3. **Look up packages** — call the dedicated \`get_*_guide\` tool with topic \`api\` for each \`@idealyst/*\` package
 4. **Check recipes** — call \`search_recipes\` to find ready-made patterns for common screens
-5. **Then write code** — only after reading the types and guides
+5. **Search icons ONCE** — combine all needed icon terms into ONE \`search_icons\` call (e.g., \`"home settings check timer calendar"\`)
+6. **Then write code** — only after reading the types and guides. Do NOT make additional icon searches — pick from what you found
 
 ### Component Tools
 - \`list_components\` / \`search_components\` — Discover available components
 - \`get_component_docs\` — Component features and best practices
-- \`get_component_types\` — **TypeScript prop interfaces** (call this before using any component)
+- \`get_component_types\` — **TypeScript prop interfaces** (supports batch: \`"Button,Card,Text"\`)
 - \`get_component_examples_ts\` — Type-checked code examples
-- \`search_icons\` — Find Material Design icon names (7,447 available, results sorted by relevance)
+- \`search_icons\` — Find Material Design icon names (7,447 available). **Batch your needs**: search once with multiple terms like \`"home settings user check"\` rather than making separate calls per icon
 
 ### Package Guide Tools
 **For any \`@idealyst/*\` package, call its dedicated guide tool with topic \`api\` BEFORE writing code.** These return complete TypeScript interfaces, return types, and correct usage. The generic \`get_package_docs\` tool only has summaries.
@@ -98,6 +99,12 @@ const deleteIcon: IconName = 'delete';
 interface MyProps { icon: IconName; }
 interface NavItem { label: string; icon: IconName; path: string; } // NOT icon: string
 const tabs: { icon: IconName }[] = [{ icon: 'home' }, { icon: 'search' }]; // NOT icon: string
+
+// Icon-accepting props (leftIcon, rightIcon, icon) accept BOTH IconName and ReactNode:
+<Button leftIcon="check">OK</Button>              // ✅ string — simplest
+<Button leftIcon={myIcon}>OK</Button>              // ✅ IconName variable
+// Do NOT wrap in <Icon>: <Button leftIcon={<Icon name="check" />}>  // ❌ unnecessary
+// Do NOT cast: <Button leftIcon={'check' as IconName}>              // ❌ unnecessary — just use the string
 \`\`\`
 
 > **CRITICAL:** Icon names do NOT have an \`mdi:\` prefix. Use bare names like \`'delete'\`, \`'home'\`, \`'check-circle'\` — NOT \`'mdi:delete'\`, \`'mdi:home'\`, etc.
@@ -131,7 +138,7 @@ These are mistakes agents make repeatedly. Each one causes TypeScript compilatio
 
 ### Imports & Styling
 16. **Never** import from \`react-native\` for UI — no \`TouchableOpacity\`, \`FlatList\`, \`ScrollView\`, \`Animated\`, \`Dimensions\`.
-17. **Never** import from \`react-native-unistyles\` — use \`@idealyst/theme\` (\`configureThemes\`, \`ThemeSettings\`, \`useTheme\`).
+17. **Never** import from \`react-native-unistyles\` — use \`@idealyst/theme\` (\`configureThemes\`, \`ThemeSettings\`, \`useTheme\`). To access theme tokens in custom styles: \`const { theme } = useTheme(); style={{ padding: theme.spacing.md, backgroundColor: theme.colors.surface }}\`.
 
 ### React 19 TypeScript
 - **useRef** requires an initial argument: \`useRef<T>(null)\` — NOT \`useRef<T>()\`. Omitting the argument causes TS2554. For non-null refs use: \`useRef<number>(0)\`, \`useRef<string[]>([])\`.

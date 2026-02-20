@@ -126,7 +126,7 @@ interface UseFileUploadOptions {
 | isUploading | boolean | Whether any upload is in progress |
 | isPaused | boolean | Whether queue is paused |
 | hasFailedUploads | boolean | Whether there are failed uploads |
-| addFiles | (files, config) => string[] | Add files to upload queue |
+| addFiles | (files, config: UploadConfig) => string[] | Add files to queue. Only \`config.url\` is required — e.g., \`addFiles(files, { url: 'https://...' })\` |
 | start | () => void | Start processing queue |
 | pause | () => void | Pause all uploads |
 | resume | () => void | Resume paused uploads |
@@ -254,25 +254,46 @@ interface FilePickerConfig {
 ### UploadConfig
 
 \`\`\`typescript
+// Only 'url' is required — all other fields have sensible defaults
 interface UploadConfig {
-  url: string;                                   // Target URL
-  method: 'POST' | 'PUT' | 'PATCH';            // Default: 'POST'
+  url: string;                                   // Target URL (REQUIRED)
+  method?: 'POST' | 'PUT' | 'PATCH';            // Default: 'POST'
   headers?: Record<string, string>;
-  fieldName: string;                             // Form field name (default: 'file')
+  fieldName?: string;                            // Form field name (default: 'file')
   formData?: Record<string, string | number | boolean>;
-  multipart: boolean;                            // Default: true
-  concurrency: number;                           // Concurrent uploads (default: 3)
-  timeout: number;                               // Request timeout ms (default: 30000)
-  retryEnabled: boolean;                         // Default: true
-  maxRetries: number;                            // Default: 3
-  retryDelay: 'fixed' | 'exponential';
-  retryDelayMs: number;                          // Default: 1000
-  chunkedUpload: boolean;                        // Default: false
-  chunkSize: number;                             // Default: 10MB
-  chunkedUploadThreshold: number;                // Default: 50MB
-  backgroundUpload: boolean;                     // Native only (default: false)
+  multipart?: boolean;                           // Default: true
+  concurrency?: number;                          // Concurrent uploads (default: 3)
+  timeout?: number;                              // Request timeout ms (default: 30000)
+  retryEnabled?: boolean;                        // Default: true
+  maxRetries?: number;                           // Default: 3
+  retryDelay?: 'fixed' | 'exponential';          // Default: 'exponential'
+  retryDelayMs?: number;                         // Default: 1000
+  chunkedUpload?: boolean;                       // Default: false
+  chunkSize?: number;                            // Default: 10MB
+  chunkedUploadThreshold?: number;               // Default: 50MB
+  backgroundUpload?: boolean;                    // Native only (default: false)
 }
 \`\`\`
+
+### UploadProgressInfo
+
+\`\`\`typescript
+interface UploadProgressInfo {
+  id: string;              // Upload ID
+  file: PickedFile;        // The file being uploaded
+  state: UploadState;      // 'pending' | 'uploading' | 'paused' | 'completed' | 'failed' | 'cancelled'
+  bytesUploaded: number;   // Bytes uploaded so far
+  bytesTotal: number;      // Total bytes to upload
+  percentage: number;      // Progress 0-100
+  speed: number;           // Upload speed in bytes/sec
+  estimatedTimeRemaining: number;  // ETA in ms (NOT 'eta')
+  retryCount: number;      // Number of retry attempts
+  error?: UploadError;     // Error if state is 'failed'
+  config: UploadConfig;    // Upload configuration used
+}
+\`\`\`
+
+> **IMPORTANT:** The property is \`state\` (NOT \`status\`) and \`percentage\` (NOT \`progress\`).
 
 ### FilePickerResult
 
@@ -378,36 +399,24 @@ function ImagePicker() {
 }
 \`\`\`
 
-## File Upload with Progress
+## File Upload with UploadProgress (Recommended)
+
+Use the pre-built \`UploadProgress\` component for the best experience:
 
 \`\`\`tsx
 import React from 'react';
-import { View, Button, Text, Progress } from '@idealyst/components';
-import { useFilePicker, useFileUpload } from '@idealyst/files';
+import { View, Button, Text, Badge } from '@idealyst/components';
+import { useFilePicker, useFileUpload, UploadProgress } from '@idealyst/files';
 
 function FileUploadScreen() {
   const picker = useFilePicker({ config: { allowedTypes: ['any'], multiple: true } });
-  const uploader = useFileUpload({ autoStart: true, concurrency: 2 });
+  const uploader = useFileUpload({ concurrency: 2 });
 
   const handlePickAndUpload = async () => {
     const result = await picker.pick();
     if (!result.cancelled && result.files.length > 0) {
-      uploader.addFiles(result.files, {
-        url: 'https://api.example.com/upload',
-        method: 'POST',
-        fieldName: 'file',
-        multipart: true,
-        concurrency: 2,
-        timeout: 30000,
-        retryEnabled: true,
-        maxRetries: 3,
-        retryDelay: 'exponential',
-        retryDelayMs: 1000,
-        chunkedUpload: false,
-        chunkSize: 10 * 1024 * 1024,
-        chunkedUploadThreshold: 50 * 1024 * 1024,
-        backgroundUpload: false,
-      });
+      uploader.addFiles(result.files, { url: 'https://api.example.com/upload' });
+      uploader.start();
     }
   };
 
@@ -416,11 +425,69 @@ function FileUploadScreen() {
       <Button onPress={handlePickAndUpload} leftIcon="upload">
         Pick & Upload
       </Button>
+
+      {/* Queue summary */}
+      {uploader.uploads.length > 0 && (
+        <View style={{ flexDirection: 'row' }} gap="sm">
+          <Badge intent="success" type="filled">{uploader.queueStatus.completed} done</Badge>
+          <Badge intent="info" type="filled">{uploader.queueStatus.uploading} uploading</Badge>
+          <Badge intent="neutral" type="filled">{uploader.queueStatus.pending} pending</Badge>
+        </View>
+      )}
+
+      {/* Per-file progress — use the pre-built UploadProgress component */}
+      {uploader.uploads.map(upload => (
+        <UploadProgress
+          key={upload.id}
+          upload={upload}
+          showFileName
+          showFileSize
+          showSpeed
+          showCancel={upload.state === 'uploading'}
+          showRetry={upload.state === 'failed'}
+          onCancel={() => uploader.cancel(upload.id)}
+          onRetry={() => uploader.retry(upload.id)}
+        />
+      ))}
+    </View>
+  );
+}
+\`\`\`
+
+## Manual Upload Progress (Custom UI)
+
+If you need custom upload UI, use the \`upload.state\` and \`upload.percentage\` properties:
+
+\`\`\`tsx
+import React from 'react';
+import { View, Button, Text, Progress } from '@idealyst/components';
+import { useFilePicker, useFileUpload } from '@idealyst/files';
+
+function CustomUploadUI() {
+  const picker = useFilePicker({ config: { allowedTypes: ['any'], multiple: true } });
+  const uploader = useFileUpload({ autoStart: true, concurrency: 2 });
+
+  const handlePick = async () => {
+    const result = await picker.pick();
+    if (!result.cancelled && result.files.length > 0) {
+      uploader.addFiles(result.files, { url: 'https://api.example.com/upload' });
+    }
+  };
+
+  return (
+    <View padding="md" gap="md">
+      <Button onPress={handlePick} leftIcon="upload">Pick & Upload</Button>
       {uploader.uploads.map(upload => (
         <View key={upload.id} gap="xs">
-          <Text>{upload.file.name}</Text>
-          <Progress value={upload.percentage} />
-          <Text typography="caption">{upload.state} — {upload.percentage}%</Text>
+          <Text typography="body2" weight="medium">{upload.file.name}</Text>
+          <Progress
+            type="linear"
+            value={upload.percentage}
+            intent={upload.state === 'completed' ? 'success' : upload.state === 'failed' ? 'danger' : 'info'}
+          />
+          <Text typography="caption" color="secondary">
+            {upload.state} — {upload.percentage}%
+          </Text>
         </View>
       ))}
     </View>

@@ -81,14 +81,14 @@ export const searchComponentsDefinition: ToolDefinition = {
 export const getComponentTypesDefinition: ToolDefinition = {
   name: "get_component_types",
   description:
-    "Get TypeScript type definitions for a specific component directly from the source. Returns the actual TypeScript interface and/or JSON schema.",
+    "Get TypeScript type definitions for a specific component directly from the source. Returns the actual TypeScript interface and/or JSON schema. Supports comma-separated names to batch multiple components in one call (e.g., 'Button,Card,Text').",
   inputSchema: {
     type: "object",
     properties: {
       component: {
         type: "string",
         description:
-          "The name of the component (e.g., 'Button', 'Card', 'Input')",
+          "The name of the component (e.g., 'Button', 'Card', 'Input'). Supports comma-separated names for batch lookup: 'Button,Card,Text,Icon'",
       },
       format: {
         type: "string",

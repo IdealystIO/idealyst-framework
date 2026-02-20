@@ -276,46 +276,104 @@ export function searchComponents(args: SearchComponentsArgs = {}): ToolResponse 
  * Get TypeScript type definitions for a component
  */
 export function getComponentTypes(args: GetComponentTypesArgs): ToolResponse {
-  const componentName = args.component;
+  const componentInput = args.component;
   const format = args.format || "both";
+
+  // Support comma-separated batch lookups: "Button,Card,Text"
+  const names = componentInput.split(",").map(s => s.trim()).filter(Boolean);
+
+  if (names.length > 1) {
+    // Batch mode: return all requested component types in one response
+    const batchResult: Record<string, unknown> = {};
+    const errors: string[] = [];
+
+    for (const name of names) {
+      try {
+        const result = getTypesFromFile(name, format);
+        const processed = postProcessComponentTypes(name, result);
+        batchResult[name] = processed;
+      } catch (error) {
+        errors.push(`${name}: ${error instanceof Error ? error.message : "Unknown error"}`);
+      }
+    }
+
+    if (errors.length > 0) {
+      (batchResult as any)._errors = errors;
+    }
+
+    return jsonResponse(batchResult);
+  }
+
+  // Single component mode (original behavior)
+  const componentName = names[0] || componentInput;
 
   try {
     const result = getTypesFromFile(componentName, format);
-
-    // Add Card-specific guidance to prevent compound component hallucination
-    if (componentName.toLowerCase() === 'card') {
-      if (typeof result === 'object' && result !== null) {
-        (result as any).usageNote = "⚠️ Card is a SIMPLE CONTAINER — there are NO compound components. " +
-          "Do NOT use Card.Content, Card.Header, Card.Body, Card.Footer, Card.Title — they do NOT exist and will cause TS2339. " +
-          "Just put children directly inside <Card>...</Card>. Example: <Card padding=\"md\"><Text>Title</Text><Text>Body</Text></Card>";
-      }
-    }
-
-    // Add IconName guidance for components that use icon props
-    const resultStr = JSON.stringify(result);
-    if (resultStr.includes('IconName') || resultStr.includes('mdi:')) {
-      const iconNote = "\n\n⚠️ ICON NAME FORMAT: The `name` prop type shows `IconName | \"mdi:...\"` variants. " +
-        "Both formats work in JSX props. However, when you store icon names in variables, type them as `IconName` " +
-        "and use BARE names (without 'mdi:' prefix):\n" +
-        "```tsx\n" +
-        "import type { IconName } from '@idealyst/components';\n" +
-        "const icon: IconName = 'home';        // CORRECT\n" +
-        "const icon: IconName = 'mdi:home';    // WRONG — TS error\n" +
-        "const icon: string = 'home';          // WRONG — won't match IconName props\n" +
-        "```\n" +
-        "Always use bare names like 'home', 'check-circle', 'arrow-left' — never 'mdi:home'.";
-
-      if (typeof result === 'object' && result !== null) {
-        (result as any).iconNameNote = iconNote;
-      }
-    }
-
-    return jsonResponse(result);
+    const processed = postProcessComponentTypes(componentName, result);
+    return jsonResponse(processed);
   } catch (error) {
     return textResponse(
       `Error: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
+}
+
+/**
+ * Post-process component types to add guidance notes and truncate large payloads
+ */
+function postProcessComponentTypes(componentName: string, result: unknown): unknown {
+  // Truncate Icon's massive IconName values list (7,447 entries → ~10 examples + note)
+  if (componentName.toLowerCase() === 'icon' && typeof result === 'object' && result !== null) {
+    const r = result as any;
+    if (r.registry?.props?.name?.values && Array.isArray(r.registry.props.name.values)) {
+      const total = r.registry.props.name.values.length;
+      r.registry.props.name.values = [
+        ...r.registry.props.name.values.slice(0, 10),
+        `... and ${total - 10} more. Use search_icons to find specific icon names.`,
+      ];
+    }
+    if (r.schema?.props && Array.isArray(r.schema.props)) {
+      for (const prop of r.schema.props) {
+        if (prop.name === 'name' && Array.isArray(prop.values) && prop.values.length > 20) {
+          const total = prop.values.length;
+          prop.values = [
+            ...prop.values.slice(0, 10),
+            `... and ${total - 10} more. Use search_icons to find specific icon names.`,
+          ];
+        }
+      }
+    }
+  }
+
+  // Add Card-specific guidance to prevent compound component hallucination
+  if (componentName.toLowerCase() === 'card') {
+    if (typeof result === 'object' && result !== null) {
+      (result as any).usageNote = "Card is a SIMPLE CONTAINER — there are NO compound components. " +
+        "Do NOT use Card.Content, Card.Header, Card.Body, Card.Footer, Card.Title — they do NOT exist and will cause TS2339. " +
+        "Just put children directly inside <Card>...</Card>. Example: <Card padding=\"md\"><Text>Title</Text><Text>Body</Text></Card>";
+    }
+  }
+
+  // Add IconName guidance for components that use icon props
+  const resultStr = JSON.stringify(result);
+  if (resultStr.includes('IconName') || resultStr.includes('mdi:')) {
+    const iconNote = "\n\nICON NAME FORMAT: The `name` prop type shows `IconName | \"mdi:...\"` variants. " +
+      "Both formats work in JSX props. However, when you store icon names in variables, type them as `IconName` " +
+      "and use BARE names (without 'mdi:' prefix):\n" +
+      "```tsx\n" +
+      "import type { IconName } from '@idealyst/components';\n" +
+      "const icon: IconName = 'home';        // CORRECT\n" +
+      "const icon: IconName = 'mdi:home';    // WRONG — TS error\n" +
+      "const icon: string = 'home';          // WRONG — won't match IconName props\n" +
+      "```\n" +
+      "Always use bare names like 'home', 'check-circle', 'arrow-left' — never 'mdi:home'.";
+
+    if (typeof result === 'object' && result !== null) {
+      (result as any).iconNameNote = iconNote;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -478,6 +536,42 @@ const iconSearchAliases: Record<string, string[]> = {
   attach: ['paperclip', 'attachment'],
   logout: ['logout', 'exit-to-app'],
   login: ['login', 'account-arrow-right'],
+  flash: ['flash', 'flash-off', 'flash-auto'],
+  home: ['home', 'home-outline', 'home-variant'],
+  house: ['home', 'home-outline', 'home-variant'],
+  money: ['currency-usd', 'cash', 'cash-multiple', 'wallet'],
+  currency: ['currency-usd', 'currency-eur', 'currency-gbp'],
+  dollar: ['currency-usd'],
+  trending: ['trending-up', 'trending-down', 'chart-line'],
+  chart: ['chart-line', 'chart-bar', 'chart-pie', 'chart-donut'],
+  graph: ['chart-line', 'chart-bar', 'chart-areaspline'],
+  gallery: ['image-multiple', 'view-gallery'],
+  image: ['image', 'image-outline', 'image-multiple'],
+  cart: ['cart', 'cart-outline', 'cart-plus', 'cart-check'],
+  shopping: ['cart', 'shopping', 'basket'],
+  wifi: ['wifi', 'wifi-off'],
+  bluetooth: ['bluetooth', 'bluetooth-off'],
+  volume: ['volume-high', 'volume-medium', 'volume-low', 'volume-off'],
+  sound: ['volume-high', 'volume-off', 'music'],
+  music: ['music', 'music-note'],
+  video: ['video', 'video-outline', 'video-off'],
+  file: ['file', 'file-outline', 'file-document'],
+  folder: ['folder', 'folder-outline', 'folder-open'],
+  document: ['file-document', 'file-document-outline'],
+  print: ['printer', 'printer-outline'],
+  help: ['help-circle', 'help-circle-outline'],
+  question: ['help-circle', 'help-circle-outline'],
+  swap: ['swap-horizontal', 'swap-vertical'],
+  sync: ['sync', 'cloud-sync'],
+  crop: ['crop', 'crop-free'],
+  rotate: ['rotate-left', 'rotate-right', 'screen-rotation'],
+  fullscreen: ['fullscreen', 'fullscreen-exit'],
+  minus: ['minus', 'minus-circle'],
+  plus: ['plus', 'plus-circle'],
+  brightness: ['brightness-5', 'brightness-6', 'brightness-7'],
+  language: ['translate', 'web'],
+  globe: ['earth', 'web'],
+  world: ['earth', 'web'],
 };
 
 export function searchIcons(args: SearchIconsArgs): ToolResponse {
@@ -589,6 +683,7 @@ export function searchIcons(args: SearchIconsArgs): ToolResponse {
     matches: matchingIcons.length,
     returned: limitedResults.length,
     icons: limitedResults,
+    import: "import { Icon } from '@idealyst/components'; import type { IconName } from '@idealyst/components';",
     usage: "IMPORTANT: These icon names are of type `IconName` from '@idealyst/components'. Use them WITHOUT any 'mdi:' prefix — just use the bare name (e.g., 'home', not 'mdi:home'). When building helper functions that return icon names, always type the return as `IconName` — never as `string`. Example: `const icon: IconName = 'home'; function getIcon(status: string): IconName { return 'check'; }`. Using `string` as the return type or adding an 'mdi:' prefix will cause TypeScript compilation errors.",
   };
 

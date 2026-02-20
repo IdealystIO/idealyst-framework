@@ -66,6 +66,7 @@ export function SettingsScreen() {
     if (key === 'darkMode') {
       const isDark = value as boolean;
       ThemeSettings.setAdaptiveThemes(false);
+      // setTheme(lightTheme, darkTheme) — pass same value for both to force a single mode
       ThemeSettings.setTheme(isDark ? 'dark' : 'light', isDark ? 'dark' : 'light');
     }
   };
@@ -213,6 +214,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       ThemeSettings.setAdaptiveThemes(true);
     } else {
       ThemeSettings.setAdaptiveThemes(false);
+      // setTheme(lightTheme, darkTheme) — pass same value for both to force a single mode
       ThemeSettings.setTheme(mode, mode);
     }
   }, [mode, isLoaded]);

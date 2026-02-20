@@ -438,12 +438,39 @@ export function getNavigationTypes(format: 'typescript' | 'json' | 'both' = 'bot
 }
 
 /**
+ * Known type resolutions for props that the @idealyst/tooling analyzer reports as `any`.
+ * The analyzer cannot resolve types imported from @idealyst/theme, so we map them here.
+ * Key format: "ComponentName.propName" or just "propName" for global matches.
+ */
+const KNOWN_PROP_TYPES: Record<string, string> = {
+  // Icon-specific
+  'Icon.size': "'xs' | 'sm' | 'md' | 'lg' | 'xl' | number",
+  'Icon.intent': "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral'",
+  'Icon.color': "Color /* e.g. 'blue.500', 'red.300' — use intent for semantic coloring */",
+  'Icon.textColor': "'primary' | 'secondary' | 'tertiary' | 'inverse'",
+  // Global fallbacks for common prop names when type is 'any'
+  'size': "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
+  'intent': "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'neutral'",
+};
+
+/**
+ * Resolve a prop's type, replacing 'any' with known concrete types where possible.
+ */
+function resolveAnyType(componentName: string, propName: string, rawType: string): string {
+  if (rawType !== 'any') return rawType;
+  return KNOWN_PROP_TYPES[`${componentName}.${propName}`]
+    ?? KNOWN_PROP_TYPES[propName]
+    ?? rawType;
+}
+
+/**
  * Synthesize a TypeScript interface string from a component's properties array.
  * Used as a fallback when typeDefinition is not available (e.g. dynamic generation
  * without ts-morph).
  */
 function synthesizeTypeDefinition(component: any): string {
   const interfaceName = component.propsInterface || 'Props';
+  const componentName = interfaceName.replace(/Props$/, '');
   const props: any[] = component.props || [];
 
   if (props.length === 0) {
@@ -478,7 +505,7 @@ function synthesizeTypeDefinition(component: any): string {
     }
 
     const optional = prop.required ? '' : '?';
-    const propType = prop.type || 'unknown';
+    const propType = resolveAnyType(componentName, prop.name, prop.type || 'unknown');
     lines.push(`  ${prop.name}${optional}: ${propType};`);
   }
 
