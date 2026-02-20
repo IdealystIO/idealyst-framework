@@ -29,6 +29,10 @@
  *   }))
  */
 
+const fs = require('fs');
+const nodePath = require('path');
+const crypto = require('crypto');
+
 // Theme analysis is provided by @idealyst/tooling (single source of truth)
 // This uses the TypeScript Compiler API for accurate theme extraction
 let loadThemeKeys;
@@ -48,6 +52,7 @@ try {
 // ============================================================================
 
 // Map of componentName -> { base: AST | null, extensions: AST[], overrides: AST | null }
+// In-memory registry still used as fast path within a single worker
 const styleRegistry = {};
 
 function getOrCreateEntry(componentName) {
@@ -60,6 +65,212 @@ function getOrCreateEntry(componentName) {
         };
     }
     return styleRegistry[componentName];
+}
+
+// ============================================================================
+// File-Based Extension Cache - Cross-worker persistence
+// ============================================================================
+// When bundlers use multiple workers (Metro, Vite), each worker has its own
+// copy of the in-memory styleRegistry. The file-based cache ensures extensions
+// registered in any worker are visible to all workers processing defineStyle.
+
+let _cacheDir = null;
+let _cacheInitialized = false;
+// Track hashes we've already written in this worker to avoid re-reading our own
+const _writtenHashes = new Set();
+
+/**
+ * Get or create the cache directory for style extensions.
+ * Uses node_modules/.cache/idealyst-styles/ by convention.
+ */
+function getCacheDir(rootDir) {
+    if (_cacheDir) return _cacheDir;
+
+    // Walk up from rootDir to find the nearest node_modules
+    let dir = rootDir;
+    while (dir !== nodePath.dirname(dir)) {
+        const nmPath = nodePath.join(dir, 'node_modules');
+        if (fs.existsSync(nmPath)) {
+            _cacheDir = nodePath.join(nmPath, '.cache', 'idealyst-styles');
+            return _cacheDir;
+        }
+        dir = nodePath.dirname(dir);
+    }
+
+    // Fallback: use rootDir directly
+    _cacheDir = nodePath.join(rootDir, 'node_modules', '.cache', 'idealyst-styles');
+    return _cacheDir;
+}
+
+/**
+ * Initialize the cache directory. Clears stale data from previous builds.
+ * Uses a build marker (PID + timestamp) to detect new build processes.
+ */
+function initCache(rootDir) {
+    if (_cacheInitialized) return;
+    _cacheInitialized = true;
+
+    const cacheDir = getCacheDir(rootDir);
+    const markerPath = nodePath.join(cacheDir, '.build-marker');
+
+    // Create cache dir if needed
+    fs.mkdirSync(cacheDir, { recursive: true });
+
+    // Check if this is a new build
+    const currentMarker = `${process.pid}`;
+    let existingMarker = null;
+    try {
+        existingMarker = fs.readFileSync(markerPath, 'utf8');
+    } catch (e) {
+        // No marker — fresh cache
+    }
+
+    if (existingMarker !== currentMarker) {
+        // New build process — clear old extensions
+        try {
+            const files = fs.readdirSync(cacheDir);
+            for (const file of files) {
+                if (file !== '.build-marker') {
+                    fs.unlinkSync(nodePath.join(cacheDir, file));
+                }
+            }
+        } catch (e) {
+            // Ignore cleanup errors
+        }
+        fs.writeFileSync(markerPath, currentMarker);
+    }
+}
+
+/**
+ * Write an expanded extension callback to the cache.
+ * Uses @babel/generator to convert AST to source, then writes atomically.
+ *
+ * @param {string} rootDir - Project root directory
+ * @param {string} componentName - Component name (e.g., 'Text')
+ * @param {object} expandedCallback - Expanded AST node (ArrowFunctionExpression)
+ * @param {'extension'|'override'} type - Type of style modification
+ */
+function writeExtensionToCache(rootDir, componentName, expandedCallback, type) {
+    const cacheDir = getCacheDir(rootDir);
+    initCache(rootDir);
+
+    // Generate source code from AST
+    let generate;
+    try {
+        generate = require('@babel/generator').default || require('@babel/generator');
+    } catch (e) {
+        // If generator not available, skip file caching (single-worker fallback)
+        return;
+    }
+
+    const source = generate(expandedCallback).code;
+    const hash = crypto.createHash('md5').update(source).digest('hex').substring(0, 12);
+
+    // Track this hash so we don't re-read our own extensions in this worker
+    _writtenHashes.add(`${componentName}-${type}-${hash}`);
+
+    const filename = `${componentName}-${type}-${hash}.js`;
+    const filepath = nodePath.join(cacheDir, filename);
+
+    // Atomic write: write to temp file, then rename
+    const tmpPath = filepath + '.tmp.' + process.pid;
+    try {
+        fs.writeFileSync(tmpPath, source, 'utf8');
+        fs.renameSync(tmpPath, filepath);
+    } catch (e) {
+        // Clean up temp file on error
+        try { fs.unlinkSync(tmpPath); } catch (_) {}
+    }
+}
+
+/**
+ * Read all cached extensions for a component.
+ * Returns parsed AST nodes ready for merging.
+ *
+ * @param {object} t - Babel types
+ * @param {string} rootDir - Project root directory
+ * @param {string} componentName - Component name
+ * @returns {{ extensions: object[], override: object|null }}
+ */
+function readExtensionsFromCache(t, rootDir, componentName) {
+    const cacheDir = getCacheDir(rootDir);
+    const result = { extensions: [], override: null };
+
+    let files;
+    try {
+        files = fs.readdirSync(cacheDir);
+    } catch (e) {
+        return result; // Cache dir doesn't exist yet
+    }
+
+    let parse;
+    try {
+        parse = require('@babel/parser').parse;
+    } catch (e) {
+        return result; // Parser not available
+    }
+
+    // Find all extension/override files for this component
+    const prefix = `${componentName}-`;
+    const relevantFiles = files.filter(f => f.startsWith(prefix) && f.endsWith('.js'))
+        .sort(); // Sort for deterministic order
+
+    for (const file of relevantFiles) {
+        // Extract type and hash from filename: ComponentName-type-hash.js
+        const match = file.match(/^.+-(extension|override)-([a-f0-9]+)\.js$/);
+        if (!match) continue;
+
+        const type = match[1];
+        const hash = match[2];
+        const key = `${componentName}-${type}-${hash}`;
+
+        // Skip extensions we wrote in this worker — they're already in the in-memory registry
+        if (_writtenHashes.has(key)) continue;
+
+        try {
+            const source = fs.readFileSync(nodePath.join(cacheDir, file), 'utf8');
+
+            // Parse source back into AST
+            const ast = parse(source, {
+                sourceType: 'module',
+                plugins: ['typescript', 'jsx'],
+            });
+
+            // The parsed file contains a single expression statement (the arrow function)
+            // Extract it from the program body
+            if (ast.program.body.length > 0) {
+                const stmt = ast.program.body[0];
+                let expr = null;
+                if (t.isExpressionStatement(stmt)) {
+                    expr = stmt.expression;
+                }
+                if (expr) {
+                    if (type === 'override') {
+                        result.override = expr;
+                    } else {
+                        result.extensions.push(expr);
+                    }
+                }
+            }
+        } catch (e) {
+            // Skip unreadable/unparseable files
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Reset the file-based cache. Used for testing.
+ */
+function resetStyleCache() {
+    _cacheDir = null;
+    _cacheInitialized = false;
+    _writtenHashes.clear();
+    // Also clear in-memory registry
+    for (const key of Object.keys(styleRegistry)) {
+        delete styleRegistry[key];
+    }
 }
 
 // ============================================================================
@@ -116,8 +327,14 @@ function mergeObjectExpressions(t, target, source) {
 
         if (existingProp) {
             // Both have this property - need to merge or replace
-            const existingValue = existingProp.value;
+            let existingValue = existingProp.value;
             const newValue = prop.value;
+
+            // Unwrap TSAsExpression (e.g., from "as const") to get at the inner value
+            const existingHasTSAs = t.isTSAsExpression(existingValue);
+            if (existingHasTSAs) {
+                existingValue = existingValue.expression;
+            }
 
             // If both are objects, deep merge
             if (t.isObjectExpression(existingValue) && t.isObjectExpression(newValue)) {
@@ -805,7 +1022,7 @@ function buildMemberExpression(t, base, chain) {
 // Babel Plugin
 // ============================================================================
 
-module.exports = function idealystStylesPlugin({ types: t }) {
+function idealystStylesPlugin({ types: t }) {
     // Store babel types for use in extractThemeKeysFromAST
     babelTypes = t;
 
@@ -981,10 +1198,13 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     const expandedVariants = [];
                     const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
 
-                    // Store in registry for later merging
+                    // Store in in-memory registry (fast path for same-worker)
                     const entry = getOrCreateEntry(componentName);
                     entry.extensions.push(expandedCallback);
                     entry.themeParam = themeParam;
+
+                    // Write to file cache (cross-worker persistence)
+                    writeExtensionToCache(rootDir, componentName, expandedCallback, 'extension');
 
                     debug(`  -> Stored extension for '${componentName}' (${entry.extensions.length} total)`);
 
@@ -1033,10 +1253,13 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     const expandedVariants = [];
                     const expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
 
-                    // Store as override (replaces base entirely)
+                    // Store as override in in-memory registry (fast path for same-worker)
                     const entry = getOrCreateEntry(componentName);
                     entry.override = expandedCallback;
                     entry.themeParam = themeParam;
+
+                    // Write to file cache (cross-worker persistence)
+                    writeExtensionToCache(rootDir, componentName, expandedCallback, 'override');
 
                     debug(`  -> Stored override for '${componentName}'`);
 
@@ -1094,16 +1317,23 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                         let expandedCallback = expandIterators(t, stylesCallback, themeParam, keys, verbose, expandedVariants);
 
                         // Check for registered override or extensions
+                        // Combine in-memory registry (same worker) with file cache (cross-worker)
                         const entry = getOrCreateEntry(componentName);
+                        const cached = readExtensionsFromCache(t, rootDir, componentName);
 
-                        if (entry.override) {
+                        // Determine override: in-memory takes precedence, then file cache
+                        const override = entry.override || cached.override;
+                        // Combine extensions: in-memory first, then file cache (already deduplicated)
+                        const allExtensions = [...entry.extensions, ...cached.extensions];
+
+                        if (override) {
                             // Override completely replaces base
                             debug(`  -> Using override for '${componentName}'`);
-                            expandedCallback = entry.override;
-                        } else if (entry.extensions.length > 0) {
+                            expandedCallback = override;
+                        } else if (allExtensions.length > 0) {
                             // Merge extensions into base
-                            debug(`  -> Merging ${entry.extensions.length} extensions for '${componentName}'`);
-                            for (const ext of entry.extensions) {
+                            debug(`  -> Merging ${allExtensions.length} extensions for '${componentName}' (${entry.extensions.length} in-memory, ${cached.extensions.length} from cache)`);
+                            for (const ext of allExtensions) {
                                 expandedCallback = mergeCallbackBodies(t, expandedCallback, ext);
                             }
                         }
@@ -1177,4 +1407,8 @@ module.exports = function idealystStylesPlugin({ types: t }) {
             },
         },
     };
-};
+}
+
+// Export plugin as default (Babel convention) with test utilities
+module.exports = idealystStylesPlugin;
+module.exports.resetStyleCache = resetStyleCache;

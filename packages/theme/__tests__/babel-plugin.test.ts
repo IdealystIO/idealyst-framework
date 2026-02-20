@@ -19,6 +19,9 @@ const plugin = require('../src/babel/plugin.js');
 // Import the cache reset function from tooling
 const { resetThemeCache } = require('@idealyst/tooling');
 
+// Import style cache reset for cross-worker tests
+const { resetStyleCache } = require('../src/babel/plugin.js');
+
 // Mock theme keys for testing (avoids needing to parse actual theme file)
 const mockThemeKeys = {
   intents: ['primary', 'success', 'danger', 'warning', 'neutral', 'info'],
@@ -80,9 +83,10 @@ function extractSection(code: string, startPattern: RegExp, endPattern?: RegExp)
 }
 
 describe('Idealyst Babel Plugin', () => {
-  // Reset the theme cache before each test to ensure fresh analysis
+  // Reset caches before each test to ensure isolation
   beforeEach(() => {
     resetThemeCache();
+    resetStyleCache();
   });
 
   describe('$intents iterator expansion', () => {
@@ -695,6 +699,92 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('margin: 0');
     });
 
+    it('should deep merge variants in extendStyle instead of replacing them', () => {
+      // First: process extendStyle that adds a new variant value to an existing variant group
+      const extendInput = `
+        import { extendStyle } from '@idealyst/theme';
+        extendStyle('VariantMerge', (theme) => ({
+          text: {
+            variants: {
+              weight: {
+                extraBold: { fontWeight: '900' },
+              },
+            },
+          }
+        }));
+      `;
+      transform(extendInput);
+
+      // Then: process the defineStyle with existing variants
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('VariantMerge', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+            variants: {
+              weight: {
+                normal: { fontWeight: '400' },
+                bold: { fontWeight: '700' },
+              },
+            },
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // Both original variants AND the extension's new variant should be present
+      expect(output).toContain("'400'");  // normal
+      expect(output).toContain("'700'");  // bold
+      expect(output).toContain("'900'");  // extraBold from extension
+      expect(output).toContain('margin: 0');
+    });
+
+    it('should deep merge variants with "as const" in extendStyle instead of replacing them', () => {
+      // First: process extendStyle that adds a new variant value
+      const extendInput = `
+        import { extendStyle } from '@idealyst/theme';
+        extendStyle('VariantAsConst', (theme) => ({
+          text: {
+            variants: {
+              weight: {
+                extraBold: { fontWeight: '900' },
+              },
+            },
+          }
+        }));
+      `;
+      transform(extendInput);
+
+      // Then: process the defineStyle with existing variants using "as const"
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('VariantAsConst', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+            variants: {
+              weight: {
+                normal: { fontWeight: '400' },
+                bold: { fontWeight: '700' },
+              } as const,
+            } as const,
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // Both original variants AND the extension's new variant should be present
+      expect(output).toContain("'400'");  // normal
+      expect(output).toContain("'700'");  // bold
+      expect(output).toContain("'900'");  // extraBold from extension
+      expect(output).toContain('margin: 0');
+    });
+
     it('should merge extendStyle _web properties into base _web', () => {
       // First: process the extendStyle call
       const extendInput = `
@@ -835,6 +925,81 @@ describe('Idealyst Babel Plugin', () => {
       // Should not expand (file not processed)
       expect(result?.code).toContain('defineStyle');
       expect(result?.code).toContain('theme.$intents');
+    });
+  });
+
+  describe('cross-worker file cache', () => {
+    it('should merge extensions from file cache when in-memory registry is empty (simulates multi-worker)', () => {
+      // Step 1: Process extendStyle in "worker 1"
+      const extendInput = `
+        import { extendStyle } from '@idealyst/theme';
+        extendStyle('CrossWorkerText', (theme) => ({
+          text: {
+            fontFamily: 'CrossWorkerFont',
+          }
+        }));
+      `;
+      transform(extendInput);
+
+      // Step 2: Clear in-memory registry to simulate a different worker
+      // This clears the in-memory styleRegistry but leaves the file cache intact
+      resetStyleCache();
+
+      // Step 3: Process defineStyle in "worker 2" — should read from file cache
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('CrossWorkerText', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+            color: theme.colors.text.primary,
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // Extension's fontFamily from "worker 1" should be merged via file cache
+      expect(output).toContain('CrossWorkerFont');
+      expect(output).toContain('margin: 0');
+    });
+
+    it('should merge overrides from file cache when in-memory registry is empty', () => {
+      // Step 1: Process overrideStyle in "worker 1"
+      const overrideInput = `
+        import { overrideStyle } from '@idealyst/theme';
+        overrideStyle('CrossWorkerOverride', (theme) => ({
+          text: {
+            fontFamily: 'OverrideFont',
+            color: 'red',
+          }
+        }));
+      `;
+      transform(overrideInput);
+
+      // Step 2: Clear in-memory registry to simulate different worker
+      resetStyleCache();
+
+      // Step 3: Process defineStyle in "worker 2"
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('CrossWorkerOverride', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // Override from "worker 1" should completely replace base
+      expect(output).toContain('OverrideFont');
+      expect(output).toContain("'red'");
+      // Base styles should be gone (override replaces entirely)
+      expect(output).not.toContain('margin: 0');
     });
   });
 });
