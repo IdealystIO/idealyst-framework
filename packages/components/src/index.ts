@@ -9,7 +9,7 @@ export * from './Button/types';
 export { default as IconButton } from './IconButton';
 export * from './IconButton/types';
 
-export { default as Text } from './Text';
+export { default as Text, setTextDefaults } from './Text';
 export * from './Text/types';
 
 export { default as View } from './View';

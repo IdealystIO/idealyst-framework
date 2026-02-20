@@ -702,6 +702,14 @@ export function getThemeTypes(args: GetThemeTypesArgs = {}): ToolResponse {
 
   try {
     const result = getThemeTypesFromFile(format);
+    // Add useTheme usage note to prevent common destructuring mistake
+    if (typeof result === 'object' && result !== null) {
+      (result as Record<string, unknown>).useThemeNote =
+        "IMPORTANT: useTheme() returns Theme directly — NOT wrapped in an object. " +
+        "Correct: `const theme = useTheme();` " +
+        "WRONG: `const { theme } = useTheme();` (causes TS2339). " +
+        "Then use inline styles: `style={{ padding: theme.spacing.md, backgroundColor: theme.colors.surface.primary }}`";
+    }
     return jsonResponse(result);
   } catch (error) {
     return textResponse(

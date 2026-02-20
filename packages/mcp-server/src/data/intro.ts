@@ -138,7 +138,8 @@ These are mistakes agents make repeatedly. Each one causes TypeScript compilatio
 
 ### Imports & Styling
 16. **Never** import from \`react-native\` for UI — no \`TouchableOpacity\`, \`FlatList\`, \`ScrollView\`, \`Animated\`, \`Dimensions\`.
-17. **Never** import from \`react-native-unistyles\` — use \`@idealyst/theme\` (\`configureThemes\`, \`ThemeSettings\`, \`useTheme\`). To access theme tokens in custom styles: \`const { theme } = useTheme(); style={{ padding: theme.spacing.md, backgroundColor: theme.colors.surface }}\`.
+17. **Never** import from \`react-native-unistyles\` — use \`@idealyst/theme\` (\`configureThemes\`, \`ThemeSettings\`, \`useTheme\`).
+18. **Custom styles**: Use \`useTheme()\` for theme tokens — it returns the Theme object **directly** (NOT wrapped): \`const theme = useTheme();\` then apply inline: \`style={{ padding: theme.spacing.md, backgroundColor: theme.colors.surface.primary }}\`. Do NOT use \`const { theme } = useTheme()\` — that causes TS2339. Do NOT use \`StyleSheet.create\` from react-native — use inline styles with theme tokens instead.
 
 ### React 19 TypeScript
 - **useRef** requires an initial argument: \`useRef<T>(null)\` — NOT \`useRef<T>()\`. Omitting the argument causes TS2554. For non-null refs use: \`useRef<number>(0)\`, \`useRef<string[]>([])\`.

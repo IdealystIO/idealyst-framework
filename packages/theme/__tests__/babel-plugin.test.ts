@@ -542,6 +542,133 @@ describe('Idealyst Babel Plugin', () => {
     });
   });
 
+  describe('extendStyle merging', () => {
+    it('should merge extendStyle with dynamic style function in defineStyle', () => {
+      // First: process the extendStyle call (registers extension in plugin registry)
+      const extendInput = `
+        import { extendStyle } from '@idealyst/theme';
+        extendStyle('TextMergeTest', (theme) => ({
+          text: () => ({
+            fontFamily: 'CustomFont',
+          })
+        }));
+      `;
+      transform(extendInput);
+
+      // Then: process the defineStyle call (should merge the extension)
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('TextMergeTest', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+            padding: 0,
+            color: theme.colors.text.primary,
+            _web: {
+              fontFamily: 'inherit',
+            },
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // Extension's fontFamily should be present in the merged output
+      expect(output).toContain('CustomFont');
+      // Should still have the base styles
+      expect(output).toContain('margin: 0');
+      expect(output).toContain('padding: 0');
+    });
+
+    it('should process extendStyle even when file does not match autoProcessPaths', () => {
+      // Simulate user code: extendStyle in a file NOT matching autoProcessPaths
+      const extendInput = `
+        import { extendStyle } from '@idealyst/theme';
+        extendStyle('TextUserTest', (theme) => ({
+          text: () => ({
+            fontFamily: 'UserFont',
+          })
+        }));
+      `;
+
+      // Transform with autoProcessPaths that does NOT match the filename
+      const extResult = babel.transformSync(extendInput, {
+        filename: '/app/src/style-extensions.ts',
+        presets: ['@babel/preset-typescript'],
+        plugins: [
+          [plugin, {
+            themePath: path.resolve(__dirname, '../src/lightTheme.ts'),
+            autoProcessPaths: ['@idealyst/components', 'packages/components'],
+          }],
+        ],
+      });
+
+      // The extendStyle() call should be removed (processed and captured)
+      // (the import statement will still reference 'extendStyle' but the call is gone)
+      expect(extResult?.code).not.toContain('extendStyle(');
+
+      // Now process defineStyle in a file that DOES match autoProcessPaths
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('TextUserTest', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+            color: theme.colors.text.primary,
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // Extension's fontFamily from user code should be merged
+      expect(output).toContain('UserFont');
+      expect(output).toContain('margin: 0');
+    });
+
+    it('should merge extendStyle _web properties into base _web', () => {
+      // First: process the extendStyle call
+      const extendInput = `
+        import { extendStyle } from '@idealyst/theme';
+        extendStyle('TextWebTest', (theme) => ({
+          text: () => ({
+            _web: {
+              fontFamily: 'MyCustomFont',
+            },
+          })
+        }));
+      `;
+      transform(extendInput);
+
+      // Then: process the defineStyle call
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('TextWebTest', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+            color: theme.colors.text.primary,
+            _web: {
+              fontFamily: 'inherit',
+            },
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // Should have the overridden fontFamily from the extension
+      expect(output).toContain('MyCustomFont');
+      // The base 'inherit' should be replaced
+      expect(output).not.toContain("'inherit'");
+      // Should still have base styles
+      expect(output).toContain('margin: 0');
+    });
+  });
+
   describe('edge cases', () => {
     it('should handle empty variants object', () => {
       const input = `

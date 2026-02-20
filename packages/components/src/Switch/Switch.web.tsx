@@ -93,10 +93,10 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     marginHorizontal,
   });
 
-  const trackProps = getWebProps([(switchStyles.switchTrack as any)({ checked, intent, disabled })]);
-  const thumbProps = getWebProps([(switchStyles.switchThumb as any)({ size, checked })]);
-  const thumbIconProps = getWebProps([(switchStyles.thumbIcon as any)({ checked, intent })]);
-  const labelProps = getWebProps([(switchStyles.label as any)({ disabled, labelPosition })]);
+  const trackProps = getWebProps([switchStyles.switchTrack as any]);
+  const thumbProps = getWebProps([switchStyles.switchThumb as any]);
+  const thumbIconProps = getWebProps([switchStyles.thumbIcon as any]);
+  const labelProps = getWebProps([switchStyles.label as any]);
 
   // Helper to render icon
   const renderIcon = () => {
@@ -118,15 +118,11 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     return null;
   };
 
-  // Computed button props with dynamic styles
-  const computedButtonProps = getWebProps([
-    (switchStyles.switchContainer as any)({})
-  ]);
+  // Computed button props with static style references
+  const computedButtonProps = getWebProps([switchStyles.switchContainer as any]);
 
-  // Computed container props with dynamic styles (for when label exists)
-  const computedContainerProps = getWebProps([
-    (switchStyles.container as any)({ disabled }),
-  ]);
+  // Computed container props (for when label exists)
+  const computedContainerProps = getWebProps([switchStyles.container as any]);
 
   const mergedButtonRef = useMergeRefs(ref as React.Ref<HTMLButtonElement>, computedButtonProps.ref);
   const mergedContainerRef = useMergeRefs(ref as React.Ref<HTMLDivElement>, computedContainerProps.ref);

@@ -673,7 +673,7 @@ export interface UseFileUploadResult {
 
   // Actions
   /** Add files to upload queue */
-  addFiles: (files: PickedFile | PickedFile[], config: UploadConfig) => string[];
+  addFiles: (files: PickedFile | PickedFile[], config: Pick<UploadConfig, 'url'> & Partial<Omit<UploadConfig, 'url'>>) => string[];
 
   /** Start processing queue */
   start: () => void;

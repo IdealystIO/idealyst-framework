@@ -48,6 +48,20 @@ export interface TextProps extends TextSpacingStyleProps {
   align?: TextAlignVariant;
 
   /**
+   * Number of lines to display before truncating with ellipsis.
+   * On native, maps directly to React Native's numberOfLines prop.
+   * On web, uses CSS line-clamp for multi-line and text-overflow for single-line.
+   */
+  numberOfLines?: number;
+
+  /**
+   * Maximum font scale factor for accessibility text sizing.
+   * Limits how large text can grow when the user increases their device font size.
+   * Set to 0 to disable scaling limits. Only applies on native (iOS & Android).
+   */
+  maxFontSizeMultiplier?: number;
+
+  /**
    * Additional styles (platform-specific)
    */
   style?: StyleProp<TextStyle>;

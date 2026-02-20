@@ -16,6 +16,7 @@ const Text = forwardRef<IdealystElement, TextProps>(({
   weight,
   color = 'primary',
   align = 'left',
+  numberOfLines,
   // Spacing variants from TextSpacingStyleProps
   gap,
   padding,
@@ -36,9 +37,26 @@ const Text = forwardRef<IdealystElement, TextProps>(({
     paddingHorizontal,
   });
 
+  // Build numberOfLines truncation styles for web
+  const truncationStyle: React.CSSProperties | undefined = numberOfLines != null
+    ? numberOfLines === 1
+      ? {
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }
+      : {
+          overflow: 'hidden',
+          display: '-webkit-box',
+          WebkitBoxOrient: 'vertical' as const,
+          WebkitLineClamp: numberOfLines,
+        }
+    : undefined;
+
   // Create the style array - pass all style-affecting props to dynamic style function
   const textStyleArray = [
     (textStyles.text as any)({ color, typography, weight, align }),
+    truncationStyle,
     flattenStyle(style),
   ];
 

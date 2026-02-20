@@ -121,23 +121,17 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     };
   });
 
-  // Get dynamic styles - call as functions for theme reactivity
-  const switchTrackStyle = (switchStyles.switchTrack as any)({ checked, intent, disabled });
-  const containerStyle = (switchStyles.container as any)({});
-  const switchContainerStyle = (switchStyles.switchContainer as any)({});
-  const labelStyle = (switchStyles.label as any)({ disabled, labelPosition });
-
   const switchElement = (
     <Pressable
       ref={!label ? ref : undefined}
       nativeID={!label ? id : undefined}
       onPress={handlePress}
       disabled={disabled}
-      style={switchContainerStyle}
+      style={switchStyles.switchContainer as any}
       testID={testID}
       {...nativeA11yProps}
     >
-      <Animated.View style={switchTrackStyle}>
+      <Animated.View style={switchStyles.switchTrack as any}>
         <Animated.View
           style={[
             {
@@ -167,14 +161,14 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
         nativeID={id}
         onPress={handlePress}
         disabled={disabled}
-        style={[containerStyle, style]}
+        style={[switchStyles.container as any, style]}
       >
         {labelPosition === 'left' && (
-          <Text style={labelStyle}>{label}</Text>
+          <Text style={switchStyles.label as any}>{label}</Text>
         )}
         {switchElement}
         {labelPosition === 'right' && (
-          <Text style={labelStyle}>{label}</Text>
+          <Text style={switchStyles.label as any}>{label}</Text>
         )}
       </Pressable>
     );

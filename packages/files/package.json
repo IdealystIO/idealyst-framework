@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/files",
-  "version": "1.2.102",
+  "version": "1.2.103",
   "description": "Cross-platform file picker, upload, and local file management for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/files#readme",
   "readme": "README.md",
@@ -37,8 +37,8 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.2.102",
-    "@idealyst/theme": "^1.2.102",
+    "@idealyst/components": "^1.2.103",
+    "@idealyst/theme": "^1.2.103",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-blob-util": ">=0.19.0",
@@ -66,8 +66,8 @@
     }
   },
   "devDependencies": {
-    "@idealyst/components": "^1.2.102",
-    "@idealyst/theme": "^1.2.102",
+    "@idealyst/components": "^1.2.103",
+    "@idealyst/theme": "^1.2.103",
     "@types/react": "^19.1.0",
     "@types/react-native": "^0.73.0",
     "react": "^19.1.0",

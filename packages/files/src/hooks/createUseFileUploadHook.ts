@@ -58,7 +58,7 @@ export function createUseFileUploadHook(createFileUploader: CreateFileUploaderFa
      */
     const addFiles = useCallback((
       files: PickedFile | PickedFile[],
-      uploadConfig: UploadConfig
+      uploadConfig: Pick<UploadConfig, 'url'> & Partial<Omit<UploadConfig, 'url'>>
     ): string[] => {
       if (!uploaderRef.current) return [];
 

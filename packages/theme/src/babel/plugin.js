@@ -66,10 +66,18 @@ function getOrCreateEntry(componentName) {
 // AST Deep Merge - Merges style object ASTs at build time
 // ============================================================================
 
+// Platform-specific keys used by Unistyles
+const PLATFORM_KEYS = new Set(['_web', '_ios', '_android']);
+
 /**
  * Deep merge two ObjectExpression ASTs.
  * Source properties override target properties.
  * Nested objects are recursively merged.
+ *
+ * Also propagates extension properties into platform-specific blocks (_web, _ios, _android)
+ * when those blocks already contain the same key. This ensures that e.g. setting
+ * `fontFamily: 'MyFont'` in an extension properly overrides `_web: { fontFamily: 'inherit' }`
+ * in the base styles.
  */
 function mergeObjectExpressions(t, target, source) {
     if (!t.isObjectExpression(target) || !t.isObjectExpression(source)) {
@@ -90,12 +98,19 @@ function mergeObjectExpressions(t, target, source) {
 
     const resultProps = [...target.properties];
 
+    // Collect non-platform source property keys and values for propagation
+    const sourceNonPlatformProps = new Map();
+
     for (const prop of source.properties) {
         if (!t.isObjectProperty(prop)) continue;
 
         const key = t.isIdentifier(prop.key) ? prop.key.name :
                     t.isStringLiteral(prop.key) ? prop.key.value : null;
         if (!key) continue;
+
+        if (!PLATFORM_KEYS.has(key)) {
+            sourceNonPlatformProps.set(key, prop);
+        }
 
         const existingProp = targetProps.get(key);
 
@@ -125,6 +140,48 @@ function mergeObjectExpressions(t, target, source) {
         } else {
             // New property from source
             resultProps.push(prop);
+        }
+    }
+
+    // Propagate extension properties into platform-specific blocks.
+    // If the base has _web: { fontFamily: 'inherit' } and the extension sets
+    // fontFamily: 'MyFont' at the top level, we need to also override fontFamily
+    // inside the _web block so the platform-specific value doesn't shadow the extension.
+    if (sourceNonPlatformProps.size > 0) {
+        for (let i = 0; i < resultProps.length; i++) {
+            const prop = resultProps[i];
+            if (!t.isObjectProperty(prop)) continue;
+
+            const key = t.isIdentifier(prop.key) ? prop.key.name :
+                        t.isStringLiteral(prop.key) ? prop.key.value : null;
+            if (!key || !PLATFORM_KEYS.has(key)) continue;
+            if (!t.isObjectExpression(prop.value)) continue;
+
+            // Check if any source properties conflict with keys in this platform block
+            const platformProps = prop.value.properties;
+            let modified = false;
+            const newPlatformProps = [...platformProps];
+
+            for (let j = 0; j < newPlatformProps.length; j++) {
+                const platProp = newPlatformProps[j];
+                if (!t.isObjectProperty(platProp)) continue;
+
+                const platKey = t.isIdentifier(platProp.key) ? platProp.key.name :
+                                t.isStringLiteral(platProp.key) ? platProp.key.value : null;
+                if (!platKey) continue;
+
+                const extProp = sourceNonPlatformProps.get(platKey);
+                if (extProp) {
+                    // Extension has a property that conflicts with this platform block key.
+                    // Override the platform block value with the extension value.
+                    newPlatformProps[j] = t.objectProperty(platProp.key, t.cloneDeep(extProp.value));
+                    modified = true;
+                }
+            }
+
+            if (modified) {
+                resultProps[i] = t.objectProperty(prop.key, t.objectExpression(newPlatformProps));
+            }
         }
     }
 
@@ -873,7 +930,10 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     opts.processAll ||
                     (opts.autoProcessPaths?.some(p => filename.includes(p)));
 
-                if (!shouldProcess) return;
+                // extendStyle/overrideStyle must ALWAYS be processed regardless of
+                // shouldProcess, since they are called from user code (not just from
+                // @idealyst/* packages). Only defineStyle and StyleSheet.create
+                // $iterator expansion are gated by autoProcessPaths.
 
                 // ============================================================
                 // Handle extendStyle - Store extension AST for later merging
@@ -964,6 +1024,10 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                     path.remove();
                     return;
                 }
+
+                // defineStyle and StyleSheet.create are only processed for files
+                // matching autoProcessPaths (i.e., framework packages)
+                if (!shouldProcess) return;
 
                 // ============================================================
                 // Handle defineStyle - Merge with extensions and output StyleSheet.create

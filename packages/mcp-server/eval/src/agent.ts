@@ -28,8 +28,8 @@ import type { ScenarioLogger } from "./logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-/** Default per-scenario wall-clock timeout (10 minutes) */
-const DEFAULT_TIMEOUT_MS = 10 * 60 * 1000;
+/** Default per-scenario wall-clock timeout (15 minutes) */
+const DEFAULT_TIMEOUT_MS = 15 * 60 * 1000;
 
 /** Progress update emitted during agent execution */
 export interface AgentProgress {
@@ -169,7 +169,8 @@ Write your component code as real files using the Write tool.
 Write all files to: ${srcDir}/
 For example, to create a LoginScreen component, write to: ${srcDir}/LoginScreen.tsx
 Do NOT just output code as text in your response — write it as files using the Write tool.
-You may create multiple files if the task requires it.`;
+You may create multiple files if the task requires it.
+For complex apps with multiple screens, write EACH screen as a separate file using the Write tool. Do NOT try to generate all code in one giant response — break it up into manageable files and write them one at a time.`;
   }
 
   const args = [
@@ -201,7 +202,7 @@ You may create multiple files if the task requires it.`;
     const child = spawn("claude", args, {
       cwd,
       stdio: ["inherit", "pipe", "pipe"],
-      env: { ...process.env, CLAUDECODE: undefined },
+      env: { ...process.env, CLAUDECODE: undefined, CLAUDE_CODE_MAX_OUTPUT_TOKENS: "40000" },
     });
 
     // Wall-clock timeout — kill the child if the scenario takes too long

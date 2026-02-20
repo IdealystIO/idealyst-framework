@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/blur",
-  "version": "1.2.102",
+  "version": "1.2.103",
   "description": "Cross-platform blur component for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",
@@ -35,7 +35,7 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.2.102",
+    "@idealyst/components": "^1.2.103",
     "@react-native-community/blur": ">=4.0.0",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0"
@@ -52,7 +52,7 @@
     }
   },
   "devDependencies": {
-    "@idealyst/components": "^1.2.102",
+    "@idealyst/components": "^1.2.103",
     "@react-native-community/blur": "^4.4.1",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",

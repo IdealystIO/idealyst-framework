@@ -126,7 +126,7 @@ interface UseFileUploadOptions {
 | isUploading | boolean | Whether any upload is in progress |
 | isPaused | boolean | Whether queue is paused |
 | hasFailedUploads | boolean | Whether there are failed uploads |
-| addFiles | (files, config: UploadConfig) => string[] | Add files to queue. Only \`config.url\` is required — e.g., \`addFiles(files, { url: 'https://...' })\` |
+| addFiles | (files, config: { url: string } & Partial\<UploadConfig\>) => string[] | Add files to queue. Only \`url\` is required — e.g., \`addFiles(files, { url: 'https://...' })\`. All other fields have defaults. |
 | start | () => void | Start processing queue |
 | pause | () => void | Pause all uploads |
 | resume | () => void | Resume paused uploads |
