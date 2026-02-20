@@ -188,6 +188,10 @@ function ArticleView({ content }: { content: string }) {
 
 ## Custom Link Handling
 
+**IMPORTANT**: Do NOT import \`Linking\` from \`react-native\` for opening URLs. The Markdown component has built-in cross-platform link handling via \`linkHandler\`:
+- \`openExternalLinks: true\` — opens external URLs in the system browser (cross-platform, no imports needed)
+- \`onLinkPress\` — intercept link taps for internal navigation
+
 \`\`\`tsx
 import React from 'react';
 import { Markdown } from '@idealyst/markdown';
@@ -202,11 +206,11 @@ function DocumentView({ markdown }: { markdown: string }) {
         onLinkPress: (url) => {
           if (url.startsWith('/')) {
             navigate({ path: url });
-            return true; // Prevent default browser behavior
+            return true; // Handled — prevent default
           }
-          return false; // Allow external links to open normally
+          return false; // Not handled — openExternalLinks takes over
         },
-        openExternalLinks: true,
+        openExternalLinks: true, // Opens external URLs cross-platform (no Linking import needed!)
       }}
     >
       {markdown}

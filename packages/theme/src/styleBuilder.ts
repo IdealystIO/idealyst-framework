@@ -102,18 +102,27 @@ export function defineStyle<TTheme, TStyles extends Record<string, unknown>>(
 /**
  * Extend existing component styles (merged at build time).
  * Import BEFORE components for extensions to apply.
+ *
+ * Accepts either a plain style object or a theme callback:
+ * ```typescript
+ * // Plain object (no theme access needed)
+ * extendStyle('Text', { text: { fontFamily: 'MyFont' } });
+ *
+ * // Theme callback (when you need theme tokens)
+ * extendStyle('Text', (theme) => ({ text: { color: theme.colors.text.primary } }));
+ * ```
  */
 export function extendStyle<K extends keyof ComponentStyleRegistry>(
   componentName: K,
-  styles: (theme: any) => ExtendStyleDef<K>
+  styles: ExtendStyleDef<K> | ((theme: any) => ExtendStyleDef<K>)
 ): void;
 export function extendStyle<K extends string>(
   componentName: K,
-  styles: (theme: any) => Record<string, any>
+  styles: Record<string, any> | ((theme: any) => Record<string, any>)
 ): void;
 export function extendStyle(
   _componentName: string,
-  _styles: (theme: any) => any
+  _styles: any
 ): void {
   // Babel removes this call and merges into defineStyle
 }
@@ -121,18 +130,27 @@ export function extendStyle(
 /**
  * Override component styles completely (replaces base at build time).
  * Import BEFORE components for overrides to apply.
+ *
+ * Accepts either a plain style object or a theme callback:
+ * ```typescript
+ * // Plain object
+ * overrideStyle('Text', { text: { fontFamily: 'MyFont' } });
+ *
+ * // Theme callback
+ * overrideStyle('Text', (theme) => ({ text: { color: theme.colors.text.primary } }));
+ * ```
  */
 export function overrideStyle<K extends keyof ComponentStyleRegistry>(
   componentName: K,
-  styles: (theme: any) => OverrideStyleDef<K>
+  styles: OverrideStyleDef<K> | ((theme: any) => OverrideStyleDef<K>)
 ): void;
 export function overrideStyle<K extends string>(
   componentName: K,
-  styles: (theme: any) => Record<string, any>
+  styles: Record<string, any> | ((theme: any) => Record<string, any>)
 ): void;
 export function overrideStyle(
   _componentName: string,
-  _styles: (theme: any) => any
+  _styles: any
 ): void {
   // Babel removes this call and replaces defineStyle
 }

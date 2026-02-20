@@ -22,10 +22,12 @@ import type { TextStyle, ViewStyle } from 'react-native';
 /**
  * Registry interface that components augment to register their style types.
  * This enables type-safe extendStyle and overrideStyle calls.
+ *
+ * Style definitions must use plain style objects, not functions.
  */
 export interface ComponentStyleRegistry {
   // Components augment this interface to add their style types
-  // Example: Text: { text: (params: TextStyleParams) => TextStyleObject }
+  // Example: Text: { text: TextStyle & { variants?: { ... } } }
 }
 
 /**
@@ -37,37 +39,24 @@ export type ComponentStyleDef<K extends string> = K extends keyof ComponentStyle
   : Record<string, any>;
 
 /**
- * Deep partial type that works with functions.
- * For style functions, preserves the function signature but makes the return type partial.
+ * Deep partial type for style objects.
+ * Recursively makes all properties optional.
+ * Extensions must be plain style objects — functions are not supported.
  */
-export type DeepPartialStyle<T> = T extends (...args: infer A) => infer R
-  ? (...args: A) => DeepPartialStyle<R>
-  : T extends object
-    ? { [K in keyof T]?: DeepPartialStyle<T[K]> }
-    : T;
+export type DeepPartialStyle<T> = T extends object
+  ? { [K in keyof T]?: DeepPartialStyle<T[K]> }
+  : T;
 
 /**
- * Style definition for extendStyle - requires functions with same params as base.
- * All style properties must be functions to access dynamic params.
+ * Style definition for extendStyle - plain style objects only.
+ * Functions are not supported; the babel plugin merges plain objects into base styles.
  */
 export type ExtendStyleDef<K extends string> = DeepPartialStyle<ComponentStyleDef<K>>;
 
 /**
- * Style definition for overrideStyle - requires full implementation with functions.
+ * Style definition for overrideStyle - requires full style implementation.
  */
 export type OverrideStyleDef<K extends string> = ComponentStyleDef<K>;
-
-/**
- * Helper to extract the params type from a dynamic style function.
- * Use this to type your extension functions.
- *
- * @example
- * ```typescript
- * type TextParams = StyleParams<TextStyleDef['text']>;
- * // TextParams = { color?: TextColorVariant }
- * ```
- */
-export type StyleParams<T> = T extends (params: infer P) => any ? P : never;
 
 // =============================================================================
 // Common Style Types
@@ -86,8 +75,3 @@ export interface StyleWithVariants<TVariants extends Record<string, any> = Recor
     [K in keyof TVariants]?: TVariants[K];
   } & { styles: ViewStyle | TextStyle }>;
 }
-
-/**
- * Dynamic style function type.
- */
-export type DynamicStyleFn<TParams, TStyle> = (params: TParams) => TStyle;

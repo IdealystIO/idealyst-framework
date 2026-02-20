@@ -581,6 +581,41 @@ describe('Idealyst Babel Plugin', () => {
       expect(output).toContain('padding: 0');
     });
 
+    it('should merge plain object extension into dynamic style function without replacing it', () => {
+      // Extension provides a plain object (not a function) for a style that is
+      // a dynamic function in the base defineStyle
+      const extendInput = `
+        import { extendStyle } from '@idealyst/theme';
+        extendStyle('TextPlainObjTest', (theme) => ({
+          text: {
+            fontFamily: 'CustomFont',
+          }
+        }));
+      `;
+      transform(extendInput);
+
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('TextPlainObjTest', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+            color: theme.colors.text.primary,
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // The base dynamic function must be preserved (not replaced by a plain object)
+      expect(output).toContain('=>');
+      // Extension's fontFamily should be merged into the function body
+      expect(output).toContain('CustomFont');
+      // Base styles must still be present
+      expect(output).toContain('margin: 0');
+    });
+
     it('should process extendStyle even when file does not match autoProcessPaths', () => {
       // Simulate user code: extendStyle in a file NOT matching autoProcessPaths
       const extendInput = `
@@ -625,6 +660,38 @@ describe('Idealyst Babel Plugin', () => {
 
       // Extension's fontFamily from user code should be merged
       expect(output).toContain('UserFont');
+      expect(output).toContain('margin: 0');
+    });
+
+    it('should accept a plain object (no theme callback) in extendStyle', () => {
+      // First: process extendStyle with a plain object
+      const extendInput = `
+        import { extendStyle } from '@idealyst/theme';
+        extendStyle('TextPlainObj', {
+          text: {
+            fontFamily: 'PlainObjFont',
+          }
+        });
+      `;
+      transform(extendInput);
+
+      // Then: process the defineStyle call
+      const defineInput = `
+        import { StyleSheet } from 'react-native-unistyles';
+        import { defineStyle } from '@idealyst/theme';
+
+        export const textStyles = defineStyle('TextPlainObj', (theme) => ({
+          text: ({ color }) => ({
+            margin: 0,
+            color: theme.colors.text.primary,
+          }),
+        }));
+      `;
+
+      const output = transform(defineInput);
+
+      // Extension's fontFamily from plain object should be merged
+      expect(output).toContain('PlainObjFont');
       expect(output).toContain('margin: 0');
     });
 

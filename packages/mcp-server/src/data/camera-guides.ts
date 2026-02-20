@@ -373,7 +373,7 @@ function VideoRecordingScreen() {
       )}
       <Button
         onPress={handleToggleRecording}
-        intent={camera.isRecording ? 'error' : 'primary'}
+        intent={camera.isRecording ? 'danger' : 'primary'}
       >
         {camera.isRecording ? 'Stop Recording' : 'Record Video'}
       </Button>

@@ -354,24 +354,8 @@ function postProcessComponentTypes(componentName: string, result: unknown): unkn
     }
   }
 
-  // Add IconName guidance for components that use icon props
-  const resultStr = JSON.stringify(result);
-  if (resultStr.includes('IconName') || resultStr.includes('mdi:')) {
-    const iconNote = "\n\nICON NAME FORMAT: The `name` prop type shows `IconName | \"mdi:...\"` variants. " +
-      "Both formats work in JSX props. However, when you store icon names in variables, type them as `IconName` " +
-      "and use BARE names (without 'mdi:' prefix):\n" +
-      "```tsx\n" +
-      "import type { IconName } from '@idealyst/components';\n" +
-      "const icon: IconName = 'home';        // CORRECT\n" +
-      "const icon: IconName = 'mdi:home';    // WRONG — TS error\n" +
-      "const icon: string = 'home';          // WRONG — won't match IconName props\n" +
-      "```\n" +
-      "Always use bare names like 'home', 'check-circle', 'arrow-left' — never 'mdi:home'.";
-
-    if (typeof result === 'object' && result !== null) {
-      (result as any).iconNameNote = iconNote;
-    }
-  }
+  // Note: IconName guidance is covered in get_intro and search_icons responses.
+  // Avoid adding verbose notes to every component — it creates noise in batch responses.
 
   return result;
 }
@@ -708,7 +692,11 @@ export function getThemeTypes(args: GetThemeTypesArgs = {}): ToolResponse {
         "IMPORTANT: useTheme() returns Theme directly — NOT wrapped in an object. " +
         "Correct: `const theme = useTheme();` " +
         "WRONG: `const { theme } = useTheme();` (causes TS2339). " +
-        "Then use inline styles: `style={{ padding: theme.spacing.md, backgroundColor: theme.colors.surface.primary }}`";
+        "Theme top-level keys: intents, radii, shadows, colors, sizes, interaction, breakpoints. " +
+        "For spacing, use component props (padding=\"md\", gap=\"md\") — NOT theme.spacing (does NOT exist). " +
+        "For colors: `style={{ backgroundColor: theme.colors.surface.primary }}`. " +
+        "For radii: `style={{ borderRadius: theme.radii.md }}`. " +
+        "For intents: `theme.intents.primary` (NOT theme.colors.intent).";
     }
     return jsonResponse(result);
   } catch (error) {

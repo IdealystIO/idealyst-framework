@@ -20,8 +20,8 @@ export type TextVariants = {
 }
 
 /**
- * All props available to dynamic Text style functions.
- * Extensions and overrides receive these to make conditional styling decisions.
+ * Parameters for the internal Text dynamic style function.
+ * Used by the defineStyle implementation to resolve styles at runtime.
  */
 export type TextStyleParams = {
     /** Text color variant */
@@ -36,9 +36,10 @@ export type TextStyleParams = {
 
 /**
  * Text style definition type for use with extendStyle/overrideStyle.
+ * Extensions are plain style objects — functions are NOT supported.
  */
 export interface TextStyleDef {
-    text: (params: TextStyleParams) => TextStyle & {
+    text: TextStyle & {
         variants?: {
             typography?: Record<string, TextStyle>;
             weight?: Record<string, TextStyle>;

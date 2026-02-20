@@ -126,11 +126,42 @@ function mergeObjectExpressions(t, target, source) {
                 const idx = resultProps.indexOf(existingProp);
                 resultProps[idx] = t.objectProperty(existingProp.key, mergedValue);
             }
-            // If both are arrow functions (dynamic styles), merge their return values
-            else if (t.isArrowFunctionExpression(existingValue) && t.isArrowFunctionExpression(newValue)) {
-                const mergedFn = mergeDynamicStyleFunctions(t, existingValue, newValue);
-                const idx = resultProps.indexOf(existingProp);
-                resultProps[idx] = t.objectProperty(existingProp.key, mergedFn);
+            // If base is a dynamic function and extension is anything (plain object
+            // or arrow function), extract the extension's object and merge it into the
+            // base function's return body. Extensions should only provide plain objects,
+            // but if a function is given we unwrap its body to get the object.
+            else if (t.isArrowFunctionExpression(existingValue)) {
+                let extObj = newValue;
+                // If extension mistakenly provides a function, unwrap its return body
+                if (t.isArrowFunctionExpression(extObj)) {
+                    extObj = extObj.body;
+                    if (t.isParenthesizedExpression(extObj)) {
+                        extObj = extObj.expression;
+                    }
+                }
+
+                if (t.isObjectExpression(extObj)) {
+                    let baseBody = existingValue.body;
+                    if (t.isParenthesizedExpression(baseBody)) {
+                        baseBody = baseBody.expression;
+                    }
+                    if (t.isObjectExpression(baseBody)) {
+                        const mergedBody = mergeObjectExpressions(t, baseBody, extObj);
+                        const idx = resultProps.indexOf(existingProp);
+                        resultProps[idx] = t.objectProperty(
+                            existingProp.key,
+                            t.arrowFunctionExpression(existingValue.params, mergedBody)
+                        );
+                    } else {
+                        // Block body or other complex form — fall back to replacement
+                        const idx = resultProps.indexOf(existingProp);
+                        resultProps[idx] = prop;
+                    }
+                } else {
+                    // Extension body isn't an object — fall back to replacement
+                    const idx = resultProps.indexOf(existingProp);
+                    resultProps[idx] = prop;
+                }
             }
             // Otherwise, source replaces target
             else {
@@ -186,33 +217,6 @@ function mergeObjectExpressions(t, target, source) {
     }
 
     return t.objectExpression(resultProps);
-}
-
-/**
- * Merge two dynamic style functions (arrow functions that return style objects).
- * Creates a new function that merges both return values.
- */
-function mergeDynamicStyleFunctions(t, baseFn, extFn) {
-    // Get the bodies (assuming they return ObjectExpressions)
-    let baseBody = baseFn.body;
-    let extBody = extFn.body;
-
-    // Handle parenthesized expressions
-    if (t.isParenthesizedExpression(baseBody)) {
-        baseBody = baseBody.expression;
-    }
-    if (t.isParenthesizedExpression(extBody)) {
-        extBody = extBody.expression;
-    }
-
-    // If both return ObjectExpressions directly, merge them
-    if (t.isObjectExpression(baseBody) && t.isObjectExpression(extBody)) {
-        const mergedBody = mergeObjectExpressions(t, baseBody, extBody);
-        return t.arrowFunctionExpression(baseFn.params, mergedBody);
-    }
-
-    // For block statements, this is more complex - just use extension for now
-    return extFn;
 }
 
 /**
@@ -941,16 +945,24 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                 if (t.isIdentifier(node.callee, { name: 'extendStyle' })) {
                     debug(`FOUND extendStyle in: ${filename}`);
 
-                    const [componentNameArg, stylesCallback] = node.arguments;
+                    const [componentNameArg, stylesArg] = node.arguments;
 
                     if (!t.isStringLiteral(componentNameArg)) {
                         debug(`  SKIP - componentName is not a string literal`);
                         return;
                     }
 
-                    if (!t.isArrowFunctionExpression(stylesCallback) &&
-                        !t.isFunctionExpression(stylesCallback)) {
-                        debug(`  SKIP - callback is not a function`);
+                    // Accept either a function callback or a plain object
+                    let stylesCallback = stylesArg;
+                    if (t.isObjectExpression(stylesArg)) {
+                        // Wrap plain object in an arrow function: (theme) => ({ ... })
+                        stylesCallback = t.arrowFunctionExpression(
+                            [t.identifier('theme')],
+                            t.parenthesizedExpression(stylesArg)
+                        );
+                    } else if (!t.isArrowFunctionExpression(stylesArg) &&
+                        !t.isFunctionExpression(stylesArg)) {
+                        debug(`  SKIP - second argument is not a function or object`);
                         return;
                     }
 
@@ -987,16 +999,24 @@ module.exports = function idealystStylesPlugin({ types: t }) {
                 if (t.isIdentifier(node.callee, { name: 'overrideStyle' })) {
                     debug(`FOUND overrideStyle in: ${filename}`);
 
-                    const [componentNameArg, stylesCallback] = node.arguments;
+                    const [componentNameArg, stylesArg] = node.arguments;
 
                     if (!t.isStringLiteral(componentNameArg)) {
                         debug(`  SKIP - componentName is not a string literal`);
                         return;
                     }
 
-                    if (!t.isArrowFunctionExpression(stylesCallback) &&
-                        !t.isFunctionExpression(stylesCallback)) {
-                        debug(`  SKIP - callback is not a function`);
+                    // Accept either a function callback or a plain object
+                    let stylesCallback = stylesArg;
+                    if (t.isObjectExpression(stylesArg)) {
+                        // Wrap plain object in an arrow function: (theme) => ({ ... })
+                        stylesCallback = t.arrowFunctionExpression(
+                            [t.identifier('theme')],
+                            t.parenthesizedExpression(stylesArg)
+                        );
+                    } else if (!t.isArrowFunctionExpression(stylesArg) &&
+                        !t.isFunctionExpression(stylesArg)) {
+                        debug(`  SKIP - second argument is not a function or object`);
                         return;
                     }
 
