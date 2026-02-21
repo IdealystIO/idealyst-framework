@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { View, Dimensions, StyleProp, ViewStyle } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from '@idealyst/theme';
 
 interface BoundedModalContentProps {
   children: ReactNode;

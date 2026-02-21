@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, forwardRef, useMemo } from 'react';
 import { Modal, View, TouchableWithoutFeedback, BackHandler, Dimensions } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from '@idealyst/theme';
 import { PopoverProps } from './types';
 import { popoverStyles } from './Popover.styles';
 import { calculateSmartPosition } from '../utils/positionUtils.native';

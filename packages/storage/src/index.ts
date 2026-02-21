@@ -5,5 +5,6 @@ import BaseStorage from './storage';
 const storage = null as unknown as BaseStorage;
 
 export { BaseStorage, storage, storage as Storage };
+export { createSecureStorage } from './createSecureStorage';
 export default BaseStorage;
 export * from './types';

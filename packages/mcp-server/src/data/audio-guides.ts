@@ -32,7 +32,8 @@ yarn add @idealyst/audio
 1. **PCM Streaming** — Audio data is delivered as \`PCMData\` chunks via callbacks, not as files
 2. **Audio Session** — On iOS/Android, configure the audio session category before recording/playback
 3. **Audio Profiles** — Pre-configured \`AudioConfig\` presets: \`speech\`, \`highQuality\`, \`studio\`, \`phone\`
-4. **Session Presets** — Pre-configured \`AudioSessionConfig\` presets: \`playback\`, \`record\`, \`voiceChat\`, \`ambient\`, \`default\`
+4. **Session Presets** — Pre-configured \`AudioSessionConfig\` presets: \`playback\`, \`record\`, \`voiceChat\`, \`ambient\`, \`default\`, \`backgroundRecord\`
+5. **Background Recording** — \`useBackgroundRecorder\` hook for recording that continues when the app is backgrounded (iOS/Android). Requires app-level native entitlements.
 
 ## Exports
 
@@ -41,10 +42,14 @@ import {
   useRecorder,
   usePlayer,
   useAudio,
+  useBackgroundRecorder,
   AUDIO_PROFILES,
   SESSION_PRESETS,
 } from '@idealyst/audio';
-import type { PCMData, AudioConfig, AudioLevel } from '@idealyst/audio';
+import type {
+  PCMData, AudioConfig, AudioLevel,
+  BackgroundRecorderStatus, BackgroundLifecycleInfo,
+} from '@idealyst/audio';
 \`\`\`
 `,
 
@@ -155,6 +160,84 @@ interface UseAudioOptions {
 
 ---
 
+### useBackgroundRecorder(options?)
+
+Background-aware recording hook. Wraps \`useRecorder\` with app lifecycle management for recording that continues when the app is backgrounded on iOS/Android. On web, works identically to \`useRecorder\` (background events never fire).
+
+> **Requires app-level native configuration** — see "Background Recording Setup" below.
+
+\`\`\`typescript
+interface UseBackgroundRecorderOptions {
+  config?: Partial<AudioConfig>;              // Audio config
+  session?: Partial<AudioSessionConfig>;      // Session config (default: SESSION_PRESETS.backgroundRecord)
+  autoRequestPermission?: boolean;            // Auto-request mic permission on mount
+  levelUpdateInterval?: number;               // Level update interval in ms (default: 100)
+  maxBackgroundDuration?: number;             // Max background recording time in ms (undefined = no limit)
+  autoConfigureSession?: boolean;             // Auto-configure session for background (default: true)
+  onLifecycleEvent?: BackgroundLifecycleCallback; // Lifecycle event callback
+}
+\`\`\`
+
+**Returns \`UseBackgroundRecorderResult\`:**
+
+All properties from \`useRecorder\`, plus:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| isInBackground | boolean | Whether the app is currently backgrounded |
+| wasInterrupted | boolean | Whether recording was interrupted (phone call, Siri, etc.) |
+| backgroundDuration | number | Total time spent recording in background (ms) |
+| appState | AppStateStatus | Current app state (\`'active' \\| 'background' \\| 'inactive'\`) |
+
+**Lifecycle events** (via \`onLifecycleEvent\`):
+
+| Event | When | Extra fields |
+|-------|------|-------------|
+| \`'backgrounded'\` | App enters background while recording | — |
+| \`'foregrounded'\` | App returns to foreground while recording | \`backgroundDuration\` |
+| \`'interrupted'\` | OS interrupts recording (phone call, Siri) | — |
+| \`'interruptionEnded'\` | OS interruption ends | \`shouldResume\` |
+| \`'maxDurationReached'\` | Background recording hit \`maxBackgroundDuration\` | \`backgroundDuration\` |
+| \`'stopped'\` | Recording stopped while in background | \`backgroundDuration\` |
+
+> **Note:** Interruptions use notify-only — the hook does NOT auto-resume. The consumer decides via the \`shouldResume\` flag.
+
+#### Background Recording Setup
+
+The OS will not allow background recording without app-level entitlements:
+
+**iOS** — \`Info.plist\`:
+\`\`\`xml
+<key>UIBackgroundModes</key>
+<array><string>audio</string></array>
+\`\`\`
+
+**Android** — \`AndroidManifest.xml\`:
+\`\`\`xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+<service
+  android:name="com.swmansion.audioapi.system.CentralizedForegroundService"
+  android:foregroundServiceType="microphone" />
+\`\`\`
+
+**Expo** — \`app.json\` plugin:
+\`\`\`json
+["react-native-audio-api", {
+  "iosBackgroundMode": true,
+  "androidForegroundService": true,
+  "androidFSTypes": ["microphone"],
+  "androidPermissions": [
+    "android.permission.FOREGROUND_SERVICE",
+    "android.permission.FOREGROUND_SERVICE_MICROPHONE",
+    "android.permission.RECORD_AUDIO"
+  ]
+}]
+\`\`\`
+
+---
+
 ## Types
 
 ### AudioConfig
@@ -216,6 +299,7 @@ type AudioErrorCode =
   | 'DEVICE_NOT_FOUND' | 'DEVICE_IN_USE' | 'NOT_SUPPORTED'
   | 'SOURCE_NOT_FOUND' | 'FORMAT_NOT_SUPPORTED' | 'DECODE_ERROR' | 'PLAYBACK_ERROR' | 'BUFFER_UNDERRUN'
   | 'RECORDING_ERROR'
+  | 'BACKGROUND_NOT_SUPPORTED' | 'BACKGROUND_MAX_DURATION'
   | 'INITIALIZATION_FAILED' | 'INVALID_STATE' | 'INVALID_CONFIG' | 'UNKNOWN';
 
 interface AudioError {
@@ -244,11 +328,12 @@ const AUDIO_PROFILES: AudioProfiles = {
 
 \`\`\`typescript
 const SESSION_PRESETS: SessionPresets = {
-  playback:  { category: 'playback', mode: 'default' },
-  record:    { category: 'record', mode: 'default' },
-  voiceChat: { category: 'playAndRecord', mode: 'voiceChat', categoryOptions: ['allowBluetooth', 'defaultToSpeaker'] },
-  ambient:   { category: 'ambient', mode: 'default' },
-  default:   { category: 'soloAmbient', mode: 'default' },
+  playback:        { category: 'playback', mode: 'default' },
+  record:          { category: 'record', mode: 'default' },
+  voiceChat:       { category: 'playAndRecord', mode: 'voiceChat', categoryOptions: ['allowBluetooth', 'defaultToSpeaker'] },
+  ambient:         { category: 'ambient', mode: 'default' },
+  default:         { category: 'soloAmbient', mode: 'default' },
+  backgroundRecord: { category: 'playAndRecord', mode: 'spokenAudio', categoryOptions: ['defaultToSpeaker', 'allowBluetooth', 'allowBluetoothA2DP', 'mixWithOthers'] },
 };
 \`\`\`
 `,
@@ -421,6 +506,77 @@ function VoiceChatScreen() {
   // ... recording/playback logic
 }
 \`\`\`
+
+## Background Recording for Transcription
+
+\`\`\`tsx
+import React, { useEffect } from 'react';
+import { View, Button, Text } from '@idealyst/components';
+import { useBackgroundRecorder, AUDIO_PROFILES } from '@idealyst/audio';
+import type { PCMData, BackgroundLifecycleInfo } from '@idealyst/audio';
+
+function BackgroundTranscriber() {
+  const recorder = useBackgroundRecorder({
+    config: AUDIO_PROFILES.speech,
+    maxBackgroundDuration: 5 * 60 * 1000, // 5 min max in background
+    onLifecycleEvent: (info: BackgroundLifecycleInfo) => {
+      switch (info.event) {
+        case 'backgrounded':
+          console.log('Recording continues in background');
+          break;
+        case 'foregrounded':
+          console.log(\`Back from background after \${info.backgroundDuration}ms\`);
+          break;
+        case 'interrupted':
+          console.log('Recording interrupted (phone call?)');
+          break;
+        case 'interruptionEnded':
+          if (info.shouldResume) {
+            recorder.resume(); // Consumer decides whether to resume
+          }
+          break;
+        case 'maxDurationReached':
+          console.log('Max background duration reached');
+          break;
+      }
+    },
+  });
+
+  // Stream PCM chunks to your speech-to-text service
+  useEffect(() => {
+    const unsub = recorder.subscribeToData((pcm: PCMData) => {
+      // Send to STT API (e.g., Whisper, Deepgram)
+      sendToTranscriptionService(pcm.toBase64());
+    });
+    return unsub;
+  }, [recorder.subscribeToData]);
+
+  const handleToggle = async () => {
+    if (recorder.isRecording) {
+      await recorder.stop();
+    } else {
+      await recorder.start();
+    }
+  };
+
+  return (
+    <View padding="md" gap="md">
+      <Button
+        onPress={handleToggle}
+        intent={recorder.isRecording ? 'error' : 'primary'}
+      >
+        {recorder.isRecording ? 'Stop' : 'Record'}
+      </Button>
+      <Text>Duration: {Math.round(recorder.duration / 1000)}s</Text>
+      {recorder.isInBackground && <Text>Recording in background...</Text>}
+      {recorder.wasInterrupted && <Text>Recording was interrupted</Text>}
+      <Text>Background time: {Math.round(recorder.backgroundDuration / 1000)}s</Text>
+    </View>
+  );
+}
+\`\`\`
+
+> **Important:** Background recording requires native entitlements. See the \`useBackgroundRecorder\` API docs for iOS, Android, and Expo setup instructions.
 
 ## Audio Level Visualization
 

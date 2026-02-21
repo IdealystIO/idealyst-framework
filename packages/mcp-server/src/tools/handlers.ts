@@ -32,6 +32,8 @@ import { lottieGuides } from "../data/lottie-guides.js";
 import { markdownGuides } from "../data/markdown-guides.js";
 import { configGuides } from "../data/config-guides.js";
 import { chartsGuides } from "../data/charts-guides.js";
+import { clipboardGuides } from "../data/clipboard-guides.js";
+import { biometricsGuides } from "../data/biometrics-guides.js";
 import {
   packages,
   getPackageSummary,
@@ -83,6 +85,8 @@ import type {
   GetMarkdownGuideArgs,
   GetConfigGuideArgs,
   GetChartsGuideArgs,
+  GetClipboardGuideArgs,
+  GetBiometricsGuideArgs,
   ListPackagesArgs,
   GetPackageDocsArgs,
   SearchPackagesArgs,
@@ -763,7 +767,7 @@ export function getStorageGuide(args: GetStorageGuideArgs): ToolResponse {
 
   if (!guide) {
     return textResponse(
-      `Topic "${topic}" not found. Available topics: overview, api, examples`
+      `Topic "${topic}" not found. Available topics: overview, api, examples, secure`
     );
   }
 
@@ -947,6 +951,40 @@ export function getChartsGuide(args: GetChartsGuideArgs): ToolResponse {
   const topic = args.topic;
   const uri = `idealyst://charts/${topic}`;
   const guide = chartsGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the clipboard package
+ */
+export function getClipboardGuide(args: GetClipboardGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://clipboard/${topic}`;
+  const guide = clipboardGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the biometrics package
+ */
+export function getBiometricsGuide(args: GetBiometricsGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://biometrics/${topic}`;
+  const guide = biometricsGuides[uri];
 
   if (!guide) {
     return textResponse(
@@ -1310,6 +1348,8 @@ export const toolHandlers: Record<string, (args: any) => ToolResponse> = {
   get_markdown_guide: getMarkdownGuide,
   get_config_guide: getConfigGuide,
   get_charts_guide: getChartsGuide,
+  get_clipboard_guide: getClipboardGuide,
+  get_biometrics_guide: getBiometricsGuide,
   list_packages: listPackages,
   get_package_docs: getPackageDocs,
   search_packages: searchPackages,

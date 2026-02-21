@@ -324,6 +324,9 @@ export type AudioErrorCode =
   | 'BUFFER_UNDERRUN'
   // Recording errors
   | 'RECORDING_ERROR'
+  // Background errors
+  | 'BACKGROUND_NOT_SUPPORTED'
+  | 'BACKGROUND_MAX_DURATION'
   // General errors
   | 'INITIALIZATION_FAILED'
   | 'INVALID_STATE'
@@ -469,4 +472,162 @@ export interface SessionPresets {
   voiceChat: AudioSessionConfig;
   ambient: AudioSessionConfig;
   default: AudioSessionConfig;
+  backgroundRecord: AudioSessionConfig;
+}
+
+// ============================================
+// BACKGROUND RECORDER TYPES
+// ============================================
+
+export type AppStateStatus = 'active' | 'background' | 'inactive' | 'unknown' | 'extension';
+
+/**
+ * Extended recorder status with background lifecycle state.
+ */
+export interface BackgroundRecorderStatus extends RecorderStatus {
+  /** Current app state */
+  appState: AppStateStatus;
+
+  /** Whether the recorder is currently operating in background */
+  isInBackground: boolean;
+
+  /** Whether the recording was interrupted by the OS (phone call, Siri, etc.) */
+  wasInterrupted: boolean;
+
+  /** Timestamp when the app last entered background, or null */
+  backgroundSince: number | null;
+
+  /** Total time spent recording in background (ms) */
+  backgroundDuration: number;
+}
+
+/** Lifecycle event types fired by the background recorder */
+export type BackgroundLifecycleEvent =
+  | 'backgrounded'
+  | 'foregrounded'
+  | 'interrupted'
+  | 'interruptionEnded'
+  | 'maxDurationReached'
+  | 'stopped';
+
+export interface BackgroundLifecycleInfo {
+  event: BackgroundLifecycleEvent;
+  timestamp: number;
+  /** Duration spent in background when foregrounded (ms) */
+  backgroundDuration?: number;
+  /** Whether the OS suggested resuming after interruption */
+  shouldResume?: boolean;
+}
+
+export type BackgroundLifecycleCallback = (info: BackgroundLifecycleInfo) => void;
+export type BackgroundStatusCallback = (status: BackgroundRecorderStatus) => void;
+
+export interface BackgroundRecorderConfig {
+  /** Audio configuration for recording */
+  audio?: Partial<AudioConfig>;
+
+  /** Audio session configuration for background recording.
+   *  Defaults to SESSION_PRESETS.backgroundRecord */
+  session?: Partial<AudioSessionConfig>;
+
+  /** Maximum duration to record in background (ms). undefined = no limit */
+  maxBackgroundDuration?: number;
+
+  /** Whether to automatically configure the audio session for background.
+   *  Default: true */
+  autoConfigureSession?: boolean;
+}
+
+/**
+ * Background-aware recorder interface.
+ * Composes an IRecorder with AppState lifecycle management.
+ */
+export interface IBackgroundRecorder {
+  /** The wrapped recorder instance */
+  readonly recorder: IRecorder;
+
+  /** Background-aware status */
+  readonly status: BackgroundRecorderStatus;
+
+  // Recording control (proxied to inner recorder)
+  start(config?: Partial<AudioConfig>): Promise<void>;
+  stop(): Promise<void>;
+  pause(): Promise<void>;
+  resume(): Promise<void>;
+
+  // Permission (proxied)
+  checkPermission(): Promise<PermissionStatus>;
+  requestPermission(): Promise<PermissionStatus>;
+
+  // Data streaming (proxied)
+  onData(callback: RecorderDataCallback): () => void;
+  onLevel(callback: RecorderLevelCallback, intervalMs?: number): () => void;
+
+  // Background-specific
+  onLifecycle(callback: BackgroundLifecycleCallback): () => void;
+  onStatusChange(callback: BackgroundStatusCallback): () => void;
+
+  // Cleanup
+  resetPeakLevel(): void;
+  dispose(): void;
+}
+
+// ============================================
+// BACKGROUND RECORDER HOOK TYPES
+// ============================================
+
+export interface UseBackgroundRecorderOptions {
+  /** Audio configuration */
+  config?: Partial<AudioConfig>;
+
+  /** Audio session configuration for background recording */
+  session?: Partial<AudioSessionConfig>;
+
+  /** Auto request permission on mount */
+  autoRequestPermission?: boolean;
+
+  /** Level update interval in ms. Default: 100 */
+  levelUpdateInterval?: number;
+
+  /** Maximum background recording duration (ms). undefined = no limit */
+  maxBackgroundDuration?: number;
+
+  /** Whether to auto-configure audio session. Default: true */
+  autoConfigureSession?: boolean;
+
+  /** Called on background lifecycle events */
+  onLifecycleEvent?: BackgroundLifecycleCallback;
+}
+
+export interface UseBackgroundRecorderResult {
+  // Standard recorder state
+  status: BackgroundRecorderStatus;
+  isRecording: boolean;
+  isPaused: boolean;
+  permission: PermissionStatus;
+  duration: number;
+  level: AudioLevel;
+  error: AudioError | null;
+
+  // Background-specific state
+  isInBackground: boolean;
+  wasInterrupted: boolean;
+  backgroundDuration: number;
+  appState: AppStateStatus;
+
+  // Actions
+  start: (config?: Partial<AudioConfig>) => Promise<void>;
+  stop: () => Promise<void>;
+  pause: () => Promise<void>;
+  resume: () => Promise<void>;
+
+  // Permissions
+  checkPermission: () => Promise<PermissionStatus>;
+  requestPermission: () => Promise<PermissionStatus>;
+
+  // Data subscription
+  subscribeToData: (callback: RecorderDataCallback) => () => void;
+
+  // Utilities
+  resetPeakLevel: () => void;
 }

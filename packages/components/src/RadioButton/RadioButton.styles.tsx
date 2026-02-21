@@ -125,4 +125,32 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
             },
         },
     }),
+
+    groupWrapper: (_props: RadioButtonDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        gap: 4,
+    }),
+
+    groupLabel: (_props: RadioButtonDynamicProps) => ({
+        fontSize: 14,
+        fontWeight: '500' as const,
+        color: theme.colors.text.primary,
+        variants: {
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
+        },
+    }),
+
+    groupHelperText: (_props: RadioButtonDynamicProps) => ({
+        fontSize: 12,
+        variants: {
+            hasError: {
+                true: { color: theme.intents.danger.primary },
+                false: { color: theme.colors.text.secondary },
+            },
+        },
+    }),
 }));

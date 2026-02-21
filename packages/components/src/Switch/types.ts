@@ -29,6 +29,16 @@ export interface SwitchProps extends FormInputStyleProps, SelectionAccessibility
   disabled?: boolean;
 
   /**
+   * Error message to display below the switch. When set, shows error styling.
+   */
+  error?: string;
+
+  /**
+   * Helper text to display below the switch. Hidden when error is set.
+   */
+  helperText?: string;
+
+  /**
    * Label text to display next to the switch
    */
   label?: string;

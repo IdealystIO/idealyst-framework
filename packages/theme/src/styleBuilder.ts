@@ -35,6 +35,7 @@ export type ComponentName =
   | 'Divider'
   | 'DropZone'
   | 'FilePickerButton'
+  | 'Form'
   | 'Grid'
   | 'Icon'
   | 'IconButton'

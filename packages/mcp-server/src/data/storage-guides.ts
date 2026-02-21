@@ -10,6 +10,7 @@ Cross-platform storage solution for React and React Native applications. Provide
 - **React Native** - Uses MMKV for high-performance storage
 - **Web** - Uses localStorage with proper error handling
 - **TypeScript** - Full type safety and IntelliSense support
+- **Secure Storage** - Optional encrypted storage via \`createSecureStorage()\` (Keychain on native, Web Crypto on web)
 
 ## Installation
 
@@ -415,5 +416,127 @@ async function safeStorageOperation() {
 6. **Data Size** - Keep stored objects reasonably sized
 7. **Cleanup** - Periodically clean up unused data
 8. **Type Safety** - Create typed wrapper functions for better TypeScript support
+9. **Use Secure Storage for Secrets** - Use \`createSecureStorage()\` for auth tokens, API keys, and sensitive data
+`,
+
+  "idealyst://storage/secure": `# Secure Storage
+
+Encrypted storage for sensitive data like auth tokens, API keys, and secrets. Uses the same \`IStorage\` interface as regular storage — drop-in replacement.
+
+## Installation
+
+\`\`\`bash
+yarn add @idealyst/storage
+
+# React Native also needs (for secure storage):
+yarn add react-native-keychain react-native-mmkv
+cd ios && pod install
+\`\`\`
+
+## Quick Start
+
+\`\`\`tsx
+import { createSecureStorage } from '@idealyst/storage';
+
+// Create a secure storage instance
+const secureStorage = createSecureStorage();
+
+// Same API as regular storage
+await secureStorage.setItem('authToken', 'eyJhbGciOiJIUzI1NiIs...');
+const token = await secureStorage.getItem('authToken');
+await secureStorage.removeItem('authToken');
+await secureStorage.clear();
+const keys = await secureStorage.getAllKeys();
+
+// Listeners work too
+const unsubscribe = secureStorage.addListener((key, value) => {
+  console.log('Secure storage changed:', key);
+});
+\`\`\`
+
+## Options
+
+\`\`\`tsx
+import { createSecureStorage, SecureStorageOptions } from '@idealyst/storage';
+
+const secureStorage = createSecureStorage({
+  prefix: 'myapp', // Namespace for keys (default: 'secure')
+});
+\`\`\`
+
+The \`prefix\` option controls:
+- **Native**: Keychain service name and MMKV instance ID
+- **Web**: localStorage key prefix and IndexedDB key name
+
+Use different prefixes to create isolated secure storage instances.
+
+## How It Works
+
+### React Native
+1. A random 16-byte encryption key is generated on first use
+2. The key is stored in the **iOS Keychain** / **Android Keystore** (hardware-backed)
+3. An encrypted MMKV instance is created using that key
+4. All data is encrypted at rest by MMKV's native AES encryption
+5. Keychain accessibility is set to \`WHEN_UNLOCKED_THIS_DEVICE_ONLY\` (not backed up, only accessible when device is unlocked)
+
+### Web
+1. A non-extractable AES-256-GCM \`CryptoKey\` is generated on first use
+2. The key is stored in **IndexedDB** (non-extractable — cannot be read as raw bytes)
+3. Each value is encrypted with a unique random IV before storing in localStorage
+4. Requires a **secure context** (HTTPS) for \`crypto.subtle\` access
+
+## Usage Example: Secure Auth Service
+
+\`\`\`tsx
+import { createSecureStorage } from '@idealyst/storage';
+
+const secureStorage = createSecureStorage({ prefix: 'auth' });
+
+interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: number;
+}
+
+class SecureAuthService {
+  static async saveTokens(tokens: AuthTokens) {
+    await secureStorage.setItem('tokens', JSON.stringify(tokens));
+  }
+
+  static async getTokens(): Promise<AuthTokens | null> {
+    const data = await secureStorage.getItem('tokens');
+    return data ? JSON.parse(data) as AuthTokens : null;
+  }
+
+  static async clearTokens() {
+    await secureStorage.removeItem('tokens');
+  }
+
+  static async saveApiKey(key: string) {
+    await secureStorage.setItem('apiKey', key);
+  }
+
+  static async getApiKey(): Promise<string | null> {
+    return secureStorage.getItem('apiKey');
+  }
+}
+\`\`\`
+
+## When to Use Secure vs Regular Storage
+
+| Data Type | Use |
+|-----------|-----|
+| Auth tokens, refresh tokens | \`createSecureStorage()\` |
+| API keys, client secrets | \`createSecureStorage()\` |
+| User preferences, theme | \`storage\` (regular) |
+| Cache data | \`storage\` (regular) |
+| Session IDs | \`createSecureStorage()\` |
+| Language preference | \`storage\` (regular) |
+
+## Platform Requirements
+
+- **React Native**: Requires \`react-native-keychain\` (>=9.0.0) and \`react-native-mmkv\` (>=4.0.0)
+- **Web**: Requires secure context (HTTPS) and IndexedDB support
+- **Web limitation**: IndexedDB may not be available in some private browsing modes
 `,
 };

@@ -41,6 +41,9 @@ export { useStyleProps, type StyleProps } from './useStyleProps';
 // Shadow utility (platform-specific via .native.ts)
 export { shadow, type ShadowOptions, type ShadowStyle } from './shadow';
 
+// Safe area insets (platform-specific via .native.ts)
+export { useSafeAreaInsets, type SafeAreaInsets } from './useSafeAreaInsets';
+
 // Component defaults
 export { setDefaultMaxFontSizeMultiplier, getDefaultMaxFontSizeMultiplier } from './defaults';
 

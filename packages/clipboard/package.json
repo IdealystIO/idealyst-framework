@@ -1,0 +1,78 @@
+{
+  "name": "@idealyst/clipboard",
+  "version": "1.2.106",
+  "description": "Cross-platform clipboard and OTP autofill for React and React Native",
+  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/clipboard#readme",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/clipboard"
+  },
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "browser": {
+        "types": "./src/index.web.ts",
+        "import": "./src/index.web.ts",
+        "require": "./src/index.web.ts"
+      },
+      "default": {
+        "types": "./src/index.ts",
+        "import": "./src/index.ts",
+        "require": "./src/index.ts"
+      }
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "@react-native-clipboard/clipboard": ">=1.0.0",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-otp-verify": ">=1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@react-native-clipboard/clipboard": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-otp-verify": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@react-native-clipboard/clipboard": "^1.16.1",
+    "@types/react": "^19.1.0",
+    "react-native-otp-verify": "^1.1.8",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "clipboard",
+    "copy",
+    "paste",
+    "otp",
+    "sms",
+    "autofill",
+    "cross-platform"
+  ]
+}

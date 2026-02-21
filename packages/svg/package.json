@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/svg",
-  "version": "1.2.106",
+  "version": "1.2.107",
   "description": "Cross-platform SVG primitives for React and React Native with identical behavior",
   "readme": "README.md",
   "main": "src/index.ts",

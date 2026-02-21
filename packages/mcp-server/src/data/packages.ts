@@ -973,6 +973,114 @@ function UploadForm() {
     ],
     relatedPackages: ["components", "camera", "storage"],
   },
+
+  clipboard: {
+    name: "Clipboard",
+    npmName: "@idealyst/clipboard",
+    description:
+      "Cross-platform clipboard and OTP autofill for React and React Native. Copy/paste text and auto-detect SMS verification codes on mobile.",
+    category: "utility",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/clipboard",
+    peerDependencies: [
+      "@react-native-clipboard/clipboard (native)",
+      "react-native-otp-verify (Android OTP, optional)",
+    ],
+    features: [
+      "Cross-platform copy/paste with async API",
+      "Android SMS OTP auto-read via SMS Retriever API (no permissions)",
+      "iOS OTP keyboard autofill via TextInput props",
+      "Clipboard change listeners",
+      "Graceful degradation when native modules missing",
+    ],
+    quickStart: `import { clipboard } from '@idealyst/clipboard';
+
+// Copy text
+await clipboard.copy('Hello, world!');
+
+// Paste text
+const text = await clipboard.paste();
+
+// OTP auto-fill (mobile)
+import { useOTPAutoFill, OTP_INPUT_PROPS } from '@idealyst/clipboard';
+
+function OTPScreen() {
+  const { code, startListening } = useOTPAutoFill({
+    codeLength: 6,
+    onCodeReceived: (otp) => verifyOTP(otp),
+  });
+
+  useEffect(() => { startListening(); }, []);
+
+  return <TextInput value={code ?? ''} {...OTP_INPUT_PROPS} />;
+}`,
+    apiHighlights: [
+      "clipboard.copy(text) - Copy text to clipboard",
+      "clipboard.paste() - Read text from clipboard",
+      "clipboard.hasText() - Check if clipboard has text",
+      "clipboard.addListener(fn) - Listen for copy events",
+      "useOTPAutoFill({ codeLength, onCodeReceived }) - Auto-detect SMS OTP codes (Android)",
+      "OTP_INPUT_PROPS - TextInput props for iOS OTP keyboard autofill",
+    ],
+    relatedPackages: ["storage", "components"],
+  },
+
+  biometrics: {
+    name: "Biometrics",
+    npmName: "@idealyst/biometrics",
+    description:
+      "Cross-platform biometric authentication and passkeys (WebAuthn/FIDO2) for React and React Native. FaceID, TouchID, fingerprint, iris, and passwordless login.",
+    category: "auth",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/biometrics",
+    peerDependencies: [
+      "expo-local-authentication (native biometrics)",
+      "react-native-passkeys (native passkeys, optional)",
+    ],
+    features: [
+      "Local biometric auth — FaceID, TouchID, fingerprint, iris",
+      "Passkeys (WebAuthn/FIDO2) — passwordless login with cryptographic credentials",
+      "Cross-platform — single API for web and React Native",
+      "Web biometrics via WebAuthn userVerification",
+      "Web passkeys via navigator.credentials",
+      "Graceful degradation when native modules missing",
+      "Base64url encoding helpers for WebAuthn data",
+    ],
+    quickStart: `import { isBiometricAvailable, authenticate } from '@idealyst/biometrics';
+
+// Check biometric availability
+const available = await isBiometricAvailable();
+
+// Authenticate
+if (available) {
+  const result = await authenticate({ promptMessage: 'Verify your identity' });
+  if (result.success) {
+    // Authenticated!
+  }
+}
+
+// Passkeys
+import { isPasskeySupported, createPasskey, getPasskey } from '@idealyst/biometrics';
+
+const credential = await createPasskey({
+  challenge: serverChallenge,
+  rp: { id: 'example.com', name: 'My App' },
+  user: { id: userId, name: email, displayName: name },
+});`,
+    apiHighlights: [
+      "isBiometricAvailable() - Check biometric hardware and enrollment",
+      "getBiometricTypes() - Get available biometric types",
+      "getSecurityLevel() - Get device security level",
+      "authenticate(options) - Prompt for biometric auth",
+      "cancelAuthentication() - Cancel auth (Android)",
+      "isPasskeySupported() - Check passkey support",
+      "createPasskey(options) - Register a new passkey",
+      "getPasskey(options) - Authenticate with passkey",
+    ],
+    relatedPackages: ["oauth-client", "storage"],
+  },
 };
 
 /**

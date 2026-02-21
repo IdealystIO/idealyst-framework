@@ -26,6 +26,22 @@ export interface RadioGroupProps extends BaseProps, AccessibilityProps {
   disabled?: boolean;
   orientation?: 'horizontal' | 'vertical';
   children: ReactNode;
+
+  /**
+   * Error message to display below the radio group. When set, shows error styling.
+   */
+  error?: string;
+
+  /**
+   * Helper text to display below the radio group. Hidden when error is set.
+   */
+  helperText?: string;
+
+  /**
+   * Label text to display above the radio group
+   */
+  label?: string;
+
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }

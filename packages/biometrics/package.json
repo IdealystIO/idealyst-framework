@@ -1,0 +1,80 @@
+{
+  "name": "@idealyst/biometrics",
+  "version": "1.2.106",
+  "description": "Cross-platform biometric authentication and passkeys for React and React Native",
+  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/biometrics#readme",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/biometrics"
+  },
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "browser": {
+        "types": "./src/index.web.ts",
+        "import": "./src/index.web.ts",
+        "require": "./src/index.web.ts"
+      },
+      "default": {
+        "types": "./src/index.ts",
+        "import": "./src/index.ts",
+        "require": "./src/index.ts"
+      }
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "expo-local-authentication": ">=14.0.0",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0",
+    "react-native-passkeys": ">=0.4.0"
+  },
+  "peerDependenciesMeta": {
+    "expo-local-authentication": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    },
+    "react-native-passkeys": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "expo-local-authentication": "^16.0.0",
+    "react-native-passkeys": "^0.4.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "biometrics",
+    "fingerprint",
+    "faceid",
+    "touchid",
+    "passkeys",
+    "webauthn",
+    "fido2",
+    "authentication",
+    "cross-platform"
+  ]
+}

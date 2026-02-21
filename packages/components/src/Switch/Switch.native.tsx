@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { switchStyles } from './Switch.styles';
 import Text from '../Text';
@@ -11,6 +11,8 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   checked = false,
   onChange,
   disabled = false,
+  error,
+  helperText,
   label,
   labelPosition = 'right',
   intent = 'primary',
@@ -32,16 +34,27 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   accessibilityDescribedBy,
   accessibilityChecked,
 }, ref) => {
+  // Derive hasError from error prop
+  const hasError = Boolean(error);
+  // Determine if we need a wrapper (when error or helperText is present)
+  const needsWrapper = Boolean(error) || Boolean(helperText);
+  const showFooter = Boolean(error) || Boolean(helperText);
+
   switchStyles.useVariants({
     size,
     disabled,
     checked,
+    hasError,
     intent,
     position: labelPosition,
     margin,
     marginVertical,
     marginHorizontal,
   });
+
+  // Wrapper and helperText styles
+  const wrapperStyle = (switchStyles.wrapper as any)({});
+  const helperTextStyle = (switchStyles.helperText as any)({ hasError });
 
   const progress = useSharedValue(checked ? 1 : 0);
 
@@ -123,12 +136,12 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
 
   const switchElement = (
     <Pressable
-      ref={!label ? ref : undefined}
-      nativeID={!label ? id : undefined}
+      ref={!label && !needsWrapper ? ref : undefined}
+      nativeID={!label && !needsWrapper ? id : undefined}
       onPress={handlePress}
       disabled={disabled}
       style={switchStyles.switchContainer as any}
-      testID={testID}
+      testID={!label && !needsWrapper ? testID : undefined}
       {...nativeA11yProps}
     >
       <Animated.View style={switchStyles.switchTrack as any}>
@@ -154,27 +167,42 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     </Pressable>
   );
 
-  if (label) {
+  // The switch + label row
+  const switchWithLabel = label ? (
+    <Pressable
+      ref={!needsWrapper ? ref as any : undefined}
+      nativeID={!needsWrapper ? id : undefined}
+      onPress={handlePress}
+      disabled={disabled}
+      style={[switchStyles.container as any, !needsWrapper && style]}
+      testID={!needsWrapper ? testID : undefined}
+    >
+      {labelPosition === 'left' && (
+        <Text style={switchStyles.label as any}>{label}</Text>
+      )}
+      {switchElement}
+      {labelPosition === 'right' && (
+        <Text style={switchStyles.label as any}>{label}</Text>
+      )}
+    </Pressable>
+  ) : switchElement;
+
+  // If wrapper needed for error/helperText
+  if (needsWrapper) {
     return (
-      <Pressable
-        ref={ref as any}
-        nativeID={id}
-        onPress={handlePress}
-        disabled={disabled}
-        style={[switchStyles.container as any, style]}
-      >
-        {labelPosition === 'left' && (
-          <Text style={switchStyles.label as any}>{label}</Text>
+      <View ref={ref as any} nativeID={id} style={[wrapperStyle, style]} testID={testID}>
+        {switchWithLabel}
+        {showFooter && (
+          <View style={{ flex: 1 }}>
+            {error && <Text style={helperTextStyle}>{error}</Text>}
+            {!error && helperText && <Text style={helperTextStyle}>{helperText}</Text>}
+          </View>
         )}
-        {switchElement}
-        {labelPosition === 'right' && (
-          <Text style={switchStyles.label as any}>{label}</Text>
-        )}
-      </Pressable>
+      </View>
     );
   }
 
-  return switchElement;
+  return switchWithLabel;
 });
 
 Switch.displayName = 'Switch';

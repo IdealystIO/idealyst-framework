@@ -63,6 +63,18 @@ export type {
   // Presets
   AudioProfiles,
   SessionPresets,
+
+  // Background recorder
+  AppStateStatus,
+  BackgroundRecorderStatus,
+  BackgroundLifecycleEvent,
+  BackgroundLifecycleInfo,
+  BackgroundLifecycleCallback,
+  BackgroundStatusCallback,
+  BackgroundRecorderConfig,
+  IBackgroundRecorder,
+  UseBackgroundRecorderOptions,
+  UseBackgroundRecorderResult,
 } from './types';
 
 // Constants
@@ -81,6 +93,7 @@ export {
   DEFAULT_SESSION_STATE,
   DEFAULT_LEVEL_UPDATE_INTERVAL,
   DEFAULT_POSITION_UPDATE_INTERVAL,
+  DEFAULT_BACKGROUND_RECORDER_STATUS,
 } from './constants';
 
 // Context (native)
@@ -95,8 +108,11 @@ export { createRecorder, NativeRecorder } from './recording/index.native';
 // Playback (native)
 export { createPlayer, NativePlayer } from './playback/index.native';
 
+// Background Recording (native)
+export { createBackgroundRecorder, NativeBackgroundRecorder } from './background/index.native';
+
 // Hooks
-export { useAudio, useRecorder, usePlayer } from './hooks';
+export { useAudio, useRecorder, usePlayer, useBackgroundRecorder } from './hooks';
 
 // Utilities
 export {

@@ -16,6 +16,7 @@ export type SliderVariants = {
     size: Size;
     intent: Intent;
     disabled: boolean;
+    hasError?: boolean;
     margin?: ViewStyleSize;
     marginVertical?: ViewStyleSize;
     marginHorizontal?: ViewStyleSize;
@@ -55,17 +56,6 @@ export const sliderStyles = defineStyle('Slider', (theme: Theme) => ({
     container: {
         gap: 4,
         paddingVertical: 8,
-        variants: {
-            margin: {
-                margin: theme.sizes.$view.padding,
-            },
-            marginVertical: {
-                marginVertical: theme.sizes.$view.padding,
-            },
-            marginHorizontal: {
-                marginHorizontal: theme.sizes.$view.padding,
-            },
-        },
     },
 
     sliderWrapper: {
@@ -265,5 +255,52 @@ export const sliderStyles = defineStyle('Slider', (theme: Theme) => ({
             transform: 'translateX(-50%)',
             whiteSpace: 'nowrap',
         },
+    },
+
+    wrapper: {
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        gap: 4,
+        variants: {
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
+        },
+    },
+
+    label: {
+        fontSize: 14,
+        fontWeight: '500' as const,
+        color: theme.colors.text.primary,
+        variants: {
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
+        },
+    },
+
+    helperText: {
+        fontSize: 12,
+        variants: {
+            hasError: {
+                true: { color: theme.intents.danger.primary },
+                false: { color: theme.colors.text.secondary },
+            },
+        },
+    },
+
+    footer: {
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between' as const,
+        alignItems: 'center' as const,
+        gap: 4,
     },
 }));

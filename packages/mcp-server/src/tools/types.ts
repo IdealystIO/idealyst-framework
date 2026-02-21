@@ -123,7 +123,7 @@ export interface GetTranslateGuideArgs {
 }
 
 export interface GetStorageGuideArgs {
-  topic: "overview" | "api" | "examples";
+  topic: "overview" | "api" | "examples" | "secure";
 }
 
 export interface GetAudioGuideArgs {
@@ -167,6 +167,14 @@ export interface GetConfigGuideArgs {
 }
 
 export interface GetChartsGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetClipboardGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
+export interface GetBiometricsGuideArgs {
   topic: "overview" | "api" | "examples";
 }
 
@@ -246,6 +254,8 @@ export type ToolName =
   | "get_markdown_guide"
   | "get_config_guide"
   | "get_charts_guide"
+  | "get_clipboard_guide"
+  | "get_biometrics_guide"
   | "list_packages"
   | "get_package_docs"
   | "search_packages"
@@ -279,6 +289,8 @@ export type ToolArgs =
   | GetMarkdownGuideArgs
   | GetConfigGuideArgs
   | GetChartsGuideArgs
+  | GetClipboardGuideArgs
+  | GetBiometricsGuideArgs
   | ListPackagesArgs
   | GetPackageDocsArgs
   | SearchPackagesArgs

@@ -2264,7 +2264,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/animate@workspace:packages/animate"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.101"
+    "@idealyst/theme": "npm:^1.2.107"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
@@ -2272,7 +2272,7 @@ __metadata:
     react-native-svg: "npm:^15.14.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.101
+    "@idealyst/theme": ^1.2.107
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-reanimated: ">=3.0.0"
@@ -2330,18 +2330,41 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@idealyst/biometrics@workspace:packages/biometrics":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/biometrics@workspace:packages/biometrics"
+  dependencies:
+    "@types/react": "npm:^19.1.0"
+    expo-local-authentication: "npm:^16.0.0"
+    react-native-passkeys: "npm:^0.4.0"
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    expo-local-authentication: ">=14.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-passkeys: ">=0.4.0"
+  peerDependenciesMeta:
+    expo-local-authentication:
+      optional: true
+    react-native:
+      optional: true
+    react-native-passkeys:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@idealyst/blur@npm:^1.2.40, @idealyst/blur@workspace:packages/blur":
   version: 0.0.0-use.local
   resolution: "@idealyst/blur@workspace:packages/blur"
   dependencies:
-    "@idealyst/components": "npm:^1.2.101"
+    "@idealyst/components": "npm:^1.2.107"
     "@react-native-community/blur": "npm:^4.4.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.101
+    "@idealyst/components": ^1.2.107
     "@react-native-community/blur": ">=4.0.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
@@ -2446,13 +2469,36 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/components@npm:^1.2.101, @idealyst/components@npm:^1.2.95, @idealyst/components@workspace:packages/components":
+"@idealyst/clipboard@workspace:packages/clipboard":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/clipboard@workspace:packages/clipboard"
+  dependencies:
+    "@react-native-clipboard/clipboard": "npm:^1.16.1"
+    "@types/react": "npm:^19.1.0"
+    react-native-otp-verify: "npm:^1.1.8"
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    "@react-native-clipboard/clipboard": ">=1.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-otp-verify: ">=1.0.0"
+  peerDependenciesMeta:
+    "@react-native-clipboard/clipboard":
+      optional: true
+    react-native:
+      optional: true
+    react-native-otp-verify:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@idealyst/components@npm:^1.2.107, @idealyst/components@npm:^1.2.95, @idealyst/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
     "@idealyst/blur": "npm:^1.2.40"
-    "@idealyst/theme": "npm:^1.2.101"
-    "@idealyst/tooling": "npm:^1.2.101"
+    "@idealyst/theme": "npm:^1.2.107"
+    "@idealyst/tooling": "npm:^1.2.107"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
@@ -2465,7 +2511,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.3.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.101
+    "@idealyst/theme": ^1.2.107
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.0.0"
     "@react-native-vector-icons/common": ">=12.0.0"
@@ -2525,8 +2571,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datagrid@workspace:packages/datagrid"
   dependencies:
-    "@idealyst/components": "npm:^1.2.101"
-    "@idealyst/theme": "npm:^1.2.101"
+    "@idealyst/components": "npm:^1.2.107"
+    "@idealyst/theme": "npm:^1.2.107"
     "@types/react": "npm:^19.1.0"
     "@types/react-window": "npm:^1.8.8"
     react: "npm:^19.1.0"
@@ -2534,8 +2580,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.101
-    "@idealyst/theme": ^1.2.101
+    "@idealyst/components": ^1.2.107
+    "@idealyst/theme": ^1.2.107
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -2558,7 +2604,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datepicker@workspace:packages/datepicker"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.101"
+    "@idealyst/theme": "npm:^1.2.107"
     "@mdi/js": "npm:^7.4.47"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
@@ -2569,7 +2615,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.2.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.101
+    "@idealyst/theme": ^1.2.107
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.6.0"
     react: ">=16.8.0"
@@ -2599,8 +2645,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/files@workspace:packages/files"
   dependencies:
-    "@idealyst/components": "npm:^1.2.101"
-    "@idealyst/theme": "npm:^1.2.101"
+    "@idealyst/components": "npm:^1.2.107"
+    "@idealyst/theme": "npm:^1.2.107"
     "@types/react": "npm:^19.1.0"
     "@types/react-native": "npm:^0.73.0"
     react: "npm:^19.1.0"
@@ -2608,8 +2654,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.101
-    "@idealyst/theme": ^1.2.101
+    "@idealyst/components": ^1.2.107
+    "@idealyst/theme": ^1.2.107
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-blob-util: ">=0.19.0"
@@ -2656,12 +2702,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/markdown@npm:^1.2.101, @idealyst/markdown@workspace:packages/markdown":
+"@idealyst/markdown@npm:^1.2.107, @idealyst/markdown@workspace:packages/markdown":
   version: 0.0.0-use.local
   resolution: "@idealyst/markdown@workspace:packages/markdown"
   dependencies:
     "@10play/tentap-editor": "npm:^0.5.0"
-    "@idealyst/theme": "npm:^1.2.101"
+    "@idealyst/theme": "npm:^1.2.107"
     "@mdi/js": "npm:^7.4.0"
     "@mdi/react": "npm:^1.6.0"
     "@tiptap/extension-link": "npm:^2.11.0"
@@ -2684,7 +2730,7 @@ __metadata:
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@10play/tentap-editor": ">=0.5.0"
-    "@idealyst/theme": ^1.2.101
+    "@idealyst/theme": ^1.2.107
     "@tiptap/extension-link": ">=2.0.0"
     "@tiptap/extension-placeholder": ">=2.0.0"
     "@tiptap/extension-task-item": ">=2.0.0"
@@ -2743,10 +2789,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/mcp-server@workspace:packages/mcp-server"
   dependencies:
-    "@idealyst/components": "npm:^1.2.101"
-    "@idealyst/navigation": "npm:^1.2.101"
-    "@idealyst/theme": "npm:^1.2.101"
-    "@idealyst/tooling": "npm:^1.2.101"
+    "@idealyst/components": "npm:^1.2.107"
+    "@idealyst/navigation": "npm:^1.2.107"
+    "@idealyst/theme": "npm:^1.2.107"
+    "@idealyst/tooling": "npm:^1.2.107"
     "@modelcontextprotocol/sdk": "npm:^1.0.4"
     "@types/better-sqlite3": "npm:^7.6.12"
     "@types/node": "npm:^20.0.0"
@@ -2787,20 +2833,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/navigation@npm:^1.2.101, @idealyst/navigation@workspace:packages/navigation":
+"@idealyst/navigation@npm:^1.2.107, @idealyst/navigation@workspace:packages/navigation":
   version: 0.0.0-use.local
   resolution: "@idealyst/navigation@workspace:packages/navigation"
   dependencies:
     "@idealyst/animate": "npm:^1.2.38"
     "@idealyst/blur": "npm:^1.2.40"
     "@idealyst/camera": "npm:^1.2.30"
-    "@idealyst/components": "npm:^1.2.101"
+    "@idealyst/components": "npm:^1.2.107"
     "@idealyst/datagrid": "npm:^1.2.30"
     "@idealyst/datepicker": "npm:^1.2.30"
     "@idealyst/lottie": "npm:^1.2.38"
-    "@idealyst/markdown": "npm:^1.2.101"
+    "@idealyst/markdown": "npm:^1.2.107"
     "@idealyst/microphone": "npm:^1.2.30"
-    "@idealyst/theme": "npm:^1.2.101"
+    "@idealyst/theme": "npm:^1.2.107"
     "@types/react": "npm:^19.1.8"
     "@types/react-dom": "npm:^19.1.6"
     react: "npm:^19.1.0"
@@ -2811,9 +2857,9 @@ __metadata:
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@idealyst/camera": ^1.2.30
-    "@idealyst/components": ^1.2.101
+    "@idealyst/components": ^1.2.107
     "@idealyst/microphone": ^1.2.30
-    "@idealyst/theme": ^1.2.101
+    "@idealyst/theme": ^1.2.107
     "@react-navigation/bottom-tabs": ">=7.0.0"
     "@react-navigation/drawer": ">=7.0.0"
     "@react-navigation/native": ">=7.0.0"
@@ -2857,16 +2903,20 @@ __metadata:
   resolution: "@idealyst/storage@workspace:packages/storage"
   dependencies:
     "@types/react": "npm:^19.1.0"
+    react-native-keychain: "npm:^9.2.0"
     react-native-mmkv: "npm:^4.1.1"
     react-native-nitro-modules: "npm:^0.32.1"
     typescript: "npm:^5.0.0"
   peerDependencies:
     react: ">=16.8.0"
     react-native: ">=0.60.0"
+    react-native-keychain: ">=9.0.0"
     react-native-mmkv: ">=4.0.0"
     react-native-nitro-modules: ">=0.20.0"
   peerDependenciesMeta:
     react-native:
+      optional: true
+    react-native-keychain:
       optional: true
     react-native-mmkv:
       optional: true
@@ -2896,14 +2946,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/theme@npm:^1.2.101, @idealyst/theme@npm:^1.2.80, @idealyst/theme@workspace:packages/theme":
+"@idealyst/theme@npm:^1.2.107, @idealyst/theme@npm:^1.2.80, @idealyst/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
     "@babel/core": "npm:^7.28.5"
     "@babel/preset-typescript": "npm:^7.28.5"
     "@babel/types": "npm:^7.28.5"
-    "@idealyst/tooling": "npm:^1.2.101"
+    "@idealyst/tooling": "npm:^1.2.107"
     "@types/babel__core": "npm:^7.20.0"
     "@types/react": "npm:^19.1.0"
     "@types/react-native": "npm:^0.73.0"
@@ -2917,7 +2967,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/tooling@npm:^1.2.101, @idealyst/tooling@workspace:packages/tooling":
+"@idealyst/tooling@npm:^1.2.107, @idealyst/tooling@workspace:packages/tooling":
   version: 0.0.0-use.local
   resolution: "@idealyst/tooling@workspace:packages/tooling"
   dependencies:
@@ -3434,6 +3484,23 @@ __metadata:
   version: 2.11.8
   resolution: "@popperjs/core@npm:2.11.8"
   checksum: 10/ddd16090cde777aaf102940f05d0274602079a95ad9805bd20bc55dcc7c3a2ba1b99dd5c73e5cc2753c3d31250ca52a67d58059459d7d27debb983a9f552936c
+  languageName: node
+  linkType: hard
+
+"@react-native-clipboard/clipboard@npm:^1.16.1":
+  version: 1.16.3
+  resolution: "@react-native-clipboard/clipboard@npm:1.16.3"
+  peerDependencies:
+    react: ">= 16.9.0"
+    react-native: ">= 0.61.5"
+    react-native-macos: ">= 0.61.0"
+    react-native-windows: ">= 0.61.0"
+  peerDependenciesMeta:
+    react-native-macos:
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: 10/87608bee52757af514b4717c42cde330dd61f46d1348dd59b4f478a27d351060c8b433375166d486d3e80d3db41dfcd17be401679cced3951c69857727ecbc96
   languageName: node
   linkType: hard
 
@@ -6675,6 +6742,17 @@ __metadata:
     jest-message-util: "npm:^29.7.0"
     jest-util: "npm:^29.7.0"
   checksum: 10/63f97bc51f56a491950fb525f9ad94f1916e8a014947f8d8445d3847a665b5471b768522d659f5e865db20b6c2033d2ac10f35fcbd881a4d26407a4f6f18451a
+  languageName: node
+  linkType: hard
+
+"expo-local-authentication@npm:^16.0.0":
+  version: 16.0.5
+  resolution: "expo-local-authentication@npm:16.0.5"
+  dependencies:
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/f83d933970bd831aca3e29813c62c4f41bad00588e30440aaf72169d33dca9c7a19989b96eff45ffd574e81ada097103e63b2e3eade32925ddbd525bed5d647d
   languageName: node
   linkType: hard
 
@@ -10738,6 +10816,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-keychain@npm:^9.2.0":
+  version: 9.2.3
+  resolution: "react-native-keychain@npm:9.2.3"
+  checksum: 10/138f9812b7290440831343476f001c82b5e581bb5b327bf2c713cc8de7e5de7638443dfc19746560098289104132516b02509b2cbe763393adceea400a6874a9
+  languageName: node
+  linkType: hard
+
 "react-native-live-audio-stream@npm:^1.1.0":
   version: 1.1.1
   resolution: "react-native-live-audio-stream@npm:1.1.1"
@@ -10763,6 +10848,27 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/693b9558f24fb998f0c36338b1da56e2e5fc2777ca20c13dc4796da46cd44ffd8610efae4c245ba7070d0301239bf7b7bb96bb4dcd318522c08bb9a90658695c
+  languageName: node
+  linkType: hard
+
+"react-native-otp-verify@npm:^1.1.8":
+  version: 1.1.8
+  resolution: "react-native-otp-verify@npm:1.1.8"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/74347107524d3b826ed91853c8c8c29bdb2d6bf66dadebed65df220accd6ed9a9286817e3706ba80da2855b8dcb4b0d26f02d37fe1147ecea85eada7b6e15813
+  languageName: node
+  linkType: hard
+
+"react-native-passkeys@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "react-native-passkeys@npm:0.4.0"
+  peerDependencies:
+    expo: ">=48.0.0"
+    react: "*"
+    react-native: ">=0.71.0"
+  checksum: 10/29e3d0cc50b5ef6a0947b94c1536e9125ef5d7c86c3a6eb0db54bc90fee43f46742abd6bc4b97d8abbb9f6097d08ab79c79bb0a18ad4bd8f75de27302720aa16
   languageName: node
   linkType: hard
 

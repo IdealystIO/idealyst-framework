@@ -75,15 +75,6 @@ export const textInputStyles = defineStyle('TextInput', (theme: Theme) => ({
                 height: theme.sizes.$input.height,
                 paddingHorizontal: theme.sizes.$input.paddingHorizontal,
             },
-            margin: {
-                margin: theme.sizes.$view.padding,
-            },
-            marginVertical: {
-                marginVertical: theme.sizes.$view.padding,
-            },
-            marginHorizontal: {
-                marginHorizontal: theme.sizes.$view.padding,
-            },
         },
         _web: {
             boxSizing: 'border-box',
@@ -207,6 +198,53 @@ export const textInputStyles = defineStyle('TextInput', (theme: Theme) => ({
                 height: theme.sizes.$input.iconSize,
             },
         },
+    }),
+
+    wrapper: (_props: TextInputDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        gap: 4,
+        variants: {
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
+        },
+    }),
+
+    label: (_props: TextInputDynamicProps) => ({
+        fontSize: 14,
+        fontWeight: '500' as const,
+        color: theme.colors.text.primary,
+        variants: {
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
+        },
+    }),
+
+    helperText: (_props: TextInputDynamicProps) => ({
+        fontSize: 12,
+        variants: {
+            hasError: {
+                true: { color: theme.intents.danger.primary },
+                false: { color: theme.colors.text.secondary },
+            },
+        },
+    }),
+
+    footer: (_props: TextInputDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        justifyContent: 'space-between' as const,
+        alignItems: 'center' as const,
+        gap: 4,
     }),
 }));
 

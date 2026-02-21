@@ -167,9 +167,24 @@ export interface TextInputProps extends FormInputStyleProps, FormAccessibilityPr
 
   /**
    * Whether the input has an error state
-   * @deprecated Use intent="danger" instead
+   * @deprecated Use error prop or intent="danger" instead
    */
   hasError?: boolean;
+
+  /**
+   * Error message to display below the input. When set, the input shows error styling.
+   */
+  error?: string;
+
+  /**
+   * Helper text to display below the input. Hidden when error is set.
+   */
+  helperText?: string;
+
+  /**
+   * Label text to display above the input
+   */
+  label?: string;
 
   /**
    * Called when the user submits the input (presses Enter on web, or the return key on mobile).

@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { radioButtonStyles } from './RadioButton.styles';
 import type { RadioGroupProps } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
@@ -19,6 +19,9 @@ const RadioGroup = forwardRef<IdealystElement, RadioGroupProps>(({
   disabled = false,
   orientation: _orientation = 'vertical',
   children,
+  error,
+  helperText,
+  label,
   style,
   testID,
   id,
@@ -29,6 +32,8 @@ const RadioGroup = forwardRef<IdealystElement, RadioGroupProps>(({
   accessibilityHidden,
   accessibilityRole,
 }, ref) => {
+  const hasError = Boolean(error);
+  const showFooter = Boolean(error || helperText);
 
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
@@ -41,10 +46,13 @@ const RadioGroup = forwardRef<IdealystElement, RadioGroupProps>(({
     });
   }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole]);
 
-  return (
+  const wrapperStyle = (radioButtonStyles.groupWrapper as any)({});
+  const labelStyle = (radioButtonStyles.groupLabel as any)({ disabled });
+  const helperTextStyle = (radioButtonStyles.groupHelperText as any)({ hasError });
+
+  const content = (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>
       <View
-        ref={ref as any}
         nativeID={id}
         style={[
           radioButtonStyles.groupContainer,
@@ -56,6 +64,23 @@ const RadioGroup = forwardRef<IdealystElement, RadioGroupProps>(({
         {children}
       </View>
     </RadioGroupContext.Provider>
+  );
+
+  if (!label && !showFooter) {
+    return content;
+  }
+
+  return (
+    <View ref={ref as any} style={wrapperStyle}>
+      {label && <Text style={labelStyle}>{label}</Text>}
+      {content}
+      {showFooter && (
+        <View style={{ flex: 1 }}>
+          {error && <Text style={helperTextStyle}>{error}</Text>}
+          {!error && helperText && <Text style={helperTextStyle}>{helperText}</Text>}
+        </View>
+      )}
+    </View>
   );
 });
 

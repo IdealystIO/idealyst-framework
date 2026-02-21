@@ -1,3 +1,13 @@
+export interface SecureStorageOptions {
+  /**
+   * Namespace prefix for storage keys.
+   * - Native: used as the Keychain service name and MMKV instance ID.
+   * - Web: used as prefix for localStorage keys and IndexedDB key name.
+   * @default 'secure'
+   */
+  prefix?: string;
+}
+
 export interface IStorage {
   getItem: (key: string) => Promise<string | null>;
   setItem: (key: string, value: string) => Promise<void>;

@@ -6,7 +6,7 @@ import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { textInputStyles } from './TextInput.styles';
 import { TextInputProps } from './types';
-import { getWebFormAriaProps } from '../utils/accessibility';
+import { getWebFormAriaProps, combineIds, generateAccessibilityId } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
 import { flattenStyle } from '../utils/flattenStyle';
 
@@ -31,6 +31,9 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   size = 'md',
   type = 'outlined',
   hasError = false,
+  error,
+  helperText,
+  label,
   // Spacing variants from FormInputStyleProps
   margin,
   marginVertical,
@@ -64,6 +67,18 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   // Determine if we should show password toggle
   const isPasswordField = inputMode === 'password' || secureTextEntry;
   const shouldShowPasswordToggle = isPasswordField && (showPasswordToggle !== false);
+
+  // Derive hasError from error prop or hasError boolean
+  const computedHasError = Boolean(error) || hasError;
+
+  // Determine if we need a wrapper (when label, error, or helperText is present)
+  const needsWrapper = Boolean(label) || Boolean(error) || Boolean(helperText);
+
+  // Generate unique IDs for accessibility
+  const inputId = useMemo(() => id || generateAccessibilityId('textinput'), [id]);
+  const errorId = useMemo(() => `${inputId}-error`, [inputId]);
+  const helperId = useMemo(() => `${inputId}-helper`, [inputId]);
+  const labelId = useMemo(() => label ? `${inputId}-label` : undefined, [inputId, label]);
 
   // Get theme for icon sizes and colors
   const { theme } = useUnistyles();
@@ -138,7 +153,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     size,
     type,
     focused: isFocused,
-    hasError,
+    hasError: computedHasError,
     disabled,
     margin,
     marginVertical,
@@ -146,19 +161,34 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   });
 
   // Get web props for all styled elements (all styles are dynamic functions)
-  const dynamicContainerStyle = (textInputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
-  const {ref: containerStyleRef, ...containerProps} = getWebProps([dynamicContainerStyle, flattenStyle(style)]);
+  const dynamicContainerStyle = (textInputStyles.container as any)({ type, focused: isFocused, hasError: computedHasError, disabled });
+  const {ref: containerStyleRef, ...containerProps} = getWebProps([dynamicContainerStyle, !needsWrapper && flattenStyle(style)].filter(Boolean));
   const leftIconContainerProps = getWebProps([(textInputStyles.leftIconContainer as any)({})]);
   const rightIconContainerProps = getWebProps([(textInputStyles.rightIconContainer as any)({})]);
   const passwordToggleProps = getWebProps([(textInputStyles.passwordToggle as any)({})]);
+
+  // Wrapper, label, and footer styles
+  const wrapperStyleComputed = (textInputStyles.wrapper as any)({});
+  const labelStyleComputed = (textInputStyles.label as any)({ disabled });
+  const footerStyleComputed = (textInputStyles.footer as any)({});
+  const helperTextStyleComputed = (textInputStyles.helperText as any)({ hasError: computedHasError });
+
+  const wrapperProps = getWebProps([wrapperStyleComputed, flattenStyle(style)]);
+  const labelProps = getWebProps([labelStyleComputed]);
+  const footerProps = getWebProps([footerStyleComputed]);
+  const helperTextProps = getWebProps([helperTextStyleComputed]);
 
   // Get input props
   const inputWebProps = getWebProps([(textInputStyles.input as any)({})]);
 
   // Generate accessibility props
   const ariaProps = useMemo(() => {
-    // Derive invalid state from hasError or explicit accessibilityInvalid
-    const isInvalid = accessibilityInvalid ?? hasError;
+    // Derive invalid state from computedHasError or explicit accessibilityInvalid
+    const isInvalid = accessibilityInvalid ?? computedHasError;
+    const describedByIds = combineIds(
+      accessibilityDescribedBy,
+      error ? errorId : helperText ? helperId : undefined
+    );
 
     return getWebFormAriaProps({
       accessibilityLabel,
@@ -166,8 +196,8 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
       accessibilityDisabled: accessibilityDisabled ?? disabled,
       accessibilityHidden,
       accessibilityRole: accessibilityRole ?? 'textbox',
-      accessibilityLabelledBy,
-      accessibilityDescribedBy,
+      accessibilityLabelledBy: accessibilityLabelledBy ?? labelId,
+      accessibilityDescribedBy: describedByIds,
       accessibilityControls,
       accessibilityExpanded,
       accessibilityPressed,
@@ -175,7 +205,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
       accessibilityHasPopup,
       accessibilityRequired,
       accessibilityInvalid: isInvalid,
-      accessibilityErrorMessage,
+      accessibilityErrorMessage: accessibilityErrorMessage ?? (error ? errorId : undefined),
       accessibilityAutoComplete,
     });
   }, [
@@ -186,7 +216,12 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     accessibilityHidden,
     accessibilityRole,
     accessibilityLabelledBy,
+    labelId,
     accessibilityDescribedBy,
+    error,
+    errorId,
+    helperText,
+    helperId,
     accessibilityControls,
     accessibilityExpanded,
     accessibilityPressed,
@@ -194,7 +229,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     accessibilityHasPopup,
     accessibilityRequired,
     accessibilityInvalid,
-    hasError,
+    computedHasError,
     accessibilityErrorMessage,
     accessibilityAutoComplete,
   ]);
@@ -257,57 +292,134 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-    const handleContainerPress = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleContainerPress = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     containerRef.current?.focus();
-  }
+  };
 
   const mergedContainerRef = useMergeRefs(containerRef, containerStyleRef);
 
+  const showFooter = Boolean(error) || Boolean(helperText);
+
+  // If no wrapper needed, return flat input container
+  if (!needsWrapper) {
+    return (
+      <div onClick={handleContainerPress} ref={mergedContainerRef} {...containerProps} id={id} data-testid={testID}>
+        {/* Left Icon */}
+        {leftIcon && (
+          <span {...leftIconContainerProps}>
+            {renderLeftIcon()}
+          </span>
+        )}
+
+        {/* Input */}
+        <input
+          {...inputWebProps}
+          {...ariaProps}
+          id={inputId}
+          ref={mergedInputRef}
+          type={getInputType()}
+          value={value}
+          onClick={handlePress}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          disabled={disabled}
+          autoCapitalize={autoCapitalize}
+        />
+
+        {/* Right Icon or Password Toggle */}
+        {shouldShowPasswordToggle ? (
+          <button
+            {...passwordToggleProps}
+            onClick={togglePasswordVisibility}
+            disabled={disabled}
+            aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+            type="button"
+            tabIndex={-1}
+          >
+            {renderPasswordToggleIcon()}
+          </button>
+        ) : rightIcon ? (
+          <span {...rightIconContainerProps}>
+            {renderRightIcon()}
+          </span>
+        ) : null}
+      </div>
+    );
+  }
+
+  // With wrapper for label/error/helperText
   return (
-    <div onClick={handleContainerPress} ref={mergedContainerRef} {...containerProps} id={id} data-testid={testID}>
-      {/* Left Icon */}
-      {leftIcon && (
-        <span {...leftIconContainerProps}>
-          {renderLeftIcon()}
-        </span>
+    <div {...wrapperProps} id={id} data-testid={testID}>
+      {label && (
+        <label {...labelProps} id={labelId} htmlFor={inputId}>{label}</label>
       )}
 
-      {/* Input */}
-      <input
-        {...inputWebProps}
-        {...ariaProps}
-        ref={mergedInputRef}
-        type={getInputType()}
-        value={value}
-        onClick={handlePress}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        disabled={disabled}
-        autoCapitalize={autoCapitalize}
-      />
+      <div onClick={handleContainerPress} ref={mergedContainerRef} {...containerProps}>
+        {/* Left Icon */}
+        {leftIcon && (
+          <span {...leftIconContainerProps}>
+            {renderLeftIcon()}
+          </span>
+        )}
 
-      {/* Right Icon or Password Toggle */}
-      {shouldShowPasswordToggle ? (
-        <button
-          {...passwordToggleProps}
-          onClick={togglePasswordVisibility}
+        {/* Input */}
+        <input
+          {...inputWebProps}
+          {...ariaProps}
+          id={inputId}
+          ref={mergedInputRef}
+          type={getInputType()}
+          value={value}
+          onClick={handlePress}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
           disabled={disabled}
-          aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
-          type="button"
-          tabIndex={-1}
-        >
-          {renderPasswordToggleIcon()}
-        </button>
-      ) : rightIcon ? (
-        <span {...rightIconContainerProps}>
-          {renderRightIcon()}
-        </span>
-      ) : null}
+          autoCapitalize={autoCapitalize}
+        />
+
+        {/* Right Icon or Password Toggle */}
+        {shouldShowPasswordToggle ? (
+          <button
+            {...passwordToggleProps}
+            onClick={togglePasswordVisibility}
+            disabled={disabled}
+            aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+            type="button"
+            tabIndex={-1}
+          >
+            {renderPasswordToggleIcon()}
+          </button>
+        ) : rightIcon ? (
+          <span {...rightIconContainerProps}>
+            {renderRightIcon()}
+          </span>
+        ) : null}
+      </div>
+
+      {showFooter && (
+        <div {...footerProps}>
+          <div style={{ flex: 1 }}>
+            {error && (
+              <span {...helperTextProps} id={errorId} role="alert">
+                {error}
+              </span>
+            )}
+            {!error && helperText && (
+              <span {...helperTextProps} id={helperId}>
+                {helperText}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 });

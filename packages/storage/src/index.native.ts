@@ -6,4 +6,6 @@ const storage = new BaseStorage(new NativeStorage());
 export default storage;
 // Export instance as both `storage` and `Storage` for convenience
 export { storage, storage as Storage, BaseStorage, NativeStorage };
+export { createSecureStorage } from './createSecureStorage.native';
+export { default as NativeSecureStorage } from './secure-storage.native';
 export * from './types';

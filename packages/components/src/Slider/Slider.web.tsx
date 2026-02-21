@@ -19,6 +19,9 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
   max = 100,
   step = 1,
   disabled = false,
+  error,
+  helperText,
+  label,
   showValue = false,
   showMinMax = false,
   marks = [],
@@ -45,6 +48,10 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
   accessibilityValueMax,
   accessibilityValueText,
 }, ref) => {
+  // Derive hasError from error prop
+  const hasError = Boolean(error);
+  // Determine if we need a wrapper (when label, error, or helperText is present)
+  const needsWrapper = Boolean(label) || Boolean(error) || Boolean(helperText);
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isDragging, setIsDragging] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -58,19 +65,28 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
     size,
     intent,
     disabled,
+    hasError,
     margin,
     marginVertical,
     marginHorizontal,
   });
 
-  const containerProps = getWebProps([sliderStyles.container as any, style as any]);
-  const wrapperProps = getWebProps([sliderStyles.sliderWrapper as any]);
+  const containerProps = getWebProps([sliderStyles.container as any, !needsWrapper && style as any].filter(Boolean));
+  const sliderWrapperProps = getWebProps([sliderStyles.sliderWrapper as any]);
   const trackProps = getWebProps([sliderStyles.track as any]);
   const thumbIconProps = getWebProps([sliderStyles.thumbIcon as any]);
   const valueLabelProps = getWebProps([sliderStyles.valueLabel as any]);
   const minMaxLabelsProps = getWebProps([sliderStyles.minMaxLabels as any]);
   const minMaxLabelProps = getWebProps([sliderStyles.minMaxLabel as any]);
   const marksProps = getWebProps([sliderStyles.marks as any]);
+
+  // Wrapper, label, and footer styles
+  const outerWrapperProps = getWebProps([sliderStyles.wrapper as any, style as any]);
+  const labelProps = getWebProps([sliderStyles.label as any]);
+  const footerProps = getWebProps([sliderStyles.footer as any]);
+  const helperTextProps = getWebProps([sliderStyles.helperText as any]);
+
+  const showFooter = Boolean(error) || Boolean(helperText);
 
   const clampValue = useCallback((val: number) => {
     const clampedValue = Math.min(Math.max(val, min), max);
@@ -252,15 +268,16 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
 
   const mergedRef = useMergeRefs(ref, containerProps.ref);
 
-  return (
-    <div {...containerProps} ref={mergedRef} id={sliderId} data-testid={testID}>
+  // The slider container element
+  const sliderContainer = (
+    <div {...containerProps} ref={!needsWrapper ? mergedRef : undefined} id={!needsWrapper ? sliderId : undefined} data-testid={!needsWrapper ? testID : undefined}>
       {showValue && (
         <div {...valueLabelProps}>
           {value}
         </div>
       )}
 
-      <div {...wrapperProps}>
+      <div {...sliderWrapperProps}>
         <div
           {...trackProps}
           {...ariaProps}
@@ -311,6 +328,38 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
       )}
     </div>
   );
+
+  // If wrapper needed for label/error/helperText
+  if (needsWrapper) {
+    return (
+      <div {...outerWrapperProps} id={sliderId} data-testid={testID}>
+        {label && (
+          <label {...labelProps}>{label}</label>
+        )}
+
+        {sliderContainer}
+
+        {showFooter && (
+          <div {...footerProps}>
+            <div style={{ flex: 1 }}>
+              {error && (
+                <span {...helperTextProps} role="alert">
+                  {error}
+                </span>
+              )}
+              {!error && helperText && (
+                <span {...helperTextProps}>
+                  {helperText}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return sliderContainer;
 });
 
 Slider.displayName = 'Slider';

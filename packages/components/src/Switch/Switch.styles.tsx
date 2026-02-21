@@ -19,6 +19,7 @@ export type SwitchDynamicProps = {
     intent?: Intent;
     checked?: boolean;
     disabled?: boolean;
+    hasError?: boolean;
     labelPosition?: LabelPosition;
     margin?: ViewStyleSize;
     marginVertical?: ViewStyleSize;
@@ -163,6 +164,33 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
             labelPosition: {
                 left: { marginRight: 8, marginLeft: 0 },
                 right: { marginLeft: 8, marginRight: 0 },
+            },
+        },
+    }),
+
+    wrapper: (_props: SwitchDynamicProps) => ({
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        gap: 4,
+        variants: {
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
+        },
+    }),
+
+    helperText: (_props: SwitchDynamicProps) => ({
+        fontSize: 12,
+        variants: {
+            hasError: {
+                true: { color: theme.intents.danger.primary },
+                false: { color: theme.colors.text.secondary },
             },
         },
     }),

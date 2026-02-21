@@ -17,6 +17,8 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   checked = false,
   onChange,
   disabled = false,
+  error,
+  helperText,
   label,
   labelPosition = 'right',
   intent = 'primary',
@@ -40,6 +42,10 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   accessibilityDescribedBy,
   accessibilityChecked,
 }, ref) => {
+  // Derive hasError from error prop
+  const hasError = Boolean(error);
+  // Determine if we need a wrapper (when error or helperText is present)
+  const needsWrapper = Boolean(error) || Boolean(helperText);
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -86,6 +92,7 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     size,
     checked,
     disabled: disabled as boolean,
+    hasError,
     labelPosition,
     margin,
     intent,
@@ -97,6 +104,14 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   const thumbProps = getWebProps([switchStyles.switchThumb as any]);
   const thumbIconProps = getWebProps([switchStyles.thumbIcon as any]);
   const labelProps = getWebProps([switchStyles.label as any]);
+
+  // Wrapper and helperText styles
+  const wrapperStyleComputed = (switchStyles.wrapper as any)({});
+  const helperTextStyleComputed = (switchStyles.helperText as any)({ hasError });
+  const wrapperProps = getWebProps([wrapperStyleComputed, flattenStyle(style)]);
+  const helperTextProps = getWebProps([helperTextStyleComputed]);
+
+  const showFooter = Boolean(error) || Boolean(helperText);
 
   // Helper to render icon
   const renderIcon = () => {
@@ -122,7 +137,7 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   const computedButtonProps = getWebProps([switchStyles.switchContainer as any]);
 
   // Computed container props (for when label exists)
-  const computedContainerProps = getWebProps([switchStyles.container as any]);
+  const computedContainerProps = getWebProps([switchStyles.container as any, !needsWrapper && flattenStyle(style)].filter(Boolean));
 
   const mergedButtonRef = useMergeRefs(ref as React.Ref<HTMLButtonElement>, computedButtonProps.ref);
   const mergedContainerRef = useMergeRefs(ref as React.Ref<HTMLDivElement>, computedContainerProps.ref);
@@ -131,12 +146,12 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     <button
       {...computedButtonProps}
       {...ariaProps}
-      style={flattenStyle(style)}
-      ref={mergedButtonRef}
+      style={!label && !needsWrapper ? flattenStyle(style) : undefined}
+      ref={!label && !needsWrapper ? mergedButtonRef : undefined}
       onClick={handleClick}
       disabled={disabled}
       id={switchId}
-      data-testid={testID}
+      data-testid={!label && !needsWrapper ? testID : undefined}
     >
       <div {...trackProps}>
         <div {...thumbProps}>
@@ -146,24 +161,48 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     </button>
   );
 
-  if (label) {
+  // The switch + label row
+  const switchWithLabel = label ? (
+    <div
+      {...computedContainerProps}
+      ref={!needsWrapper ? mergedContainerRef : undefined}
+      id={!needsWrapper ? id : undefined}
+      data-testid={!needsWrapper ? testID : undefined}
+    >
+      {labelPosition === 'left' && (
+        <span {...labelProps}>{label}</span>
+      )}
+      {switchElement}
+      {labelPosition === 'right' && (
+        <span {...labelProps}>{label}</span>
+      )}
+    </div>
+  ) : switchElement;
+
+  // If wrapper needed for error/helperText
+  if (needsWrapper) {
     return (
-      <div
-        {...computedContainerProps}
-        ref={mergedContainerRef}
-      >
-        {labelPosition === 'left' && (
-          <span {...labelProps}>{label}</span>
-        )}
-        {switchElement}
-        {labelPosition === 'right' && (
-          <span {...labelProps}>{label}</span>
+      <div {...wrapperProps} id={id} data-testid={testID}>
+        {switchWithLabel}
+        {showFooter && (
+          <div style={{ flex: 1 }}>
+            {error && (
+              <span {...helperTextProps} role="alert">
+                {error}
+              </span>
+            )}
+            {!error && helperText && (
+              <span {...helperTextProps}>
+                {helperText}
+              </span>
+            )}
+          </div>
         )}
       </div>
     );
   }
 
-  return switchElement;
+  return switchWithLabel;
 });
 
 Switch.displayName = 'Switch';

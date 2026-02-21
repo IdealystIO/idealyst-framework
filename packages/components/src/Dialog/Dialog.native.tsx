@@ -1,7 +1,7 @@
 import { useEffect, forwardRef, useMemo, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler, Platform, Keyboard, useWindowDimensions } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from '@idealyst/theme';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';

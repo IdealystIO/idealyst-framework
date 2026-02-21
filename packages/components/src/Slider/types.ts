@@ -22,6 +22,21 @@ export interface SliderProps extends FormInputStyleProps, RangeAccessibilityProp
   max?: number;
   step?: number;
   disabled?: boolean;
+
+  /**
+   * Error message to display below the slider. When set, shows error styling.
+   */
+  error?: string;
+
+  /**
+   * Helper text to display below the slider. Hidden when error is set.
+   */
+  helperText?: string;
+
+  /**
+   * Label text to display above the slider
+   */
+  label?: string;
   showValue?: boolean;
   showMinMax?: boolean;
   marks?: SliderMark[];

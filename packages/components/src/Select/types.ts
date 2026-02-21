@@ -62,9 +62,11 @@ export interface SelectProps extends FormInputStyleProps, FormAccessibilityProps
   disabled?: boolean;
 
   /**
-   * Whether the select shows an error state
+   * Error state or error message. When a string is provided, it displays as error text.
+   * When boolean true, shows error styling without text.
+   * @deprecated Using boolean is deprecated. Prefer passing an error message string.
    */
-  error?: boolean;
+  error?: string | boolean;
 
   /**
    * Helper text to display below the select

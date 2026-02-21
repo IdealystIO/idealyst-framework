@@ -19,7 +19,7 @@ export type SelectDynamicProps = {
     intent?: Intent;
     type?: SelectType;
     disabled?: boolean;
-    error?: boolean;
+    hasError?: boolean;
     focused?: boolean;
     margin?: ViewStyleSize;
     marginVertical?: ViewStyleSize;
@@ -56,10 +56,10 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
         marginBottom: 4,
     }),
 
-    trigger: ({ type = 'outlined', intent = 'neutral', disabled = false, error = false, focused = false }: SelectDynamicProps) => {
-        // Determine border color based on state priority: error > focused > default
+    trigger: ({ type = 'outlined', intent = 'neutral', disabled = false, hasError = false, focused = false }: SelectDynamicProps) => {
+        // Determine border color based on state priority: hasError > focused > default
         const getBorderColor = () => {
-            if (error) return theme.intents.danger.primary;
+            if (hasError) return theme.intents.danger.primary;
             if (focused) return theme.intents[intent]?.primary ?? theme.intents.primary.primary;
             return type === 'filled' ? 'transparent' : theme.colors.border.primary;
         };
@@ -86,9 +86,9 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
                 boxSizing: 'border-box',
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 border: `1px solid ${borderColor}`,
-                boxShadow: focused && !error ? `0 0 0 2px ${theme.intents[intent]?.primary ?? theme.intents.primary.primary}33` : 'none',
+                boxShadow: focused && !hasError ? `0 0 0 2px ${theme.intents[intent]?.primary ?? theme.intents.primary.primary}33` : 'none',
                 transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-                _hover: disabled ? {} : { borderColor: focused || error ? borderColor : theme.colors.border.secondary },
+                _hover: disabled ? {} : { borderColor: focused || hasError ? borderColor : theme.colors.border.secondary },
                 _active: disabled ? {} : { opacity: 0.9 },
                 _focus: { outline: 'none' },
             },
@@ -274,10 +274,10 @@ export const selectStyles = defineStyle('Select', (theme: Theme) => ({
         color: theme.colors.text.secondary,
     }),
 
-    helperText: ({ error = false }: SelectDynamicProps) => ({
+    helperText: ({ hasError = false }: SelectDynamicProps) => ({
         fontSize: 12,
         marginTop: 4,
-        color: error ? theme.intents.danger.primary : theme.colors.text.secondary,
+        color: hasError ? theme.intents.danger.primary : theme.colors.text.secondary,
     }),
 
     overlay: (_props: SelectDynamicProps) => ({

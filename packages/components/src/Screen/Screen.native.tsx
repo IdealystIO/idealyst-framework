@@ -1,7 +1,7 @@
 import { forwardRef, useEffect } from 'react';
 import { View as RNView, ScrollView as RNScrollView, Keyboard, Platform } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from '@idealyst/theme';
 import { ScreenProps } from './types';
 import { screenStyles } from './Screen.styles';
 import type { IdealystElement } from '../utils/refTypes';
@@ -129,10 +129,19 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
     );
   }
 
+  const contentInsetStyle = contentInset ? {
+    paddingTop: safeAreaStyle.paddingTop + (contentInset.top ?? 0),
+    paddingBottom: safeAreaStyle.paddingBottom + (contentInset.bottom ?? 0),
+    paddingLeft: safeAreaStyle.paddingLeft + (contentInset.left ?? 0),
+    paddingRight: safeAreaStyle.paddingRight + (contentInset.right ?? 0),
+  } : safeAreaStyle;
+
   return (
     <Animated.View style={[{ flex: 1 }, avoidKeyboard && animatedKeyboardStyle]}>
-      <RNView ref={ref as any} nativeID={id} style={[screenStyle, safeAreaStyle, style]} testID={testID} onLayout={onLayout}>
-        {children}
+      <RNView ref={ref as any} nativeID={id} style={[screenStyle, style]} testID={testID} onLayout={onLayout}>
+        <RNView style={[contentInsetStyle, { flex: 1 }]}>
+          {children}
+        </RNView>
       </RNView>
     </Animated.View>
   );

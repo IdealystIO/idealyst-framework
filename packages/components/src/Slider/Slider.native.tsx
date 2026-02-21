@@ -17,6 +17,9 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
   max = 100,
   step = 1,
   disabled = false,
+  error,
+  helperText,
+  label,
   showValue = false,
   showMinMax = false,
   marks = [],
@@ -43,6 +46,11 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
   accessibilityValueMax,
   accessibilityValueText,
 }, ref) => {
+  // Derive hasError from error prop
+  const hasError = Boolean(error);
+  // Determine if we need a wrapper (when label, error, or helperText is present)
+  const needsWrapper = Boolean(label) || Boolean(error) || Boolean(helperText);
+  const showFooter = Boolean(error) || Boolean(helperText);
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [trackWidthState, setTrackWidthState] = useState(0);
   const trackWidth = useSharedValue(0);
@@ -55,10 +63,17 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
   sliderStyles.useVariants({
     size,
     disabled,
+    hasError,
     margin,
     marginVertical,
     marginHorizontal,
   });
+
+  // Wrapper, label, and footer styles
+  const wrapperStyle = sliderStyles.wrapper as any;
+  const labelStyle = sliderStyles.label as any;
+  const footerStyle = sliderStyles.footer as any;
+  const helperTextStyle = sliderStyles.helperText as any;
 
   const clampValue = (val: number) => {
     'worklet';
@@ -210,6 +225,113 @@ const Slider = forwardRef<IdealystElement, SliderProps>(({
   // Get dynamic styles
   const containerStyle = (sliderStyles.container as any);
   const trackStyle = (sliderStyles.track as any);
+
+  // The slider container element
+  const sliderContainer = (
+    <View style={[containerStyle, !needsWrapper && style]} testID={!needsWrapper ? testID : undefined} {...nativeA11yProps}>
+      {showValue && (
+        <View style={sliderStyles.valueLabel as any}>
+          <Text>{value}</Text>
+        </View>
+      )}
+
+      <View style={sliderStyles.sliderWrapper}>
+        <GestureDetector gesture={composedGesture}>
+          <View
+            style={trackStyle}
+            onLayout={(e: LayoutChangeEvent) => {
+              const width = e.nativeEvent.layout.width;
+              trackWidth.value = width;
+              setTrackWidthState(width);
+            }}
+          >
+            {/* Filled track */}
+            <Animated.View
+              style={[(sliderStyles.filledTrack as any), filledTrackAnimatedStyle]}
+            />
+
+            {/* Marks */}
+            {marks.length > 0 && trackWidthState > 0 && (
+              <View style={sliderStyles.marks as any}>
+                {marks.map((mark) => {
+                  const markPercentage = ((mark.value - min) / (max - min)) * 100;
+                  const markPosition = (markPercentage / 100) * trackWidthState;
+                  return (
+                    <View key={mark.value}>
+                      <View
+                        style={[
+                          sliderStyles.mark as any,
+                          { left: markPosition },
+                        ]}
+                      />
+                      {mark.label && (
+                        <View
+                          style={[
+                            sliderStyles.markLabel as any,
+                            { left: markPosition },
+                          ]}
+                        >
+                          <Text typography="caption">{mark.label}</Text>
+                        </View>
+                      )}
+                    </View>
+                  );
+                })}
+              </View>
+            )}
+
+            {/* Thumb */}
+            <Animated.View
+              style={[
+                (sliderStyles.thumb as any),
+                {
+                  // Manual positioning/sizing for native layout
+                  position: 'absolute',
+                  top: '50%',
+                  marginTop: -thumbSize / 2,
+                  width: thumbSize,
+                  height: thumbSize,
+                  borderRadius: thumbSize / 2,
+                },
+                thumbAnimatedStyle,
+              ]}
+            >
+              {renderIcon()}
+            </Animated.View>
+          </View>
+        </GestureDetector>
+      </View>
+
+      {showMinMax && (
+        <View style={sliderStyles.minMaxLabels}>
+          <Text style={sliderStyles.minMaxLabel} typography="caption">{min}</Text>
+          <Text style={sliderStyles.minMaxLabel} typography="caption">{max}</Text>
+        </View>
+      )}
+    </View>
+  );
+
+  // If wrapper needed for label/error/helperText
+  if (needsWrapper) {
+    return (
+      <View ref={ref as any} nativeID={id} style={[wrapperStyle, style]} testID={testID}>
+        {label && (
+          <Text style={labelStyle}>{label}</Text>
+        )}
+
+        {sliderContainer}
+
+        {showFooter && (
+          <View style={footerStyle}>
+            <View style={{ flex: 1 }}>
+              {error && <Text style={helperTextStyle}>{error}</Text>}
+              {!error && helperText && <Text style={helperTextStyle}>{helperText}</Text>}
+            </View>
+          </View>
+        )}
+      </View>
+    );
+  }
 
   return (
     <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>

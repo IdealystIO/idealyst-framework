@@ -4,6 +4,7 @@ import type {
   RecorderStatus,
   PlayerStatus,
   AudioSessionState,
+  BackgroundRecorderStatus,
   AudioProfiles,
   SessionPresets,
 } from './types';
@@ -105,6 +106,14 @@ export const SESSION_PRESETS: SessionPresets = {
     categoryOptions: ['defaultToSpeaker', 'allowBluetooth', 'allowBluetoothA2DP', 'mixWithOthers'],
     active: true,
   },
+
+  /** For background audio recording (STT, voice memos, transcription) */
+  backgroundRecord: {
+    category: 'playAndRecord',
+    mode: 'spokenAudio',
+    categoryOptions: ['defaultToSpeaker', 'allowBluetooth', 'allowBluetoothA2DP', 'mixWithOthers'],
+    active: true,
+  },
 };
 
 // ============================================
@@ -159,3 +168,16 @@ export const BIT_DEPTH_MAX_VALUES = {
   16: 32768,
   32: 1.0,
 } as const;
+
+// ============================================
+// BACKGROUND RECORDER DEFAULTS
+// ============================================
+
+export const DEFAULT_BACKGROUND_RECORDER_STATUS: BackgroundRecorderStatus = {
+  ...DEFAULT_RECORDER_STATUS,
+  appState: 'active',
+  isInBackground: false,
+  wasInterrupted: false,
+  backgroundSince: null,
+  backgroundDuration: 0,
+};

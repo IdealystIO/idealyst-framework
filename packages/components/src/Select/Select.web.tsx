@@ -18,7 +18,7 @@ const Select = forwardRef<IdealystElement, SelectProps>(({
   onChange,
   placeholder = 'Select an option',
   disabled = false,
-  error = false,
+  error,
   helperText,
   label,
   type = 'outlined',
@@ -36,6 +36,10 @@ const Select = forwardRef<IdealystElement, SelectProps>(({
   accessibilityLabel,
   id,
 }, ref) => {
+  // Derive hasError boolean from error prop
+  const hasError = Boolean(error);
+  // Get error message if error is a string
+  const errorMessage = typeof error === 'string' ? error : undefined;
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -66,7 +70,7 @@ const Select = forwardRef<IdealystElement, SelectProps>(({
     type,
     size,
     disabled,
-    error,
+    hasError,
     focused: isOpen,
     margin,
     marginVertical,
@@ -182,7 +186,7 @@ const Select = forwardRef<IdealystElement, SelectProps>(({
   // Get dynamic styles - call as functions for theme reactivity
   const containerStyle = (selectStyles.container as any)({});
   const labelStyle = (selectStyles.label as any)({});
-  const triggerStyle = (selectStyles.trigger as any)({ type, intent, disabled, error, focused: isOpen });
+  const triggerStyle = (selectStyles.trigger as any)({ type, intent, disabled, hasError, focused: isOpen });
   const triggerContentStyle = (selectStyles.triggerContent as any)({});
   const triggerTextStyle = (selectStyles.triggerText as any)({});
   const placeholderStyle = (selectStyles.placeholder as any)({});
@@ -200,7 +204,7 @@ const Select = forwardRef<IdealystElement, SelectProps>(({
   const optionIconStyle = (selectStyles.optionIcon as any)({});
   const optionTextStyle = (selectStyles.optionText as any)({});
   const optionTextDisabledStyle = (selectStyles.optionTextDisabled as any)({});
-  const helperTextStyle = (selectStyles.helperText as any)({ error });
+  const helperTextStyle = (selectStyles.helperText as any)({ hasError });
 
   const containerWebProps = getWebProps([containerStyle, style as any]);
   const triggerWebProps = getWebProps([triggerStyle]);
@@ -336,9 +340,9 @@ const Select = forwardRef<IdealystElement, SelectProps>(({
         </div>
       </PositionedPortal>
 
-      {helperText && (
-        <div {...getWebProps([helperTextStyle])}>
-          {helperText}
+      {(errorMessage || helperText) && (
+        <div {...getWebProps([helperTextStyle])} role={errorMessage ? 'alert' : undefined}>
+          {errorMessage || helperText}
         </div>
       )}
     </div>

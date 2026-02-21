@@ -240,8 +240,8 @@ export const getStorageGuideDefinition: ToolDefinition = {
     properties: {
       topic: {
         type: "string",
-        description: "Topic to get docs for: 'overview', 'api', 'examples'",
-        enum: ["overview", "api", "examples"],
+        description: "Topic to get docs for: 'overview', 'api', 'examples', 'secure'",
+        enum: ["overview", "api", "examples", "secure"],
       },
     },
     required: ["topic"],
@@ -432,6 +432,42 @@ export const getChartsGuideDefinition: ToolDefinition = {
   name: "get_charts_guide",
   description:
     "Get documentation for @idealyst/charts animated charting library. Covers LineChart, BarChart, data types, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getClipboardGuideDefinition: ToolDefinition = {
+  name: "get_clipboard_guide",
+  description:
+    "Get documentation for @idealyst/clipboard cross-platform clipboard and OTP autofill package. Covers copy/paste API, useOTPAutoFill hook, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+export const getBiometricsGuideDefinition: ToolDefinition = {
+  name: "get_biometrics_guide",
+  description:
+    "Get documentation for @idealyst/biometrics cross-platform biometric authentication and passkeys (WebAuthn/FIDO2) package. Covers local biometric auth, passkey registration/login, and examples.",
   inputSchema: {
     type: "object",
     properties: {
@@ -644,6 +680,8 @@ export const toolDefinitions: ToolDefinition[] = [
   getMarkdownGuideDefinition,
   getConfigGuideDefinition,
   getChartsGuideDefinition,
+  getClipboardGuideDefinition,
+  getBiometricsGuideDefinition,
   // Package tools
   listPackagesDefinition,
   getPackageDocsDefinition,

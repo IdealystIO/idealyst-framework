@@ -34,14 +34,13 @@ async function main() {
   let themeValues: ThemeValues | null = null;
 
   try {
-    // Paths relative to monorepo root
-    const componentsPath = path.resolve(__dirname, '../../../components/src');
-    const themePath = path.resolve(__dirname, '../../../theme/src/lightTheme.ts');
+    // Paths relative to scripts/ → mcp-server/ → packages/
+    const componentsPath = path.resolve(__dirname, '../../components/src');
+    const themePath = path.resolve(__dirname, '../../theme/src/lightTheme.ts');
 
     componentRegistry = analyzeComponents({
       componentPaths: [componentsPath],
       themePath,
-      debug: false,
     });
     console.log(`   Generated registry with ${Object.keys(componentRegistry).length} components\n`);
 

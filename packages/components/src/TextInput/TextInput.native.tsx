@@ -6,6 +6,7 @@ import { TextInputProps } from './types';
 import { textInputStyles } from './TextInput.styles';
 import { getNativeFormAccessibilityProps } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
+import Text from '../Text';
 
 // Inner TextInput component that can be memoized to prevent re-renders
 // for Android secure text entry
@@ -68,6 +69,9 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   size = 'md',
   type = 'outlined',
   hasError = false,
+  error,
+  helperText,
+  label,
   // Spacing variants from FormInputStyleProps
   margin,
   marginVertical,
@@ -90,6 +94,12 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  // Derive hasError from error prop or hasError boolean
+  const computedHasError = Boolean(error) || hasError;
+
+  // Determine if we need a wrapper (when label, error, or helperText is present)
+  const needsWrapper = Boolean(label) || Boolean(error) || Boolean(helperText);
 
   // Track if this is a secure field that needs Android workaround
   const isSecureField = inputMode === 'password' || secureTextEntry;
@@ -160,12 +170,13 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
 
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
-    // Derive invalid state from hasError or explicit accessibilityInvalid
-    const isInvalid = accessibilityInvalid ?? hasError;
+    // Derive invalid state from computedHasError or explicit accessibilityInvalid
+    const isInvalid = accessibilityInvalid ?? computedHasError;
+    const computedLabel = accessibilityLabel ?? label ?? placeholder;
 
     return getNativeFormAccessibilityProps({
-      accessibilityLabel,
-      accessibilityHint,
+      accessibilityLabel: computedLabel,
+      accessibilityHint: accessibilityHint ?? (error || helperText),
       accessibilityDisabled: accessibilityDisabled ?? disabled,
       accessibilityHidden,
       accessibilityRole: accessibilityRole ?? 'textbox',
@@ -174,14 +185,18 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     });
   }, [
     accessibilityLabel,
+    label,
+    placeholder,
     accessibilityHint,
+    error,
+    helperText,
     accessibilityDisabled,
     disabled,
     accessibilityHidden,
     accessibilityRole,
     accessibilityRequired,
     accessibilityInvalid,
-    hasError,
+    computedHasError,
   ]);
 
   // Determine the textContentType for iOS AutoFill
@@ -224,7 +239,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     size,
     type,
     focused: isFocused,
-    hasError,
+    hasError: computedHasError,
     disabled,
     margin,
     marginVertical,
@@ -232,10 +247,18 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
   });
 
   // Compute dynamic styles - call as functions for theme reactivity
-  const containerStyle = (textInputStyles.container as any)({ type, focused: isFocused, hasError, disabled });
+  const containerStyle = (textInputStyles.container as any)({ type, focused: isFocused, hasError: computedHasError, disabled });
   const leftIconContainerStyle = (textInputStyles.leftIconContainer as any)({});
   const rightIconContainerStyle = (textInputStyles.rightIconContainer as any)({});
   const passwordToggleStyle = (textInputStyles.passwordToggle as any)({});
+
+  // Wrapper, label, and footer styles
+  const wrapperStyle = (textInputStyles.wrapper as any)({});
+  const labelStyle = (textInputStyles.label as any)({ disabled });
+  const footerStyle = (textInputStyles.footer as any)({});
+  const helperTextStyle = (textInputStyles.helperText as any)({ hasError: computedHasError });
+
+  const showFooter = Boolean(error) || Boolean(helperText);
 
   // Helper to render left icon
   const renderLeftIcon = () => {
@@ -275,44 +298,104 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     return null;
   };
 
+  // If no wrapper needed, return flat input container
+  if (!needsWrapper) {
+    return (
+      <View style={[containerStyle, style]} testID={testID} nativeID={id}>
+        {/* Left Icon */}
+        {leftIcon && (
+          <View style={leftIconContainerStyle}>
+            {renderLeftIcon()}
+          </View>
+        )}
+
+        {/* Input */}
+        <InnerRNTextInput
+          inputRef={ref}
+          value={value}
+          onChangeText={handleChangeText}
+          isAndroidSecure={needsAndroidSecureWorkaround}
+          inputStyle={inputStyle}
+          textInputProps={textInputProps}
+        />
+
+        {/* Right Icon or Password Toggle */}
+        {shouldShowPasswordToggle ? (
+          <TouchableOpacity
+            style={passwordToggleStyle}
+            onPress={togglePasswordVisibility}
+            disabled={disabled}
+            accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
+          >
+            <MaterialDesignIcons
+              name={isPasswordVisible ? 'eye-off' : 'eye'}
+              size={iconSize}
+              color={iconColor}
+            />
+          </TouchableOpacity>
+        ) : rightIcon ? (
+          <View style={rightIconContainerStyle}>
+            {renderRightIcon()}
+          </View>
+        ) : null}
+      </View>
+    );
+  }
+
+  // With wrapper for label/error/helperText
   return (
-    <View style={[containerStyle, style]} testID={testID} nativeID={id}>
-      {/* Left Icon */}
-      {leftIcon && (
-        <View style={leftIconContainerStyle}>
-          {renderLeftIcon()}
-        </View>
+    <View style={[wrapperStyle, style]} testID={testID} nativeID={id}>
+      {label && (
+        <Text style={labelStyle}>{label}</Text>
       )}
 
-      {/* Input */}
-      <InnerRNTextInput
-        inputRef={ref}
-        value={value}
-        onChangeText={handleChangeText}
-        isAndroidSecure={needsAndroidSecureWorkaround}
-        inputStyle={inputStyle}
-        textInputProps={textInputProps}
-      />
+      <View style={containerStyle}>
+        {/* Left Icon */}
+        {leftIcon && (
+          <View style={leftIconContainerStyle}>
+            {renderLeftIcon()}
+          </View>
+        )}
 
-      {/* Right Icon or Password Toggle */}
-      {shouldShowPasswordToggle ? (
-        <TouchableOpacity
-          style={passwordToggleStyle}
-          onPress={togglePasswordVisibility}
-          disabled={disabled}
-          accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
-        >
-          <MaterialDesignIcons
-            name={isPasswordVisible ? 'eye-off' : 'eye'}
-            size={iconSize}
-            color={iconColor}
-          />
-        </TouchableOpacity>
-      ) : rightIcon ? (
-        <View style={rightIconContainerStyle}>
-          {renderRightIcon()}
+        {/* Input */}
+        <InnerRNTextInput
+          inputRef={ref}
+          value={value}
+          onChangeText={handleChangeText}
+          isAndroidSecure={needsAndroidSecureWorkaround}
+          inputStyle={inputStyle}
+          textInputProps={textInputProps}
+        />
+
+        {/* Right Icon or Password Toggle */}
+        {shouldShowPasswordToggle ? (
+          <TouchableOpacity
+            style={passwordToggleStyle}
+            onPress={togglePasswordVisibility}
+            disabled={disabled}
+            accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
+          >
+            <MaterialDesignIcons
+              name={isPasswordVisible ? 'eye-off' : 'eye'}
+              size={iconSize}
+              color={iconColor}
+            />
+          </TouchableOpacity>
+        ) : rightIcon ? (
+          <View style={rightIconContainerStyle}>
+            {renderRightIcon()}
+          </View>
+        ) : null}
+      </View>
+
+      {showFooter && (
+        <View style={footerStyle}>
+          <View style={{ flex: 1 }}>
+            {error && <Text style={helperTextStyle}>{error}</Text>}
+            {!error && helperText && <Text style={helperTextStyle}>{helperText}</Text>}
+          </View>
         </View>
-      ) : null}
+      )}
     </View>
   );
 });
