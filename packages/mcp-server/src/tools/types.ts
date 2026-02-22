@@ -178,6 +178,10 @@ export interface GetBiometricsGuideArgs {
   topic: "overview" | "api" | "examples";
 }
 
+export interface GetPaymentsGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
 // ============================================================================
 // Package Tool Types
 // ============================================================================
@@ -256,6 +260,7 @@ export type ToolName =
   | "get_charts_guide"
   | "get_clipboard_guide"
   | "get_biometrics_guide"
+  | "get_payments_guide"
   | "list_packages"
   | "get_package_docs"
   | "search_packages"
@@ -291,6 +296,7 @@ export type ToolArgs =
   | GetChartsGuideArgs
   | GetClipboardGuideArgs
   | GetBiometricsGuideArgs
+  | GetPaymentsGuideArgs
   | ListPackagesArgs
   | GetPackageDocsArgs
   | SearchPackagesArgs

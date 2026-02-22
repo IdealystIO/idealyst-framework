@@ -1,7 +1,8 @@
 {
-  "name": "@idealyst/svg",
+  "name": "@idealyst/payments",
   "version": "1.2.111",
-  "description": "Cross-platform SVG primitives for React and React Native with identical behavior",
+  "description": "Cross-platform In-App Purchase wrapper for React Native (StoreKit 2, Google Play Billing)",
+  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/payments#readme",
   "readme": "README.md",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -10,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/IdealystIO/idealyst-framework.git",
-    "directory": "packages/svg"
+    "directory": "packages/payments"
   },
   "author": "Idealyst <contact@idealyst.io>",
   "license": "MIT",
@@ -20,14 +21,16 @@
   "exports": {
     ".": {
       "react-native": "./src/index.native.ts",
-      "import": "./src/index.ts",
-      "require": "./src/index.ts",
-      "types": "./src/index.ts"
-    },
-    "./examples": {
-      "import": "./src/examples/index.ts",
-      "require": "./src/examples/index.ts",
-      "types": "./src/examples/index.ts"
+      "browser": {
+        "types": "./src/index.web.ts",
+        "import": "./src/index.web.ts",
+        "require": "./src/index.web.ts"
+      },
+      "default": {
+        "types": "./src/index.ts",
+        "import": "./src/index.ts",
+        "require": "./src/index.ts"
+      }
     }
   },
   "scripts": {
@@ -37,21 +40,18 @@
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
-    "react-native-svg": ">=13.0.0"
+    "react-native-iap": ">=14.0.0"
   },
   "peerDependenciesMeta": {
     "react-native": {
       "optional": true
     },
-    "react-native-svg": {
+    "react-native-iap": {
       "optional": true
     }
   },
   "devDependencies": {
     "@types/react": "^19.1.0",
-    "react": "^19.1.0",
-    "react-native": "^0.80.1",
-    "react-native-svg": "^15.14.0",
     "typescript": "^5.0.0"
   },
   "files": [
@@ -61,9 +61,11 @@
   "keywords": [
     "react",
     "react-native",
-    "svg",
-    "cross-platform",
-    "vector-graphics",
-    "idealyst"
+    "in-app-purchase",
+    "iap",
+    "storekit",
+    "google-play-billing",
+    "subscriptions",
+    "cross-platform"
   ]
 }

@@ -482,6 +482,24 @@ export const getBiometricsGuideDefinition: ToolDefinition = {
   },
 };
 
+export const getPaymentsGuideDefinition: ToolDefinition = {
+  name: "get_payments_guide",
+  description:
+    "Get documentation for @idealyst/payments In-App Purchase package. Covers StoreKit 2, Google Play Billing, react-native-iap, useIAP hook, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
 // ============================================================================
 // Package Tool Definitions
 // ============================================================================
@@ -682,6 +700,7 @@ export const toolDefinitions: ToolDefinition[] = [
   getChartsGuideDefinition,
   getClipboardGuideDefinition,
   getBiometricsGuideDefinition,
+  getPaymentsGuideDefinition,
   // Package tools
   listPackagesDefinition,
   getPackageDocsDefinition,

@@ -30,6 +30,8 @@ PACKAGES=(
   "audio"
   "svg"
   "files"
+  "biometrics"
+  "payments"
 )
 
 for pkg in "${PACKAGES[@]}"; do

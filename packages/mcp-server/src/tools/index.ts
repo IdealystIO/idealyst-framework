@@ -66,6 +66,7 @@ export type {
   GetChartsGuideArgs,
   GetClipboardGuideArgs,
   GetBiometricsGuideArgs,
+  GetPaymentsGuideArgs,
   // Package tool types
   ListPackagesArgs,
   GetPackageDocsArgs,
@@ -108,6 +109,7 @@ export {
   getChartsGuideDefinition,
   getClipboardGuideDefinition,
   getBiometricsGuideDefinition,
+  getPaymentsGuideDefinition,
   listPackagesDefinition,
   getPackageDocsDefinition,
   searchPackagesDefinition,
@@ -151,6 +153,7 @@ export {
   getChartsGuide,
   getClipboardGuide,
   getBiometricsGuide,
+  getPaymentsGuide,
   listPackages,
   getPackageDocs,
   searchPackages,

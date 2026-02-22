@@ -1081,6 +1081,54 @@ const credential = await createPasskey({
     ],
     relatedPackages: ["oauth-client", "storage"],
   },
+
+  payments: {
+    name: "Payments",
+    npmName: "@idealyst/payments",
+    description:
+      "Cross-platform In-App Purchase (IAP) wrapper for React Native. Wraps react-native-iap for StoreKit 2 (iOS) and Google Play Billing (Android). Supports subscriptions, one-time purchases, and restore.",
+    category: "utility",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/payments react-native-iap",
+    peerDependencies: [
+      "react-native-iap (native)",
+    ],
+    features: [
+      "StoreKit 2 — Native iOS in-app purchases and subscriptions",
+      "Google Play Billing — Native Android purchases and subscriptions",
+      "Flat function API + useIAP convenience hook",
+      "Product and subscription fetching by SKU",
+      "Purchase with server-side receipt validation flow",
+      "Consumable and non-consumable product support",
+      "Subscription purchase with offer token support (Android)",
+      "Restore previous purchases",
+      "Normalized error handling across platforms",
+      "Graceful degradation when react-native-iap missing",
+      "Web stub (IAP is native-only)",
+    ],
+    quickStart: `import { useIAP } from '@idealyst/payments';
+
+const { isReady, subscriptions, purchaseSubscription, finishTransaction } = useIAP({
+  subscriptionSkus: ['pro_monthly', 'pro_yearly'],
+});
+
+const purchase = await purchaseSubscription('pro_monthly');
+await validateReceiptOnServer(purchase.transactionReceipt);
+await finishTransaction(purchase);`,
+    apiHighlights: [
+      "initializeIAP(config?) - Initialize IAP connection",
+      "getProducts(skus) - Fetch one-time purchase products",
+      "getSubscriptions(skus) - Fetch subscription products",
+      "purchaseProduct(sku) - Purchase a one-time product",
+      "purchaseSubscription(sku, offerToken?) - Purchase a subscription",
+      "finishTransaction(purchase, isConsumable?) - Finish after server validation",
+      "restorePurchases() - Restore previous purchases",
+      "endConnection() - Cleanup IAP connection",
+      "useIAP(options?) - Convenience hook with state management",
+    ],
+    relatedPackages: ["biometrics", "oauth-client"],
+  },
 };
 
 /**

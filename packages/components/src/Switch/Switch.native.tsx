@@ -46,13 +46,17 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     checked,
     hasError,
     intent,
-    position: labelPosition,
+    labelPosition,
     margin,
     marginVertical,
     marginHorizontal,
   });
 
-  // Wrapper and helperText styles
+  // Resolve dynamic style functions
+  const switchContainerStyle = (switchStyles.switchContainer as any)({});
+  const switchTrackStyle = (switchStyles.switchTrack as any)({});
+  const containerStyle = (switchStyles.container as any)({});
+  const labelStyle = (switchStyles.label as any)({});
   const wrapperStyle = (switchStyles.wrapper as any)({});
   const helperTextStyle = (switchStyles.helperText as any)({ hasError });
 
@@ -140,11 +144,11 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
       nativeID={!label && !needsWrapper ? id : undefined}
       onPress={handlePress}
       disabled={disabled}
-      style={switchStyles.switchContainer as any}
+      style={switchContainerStyle}
       testID={!label && !needsWrapper ? testID : undefined}
       {...nativeA11yProps}
     >
-      <Animated.View style={switchStyles.switchTrack as any}>
+      <Animated.View style={switchTrackStyle}>
         <Animated.View
           style={[
             {
@@ -174,15 +178,15 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
       nativeID={!needsWrapper ? id : undefined}
       onPress={handlePress}
       disabled={disabled}
-      style={[switchStyles.container as any, !needsWrapper && style]}
+      style={[containerStyle, !needsWrapper && style]}
       testID={!needsWrapper ? testID : undefined}
     >
       {labelPosition === 'left' && (
-        <Text style={switchStyles.label as any}>{label}</Text>
+        <Text style={labelStyle}>{label}</Text>
       )}
       {switchElement}
       {labelPosition === 'right' && (
-        <Text style={switchStyles.label as any}>{label}</Text>
+        <Text style={labelStyle}>{label}</Text>
       )}
     </Pressable>
   ) : switchElement;
