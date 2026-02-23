@@ -9,6 +9,7 @@ import { AddProjectOptions, AddableProjectType, NotInWorkspaceError } from '../t
 import { logger } from '../utils/logger';
 import { generateWebPackage, generateMobilePackage, generateSharedPackage } from '../generators/core';
 import { applyApiExtension } from '../generators/extensions/api';
+import { applyLiveActivityExtension } from '../generators/extensions/live-activity';
 import { addToWorkspaces } from '../templates/merger';
 import { buildTemplateData } from '../templates/processor';
 import { IDEALYST_VERSION } from '../constants';
@@ -19,6 +20,7 @@ export interface AddCommandOptions {
   withTrpc?: boolean;
   withGraphql?: boolean;
   skipInstall?: boolean;
+  activityName?: string;
 }
 
 /**
@@ -30,7 +32,7 @@ export async function addCommand(
 ): Promise<void> {
   try {
     // Validate project type
-    const validTypes: AddableProjectType[] = ['web', 'mobile', 'api', 'shared'];
+    const validTypes: AddableProjectType[] = ['web', 'mobile', 'api', 'shared', 'live-activity'];
     if (!validTypes.includes(options.type as AddableProjectType)) {
       logger.error(`Invalid project type: ${options.type}`);
       logger.dim(`Valid types: ${validTypes.join(', ')}`);
@@ -73,8 +75,8 @@ export async function addCommand(
     const type = options.type as AddableProjectType;
     const projectPath = path.join(workspaceRoot, 'packages', name);
 
-    // Check if project already exists
-    if (await fs.pathExists(projectPath)) {
+    // Check if project already exists (skip for live-activity which extends mobile)
+    if (type !== 'live-activity' && await fs.pathExists(projectPath)) {
       logger.error(`Project already exists: packages/${name}`);
       process.exit(1);
     }
@@ -122,10 +124,31 @@ export async function addCommand(
           projectName: name,
         });
         break;
+
+      case 'live-activity': {
+        const activityName = options.activityName;
+        if (!activityName) {
+          logger.error('Live Activity requires --activity-name (PascalCase)');
+          logger.dim('Example: idealyst add live-activity --type live-activity --activity-name OrderTracker');
+          process.exit(1);
+        }
+        const result = await applyLiveActivityExtension(workspaceRoot, templateData, {
+          name: activityName,
+        });
+        if (!result.success) {
+          logger.error(result.warning || 'Failed to scaffold Live Activity');
+          process.exit(1);
+        }
+        if (result.warning) {
+          logger.warn(result.warning);
+        }
+        break;
+      }
     }
 
     // Update root package.json workspaces (if not already using packages/*)
-    if (!rootPackageJson.workspaces?.includes('packages/*')) {
+    // Skip for live-activity which extends the existing mobile package
+    if (type !== 'live-activity' && !rootPackageJson.workspaces?.includes('packages/*')) {
       await addToWorkspaces(
         path.join(workspaceRoot, 'package.json'),
         `packages/${name}`
@@ -133,7 +156,11 @@ export async function addCommand(
     }
 
     // Print success
-    printAddSuccess(name, type, workspaceRoot);
+    if (type === 'live-activity') {
+      printLiveActivitySuccess(options.activityName || name, workspaceRoot);
+    } else {
+      printAddSuccess(name, type, workspaceRoot);
+    }
 
   } catch (error) {
     if (error instanceof NotInWorkspaceError) {
@@ -241,5 +268,30 @@ function printAddSuccess(
   console.log(chalk.cyan('  To connect to existing packages:'));
   console.log(chalk.dim('    1. Add the dependency in package.json'));
   console.log(chalk.dim('    2. Import and use components/utilities'));
+  console.log('');
+}
+
+/**
+ * Print success message for live-activity add command
+ */
+function printLiveActivitySuccess(
+  activityName: string,
+  workspaceRoot: string
+): void {
+  console.log(chalk.green.bold('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'));
+  console.log(chalk.green.bold(`  ✓ Scaffolded Live Activity: ${activityName}`));
+  console.log(chalk.green.bold('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'));
+
+  console.log(chalk.cyan('  Files created:'));
+  console.log(chalk.dim(`    iOS:  ios/*LiveActivity/${activityName}Attributes.swift`));
+  console.log(chalk.dim(`    iOS:  ios/*LiveActivity/${activityName}ActivityView.swift`));
+  console.log(chalk.dim(`    iOS:  ios/*LiveActivity/${activityName}Bundle.swift`));
+  console.log(chalk.dim(`    TS:   src/activities/${activityName.charAt(0).toLowerCase() + activityName.slice(1)}.ts\n`));
+
+  console.log(chalk.cyan('  Next steps:'));
+  console.log(chalk.dim('    1. Add @idealyst/live-activity to your mobile package'));
+  console.log(chalk.dim('    2. Add the Widget Extension target in Xcode'));
+  console.log(chalk.dim('    3. Customize the Swift attributes & views'));
+  console.log(chalk.dim('    4. Use the generated TypeScript helper to start activities'));
   console.log('');
 }

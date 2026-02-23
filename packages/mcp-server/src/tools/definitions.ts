@@ -679,6 +679,28 @@ export const getIntroDefinition: ToolDefinition = {
 };
 
 // ============================================================================
+// Live Activity Tool Definitions
+// ============================================================================
+
+export const getLiveActivityGuideDefinition: ToolDefinition = {
+  name: "get_live_activity_guide",
+  description:
+    "Get documentation for @idealyst/live-activity cross-platform Live Activities package. Covers iOS ActivityKit (Dynamic Island), Android 16 Live Updates (ProgressStyle), useLiveActivity hook, template presets, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+// ============================================================================
 // All Tool Definitions Array
 // ============================================================================
 
@@ -720,6 +742,7 @@ export const toolDefinitions: ToolDefinition[] = [
   getBiometricsGuideDefinition,
   getPaymentsGuideDefinition,
   getNotificationsGuideDefinition,
+  getLiveActivityGuideDefinition,
   // Package tools
   listPackagesDefinition,
   getPackageDocsDefinition,

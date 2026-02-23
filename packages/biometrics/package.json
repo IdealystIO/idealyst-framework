@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/biometrics",
-  "version": "1.2.113",
+  "version": "1.2.114",
   "description": "Cross-platform biometric authentication and passkeys for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/biometrics#readme",
   "readme": "README.md",

@@ -1197,6 +1197,57 @@ const { status, requestPermission } = useNotificationPermissions();`,
     ],
     relatedPackages: ["storage", "oauth-client"],
   },
+
+  "live-activity": {
+    name: "Live Activity",
+    npmName: "@idealyst/live-activity",
+    description:
+      "Cross-platform Live Activities — iOS ActivityKit (Lock Screen + Dynamic Island) and Android 16 Live Updates (Notification.ProgressStyle). Includes pre-built SwiftUI templates, a CLI generator for custom activities, and a TurboModule bridge.",
+    category: "utility",
+    platforms: ["native", "web"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/live-activity",
+    peerDependencies: ["react", "react-native"],
+    features: [
+      "Unified useLiveActivity() hook for both platforms",
+      "Pre-built SwiftUI templates: delivery, timer, media, progress",
+      "CLI generator for custom Live Activity scaffolding",
+      "TurboModule bridge (New Architecture)",
+      "Type-safe generic StartActivityOptions<T> per template",
+      "iOS push token support for server-driven updates",
+      "Event system for lifecycle changes (started, updated, ended, stale)",
+      "Android ProgressStyle with fallback to standard notifications",
+      "Web stubs with graceful not_supported returns",
+    ],
+    quickStart: `import { useLiveActivity, deliveryActivity } from '@idealyst/live-activity';
+
+const { start, update, end, currentActivity, isSupported } = useLiveActivity();
+
+// Start a delivery activity
+const info = await start(deliveryActivity(
+  { title: 'Order #1234', startLabel: 'Kitchen', endLabel: 'Door' },
+  { status: 'Preparing', progress: 0, eta: new Date().toISOString() }
+));
+
+// Update progress
+await update(info.id, {
+  contentState: { status: 'On the way!', progress: 0.6 },
+});
+
+// End the activity
+await end(info.id, { dismissalPolicy: 'default' });`,
+    apiHighlights: [
+      "useLiveActivity(options?) - Hook for managing Live Activities with state tracking",
+      "start(options) - Start a new Live Activity",
+      "update(activityId, options) - Update content state",
+      "end(activityId, options?) - End with dismissal policy",
+      "endAll(options?) - End all active activities",
+      "getPushToken(activityId) - Get iOS push token",
+      "addEventListener(handler) - Subscribe to lifecycle events",
+      "deliveryActivity() / timerActivity() / mediaActivity() / progressActivity() - Template presets",
+    ],
+    relatedPackages: ["notifications"],
+  },
 };
 
 /**

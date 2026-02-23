@@ -186,6 +186,10 @@ export interface GetNotificationsGuideArgs {
   topic: "overview" | "api" | "examples";
 }
 
+export interface GetLiveActivityGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
 // ============================================================================
 // Package Tool Types
 // ============================================================================
@@ -266,6 +270,7 @@ export type ToolName =
   | "get_biometrics_guide"
   | "get_payments_guide"
   | "get_notifications_guide"
+  | "get_live_activity_guide"
   | "list_packages"
   | "get_package_docs"
   | "search_packages"
@@ -303,6 +308,7 @@ export type ToolArgs =
   | GetBiometricsGuideArgs
   | GetPaymentsGuideArgs
   | GetNotificationsGuideArgs
+  | GetLiveActivityGuideArgs
   | ListPackagesArgs
   | GetPackageDocsArgs
   | SearchPackagesArgs

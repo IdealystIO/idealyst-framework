@@ -1,0 +1,80 @@
+{
+  "name": "@idealyst/live-activity",
+  "version": "1.2.114",
+  "description": "Cross-platform Live Activities for React Native (iOS ActivityKit + Android Live Updates)",
+  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/live-activity#readme",
+  "readme": "README.md",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "react-native": "src/index.native.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IdealystIO/idealyst-framework.git",
+    "directory": "packages/live-activity"
+  },
+  "author": "Idealyst <contact@idealyst.io>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "browser": {
+        "types": "./src/index.web.ts",
+        "import": "./src/index.web.ts",
+        "require": "./src/index.web.ts"
+      },
+      "default": {
+        "types": "./src/index.ts",
+        "import": "./src/index.ts",
+        "require": "./src/index.ts"
+      }
+    }
+  },
+  "scripts": {
+    "prepublishOnly": "echo 'Publishing TypeScript source directly'",
+    "publish:npm": "npm publish"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.76.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "typescript": "^5.0.0"
+  },
+  "codegenConfig": {
+    "name": "IdealystLiveActivitySpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "io.idealyst.liveactivity"
+    }
+  },
+  "files": [
+    "src",
+    "ios",
+    "android",
+    "*.podspec",
+    "README.md"
+  ],
+  "keywords": [
+    "react",
+    "react-native",
+    "live-activity",
+    "activitykit",
+    "dynamic-island",
+    "live-updates",
+    "notifications",
+    "ios",
+    "android",
+    "cross-platform"
+  ]
+}

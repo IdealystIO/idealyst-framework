@@ -50,9 +50,12 @@ const packagePaths = [
   'packages/files/package.json',
   "packages/biometrics/package.json",
   "packages/payments/package.json",
+  'packages/notifications/package.json',
+  'packages/live-activity/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',
+
 ];
 
 // Function to update version in package.json

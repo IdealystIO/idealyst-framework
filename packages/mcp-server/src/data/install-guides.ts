@@ -1280,6 +1280,139 @@ function Test() {
       },
     ],
   },
+
+  // ============================================================================
+  // @idealyst/live-activity
+  // ============================================================================
+  "live-activity": {
+    packageName: "Live Activity",
+    npmName: "@idealyst/live-activity",
+    description:
+      "Cross-platform Live Activities — iOS ActivityKit (Lock Screen + Dynamic Island) and Android 16 Live Updates (Notification.ProgressStyle)",
+    platforms: ["native", "web"],
+    complexity: "complex",
+
+    installation: {
+      yarn: "yarn add @idealyst/live-activity",
+      npm: "npm install @idealyst/live-activity",
+    },
+
+    peerDependencies: [
+      {
+        name: "react",
+        required: true,
+        platforms: ["native"],
+        note: "React 18.0.0+",
+      },
+      {
+        name: "react-native",
+        required: true,
+        platforms: ["native"],
+        note: "React Native 0.76.0+ (New Architecture / TurboModules)",
+      },
+    ],
+
+    ios: {
+      podInstallRequired: true,
+      infoPlistEntries: [
+        {
+          key: "NSSupportsLiveActivities",
+          value: "<true/>",
+          description:
+            "Required to enable Live Activities on the device. Add to the main app target's Info.plist.",
+        },
+        {
+          key: "NSSupportsLiveActivitiesFrequentUpdates",
+          value: "<true/>",
+          description:
+            "Allows more frequent content updates (up to once per second). Add to Info.plist.",
+        },
+      ],
+      additionalSteps: [
+        "cd ios && pod install",
+        "In Xcode: File → New → Target → Widget Extension. Name it '{AppName}LiveActivity'.",
+        "In the Widget Extension target, add ActivityKit and WidgetKit frameworks.",
+        "Copy the generated Swift template files into the Widget Extension target.",
+        "Enable 'Supports Live Activities' in the main app target's Signing & Capabilities.",
+        "If using push updates: add App Groups capability to both main app and Widget Extension targets.",
+        "Set the Widget Extension's deployment target to iOS 16.2+.",
+      ],
+    },
+
+    android: {
+      permissions: [
+        {
+          permission: "android.permission.POST_NOTIFICATIONS",
+          description:
+            "Required to post notifications (Android 13+). Request at runtime.",
+        },
+        {
+          permission: "android.permission.POST_PROMOTED_NOTIFICATIONS",
+          description:
+            "Required for ProgressStyle Live Update notifications (Android 16+). Request at runtime.",
+        },
+      ],
+      gradleChanges: [
+        {
+          file: "android/app/build.gradle",
+          changes: "compileSdkVersion 36\ntargetSdkVersion 36",
+          description:
+            "ProgressStyle requires API 36 (Android 16). Set compileSdkVersion and targetSdkVersion to 36.",
+        },
+      ],
+      additionalSteps: [
+        "Ensure compileSdkVersion and targetSdkVersion are set to 36 in android/app/build.gradle.",
+        "Create a notification channel for live updates (the package creates a default 'live_updates' channel).",
+        "On Android < API 36, the package falls back to standard progress notifications automatically.",
+      ],
+    },
+
+    web: {
+      notes: [
+        "Web platform returns graceful 'not_supported' stubs — no additional configuration needed.",
+        "isSupported will be false, start/update/end will reject with a not_supported error.",
+        "Useful for shared codebases where Live Activity logic is called from web.",
+      ],
+    },
+
+    verification: `import { useLiveActivity } from '@idealyst/live-activity';
+
+function Test() {
+  const { isSupported, isEnabled } = useLiveActivity();
+  console.log('Supported:', isSupported, 'Enabled:', isEnabled);
+  // iOS: both should be true if Info.plist is configured
+  // Android: isSupported true on API 36+, isEnabled true if notification permission granted
+  // Web: isSupported false
+}`,
+
+    troubleshooting: [
+      {
+        issue: "Live Activity not appearing on iOS Lock Screen",
+        solution:
+          "Ensure NSSupportsLiveActivities is YES in Info.plist, the Widget Extension target is properly configured in Xcode, and you're running on iOS 16.2+. Check that the ActivityAttributes struct name matches between Swift and the templateType string.",
+      },
+      {
+        issue: "Dynamic Island not showing",
+        solution:
+          "Dynamic Island is only available on iPhone 14 Pro and later. On other devices, the Live Activity only appears on the Lock Screen. Verify the dynamicIsland closure is defined in your ActivityConfiguration.",
+      },
+      {
+        issue: "Push token is null",
+        solution:
+          "Push tokens are iOS-only. Ensure App Groups capability is enabled on both the main app and Widget Extension. The token is generated asynchronously — listen for the 'pushTokenUpdated' event.",
+      },
+      {
+        issue: "Android notification not showing as ProgressStyle",
+        solution:
+          "ProgressStyle requires Android 16 (API 36). On older versions, the package falls back to a standard progress notification. Ensure compileSdkVersion is 36 and the POST_PROMOTED_NOTIFICATIONS permission is granted.",
+      },
+      {
+        issue: "startActivity rejects with 'not_supported'",
+        solution:
+          "Check that you're running on a supported platform (iOS 16.2+ or Android API 24+). On web, Live Activities are not supported and will always return not_supported.",
+      },
+    ],
+  },
 };
 
 /**

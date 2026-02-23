@@ -100,10 +100,11 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     marginHorizontal,
   });
 
-  const trackProps = getWebProps([switchStyles.switchTrack as any]);
-  const thumbProps = getWebProps([switchStyles.switchThumb as any]);
-  const thumbIconProps = getWebProps([switchStyles.thumbIcon as any]);
-  const labelProps = getWebProps([switchStyles.label as any]);
+  const dynamicProps = { size, checked, disabled, hasError, intent, labelPosition };
+  const trackProps = getWebProps([(switchStyles.switchTrack as any)(dynamicProps)]);
+  const thumbProps = getWebProps([(switchStyles.switchThumb as any)(dynamicProps)]);
+  const thumbIconProps = getWebProps([(switchStyles.thumbIcon as any)(dynamicProps)]);
+  const labelProps = getWebProps([(switchStyles.label as any)(dynamicProps)]);
 
   // Wrapper and helperText styles
   const wrapperStyleComputed = (switchStyles.wrapper as any)({});
@@ -134,10 +135,10 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
   };
 
   // Computed button props with static style references
-  const computedButtonProps = getWebProps([switchStyles.switchContainer as any]);
+  const computedButtonProps = getWebProps([(switchStyles.switchContainer as any)(dynamicProps)]);
 
   // Computed container props (for when label exists)
-  const computedContainerProps = getWebProps([switchStyles.container as any, !needsWrapper && flattenStyle(style)].filter(Boolean));
+  const computedContainerProps = getWebProps([(switchStyles.container as any)(dynamicProps), !needsWrapper && flattenStyle(style)].filter(Boolean));
 
   const mergedButtonRef = useMergeRefs(ref as React.Ref<HTMLButtonElement>, computedButtonProps.ref);
   const mergedContainerRef = useMergeRefs(ref as React.Ref<HTMLDivElement>, computedContainerProps.ref);

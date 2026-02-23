@@ -40,8 +40,9 @@ program
 program
   .command('add <name>')
   .description('Add a new project to an existing workspace')
-  .requiredOption('-t, --type <type>', 'Project type: web, mobile, api, shared')
+  .requiredOption('-t, --type <type>', 'Project type: web, mobile, api, shared, live-activity')
   .option('--app-name <name>', 'Mobile app display name (for mobile type)')
+  .option('--activity-name <name>', 'Live Activity name in PascalCase (for live-activity type)')
   .option('--with-trpc', 'Include tRPC setup')
   .option('--with-graphql', 'Include GraphQL setup')
   .option('--skip-install', 'Skip dependency installation')

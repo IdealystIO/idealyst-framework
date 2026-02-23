@@ -216,7 +216,7 @@ export interface ReactNativeInitOptions {
 /**
  * Types of projects that can be added to workspace
  */
-export type AddableProjectType = 'web' | 'mobile' | 'api' | 'shared';
+export type AddableProjectType = 'web' | 'mobile' | 'api' | 'shared' | 'live-activity';
 
 /**
  * Options for add command
