@@ -24,8 +24,12 @@ yarn add @idealyst/oauth-client
 
 #### For React Native:
 ```bash
-npm install @react-native-async-storage/async-storage
+npm install react-native-inappbrowser-reborn
+# Then for iOS:
+cd ios && pod install
 ```
+
+This provides `ASWebAuthenticationSession` on iOS (in-app auth sheet, no redirect prompt) and `Chrome Custom Tabs` on Android (in-app browser overlay).
 
 #### For Web:
 No additional dependencies required.
@@ -63,10 +67,11 @@ This library uses a hybrid approach that minimizes server requirements:
 4. Client automatically detects callback and exchanges code directly with Google using PKCE
 
 ### Mobile Flow:
-1. App opens browser to `GET /api/auth/google?redirect_uri=com.yourapp://oauth/callback&state=xyz&code_challenge=abc`
-2. Server redirects to Google OAuth with server's client credentials + client's PKCE challenge
-3. Google redirects back to `com.yourapp://oauth/callback?code=123&state=xyz`
-4. Mobile OS opens app via deep link, client exchanges code directly with Google using PKCE
+1. App opens an in-app auth session (`ASWebAuthenticationSession` on iOS, `Chrome Custom Tabs` on Android)
+2. Auth session navigates to `GET /api/auth/google?redirect_uri=com.yourapp://oauth/callback&state=xyz&code_challenge=abc`
+3. Server redirects to Google OAuth with server's client credentials + client's PKCE challenge
+4. Google redirects back to `com.yourapp://oauth/callback?code=123&state=xyz`
+5. Auth session captures the redirect and returns the URL directly to the app (no system prompt on iOS)
 
 ## Minimal Server Setup
 
@@ -130,9 +135,9 @@ Add intent filter to `android/app/src/main/AndroidManifest.xml`:
 </activity>
 ```
 
-### Deep Link Handling (Automatic)
+### In-App Auth Session (Automatic)
 
-The client automatically handles OAuth deep links. The deep link handler is built-in and requires no additional setup.
+The client uses `react-native-inappbrowser-reborn` to handle the OAuth flow within an in-app browser session. On iOS this uses `ASWebAuthenticationSession` which avoids the "Open in App?" system prompt that occurs with Safari redirects. On Android it uses Chrome Custom Tabs. No manual deep link listener setup is required.
 
 ## API Reference
 
@@ -265,11 +270,11 @@ try {
   const result = await client.authorize()
 } catch (error) {
   if (error.message.includes('User cancelled')) {
-    // User cancelled the authorization
+    // User dismissed the auth session
+  } else if (error.message.includes('not available')) {
+    // InAppBrowser not available on device (missing native dependency)
   } else if (error.message.includes('Invalid state')) {
-    // CSRF protection triggered  
-  } else if (error.message.includes('timeout')) {
-    // User didn't complete OAuth in time (mobile)
+    // CSRF protection triggered
   } else {
     // Other OAuth error
   }

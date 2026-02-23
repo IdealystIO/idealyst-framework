@@ -12,16 +12,20 @@ Cross-platform OAuth2 client with a simple, generic API.
 ## Installation
 
 \`\`\`bash
-yarn add @idealyst/oauth-client
+yarn add @idealyst/oauth-client react-native-inappbrowser-reborn
+# Then for iOS:
+cd ios && pod install
 \`\`\`
+
+> \`react-native-inappbrowser-reborn\` is only required for React Native. Web projects do not need it.
 
 ## Platform Support
 
-| Platform | Status |
-|----------|--------|
-| Web      | ✅ Popup/redirect flow |
-| iOS      | ✅ ASWebAuthenticationSession |
-| Android  | ✅ Custom Tabs |
+| Platform | Status | Browser |
+|----------|--------|---------|
+| Web      | ✅ Popup/redirect flow | Standard browser redirect |
+| iOS      | ✅ ASWebAuthenticationSession | In-app auth sheet (no redirect prompt) |
+| Android  | ✅ Chrome Custom Tabs | In-app browser overlay |
 
 ## Key Exports
 

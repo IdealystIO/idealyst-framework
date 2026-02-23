@@ -182,6 +182,10 @@ export interface GetPaymentsGuideArgs {
   topic: "overview" | "api" | "examples";
 }
 
+export interface GetNotificationsGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
 // ============================================================================
 // Package Tool Types
 // ============================================================================
@@ -261,6 +265,7 @@ export type ToolName =
   | "get_clipboard_guide"
   | "get_biometrics_guide"
   | "get_payments_guide"
+  | "get_notifications_guide"
   | "list_packages"
   | "get_package_docs"
   | "search_packages"
@@ -297,6 +302,7 @@ export type ToolArgs =
   | GetClipboardGuideArgs
   | GetBiometricsGuideArgs
   | GetPaymentsGuideArgs
+  | GetNotificationsGuideArgs
   | ListPackagesArgs
   | GetPackageDocsArgs
   | SearchPackagesArgs

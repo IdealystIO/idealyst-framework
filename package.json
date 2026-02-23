@@ -1,6 +1,6 @@
 {
   "name": "idealyst-monorepo",
-  "version": "1.2.111",
+  "version": "1.2.113",
   "private": true,
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "publish:blur": "cd packages/blur && npm publish",
     "publish:clipboard": "cd packages/clipboard && npm publish",
     "publish:biometrics": "cd packages/biometrics && npm publish",
+    "publish:notifications": "cd packages/notifications && npm publish",
     "publish:all": "./scripts/publish-all.sh",
     "version:patch": "yarn workspaces foreach -A --no-private version patch && yarn version:sync",
     "version:minor": "yarn workspaces foreach -A --no-private version minor && yarn version:sync",

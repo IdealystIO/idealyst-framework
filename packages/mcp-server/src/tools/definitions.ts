@@ -500,6 +500,24 @@ export const getPaymentsGuideDefinition: ToolDefinition = {
   },
 };
 
+export const getNotificationsGuideDefinition: ToolDefinition = {
+  name: "get_notifications_guide",
+  description:
+    "Get documentation for @idealyst/notifications cross-platform push and local notifications package. Covers usePushNotifications, useLocalNotifications, useNotificationPermissions hooks, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
 // ============================================================================
 // Package Tool Definitions
 // ============================================================================
@@ -701,6 +719,7 @@ export const toolDefinitions: ToolDefinition[] = [
   getClipboardGuideDefinition,
   getBiometricsGuideDefinition,
   getPaymentsGuideDefinition,
+  getNotificationsGuideDefinition,
   // Package tools
   listPackagesDefinition,
   getPackageDocsDefinition,

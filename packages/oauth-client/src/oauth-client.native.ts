@@ -1,5 +1,5 @@
 import type { OAuthClient, OAuthConfig, OAuthResult, OAuthCallbackParams } from './types'
-import { Linking } from 'react-native'
+import { InAppBrowser } from 'react-native-inappbrowser-reborn'
 
 export class NativeOAuthClient<T = OAuthResult> implements OAuthClient<T> {
   private config: OAuthConfig<T>
@@ -12,11 +12,33 @@ export class NativeOAuthClient<T = OAuthResult> implements OAuthClient<T> {
     const state = this.generateState()
     const oauthUrl = this.buildOAuthUrl(state)
 
-    // Open OAuth URL in system browser
-    await Linking.openURL(oauthUrl)
+    // Use InAppBrowser's auth session (ASWebAuthenticationSession on iOS, Chrome Custom Tabs on Android)
+    const redirectScheme = new URL(this.config.redirectUrl).protocol.slice(0, -1)
 
-    // Wait for deep link callback
-    const callbackParams = await this.waitForDeepLinkCallback()
+    if (!(await InAppBrowser.isAvailable())) {
+      throw new Error('InAppBrowser is not available on this device')
+    }
+
+    const result = await InAppBrowser.openAuth(oauthUrl, redirectScheme, {
+      ephemeralWebSession: false,
+      showTitle: false,
+      enableUrlBarHiding: true,
+      enableDefaultShare: false,
+    })
+
+    if (result.type === 'cancel' || result.type === 'dismiss') {
+      throw new Error('User cancelled the authorization')
+    }
+
+    if (result.type !== 'success' || !result.url) {
+      throw new Error('OAuth flow failed unexpectedly')
+    }
+
+    const callbackParams = this.parseRedirectUrl(result.url)
+
+    if (!callbackParams) {
+      throw new Error('Failed to parse OAuth callback parameters')
+    }
 
     if (callbackParams.error) {
       throw new Error(`OAuth error: ${callbackParams.error}`)
@@ -31,66 +53,9 @@ export class NativeOAuthClient<T = OAuthResult> implements OAuthClient<T> {
     return callbackParams as T
   }
 
-  private async waitForDeepLinkCallback(): Promise<OAuthCallbackParams> {
-    return new Promise((resolve, reject) => {
-      let subscription: any
-      let timeoutId: NodeJS.Timeout | null = null
-      
-      const handleUrl = (event: { url: string }) => {
-        const callbackData = this.parseDeepLink(event.url)
-        if (callbackData) {
-          cleanup()
-          resolve(callbackData)
-        }
-      }
-
-      const cleanup = () => {
-        if (subscription?.remove) {
-          subscription.remove()
-        } else if (subscription) {
-          // For newer React Native versions
-          subscription()
-        }
-        if (timeoutId) {
-          clearTimeout(timeoutId)
-        }
-      }
-
-      // Check for initial URL (if app was opened from deep link)
-      Linking.getInitialURL().then((url: string | null) => {
-        if (url) {
-          const callbackData = this.parseDeepLink(url)
-          if (callbackData) {
-            cleanup()
-            resolve(callbackData)
-            return
-          }
-        }
-      }).catch((error: Error) => {
-        console.warn('Failed to get initial URL:', error)
-      })
-
-      // Listen for subsequent deep links
-      subscription = Linking.addEventListener('url', handleUrl)
-
-      // Timeout after 5 minutes
-      timeoutId = setTimeout(() => {
-        cleanup()
-        reject(new Error('OAuth timeout - user did not complete authorization'))
-      }, 5 * 60 * 1000)
-    })
-  }
-
-  private parseDeepLink(url: string): OAuthCallbackParams | null {
+  private parseRedirectUrl(url: string): OAuthCallbackParams | null {
     try {
-      // Handle custom scheme URLs (e.g., com.myapp://oauth/callback?code=123)
       const parsedUrl = new URL(url)
-
-      // Check if this is our OAuth callback
-      const expectedScheme = new URL(this.config.redirectUrl).protocol.slice(0, -1)
-      if (parsedUrl.protocol.slice(0, -1) !== expectedScheme) {
-        return null
-      }
 
       // Collect all query parameters
       const params: OAuthCallbackParams = {}
@@ -115,14 +80,14 @@ export class NativeOAuthClient<T = OAuthResult> implements OAuthClient<T> {
 
       return params
     } catch (error) {
-      console.warn('Failed to parse deep link URL:', url, error)
+      console.warn('Failed to parse redirect URL:', url, error)
       return null
     }
   }
 
   private buildOAuthUrl(state: string): string {
     const url = new URL(this.config.oauthUrl)
-    
+
     url.searchParams.set('redirect_uri', this.config.redirectUrl)
     url.searchParams.set('state', state)
 

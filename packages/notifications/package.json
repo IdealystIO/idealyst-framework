@@ -1,22 +1,19 @@
 {
-  "name": "@idealyst/config",
+  "name": "@idealyst/notifications",
   "version": "1.2.113",
-  "description": "Cross-platform configuration and environment variable support for React and React Native",
-  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/config#readme",
+  "description": "Cross-platform push and local notifications for React and React Native",
+  "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/notifications#readme",
   "readme": "README.md",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "types": "src/index.ts",
   "react-native": "src/index.native.ts",
-  "bin": {
-    "idealyst-config": "./bin/idealyst-config.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/IdealystIO/idealyst-framework.git",
-    "directory": "packages/config"
+    "directory": "packages/notifications"
   },
-  "author": "Your Name <your.email@example.com>",
+  "author": "Idealyst <contact@idealyst.io>",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -29,24 +26,11 @@
         "import": "./src/index.web.ts",
         "require": "./src/index.web.ts"
       },
-      "import": {
-        "types": "./src/index.web.ts",
-        "default": "./src/index.web.ts"
-      },
       "default": {
         "types": "./src/index.ts",
         "import": "./src/index.ts",
         "require": "./src/index.ts"
       }
-    },
-    "./plugin": {
-      "require": "./plugin.js",
-      "default": "./plugin.js"
-    },
-    "./generate": {
-      "types": "./src/cli/generate.ts",
-      "import": "./src/cli/generate.ts",
-      "require": "./src/cli/generate.ts"
     }
   },
   "scripts": {
@@ -54,33 +38,45 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "react-native-config": ">=1.5.0"
+    "@notifee/react-native": ">=9.0.0",
+    "@react-native-firebase/app": ">=21.0.0",
+    "@react-native-firebase/messaging": ">=21.0.0",
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0"
   },
   "peerDependenciesMeta": {
-    "react-native-config": {
+    "react-native": {
+      "optional": true
+    },
+    "@notifee/react-native": {
+      "optional": true
+    },
+    "@react-native-firebase/app": {
+      "optional": true
+    },
+    "@react-native-firebase/messaging": {
       "optional": true
     }
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "react-native-config": "^1.5.0",
+    "@types/react": "^19.1.0",
     "typescript": "^5.0.0"
   },
   "files": [
     "src",
-    "bin",
-    "plugin.js",
     "README.md"
   ],
   "keywords": [
-    "config",
-    "configuration",
-    "env",
-    "environment",
-    "dotenv",
     "react",
     "react-native",
-    "cross-platform",
-    "idealyst"
+    "notifications",
+    "push-notifications",
+    "local-notifications",
+    "fcm",
+    "firebase-messaging",
+    "apns",
+    "web-push",
+    "notifee",
+    "cross-platform"
   ]
 }

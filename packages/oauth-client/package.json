@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/oauth-client",
-  "version": "1.2.111",
+  "version": "1.2.113",
   "description": "Universal OAuth2 client for web and React Native",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -38,12 +38,14 @@
     "@types/react-native": "^0.73.0",
     "react": "^19.1.0",
     "react-native": "^0.80.1",
+    "react-native-inappbrowser-reborn": "^3.7.0",
     "tsup": "^8.3.5",
     "typescript": "^5.7.3"
   },
   "peerDependencies": {
     "@idealyst/storage": "^1.2.30",
-    "react-native": ">=0.60.0"
+    "react-native": ">=0.60.0",
+    "react-native-inappbrowser-reborn": ">=3.0.0"
   },
   "files": [
     "dist",

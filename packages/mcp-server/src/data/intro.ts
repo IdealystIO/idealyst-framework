@@ -62,6 +62,7 @@ This server has tools for every aspect of the framework. **Always look up the AP
 | \`@idealyst/lottie\` | \`get_lottie_guide\` |
 | \`@idealyst/storage\` | \`get_storage_guide\` |
 | \`@idealyst/translate\` | \`get_translate_guide\` |
+| \`@idealyst/notifications\` | \`get_notifications_guide\` |
 
 ### Other Tools
 - \`get_theme_types\` — Theme type definitions (Size, Intent, Color)

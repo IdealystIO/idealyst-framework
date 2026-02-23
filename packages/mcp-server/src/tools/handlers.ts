@@ -35,6 +35,7 @@ import { chartsGuides } from "../data/charts-guides.js";
 import { clipboardGuides } from "../data/clipboard-guides.js";
 import { biometricsGuides } from "../data/biometrics-guides.js";
 import { paymentsGuides } from "../data/payments-guides.js";
+import { notificationsGuides } from "../data/notifications-guides.js";
 import {
   packages,
   getPackageSummary,
@@ -89,6 +90,7 @@ import type {
   GetClipboardGuideArgs,
   GetBiometricsGuideArgs,
   GetPaymentsGuideArgs,
+  GetNotificationsGuideArgs,
   ListPackagesArgs,
   GetPackageDocsArgs,
   SearchPackagesArgs,
@@ -1014,6 +1016,23 @@ export function getPaymentsGuide(args: GetPaymentsGuideArgs): ToolResponse {
   return textResponse(guide);
 }
 
+/**
+ * Get documentation for the notifications package
+ */
+export function getNotificationsGuide(args: GetNotificationsGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://notifications/${topic}`;
+  const guide = notificationsGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
 // ============================================================================
 // Package Tool Handlers
 // ============================================================================
@@ -1370,6 +1389,7 @@ export const toolHandlers: Record<string, (args: any) => ToolResponse> = {
   get_clipboard_guide: getClipboardGuide,
   get_biometrics_guide: getBiometricsGuide,
   get_payments_guide: getPaymentsGuide,
+  get_notifications_guide: getNotificationsGuide,
   list_packages: listPackages,
   get_package_docs: getPackageDocs,
   search_packages: searchPackages,

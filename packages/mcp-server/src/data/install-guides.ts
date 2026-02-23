@@ -560,12 +560,12 @@ const data = await storage.get('key');`,
   "oauth-client": {
     packageName: "OAuth Client",
     npmName: "@idealyst/oauth-client",
-    description: "Universal OAuth2 client with PKCE support for web and React Native",
+    description: "Universal OAuth2 client with PKCE support for web and React Native. Uses ASWebAuthenticationSession (iOS) and Chrome Custom Tabs (Android) via react-native-inappbrowser-reborn.",
     platforms: ["web", "native"],
     complexity: "complex",
     installation: {
-      yarn: "yarn add @idealyst/oauth-client @idealyst/storage",
-      npm: "npm install @idealyst/oauth-client @idealyst/storage",
+      yarn: "yarn add @idealyst/oauth-client @idealyst/storage react-native-inappbrowser-reborn",
+      npm: "npm install @idealyst/oauth-client @idealyst/storage react-native-inappbrowser-reborn",
     },
     peerDependencies: [
       {
@@ -573,6 +573,12 @@ const data = await storage.get('key');`,
         required: true,
         platforms: ["web", "native"],
         note: "Required for secure token storage",
+      },
+      {
+        name: "react-native-inappbrowser-reborn",
+        required: true,
+        platforms: ["native"],
+        note: "Required for in-app OAuth browser session (ASWebAuthenticationSession on iOS, Chrome Custom Tabs on Android)",
       },
     ],
     ios: {
@@ -594,7 +600,6 @@ const data = await storage.get('key');`,
       additionalSteps: [
         "cd ios && pod install",
         "Replace 'com.yourapp' with your app's bundle identifier or custom scheme",
-        "Handle the URL in your AppDelegate or SceneDelegate",
       ],
     },
     android: {
@@ -621,28 +626,32 @@ const data = await storage.get('key');`,
         "Uses standard browser redirect for OAuth flow",
         "Tokens are stored in localStorage via @idealyst/storage",
         "Configure your OAuth provider to allow your web app's origin",
+        "react-native-inappbrowser-reborn is NOT required for web",
       ],
     },
-    verification: `import { OAuthClient } from '@idealyst/oauth-client';
+    verification: `import { createOAuthClient } from '@idealyst/oauth-client';
 
-const oauth = new OAuthClient({
-  clientId: 'your-client-id',
-  authorizationEndpoint: 'https://auth.example.com/authorize',
-  tokenEndpoint: 'https://auth.example.com/token',
-  redirectUri: 'com.yourapp://callback',
+const oauth = createOAuthClient({
+  oauthUrl: 'https://api.yourapp.com/auth/google',
+  redirectUrl: 'com.yourapp://oauth/callback',
 });
 
-await oauth.login();`,
+await oauth.authorize();`,
     troubleshooting: [
       {
         issue: "OAuth redirect not returning to app (iOS)",
         solution:
-          "Ensure CFBundleURLSchemes in Info.plist matches your redirectUri scheme",
+          "Ensure CFBundleURLSchemes in Info.plist matches your redirectUrl scheme. Run 'cd ios && pod install' after installing react-native-inappbrowser-reborn.",
       },
       {
         issue: "OAuth redirect not returning to app (Android)",
         solution:
-          "Ensure intent-filter scheme in AndroidManifest matches your redirectUri",
+          "Ensure intent-filter scheme in AndroidManifest matches your redirectUrl scheme",
+      },
+      {
+        issue: "InAppBrowser is not available",
+        solution:
+          "Ensure react-native-inappbrowser-reborn is installed and linked. On iOS, run 'cd ios && pod install'. On Android, the library auto-links.",
       },
       {
         issue: "CORS errors on token exchange (web)",
@@ -1108,6 +1117,166 @@ function Test() {
         issue: "Background uploads fail on iOS",
         solution:
           "Add 'fetch' to UIBackgroundModes array in Info.plist",
+      },
+    ],
+  },
+
+  notifications: {
+    packageName: "Notifications",
+    npmName: "@idealyst/notifications",
+    description:
+      "Cross-platform push and local notifications. Push via Firebase Cloud Messaging (native) and Web Push API (web). Local via Notifee (native) and Notification API (web).",
+    platforms: ["native", "web"],
+    complexity: "complex",
+    installation: {
+      yarn: "yarn add @idealyst/notifications\n# Native push:\nyarn add @react-native-firebase/app @react-native-firebase/messaging\n# Native local:\nyarn add @notifee/react-native",
+      npm: "npm install @idealyst/notifications\n# Native push:\nnpm install @react-native-firebase/app @react-native-firebase/messaging\n# Native local:\nnpm install @notifee/react-native",
+    },
+    peerDependencies: [
+      {
+        name: "@react-native-firebase/app",
+        required: false,
+        platforms: ["native"],
+        note: "Required for push notifications on native. Firebase is the only Android push transport (FCM replaced GCM in 2019).",
+      },
+      {
+        name: "@react-native-firebase/messaging",
+        required: false,
+        platforms: ["native"],
+        note: "Required for push notifications on native. Wraps FCM (Android) and APNs (iOS).",
+      },
+      {
+        name: "@notifee/react-native",
+        required: false,
+        platforms: ["native"],
+        note: "Required for local notifications on native. Rich notifications, channels, categories, scheduling.",
+      },
+      {
+        name: "react-native",
+        required: false,
+        platforms: ["native"],
+      },
+    ],
+    ios: {
+      podInstallRequired: true,
+      infoPlistEntries: [
+        {
+          key: "UIBackgroundModes",
+          value: "<array>\n  <string>remote-notification</string>\n</array>",
+          description:
+            "Enable background remote notifications. Required for push to work when app is in background.",
+        },
+      ],
+      additionalSteps: [
+        "Enable Push Notifications capability in Xcode: Signing & Capabilities → + Capability → Push Notifications",
+        "Enable Background Modes → Remote notifications in Xcode",
+        "Download GoogleService-Info.plist from Firebase Console and add to your iOS project root (same level as Info.plist)",
+        "If not using Cocoapods auto-linking: add FirebaseAppDelegateProxyEnabled = YES to Info.plist",
+        "For APNs: upload your APNs authentication key (.p8) or certificate to Firebase Console → Project Settings → Cloud Messaging",
+      ],
+    },
+    android: {
+      permissions: [
+        {
+          permission: "android.permission.POST_NOTIFICATIONS",
+          description:
+            "Required on Android 13+ (API 33) to show notifications. Must be requested at runtime.",
+        },
+        {
+          permission: "android.permission.RECEIVE_BOOT_COMPLETED",
+          description:
+            "Required for scheduled notifications to persist across device reboots.",
+        },
+        {
+          permission: "android.permission.VIBRATE",
+          description:
+            "Required for notification vibration patterns.",
+        },
+      ],
+      gradleChanges: [
+        {
+          file: "android/build.gradle (project level)",
+          changes:
+            'buildscript {\n  dependencies {\n    // Add Google services Gradle plugin\n    classpath \'com.google.gms:google-services:4.4.0\'\n  }\n}',
+          description:
+            "Add Google Services plugin to project-level build.gradle",
+        },
+        {
+          file: "android/app/build.gradle",
+          changes:
+            "apply plugin: 'com.google.gms.google-services'",
+          description:
+            "Apply Google Services plugin at the bottom of app-level build.gradle",
+        },
+      ],
+      additionalSteps: [
+        "Download google-services.json from Firebase Console and place in android/app/",
+        "For Android 13+ (API 33): request POST_NOTIFICATIONS permission at runtime before calling register()",
+        "Create a default notification channel in Application.onCreate() or use createChannel() from the package",
+      ],
+    },
+    web: {
+      notes: [
+        "Call configurePush({ vapidKey }) before registering for push (get VAPID key from your push server or Firebase Console)",
+        "Create a service worker (default: /firebase-messaging-sw.js) to handle background push messages",
+        "Web push tokens are PushSubscription objects (JSON-serialized) — send to your server for push delivery",
+        "Web local notification scheduling uses setTimeout — notifications are lost if the page is closed",
+        "Badge API (navigator.setAppBadge) requires the page to be served over HTTPS and works in PWA context",
+      ],
+    },
+    verification: `import {
+  usePushNotifications,
+  useLocalNotifications,
+  useNotificationPermissions,
+} from '@idealyst/notifications';
+
+function Test() {
+  const { status, requestPermission } = useNotificationPermissions();
+  const { token, register } = usePushNotifications();
+  const { displayNotification } = useLocalNotifications();
+
+  const handleSetup = async () => {
+    await requestPermission();
+    const pushToken = await register();
+    console.log('Push token:', pushToken);
+    await displayNotification({
+      title: 'Setup Complete',
+      body: 'Notifications are working!',
+    });
+  };
+
+  return <Button onPress={handleSetup}>Enable Notifications</Button>;
+}`,
+    troubleshooting: [
+      {
+        issue: "Push token is null on native",
+        solution:
+          "Ensure GoogleService-Info.plist (iOS) or google-services.json (Android) is properly configured. Verify Push Notifications capability is enabled in Xcode. Check that @react-native-firebase/app and @react-native-firebase/messaging are installed.",
+      },
+      {
+        issue: "Notifications not showing on Android 13+",
+        solution:
+          "Android 13 (API 33) requires runtime POST_NOTIFICATIONS permission. Call requestPermission() before register(). Check that a default notification channel exists.",
+      },
+      {
+        issue: "Background notifications not received on iOS",
+        solution:
+          "Enable Background Modes → Remote notifications in Xcode. Ensure UIBackgroundModes includes 'remote-notification' in Info.plist. Verify APNs key is uploaded to Firebase Console.",
+      },
+      {
+        issue: "Web push subscription fails",
+        solution:
+          "Ensure configurePush({ vapidKey }) is called before getPushToken(). Verify the service worker is registered and accessible. Check that the page is served over HTTPS.",
+      },
+      {
+        issue: "Local notifications not appearing on native",
+        solution:
+          "Verify @notifee/react-native is installed and linked. On Android, ensure a notification channel is created before displaying. On iOS, ensure notification permissions are granted.",
+      },
+      {
+        issue: "Scheduled notifications lost on web",
+        solution:
+          "Web scheduling uses setTimeout which only works while the page is open. For persistent web scheduling, use a service worker with the Push API or a server-side scheduler.",
       },
     ],
   },

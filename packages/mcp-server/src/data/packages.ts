@@ -1129,6 +1129,74 @@ await finishTransaction(purchase);`,
     ],
     relatedPackages: ["biometrics", "oauth-client"],
   },
+
+  notifications: {
+    name: "Notifications",
+    npmName: "@idealyst/notifications",
+    description:
+      "Cross-platform push and local notifications for React Native and web. Push via Firebase Cloud Messaging (native) and Web Push API (web). Local notifications via Notifee (native) and Notification API (web). Backend-agnostic — gives you device tokens, your server sends via any push service.",
+    category: "utility",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/notifications",
+    peerDependencies: [
+      "@react-native-firebase/app (native push)",
+      "@react-native-firebase/messaging (native push)",
+      "@notifee/react-native (native local)",
+      "react-native (native)",
+    ],
+    features: [
+      "Push notification registration — FCM tokens (native) and PushSubscription (web)",
+      "Local notifications — display, schedule, cancel across platforms",
+      "Permission management — check, request, and track notification permissions",
+      "Foreground message handling — react to push while app is in foreground",
+      "Notification open handling — deep-link when user taps a notification",
+      "Background message handler — process push in background (native)",
+      "Topic subscription — subscribe/unsubscribe to FCM topics (native)",
+      "Android channels — create, delete, and manage notification channels",
+      "Notification categories and actions — interactive notification buttons",
+      "Badge count management — PWA badge API (web) and Notifee (native)",
+      "Scheduling with triggers — timestamp, interval, and repeat triggers",
+      "Token refresh handling — automatic token rotation callbacks",
+      "Web Push with VAPID — standard Web Push API, no vendor lock-in",
+      "Three focused hooks — usePushNotifications, useLocalNotifications, useNotificationPermissions",
+      "Standalone functions — for non-React or top-level usage (e.g., background handler)",
+      "Graceful degradation when native deps are not installed",
+    ],
+    quickStart: `import {
+  usePushNotifications,
+  useLocalNotifications,
+  useNotificationPermissions,
+} from '@idealyst/notifications';
+
+// Push notifications
+const { token, register } = usePushNotifications({
+  autoRegister: true,
+  onMessage: (msg) => console.log('Push received:', msg),
+});
+
+// Local notifications
+const { displayNotification } = useLocalNotifications();
+await displayNotification({
+  title: 'Hello',
+  body: 'This is a local notification',
+});
+
+// Permissions
+const { status, requestPermission } = useNotificationPermissions();`,
+    apiHighlights: [
+      "usePushNotifications(options?) - Push token management and message listeners",
+      "useLocalNotifications(options?) - Display, schedule, and manage local notifications",
+      "useNotificationPermissions(options?) - Check and request notification permissions",
+      "configurePush({ vapidKey }) - Web-only: configure VAPID key before push registration",
+      "setBackgroundMessageHandler(handler) - Register background push handler (native, call at top level)",
+      "displayNotification(options) - Show a local notification immediately",
+      "scheduleNotification(options) - Schedule a notification with triggers",
+      "createChannel(channel) - Create an Android notification channel",
+      "subscribeToTopic(topic) - Subscribe to FCM topic (native)",
+    ],
+    relatedPackages: ["storage", "oauth-client"],
+  },
 };
 
 /**
