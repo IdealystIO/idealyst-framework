@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/translate",
-  "version": "1.2.117",
+  "version": "1.2.118",
   "description": "Cross-platform internationalization for Idealyst Framework",
   "readme": "README.md",
   "main": "src/index.ts",

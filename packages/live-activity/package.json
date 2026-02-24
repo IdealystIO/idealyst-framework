@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/live-activity",
-  "version": "1.2.117",
+  "version": "1.2.118",
   "description": "Cross-platform Live Activities for React Native (iOS ActivityKit + Android Live Updates)",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/live-activity#readme",
   "readme": "README.md",

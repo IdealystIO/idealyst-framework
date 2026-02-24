@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/storage",
-  "version": "1.2.117",
+  "version": "1.2.118",
   "description": "Cross-platform storage abstraction for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/storage#readme",
   "readme": "README.md",
