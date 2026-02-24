@@ -464,34 +464,86 @@ Section-based navigation with a tab bar.
 
 ## Drawer Navigator
 
-Side menu navigation, primarily for desktop/tablet.
+Side menu navigation with a persistent sidebar. Ideal for dashboards and admin panels.
 
 ### Configuration
 
 \`\`\`tsx
-{
+import { NavigatorParam } from '@idealyst/navigation';
+
+const AppRouter: NavigatorParam = {
   path: "/",
   type: 'navigator',
   layout: 'drawer',
   routes: [
-    { path: "dashboard", type: 'screen', component: DashboardScreen },
-    { path: "users", type: 'screen', component: UsersScreen },
-    { path: "settings", type: 'screen', component: SettingsScreen },
+    {
+      path: "",
+      type: 'screen',
+      component: DashboardScreen,
+      options: { title: 'Dashboard', tabBarLabel: 'Dashboard' }
+    },
+    {
+      path: "users",
+      type: 'screen',
+      component: UsersScreen,
+      options: { title: 'Users', tabBarLabel: 'Users' }
+    },
+    {
+      path: "settings",
+      type: 'screen',
+      component: SettingsScreen,
+      options: { title: 'Settings', tabBarLabel: 'Settings' }
+    },
   ]
+};
+\`\`\`
+
+> **Route options:** Drawer routes use \`TabBarScreenOptions\` — set \`tabBarLabel\` for the sidebar label and \`title\` for the screen title. Both are displayed in the default sidebar.
+
+### Custom Sidebar Component
+
+You can provide a custom sidebar via \`sidebarComponent\`:
+
+\`\`\`tsx
+import { DrawerSidebarProps } from '@idealyst/navigation';
+import { View, Text, Pressable, Icon } from '@idealyst/components';
+
+function CustomSidebar({ insets }: DrawerSidebarProps) {
+  const { navigate } = useNavigator();
+  return (
+    <View style={{ flex: 1, paddingTop: insets?.top ?? 0 }} background="secondary">
+      <Text typography="h6" weight="bold" padding="lg">My App</Text>
+      <Pressable onPress={() => navigate({ path: '/' })}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }} padding="md" gap="md">
+          <Icon name="home" size="md" />
+          <Text>Dashboard</Text>
+        </View>
+      </Pressable>
+    </View>
+  );
 }
+
+const AppRouter: NavigatorParam = {
+  path: "/",
+  type: 'navigator',
+  layout: 'drawer',
+  sidebarComponent: CustomSidebar,
+  routes: [...]
+};
 \`\`\`
 
 ### Platform Behavior
 
 **Mobile:**
-- Slide-out drawer
-- Swipe gesture to open
+- Slide-out drawer with swipe gesture
 - Overlay when open
+- Custom \`sidebarComponent\` receives \`DrawerSidebarProps\` with safe area \`insets\`
 
 **Web:**
-- Sidebar navigation
-- Can be persistent or overlay
-- Responsive behavior
+- Fixed 240px left sidebar with navigation items
+- Items show \`tabBarLabel\` (or \`title\`) from route options
+- Active route is highlighted
+- If \`sidebarComponent\` is provided, it replaces the default sidebar
 
 ### Use Cases
 - Admin panels
@@ -589,9 +641,92 @@ const appRouter: RouteParam = {
 
 On web, navigators can use custom layout components to add headers, sidebars, and other UI around route content.
 
+## IMPORTANT: Layout Component File Structure
+
+Layout components are **web-only**. Native ignores \`layoutComponent\` entirely. You must create platform-specific files so the native build doesn't import web-only code:
+
+\`\`\`
+layouts/
+  AppLayout.web.tsx       ← Real layout with Outlet from @idealyst/navigation
+  AppLayout.native.tsx    ← No-op mock (return null)
+  index.web.ts            ← export { AppLayout } from './AppLayout.web'
+  index.native.ts         ← export { AppLayout } from './AppLayout.native'
+\`\`\`
+
+### Example Files
+
+**\`AppLayout.web.tsx\`** — The real layout:
+\`\`\`tsx
+import React from 'react';
+import { Outlet, useNavigator } from '@idealyst/navigation';
+import type { StackLayoutProps } from '@idealyst/navigation';
+import { View, Text, Pressable, Icon } from '@idealyst/components';
+
+export function AppLayout({ routes, currentPath, options }: StackLayoutProps) {
+  const { navigate } = useNavigator();
+  return (
+    <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={{ width: 240, borderRightWidth: 1, borderRightColor: '#e0e0e0' }}>
+        {routes.map((route) => (
+          <Pressable key={route.fullPath} onPress={() => navigate({ path: route.fullPath })}>
+            <Text style={{ padding: 12, fontWeight: currentPath === route.fullPath ? 'bold' : 'normal' }}>
+              {route.options?.title || route.path}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+    </View>
+  );
+}
+\`\`\`
+
+**\`AppLayout.native.tsx\`** — No-op mock (native uses its own navigator UI):
+\`\`\`tsx
+export function AppLayout() {
+  return null;
+}
+\`\`\`
+
+**\`index.web.ts\`**:
+\`\`\`ts
+export { AppLayout } from './AppLayout.web';
+\`\`\`
+
+**\`index.native.ts\`**:
+\`\`\`ts
+export { AppLayout } from './AppLayout.native';
+\`\`\`
+
+**\`AppRouter.ts\`** — Wiring:
+\`\`\`tsx
+import { AppLayout } from './layouts';
+import type { NavigatorParam } from '@idealyst/navigation';
+
+const appRouter: NavigatorParam = {
+  path: '/',
+  type: 'navigator',
+  layout: 'stack',
+  layoutComponent: AppLayout,  // Web only — native ignores this
+  routes: [
+    { path: '', type: 'screen', component: HomeScreen },
+    { path: 'settings', type: 'screen', component: SettingsScreen },
+  ],
+};
+\`\`\`
+
+> **Key rules:**
+> - Import \`Outlet\` from \`@idealyst/navigation\` (NOT from \`react-router-dom\`)
+> - Layout props do NOT include \`children\` — content renders via \`<Outlet />\`
+> - Always create both \`.web.tsx\` and \`.native.tsx\` files with platform index files
+
 ## GeneralLayout Component
 
-The built-in \`GeneralLayout\` provides header and sidebar functionality:
+> **Note:** \`GeneralLayout\` is a reference pattern shown in documentation. For production apps, build custom layouts using Idealyst components (\`View\`, \`Text\`, \`Pressable\`, \`Icon\`) with \`<Outlet />\` from \`@idealyst/navigation\`. The examples below illustrate the configuration API.
+
+The \`GeneralLayout\` demonstrates header and sidebar configuration:
 
 ### Basic Usage
 
@@ -608,7 +743,7 @@ import { GeneralLayout } from '@idealyst/navigation';
     content: <NavigationMenu />,
   }}
 >
-  {children}
+  <Outlet />
 </GeneralLayout>
 \`\`\`
 
@@ -706,36 +841,32 @@ const router: NavigatorParam = {
 ### Stack Layout Component
 
 \`\`\`tsx
-import { GeneralLayout } from '@idealyst/navigation';
+import { Outlet } from '@idealyst/navigation';
 import type { StackLayoutProps } from '@idealyst/navigation';
 
 export const CustomStackLayout: React.FC<StackLayoutProps> = ({
-  children,
   options,
   routes,
   currentPath
 }) => {
   return (
-    <GeneralLayout
-      header={{
-        enabled: true,
-        content: (
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text>{options?.headerTitle || 'My App'}</Text>
-            {options?.headerRight}
-          </View>
-        )
-      }}
-      sidebar={{
-        enabled: true,
-        collapsible: true,
-        content: (
+    <View style={{ flex: 1 }}>
+      {/* Header */}
+      <View style={{ height: 56, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 }}>
+        <Text>{options?.headerTitle || 'My App'}</Text>
+        <View style={{ marginLeft: 'auto' }}>{options?.headerRight}</View>
+      </View>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        {/* Sidebar */}
+        <View style={{ width: 240 }}>
           <NavigationMenu routes={routes} currentPath={currentPath} />
-        )
-      }}
-    >
-      {children}
-    </GeneralLayout>
+        </View>
+        {/* Content — rendered via Outlet, NOT children */}
+        <View style={{ flex: 1 }}>
+          <Outlet />
+        </View>
+      </View>
+    </View>
   );
 };
 \`\`\`
@@ -743,10 +874,10 @@ export const CustomStackLayout: React.FC<StackLayoutProps> = ({
 ### Tab Layout Component
 
 \`\`\`tsx
+import { Outlet } from '@idealyst/navigation';
 import type { TabLayoutProps } from '@idealyst/navigation';
 
 export const CustomTabLayout: React.FC<TabLayoutProps> = ({
-  children,
   routes,
   currentPath
 }) => {
@@ -758,8 +889,8 @@ export const CustomTabLayout: React.FC<TabLayoutProps> = ({
       <View style={{ flexDirection: 'row', borderBottom: '1px solid #ccc' }}>
         {routes.map(route => (
           <Pressable
-            key={route.path}
-            onPress={() => navigator.navigate({ path: route.fullPath, vars: {} })}
+            key={route.fullPath}
+            onPress={() => navigator.navigate({ path: route.fullPath })}
             style={{
               padding: 16,
               borderBottom: currentPath === route.fullPath ? '2px solid blue' : 'none'
@@ -770,9 +901,9 @@ export const CustomTabLayout: React.FC<TabLayoutProps> = ({
         ))}
       </View>
 
-      {/* Content */}
+      {/* Content — rendered via Outlet, NOT children */}
       <View style={{ flex: 1 }}>
-        {children}
+        <Outlet />
       </View>
     </View>
   );
@@ -781,6 +912,8 @@ export const CustomTabLayout: React.FC<TabLayoutProps> = ({
 
 ## Layout Props Reference
 
+> **IMPORTANT:** Layout props do NOT include \`children\`. Route content is rendered via \`<Outlet />\` imported from \`@idealyst/navigation\`.
+
 ### StackLayoutProps
 
 \`\`\`tsx
@@ -788,8 +921,8 @@ type StackLayoutProps = {
   options?: NavigatorOptions;           // Navigator options
   routes: RouteWithFullPath[];          // All routes with full paths
   currentPath: string;                  // Current active path
-  children?: React.ReactNode;           // Route content
 };
+// Content renders via <Outlet /> from @idealyst/navigation — NOT via children
 \`\`\`
 
 ### TabLayoutProps
@@ -799,8 +932,8 @@ type TabLayoutProps = {
   options?: NavigatorOptions;                    // Navigator options
   routes: RouteWithFullPath<TabBarScreenOptions>[]; // Tab routes
   currentPath: string;                            // Current active path
-  children?: React.ReactNode;                     // Route content
 };
+// Content renders via <Outlet /> from @idealyst/navigation — NOT via children
 \`\`\`
 
 ## Real-World Examples
@@ -808,41 +941,35 @@ type TabLayoutProps = {
 ### Dashboard Layout
 
 \`\`\`tsx
+import { Outlet } from '@idealyst/navigation';
+
 export const DashboardLayout: React.FC<StackLayoutProps> = ({
-  children,
   routes,
-  currentPath
+  currentPath,
+  options
 }) => {
+  const { navigate } = useNavigator();
   return (
-    <GeneralLayout
-      header={{
-        enabled: true,
-        height: 72,
-        content: (
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 16
-          }}>
-            <Text typography="h5" weight="bold">Dashboard</Text>
-            <View style={{ flexDirection: 'row', gap: 16 }}>
-              <NotificationBell />
-              <UserAvatar />
-            </View>
-          </View>
-        )
-      }}
-      sidebar={{
-        enabled: true,
-        collapsible: true,
-        position: 'left',
-        expandedWidth: 260,
-        content: <DashboardSidebar routes={routes} currentPath={currentPath} />
-      }}
-    >
-      {children}
-    </GeneralLayout>
+    <View style={{ flex: 1 }}>
+      {/* Header */}
+      <View style={{ height: 72, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#e0e0e0' }}>
+        <Text typography="h5" weight="bold">Dashboard</Text>
+        <View style={{ flexDirection: 'row', gap: 16 }}>
+          <NotificationBell />
+          <UserAvatar />
+        </View>
+      </View>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        {/* Sidebar */}
+        <View style={{ width: 260 }}>
+          <DashboardSidebar routes={routes} currentPath={currentPath} />
+        </View>
+        {/* Content via Outlet */}
+        <View style={{ flex: 1 }}>
+          <Outlet />
+        </View>
+      </View>
+    </View>
   );
 };
 \`\`\`
@@ -850,27 +977,21 @@ export const DashboardLayout: React.FC<StackLayoutProps> = ({
 ### Admin Panel Layout
 
 \`\`\`tsx
-export const AdminLayout: React.FC<StackLayoutProps> = ({ children }) => {
+import { Outlet } from '@idealyst/navigation';
+
+export const AdminLayout: React.FC<StackLayoutProps> = ({ options }) => {
   return (
-    <GeneralLayout
-      header={{
-        enabled: true,
-        content: <AdminHeader />,
-        style: { backgroundColor: '#1a1a1a', color: '#fff' }
-      }}
-      sidebar={{
-        enabled: true,
-        collapsible: true,
-        position: 'left',
-        initiallyExpanded: true,
-        content: <AdminNavigationMenu />,
-        style: { backgroundColor: '#2a2a2a' }
-      }}
-    >
-      <View style={{ padding: 24 }}>
-        {children}
+    <View style={{ flex: 1 }}>
+      <AdminHeader />
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        <View style={{ width: 240, backgroundColor: '#2a2a2a' }}>
+          <AdminNavigationMenu />
+        </View>
+        <View style={{ flex: 1, padding: 24 }}>
+          <Outlet />
+        </View>
       </View>
-    </GeneralLayout>
+    </View>
   );
 };
 \`\`\`
@@ -1781,18 +1902,18 @@ Every layout component receives these props:
 
 \`\`\`tsx
 type LayoutProps = {
-  children: React.ReactNode;     // The route content (renders via <Outlet />)
   options?: NavigatorOptions;    // headerTitle, headerLeft, headerRight, etc.
   routes: RouteWithFullPath[];   // All child routes with their full paths
   currentPath: string;           // Currently active route path
 };
+// Content renders via <Outlet /> from @idealyst/navigation — NOT via children
 \`\`\`
 
 **This gives you everything you need to build any navigation UI:**
 - \`options\` - What to show in headers
 - \`routes\` - What tabs/menu items to render
 - \`currentPath\` - Which one is active
-- \`children\` - Where to render the screen content
+- \`<Outlet />\` - Where to render the screen content (import from @idealyst/navigation)
 
 ## Stack Navigator Parity
 
@@ -1805,10 +1926,9 @@ type LayoutProps = {
 ### Web Implementation
 
 \`\`\`tsx
-import { Outlet } from 'react-router-dom';
-import { View, Text, IconButton, Pressable } from '@idealyst/components';
-import { useNavigator } from '@idealyst/navigation';
+import { Outlet, useNavigator } from '@idealyst/navigation';
 import type { StackLayoutProps } from '@idealyst/navigation';
+import { View, Text, IconButton, Pressable } from '@idealyst/components';
 
 export function StackLayout({ options, currentPath }: StackLayoutProps) {
   const { canGoBack, goBack } = useNavigator();
@@ -1885,10 +2005,9 @@ export function StackLayout({ options, currentPath }: StackLayoutProps) {
 ### Web Implementation
 
 \`\`\`tsx
-import { Outlet } from 'react-router-dom';
-import { View, Text, Pressable, Icon, Badge } from '@idealyst/components';
-import { useNavigator } from '@idealyst/navigation';
+import { Outlet, useNavigator } from '@idealyst/navigation';
 import type { TabLayoutProps } from '@idealyst/navigation';
+import { View, Text, Pressable, Icon, Badge } from '@idealyst/components';
 
 export function TabLayout({ routes, currentPath }: TabLayoutProps) {
   const { navigate } = useNavigator();
@@ -1973,10 +2092,9 @@ export function TabLayout({ routes, currentPath }: TabLayoutProps) {
 On web, drawers are typically persistent sidebars. Here's how to build both:
 
 \`\`\`tsx
-import { Outlet } from 'react-router-dom';
-import { View, Text, Pressable, Icon } from '@idealyst/components';
-import { useNavigator } from '@idealyst/navigation';
+import { Outlet, useNavigator } from '@idealyst/navigation';
 import type { StackLayoutProps } from '@idealyst/navigation';
+import { View, Text, Pressable, Icon } from '@idealyst/components';
 
 export function DrawerLayout({ routes, currentPath, options }: StackLayoutProps) {
   const { navigate } = useNavigator();
@@ -2050,29 +2168,26 @@ The \`GeneralLayout\` component simplifies building layouts:
 \`\`\`tsx
 import { GeneralLayout } from '@idealyst/navigation';
 
-export function AppLayout({ options, routes, currentPath, children }: StackLayoutProps) {
+export function AppLayout({ options, routes, currentPath }: StackLayoutProps) {
+  const { navigate } = useNavigator();
   return (
-    <GeneralLayout
-      header={{
-        enabled: true,
-        height: 56,
-        content: (
-          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-            <Text typography="h6" weight="bold">{options?.headerTitle || 'App'}</Text>
-            <View style={{ marginLeft: 'auto' }}>{options?.headerRight}</View>
-          </View>
-        ),
-      }}
-      sidebar={{
-        enabled: true,
-        collapsible: true,
-        expandedWidth: 240,
-        collapsedWidth: 64,
-        content: <SidebarMenu routes={routes} currentPath={currentPath} />,
-      }}
-    >
-      {children}
-    </GeneralLayout>
+    <View style={{ flex: 1 }}>
+      {/* Header */}
+      <View style={{ height: 56, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: '#e0e0e0' }}>
+        <Text typography="h6" weight="bold">{options?.headerTitle || 'App'}</Text>
+        <View style={{ marginLeft: 'auto' }}>{options?.headerRight}</View>
+      </View>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        {/* Sidebar */}
+        <View style={{ width: 240 }}>
+          <SidebarMenu routes={routes} currentPath={currentPath} />
+        </View>
+        {/* Content via Outlet */}
+        <View style={{ flex: 1 }}>
+          <Outlet />
+        </View>
+      </View>
+    </View>
   );
 }
 \`\`\`
@@ -2138,7 +2253,7 @@ const appRouter: NavigatorParam = {
 3. **Options are your data source** - headerTitle, tabBarIcon, etc. drive your layout
 4. **routes array is navigation menu** - Use it to build sidebars, tab bars, menus
 5. **currentPath enables active states** - Compare to highlight current item
-6. **Outlet renders children** - From react-router-dom, this is where screen content goes
+6. **Outlet renders content** - Import from @idealyst/navigation, this is where screen content goes
 
 ## Common Patterns
 

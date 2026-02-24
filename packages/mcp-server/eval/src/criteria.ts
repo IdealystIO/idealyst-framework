@@ -25,7 +25,7 @@ export const DEFAULT_CRITERIA: SupervisorCriterion[] = [
   {
     id: "idealyst_usage",
     label: "Idealyst Usage",
-    weight: 0.15,
+    weight: 0.14,
     failSeverity: "proportional",
     description:
       "Did the agent use Idealyst components, utilities, and APIs properly?",
@@ -38,7 +38,7 @@ export const DEFAULT_CRITERIA: SupervisorCriterion[] = [
   {
     id: "navigation_understanding",
     label: "Navigation Understanding",
-    weight: 0.1,
+    weight: 0.09,
     failSeverity: "proportional",
     description:
       "Did the agent understand the @idealyst/navigation system?",
@@ -52,7 +52,7 @@ export const DEFAULT_CRITERIA: SupervisorCriterion[] = [
   {
     id: "no_raw_primitives",
     label: "No Raw Primitives",
-    weight: 0.2,
+    weight: 0.18,
     failSeverity: "huge",
     description:
       "Did the agent avoid using raw React/React Native primitives instead of Idealyst components?",
@@ -67,7 +67,7 @@ Using <div>, <span>, <button> etc. HTML elements is also a HUGE FAILURE.`,
   {
     id: "valid_props",
     label: "Valid Props",
-    weight: 0.15,
+    weight: 0.14,
     failSeverity: "medium",
     description:
       "Did the agent pass valid props to Idealyst components?",
@@ -81,7 +81,7 @@ Cross-reference with TypeScript compilation results if available.`,
   {
     id: "self_correction",
     label: "Self-Correction",
-    weight: 0.15,
+    weight: 0.13,
     failSeverity: "huge",
     description:
       "When the agent discovered wrong props/APIs (via MCP tools or errors), did it correct itself?",
@@ -95,7 +95,7 @@ If the agent never made mistakes, score 100. Focus on the response to discovered
   {
     id: "package_awareness",
     label: "Package Awareness",
-    weight: 0.1,
+    weight: 0.09,
     failSeverity: "proportional",
     description:
       "Did the agent know to use specific @idealyst packages for specific functions?",
@@ -123,7 +123,7 @@ Consider: @idealyst/storage for persistence, @idealyst/translate for i18n, @idea
   {
     id: "true_cross_platform",
     label: "True Cross-Platform",
-    weight: 0.1,
+    weight: 0.08,
     failSeverity: "proportional",
     description:
       "Is the code truly cross-platform, avoiding hacks like 'typeof window !== undefined'?",
@@ -133,6 +133,23 @@ Consider: @idealyst/storage for persistence, @idealyst/translate for i18n, @idea
 - 30-59: Uses typeof window !== 'undefined' or Platform.OS checks for component rendering
 - 0-29: Heavy use of platform detection hacks, not truly cross-platform
 Note: Using Platform.OS for minor style adjustments is acceptable. Using it to conditionally render entirely different component trees is a failure.`,
+  },
+  {
+    id: "runtime_correctness",
+    label: "Runtime Correctness",
+    weight: 0.10,
+    failSeverity: "medium",
+    description:
+      "Does the app load without errors, does navigation work, and does the UI render correctly at runtime?",
+    evalGuidance: `Score based on runtime behavior verified via Playwright (if available) or inferred from code quality.
+- 90-100: App loads cleanly, no console errors, navigation works, all expected UI elements render
+- 70-89: App loads but has minor console warnings or one non-critical UI element missing
+- 40-69: App loads but has console errors, broken navigation, or significant UI missing
+- 0-39: App fails to load, crashes on startup, or has critical runtime errors
+If Playwright verification was not performed, score based on code analysis:
+- Would imports resolve correctly at runtime?
+- Are there obvious runtime errors (undefined references, missing providers)?
+- Would navigation routes render the right components?`,
   },
 ];
 

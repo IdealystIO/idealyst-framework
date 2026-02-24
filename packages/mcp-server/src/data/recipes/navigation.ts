@@ -283,4 +283,527 @@ export function App() {
     ],
     relatedRecipes: ["tab-navigation", "drawer-navigation"],
   },
+
+  "web-sidebar-layout": {
+    name: "Web Sidebar Layout",
+    description:
+      "Sidebar layout for web with header, route-driven menu, and active highlighting. Shows the complete .web.tsx / .native.tsx platform file structure required for layoutComponent.",
+    category: "navigation",
+    difficulty: "intermediate",
+    packages: ["@idealyst/components", "@idealyst/navigation"],
+    code: `// ============================================================
+// File 1: layouts/AppLayout.web.tsx  (the REAL layout — web only)
+// ============================================================
+import React from 'react';
+import { Outlet, useNavigator } from '@idealyst/navigation';
+import type { StackLayoutProps } from '@idealyst/navigation';
+import { View, Text, Pressable, Icon, Divider } from '@idealyst/components';
+import type { IconName } from '@idealyst/components';
+
+export function AppLayout({ routes, currentPath, options }: StackLayoutProps) {
+  const { navigate } = useNavigator();
+
+  return (
+    <View style={{ flex: 1, flexDirection: 'row' }}>
+      {/* Sidebar */}
+      <View style={{ width: 260, borderRightWidth: 1, borderRightColor: '#e0e0e0', backgroundColor: '#fafafa' }}>
+        {/* Logo / App name */}
+        <View style={{ height: 56, justifyContent: 'center', paddingHorizontal: 16 }}>
+          <Text typography="h6" weight="bold">{options?.headerTitle || 'My App'}</Text>
+        </View>
+
+        <Divider />
+
+        {/* Menu items built from routes */}
+        <View style={{ padding: 8, gap: 2 }}>
+          {routes.map((route) => {
+            const isActive = currentPath === route.fullPath
+              || currentPath.startsWith(route.fullPath + '/');
+
+            return (
+              <Pressable
+                key={route.fullPath}
+                onPress={() => navigate({ path: route.fullPath })}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 12,
+                  paddingVertical: 10,
+                  paddingHorizontal: 12,
+                  borderRadius: 8,
+                  backgroundColor: isActive ? 'rgba(0,122,255,0.08)' : 'transparent',
+                }}
+              >
+                <Icon
+                  name={(route.options?.icon as IconName) || 'circle-outline'}
+                  size="sm"
+                  color={isActive ? '#007AFF' : '#666'}
+                />
+                <Text
+                  typography="body2"
+                  weight={isActive ? 'semibold' : 'regular'}
+                  style={{ color: isActive ? '#007AFF' : '#333' }}
+                >
+                  {route.options?.title || route.path}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </View>
+
+      {/* Page content — rendered via Outlet, NOT children */}
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+    </View>
+  );
+}
+
+// ============================================================
+// File 2: layouts/AppLayout.native.tsx  (no-op mock for native)
+// ============================================================
+// Native ignores layoutComponent, so this is just a placeholder.
+export function AppLayout() {
+  return null;
+}
+
+// ============================================================
+// File 3: layouts/index.web.ts
+// ============================================================
+export { AppLayout } from './AppLayout.web';
+
+// ============================================================
+// File 4: layouts/index.native.ts
+// ============================================================
+export { AppLayout } from './AppLayout.native';
+
+// ============================================================
+// File 5: AppRouter.ts  (wiring)
+// ============================================================
+import { AppLayout } from './layouts';
+import type { NavigatorParam } from '@idealyst/navigation';
+// import your screen components here
+
+const appRouter: NavigatorParam = {
+  path: '/',
+  type: 'navigator',
+  layout: 'stack',
+  layoutComponent: AppLayout,  // web only — native ignores this
+  options: { headerTitle: 'Dashboard' },
+  routes: [
+    { path: '',        type: 'screen', component: HomeScreen,     options: { title: 'Home',     icon: 'home'            } },
+    { path: 'tasks',   type: 'screen', component: TasksScreen,    options: { title: 'Tasks',    icon: 'clipboard-list'  } },
+    { path: 'team',    type: 'screen', component: TeamScreen,     options: { title: 'Team',     icon: 'account-group'   } },
+    { path: 'settings',type: 'screen', component: SettingsScreen, options: { title: 'Settings', icon: 'cog'             } },
+  ],
+};`,
+    explanation: `Web sidebar layout with complete platform file structure:
+
+1. **AppLayout.web.tsx** — The real layout. Receives StackLayoutProps (routes, currentPath, options). Builds a sidebar from routes, highlights the active item, and renders page content via \`<Outlet />\` from \`@idealyst/navigation\`.
+2. **AppLayout.native.tsx** — No-op mock. Native ignores layoutComponent, so this just returns null.
+3. **index.web.ts / index.native.ts** — Platform-specific re-exports so the bundler picks the right file.
+4. **AppRouter.ts** — Sets \`layoutComponent: AppLayout\` on the navigator. Each route's \`options.icon\` and \`options.title\` drive the sidebar menu.
+
+Key points:
+- Import \`Outlet\` from \`@idealyst/navigation\`, NOT from \`react-router-dom\`
+- StackLayoutProps has NO \`children\` prop — use \`<Outlet />\` instead
+- \`layoutComponent\` is web-only; native uses its own native navigator UI`,
+    tips: [
+      "Import Outlet from @idealyst/navigation, NEVER from react-router-dom",
+      "StackLayoutProps does NOT include children — render content with <Outlet />",
+      "Always create both .web.tsx and .native.tsx files with platform index files",
+      "Use route.fullPath (not route.path) for navigation and active state comparison",
+      "Use currentPath.startsWith(route.fullPath + '/') for nested route highlighting",
+    ],
+    relatedRecipes: [
+      "web-tab-layout",
+      "web-collapsible-sidebar",
+      "drawer-navigation",
+    ],
+  },
+
+  "web-tab-layout": {
+    name: "Web Tab Layout",
+    description:
+      "Custom top tab bar for web that renders tabBarIcon, tabBarLabel, and tabBarBadge from route options. Complete platform file structure included.",
+    category: "navigation",
+    difficulty: "intermediate",
+    packages: ["@idealyst/components", "@idealyst/navigation"],
+    code: `// ============================================================
+// File 1: layouts/TabLayout.web.tsx  (the REAL layout — web only)
+// ============================================================
+import React from 'react';
+import { Outlet, useNavigator } from '@idealyst/navigation';
+import type { TabLayoutProps } from '@idealyst/navigation';
+import { View, Text, Pressable, Badge } from '@idealyst/components';
+
+export function TabLayout({ routes, currentPath }: TabLayoutProps) {
+  const { navigate } = useNavigator();
+
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Top tab bar */}
+      <View style={{
+        flexDirection: 'row',
+        height: 48,
+        borderBottomWidth: 1,
+        borderBottomColor: '#e0e0e0',
+        backgroundColor: '#fff',
+      }}>
+        {routes.map((route) => {
+          const isActive = currentPath === route.fullPath;
+          const opts = route.options;
+
+          return (
+            <Pressable
+              key={route.fullPath}
+              onPress={() => navigate({ path: route.fullPath })}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 6,
+                paddingHorizontal: 16,
+                borderBottomWidth: 2,
+                borderBottomColor: isActive ? '#007AFF' : 'transparent',
+              }}
+            >
+              {/* Render tabBarIcon if defined */}
+              {opts?.tabBarIcon && (
+                <View style={{ position: 'relative' }}>
+                  {opts.tabBarIcon({
+                    focused: isActive,
+                    color: isActive ? '#007AFF' : '#8E8E93',
+                    size: 20,
+                  })}
+                  {/* Badge */}
+                  {opts.tabBarBadge != null && (
+                    <Badge
+                      size="sm"
+                      intent="danger"
+                      style={{ position: 'absolute', top: -4, right: -8 }}
+                    >
+                      {opts.tabBarBadge}
+                    </Badge>
+                  )}
+                </View>
+              )}
+
+              {/* Label */}
+              {opts?.tabBarLabel && (
+                <Text
+                  typography="body2"
+                  weight={isActive ? 'semibold' : 'regular'}
+                  style={{ color: isActive ? '#007AFF' : '#8E8E93' }}
+                >
+                  {opts.tabBarLabel}
+                </Text>
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
+
+      {/* Page content — rendered via Outlet, NOT children */}
+      <View style={{ flex: 1 }}>
+        <Outlet />
+      </View>
+    </View>
+  );
+}
+
+// ============================================================
+// File 2: layouts/TabLayout.native.tsx  (no-op mock for native)
+// ============================================================
+export function TabLayout() {
+  return null;
+}
+
+// ============================================================
+// File 3: layouts/index.web.ts
+// ============================================================
+export { TabLayout } from './TabLayout.web';
+
+// ============================================================
+// File 4: layouts/index.native.ts
+// ============================================================
+export { TabLayout } from './TabLayout.native';
+
+// ============================================================
+// File 5: AppRouter.ts  (wiring)
+// ============================================================
+import { TabLayout } from './layouts';
+import type { NavigatorParam } from '@idealyst/navigation';
+import { Icon } from '@idealyst/components';
+// import your screen components here
+
+const appRouter: NavigatorParam = {
+  path: '/',
+  type: 'navigator',
+  layout: 'tab',
+  layoutComponent: TabLayout,  // web only — native uses its own tab bar
+  routes: [
+    {
+      path: '',
+      type: 'screen',
+      component: HomeScreen,
+      options: {
+        tabBarLabel: 'Home',
+        tabBarIcon: ({ focused, color }) => (
+          <Icon name={focused ? 'home' : 'home-outline'} size="sm" color={color} />
+        ),
+      },
+    },
+    {
+      path: 'search',
+      type: 'screen',
+      component: SearchScreen,
+      options: {
+        tabBarLabel: 'Search',
+        tabBarIcon: ({ color }) => <Icon name="magnify" size="sm" color={color} />,
+      },
+    },
+    {
+      path: 'notifications',
+      type: 'screen',
+      component: NotificationsScreen,
+      options: {
+        tabBarLabel: 'Alerts',
+        tabBarIcon: ({ focused, color }) => (
+          <Icon name={focused ? 'bell' : 'bell-outline'} size="sm" color={color} />
+        ),
+        tabBarBadge: 5,
+      },
+    },
+    {
+      path: 'profile',
+      type: 'screen',
+      component: ProfileScreen,
+      options: {
+        tabBarLabel: 'Profile',
+        tabBarIcon: ({ focused, color }) => (
+          <Icon name={focused ? 'account' : 'account-outline'} size="sm" color={color} />
+        ),
+      },
+    },
+  ],
+};`,
+    explanation: `Web tab layout with complete platform file structure:
+
+1. **TabLayout.web.tsx** — Receives TabLayoutProps (routes, currentPath). Renders a top tab bar by mapping over routes and reading tabBarIcon, tabBarLabel, and tabBarBadge from each route's options. Content renders via \`<Outlet />\`.
+2. **TabLayout.native.tsx** — No-op mock. Native uses its own bottom tab bar.
+3. **index.web.ts / index.native.ts** — Platform-specific re-exports.
+4. **AppRouter.ts** — Sets \`layoutComponent: TabLayout\` on a tab navigator.
+
+Key points:
+- tabBarIcon receives { focused, color, size } — use these to render the right icon variant
+- tabBarBadge renders a small count indicator (use Badge component)
+- Import Outlet from @idealyst/navigation, NOT react-router-dom`,
+    tips: [
+      "TabLayoutProps has NO children prop — use <Outlet /> for content",
+      "Use route.options?.tabBarIcon?.({ focused, color, size }) to render icons",
+      "tabBarBadge can be string or number — check with != null",
+      "Use route.fullPath for navigation and active state, not route.path",
+    ],
+    relatedRecipes: [
+      "web-sidebar-layout",
+      "web-collapsible-sidebar",
+      "tab-navigation",
+    ],
+  },
+
+  "web-collapsible-sidebar": {
+    name: "Web Collapsible Sidebar Layout",
+    description:
+      "Collapsible sidebar (260px expanded / 64px collapsed) with toggle button, header bar, avatar, and 5+ menu items. Advanced web layout with full platform file structure.",
+    category: "navigation",
+    difficulty: "advanced",
+    packages: ["@idealyst/components", "@idealyst/navigation"],
+    code: `// ============================================================
+// File 1: layouts/DashboardLayout.web.tsx  (real layout)
+// ============================================================
+import React, { useState } from 'react';
+import { Outlet, useNavigator } from '@idealyst/navigation';
+import type { StackLayoutProps } from '@idealyst/navigation';
+import { View, Text, Pressable, Icon, Avatar, Divider } from '@idealyst/components';
+import type { IconName } from '@idealyst/components';
+
+const EXPANDED_WIDTH = 260;
+const COLLAPSED_WIDTH = 64;
+
+export function DashboardLayout({ routes, currentPath, options }: StackLayoutProps) {
+  const { navigate } = useNavigator();
+  const [collapsed, setCollapsed] = useState(false);
+  const sidebarWidth = collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH;
+
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Header bar */}
+      <View style={{
+        height: 56,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#e0e0e0',
+        backgroundColor: '#fff',
+        gap: 12,
+      }}>
+        {/* Hamburger toggle */}
+        <Pressable onPress={() => setCollapsed(!collapsed)}>
+          <Icon name="menu" size="sm" />
+        </Pressable>
+
+        <Text typography="h6" weight="bold" style={{ flex: 1 }}>
+          {options?.headerTitle || 'Dashboard'}
+        </Text>
+
+        {/* Right side — avatar */}
+        <Avatar src="https://i.pravatar.cc/40" size="sm" />
+      </View>
+
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        {/* Collapsible sidebar */}
+        <View style={{
+          width: sidebarWidth,
+          borderRightWidth: 1,
+          borderRightColor: '#e0e0e0',
+          backgroundColor: '#fafafa',
+          transition: 'width 0.2s ease',
+          overflow: 'hidden',
+        }}>
+          <View style={{ padding: 8, gap: 2 }}>
+            {routes.map((route) => {
+              const isActive = currentPath === route.fullPath
+                || currentPath.startsWith(route.fullPath + '/');
+              const iconName = (route.options?.icon as IconName) || 'circle-outline';
+
+              return (
+                <Pressable
+                  key={route.fullPath}
+                  onPress={() => navigate({ path: route.fullPath })}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 12,
+                    paddingVertical: 10,
+                    paddingHorizontal: collapsed ? 20 : 12,
+                    borderRadius: 8,
+                    backgroundColor: isActive ? 'rgba(0,122,255,0.08)' : 'transparent',
+                  }}
+                >
+                  <Icon
+                    name={iconName}
+                    size="sm"
+                    color={isActive ? '#007AFF' : '#666'}
+                  />
+                  {!collapsed && (
+                    <Text
+                      typography="body2"
+                      weight={isActive ? 'semibold' : 'regular'}
+                      style={{ color: isActive ? '#007AFF' : '#333' }}
+                    >
+                      {route.options?.title || route.path}
+                    </Text>
+                  )}
+                </Pressable>
+              );
+            })}
+          </View>
+
+          {/* Collapse toggle at bottom */}
+          <View style={{ marginTop: 'auto', padding: 8 }}>
+            <Divider style={{ marginBottom: 8 }} />
+            <Pressable
+              onPress={() => setCollapsed(!collapsed)}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 12,
+                paddingVertical: 10,
+                paddingHorizontal: collapsed ? 20 : 12,
+                borderRadius: 8,
+              }}
+            >
+              <Icon name={collapsed ? 'chevron-right' : 'chevron-left'} size="sm" color="#666" />
+              {!collapsed && (
+                <Text typography="body2" style={{ color: '#666' }}>Collapse</Text>
+              )}
+            </Pressable>
+          </View>
+        </View>
+
+        {/* Page content — rendered via Outlet, NOT children */}
+        <View style={{ flex: 1 }}>
+          <Outlet />
+        </View>
+      </View>
+    </View>
+  );
+}
+
+// ============================================================
+// File 2: layouts/DashboardLayout.native.tsx  (no-op mock)
+// ============================================================
+export function DashboardLayout() {
+  return null;
+}
+
+// ============================================================
+// File 3: layouts/index.web.ts
+// ============================================================
+export { DashboardLayout } from './DashboardLayout.web';
+
+// ============================================================
+// File 4: layouts/index.native.ts
+// ============================================================
+export { DashboardLayout } from './DashboardLayout.native';
+
+// ============================================================
+// File 5: AppRouter.ts  (wiring)
+// ============================================================
+import { DashboardLayout } from './layouts';
+import type { NavigatorParam } from '@idealyst/navigation';
+// import your screen components here
+
+const appRouter: NavigatorParam = {
+  path: '/',
+  type: 'navigator',
+  layout: 'stack',
+  layoutComponent: DashboardLayout,
+  options: { headerTitle: 'Admin Panel' },
+  routes: [
+    { path: '',          type: 'screen', component: DashboardScreen, options: { title: 'Dashboard', icon: 'view-dashboard' } },
+    { path: 'users',     type: 'screen', component: UsersScreen,     options: { title: 'Users',     icon: 'account-group'  } },
+    { path: 'analytics', type: 'screen', component: AnalyticsScreen, options: { title: 'Analytics', icon: 'chart-line'     } },
+    { path: 'messages',  type: 'screen', component: MessagesScreen,  options: { title: 'Messages',  icon: 'email-outline'  } },
+    { path: 'settings',  type: 'screen', component: SettingsScreen,  options: { title: 'Settings',  icon: 'cog'            } },
+  ],
+};`,
+    explanation: `Collapsible sidebar layout with full platform structure:
+
+1. **DashboardLayout.web.tsx** — Header bar with hamburger toggle + avatar. Sidebar toggles between 260px and 64px. When collapsed, only icons show. Active route is highlighted. Content renders via \`<Outlet />\`.
+2. **DashboardLayout.native.tsx** — No-op mock for native.
+3. **index.web.ts / index.native.ts** — Platform re-exports.
+4. **AppRouter.ts** — Wires layoutComponent with 5 routes, each with title and icon.
+
+Key patterns:
+- \`useState\` for collapse state — toggle via hamburger or bottom chevron
+- \`transition: 'width 0.2s ease'\` for smooth animation
+- \`overflow: 'hidden'\` to clip text when collapsed
+- Active highlighting using \`currentPath.startsWith(route.fullPath + '/')\``,
+    tips: [
+      "Import Outlet from @idealyst/navigation, NEVER from react-router-dom",
+      "StackLayoutProps has NO children — use <Outlet /> for page content",
+      "Use CSS transition on width for smooth collapse animation",
+      "Always create .native.tsx no-op mocks — native ignores layoutComponent",
+      "Cast route.options.icon to IconName for type safety",
+    ],
+    relatedRecipes: [
+      "web-sidebar-layout",
+      "web-tab-layout",
+      "drawer-navigation",
+    ],
+  },
 };

@@ -35,9 +35,15 @@ import { scenarios, getScenariosByType } from "./scenarios/index.js";
 import { scaffoldWorkspace } from "./workspace.js";
 import { scaffoldProjectWorkspace } from "./project-workspace.js";
 import { runTypecheck } from "./typecheck.js";
-import { runSupervisorEvaluation } from "./supervisor.js";
+import { runSupervisorEvaluation, runPlaywrightSupervisorEvaluation } from "./supervisor.js";
 import { tryOpenDatabase } from "./db.js";
 import { ScenarioLogger } from "./logger.js";
+import {
+  scaffoldGoldenProject,
+  copyGoldenWorkspace,
+  type GoldenProjectInfo,
+} from "./golden-project.js";
+import { startServers } from "./serve.js";
 import {
   computeToolStats,
   computeAggregateScores,
@@ -108,6 +114,36 @@ async function resolveCliVersion(): Promise<void> {
 
 // Fire on startup (non-blocking)
 resolveCliVersion();
+
+// ============================================================================
+// Golden Project (lazily initialized on first run that needs it)
+// ============================================================================
+
+let goldenProject: GoldenProjectInfo | null = null;
+let goldenProjectPromise: Promise<GoldenProjectInfo> | null = null;
+
+/**
+ * Get or initialize the golden project.
+ * Lazy: only scaffolds on first call, then cached.
+ */
+async function getGoldenProject(): Promise<GoldenProjectInfo> {
+  if (goldenProject) return goldenProject;
+
+  if (!goldenProjectPromise) {
+    goldenProjectPromise = scaffoldGoldenProject()
+      .then((info) => {
+        goldenProject = info;
+        console.log(`[server] Golden project ready at ${info.path}`);
+        return info;
+      })
+      .catch((err) => {
+        goldenProjectPromise = null; // Allow retry on next call
+        throw err;
+      });
+  }
+
+  return goldenProjectPromise;
+}
 
 // ============================================================================
 // Run State
@@ -296,6 +332,9 @@ async function runSingleScenario(
 
   let workspace: { path: string; srcDir?: string; cleanup: () => void } | null =
     null;
+  /** For Playwright scenarios, the full project root (may differ from workspace.path) */
+  let projectRoot: string | null = null;
+  let serverCleanup: (() => void) | null = null;
 
   const logger = state.options.verbose
     ? new ScenarioLogger(outputDir, evalRunId, scenario.id)
@@ -306,11 +345,32 @@ async function runSingleScenario(
 
     // Scaffold workspace
     if (scenario.type === "project") {
-      const projectWorkspace = scaffoldProjectWorkspace(scenario, runId);
-      workspace = {
-        path: projectWorkspace.projectRoot,
-        cleanup: projectWorkspace.cleanup,
-      };
+      // For project scenarios with Playwright verification, try using a golden copy
+      if (scenario.playwrightVerification) {
+        try {
+          const golden = await getGoldenProject();
+          logger?.log(`Using golden project copy from ${golden.path}`);
+          const copy = copyGoldenWorkspace(golden.path, runId);
+          projectRoot = copy.path;
+          // Agent writes to packages/shared/ so files appear in the app
+          const sharedDir = path.join(copy.path, "packages/shared");
+          workspace = { path: sharedDir, cleanup: copy.cleanup };
+        } catch (goldenErr) {
+          const msg = goldenErr instanceof Error ? goldenErr.message : String(goldenErr);
+          logger?.warn(`Golden project unavailable (${msg.slice(0, 100)}), falling back to scaffoldProjectWorkspace`);
+          const projectWorkspace = scaffoldProjectWorkspace(scenario, runId);
+          workspace = {
+            path: projectWorkspace.projectRoot,
+            cleanup: projectWorkspace.cleanup,
+          };
+        }
+      } else {
+        const projectWorkspace = scaffoldProjectWorkspace(scenario, runId);
+        workspace = {
+          path: projectWorkspace.projectRoot,
+          cleanup: projectWorkspace.cleanup,
+        };
+      }
     } else {
       workspace = scaffoldWorkspace(runId);
     }
@@ -340,15 +400,66 @@ async function runSingleScenario(
     // Supervisor evaluation
     let supervisorEval = null;
     if (!state.options.skipSupervisor) {
-      try {
-        supervisorEval = await runSupervisorEvaluation(log, scenario, {
-          model: state.options.model,
-          verbose: state.options.verbose,
-          logger,
-        });
-      } catch (error) {
-        const msg = error instanceof Error ? error.message : String(error);
-        logger?.warn(`Supervisor failed: ${msg.slice(0, 200)}`);
+      // Playwright-enhanced supervisor for scenarios with playwrightVerification
+      if (scenario.playwrightVerification && scenario.type === "project") {
+        try {
+          const serveDir = projectRoot || workspace.path;
+          logger?.log(`Starting dev servers for Playwright verification at ${serveDir}...`);
+          const serverHandles = await startServers(serveDir, {
+            verbose: state.options.verbose,
+            log: (msg) => logger?.log(msg),
+          });
+          serverCleanup = serverHandles.cleanup;
+          logger?.log(`Servers ready: web=${serverHandles.webUrl}, api=${serverHandles.apiUrl}`);
+
+          supervisorEval = await runPlaywrightSupervisorEvaluation(
+            log,
+            scenario,
+            {
+              model: state.options.model,
+              verbose: state.options.verbose,
+              logger,
+              webUrl: serverHandles.webUrl,
+              apiUrl: serverHandles.apiUrl,
+              playwrightInstructions: scenario.playwrightInstructions,
+            }
+          );
+        } catch (error) {
+          const msg = error instanceof Error ? error.message : String(error);
+          logger?.warn(`Playwright supervisor failed: ${msg.slice(0, 200)}`);
+          logger?.warn(`Falling back to static supervisor...`);
+
+          // Fall back to static-only supervisor
+          try {
+            supervisorEval = await runSupervisorEvaluation(log, scenario, {
+              model: state.options.model,
+              verbose: state.options.verbose,
+              logger,
+            });
+          } catch (fallbackErr) {
+            const fbMsg = fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr);
+            logger?.warn(`Static supervisor also failed: ${fbMsg.slice(0, 200)}`);
+          }
+        } finally {
+          // Always kill servers
+          if (serverCleanup) {
+            logger?.log(`Stopping dev servers...`);
+            serverCleanup();
+            serverCleanup = null;
+          }
+        }
+      } else {
+        // Standard static-only supervisor
+        try {
+          supervisorEval = await runSupervisorEvaluation(log, scenario, {
+            model: state.options.model,
+            verbose: state.options.verbose,
+            logger,
+          });
+        } catch (error) {
+          const msg = error instanceof Error ? error.message : String(error);
+          logger?.warn(`Supervisor failed: ${msg.slice(0, 200)}`);
+        }
       }
     }
 

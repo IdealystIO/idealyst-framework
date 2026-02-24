@@ -46,6 +46,11 @@ interface BaseScenarioFields {
   difficulty: "basic" | "intermediate" | "advanced";
   /** Tags for filtering */
   tags: string[];
+
+  /** Enable Playwright-based runtime verification by supervisor */
+  playwrightVerification?: boolean;
+  /** Instructions for the supervisor's Playwright verification phase */
+  playwrightInstructions?: string;
 }
 
 export interface ComponentScenario extends BaseScenarioFields {
@@ -228,6 +233,21 @@ export interface FrameworkIssue {
   suggestedFix: string;
 }
 
+export interface RuntimeVerification {
+  /** Whether the app loaded without crashing */
+  appLoads: boolean;
+  /** Console errors found during runtime */
+  consoleErrors: string[];
+  /** Whether navigation between routes works */
+  navigationWorks: boolean | null;
+  /** UI elements found during snapshot/screenshot */
+  uiElementsFound: string[];
+  /** Path to a screenshot taken by the supervisor */
+  screenshotPath: string | null;
+  /** Free-form notes from the supervisor */
+  notes: string;
+}
+
 export interface SupervisorEvaluation {
   scenarioId: string;
   /** ISO timestamp */
@@ -244,6 +264,8 @@ export interface SupervisorEvaluation {
   frameworkIssues: FrameworkIssue[];
   /** Raw supervisor response for debugging */
   rawResponse: string;
+  /** Runtime verification results (only if Playwright was used) */
+  runtimeVerification?: RuntimeVerification;
 }
 
 // ============================================================================

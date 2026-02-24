@@ -18,6 +18,7 @@ import type {
   SupervisorEvaluation,
   SupervisorCriterionResult,
   FrameworkIssue,
+  RuntimeVerification,
 } from "./types.js";
 import { DEFAULT_CRITERIA, type SupervisorCriterion } from "./criteria.js";
 import type { ScenarioLogger } from "./logger.js";
@@ -27,6 +28,17 @@ export interface SupervisorOptions {
   verbose?: boolean;
   /** Per-scenario file logger (replaces console.log for parallel execution) */
   logger?: ScenarioLogger;
+}
+
+export interface PlaywrightSupervisorOptions extends SupervisorOptions {
+  /** URL of the running web dev server */
+  webUrl: string;
+  /** URL of the running API server */
+  apiUrl: string;
+  /** Additional Playwright verification instructions from the scenario */
+  playwrightInstructions?: string;
+  /** Path to save screenshots */
+  screenshotDir?: string;
 }
 
 // ============================================================================
@@ -545,4 +557,407 @@ export async function runSupervisorEvaluation(
     frameworkIssues: [],
     rawResponse: lastError?.message || "",
   };
+}
+
+// ============================================================================
+// Playwright-Enhanced Supervisor
+// ============================================================================
+
+/** Playwright MCP tools the supervisor is allowed to use */
+const PLAYWRIGHT_TOOLS = [
+  "mcp__playwright__browser_navigate",
+  "mcp__playwright__browser_snapshot",
+  "mcp__playwright__browser_take_screenshot",
+  "mcp__playwright__browser_click",
+  "mcp__playwright__browser_console_messages",
+  "mcp__playwright__browser_wait_for",
+  "mcp__playwright__browser_close",
+  "mcp__playwright__browser_network_requests",
+  "mcp__playwright__browser_evaluate",
+];
+
+/**
+ * Build the Playwright-enhanced supervisor prompt.
+ *
+ * This extends the standard static evaluation prompt with a runtime
+ * verification section that instructs the supervisor to use Playwright
+ * MCP tools to actually navigate and test the running app.
+ */
+function buildPlaywrightSupervisorPrompt(
+  log: EvalConversationLog,
+  scenario: EvalScenario,
+  writtenFileContents: Record<string, string>,
+  criteria: SupervisorCriterion[],
+  playwrightOptions: PlaywrightSupervisorOptions
+): string {
+  const condensedLog = condenseConversationLog(log);
+
+  // File contents section
+  const fileLines: string[] = [];
+  for (const [filename, content] of Object.entries(writtenFileContents)) {
+    fileLines.push(`### ${filename}`);
+    fileLines.push("```tsx");
+    fileLines.push(content);
+    fileLines.push("```");
+    fileLines.push("");
+  }
+  const filesSection =
+    fileLines.length > 0
+      ? fileLines.join("\n")
+      : "No files were written by the agent.";
+
+  // TypeScript results
+  let tscSection: string;
+  if (!log.typecheckResult) {
+    tscSection = "TypeScript compilation was not run (no files written).";
+  } else if (log.typecheckResult.success) {
+    tscSection = "TypeScript compilation PASSED with 0 errors.";
+  } else {
+    const errors = log.typecheckResult.errors
+      .slice(0, 10)
+      .map((e) => `  ${e.file}:${e.line} — ${e.code}: ${e.message}`)
+      .join("\n");
+    const more =
+      log.typecheckResult.errors.length > 10
+        ? `\n  ... and ${log.typecheckResult.errors.length - 10} more`
+        : "";
+    tscSection = `TypeScript compilation FAILED with ${log.typecheckResult.errorCount} error(s):\n${errors}${more}`;
+  }
+
+  const criteriaIds = criteria.map((c) => `"${c.id}"`).join(", ");
+
+  const customPlaywrightInstructions = playwrightOptions.playwrightInstructions
+    ? `\n\nScenario-specific verification instructions:\n${playwrightOptions.playwrightInstructions}`
+    : "";
+
+  return `# Idealyst Framework Evaluation — Supervisor Review (with Runtime Verification)
+
+You are evaluating how well a coding agent used the Idealyst cross-platform framework to complete a task. The agent had access to MCP documentation tools but NO pre-loaded framework knowledge. It had to discover everything through the MCP server.
+
+You have TWO phases of evaluation:
+1. **Static Analysis** — Review the code, conversation, and TypeScript results (below)
+2. **Runtime Verification** — Use Playwright tools to navigate the running app and verify it works
+
+## Task Given to Agent
+
+${scenario.taskPrompt}
+
+## Agent Conversation Log
+
+${condensedLog}
+
+## Files Written by Agent
+
+${filesSection}
+
+## TypeScript Compilation Result
+
+${tscSection}
+
+## Runtime Verification
+
+The agent's code has been deployed to a running web application. Use the Playwright tools to verify it works at runtime.
+
+**Web App URL:** ${playwrightOptions.webUrl}
+**API Server URL:** ${playwrightOptions.apiUrl}
+
+### Verification Steps (keep brief — max 5 Playwright tool calls)
+
+Use the Playwright MCP tools to quickly verify the app:
+
+1. **Navigate** to ${playwrightOptions.webUrl} using browser_navigate
+2. **Take a snapshot** using browser_snapshot to see the rendered UI structure
+3. **Check console** for errors using browser_console_messages (level: "error")
+4. **Click one navigation item** (if navigation exists) to verify routing works
+5. **Take another snapshot** to see the new page
+
+Keep it simple — you have limited turns. Do Playwright checks FIRST, then output the JSON evaluation.${customPlaywrightInstructions}
+
+### Important Notes
+- If the app fails to load or shows a blank page, note this as a critical failure
+- Focus on verifying the core UI renders, not exhaustive testing
+- After Playwright checks, immediately output the JSON evaluation
+
+## Evaluation Criteria
+
+Evaluate the agent across these ${criteria.length} criteria. For each, provide:
+- **score** (0-100)
+- **severity**: "pass" | "minor_fail" | "medium_fail" | "huge_fail"
+- **reasoning** (2-3 sentences explaining your assessment)
+- **evidence** (array of specific quotes, line references, or tool call references)
+
+For the "runtime_correctness" criterion, use your Playwright findings as primary evidence.
+
+${buildCriteriaPrompt(criteria)}
+
+## Framework Issues
+
+Also identify any gaps or problems in:
+- **The MCP server tools** (missing info, confusing responses, incomplete documentation)
+- **The CLI** (missing commands, unclear flags, scaffolding issues)
+- **The framework itself** (missing components, poor APIs, broken types)
+- **The documentation** (incomplete, misleading, outdated examples)
+
+For each issue provide: issueId (short slug), source, severity, description, suggestedFix.
+Only include real issues you observed — don't fabricate problems.
+
+## Response Format
+
+After completing your Playwright verification, respond with ONLY valid JSON matching this exact schema:
+
+{
+  "criteria": [
+    {
+      "criterionId": "${criteria[0]?.id || "example"}",
+      "label": "${criteria[0]?.label || "Example"}",
+      "score": 85,
+      "severity": "pass",
+      "reasoning": "Explanation of assessment...",
+      "evidence": ["Turn 5: imported from @idealyst/components correctly", "..."]
+    }
+    // ... one entry per criterion: ${criteriaIds}
+  ],
+  "qualitativeScore": 78,
+  "summary": "Overall 2-3 sentence assessment of the agent's performance...",
+  "frameworkIssues": [
+    {
+      "issueId": "short-slug-here",
+      "source": "mcp_server",
+      "severity": "major",
+      "description": "Description of the issue...",
+      "suggestedFix": "How to fix it..."
+    }
+  ],
+  "runtimeVerification": {
+    "appLoads": true,
+    "consoleErrors": [],
+    "navigationWorks": true,
+    "uiElementsFound": ["sidebar", "header", "menu items"],
+    "screenshotPath": null,
+    "notes": "App renders correctly with sidebar and 4 menu items visible"
+  }
+}
+
+IMPORTANT: Your response must be ONLY the JSON object, no markdown fences, no explanation text. Do all Playwright verification FIRST, then output the JSON.`;
+}
+
+/**
+ * Parse the Playwright supervisor response, including runtimeVerification.
+ */
+function parsePlaywrightSupervisorResponse(
+  raw: string,
+  scenarioId: string,
+  criteria: SupervisorCriterion[]
+): {
+  criteria: SupervisorCriterionResult[];
+  qualitativeScore: number;
+  summary: string;
+  frameworkIssues: FrameworkIssue[];
+  runtimeVerification: RuntimeVerification;
+} {
+  // Reuse the base parser
+  const base = parseSupervisorResponse(raw, scenarioId, criteria);
+
+  // Extract runtimeVerification from the raw JSON
+  let runtimeVerification: RuntimeVerification = {
+    appLoads: false,
+    consoleErrors: ["Playwright verification response not parsed"],
+    navigationWorks: null,
+    uiElementsFound: [],
+    screenshotPath: null,
+    notes: "Failed to parse runtime verification from supervisor response",
+  };
+
+  try {
+    let cleaned = raw.trim();
+    const fenceMatch = cleaned.match(/```(?:json)?\s*\n([\s\S]*?)\n```/);
+    if (fenceMatch) {
+      cleaned = fenceMatch[1].trim();
+    } else {
+      const firstBrace = cleaned.indexOf("{");
+      const lastBrace = cleaned.lastIndexOf("}");
+      if (firstBrace !== -1 && lastBrace > firstBrace) {
+        cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+      }
+    }
+
+    const parsed = JSON.parse(cleaned);
+    if (parsed.runtimeVerification && typeof parsed.runtimeVerification === "object") {
+      const rv = parsed.runtimeVerification;
+      runtimeVerification = {
+        appLoads: rv.appLoads === true,
+        consoleErrors: Array.isArray(rv.consoleErrors) ? rv.consoleErrors.map(String) : [],
+        navigationWorks: rv.navigationWorks === true ? true : rv.navigationWorks === false ? false : null,
+        uiElementsFound: Array.isArray(rv.uiElementsFound) ? rv.uiElementsFound.map(String) : [],
+        screenshotPath: typeof rv.screenshotPath === "string" ? rv.screenshotPath : null,
+        notes: String(rv.notes || ""),
+      };
+    }
+  } catch {
+    // Keep defaults
+  }
+
+  return {
+    ...base,
+    runtimeVerification,
+  };
+}
+
+/**
+ * Run the Playwright-enhanced supervisor evaluation.
+ *
+ * Spawns a `claude` CLI instance WITH Playwright MCP tools enabled.
+ * The supervisor performs static analysis AND navigates the running app
+ * to verify runtime correctness.
+ *
+ * Falls back to static-only evaluation if Playwright fails.
+ */
+export async function runPlaywrightSupervisorEvaluation(
+  log: EvalConversationLog,
+  scenario: EvalScenario,
+  options: PlaywrightSupervisorOptions,
+  criteria: SupervisorCriterion[] = DEFAULT_CRITERIA
+): Promise<SupervisorEvaluation> {
+  const startTime = Date.now();
+  const logger = options.logger;
+
+  logger?.log(`[Playwright Supervisor] Starting with web=${options.webUrl}, api=${options.apiUrl}`);
+
+  // Read written files
+  const writtenFileContents = readWrittenFiles(log);
+
+  // Build the Playwright-enhanced prompt
+  const prompt = buildPlaywrightSupervisorPrompt(
+    log,
+    scenario,
+    writtenFileContents,
+    criteria,
+    options
+  );
+
+  logger?.log(`[Playwright Supervisor] Prompt length: ${prompt.length} chars`);
+
+  // Write Playwright MCP config to temp file
+  const playwrightMcpConfig = path.join(
+    os.tmpdir(),
+    `eval-playwright-mcp-${Date.now()}.json`
+  );
+  fs.writeFileSync(
+    playwrightMcpConfig,
+    JSON.stringify({
+      mcpServers: {
+        playwright: {
+          command: "npx",
+          args: ["-y", "@playwright/mcp", "--headless", "--browser", "chromium"],
+        },
+      },
+    })
+  );
+
+  try {
+    // Spawn claude with Playwright tools enabled
+    const raw = await new Promise<string>((resolve, reject) => {
+      const child = spawn(
+        "claude",
+        [
+          "-p", "-",
+          "--model", options.model,
+          "--output-format", "text",
+          "--max-turns", "30",
+          "--no-session-persistence",
+          "--mcp-config", playwrightMcpConfig,
+          "--strict-mcp-config",
+          "--allowedTools", PLAYWRIGHT_TOOLS.join(","),
+          "--dangerously-skip-permissions",
+        ],
+        {
+          cwd: process.cwd(),
+          env: { ...process.env, CLAUDECODE: undefined },
+          stdio: ["pipe", "pipe", "pipe"],
+        }
+      );
+
+      const chunks: Buffer[] = [];
+      const errChunks: Buffer[] = [];
+      let killed = false;
+
+      child.stdout.on("data", (chunk: Buffer) => chunks.push(chunk));
+      child.stderr.on("data", (chunk: Buffer) => errChunks.push(chunk));
+
+      // 8 minute timeout for Playwright (navigation takes time)
+      const timer = setTimeout(() => {
+        killed = true;
+        child.kill("SIGTERM");
+        reject(new Error("Playwright supervisor timed out after 8 minutes"));
+      }, 480_000);
+
+      child.on("error", (err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+
+      child.on("close", (code) => {
+        clearTimeout(timer);
+        if (killed) return;
+        const stdout = Buffer.concat(chunks).toString("utf-8");
+        const stderr = Buffer.concat(errChunks).toString("utf-8");
+        if (code !== 0) {
+          const err = new Error(
+            `Playwright supervisor failed with exit code ${code}`
+          );
+          (err as any).stdout = stdout;
+          (err as any).stderr = stderr;
+          reject(err);
+        } else {
+          resolve(stdout);
+        }
+      });
+
+      child.stdin.write(prompt);
+      child.stdin.end();
+    });
+
+    logger?.log(
+      `[Playwright Supervisor] Raw response (first 300 chars): ${raw.slice(0, 300)}`
+    );
+
+    const parsed = parsePlaywrightSupervisorResponse(raw, scenario.id, criteria);
+
+    const evaluation: SupervisorEvaluation = {
+      scenarioId: scenario.id,
+      evaluatedAt: new Date().toISOString(),
+      durationMs: Date.now() - startTime,
+      criteria: parsed.criteria,
+      qualitativeScore: parsed.qualitativeScore,
+      summary: parsed.summary,
+      frameworkIssues: parsed.frameworkIssues,
+      rawResponse: raw,
+      runtimeVerification: parsed.runtimeVerification,
+    };
+
+    logger?.log(
+      `[Playwright Supervisor] Score: ${evaluation.qualitativeScore}/100 ` +
+      `(${(evaluation.durationMs / 1000).toFixed(1)}s)`
+    );
+    logger?.log(
+      `[Playwright Supervisor] Runtime: appLoads=${parsed.runtimeVerification.appLoads}, ` +
+      `consoleErrors=${parsed.runtimeVerification.consoleErrors.length}, ` +
+      `navWorks=${parsed.runtimeVerification.navigationWorks}`
+    );
+
+    // Clean up temp MCP config
+    try { fs.unlinkSync(playwrightMcpConfig); } catch { /* ignore */ }
+
+    return evaluation;
+  } catch (error) {
+    // Clean up temp MCP config
+    try { fs.unlinkSync(playwrightMcpConfig); } catch { /* ignore */ }
+
+    const msg = error instanceof Error ? error.message : String(error);
+    logger?.warn(`[Playwright Supervisor] Failed: ${msg.slice(0, 300)}`);
+    logger?.warn(`[Playwright Supervisor] Falling back to static-only evaluation`);
+
+    // Fall back to static-only evaluation
+    return runSupervisorEvaluation(log, scenario, options, criteria);
+  }
 }

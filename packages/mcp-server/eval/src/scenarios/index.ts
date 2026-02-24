@@ -29,6 +29,10 @@ import { chartsDashboardScenario } from "./charts-dashboard.js";
 import { markdownContentScenario } from "./markdown-content.js";
 import { fullAppNoContextScenario } from "./full-app-no-context.js";
 import { guideToolDiscoveryScenario } from "./guide-tool-discovery.js";
+import { webLayoutSidebarScenario } from "./web-layout-sidebar.js";
+import { webLayoutTabsScenario } from "./web-layout-tabs.js";
+import { webLayoutResponsiveScenario } from "./web-layout-responsive.js";
+import { playwrightSidebarScenario } from "./playwright-sidebar.js";
 
 export const scenarios: Record<string, EvalScenario> = {
   // Component scenarios (symlinked workspace)
@@ -54,9 +58,17 @@ export const scenarios: Record<string, EvalScenario> = {
   "full-app-no-context": fullAppNoContextScenario,
   "guide-tool-discovery": guideToolDiscoveryScenario,
 
+  // Web layout scenarios
+  "web-layout-sidebar": webLayoutSidebarScenario,
+  "web-layout-tabs": webLayoutTabsScenario,
+  "web-layout-responsive": webLayoutResponsiveScenario,
+
   // Project scenarios (idealyst-cli scaffolded)
   "project-scaffold": projectScaffoldScenario,
   "api-backend": apiBackendScenario,
+
+  // Playwright-verified scenarios (golden project + runtime verification)
+  "playwright-sidebar": playwrightSidebarScenario,
 };
 
 export const scenarioList: EvalScenario[] = Object.values(scenarios);

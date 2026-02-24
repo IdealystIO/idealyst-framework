@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/components",
-  "version": "1.2.114",
+  "version": "1.2.115",
   "description": "Shared component library for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/components#readme",
   "readme": "README.md",
@@ -56,7 +56,7 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/theme": "^1.2.114",
+    "@idealyst/theme": "^1.2.115",
     "@mdi/js": ">=7.0.0",
     "@mdi/react": ">=1.0.0",
     "@react-native-vector-icons/common": ">=12.0.0",
@@ -107,8 +107,8 @@
   },
   "devDependencies": {
     "@idealyst/blur": "^1.2.40",
-    "@idealyst/theme": "^1.2.114",
-    "@idealyst/tooling": "^1.2.114",
+    "@idealyst/theme": "^1.2.115",
+    "@idealyst/tooling": "^1.2.115",
     "@mdi/react": "^1.6.1",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",

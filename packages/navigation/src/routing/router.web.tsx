@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Routes, Route, useLocation, useParams } from '../router'
 import { DefaultStackLayout } from '../layouts/DefaultStackLayout'
 import { DefaultTabLayout } from '../layouts/DefaultTabLayout'
-import { NavigatorParam, RouteParam, ScreenParam, NotFoundComponentProps, StackLayoutProps, TabLayoutProps, RouteWithFullPath } from './types'
+import { DefaultDrawerLayout } from '../layouts/DefaultDrawerLayout'
+import { NavigatorParam, RouteParam, ScreenParam, NotFoundComponentProps, StackLayoutProps, TabLayoutProps, DrawerSidebarProps, RouteWithFullPath } from './types'
+import { DrawerLayoutProps } from '../layouts/DefaultDrawerLayout'
 import { NavigateParams } from '../context/types'
 
 /**
@@ -90,19 +92,22 @@ const NotFoundWrapper = ({
 }
 
 /**
- * Wrapper component that provides currentPath to layout components
+ * Wrapper component that provides currentPath to layout components.
+ * For drawer layouts, also passes through the optional sidebarComponent.
  */
 const LayoutWrapper: React.FC<{
-    LayoutComponent: React.ComponentType<StackLayoutProps | TabLayoutProps>
+    LayoutComponent: React.ComponentType<StackLayoutProps | TabLayoutProps | DrawerLayoutProps>
     options?: any
     routes: RouteWithFullPath[]
-}> = ({ LayoutComponent, options, routes }) => {
+    sidebarComponent?: React.ComponentType<DrawerSidebarProps>
+}> = ({ LayoutComponent, options, routes, sidebarComponent }) => {
     const location = useLocation()
     return (
         <LayoutComponent
             options={options}
             routes={routes}
             currentPath={location.pathname}
+            {...(sidebarComponent ? { sidebarComponent } : {})}
         />
     )
 }
@@ -173,9 +178,11 @@ const buildRoute = (params: RouteParam, index: number, isNested = false, parentP
             />
         );
     } else if (params.type === 'navigator') {
-        // Get the layout component directly
+        // Get the layout component based on navigator layout type
         const LayoutComponent = params.layoutComponent ||
-            (params.layout === 'tab' ? DefaultTabLayout : DefaultStackLayout);
+            (params.layout === 'tab' ? DefaultTabLayout :
+             params.layout === 'drawer' ? DefaultDrawerLayout :
+             DefaultStackLayout);
 
         // Compute the full path for this navigator
         const navigatorFullPath = joinPaths(parentPath, params.path);
@@ -235,6 +242,9 @@ const buildRoute = (params: RouteParam, index: number, isNested = false, parentP
             );
         }
 
+        // Extract sidebarComponent for drawer navigators
+        const sidebarComponent = params.layout === 'drawer' ? params.sidebarComponent : undefined;
+
         // Build the main navigator route with layout
         // Use LayoutWrapper to provide reactive currentPath
         const navigatorRoute = (
@@ -246,6 +256,7 @@ const buildRoute = (params: RouteParam, index: number, isNested = false, parentP
                         LayoutComponent={LayoutComponent}
                         options={params.options}
                         routes={routesWithFullPaths}
+                        sidebarComponent={sidebarComponent}
                     />
                 }
             >

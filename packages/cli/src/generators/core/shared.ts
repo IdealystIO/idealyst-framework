@@ -775,7 +775,7 @@ function createHelloWorldComponent(): string {
  */
 
 import { View, Text, Button } from '@idealyst/components';
-import { useUnistyles } from 'react-native-unistyles';
+import { useTheme } from '@idealyst/theme';
 
 export interface HelloWorldProps {
   name?: string;
@@ -783,7 +783,7 @@ export interface HelloWorldProps {
 }
 
 export function HelloWorld({ name = 'World', onPress }: HelloWorldProps) {
-  const { theme } = useUnistyles();
+  const theme = useTheme();
 
   return (
     <View
@@ -899,10 +899,10 @@ function createAboutScreen(): string {
 
 import { View, Text, Button } from '@idealyst/components';
 import { useNavigator } from '@idealyst/navigation';
-import { useUnistyles } from 'react-native-unistyles';
+import { useTheme } from '@idealyst/theme';
 
 export default function About() {
-  const { theme } = useUnistyles();
+  const theme = useTheme();
   const { goBack } = useNavigator();
 
   return (

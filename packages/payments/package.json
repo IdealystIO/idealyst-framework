@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/payments",
-  "version": "1.2.114",
+  "version": "1.2.115",
   "description": "Cross-platform In-App Purchase wrapper for React Native (StoreKit 2, Google Play Billing)",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/payments#readme",
   "readme": "README.md",

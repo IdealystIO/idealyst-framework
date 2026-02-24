@@ -91,6 +91,12 @@ const searchSynonyms: Record<string, string[]> = {
   prisma: ['database', 'trpc'],
   crud: ['trpc', 'data', 'list'],
   todo: ['trpc', 'data'],
+  layout: ['sidebar', 'web-layout', 'navigation', 'outlet', 'dashboard'],
+  sidebar: ['layout', 'web-layout', 'navigation', 'drawer', 'collapsible'],
+  outlet: ['layout', 'web-layout', 'navigation', 'sidebar'],
+  dashboard: ['layout', 'sidebar', 'web-layout', 'admin'],
+  'web-layout': ['layout', 'sidebar', 'outlet', 'navigation'],
+  collapsible: ['sidebar', 'layout', 'web-layout', 'drawer'],
 };
 
 /**
