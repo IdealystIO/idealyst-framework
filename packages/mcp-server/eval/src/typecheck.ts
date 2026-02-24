@@ -65,6 +65,33 @@ export async function runTypecheck(workspacePath: string): Promise<TypecheckResu
   }
 }
 
+/**
+ * Subtract baseline (pre-existing) errors from a typecheck result.
+ *
+ * Uses fingerprints (file:line:code) to identify which errors existed
+ * before the agent ran. Only errors NOT present in the baseline are
+ * counted against the agent.
+ */
+export function subtractBaselineErrors(
+  result: TypecheckResult,
+  baselineFingerprints: Set<string>
+): TypecheckResult {
+  if (baselineFingerprints.size === 0) return result;
+  if (result.success) return result;
+
+  const agentErrors = result.errors.filter((e) => {
+    const fingerprint = `${e.file}:${e.line}:${e.code}`;
+    return !baselineFingerprints.has(fingerprint);
+  });
+
+  return {
+    success: agentErrors.length === 0,
+    errorCount: agentErrors.length,
+    errors: agentErrors,
+    rawOutput: result.rawOutput,
+  };
+}
+
 function findTsc(): string {
   const candidates = [
     path.join(REPO_ROOT, "node_modules", ".bin", "tsc"),

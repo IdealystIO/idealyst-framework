@@ -7,8 +7,7 @@ export const errorRecoveryScenario: ComponentScenario = {
   description:
     "Tests whether the agent handles not-found errors and recovers gracefully",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about the framework before writing any code.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 If a tool returns an error or says something doesn't exist, adapt your approach and find alternatives.
 Write your component code as real files using the Write tool to the workspace path provided.`,
   taskPrompt: `I need you to build a form using the Idealyst framework. Here are my requirements — but note that some of these might not exist exactly as described, so you'll need to look things up and adapt:

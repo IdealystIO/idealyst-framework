@@ -7,11 +7,9 @@ export const navigationScenario: ComponentScenario = {
   description:
     "Tests whether the agent can set up tab and stack navigation using the navigation package",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about the framework before writing any code.
-Always check component documentation and types before using them in your code.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your component code as real files using the Write tool to the workspace path provided.`,
-  taskPrompt: `Set up navigation for a React Native app using the Idealyst navigation package. The app should have:
+  taskPrompt: `Set up navigation for a cross-platform app. The app should have:
 
 1. **Bottom tab navigation** with three tabs: Home, Search, and Profile
 2. **Stack navigator inside the Home tab** with:
@@ -19,7 +17,7 @@ Write your component code as real files using the Write tool to the workspace pa
    - A DetailScreen (accessible from HomeScreen)
 3. Each tab should have an appropriate icon
 
-Use the MCP tools to look up navigation types, check for navigation recipes, find the right package documentation, and search for appropriate tab icons. Write the complete navigation configuration code.`,
+Write the complete navigation configuration code.`,
   expectedToolUsage: [
     "get_navigation_types",
     "get_package_docs",

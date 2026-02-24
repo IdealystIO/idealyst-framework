@@ -207,6 +207,7 @@ const parseParameterizedPath = (path: string, rootRoute: any): { routeName: stri
 const UnwrappedNavigatorProvider = ({ route, floatingComponent }: NavigatorProviderProps) => {
 
     const navigation = useNavigation();
+    const navState = navigation.getState?.();
 
     const navigate = (params: NavigateParams, _redirectCount = 0) => {
         // Validate params - catch common mistake of passing string directly
@@ -326,6 +327,7 @@ const UnwrappedNavigatorProvider = ({ route, floatingComponent }: NavigatorProvi
     return (
         <NavigatorContext.Provider value={{
             route,
+            currentPath: navState?.routes?.[navState.index]?.name ?? '/',
             navigate,
             replace,
             canGoBack,
@@ -461,7 +463,7 @@ const DrawerNavigatorProvider = ({ navigation, route, children }: { navigation: 
     };
 
     return (
-        <DrawerNavigatorContext.Provider value={{ navigate, replace, route, canGoBack, goBack }}>
+        <DrawerNavigatorContext.Provider value={{ navigate, replace, route, currentPath: '/', canGoBack, goBack }}>
             {children}
         </DrawerNavigatorContext.Provider>
     );

@@ -142,7 +142,7 @@ export const getCliUsageDefinition: ToolDefinition = {
 export const searchIconsDefinition: ToolDefinition = {
   name: "search_icons",
   description:
-    "Search for Material Design Icons by name or keyword. Returns matching icon names from 7,447 available icons.",
+    "Search for Material Design Icons by name or keyword. Returns matching icon names from 7,447 available icons. On web, icons must be registered by the Babel plugin (auto-detected from JSX or listed in babel.config.js). On native, all icons work out of the box.",
   inputSchema: {
     type: "object",
     properties: {

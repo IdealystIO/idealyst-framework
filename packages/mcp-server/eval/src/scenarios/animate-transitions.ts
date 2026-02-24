@@ -7,9 +7,7 @@ export const animateTransitionsScenario: ComponentScenario = {
   description:
     "Tests discovery and usage of @idealyst/animate hooks (useAnimatedStyle, useAnimatedValue, usePresence, useGradientBorder) with correct easing values",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about the framework before writing any code.
-Always check component documentation and types before using them in your code.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your component code as real files using the Write tool to the workspace path provided.`,
   taskPrompt: `Build an animated notification center screen. Requirements:
 
@@ -19,7 +17,7 @@ Write your component code as real files using the Write tool to the workspace pa
 4. **Mark All Read Button** — A button that triggers a bounce animation (scale up then settle) when pressed
 5. **Gradient Border** — The most recent notification should have an animated gradient border to highlight it
 
-Use the @idealyst/animate package for all animations and @idealyst/components for UI elements.`,
+Discover what animation packages are available using the MCP tools.`,
   expectedToolUsage: [
     "get_animate_guide",
     "get_component_docs",

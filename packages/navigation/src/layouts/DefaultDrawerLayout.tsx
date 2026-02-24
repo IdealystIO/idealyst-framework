@@ -66,7 +66,7 @@ export const DefaultDrawerLayout: React.FC<DrawerLayoutProps> = ({
                         borderRightColor: '#e0e0e0',
                         backgroundColor: '#f8f9fa'
                     }}>
-                        <SidebarComponent />
+                        <SidebarComponent currentPath={currentPath} />
                     </View>
                 ) : (
                     <View style={{
@@ -90,7 +90,9 @@ export const DefaultDrawerLayout: React.FC<DrawerLayoutProps> = ({
                             return (
                                 <Pressable
                                     key={route.path}
-                                    onPress={() => navigator.navigate({ path: route.fullPath })}
+                                    onPress={() => {
+                                        navigator.navigate({ path: route.fullPath })
+                                    }}
                                     style={{
                                         flexDirection: 'row',
                                         alignItems: 'center',

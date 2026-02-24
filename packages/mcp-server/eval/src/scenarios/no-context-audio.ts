@@ -13,7 +13,7 @@ export const noContextAudioScenario: ComponentScenario = {
 - Play back the last recording
 - Save recordings to local storage
 
-Use any available framework components and packages. Look up what's available using your MCP tools before writing code.`,
+Use any available framework components and packages.`,
   expectedToolUsage: [
     "search_packages",
     "get_package_docs",

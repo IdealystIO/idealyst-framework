@@ -7,9 +7,7 @@ export const settingsPageScenario: ComponentScenario = {
   description:
     "Tests whether the agent can use components, theme types, and icons to build a settings page",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about the framework before writing any code.
-Always check component documentation and types before using them in your code.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your component code as real files using the Write tool to the workspace path provided.`,
   taskPrompt: `Create a settings page with the following sections:
 
@@ -18,7 +16,7 @@ Write your component code as real files using the Write tool to the workspace pa
 3. **Account** — Display user avatar, name, and email with an "Edit Profile" button
 4. **About** — App version and a "Log Out" button
 
-Use Idealyst components for all UI elements. Look up the available components, check for a settings recipe, find appropriate icons for each section, and check the theme types for proper color/size usage.`,
+Each section should have an appropriate icon.`,
   expectedToolUsage: [
     "search_recipes",
     "get_recipe",

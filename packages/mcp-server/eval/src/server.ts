@@ -34,7 +34,7 @@ import { gradeConversation } from "./grading/index.js";
 import { scenarios, getScenariosByType } from "./scenarios/index.js";
 import { scaffoldWorkspace } from "./workspace.js";
 import { scaffoldProjectWorkspace } from "./project-workspace.js";
-import { runTypecheck } from "./typecheck.js";
+import { runTypecheck, subtractBaselineErrors } from "./typecheck.js";
 import { runSupervisorEvaluation, runPlaywrightSupervisorEvaluation } from "./supervisor.js";
 import { tryOpenDatabase } from "./db.js";
 import { ScenarioLogger } from "./logger.js";
@@ -335,6 +335,8 @@ async function runSingleScenario(
   /** For Playwright scenarios, the full project root (may differ from workspace.path) */
   let projectRoot: string | null = null;
   let serverCleanup: (() => void) | null = null;
+  /** Baseline typecheck fingerprints from the golden project (if used) */
+  let baselineFingerprints: Set<string> | null = null;
 
   const logger = state.options.verbose
     ? new ScenarioLogger(outputDir, evalRunId, scenario.id)
@@ -350,6 +352,10 @@ async function runSingleScenario(
         try {
           const golden = await getGoldenProject();
           logger?.log(`Using golden project copy from ${golden.path}`);
+          logger?.log(
+            `Baseline typecheck: ${golden.baselineTypecheckErrorCount} pre-existing error(s)`
+          );
+          baselineFingerprints = golden.baselineTypecheckFingerprints;
           const copy = copyGoldenWorkspace(golden.path, runId);
           projectRoot = copy.path;
           // Agent writes to packages/shared/ so files appear in the app
@@ -391,7 +397,21 @@ async function runSingleScenario(
 
     // TypeScript validation
     if (log.writtenFiles.length > 0) {
-      log.typecheckResult = await runTypecheck(workspace.path);
+      let typecheckResult = await runTypecheck(workspace.path);
+
+      // Subtract pre-existing errors from the golden project baseline
+      // so only errors introduced by the agent are counted
+      if (baselineFingerprints && baselineFingerprints.size > 0) {
+        const rawCount = typecheckResult.errorCount;
+        typecheckResult = subtractBaselineErrors(typecheckResult, baselineFingerprints);
+        if (rawCount !== typecheckResult.errorCount) {
+          logger?.log(
+            `Typecheck: ${rawCount} total error(s), ${rawCount - typecheckResult.errorCount} baseline, ${typecheckResult.errorCount} agent-introduced`
+          );
+        }
+      }
+
+      log.typecheckResult = typecheckResult;
     }
 
     // Heuristic grading

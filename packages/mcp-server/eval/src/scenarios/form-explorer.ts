@@ -7,22 +7,14 @@ export const formExplorerScenario: ComponentScenario = {
   description:
     "Tests whether the agent can systematically explore form components and their types",
   systemPrompt: `You are a React developer evaluating the Idealyst framework for your team.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to thoroughly explore the framework's form capabilities.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your component code as real files using the Write tool to the workspace path provided.`,
-  taskPrompt: `Explore all form-related components available in the Idealyst framework. For each one:
-1. Look up its documentation
-2. Check its TypeScript types/props
-3. Note the key props and their types
-
-Then build a user registration form using the components you found. The form should include:
+  taskPrompt: `Explore what form-related components are available, then build a user registration form. The form should include:
 - Full name input
 - Email input
 - Password input with confirmation
 - A terms & conditions checkbox
-- A submit button
-
-Start by listing all components, then filter for form components, then look up each one's types before writing code.`,
+- A submit button`,
   expectedToolUsage: [
     "list_components",
     "search_components",

@@ -15,7 +15,7 @@ export const fullAppNoContextScenario: ComponentScenario = {
 4. **Animated Progress Ring** — An animated progress indicator showing "3 of 5 exercises completed" that fills up smoothly as exercises are done
 5. **Quick Stats Cards** — Cards showing today's stats: total time, calories burned, exercises completed
 
-Use the MCP tools to discover what framework you're working with, what components and packages are available, and read their documentation before writing code.`,
+Use the MCP tools to discover what framework you're working with and what components and packages are available.`,
   expectedToolUsage: [
     "get_intro",
     "list_packages",

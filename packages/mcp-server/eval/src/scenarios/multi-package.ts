@@ -7,25 +7,17 @@ export const multiPackageScenario: ComponentScenario = {
   description:
     "Tests whether the agent can integrate multiple Idealyst packages (storage, translate, components) in one screen",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about each package before writing any code.
-Always check package documentation, component props, and API guides before using them.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your component code as real files using the Write tool to the workspace path provided.`,
-  taskPrompt: `Build a product detail screen that integrates three Idealyst packages:
+  taskPrompt: `Build a product detail screen with the following features:
 
-1. **@idealyst/components** — For all UI elements (Card, Button, Text, Image display)
-2. **@idealyst/storage** — To cache the product data locally
-3. **@idealyst/translate** — For internationalization (English and Spanish)
-
-The screen should display:
-- Product image
-- Product name (translated)
-- Price with currency formatting
-- Description (translated)
+- Product image, name, price with currency formatting, and description
 - An "Add to Cart" button with loading state
 - A quantity selector
+- **Local caching** — Cache product data locally so it persists between sessions
+- **Internationalization** — Support English and Spanish translations for product name and description
 
-Look up the storage API guide, the translate guide, and the component documentation using the MCP tools before writing code.`,
+Discover what packages are available for storage and translation using the MCP tools.`,
   expectedToolUsage: [
     "get_storage_guide",
     "get_translate_guide",

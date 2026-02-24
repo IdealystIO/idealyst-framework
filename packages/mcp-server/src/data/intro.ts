@@ -26,16 +26,18 @@ import { View, Text, Button, TextInput, Card, Icon, ... } from '@idealyst/compon
 
 ## How to Use This MCP Server
 
-This server has tools for every aspect of the framework. **Always look up the API before writing code.**
+This server has tools for every aspect of the framework. **Look up APIs as you need them — don't research everything upfront.**
 
-### Workflow (be efficient — minimize tool calls)
+### Workflow
 
-1. **Start here** — this intro covers conventions and gotchas
-2. **Look up components** — call \`get_component_types\` for EVERY component you plan to use. Call it for each component you need. (Card has NO compound components — no Card.Content/Card.Header)
-3. **Look up packages** — call the dedicated \`get_*_guide\` tool with topic \`api\` for each \`@idealyst/*\` package
-4. **Check recipes** — call \`search_recipes\` to find ready-made patterns for common screens
-5. **Search icons ONCE** — combine all needed icon terms into ONE \`search_icons\` call (e.g., \`"home settings check timer calendar"\`)
-6. **Then write code** — only after reading the types and guides. Do NOT make additional icon searches — pick from what you found
+Write code iteratively. Look up each API right before you use it:
+
+- **Before using a component** — call \`get_component_types\` for its props (supports batching: \`get_component_types("Button,Card,Text")\`)
+- **Before using a package** — call its dedicated \`get_*_guide\` tool with topic \`api\`
+- **Search icons once** — batch all terms into one call: \`search_icons("home settings check timer")\`
+- **Check recipes** — \`search_recipes\` for ready-made patterns you can adapt
+
+Do NOT try to read all documentation before writing code. Start building, and look things up as you go.
 
 ### Component Tools
 - \`list_components\` / \`search_components\` — Discover available components
@@ -45,7 +47,7 @@ This server has tools for every aspect of the framework. **Always look up the AP
 - \`search_icons\` — Find Material Design icon names (7,447 available). **Batch your needs**: search once with multiple terms like \`"home settings user check"\` rather than making separate calls per icon
 
 ### Package Guide Tools
-**For any \`@idealyst/*\` package, call its dedicated guide tool with topic \`api\` BEFORE writing code.** These return complete TypeScript interfaces, return types, and correct usage. The generic \`get_package_docs\` tool only has summaries.
+Each \`@idealyst/*\` package has a dedicated guide tool that returns complete TypeScript interfaces and correct usage. The generic \`get_package_docs\` tool only has summaries.
 
 | Package | Guide Tool |
 |---------|-----------|
@@ -119,9 +121,9 @@ These are mistakes agents make repeatedly. Each one causes TypeScript compilatio
 
 ### Component Props
 1. **Text** does NOT have \`variant\`, \`intent\`, \`size\`, \`fontSize\`, \`numberOfLines\`, \`ellipsizeMode\`, \`selectable\`, \`textColor\`, or \`onPress\`. Use \`typography\` (\`h1\`–\`h6\`, \`subtitle1\`, \`subtitle2\`, \`body1\`, \`body2\`, \`caption\`), \`weight\` (\`light\`, \`normal\`, \`medium\`, \`semibold\`, \`bold\`), and \`color\` (\`primary\`, \`secondary\`, \`tertiary\`, \`inverse\`). **\`textColor\` is an Icon-only prop** — Text uses \`color\`. For pressable text, wrap in \`Pressable\` or use \`Button type="text"\`.
-2. **TextInput** does NOT have \`label\`, \`error\`, \`editable\`, \`autoComplete\`, \`keyboardType\`, or \`onChange\`. Compose labels/errors with \`Text\` + \`View\`. Use \`onChangeText\`, \`inputMode\` (\`text\`, \`email\`, \`password\`, \`number\`), and \`textContentType\`. TextArea is different — it DOES support \`label\`, \`error\`, \`rows\`, \`onChange\`.
+2. **TextInput** does NOT have \`label\`, \`error\`, \`editable\`, \`autoComplete\`, \`keyboardType\`, or \`onChange\`. Compose labels/errors with \`Text\` + \`View\`. Use \`onChangeText\`, \`inputMode\` (\`'text' | 'email' | 'password' | 'number'\` — NOT \`'decimal'\`, \`'numeric'\`, \`'tel'\`, \`'url'\`), and \`textContentType\`. TextArea is different — it DOES support \`label\`, \`error\`, \`rows\`, \`onChange\`.
 3. **Button/IconButton** \`type\` is \`'contained' | 'outlined' | 'text'\` — NOT \`'ghost'\`, \`'solid'\`, \`'default'\`. Button has \`leftIcon\` and \`rightIcon\` — NOT \`icon\`.
-4. **View** does NOT have \`direction\`, \`align\`, or \`onPress\` props. For touch handling, wrap content in \`Pressable\` from \`@idealyst/components\` (NOT from \`react-native\`): \`<Pressable onPress={handlePress}><View>...</View></Pressable>\`. For horizontal layout use \`style={{ flexDirection: 'row' }}\`. View DOES have shorthand props: \`gap\`/\`spacing\`, \`padding\`, \`paddingVertical\`, \`paddingHorizontal\`, \`margin\`, \`marginVertical\`, \`marginHorizontal\` (all accept Size: \`xs\`|\`sm\`|\`md\`|\`lg\`|\`xl\`), plus \`background\`, \`radius\`, \`border\`, \`scrollable\`. \`border\` is \`'none' | 'thin' | 'thick'\` — NOT \`'outline'\`, \`'solid'\`.
+4. **View** does NOT have \`direction\`, \`align\`, or \`onPress\` props. For touch handling, wrap content in \`Pressable\` from \`@idealyst/components\` (NOT from \`react-native\`): \`<Pressable onPress={handlePress}><View>...</View></Pressable>\`. For horizontal layout use \`style={{ flexDirection: 'row' }}\`. View spacing shorthand props (all accept Size: \`xs\`|\`sm\`|\`md\`|\`lg\`|\`xl\`): \`padding\`, \`paddingVertical\`, \`paddingHorizontal\`, \`margin\`, \`marginVertical\`, \`marginHorizontal\`, \`gap\`/\`spacing\`. Do NOT use \`paddingTop\`, \`paddingBottom\`, \`paddingLeft\`, \`paddingRight\`, \`marginTop\`, \`marginBottom\`, \`marginLeft\`, \`marginRight\` as shorthand props — they do NOT exist and will cause TS2353. For single-side spacing, use \`style={{ paddingTop: 16 }}\`. Other View props: \`background\`, \`radius\`, \`border\`, \`scrollable\`. \`border\` is \`'none' | 'thin' | 'thick'\` — NOT \`'outline'\`, \`'solid'\`.
 5. **Badge** \`type\` is \`'filled' | 'outlined' | 'dot'\` — NOT \`'soft'\`, \`'subtle'\`, \`'solid'\`.
 6. **Avatar** uses \`src\` for image URL, \`fallback\` for initials — NOT \`name\`, \`initials\`, \`label\`. Shape: \`'circle' | 'square'\`.
 7. **Link** requires a \`to\` prop (path string) — it's a navigation link, NOT pressable text.
@@ -133,7 +135,7 @@ These are mistakes agents make repeatedly. Each one causes TypeScript compilatio
 ### Navigation
 11. Use \`NavigatorProvider\` — there is NO \`Router\` export.
 12. Use \`useNavigator()\` — NOT \`useNavigate()\`.
-13. \`navigate()\` takes an **object**: \`navigate({ path: '/settings' })\` — NOT \`navigate('/settings')\` or \`navigate('routeName', params)\`.
+13. \`navigate()\` takes an **object**: \`navigate({ path: '/settings' })\` — NOT \`navigate('/settings')\` or \`navigate('routeName', params)\`. To pass data use \`vars\`: \`navigate({ path: '/detail/:id', vars: { id: '123' } })\` — NOT \`params\`: \`navigate({ path: '/detail', params: { id: '123' } })\` (no \`params\` property exists).
 14. \`useNavigationState\` returns \`Record<string, unknown>\` by default. Always provide a type parameter: \`useNavigationState<{ title?: string }>()\`.
 15. \`useParams()\` does NOT accept generic type arguments. It returns \`Record<string, string>\`. Do NOT write \`useParams<{ id: string }>()\` — that causes TS2558.
 
@@ -144,10 +146,15 @@ These are mistakes agents make repeatedly. Each one causes TypeScript compilatio
 19. **Spacing & Layout**: Use component shorthand props for spacing — NOT \`theme.spacing\` (which does NOT exist). The correct patterns:
    - \`<View padding="md" gap="md">\` — shorthand props on View/Card
    - \`<View paddingHorizontal="lg" marginVertical="sm">\` — directional shorthands
+   - \`<View style={{ paddingTop: 16, marginBottom: 8 }}>\` — single-side spacing via style prop (NOT shorthand props)
    - \`style={{ backgroundColor: theme.colors.surface.primary }}\` — inline styles for colors only
    - \`theme.radii.md\` — border radius values (this DOES exist)
+   - **WRONG**: \`<View paddingTop="md">\` — does NOT exist as a shorthand prop; use \`style={{ paddingTop: 16 }}\`
    - **WRONG**: \`theme.spacing.md\` — does NOT exist, causes TS2339
+   - **WRONG**: \`theme.colors.background\` — does NOT exist. \`theme.colors\` has: \`pallet\`, \`surface\`, \`text\`, \`border\`. Use \`theme.colors.surface.primary\` for background colors.
    - **WRONG**: \`theme.colors.intent.danger\` — does NOT exist; intents are at \`theme.intents.danger\`
+   - **WRONG**: \`theme.intents.primary.bg\` — IntentValue does NOT have \`bg\` or \`text\`. IntentValue has: \`primary\` (main color string), \`contrast\` (text-on-bg color), \`light\`, \`dark\`
+   - **CORRECT**: \`theme.intents.primary.primary\` for the color, \`theme.intents.primary.contrast\` for text on that color
 
 ### Cross-Platform (CRITICAL)
 20. **Never use raw HTML/SVG elements** (\`<svg>\`, \`<circle>\`, \`<canvas>\`, \`<div>\`, \`<span>\`, \`<input>\`) — they are web-only and will crash on React Native, just like react-native primitives crash on web. Also never use CSS \`transition\` or \`animation\` properties in styles — they don't exist on native. If you need custom drawing or circular progress, use \`@idealyst/animate\` hooks or \`@idealyst/charts\` — never raw SVG.
@@ -173,7 +180,7 @@ When working in a CLI-scaffolded workspace (created with \`idealyst init\` + \`i
 ### Package-Specific (call guide tools for full API)
 18. **Audio** (\`@idealyst/audio\`) is **PCM streaming**, NOT file-based. \`recorder.stop()\` returns \`void\`. Data is \`ArrayBufferLike\`, NOT strings. Call \`get_audio_guide\` topic \`api\`.
 19. **Camera** (\`@idealyst/camera\`): Component is \`CameraPreview\`, NOT \`Camera\`. Permission is \`requestPermission()\`, NOT \`requestCameraPermission\`. \`CameraStatus\` is an interface (\`.state\`, \`.permission\`), NOT a string. Call \`get_camera_guide\` topic \`api\`.
-20. **Files** (\`@idealyst/files\`): Method is \`pick()\`, NOT \`pickFiles()\`. \`FileType\` is \`'image' | 'video' | 'audio' | 'document' | 'archive' | 'any'\` — NOT \`'pdf'\` or \`'doc'\`. Call \`get_files_guide\` topic \`api\`.
+20. **Files** (\`@idealyst/files\`): Method is \`pick()\`, NOT \`pickFiles()\`. \`useFilePicker()\` takes \`{ config: { allowedTypes: ['image'], multiple: true } }\` — NOT \`{ type: 'image' }\` (no \`type\` prop on options). \`FileType\` is \`'image' | 'video' | 'audio' | 'document' | 'archive' | 'any'\` — NOT \`'pdf'\` or \`'doc'\`. Call \`get_files_guide\` topic \`api\`.
 21. **Storage** (\`@idealyst/storage\`): Methods are \`getItem()\`/\`setItem()\`, NOT \`get()\`/\`set()\`. Values are string-only. Call \`get_storage_guide\` topic \`api\`.
 22. **Animate** (\`@idealyst/animate\`): There is NO \`useSequence\` or \`useKeyframes\` — only \`useAnimatedStyle\`, \`useAnimatedValue\`, \`usePresence\`, \`useGradientBorder\`. Easing values are **camelCase**: \`'easeOut'\` NOT \`'ease-out'\`. \`useAnimatedValue\` REQUIRES an initial number: \`useAnimatedValue(0)\` — NOT \`useAnimatedValue()\`. Call \`get_animate_guide\` topic \`api\`.
 23. **Charts** (\`@idealyst/charts\`): \`ChartDataSeries\` requires \`id\` and \`name\` (NOT \`label\`). \`AxisConfig\` uses \`show\` (NOT \`visible\`). \`tickFormat\` type is \`(value: number | string | Date) => string\`. Call \`get_charts_guide\` topic \`api\`.

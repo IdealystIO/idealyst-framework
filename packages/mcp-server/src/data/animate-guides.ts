@@ -50,9 +50,10 @@ Easing values use **camelCase** (NOT CSS hyphenated format). Available values:
 ## Key Concepts
 
 1. **Theme integration** — Duration and easing values come from \`@idealyst/theme/animation\`
-2. **Transform syntax** — Simplified object syntax: \`{ x: 10, y: 20, scale: 1.2 }\` instead of arrays
-3. **Platform overrides** — Customize animation behavior per-platform
+2. **Transform syntax** — Simplified object syntax: \`{ x: 10, y: 20, scale: 1.2, rotate: 90 }\` (rotate number auto-converts to degrees)
+3. **Truly cross-platform** — Same code works on web (CSS transitions) and native (Reanimated). No platform-specific code needed.
 4. **GPU-accelerated** — Prefers opacity + transform for best performance
+5. **No wrapping needed** — \`useAnimatedStyle\` returns a style object you apply directly to \`<View style={style}>\`. No \`withAnimated\` HOC needed for Idealyst components.
 `,
 
   "idealyst://animate/api": `# @idealyst/animate — API Reference
@@ -179,7 +180,7 @@ interface InterpolationConfig<T> {
 
 ### usePresence(isPresent, options)
 
-Enter/exit animations for conditional rendering.
+Enter/exit animations for conditional rendering. Keeps the element mounted during exit animation so the transition is visible.
 
 \`\`\`typescript
 interface UsePresenceOptions extends AnimationOptions {
@@ -194,8 +195,20 @@ interface UsePresenceOptions extends AnimationOptions {
 | Property | Type | Description |
 |----------|------|-------------|
 | isPresent | boolean | Whether element should be rendered |
-| style | AnimatableStyle | Animated style |
+| style | AnimatableStyle | Animated style to spread on the element |
 | exit | () => void | Trigger exit animation manually |
+
+**Usage pattern:**
+\`\`\`tsx
+const { isPresent, style } = usePresence(show, {
+  enter: { opacity: 1, transform: { y: 0 } },
+  exit: { opacity: 0, transform: { y: -20 } },
+  duration: 250, easing: 'easeOut',
+});
+// CORRECT: conditionally render with isPresent, apply style
+{isPresent && <View style={style}>Content</View>}
+// WRONG: do NOT use {show && ...} — use isPresent from the hook
+\`\`\`
 
 ---
 
@@ -284,12 +297,46 @@ transform: [{ translateX: 10 }, { translateY: 20 }, { scale: 1.2 }]
 | scale | number | scale |
 | scaleX | number | scaleX |
 | scaleY | number | scaleY |
-| rotate | number \\| string | rotate |
+| rotate | number \\| string | rotate (number auto-converts to degrees: \`180\` → \`'180deg'\`) |
 | rotateX | string | rotateX |
 | rotateY | string | rotateY |
 | skewX | string | skewX |
 | skewY | string | skewY |
 | perspective | number | perspective |
+
+> **rotate accepts numbers:** \`transform: { rotate: 180 }\` is automatically converted to \`'180deg'\` internally. Both \`rotate: 180\` and \`rotate: '180deg'\` work identically on all platforms.
+
+---
+
+## withAnimated HOC
+
+\`withAnimated\` wraps a component for animation support. **On web, it is a no-op** (CSS handles animations natively). On native, it calls \`Animated.createAnimatedComponent()\` from Reanimated.
+
+\`\`\`tsx
+import { withAnimated } from '@idealyst/animate';
+import { View } from '@idealyst/components';
+
+const AnimatedView = withAnimated(View);
+\`\`\`
+
+> **When do you need withAnimated?** In most cases, you do NOT need it. \`useAnimatedStyle\` returns a plain style object that works directly on any \`<View style={animStyle}>\`. Only use \`withAnimated\` if you need to animate a third-party component that doesn't accept style props normally.
+
+---
+
+## Platform Behavior
+
+The animate package provides a unified API, but the underlying implementations differ:
+
+| Behavior | Web | Native (iOS/Android) |
+|----------|-----|---------------------|
+| Engine | CSS transitions | react-native-reanimated |
+| \`useAnimatedStyle\` | Sets CSS \`transition\` property | Runs on UI thread via worklets |
+| \`usePresence\` | CSS transitions + requestAnimationFrame for DOM sync | Reanimated shared values |
+| \`withAnimated\` | No-op (returns component as-is) | \`Animated.createAnimatedComponent()\` |
+| \`easing: 'spring'\` | Approximated with CSS cubic-bezier | Native spring physics |
+| Transform auto-conversion | \`rotate: 180\` → CSS \`rotate(180deg)\` | \`rotate: 180\` → \`'180deg'\` shared value |
+
+**Key takeaway:** Your animation code is the same on all platforms. The \`@idealyst/animate\` package handles all platform differences internally. Do NOT write platform-specific animation code.
 `,
 
   "idealyst://animate/examples": `# @idealyst/animate — Examples
@@ -489,6 +536,7 @@ function ExpandableSection({ title, children }: { title: string; children: React
     { duration: 300, easing: 'easeOut' }
   );
 
+  // rotate accepts numbers — 180 auto-converts to '180deg' on all platforms
   const iconStyle = useAnimatedStyle(
     { transform: { rotate: expanded ? 180 : 0 } },
     { duration: 200, easing: 'easeOut' }

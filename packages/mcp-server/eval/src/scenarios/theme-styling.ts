@@ -7,19 +7,15 @@ export const themeStylingScenario: ComponentScenario = {
   description:
     "Tests whether the agent correctly uses the Idealyst theme system: intent colors, sizes, typography, and Unistyles",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about the framework before writing any code.
-Always check theme types, component types, and documentation before using them in code.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your component code as real files using the Write tool to the workspace path provided.`,
-  taskPrompt: `Build a styled component showcase screen that demonstrates proper Idealyst theming:
+  taskPrompt: `Build a component showcase screen that demonstrates the framework's theming capabilities:
 
-1. **Intent Colors** — Show Button, Alert, and Badge components in each available intent (primary, success, warning, danger, info)
-2. **Size Variants** — Show Button and TextInput in each available size (sm, md, lg)
-3. **Typography Scale** — Show Text components using every available typography preset (h1 through h6, subtitle, body, caption, etc.)
+1. **Color Variants** — Show buttons, alerts, and badges in each available color/intent variant
+2. **Size Variants** — Show buttons and text inputs in each available size
+3. **Typography Scale** — Show text in every available typography preset
 4. **Card Styling** — Cards with different padding sizes and shadow variants
-5. **Icon Sizes** — Icons at different size values
-
-Look up the theme types to see what Size, Intent, and other theme values are available.`,
+5. **Icon Sizes** — Icons at different size values`,
   expectedToolUsage: [
     "get_theme_types",
     "get_component_types",

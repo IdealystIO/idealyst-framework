@@ -11,10 +11,17 @@ export const NOT_FOUND_SCREEN_NAME = '__notFound__';
  */
 export type TabBarScreenOptions = {
     /**
-     * Icon component for tab/drawer navigation (React.ComponentType, React.ReactElement, function, or string)
+     * Icon for tab/drawer navigation.
+     *
+     * Can be:
+     * - A **string** (icon name) — e.g. `"home"`, `"cog"`. The default layout renders
+     *   `<Icon name={tabBarIcon} size="sm" />` automatically.
+     * - A **render function** — receives `{ focused, color, size }`. The `size` param is
+     *   a number (from native tab bars); **ignore it** and use a Size token instead:
+     *   `tabBarIcon: ({ focused }) => <Icon name={focused ? 'home' : 'home-outline'} size="sm" />`
      */
-    tabBarIcon?: ((props: { focused: boolean; color: string; size: string | number }) => React.ReactElement)
-    
+    tabBarIcon?: string | ((props: { focused: boolean; color: string; size: string | number }) => React.ReactElement)
+
     /**
      * Label for tab/drawer navigation
      */
@@ -130,10 +137,12 @@ export type StackNavigatorParam = {
 } & BaseNavigatorParam
 
 /**
- * Props passed to drawer sidebar components on mobile
- * Includes safe area insets for proper layout
+ * Props passed to drawer sidebar components
+ * Includes the current path and safe area insets for proper layout
  */
 export type DrawerSidebarProps = {
+    /** Current URL path, useful for highlighting active nav items */
+    currentPath: string;
     /**
      * Safe area insets (mobile only)
      * Use these to add padding to avoid notches, status bars, etc.

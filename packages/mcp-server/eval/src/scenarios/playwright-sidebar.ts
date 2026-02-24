@@ -17,18 +17,14 @@ export const playwrightSidebarScenario: ProjectScenario = {
     // No scaffold commands — uses golden project copy when playwrightVerification is true
   ],
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about the framework before writing any code.
-Always check component documentation and types before using them in your code.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your component code as real files using the Write tool to the workspace path provided.`,
-  taskPrompt: `Modify this existing app to have a sidebar dashboard layout. The app uses @idealyst/navigation and @idealyst/components.
+  taskPrompt: `Modify this existing app to have a sidebar dashboard layout.
 
 Requirements:
-1. **Update the AppRouter** (in the navigation/ folder) to use a sidebar layout with at least 4 routes: Dashboard, Projects, Team, Settings
+1. **Update the router** to use a sidebar layout with at least 4 routes: Dashboard, Projects, Team, Settings
 2. **Create screen components** for each route — each screen should display its name, a brief description, and a relevant icon
-3. **Use Idealyst components** — Text, Card, Button, Icon, View, etc.
-
-The app is already set up with @idealyst/navigation's NavigatorProvider. Just update the router and create the screen files.
+3. Use the framework's component library for all UI elements
 
 IMPORTANT: Look at the existing file structure first using Read and Glob tools to understand the project layout before making changes.`,
   expectedToolUsage: [

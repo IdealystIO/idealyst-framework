@@ -5,7 +5,7 @@
  * These handlers can be used directly or through an MCP server.
  *
  * Component documentation now uses:
- * - Types: Dynamically loaded from @idealyst/tooling via generated/types.json
+ * - Types: Pre-generated and bundled from generated/types.json at build time
  * - Examples: Type-checked .examples.tsx files in examples/components/
  * - Metadata: Minimal static metadata (category, description, features, best practices)
  */
@@ -174,7 +174,7 @@ export function getComponentDocs(args: GetComponentDocsArgs): ToolResponse {
 ${types.typescript}
 \`\`\``;
   } catch {
-    propsSection = "## Props\n\n_Types not available. Run `yarn extract-types` to generate._";
+    propsSection = "## Props\n\n_Type information not available for this component._";
   }
 
   // Get type-checked examples
@@ -361,6 +361,16 @@ function postProcessComponentTypes(componentName: string, result: unknown): unkn
       (result as any).usageNote = "Card is a SIMPLE CONTAINER — there are NO compound components. " +
         "Do NOT use Card.Content, Card.Header, Card.Body, Card.Footer, Card.Title — they do NOT exist and will cause TS2339. " +
         "Just put children directly inside <Card>...</Card>. Example: <Card padding=\"md\"><Text>Title</Text><Text>Body</Text></Card>";
+    }
+  }
+
+  // Add View-specific guidance to prevent invalid shorthand prop usage
+  if (componentName.toLowerCase() === 'view') {
+    if (typeof result === 'object' && result !== null) {
+      (result as any).usageNote = "View spacing shorthand props: padding, paddingVertical, paddingHorizontal, margin, marginVertical, marginHorizontal, gap/spacing. " +
+        "These accept Size values (xs, sm, md, lg, xl). " +
+        "Do NOT use paddingTop, paddingBottom, paddingLeft, paddingRight, marginTop, marginBottom, marginLeft, marginRight as shorthand props — " +
+        "they do NOT exist and will cause TS2353. For single-side spacing use style={{ paddingTop: 16 }}.";
     }
   }
 
@@ -679,6 +689,7 @@ export function searchIcons(args: SearchIconsArgs): ToolResponse {
     icons: limitedResults,
     import: "import { Icon } from '@idealyst/components'; import type { IconName } from '@idealyst/components';",
     usage: "IMPORTANT: These icon names are of type `IconName` from '@idealyst/components'. Use them WITHOUT any 'mdi:' prefix — just use the bare name (e.g., 'home', not 'mdi:home'). When building helper functions that return icon names, always type the return as `IconName` — never as `string`. Example: `const icon: IconName = 'home'; function getIcon(status: string): IconName { return 'check'; }`. Using `string` as the return type or adding an 'mdi:' prefix will cause TypeScript compilation errors.",
+    iconRegistration: "WEB ONLY: Icons must be registered at build time by the Idealyst Babel plugin. The plugin automatically detects icon names used in JSX (e.g., <Icon name=\"home\" />). If you use dynamic icon names or helper functions that return icon names, add them to the 'icons' array in babel.config.js: plugins: [['@idealyst/tooling/babel', { icons: ['chart-line', 'chart-bar'] }]]. On React Native, all 7,447 MDI icons work out of the box via react-native-vector-icons — no registration needed. Common safe icons (always available in scaffolded projects): home, cog, account, bell, magnify, plus, close, check, arrow-left, chevron-right, menu, folder, email, heart, star.",
   };
 
   return jsonResponse(result);
@@ -698,7 +709,8 @@ export function getThemeTypes(args: GetThemeTypesArgs = {}): ToolResponse {
     const result = getThemeTypesFromFile(format);
     // Add useTheme usage note to prevent common destructuring mistake
     if (typeof result === 'object' && result !== null) {
-      (result as Record<string, unknown>).useThemeNote =
+      const r = result as Record<string, unknown>;
+      r.useThemeNote =
         "IMPORTANT: useTheme() returns Theme directly — NOT wrapped in an object. " +
         "Correct: `const theme = useTheme();` " +
         "WRONG: `const { theme } = useTheme();` (causes TS2339). " +
@@ -706,7 +718,78 @@ export function getThemeTypes(args: GetThemeTypesArgs = {}): ToolResponse {
         "For spacing, use component props (padding=\"md\", gap=\"md\") — NOT theme.spacing (does NOT exist). " +
         "For colors: `style={{ backgroundColor: theme.colors.surface.primary }}`. " +
         "For radii: `style={{ borderRadius: theme.radii.md }}`. " +
-        "For intents: `theme.intents.primary` (NOT theme.colors.intent).";
+        "For intents: `theme.intents.primary.primary` (main color), `.contrast`, `.light`, `.dark`. " +
+        "WRONG: `theme.intents.primary.bg` — 'bg' does NOT exist. " +
+        "WRONG: `theme.intents.primary.text` — 'text' does NOT exist. " +
+        "WRONG: `theme.colors.intent.danger` — intents are at theme.intents, NOT theme.colors.intent.";
+
+      r.themeAccessPatterns =
+        "## Theme Access Patterns\n\n" +
+        "```typescript\n" +
+        "import { useTheme } from '@idealyst/theme';\n" +
+        "const theme = useTheme();\n\n" +
+        "// Colors (surface, text, border sub-groups)\n" +
+        "theme.colors.surface.primary    // main background\n" +
+        "theme.colors.surface.secondary  // card/section background\n" +
+        "theme.colors.text.primary       // main text color\n" +
+        "theme.colors.text.secondary     // muted text\n" +
+        "theme.colors.text.tertiary      // subtle text\n" +
+        "theme.colors.text.inverse       // text on dark backgrounds\n" +
+        "theme.colors.border.primary     // standard border\n" +
+        "theme.colors.border.secondary   // subtle border\n\n" +
+        "// Intents — IntentValue has: primary, contrast, light, dark\n" +
+        "theme.intents.primary.primary   // primary intent main color (string)\n" +
+        "theme.intents.primary.contrast  // contrast color for text on primary bg\n" +
+        "theme.intents.primary.light     // lighter variant\n" +
+        "theme.intents.primary.dark      // darker variant\n" +
+        "theme.intents.danger.primary    // danger intent main color\n" +
+        "// Available intents: primary, secondary, success, warning, danger, info, neutral\n" +
+        "// WRONG: theme.intents.primary.bg — 'bg' does NOT exist on IntentValue\n" +
+        "// WRONG: theme.intents.primary.text — 'text' does NOT exist on IntentValue\n\n" +
+        "// Radii\n" +
+        "theme.radii.none  // 0\n" +
+        "theme.radii.sm    // small radius\n" +
+        "theme.radii.md    // medium radius\n" +
+        "theme.radii.lg    // large radius\n" +
+        "theme.radii.xl    // extra large\n" +
+        "theme.radii.full  // fully rounded\n\n" +
+        "// Shadows\n" +
+        "theme.shadows.sm   // subtle shadow\n" +
+        "theme.shadows.md   // medium shadow\n" +
+        "theme.shadows.lg   // prominent shadow\n\n" +
+        "// Breakpoints (responsive)\n" +
+        "theme.breakpoints.xs  // 0\n" +
+        "theme.breakpoints.sm  // small screens\n" +
+        "theme.breakpoints.md  // medium screens\n" +
+        "theme.breakpoints.lg  // large screens\n" +
+        "```";
+
+      r.themeSetup =
+        "## Theme Setup (app initialization)\n\n" +
+        "```typescript\n" +
+        "import { configureThemes, lightTheme, darkTheme, fromTheme } from '@idealyst/theme';\n\n" +
+        "// Build themes from defaults\n" +
+        "const light = fromTheme(lightTheme).build();\n" +
+        "const dark = fromTheme(darkTheme).build();\n\n" +
+        "// Configure at app startup (call once, before any component renders)\n" +
+        "configureThemes({ themes: { light, dark } });\n" +
+        "```\n\n" +
+        "## Theme Switching at Runtime\n\n" +
+        "```typescript\n" +
+        "import { ThemeSettings, getColorScheme } from '@idealyst/theme';\n\n" +
+        "// Switch theme\n" +
+        "ThemeSettings.setTheme('dark', 'dark');       // (themeName, contentColor)\n" +
+        "ThemeSettings.setTheme('light', 'light', true); // animated transition\n\n" +
+        "// Get current theme name\n" +
+        "const current = ThemeSettings.getThemeName(); // 'light' or 'dark'\n\n" +
+        "// Follow system light/dark preference\n" +
+        "ThemeSettings.setAdaptiveThemes(true);\n\n" +
+        "// Get device color scheme\n" +
+        "const scheme = getColorScheme(); // 'light' | 'dark' | null\n" +
+        "```\n\n" +
+        "IMPORTANT: Do NOT import from 'react-native-unistyles' directly. " +
+        "Use configureThemes (NOT StyleSheet.configure or UnistylesRegistry). " +
+        "Use ThemeSettings (NOT UnistylesRuntime).";
     }
     return jsonResponse(result);
   } catch (error) {
@@ -728,6 +811,15 @@ export function getNavigationTypes(args: GetNavigationTypesArgs = {}): ToolRespo
 
   try {
     const result = getNavigationTypesFromFile(format);
+    // Add tabBarIcon usage note to prevent the size type mismatch
+    if (typeof result === 'object' && result !== null) {
+      (result as Record<string, unknown>).tabBarIconNote =
+        "IMPORTANT: tabBarIcon can be a string (icon name) or a render function. " +
+        "String form (simplest): tabBarIcon: 'home' — the layout renders <Icon name=\"home\" size=\"sm\" /> automatically. " +
+        "Function form: tabBarIcon: ({ focused }) => <Icon name={focused ? 'home' : 'home-outline'} size=\"sm\" /> " +
+        "WARNING: The function receives { size: number } from native tab bars, but Icon expects a Size token ('xs'|'sm'|'md'|'lg'|'xl'). " +
+        "Do NOT pass the size param to Icon. Use a fixed size token like 'sm' or 'md' instead.";
+    }
     return jsonResponse(result);
   } catch (error) {
     return textResponse(

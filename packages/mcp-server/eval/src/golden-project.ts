@@ -19,6 +19,7 @@ import os from "os";
 import crypto from "crypto";
 import { execSync } from "child_process";
 import { fileURLToPath } from "url";
+import { runTypecheck } from "./typecheck.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "../../../..");
@@ -50,6 +51,14 @@ export interface GoldenProjectInfo {
   path: string;
   /** Hash identifying this golden project version */
   hash: string;
+  /**
+   * Baseline typecheck errors from the golden project's shared package.
+   * These pre-existing errors (e.g., React 19 JSX type incompatibilities)
+   * should be subtracted from agent error counts during grading.
+   */
+  baselineTypecheckErrorCount: number;
+  /** Fingerprints of baseline errors for deduplication (file:line:code) */
+  baselineTypecheckFingerprints: Set<string>;
 }
 
 export interface ProjectWorkspaceCopy {
@@ -253,7 +262,10 @@ export async function scaffoldGoldenProject(): Promise<GoldenProjectInfo> {
     // Re-symlink in case monorepo packages changed
     console.log(`[golden] Reusing existing golden project at ${projectDir}`);
     symlinkIdealystPackages(projectDir);
-    return { path: projectDir, hash };
+
+    // Run baseline typecheck on the shared package
+    const baseline = await runBaselineTypecheck(projectDir);
+    return { path: projectDir, hash, ...baseline };
   }
 
   // Clean up any partial previous attempt
@@ -326,9 +338,72 @@ export async function scaffoldGoldenProject(): Promise<GoldenProjectInfo> {
   // Step 5: Patch Vite config to resolve @idealyst/* through project node_modules
   patchViteConfig(projectDir);
 
+  console.log(`[golden] Running baseline typecheck on shared package...`);
+
+  // Step 6: Run baseline typecheck to establish pre-existing error count
+  const baseline = await runBaselineTypecheck(projectDir);
+
+  console.log(
+    `[golden] Baseline typecheck: ${baseline.baselineTypecheckErrorCount} pre-existing error(s)`
+  );
   console.log(`[golden] Golden project ready at ${projectDir}`);
 
-  return { path: projectDir, hash };
+  return { path: projectDir, hash, ...baseline };
+}
+
+// ============================================================================
+// Baseline Typecheck
+// ============================================================================
+
+/**
+ * Run tsc on the golden project's shared package to establish a baseline
+ * error count. These are pre-existing errors (e.g., React 19 JSX type
+ * incompatibilities in HelloWorld.tsx, Home.tsx, About.tsx) that should NOT
+ * be attributed to the agent.
+ */
+async function runBaselineTypecheck(
+  projectDir: string
+): Promise<{
+  baselineTypecheckErrorCount: number;
+  baselineTypecheckFingerprints: Set<string>;
+}> {
+  const sharedDir = path.join(projectDir, "packages/shared");
+
+  if (!fs.existsSync(path.join(sharedDir, "tsconfig.json"))) {
+    console.log(`[golden] No tsconfig.json in packages/shared — baseline is 0`);
+    return {
+      baselineTypecheckErrorCount: 0,
+      baselineTypecheckFingerprints: new Set(),
+    };
+  }
+
+  try {
+    const result = await runTypecheck(sharedDir);
+    const fingerprints = new Set(
+      result.errors.map((e) => `${e.file}:${e.line}:${e.code}`)
+    );
+
+    if (result.errorCount > 0) {
+      console.log(
+        `[golden] Baseline errors (${result.errorCount}): ${result.errors
+          .slice(0, 5)
+          .map((e) => `${e.file}:${e.line} ${e.code}`)
+          .join(", ")}${result.errorCount > 5 ? "..." : ""}`
+      );
+    }
+
+    return {
+      baselineTypecheckErrorCount: result.errorCount,
+      baselineTypecheckFingerprints: fingerprints,
+    };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn(`[golden] Baseline typecheck failed (non-fatal): ${msg.slice(0, 200)}`);
+    return {
+      baselineTypecheckErrorCount: 0,
+      baselineTypecheckFingerprints: new Set(),
+    };
+  }
 }
 
 // ============================================================================
@@ -389,10 +464,86 @@ function findNodeModulesDirs(goldenPath: string): string[] {
 }
 
 /**
+ * Check if a scoped directory (e.g., @eval-golden/) contains workspace
+ * package symlinks — relative symlinks pointing to ../../packages/*.
+ */
+function isWorkspaceScopeDir(scopeDirPath: string): boolean {
+  try {
+    for (const entry of fs.readdirSync(scopeDirPath, { withFileTypes: true })) {
+      if (entry.isSymbolicLink()) {
+        const target = fs.readlinkSync(path.join(scopeDirPath, entry.name));
+        if (target.startsWith("../../packages/")) {
+          return true;
+        }
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return false;
+}
+
+/**
+ * Create a node_modules directory in the workspace that properly resolves
+ * workspace packages to the WORKSPACE's local packages (not the golden's).
+ *
+ * The problem: Golden project's node_modules has `@eval-golden/shared` as a
+ * relative symlink (`../../packages/shared`). When the entire node_modules
+ * is directory-symlinked to the golden copy, this relative path resolves to
+ * the GOLDEN project's packages/shared, not the workspace copy where the
+ * agent made modifications.
+ *
+ * Solution: Create a real node_modules directory with individual symlinks.
+ * For the workspace scope (@eval-golden/*), create symlinks pointing to the
+ * workspace's own packages/ directory. Everything else symlinks to golden.
+ */
+function createWorkspaceNodeModules(
+  goldenNm: string,
+  workspaceNm: string,
+  workspaceRoot: string
+): void {
+  fs.mkdirSync(workspaceNm, { recursive: true });
+
+  for (const entry of fs.readdirSync(goldenNm, { withFileTypes: true })) {
+    const goldenEntryPath = path.join(goldenNm, entry.name);
+    const workspaceEntryPath = path.join(workspaceNm, entry.name);
+
+    if (entry.name === ".vite" || entry.name === ".cache") {
+      // Skip cache directories — Vite will recreate them fresh
+      continue;
+    }
+
+    if (entry.name.startsWith("@") && fs.statSync(goldenEntryPath).isDirectory()) {
+      // Scoped package directory — check if it's the workspace scope
+      if (isWorkspaceScopeDir(goldenEntryPath)) {
+        // Workspace scope: create real directory with symlinks to LOCAL packages
+        fs.mkdirSync(workspaceEntryPath, { recursive: true });
+        for (const pkg of fs.readdirSync(goldenEntryPath)) {
+          const localPkgPath = path.join(workspaceRoot, "packages", pkg);
+          if (fs.existsSync(localPkgPath)) {
+            fs.symlinkSync(localPkgPath, path.join(workspaceEntryPath, pkg), "dir");
+          } else {
+            // Fallback: symlink to golden's version
+            fs.symlinkSync(path.join(goldenEntryPath, pkg), path.join(workspaceEntryPath, pkg), "dir");
+          }
+        }
+      } else {
+        // Regular scope (e.g., @babel, @idealyst): symlink the whole directory
+        fs.symlinkSync(goldenEntryPath, workspaceEntryPath, "dir");
+      }
+    } else {
+      // Regular package or file: symlink to golden's version
+      fs.symlinkSync(goldenEntryPath, workspaceEntryPath, entry.isDirectory() ? "dir" : "file");
+    }
+  }
+}
+
+/**
  * Create a fast copy of the golden workspace for a specific scenario run.
  *
  * - Deep-copies all files except node_modules
- * - Symlinks node_modules from the golden copy
+ * - Creates root node_modules with proper workspace package resolution
+ * - Symlinks package-level node_modules from the golden copy
  */
 export function copyGoldenWorkspace(
   goldenPath: string,
@@ -408,7 +559,7 @@ export function copyGoldenWorkspace(
   // Deep copy files (excluding node_modules)
   copyDirExcludeNodeModules(goldenPath, copyDir);
 
-  // Symlink all node_modules directories
+  // Handle node_modules directories
   const nmDirs = findNodeModulesDirs(goldenPath);
   for (const nmDir of nmDirs) {
     const goldenNm = path.join(goldenPath, nmDir);
@@ -417,7 +568,15 @@ export function copyGoldenWorkspace(
     // Ensure parent directory exists
     fs.mkdirSync(path.dirname(copyNm), { recursive: true });
 
-    fs.symlinkSync(goldenNm, copyNm, "dir");
+    if (nmDir === "node_modules") {
+      // Root node_modules: create a real directory with workspace-aware symlinks
+      // so that @eval-golden/* resolves to the workspace's packages, not golden's
+      createWorkspaceNodeModules(goldenNm, copyNm, copyDir);
+    } else {
+      // Package-level node_modules: simple symlink is fine
+      // (these don't have workspace package references)
+      fs.symlinkSync(goldenNm, copyNm, "dir");
+    }
   }
 
   return {

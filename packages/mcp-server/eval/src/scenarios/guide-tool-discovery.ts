@@ -7,9 +7,7 @@ export const guideToolDiscoveryScenario: ComponentScenario = {
   description:
     "Tests whether the agent discovers and uses dedicated get_*_guide tools instead of relying on generic get_package_docs",
   systemPrompt: `You are a React developer building a cross-platform app with the Idealyst framework.
-You have access to MCP tools that provide documentation about Idealyst components, packages, recipes, and types.
-Use these tools to learn about the framework before writing any code.
-Always check component documentation and types before using them in your code.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your component code as real files using the Write tool to the workspace path provided.`,
   taskPrompt: `Build a media upload screen that combines camera capture, file picking, and upload animations. Requirements:
 
@@ -19,7 +17,7 @@ Write your component code as real files using the Write tool to the workspace pa
 4. **Media Preview Grid** — Show captured/picked media in a grid with image thumbnails
 5. **Upload Button** — A button to upload all selected media with a loading state
 
-Use the appropriate Idealyst packages for camera, file picking, and animations alongside the component library for UI elements.`,
+Discover what packages are available for camera, file picking, and animations using the MCP tools.`,
   expectedToolUsage: [
     "get_camera_guide",
     "get_files_guide",

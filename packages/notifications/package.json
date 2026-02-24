@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/notifications",
-  "version": "1.2.115",
+  "version": "1.2.117",
   "description": "Cross-platform push and local notifications for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/notifications#readme",
   "readme": "README.md",

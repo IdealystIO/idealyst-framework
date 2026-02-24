@@ -369,17 +369,22 @@ export function AppLayout() {
 }
 
 // ============================================================
-// File 3: layouts/index.web.ts
+// File 3: layouts/index.ts  (base — needed for module resolution)
 // ============================================================
 export { AppLayout } from './AppLayout.web';
 
 // ============================================================
-// File 4: layouts/index.native.ts
+// File 4: layouts/index.web.ts
+// ============================================================
+export { AppLayout } from './AppLayout.web';
+
+// ============================================================
+// File 5: layouts/index.native.ts
 // ============================================================
 export { AppLayout } from './AppLayout.native';
 
 // ============================================================
-// File 5: AppRouter.ts  (wiring)
+// File 6: AppRouter.ts  (wiring)
 // ============================================================
 import { AppLayout } from './layouts';
 import type { NavigatorParam } from '@idealyst/navigation';
@@ -402,8 +407,9 @@ const appRouter: NavigatorParam = {
 
 1. **AppLayout.web.tsx** — The real layout. Receives StackLayoutProps (routes, currentPath, options). Builds a sidebar from routes, highlights the active item, and renders page content via \`<Outlet />\` from \`@idealyst/navigation\`.
 2. **AppLayout.native.tsx** — No-op mock. Native ignores layoutComponent, so this just returns null.
-3. **index.web.ts / index.native.ts** — Platform-specific re-exports so the bundler picks the right file.
-4. **AppRouter.ts** — Sets \`layoutComponent: AppLayout\` on the navigator. Each route's \`options.icon\` and \`options.title\` drive the sidebar menu.
+3. **index.ts** — Base re-export (needed for module resolution when bundler doesn't support platform extensions).
+4. **index.web.ts / index.native.ts** — Platform-specific re-exports.
+5. **AppRouter.ts** — Sets \`layoutComponent: AppLayout\` on the navigator. Each route's \`options.icon\` and \`options.title\` drive the sidebar menu.
 
 Key points:
 - Import \`Outlet\` from \`@idealyst/navigation\`, NOT from \`react-router-dom\`
@@ -412,7 +418,7 @@ Key points:
     tips: [
       "Import Outlet from @idealyst/navigation, NEVER from react-router-dom",
       "StackLayoutProps does NOT include children — render content with <Outlet />",
-      "Always create both .web.tsx and .native.tsx files with platform index files",
+      "Always create both .web.tsx and .native.tsx files with platform index files, plus a base index.ts",
       "Use route.fullPath (not route.path) for navigation and active state comparison",
       "Use currentPath.startsWith(route.fullPath + '/') for nested route highlighting",
     ],
@@ -436,7 +442,7 @@ Key points:
 import React from 'react';
 import { Outlet, useNavigator } from '@idealyst/navigation';
 import type { TabLayoutProps } from '@idealyst/navigation';
-import { View, Text, Pressable, Badge } from '@idealyst/components';
+import { View, Text, Pressable, Badge, Icon } from '@idealyst/components';
 
 export function TabLayout({ routes, currentPath }: TabLayoutProps) {
   const { navigate } = useNavigator();
@@ -469,14 +475,16 @@ export function TabLayout({ routes, currentPath }: TabLayoutProps) {
                 borderBottomColor: isActive ? '#007AFF' : 'transparent',
               }}
             >
-              {/* Render tabBarIcon if defined */}
+              {/* Render tabBarIcon — can be a string or render function */}
               {opts?.tabBarIcon && (
                 <View style={{ position: 'relative' }}>
-                  {opts.tabBarIcon({
-                    focused: isActive,
-                    color: isActive ? '#007AFF' : '#8E8E93',
-                    size: 20,
-                  })}
+                  {typeof opts.tabBarIcon === 'string'
+                    ? <Icon name={opts.tabBarIcon as any} size="sm" intent={isActive ? 'primary' : undefined} />
+                    : opts.tabBarIcon({
+                        focused: isActive,
+                        color: isActive ? '#007AFF' : '#8E8E93',
+                        size: 'sm',
+                      })}
                   {/* Badge */}
                   {opts.tabBarBadge != null && (
                     <Badge
@@ -521,17 +529,22 @@ export function TabLayout() {
 }
 
 // ============================================================
-// File 3: layouts/index.web.ts
+// File 3: layouts/index.ts  (base — needed for module resolution)
 // ============================================================
 export { TabLayout } from './TabLayout.web';
 
 // ============================================================
-// File 4: layouts/index.native.ts
+// File 4: layouts/index.web.ts
+// ============================================================
+export { TabLayout } from './TabLayout.web';
+
+// ============================================================
+// File 5: layouts/index.native.ts
 // ============================================================
 export { TabLayout } from './TabLayout.native';
 
 // ============================================================
-// File 5: AppRouter.ts  (wiring)
+// File 6: AppRouter.ts  (wiring)
 // ============================================================
 import { TabLayout } from './layouts';
 import type { NavigatorParam } from '@idealyst/navigation';
@@ -550,8 +563,9 @@ const appRouter: NavigatorParam = {
       component: HomeScreen,
       options: {
         tabBarLabel: 'Home',
-        tabBarIcon: ({ focused, color }) => (
-          <Icon name={focused ? 'home' : 'home-outline'} size="sm" color={color} />
+        // Function form: ignore size param, use Size token. Use focused for icon variants.
+        tabBarIcon: ({ focused }) => (
+          <Icon name={focused ? 'home' : 'home-outline'} size="sm" />
         ),
       },
     },
@@ -561,7 +575,7 @@ const appRouter: NavigatorParam = {
       component: SearchScreen,
       options: {
         tabBarLabel: 'Search',
-        tabBarIcon: ({ color }) => <Icon name="magnify" size="sm" color={color} />,
+        tabBarIcon: 'magnify',  // String form: just the icon name
       },
     },
     {
@@ -570,8 +584,8 @@ const appRouter: NavigatorParam = {
       component: NotificationsScreen,
       options: {
         tabBarLabel: 'Alerts',
-        tabBarIcon: ({ focused, color }) => (
-          <Icon name={focused ? 'bell' : 'bell-outline'} size="sm" color={color} />
+        tabBarIcon: ({ focused }) => (
+          <Icon name={focused ? 'bell' : 'bell-outline'} size="sm" />
         ),
         tabBarBadge: 5,
       },
@@ -582,8 +596,8 @@ const appRouter: NavigatorParam = {
       component: ProfileScreen,
       options: {
         tabBarLabel: 'Profile',
-        tabBarIcon: ({ focused, color }) => (
-          <Icon name={focused ? 'account' : 'account-outline'} size="sm" color={color} />
+        tabBarIcon: ({ focused }) => (
+          <Icon name={focused ? 'account' : 'account-outline'} size="sm" />
         ),
       },
     },
@@ -593,18 +607,23 @@ const appRouter: NavigatorParam = {
 
 1. **TabLayout.web.tsx** — Receives TabLayoutProps (routes, currentPath). Renders a top tab bar by mapping over routes and reading tabBarIcon, tabBarLabel, and tabBarBadge from each route's options. Content renders via \`<Outlet />\`.
 2. **TabLayout.native.tsx** — No-op mock. Native uses its own bottom tab bar.
-3. **index.web.ts / index.native.ts** — Platform-specific re-exports.
-4. **AppRouter.ts** — Sets \`layoutComponent: TabLayout\` on a tab navigator.
+3. **index.ts** — Base re-export (needed for module resolution when bundler doesn't support platform extensions).
+4. **index.web.ts / index.native.ts** — Platform-specific re-exports.
+5. **AppRouter.ts** — Sets \`layoutComponent: TabLayout\` on a tab navigator.
 
 Key points:
-- tabBarIcon receives { focused, color, size } — use these to render the right icon variant
+- tabBarIcon can be a string (icon name) OR a render function — check typeof before calling
+- String form: layout renders <Icon name={tabBarIcon} size="sm" /> automatically
+- Function form: receives { focused, color, size }. WARNING: ignore the size param — use a Size token ('sm', 'md') instead
 - tabBarBadge renders a small count indicator (use Badge component)
 - Import Outlet from @idealyst/navigation, NOT react-router-dom`,
     tips: [
       "TabLayoutProps has NO children prop — use <Outlet /> for content",
-      "Use route.options?.tabBarIcon?.({ focused, color, size }) to render icons",
+      "tabBarIcon can be a string ('home') or a function. Check typeof before calling.",
+      "When using the function form, ignore the size param and use a Size token like 'sm'",
       "tabBarBadge can be string or number — check with != null",
       "Use route.fullPath for navigation and active state, not route.path",
+      "Always create a base index.ts alongside index.web.ts and index.native.ts",
     ],
     relatedRecipes: [
       "web-sidebar-layout",
@@ -670,7 +689,6 @@ export function DashboardLayout({ routes, currentPath, options }: StackLayoutPro
           borderRightWidth: 1,
           borderRightColor: '#e0e0e0',
           backgroundColor: '#fafafa',
-          transition: 'width 0.2s ease',
           overflow: 'hidden',
         }}>
           <View style={{ padding: 8, gap: 2 }}>
@@ -751,17 +769,22 @@ export function DashboardLayout() {
 }
 
 // ============================================================
-// File 3: layouts/index.web.ts
+// File 3: layouts/index.ts  (base — needed for module resolution)
 // ============================================================
 export { DashboardLayout } from './DashboardLayout.web';
 
 // ============================================================
-// File 4: layouts/index.native.ts
+// File 4: layouts/index.web.ts
+// ============================================================
+export { DashboardLayout } from './DashboardLayout.web';
+
+// ============================================================
+// File 5: layouts/index.native.ts
 // ============================================================
 export { DashboardLayout } from './DashboardLayout.native';
 
 // ============================================================
-// File 5: AppRouter.ts  (wiring)
+// File 6: AppRouter.ts  (wiring)
 // ============================================================
 import { DashboardLayout } from './layouts';
 import type { NavigatorParam } from '@idealyst/navigation';
@@ -785,19 +808,21 @@ const appRouter: NavigatorParam = {
 
 1. **DashboardLayout.web.tsx** — Header bar with hamburger toggle + avatar. Sidebar toggles between 260px and 64px. When collapsed, only icons show. Active route is highlighted. Content renders via \`<Outlet />\`.
 2. **DashboardLayout.native.tsx** — No-op mock for native.
-3. **index.web.ts / index.native.ts** — Platform re-exports.
-4. **AppRouter.ts** — Wires layoutComponent with 5 routes, each with title and icon.
+3. **index.ts** — Base re-export (needed for module resolution when bundler doesn't support platform extensions).
+4. **index.web.ts / index.native.ts** — Platform-specific re-exports.
+5. **AppRouter.ts** — Wires layoutComponent with 5 routes, each with title and icon.
 
 Key patterns:
 - \`useState\` for collapse state — toggle via hamburger or bottom chevron
-- \`transition: 'width 0.2s ease'\` for smooth animation
 - \`overflow: 'hidden'\` to clip text when collapsed
+- Width changes instantly on toggle — do NOT use CSS \`transition\` (not valid ViewStyle)
 - Active highlighting using \`currentPath.startsWith(route.fullPath + '/')\``,
     tips: [
       "Import Outlet from @idealyst/navigation, NEVER from react-router-dom",
       "StackLayoutProps has NO children — use <Outlet /> for page content",
-      "Use CSS transition on width for smooth collapse animation",
+      "Do NOT use CSS transition or as React.CSSProperties — just set width directly",
       "Always create .native.tsx no-op mocks — native ignores layoutComponent",
+      "Always create a base index.ts alongside index.web.ts and index.native.ts for module resolution",
       "Cast route.options.icon to IconName for type safety",
     ],
     relatedRecipes: [

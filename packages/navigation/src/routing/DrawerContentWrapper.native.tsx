@@ -17,9 +17,14 @@ export const DrawerContentWrapper: React.FC<{
     // Get safe area insets from React Native Safe Area Context
     const insets = useSafeAreaInsets();
 
+    // Compute current path from navigation state
+    const state = drawerProps.state;
+    const currentRoute = state.routes[state.index];
+    const currentPath = currentRoute?.path ?? `/${currentRoute?.name ?? ''}`;
+
     return (
         <DrawerNavigatorProvider navigation={drawerProps.navigation} route={route}>
-            <Content insets={insets} />
+            <Content currentPath={currentPath} insets={insets} />
         </DrawerNavigatorProvider>
     );
 };

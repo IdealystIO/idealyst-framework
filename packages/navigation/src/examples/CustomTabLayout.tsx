@@ -56,7 +56,9 @@ function TabButton({route, onNavigate, currentPath}: TabButtonProps) {
         onPress={() => onNavigate(route.path)}
         style={{ margin: 4 }}
     >
-        {route.options?.tabBarIcon?.({ size: 20, color: currentPath === route.path ? 'blue' : 'black' })}
+        {typeof route.options?.tabBarIcon === 'string'
+          ? null /* string icons handled by default layout */
+          : route.options?.tabBarIcon?.({ focused: currentPath === route.path, size: 'sm', color: currentPath === route.path ? 'blue' : 'black' })}
         <Text style={{ color: currentPath === route.fullPath ? 'blue' : 'black' }}>
             {route.fullPath === '/' ? 'Home' : route.fullPath}
         </Text>

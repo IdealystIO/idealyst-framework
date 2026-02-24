@@ -159,8 +159,8 @@ export async function runAgentLoop(
   // Build the system prompt — inject workspace path
   let systemPrompt = scenario.systemPrompt;
 
-  // Prepend universal intro instruction to the task prompt so it's the first thing the agent sees
-  const taskPrompt = `IMPORTANT: Before doing anything else, call the get_intro tool to get a comprehensive overview of the Idealyst framework's conventions, correct prop names, and common mistakes to avoid. Do this FIRST, before searching for components or writing any code.\n\n${scenario.taskPrompt}`;
+  // Prepend a brief intro nudge — agents should call get_intro early but not block on full research
+  const taskPrompt = `You are building with the Idealyst component framework. Call get_intro first to learn the conventions and common mistakes, then start building. Look up specific component/package APIs as you need them.\n\n${scenario.taskPrompt}`;
 
   if (options.workspacePath) {
     const srcDir = path.join(options.workspacePath, "src");

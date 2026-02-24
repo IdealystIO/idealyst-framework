@@ -23,6 +23,76 @@ function shortToolName(name: string): string {
   return name.replace(/^mcp__idealyst__/, "");
 }
 
+/**
+ * Tool equivalence map.
+ *
+ * Efficient agents may use batch or broad tools instead of the individual
+ * tools listed in a scenario's `expectedToolUsage`.  This map defines which
+ * tools can satisfy an expected tool — i.e. "if the agent called any of the
+ * equivalents, the expected tool should be treated as discovered."
+ *
+ * The key is the expected tool name from the scenario; the value is a list
+ * of alternative tool names that fulfil the same purpose.
+ */
+const TOOL_EQUIVALENCES: Record<string, string[]> = {
+  // get_intro provides a comprehensive framework overview that covers the
+  // same ground as list_components, list_packages, and search_components.
+  list_components: ["get_intro", "get_component_types"],
+  list_packages: ["get_intro"],
+  search_components: ["get_intro", "get_component_types"],
+  // get_component_types in batch mode returns full type definitions which
+  // subsume what get_component_docs provides.
+  get_component_docs: ["get_component_types", "get_intro"],
+  // Guide tools are equivalent to searching for and then reading package docs.
+  search_packages: [
+    "get_intro",
+    "get_camera_guide",
+    "get_audio_guide",
+    "get_files_guide",
+    "get_animate_guide",
+    "get_storage_guide",
+    "get_translate_guide",
+    "get_config_guide",
+    "get_oauth_client_guide",
+    "get_datepicker_guide",
+    "get_datagrid_guide",
+    "get_lottie_guide",
+    "get_markdown_guide",
+    "get_charts_guide",
+  ],
+  get_package_docs: [
+    "get_camera_guide",
+    "get_audio_guide",
+    "get_files_guide",
+    "get_animate_guide",
+    "get_storage_guide",
+    "get_translate_guide",
+    "get_config_guide",
+    "get_oauth_client_guide",
+    "get_datepicker_guide",
+    "get_datagrid_guide",
+    "get_lottie_guide",
+    "get_markdown_guide",
+    "get_charts_guide",
+  ],
+  // Recipes can be discovered via get_intro as well
+  search_recipes: ["get_intro", "list_recipes"],
+  get_recipe: ["search_recipes", "list_recipes"],
+};
+
+/**
+ * Check whether an expected tool was satisfied — either the tool itself was
+ * called, or an equivalent tool was called.
+ */
+function isToolSatisfied(expectedTool: string, calledTools: Set<string>): boolean {
+  if (calledTools.has(expectedTool)) return true;
+  const equivalents = TOOL_EQUIVALENCES[expectedTool];
+  if (equivalents) {
+    return equivalents.some((eq) => calledTools.has(eq));
+  }
+  return false;
+}
+
 // ============================================================================
 // Helpers — Code Content
 // ============================================================================
@@ -109,16 +179,26 @@ export function analyzeToolDiscovery(
   const calledTools = new Set(log.toolCalls.map((tc) => shortToolName(tc.toolName)));
   const expectedTools = new Set(scenario.expectedToolUsage);
 
-  const discovered = [...expectedTools].filter((t) => calledTools.has(t));
-  const missed = [...expectedTools].filter((t) => !calledTools.has(t));
+  // A tool is "satisfied" if it was called directly OR via an equivalent tool
+  const satisfied = [...expectedTools].filter((t) => isToolSatisfied(t, calledTools));
+  const missed = [...expectedTools].filter((t) => !isToolSatisfied(t, calledTools));
 
   const score = expectedTools.size > 0
-    ? Math.round((discovered.length / expectedTools.size) * 100)
+    ? Math.round((satisfied.length / expectedTools.size) * 100)
     : 100;
 
   const notes: string[] = [];
-  if (discovered.length > 0) {
-    notes.push(`Used expected tools: ${discovered.join(", ")}`);
+
+  // Report tools that were satisfied by direct call
+  const directlyUsed = satisfied.filter((t) => calledTools.has(t));
+  // Report tools satisfied via equivalence
+  const satisfiedByEquivalent = satisfied.filter((t) => !calledTools.has(t));
+
+  if (directlyUsed.length > 0) {
+    notes.push(`Used expected tools: ${directlyUsed.join(", ")}`);
+  }
+  if (satisfiedByEquivalent.length > 0) {
+    notes.push(`Satisfied via equivalent tools: ${satisfiedByEquivalent.join(", ")}`);
   }
   if (missed.length > 0) {
     notes.push(`Missed tools: ${missed.join(", ")}`);
@@ -153,7 +233,12 @@ export function analyzeInformationGathering(
   // Check if agent gathered docs before coding (use short names for matching)
   const checkedDocs = toolCallsBeforeCode.some((tc) => {
     const name = shortToolName(tc.toolName);
-    return name.includes("docs") || name.includes("guide") || name === "get_recipe";
+    return (
+      name.includes("docs") ||
+      name.includes("guide") ||
+      name === "get_recipe" ||
+      name === "get_intro"
+    );
   });
   const checkedTypes = toolCallsBeforeCode.some((tc) => {
     const name = shortToolName(tc.toolName);
@@ -161,11 +246,27 @@ export function analyzeInformationGathering(
   });
   const checkedExamples = toolCallsBeforeCode.some((tc) => {
     const name = shortToolName(tc.toolName);
-    return name.includes("example") || name.includes("recipe");
+    return (
+      name.includes("example") ||
+      name.includes("recipe")
+    );
   });
+  // Exploration: discovering what's available in the framework.
+  // get_intro provides a full overview, get_component_types in batch mode
+  // effectively discovers components, and guide tools discover packages.
   const exploredFirst = toolCallsBeforeCode.some((tc) => {
     const name = shortToolName(tc.toolName);
-    return name === "list_components" || name === "search_components" || name === "list_packages";
+    return (
+      name === "list_components" ||
+      name === "search_components" ||
+      name === "list_packages" ||
+      name === "search_packages" ||
+      name === "get_intro" ||
+      name === "get_component_types" ||
+      name.endsWith("_guide") ||
+      name === "list_recipes" ||
+      name === "search_recipes"
+    );
   });
 
   let score = 0;
@@ -468,14 +569,15 @@ export function detectIssues(
     });
   }
 
-  // Detect missing expected tools (normalize to short names for comparison)
+  // Detect missing expected tools (normalize to short names for comparison).
+  // A tool is not "missing" if it was satisfied via an equivalent batch/broad tool.
   const calledToolsShort = new Set(log.toolCalls.map((tc) => shortToolName(tc.toolName)));
   for (const expected of scenario.expectedToolUsage) {
-    if (!calledToolsShort.has(expected)) {
+    if (!isToolSatisfied(expected, calledToolsShort)) {
       issues.push({
         severity: "minor",
         category: "missing_info",
-        description: `Expected tool '${expected}' was never called`,
+        description: `Expected tool '${expected}' was never called (nor any equivalent)`,
         toolName: expected,
         evidence: `Tools actually used: ${[...calledToolsShort].join(", ")}`,
       });

@@ -14,17 +14,14 @@ export const projectScaffoldScenario: ProjectScenario = {
     },
   ],
   systemPrompt: `You are a developer who has just scaffolded a new project using a cross-platform framework.
-You have access to MCP tools that provide documentation about available components, packages, and APIs.
-Use these tools to discover what's available before writing code.
+You have access to MCP tools that provide framework documentation. Use them as needed.
 Write your code using the Write tool to the workspace path provided.`,
   taskPrompt: `You've just created a new cross-platform app project. Now add a user profile screen with:
-- Avatar display (use an avatar or image component)
+- Avatar display
 - User name and email display fields
 - An "Edit Profile" toggle that switches fields to editable inputs
 - A "Save" button with loading state
-- Proper layout and styling using available framework components
-
-Use your MCP tools to discover what components and patterns are available, then write the code.`,
+- Proper layout and styling`,
   additionalAllowedTools: ["Bash", "Read", "Glob"],
   expectedToolUsage: [
     "get_component_docs",

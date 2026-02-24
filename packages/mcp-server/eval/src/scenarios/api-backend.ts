@@ -15,20 +15,19 @@ export const apiBackendScenario: ProjectScenario = {
   ],
   systemPrompt: `You are a developer building a full-stack cross-platform app.
 The project was scaffolded with a CLI and includes a tRPC API server and Prisma database layer.
-You have MCP tools to discover available UI components and framework packages.
-Use your MCP tools and explore the project structure before writing code.
+You have MCP tools that provide framework documentation. Use them as needed.
 Write files using the Write tool to the workspace path provided.`,
   taskPrompt: `Add a complete "todos" feature to this project:
 
 1. **Database**: Define a Prisma model for Todo (id, title, completed, createdAt)
 2. **API**: Create a tRPC router with CRUD operations (list, create, toggle, delete)
-3. **Frontend**: Build a TodoList screen using available framework components that:
+3. **Frontend**: Build a TodoList screen that:
    - Lists all todos with checkboxes
    - Has an input to add new todos
    - Has delete buttons on each todo
    - Shows loading states
 
-Use your MCP tools to discover available components before building the UI. Explore the project structure to understand where files should go.`,
+Explore the project structure to understand where files should go.`,
   additionalAllowedTools: ["Bash", "Read", "Glob"],
   expectedToolUsage: [
     "get_component_docs",

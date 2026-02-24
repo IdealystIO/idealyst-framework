@@ -191,11 +191,13 @@ For tab navigators:
 
 \`\`\`tsx
 type TabBarScreenOptions = {
-  tabBarIcon?: (props: {
+  // String form (simplest): just the icon name
+  // Function form: render function (see warning below about size param)
+  tabBarIcon?: string | ((props: {
     focused: boolean;
     color: string;
     size: string | number
-  }) => React.ReactElement;
+  }) => React.ReactElement);
 
   tabBarLabel?: string;     // Tab label
   tabBarBadge?: string | number;  // Badge count
@@ -203,9 +205,11 @@ type TabBarScreenOptions = {
 } & ScreenOptions;
 \`\`\`
 
+> **tabBarIcon WARNING:** The function form receives \`{ size: number }\` from native tab bars, but Idealyst's Icon component expects a Size token (\`'xs' | 'sm' | 'md' | 'lg' | 'xl'\`). **Do NOT pass the size param to Icon.** Use a fixed size token instead.
+
 > **Nested navigators:** When a Stack is nested inside a Tab, the **stack's root route** still uses \`TabBarScreenOptions\` for its \`options\` (it needs tabBarIcon/tabBarLabel for the tab bar). Type it as \`options: TabBarScreenOptions\` on the stack wrapper route.
 
-Example:
+Example (string form -- simplest):
 \`\`\`tsx
 {
   path: "home",
@@ -213,8 +217,23 @@ Example:
   component: HomeScreen,
   options: {
     tabBarLabel: "Home",
-    tabBarIcon: ({ focused, color }) => (
-      <Icon name="home" color={color} />
+    tabBarIcon: "home",  // Just the icon name -- layout renders it automatically
+    tabBarBadge: 5
+  }
+}
+\`\`\`
+
+Example (function form -- for focused/unfocused variants):
+\`\`\`tsx
+{
+  path: "home",
+  type: 'screen',
+  component: HomeScreen,
+  options: {
+    tabBarLabel: "Home",
+    // Ignore the size param -- use a Size token ('sm', 'md', etc.) instead
+    tabBarIcon: ({ focused }) => (
+      <Icon name={focused ? 'home' : 'home-outline'} size="sm" />
     ),
     tabBarBadge: 5
   }
@@ -427,7 +446,7 @@ Section-based navigation with a tab bar.
       component: HomeScreen,
       options: {
         tabBarLabel: "Home",
-        tabBarIcon: ({ color }) => <Icon name="home" color={color} />
+        tabBarIcon: "home",  // String form: just the icon name
       }
     },
     {
@@ -436,7 +455,10 @@ Section-based navigation with a tab bar.
       component: SearchScreen,
       options: {
         tabBarLabel: "Search",
-        tabBarIcon: ({ color }) => <Icon name="search" color={color} />
+        // Function form: use focused for icon variants. Ignore size param.
+        tabBarIcon: ({ focused }) => (
+          <Icon name={focused ? 'magnify' : 'magnify'} size="sm" />
+        ),
       }
     },
   ]
@@ -502,23 +524,44 @@ const AppRouter: NavigatorParam = {
 
 ### Custom Sidebar Component
 
-You can provide a custom sidebar via \`sidebarComponent\`:
+You can provide a custom sidebar via \`sidebarComponent\`. The component receives \`DrawerSidebarProps\` which includes:
+- \`currentPath\`: The current URL/route path — use this for active state highlighting
+- \`insets\`: Safe area insets (mobile only, for notch/status bar padding)
 
 \`\`\`tsx
-import { DrawerSidebarProps } from '@idealyst/navigation';
+import { DrawerSidebarProps, useNavigator } from '@idealyst/navigation';
 import { View, Text, Pressable, Icon } from '@idealyst/components';
 
-function CustomSidebar({ insets }: DrawerSidebarProps) {
+// currentPath is available both as a prop AND from useNavigator()
+function CustomSidebar({ currentPath, insets }: DrawerSidebarProps) {
   const { navigate } = useNavigator();
+
+  const navItems = [
+    { path: '/', label: 'Dashboard', icon: 'view-dashboard' as const },
+    { path: '/projects', label: 'Projects', icon: 'folder' as const },
+    { path: '/settings', label: 'Settings', icon: 'cog' as const },
+  ];
+
   return (
     <View style={{ flex: 1, paddingTop: insets?.top ?? 0 }} background="secondary">
       <Text typography="h6" weight="bold" padding="lg">My App</Text>
-      <Pressable onPress={() => navigate({ path: '/' })}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }} padding="md" gap="md">
-          <Icon name="home" size="md" />
-          <Text>Dashboard</Text>
-        </View>
-      </Pressable>
+      {navItems.map((item) => {
+        const isActive = currentPath === item.path
+          || (item.path !== '/' && currentPath.startsWith(item.path + '/'));
+        return (
+          <Pressable key={item.path} onPress={() => navigate({ path: item.path })}>
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+              padding="md"
+              gap="md"
+              background={isActive ? 'primary' : 'transparent'}
+            >
+              <Icon name={item.icon} size="md" intent={isActive ? 'primary' : undefined} />
+              <Text weight={isActive ? 'semibold' : 'normal'}>{item.label}</Text>
+            </View>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
@@ -532,18 +575,21 @@ const AppRouter: NavigatorParam = {
 };
 \`\`\`
 
+> **TIP:** \`currentPath\` is available both as a prop in \`DrawerSidebarProps\` AND from \`useNavigator()\`. Either approach works: \`const { navigate, currentPath } = useNavigator()\` or use the prop.
+
 ### Platform Behavior
 
 **Mobile:**
 - Slide-out drawer with swipe gesture
 - Overlay when open
-- Custom \`sidebarComponent\` receives \`DrawerSidebarProps\` with safe area \`insets\`
+- Custom \`sidebarComponent\` receives \`DrawerSidebarProps\` with \`currentPath\` and safe area \`insets\`
 
 **Web:**
 - Fixed 240px left sidebar with navigation items
 - Items show \`tabBarLabel\` (or \`title\`) from route options
 - Active route is highlighted
 - If \`sidebarComponent\` is provided, it replaces the default sidebar
+- Custom sidebar receives \`DrawerSidebarProps\` with \`currentPath\`
 
 ### Use Cases
 - Admin panels
@@ -649,9 +695,12 @@ Layout components are **web-only**. Native ignores \`layoutComponent\` entirely.
 layouts/
   AppLayout.web.tsx       ← Real layout with Outlet from @idealyst/navigation
   AppLayout.native.tsx    ← No-op mock (return null)
+  index.ts                ← REQUIRED: base export for TypeScript resolution
   index.web.ts            ← export { AppLayout } from './AppLayout.web'
   index.native.ts         ← export { AppLayout } from './AppLayout.native'
 \`\`\`
+
+> **CRITICAL:** You MUST create a base \`index.ts\` alongside \`index.web.ts\` and \`index.native.ts\`. Without it, TypeScript cannot resolve \`import { AppLayout } from './layouts'\` and you get TS2307. The base \`index.ts\` re-exports from the web version (bundlers pick the platform-specific file at runtime).
 
 ### Example Files
 
@@ -690,6 +739,11 @@ export function AppLayout() {
 }
 \`\`\`
 
+**\`index.ts\`** — Base export (REQUIRED for TypeScript module resolution):
+\`\`\`ts
+export { AppLayout } from './AppLayout.web';
+\`\`\`
+
 **\`index.web.ts\`**:
 \`\`\`ts
 export { AppLayout } from './AppLayout.web';
@@ -720,7 +774,8 @@ const appRouter: NavigatorParam = {
 > **Key rules:**
 > - Import \`Outlet\` from \`@idealyst/navigation\` (NOT from \`react-router-dom\`)
 > - Layout props do NOT include \`children\` — content renders via \`<Outlet />\`
-> - Always create both \`.web.tsx\` and \`.native.tsx\` files with platform index files
+> - Always create \`.web.tsx\`, \`.native.tsx\`, AND a base \`index.ts\` — without the base \`index.ts\`, TypeScript reports TS2307 (cannot find module)
+> - The base \`index.ts\` re-exports from the \`.web\` version; bundlers pick the right platform file at runtime
 
 ## GeneralLayout Component
 
@@ -2044,10 +2099,12 @@ export function TabLayout({ routes, currentPath }: TabLayoutProps) {
             >
               {/* Icon with optional badge */}
               <View style={{ position: 'relative' }}>
-                {options?.tabBarIcon?.({
+                {typeof options?.tabBarIcon === 'string' ? (
+                  <Icon name={options.tabBarIcon as any} size="sm" intent={isActive ? 'primary' : undefined} />
+                ) : options?.tabBarIcon?.({
                   focused: isActive,
                   color: isActive ? '#007AFF' : '#8E8E93',
-                  size: 24,
+                  size: 'sm',
                 })}
                 {options?.tabBarBadge && (
                   <Badge
@@ -2223,7 +2280,7 @@ const appRouter: NavigatorParam = {
           component: HomeScreen,
           options: {
             tabBarLabel: "Home",
-            tabBarIcon: ({ color }) => <Icon name="home" color={color} />,
+            tabBarIcon: ({ focused }) => <Icon name={focused ? 'home' : 'home-outline'} size="sm" />,
           },
         },
         {
@@ -2232,7 +2289,7 @@ const appRouter: NavigatorParam = {
           component: SearchScreen,
           options: {
             tabBarLabel: "Search",
-            tabBarIcon: ({ color }) => <Icon name="magnify" color={color} />,
+            tabBarIcon: () => <Icon name="magnify" size="sm" />,
           },
         },
       ],

@@ -41,6 +41,11 @@ export type NavigatorProviderProps = {
  */
 export type NavigatorContextValue = {
     route: NavigatorParam | undefined;
+    /**
+     * The current URL path (web) or active route path (native).
+     * Useful for highlighting active navigation items in sidebars/drawers.
+     */
+    currentPath: string;
     navigate: (params: NavigateParams) => void;
     /**
      * Replace the current screen with a new one. The current screen unmounts

@@ -3,13 +3,19 @@ import { useNavigate, useParams, useLocation } from '../router';
 import { NavigateParams, NavigatorProviderProps, NavigatorContextValue } from './types';
 import { buildNavigator, NavigatorParam } from '../routing';
 
-const NavigatorContext = createContext<NavigatorContextValue>({
-    navigate: () => {},
-    replace: () => {},
-    route: undefined,
-    canGoBack: () => false,
-    goBack: () => {},
-});
+// Use Symbol.for() to ensure a single context instance even if this module
+// is loaded multiple times by the bundler (e.g. Vite with symlinked packages).
+const CONTEXT_KEY = Symbol.for('idealyst.navigator.context');
+const _global = globalThis as any;
+const NavigatorContext: React.Context<NavigatorContextValue> = _global[CONTEXT_KEY] ||
+    (_global[CONTEXT_KEY] = createContext<NavigatorContextValue>({
+        navigate: () => {},
+        replace: () => {},
+        route: undefined,
+        currentPath: '/',
+        canGoBack: () => false,
+        goBack: () => {},
+    }));
 
 /**
  * Normalize a path and substitute variables
@@ -313,6 +319,7 @@ export const NavigatorProvider = ({
     return (
         <NavigatorContext.Provider value={{
             route,
+            currentPath: location.pathname,
             navigate: navigateFunction,
             replace,
             canGoBack,

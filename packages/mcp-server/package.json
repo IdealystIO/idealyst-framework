@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/mcp-server",
-  "version": "1.2.115",
+  "version": "1.2.117",
   "description": "MCP server providing documentation and examples for the Idealyst framework",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -31,8 +31,9 @@
     "validate-examples": "tsx scripts/validate-examples.ts",
     "test": "tsx scripts/test-examples.ts",
     "prebuild": "yarn extract-types && yarn validate-examples",
-    "build": "tsup && mkdir -p dist/generated && cp -r src/generated/* dist/generated/",
-    "dev": "tsup --watch",
+    "prepublishOnly": "yarn build",
+    "build": "tsup",
+    "dev": "yarn extract-types && tsup --watch",
     "start": "node dist/index.js",
     "eval": "tsx eval/src/run-eval.ts",
     "eval:all": "tsx eval/src/run-eval.ts --scenarios all",
@@ -54,13 +55,13 @@
   "author": "Idealyst",
   "license": "MIT",
   "dependencies": {
-    "@idealyst/components": "^1.2.115",
-    "@idealyst/navigation": "^1.2.115",
-    "@idealyst/theme": "^1.2.115",
-    "@idealyst/tooling": "^1.2.115",
+    "@idealyst/components": "^1.2.117",
+    "@idealyst/navigation": "^1.2.117",
+    "@idealyst/theme": "^1.2.117",
     "@modelcontextprotocol/sdk": "^1.0.4"
   },
   "devDependencies": {
+    "@idealyst/tooling": "^1.2.117",
     "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^20.0.0",
     "@types/react": "^19.1.0",
