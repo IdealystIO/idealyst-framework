@@ -24,6 +24,8 @@ export type MarkdownElementType =
   | 'listOrdered'
   | 'listUnordered'
   | 'listItem'
+  | 'listItemBullet'
+  | 'listItemContent'
   | 'table'
   | 'tableHead'
   | 'tableRow'

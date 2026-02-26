@@ -33,7 +33,8 @@ yarn add @idealyst/audio
 2. **Audio Session** — On iOS/Android, configure the audio session category before recording/playback
 3. **Audio Profiles** — Pre-configured \`AudioConfig\` presets: \`speech\`, \`highQuality\`, \`studio\`, \`phone\`
 4. **Session Presets** — Pre-configured \`AudioSessionConfig\` presets: \`playback\`, \`record\`, \`voiceChat\`, \`ambient\`, \`default\`, \`backgroundRecord\`
-5. **Background Recording** — \`useBackgroundRecorder\` hook for recording that continues when the app is backgrounded (iOS/Android). Requires app-level native entitlements.
+5. **Audio Level** — \`recorder.level\` returns \`AudioLevel { current: number, peak: number, rms: number, db: number }\`. All values are 0.0-1.0 except \`db\` (-Infinity to 0).
+6. **Background Recording** — \`useBackgroundRecorder\` hook for recording that continues when the app is backgrounded (iOS/Android). Requires app-level native entitlements.
 
 ## Exports
 
@@ -132,6 +133,22 @@ interface UsePlayerOptions {
 | toggleMute | () => void | Toggle mute |
 
 > **Critical:** \`feedPCMData()\` accepts \`ArrayBufferLike | Int16Array\` — **NOT strings or base64**.
+> If you receive base64-encoded audio from an external API and need to play it back, you MUST decode it to binary first.
+> **Cross-platform base64 decode** (do NOT use \`atob()\` — it's browser-only):
+> \`\`\`typescript
+> // Cross-platform: works on web AND React Native
+> function base64ToArrayBuffer(base64: string): ArrayBuffer {
+>   const binaryString = typeof atob !== 'undefined'
+>     ? atob(base64)
+>     : Buffer.from(base64, 'base64').toString('binary');
+>   const bytes = new Uint8Array(binaryString.length);
+>   for (let i = 0; i < binaryString.length; i++) {
+>     bytes[i] = binaryString.charCodeAt(i);
+>   }
+>   return bytes.buffer;
+> }
+> // Then: player.feedPCMData(base64ToArrayBuffer(encodedAudio));
+> \`\`\`
 
 ---
 
@@ -582,7 +599,7 @@ function BackgroundTranscriber() {
 
 \`\`\`tsx
 import React from 'react';
-import { View, Text } from '@idealyst/components';
+import { View, Text, Progress } from '@idealyst/components';
 import { useRecorder, AUDIO_PROFILES } from '@idealyst/audio';
 
 function AudioLevelMeter() {
@@ -596,22 +613,10 @@ function AudioLevelMeter() {
       <Text>Level: {Math.round(recorder.level.current * 100)}%</Text>
       <Text>Peak: {Math.round(recorder.level.peak * 100)}%</Text>
       <Text>dB: {recorder.level.db.toFixed(1)}</Text>
-      <View
-        style={{
-          height: 20,
-          backgroundColor: '#e0e0e0',
-          borderRadius: 10,
-          overflow: 'hidden',
-        }}
-      >
-        <View
-          style={{
-            width: \`\${recorder.level.current * 100}%\`,
-            height: '100%',
-            backgroundColor: recorder.level.current > 0.8 ? 'red' : 'green',
-          }}
-        />
-      </View>
+      <Progress
+        value={recorder.level.current * 100}
+        intent={recorder.level.current > 0.8 ? 'danger' : 'success'}
+      />
     </View>
   );
 }

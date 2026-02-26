@@ -776,6 +776,7 @@ const appRouter: NavigatorParam = {
 > - Layout props do NOT include \`children\` — content renders via \`<Outlet />\`
 > - Always create \`.web.tsx\`, \`.native.tsx\`, AND a base \`index.ts\` — without the base \`index.ts\`, TypeScript reports TS2307 (cannot find module)
 > - The base \`index.ts\` re-exports from the \`.web\` version; bundlers pick the right platform file at runtime
+> - **Web-only CSS** in \`.web.tsx\`: cast with \`as any\`, NOT \`as React.CSSProperties\` — \`CSSProperties\` is incompatible with \`StyleProp<ViewStyle>\` (TS2322). Example: \`style={{ position: 'fixed', transition: 'width 0.2s' } as any}\`
 
 ## GeneralLayout Component
 
@@ -1147,9 +1148,11 @@ navigator.navigate({ path: '/new-location', replace: true });
 
 ## useParams Hook
 
-Access current route path parameters. Returns \`Record<string, string>\`.
+Access current route path parameters. Returns \`Record<string, string | undefined>\`.
 
 > **WARNING:** \`useParams()\` does NOT accept generic type arguments. Do NOT write \`useParams<{ id: string }>()\` — this causes TS2558. Access params by key from the returned record instead.
+
+> **IMPORTANT:** Param values are \`string | undefined\`, NOT \`string\`. When passing a param to a function that expects \`string\`, you MUST handle the undefined case — either with a fallback (\`params.id ?? ''\`), a guard (\`if (!params.id) return null\`), or a non-null assertion (\`params.id!\`) if you are certain it exists. Without this, TypeScript will report TS2345.
 
 \`\`\`tsx
 import { useParams } from '@idealyst/navigation';
@@ -1157,7 +1160,11 @@ import { useParams } from '@idealyst/navigation';
 function UserScreen() {
   // CORRECT — no type argument
   const params = useParams();
-  const userId = params.id;        // Path param from /user/:id
+  const userId = params.id;        // string | undefined from /user/:id
+
+  // Handle undefined before using in typed contexts:
+  if (!userId) return <Text>User not found</Text>;
+  // Now userId is narrowed to string
 
   // WRONG — useParams does NOT accept generics
   // const params = useParams<{ id: string }>();  // TS2558 error!

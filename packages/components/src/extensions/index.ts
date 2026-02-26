@@ -93,4 +93,5 @@ export type {
     ImageStyleableElements,
     PressableStyleableElements,
     ScreenStyleableElements,
+    DatePickerCalendarStyleableElements,
 } from './types';

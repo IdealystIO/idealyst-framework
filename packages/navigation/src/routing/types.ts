@@ -74,6 +74,10 @@ export type ScreenOptions = {
     title?: string;
     headerShown?: boolean;
     /**
+     * Icon name for this screen (used by custom layout components like sidebars, drawers, etc.)
+     */
+    icon?: string;
+    /**
      * When true, renders the screen outside of parent layout wrappers.
      * Useful for fullscreen modals, onboarding flows, or any screen that
      * should not inherit the parent navigator's layout (header, sidebar, tabs, etc.)

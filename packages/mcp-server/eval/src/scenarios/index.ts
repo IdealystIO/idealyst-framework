@@ -33,6 +33,16 @@ import { webLayoutSidebarScenario } from "./web-layout-sidebar.js";
 import { webLayoutTabsScenario } from "./web-layout-tabs.js";
 import { webLayoutResponsiveScenario } from "./web-layout-responsive.js";
 import { playwrightSidebarScenario } from "./playwright-sidebar.js";
+import { lottieAnimationScenario } from "./lottie-animation.js";
+import { notificationsLocalScenario } from "./notifications-local.js";
+import { translateI18nScenario } from "./translate-i18n.js";
+import { storageTodoCrudScenario } from "./storage-todo-crud.js";
+import { tableDataScenario } from "./table-data.js";
+import { gridResponsiveScenario } from "./grid-responsive.js";
+import { themeConfigScenario } from "./theme-config.js";
+import { installGuideCameraScenario } from "./install-guide-camera.js";
+import { wizardMultiStepScenario } from "./wizard-multi-step.js";
+import { multiScreenAppScenario } from "./multi-screen-app.js";
 
 export const scenarios: Record<string, EvalScenario> = {
   // Component scenarios (symlinked workspace)
@@ -69,6 +79,18 @@ export const scenarios: Record<string, EvalScenario> = {
 
   // Playwright-verified scenarios (golden project + runtime verification)
   "playwright-sidebar": playwrightSidebarScenario,
+
+  // New coverage scenarios
+  "lottie-animation": lottieAnimationScenario,
+  "notifications-local": notificationsLocalScenario,
+  "translate-i18n": translateI18nScenario,
+  "storage-todo-crud": storageTodoCrudScenario,
+  "table-data": tableDataScenario,
+  "grid-responsive": gridResponsiveScenario,
+  "theme-config": themeConfigScenario,
+  "install-guide-camera": installGuideCameraScenario,
+  "wizard-multi-step": wizardMultiStepScenario,
+  "multi-screen-app": multiScreenAppScenario,
 };
 
 export const scenarioList: EvalScenario[] = Object.values(scenarios);

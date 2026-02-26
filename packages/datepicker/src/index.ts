@@ -12,4 +12,5 @@ export type {
   DateInputProps,
   TimeInputProps,
   DateTimePickerProps,
+  DayIndicator,
 } from './types';

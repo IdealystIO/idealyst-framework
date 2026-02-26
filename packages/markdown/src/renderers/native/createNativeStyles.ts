@@ -144,20 +144,20 @@ export function createNativeStyles({
       styleOverrides?.listItem
     ) as ViewStyle,
     bullet_list_icon: mergeStyles(
-      extractStyle(styles.listItemBullet, dynamicProps),
-      undefined
+      { marginLeft: 8, ...extractStyle(styles.listItemBullet, dynamicProps) },
+      styleOverrides?.listItemBullet
     ) as TextStyle,
     bullet_list_content: mergeStyles(
       extractStyle(styles.listItemContent, dynamicProps),
-      undefined
+      styleOverrides?.listItemContent
     ) as ViewStyle,
     ordered_list_icon: mergeStyles(
-      extractStyle(styles.listItemBullet, dynamicProps),
-      undefined
+      { marginLeft: 8, ...extractStyle(styles.listItemBullet, dynamicProps) },
+      styleOverrides?.listItemBullet
     ) as TextStyle,
     ordered_list_content: mergeStyles(
       extractStyle(styles.listItemContent, dynamicProps),
-      undefined
+      styleOverrides?.listItemContent
     ) as ViewStyle,
 
     // Code

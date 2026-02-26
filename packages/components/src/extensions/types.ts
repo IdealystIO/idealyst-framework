@@ -426,6 +426,37 @@ export type ScreenStyleableElements = {
     content: Styles;
 };
 
+/**
+ * DatePickerCalendar styleable elements.
+ * @see datePickerCalendarStyles in @idealyst/datepicker
+ */
+export type DatePickerCalendarStyleableElements = {
+    calendar: ElementStyle;
+    calendarHeader: ElementStyle;
+    calendarTitle: ElementStyle;
+    weekdayRow: ElementStyle;
+    weekdayCell: ElementStyle;
+    weekdayText: ElementStyle;
+    calendarGrid: ElementStyle;
+    dayCell: ElementStyle;
+    dayButton: ElementStyle;
+    dayText: ElementStyle;
+    selectedDay: ElementStyle;
+    selectedDayText: ElementStyle;
+    todayDay: ElementStyle;
+    navButton: ElementStyle;
+    titleButton: ElementStyle;
+    titleText: ElementStyle;
+    monthGrid: ElementStyle;
+    yearGrid: ElementStyle;
+    selectorItem: ElementStyle;
+    selectorItemSelected: ElementStyle;
+    selectorItemText: ElementStyle;
+    selectorItemTextSelected: ElementStyle;
+    indicatorRow: ElementStyle;
+    indicator: ElementStyle;
+};
+
 // ============================================================================
 // Master Component Style Elements Map
 // ============================================================================
@@ -502,6 +533,7 @@ interface BuiltInComponentStyleElements {
     Image: ImageStyleableElements;
     Pressable: PressableStyleableElements;
     Screen: ScreenStyleableElements;
+    DatePickerCalendar: DatePickerCalendarStyleableElements;
 }
 
 /**

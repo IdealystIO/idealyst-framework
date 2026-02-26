@@ -199,6 +199,7 @@ export const markdownStyles = defineStyle('Markdown', (theme: Theme) => ({
 
   listItemBullet: (_props: MarkdownDynamicProps) => ({
     color: theme.colors.text.secondary,
+    marginLeft: 8,
     marginRight: 8,
     width: 16,
   }),

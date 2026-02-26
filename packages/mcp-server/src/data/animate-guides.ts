@@ -100,9 +100,9 @@ Animate any style property changes. Returns an animated style object.
 
 \`\`\`typescript
 interface AnimationOptions {
-  duration?: Duration;    // ms or theme token key
-  easing?: EasingKey;     // Theme easing key
-  delay?: number;         // Delay before animation (ms)
+  duration?: Duration;    // ms or theme token key (e.g., 300, 500)
+  easing?: EasingKey;     // Theme easing key (e.g., 'easeOut', 'spring')
+  delay?: number;         // Delay in ms before animation starts (e.g., 100, 200). Useful for staggered entrance animations.
 }
 
 interface UseAnimatedStyleOptions extends AnimationOptions {
@@ -128,6 +128,20 @@ useEffect(() => { setReady(true); }, []);
 const entranceStyle = useAnimatedStyle(
   { opacity: ready ? 1 : 0, transform: { y: ready ? 0 : 20 } },
   { duration: 400, easing: 'easeOut' }
+);
+
+// Staggered entrance: use delay for each item
+const style1 = useAnimatedStyle(
+  { opacity: ready ? 1 : 0, transform: { y: ready ? 0 : 20 } },
+  { duration: 300, easing: 'easeOut', delay: 0 }
+);
+const style2 = useAnimatedStyle(
+  { opacity: ready ? 1 : 0, transform: { y: ready ? 0 : 20 } },
+  { duration: 300, easing: 'easeOut', delay: 100 }
+);
+const style3 = useAnimatedStyle(
+  { opacity: ready ? 1 : 0, transform: { y: ready ? 0 : 20 } },
+  { duration: 300, easing: 'easeOut', delay: 200 }
 );
 \`\`\`
 
@@ -280,15 +294,17 @@ For expand/collapse, animate \`opacity\` + \`maxHeight\` together. Do NOT includ
 
 ## Transform Syntax
 
-Use simplified object syntax instead of React Native arrays:
+**ALWAYS use object syntax** for transforms in useAnimatedStyle/usePresence:
 
 \`\`\`typescript
-// Recommended: object syntax
+// CORRECT: object syntax (required for animations)
 transform: { x: 10, y: 20, scale: 1.2, rotate: 45 }
 
-// Legacy: array syntax (still supported)
-transform: [{ translateX: 10 }, { translateY: 20 }, { scale: 1.2 }]
+// WRONG in useAnimatedStyle: array syntax does NOT animate correctly
+// transform: [{ translateX: 10 }, { translateY: 20 }]  // ❌ won't animate
 \`\`\`
+
+> **IMPORTANT:** Array-syntax transforms (React Native style) do NOT work with \`useAnimatedStyle\` or \`usePresence\`. Always use the simplified object syntax: \`transform: { x, y, scale, rotate }\`. Array syntax is only valid in static \`style\` props on non-animated elements.
 
 | Property | Type | Maps to |
 |----------|------|---------|

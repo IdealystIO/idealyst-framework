@@ -3,12 +3,19 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { mdiChevronLeft, mdiChevronRight } from '@mdi/js';
 import { IconSvg } from './IconSvg.web';
 import { datePickerCalendarStyles } from './DatePicker.styles';
-import type { DatePickerProps } from './types';
+import type { DatePickerProps, DayIndicator } from './types';
 
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 type ViewMode = 'calendar' | 'months' | 'years';
+
+function formatDateKey(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
 
 export const DatePicker: React.FC<DatePickerProps> = ({
   value,
@@ -16,6 +23,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   minDate,
   maxDate,
   disabled = false,
+  indicators,
   style,
 }) => {
   const [currentMonth, setCurrentMonth] = useState(() => value || new Date());
@@ -157,6 +165,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const selectorItemTextStyle = (styles.selectorItemText as any)({});
   const selectorItemTextSelectedStyle = (styles.selectorItemTextSelected as any)({});
   const iconColorStyle = (styles.iconColor as any)({});
+  const indicatorRowStyle = (styles.indicatorRow as any)({});
+  const indicatorStyle = (styles.indicator as any)({});
 
   // Get web props for all elements
   const calendarProps = getWebProps([calendarStyle, style as any]);
@@ -174,6 +184,14 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const selectorItemSelectedProps = getWebProps([selectorItemStyle, selectorItemSelectedStyle]);
   const selectorItemTextProps = getWebProps([selectorItemTextStyle]);
   const selectorItemTextSelectedProps = getWebProps([selectorItemTextStyle, selectorItemTextSelectedStyle]);
+  const indicatorRowProps = getWebProps([indicatorRowStyle]);
+
+  // Helper to get indicators for a date
+  const getIndicators = (date: Date): DayIndicator[] => {
+    if (!indicators) return [];
+    const key = formatDateKey(date);
+    return indicators[key] || [];
+  };
 
   // Render month selector
   if (viewMode === 'months') {
@@ -196,7 +214,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           >
             <span {...titleTextProps}>{year}</span>
           </button>
-          <div style={{ width: 28 }} />
+          <div style={{ width: 32 }} />
         </div>
         <div {...monthGridProps}>
           {MONTHS.map((month, index) => {
@@ -332,6 +350,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           const selected = isSelected(date);
           const today = isToday(date);
           const dayDisabled = isDisabled(date);
+          const dayIndicators = getIndicators(date);
 
           // Get appropriate button props (className and ref only)
           const buttonProps = dayDisabled
@@ -343,18 +362,28 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                 : dayButtonProps;
 
           return (
-            <button
-              key={index}
-              type="button"
-              className={buttonProps.className}
-              style={{ opacity: (!isCurrentMonthDay || dayDisabled) ? 0.3 : 1 }}
-              onClick={() => handleDayPress(date)}
-              disabled={dayDisabled}
-            >
-              <span {...(selected ? selectedDayTextProps : dayTextProps)}>
-                {date.getDate()}
-              </span>
-            </button>
+            <div key={index} {...dayCellProps}>
+              <button
+                type="button"
+                className={buttonProps.className}
+                style={{ opacity: (!isCurrentMonthDay || dayDisabled) ? 0.3 : 1 }}
+                onClick={() => handleDayPress(date)}
+                disabled={dayDisabled}
+              >
+                <span {...(selected ? selectedDayTextProps : dayTextProps)}>
+                  {date.getDate()}
+                </span>
+              </button>
+              <div {...indicatorRowProps}>
+                {dayIndicators.slice(0, 3).map((ind, i) => (
+                  <div
+                    key={ind.key ?? i}
+                    className={getWebProps([indicatorStyle]).className}
+                    style={{ backgroundColor: ind.color }}
+                  />
+                ))}
+              </div>
+            </div>
           );
         })}
       </div>

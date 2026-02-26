@@ -70,6 +70,8 @@ function CameraScreen() {
 
 Renders the camera preview. Must receive a camera instance from \`useCamera().cameraRef.current\`.
 
+> **IMPORTANT:** CameraPreview uses \`resizeMode\` ('cover' | 'contain'). But when displaying captured photos, use the **Image** component with \`objectFit\` — NOT \`resizeMode\`. Image does NOT have a \`resizeMode\` prop. Example: \`<Image source={photo.uri} objectFit="cover" />\`.
+
 \`\`\`typescript
 interface CameraPreviewProps {
   camera: ICamera | null;            // Camera instance from useCamera().cameraRef.current

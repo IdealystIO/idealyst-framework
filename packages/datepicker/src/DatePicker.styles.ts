@@ -19,12 +19,12 @@ export type DatePickerDynamicProps = {
  * DatePicker calendar styles with theme reactivity.
  */
 export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme: Theme) => ({
-  // Calendar container - compact
+  // Calendar container
   calendar: (_props: DatePickerDynamicProps) => ({
-    padding: 8,
+    padding: 12,
     backgroundColor: theme.colors.surface.primary,
     borderRadius: 6,
-    width: 220,
+    width: 280,
     variants: {
       disabled: {
         true: { opacity: 0.6 },
@@ -38,7 +38,7 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     justifyContent: 'space-between' as const,
-    marginBottom: 4,
+    marginBottom: 8,
     paddingHorizontal: 2,
     _web: {
       display: 'flex',
@@ -57,15 +57,15 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   // Weekday header row
   weekdayRow: (_props: DatePickerDynamicProps) => ({
     flexDirection: 'row' as const,
-    marginBottom: 2,
+    marginBottom: 4,
     _web: {
       display: 'flex',
     },
   }),
 
   weekdayCell: (_props: DatePickerDynamicProps) => ({
-    width: 28,
-    height: 20,
+    width: 36,
+    height: 24,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     _web: {
@@ -104,12 +104,13 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
     },
   }),
 
-  // Individual day cell - compact
+  // Individual day cell - contains button + indicator row
   dayCell: (_props: DatePickerDynamicProps) => ({
-    width: 28,
-    height: 28,
+    width: 36,
+    height: 42,
     alignItems: 'center' as const,
-    justifyContent: 'center' as const,
+    justifyContent: 'flex-start' as const,
+    paddingTop: 2,
     _web: {
       display: 'flex',
     },
@@ -117,8 +118,8 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
 
   // Navigation button
   navButton: (_props: DatePickerDynamicProps) => ({
-    width: 28,
-    height: 28,
+    width: 32,
+    height: 32,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     borderRadius: 4,
@@ -158,18 +159,18 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   }),
 
   titleText: (_props: DatePickerDynamicProps) => ({
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600' as const,
     color: theme.colors.text.primary,
   }),
 
-  // Day button - fills entire cell for better click handling
+  // Day button - fills cell for better click handling
   dayButton: (_props: DatePickerDynamicProps) => ({
-    width: 28,
-    height: 28,
+    width: 32,
+    height: 32,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
-    borderRadius: 14,
+    borderRadius: 16,
     backgroundColor: 'transparent',
     borderWidth: 0,
     _web: {
@@ -188,7 +189,7 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   }),
 
   dayText: (_props: DatePickerDynamicProps) => ({
-    fontSize: 12,
+    fontSize: 14,
     color: theme.colors.text.primary,
     _web: {
       pointerEvents: 'none',
@@ -196,7 +197,7 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   }),
 
   weekdayText: (_props: DatePickerDynamicProps) => ({
-    fontSize: 11,
+    fontSize: 12,
     color: theme.colors.text.secondary,
   }),
 
@@ -232,7 +233,7 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   }),
 
   selectorItemText: (_props: DatePickerDynamicProps) => ({
-    fontSize: 12,
+    fontSize: 13,
     color: theme.colors.text.primary,
     _web: {
       pointerEvents: 'none',
@@ -249,7 +250,7 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   // Selected day styling
   selectedDay: (_props: DatePickerDynamicProps) => ({
     backgroundColor: theme.intents.primary.primary,
-    borderRadius: 6,
+    borderRadius: 16,
     _web: {
       background: theme.intents.primary.primary,
     },
@@ -265,10 +266,29 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
   // Today styling - subtle background highlight
   todayDay: (_props: DatePickerDynamicProps) => ({
     backgroundColor: theme.intents.primary.light,
-    borderRadius: 6,
+    borderRadius: 16,
     _web: {
       background: theme.intents.primary.light,
     },
+  }),
+
+  // Indicator row below the day number
+  indicatorRow: (_props: DatePickerDynamicProps) => ({
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    height: 6,
+    gap: 2,
+    _web: {
+      display: 'flex',
+    },
+  }),
+
+  // Individual indicator dot
+  indicator: (_props: DatePickerDynamicProps) => ({
+    width: 4,
+    height: 4,
+    borderRadius: 2,
   }),
 
   // Icon color helper

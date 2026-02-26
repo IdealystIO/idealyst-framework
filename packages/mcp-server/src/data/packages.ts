@@ -1248,6 +1248,54 @@ await end(info.id, { dismissalPolicy: 'default' });`,
     ],
     relatedPackages: ["notifications"],
   },
+
+  network: {
+    name: "Network",
+    npmName: "@idealyst/network",
+    description:
+      "Cross-platform network connectivity and utilities for React and React Native. Real-time connection monitoring, fetch with timeout, retry with exponential backoff, and wait-for-network primitives.",
+    category: "utility",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/network",
+    peerDependencies: [
+      "@react-native-community/netinfo (native)",
+    ],
+    features: [
+      "useNetwork hook — real-time isConnected, connection type, effective speed",
+      "Network state listener for non-React code",
+      "Connection type detection — WiFi, cellular, ethernet, bluetooth, VPN",
+      "Effective connection speed — slow-2g, 2g, 3g, 4g",
+      "Cellular generation — 2G, 3G, 4G, 5G (native)",
+      "Internet reachability — distinguish connected from reachable",
+      "fetchWithTimeout — fetch with configurable auto-abort",
+      "retry — exponential backoff with network-aware gating",
+      "waitForNetwork — promise that resolves when back online",
+      "Data saver detection (web)",
+      "Downlink speed and RTT estimation (web)",
+    ],
+    quickStart: `import { useNetwork } from '@idealyst/network';
+
+function App() {
+  const { isConnected, type, effectiveType } = useNetwork();
+
+  if (!isConnected) {
+    return <Text>You are offline</Text>;
+  }
+
+  return <Text>Connected via {type} ({effectiveType})</Text>;
+}`,
+    apiHighlights: [
+      "useNetwork(options?) - React hook for real-time network state",
+      "getNetworkState() - One-time state snapshot (sync on web, async on native)",
+      "addNetworkStateListener(cb) - Subscribe to changes (returns unsubscribe)",
+      "fetchWithTimeout(url, options) - Fetch with auto-abort timeout",
+      "retry(fn, options) - Exponential backoff retry",
+      "waitForNetwork(options) - Promise that resolves when online",
+      "NetworkState { isConnected, isInternetReachable, type, effectiveType, cellularGeneration, downlink, rtt, isDataSaving }",
+    ],
+    relatedPackages: ["storage", "config"],
+  },
 };
 
 /**

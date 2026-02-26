@@ -34,6 +34,7 @@ PACKAGES=(
   "payments"
   "notifications"
   "live-activity"
+  "network"
 )
 
 for pkg in "${PACKAGES[@]}"; do

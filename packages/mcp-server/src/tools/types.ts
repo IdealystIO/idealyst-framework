@@ -190,6 +190,10 @@ export interface GetLiveActivityGuideArgs {
   topic: "overview" | "api" | "examples";
 }
 
+export interface GetNetworkGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
 // ============================================================================
 // Package Tool Types
 // ============================================================================
@@ -271,6 +275,7 @@ export type ToolName =
   | "get_payments_guide"
   | "get_notifications_guide"
   | "get_live_activity_guide"
+  | "get_network_guide"
   | "list_packages"
   | "get_package_docs"
   | "search_packages"
@@ -309,6 +314,7 @@ export type ToolArgs =
   | GetPaymentsGuideArgs
   | GetNotificationsGuideArgs
   | GetLiveActivityGuideArgs
+  | GetNetworkGuideArgs
   | ListPackagesArgs
   | GetPackageDocsArgs
   | SearchPackagesArgs

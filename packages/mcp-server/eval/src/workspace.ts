@@ -35,6 +35,7 @@ const IDEALYST_PACKAGES = [
   "oauth-client",
   "lottie",
   "svg",
+  "notifications",
 ];
 
 /**

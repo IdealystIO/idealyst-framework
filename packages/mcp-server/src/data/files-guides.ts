@@ -39,7 +39,9 @@ import {
 \`\`\`
 
 > **Common mistakes:**
+> - **\`pick()\` returns \`FilePickerResult\`, NOT an array.** Access files via \`result.files\`: \`result.files.length\`, \`result.files[0].uri\`. Do NOT write \`result.length\` or \`result[0]\` — \`FilePickerResult\` is an object: \`{ cancelled: boolean, files: PickedFile[], rejected: RejectedFile[] }\`.
 > - The method is \`pick()\`, NOT \`pickFiles()\`
+> - \`pick()\` accepts overrides DIRECTLY: \`picker.pick({ allowedTypes: ['image'] })\` — NOT \`picker.pick({ config: { allowedTypes: ['image'] } })\`. The \`{ config: ... }\` wrapper is ONLY for \`useFilePicker()\` initialization.
 > - \`FileType\` values are: \`'image' | 'video' | 'audio' | 'document' | 'archive' | 'any'\` — NOT \`'pdf'\` or \`'doc'\`
 > - \`PickedFile\` has \`uri\`, \`name\`, \`size\`, \`type\`, \`extension\` — dimensions are in optional \`dimensions?: { width, height }\`, NOT top-level \`width\`/\`height\`
 
@@ -95,7 +97,7 @@ interface UseFilePickerOptions {
 | permission | PermissionResult \\| null | Permission result |
 | error | FilePickerError \\| null | Current error |
 | files | PickedFile[] | Last picked files |
-| pick | (config?) => Promise<FilePickerResult> | **Open file picker** |
+| pick | (overrides?: Partial\\<FilePickerConfig\\>) => Promise<FilePickerResult> | **Open file picker. Overrides go DIRECTLY — NOT wrapped in \`{ config }\`.** Example: \`picker.pick({ allowedTypes: ['image'] })\` — NOT \`picker.pick({ config: { allowedTypes: ['image'] } })\` |
 | captureFromCamera | (options?) => Promise<FilePickerResult> | Open camera to capture |
 | clear | () => void | Clear picked files |
 | checkPermission | () => Promise<PermissionResult> | Check permission |
@@ -231,6 +233,27 @@ interface PickedFile {
 \`\`\`
 
 > **Note:** \`dimensions\` is an optional nested object — NOT top-level \`width\`/\`height\` properties.
+
+### FilePickerResult (returned by pick())
+
+\`\`\`typescript
+interface FilePickerResult {
+  cancelled: boolean;        // Whether user cancelled the picker
+  files: PickedFile[];       // Picked files (empty if cancelled)
+  rejected: RejectedFile[];  // Files rejected by validation
+  error?: FilePickerError;   // Error if picker failed
+}
+\`\`\`
+
+> **CRITICAL:** \`pick()\` returns \`FilePickerResult\`, NOT an array. Always access \`result.files\` to get the array of picked files:
+> \`\`\`typescript
+> const result = await picker.pick();
+> if (!result.cancelled && result.files.length > 0) {
+>   const file = result.files[0]; // ✅ Correct
+>   console.log(file.uri, file.name);
+> }
+> // ❌ WRONG: result.length, result[0] — FilePickerResult is NOT an array
+> \`\`\`
 
 ### FilePickerConfig
 

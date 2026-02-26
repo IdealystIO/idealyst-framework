@@ -1,12 +1,19 @@
 import type { ViewStyle } from 'react-native';
 import type { Size } from '@idealyst/theme';
 
+export interface DayIndicator {
+  color: string;
+  key?: string;
+}
+
 export interface DatePickerProps {
   value?: Date;
   onChange: (date: Date) => void;
   minDate?: Date;
   maxDate?: Date;
   disabled?: boolean;
+  /** Indicators to render below specific dates. Key format: "YYYY-MM-DD" */
+  indicators?: Record<string, DayIndicator[]>;
   style?: ViewStyle;
 }
 

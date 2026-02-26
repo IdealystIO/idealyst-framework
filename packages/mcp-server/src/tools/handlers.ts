@@ -37,6 +37,7 @@ import { biometricsGuides } from "../data/biometrics-guides.js";
 import { paymentsGuides } from "../data/payments-guides.js";
 import { notificationsGuides } from "../data/notifications-guides.js";
 import { liveActivityGuides } from "../data/live-activity-guides.js";
+import { networkGuides } from "../data/network-guides.js";
 import {
   packages,
   getPackageSummary,
@@ -93,6 +94,7 @@ import type {
   GetPaymentsGuideArgs,
   GetNotificationsGuideArgs,
   GetLiveActivityGuideArgs,
+  GetNetworkGuideArgs,
   ListPackagesArgs,
   GetPackageDocsArgs,
   SearchPackagesArgs,
@@ -360,7 +362,12 @@ function postProcessComponentTypes(componentName: string, result: unknown): unkn
     if (typeof result === 'object' && result !== null) {
       (result as any).usageNote = "Card is a SIMPLE CONTAINER — there are NO compound components. " +
         "Do NOT use Card.Content, Card.Header, Card.Body, Card.Footer, Card.Title — they do NOT exist and will cause TS2339. " +
-        "Just put children directly inside <Card>...</Card>. Example: <Card padding=\"md\"><Text>Title</Text><Text>Body</Text></Card>";
+        "Just put children directly inside <Card>...</Card>. Example: <Card padding=\"md\"><Text>Title</Text><Text>Body</Text></Card>. " +
+        "**Card does NOT have `border`, `scrollable`, or `backgroundColor` props** — those are View-only props. " +
+        "Using `border` on Card causes TS2322. For borders use `type='outlined'`. For elevated cards use `type='elevated'`. " +
+        "Card styling props: padding, paddingVertical, paddingHorizontal, margin, marginVertical, marginHorizontal, gap/spacing, " +
+        "radius, type ('default'|'outlined'|'elevated'|'filled'), intent, background, style, onPress, disabled. " +
+        "For custom shadows use style={{ ...theme.shadows.md }}.";
     }
   }
 
@@ -370,7 +377,52 @@ function postProcessComponentTypes(componentName: string, result: unknown): unkn
       (result as any).usageNote = "View spacing shorthand props: padding, paddingVertical, paddingHorizontal, margin, marginVertical, marginHorizontal, gap/spacing. " +
         "These accept Size values (xs, sm, md, lg, xl). " +
         "Do NOT use paddingTop, paddingBottom, paddingLeft, paddingRight, marginTop, marginBottom, marginLeft, marginRight as shorthand props — " +
-        "they do NOT exist and will cause TS2353. For single-side spacing use style={{ paddingTop: 16 }}.";
+        "they do NOT exist and will cause TS2353. For single-side spacing use style={{ paddingTop: 16 }}. " +
+        "View does NOT have a `pointerEvents` JSX prop. Use style={{ pointerEvents: 'none' }} instead.";
+    }
+  }
+
+  // Add TextArea-specific guidance: TextArea API differs from TextInput
+  if (componentName.toLowerCase() === 'textarea') {
+    if (typeof result === 'object' && result !== null) {
+      (result as any).usageNote = "TextArea has a DIFFERENT API from TextInput. " +
+        "TextArea uses onChange (not onChangeText) and does NOT have onBlur. " +
+        "TextArea DOES support label, error, and rows props (TextInput does NOT support label/error). " +
+        "Always call get_component_types('TextArea') separately — do NOT assume it shares TextInput's props.";
+    }
+  }
+
+  // Add Image-specific guidance: objectFit vs resizeMode, source vs src
+  if (componentName.toLowerCase() === 'image') {
+    if (typeof result === 'object' && result !== null) {
+      (result as any).usageNote = "Image uses `objectFit` (CSS convention) — NOT `resizeMode` (React Native convention). " +
+        "Valid objectFit values: 'contain', 'cover', 'fill', 'none', 'scale-down'. " +
+        "Image uses `source` prop (accepts URL string or ImageSourcePropType) — NOT `src`. " +
+        "Example: <Image source=\"https://example.com/photo.jpg\" objectFit=\"cover\" width={200} height={200} />";
+    }
+  }
+
+  // Add Icon color guidance: intent vs textColor distinction
+  if (componentName.toLowerCase() === 'icon') {
+    if (typeof result === 'object' && result !== null) {
+      (result as any).usageNote = "Icon color props: " +
+        "Use `intent` for semantic coloring (primary, danger, success, etc.) — renders the icon in the intent's primary color. " +
+        "Use `textColor` for text-semantic coloring (primary, secondary, tertiary, inverse) — renders the icon using theme.colors.text[textColor]. " +
+        "Use `color` for arbitrary hex/rgb colors. " +
+        "If the icon represents an action or status, use `intent`. If it should match surrounding text color, use `textColor`.";
+    }
+  }
+
+  // Add Badge-specific guidance to prevent intent type narrowing issues
+  if (componentName.toLowerCase() === 'badge') {
+    if (typeof result === 'object' && result !== null) {
+      (result as any).usageNote = "Badge `intent` expects Intent: 'primary' | 'success' | 'danger' | 'warning' | 'neutral' | 'info'. " +
+        "Simple ternaries in JSX work fine: `<Badge intent={x > 5 ? 'success' : 'danger'}>` — TS infers the union. " +
+        "**Do NOT use `as const` on ternary expressions** — `(cond ? 'a' : 'b') as const` causes TS1355. " +
+        "For arrays of objects, use `as const` on each property value: `{ intent: 'success' as const }`, " +
+        "or use `as const` on the entire array literal. " +
+        "For complex logic, declare a typed variable: `const intent: Intent = cond ? 'success' : 'danger';` (import Intent from @idealyst/theme). " +
+        "This applies to all intent/type props on Badge, Button, Card, Icon, etc.";
     }
   }
 
@@ -819,6 +871,30 @@ export function getNavigationTypes(args: GetNavigationTypesArgs = {}): ToolRespo
         "Function form: tabBarIcon: ({ focused }) => <Icon name={focused ? 'home' : 'home-outline'} size=\"sm\" /> " +
         "WARNING: The function receives { size: number } from native tab bars, but Icon expects a Size token ('xs'|'sm'|'md'|'lg'|'xl'). " +
         "Do NOT pass the size param to Icon. Use a fixed size token like 'sm' or 'md' instead.";
+      (result as Record<string, unknown>).layoutNote =
+        "IMPORTANT: For custom layouts (sidebar, drawer), import Outlet from @idealyst/navigation — " +
+        "NOT from react-router-dom. Outlet renders the active route's content inside your layout. " +
+        "Example: import { Outlet, useNavigator } from '@idealyst/navigation'; " +
+        "ScreenOptions has: title, headerShown, icon (string), fullScreen. " +
+        "StackLayoutProps has: options, routes (RouteWithFullPath<ScreenOptions>[]), currentPath. " +
+        "Access route metadata: route.options?.icon, route.options?.title, route.fullPath.";
+      (result as Record<string, unknown>).usageExample =
+        "## NavigatorProvider Usage\n\n" +
+        "```tsx\n" +
+        "import { NavigatorProvider } from '@idealyst/navigation';\n" +
+        "import type { NavigatorParam } from '@idealyst/navigation';\n\n" +
+        "const routeConfig: NavigatorParam = {\n" +
+        "  path: '/',\n" +
+        "  type: 'navigator',\n" +
+        "  layout: 'tab',\n" +
+        "  routes: [\n" +
+        "    { path: '/home', type: 'screen', component: HomeScreen, options: { title: 'Home', tabBarIcon: 'home' } },\n" +
+        "    { path: '/settings', type: 'screen', component: SettingsScreen, options: { title: 'Settings', tabBarIcon: 'cog' } },\n" +
+        "  ],\n" +
+        "};\n\n" +
+        "// CRITICAL: The prop is \"route\" (SINGULAR), NOT \"routes\"\n" +
+        "export const App = () => <NavigatorProvider route={routeConfig} />;\n" +
+        "```";
     }
     return jsonResponse(result);
   } catch (error) {
@@ -1134,6 +1210,23 @@ export function getLiveActivityGuide(args: GetLiveActivityGuideArgs): ToolRespon
   const topic = args.topic;
   const uri = `idealyst://live-activity/${topic}`;
   const guide = liveActivityGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
+/**
+ * Get documentation for the network package
+ */
+export function getNetworkGuide(args: GetNetworkGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://network/${topic}`;
+  const guide = networkGuides[uri];
 
   if (!guide) {
     return textResponse(
@@ -1502,6 +1595,7 @@ export const toolHandlers: Record<string, (args: any) => ToolResponse> = {
   get_payments_guide: getPaymentsGuide,
   get_notifications_guide: getNotificationsGuide,
   get_live_activity_guide: getLiveActivityGuide,
+  get_network_guide: getNetworkGuide,
   list_packages: listPackages,
   get_package_docs: getPackageDocs,
   search_packages: searchPackages,

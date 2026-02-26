@@ -267,9 +267,10 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
 
   Image: {
     category: 'display',
-    description: 'Cross-platform image component with loading and error states',
+    description: 'Cross-platform image component for displaying photos, pictures, and remote/local images with loading and error states',
     features: [
-      'Multiple resize modes',
+      'Display photos, pictures, and media from URLs or local sources',
+      'Multiple resize modes (cover, contain, stretch, center)',
       'Loading placeholder',
       'Error fallback',
       'Lazy loading',
@@ -667,6 +668,10 @@ const componentAliases: Record<string, string> = {
   modal: "Dialog",
   tooltip: "Tooltip",
   snackbar: "Toast",
+  photo: "Image",
+  picture: "Image",
+  img: "Image",
+  thumbnail: "Image",
 };
 
 /**

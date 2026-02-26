@@ -2,12 +2,19 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { datePickerCalendarStyles } from './DatePicker.styles';
-import type { DatePickerProps } from './types';
+import type { DatePickerProps, DayIndicator } from './types';
 
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 type ViewMode = 'calendar' | 'months' | 'years';
+
+function formatDateKey(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
 
 export const DatePicker: React.FC<DatePickerProps> = ({
   value,
@@ -15,6 +22,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   minDate,
   maxDate,
   disabled = false,
+  indicators,
   style,
 }) => {
   const [currentMonth, setCurrentMonth] = useState(() => value || new Date());
@@ -44,6 +52,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const selectorItemTextStyle = (styles.selectorItemText as any)({});
   const selectorItemTextSelectedStyle = (styles.selectorItemTextSelected as any)({});
   const iconStyle = (styles.iconColor as any)({});
+  const indicatorRowStyle = (styles.indicatorRow as any)({});
+  const indicatorStyle = (styles.indicator as any)({});
 
   const { days, monthShort, year } = useMemo(() => {
     const year = currentMonth.getFullYear();
@@ -157,6 +167,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     setCurrentMonth(new Date(currentMonth.getFullYear() + 10, currentMonth.getMonth(), 1));
   };
 
+  // Helper to get indicators for a date
+  const getIndicators = (date: Date): DayIndicator[] => {
+    if (!indicators) return [];
+    const key = formatDateKey(date);
+    return indicators[key] || [];
+  };
+
   // Render month selector
   if (viewMode === 'months') {
     return (
@@ -176,7 +193,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           >
             <Text style={titleTextStyle}>{year}</Text>
           </TouchableOpacity>
-          <View style={{ width: 28 }} />
+          <View style={{ width: 32 }} />
         </View>
         <View style={monthGridStyle}>
           {MONTHS.map((month, index) => {
@@ -305,20 +322,24 @@ export const DatePicker: React.FC<DatePickerProps> = ({
           const today = isToday(date);
           const dayDisabled = isDisabled(date);
           const disabledDayButtonStyle = (styles.dayButton as any)({ disabled: dayDisabled });
+          const dayIndicators = getIndicators(date);
 
           return (
             <View
               key={index}
               style={[
                 dayCellStyle,
-                selected && selectedDayStyle,
                 !isCurrentMonth && { opacity: 0.3 },
-                today && !selected && todayDayStyle,
                 dayDisabled && { opacity: 0.3 },
               ]}
             >
               <TouchableOpacity
-                style={[dayButtonStyle, dayDisabled && disabledDayButtonStyle]}
+                style={[
+                  dayButtonStyle,
+                  dayDisabled && disabledDayButtonStyle,
+                  selected && selectedDayStyle,
+                  today && !selected && todayDayStyle,
+                ]}
                 onPress={() => handleDayPress(date)}
                 disabled={dayDisabled}
               >
@@ -331,6 +352,14 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                   {date.getDate()}
                 </Text>
               </TouchableOpacity>
+              <View style={indicatorRowStyle}>
+                {dayIndicators.slice(0, 3).map((ind, i) => (
+                  <View
+                    key={ind.key ?? i}
+                    style={[indicatorStyle, { backgroundColor: ind.color }]}
+                  />
+                ))}
+              </View>
             </View>
           );
         })}

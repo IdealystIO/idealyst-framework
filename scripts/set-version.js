@@ -52,6 +52,7 @@ const packagePaths = [
   "packages/payments/package.json",
   'packages/notifications/package.json',
   'packages/live-activity/package.json',
+  'packages/network/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',

@@ -701,6 +701,28 @@ export const getLiveActivityGuideDefinition: ToolDefinition = {
 };
 
 // ============================================================================
+// Network Tool Definitions
+// ============================================================================
+
+export const getNetworkGuideDefinition: ToolDefinition = {
+  name: "get_network_guide",
+  description:
+    "Get documentation for @idealyst/network cross-platform network connectivity and utilities package. Covers useNetwork hook, fetchWithTimeout, retry, waitForNetwork, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+// ============================================================================
 // All Tool Definitions Array
 // ============================================================================
 
@@ -743,6 +765,7 @@ export const toolDefinitions: ToolDefinition[] = [
   getPaymentsGuideDefinition,
   getNotificationsGuideDefinition,
   getLiveActivityGuideDefinition,
+  getNetworkGuideDefinition,
   // Package tools
   listPackagesDefinition,
   getPackageDocsDefinition,
