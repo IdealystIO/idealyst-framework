@@ -41,3 +41,19 @@ export type {
 // This base index re-exports the web version as the default for bundlers that don't
 // resolve "browser" or "react-native" conditions (e.g., plain tsc with types resolution).
 export { default as Markdown } from './Markdown/Markdown.web';
+
+// Editor — web fallback for base index (see index.web.ts / index.native.ts for platform-specific)
+export { default as MarkdownEditor } from './Editor/MarkdownEditor.web';
+
+// Editor types
+export type {
+  MarkdownEditorProps,
+  MarkdownEditorRef,
+  ToolbarItem,
+  ToolbarConfig,
+} from './Editor/types';
+
+export type {
+  EditorDynamicProps,
+  EditorVariants,
+} from './Editor/MarkdownEditor.styles';

@@ -14,7 +14,7 @@ interface BoundedModalContentProps {
 
 /**
  * A wrapper component for modal content that automatically constrains its height
- * to fit within screen boundaries, accounting for safe areas.
+ * and width to fit within screen boundaries, accounting for safe areas.
  */
 export const BoundedModalContent: React.FC<BoundedModalContentProps> = ({
   children,
@@ -26,7 +26,7 @@ export const BoundedModalContent: React.FC<BoundedModalContentProps> = ({
   onLayout,
 }) => {
   const insets = useSafeAreaInsets();
-  const { height: windowHeight } = Dimensions.get('window');
+  const { width: windowWidth, height: windowHeight } = Dimensions.get('window');
   const padding = 12;
 
   // Calculate dynamic maxHeight to ensure content stays within bounds
@@ -38,6 +38,9 @@ export const BoundedModalContent: React.FC<BoundedModalContentProps> = ({
   // Calculate available height: from current top position to bottom boundary
   const availableHeight = Math.max(100, bottomBound - top);
 
+  // Calculate max width so content doesn't overflow the right edge
+  const maxAvailableWidth = windowWidth - left - insets.right - padding;
+
   return (
     <View
       style={[
@@ -45,7 +48,7 @@ export const BoundedModalContent: React.FC<BoundedModalContentProps> = ({
           position: 'absolute',
           top,
           left,
-          ...(width && { width }),
+          ...(width ? { width } : { maxWidth: maxAvailableWidth }),
           maxHeight: availableHeight,
         },
         style,

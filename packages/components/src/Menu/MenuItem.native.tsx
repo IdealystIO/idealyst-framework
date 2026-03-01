@@ -24,19 +24,28 @@ const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, si
   const iconStyle = (menuItemStyles.icon as any)({});
   const labelStyle = (menuItemStyles.label as any)({});
 
+  // Extract icon size from theme variant (fontSize is set by $menu.iconSize)
+  const iconSize = iconStyle.fontSize || iconStyle.width || 20;
+
   const renderIcon = () => {
     if (!item.icon) return null;
 
     if (typeof item.icon === 'string') {
       return (
-        <MaterialDesignIcons
-          name={item.icon as any}
-          color={iconStyle.color}
-          style={iconStyle}
-        />
+        <View style={{ width: iconSize, height: iconSize, alignItems: 'center', justifyContent: 'center', marginRight: iconStyle.marginRight || 12, flexShrink: 0 }}>
+          <MaterialDesignIcons
+            name={item.icon as any}
+            size={iconSize}
+            color={iconStyle.color}
+          />
+        </View>
       );
     } else if (isValidElement(item.icon)) {
-      return item.icon;
+      return (
+        <View style={{ marginRight: iconStyle.marginRight || 12, flexShrink: 0 }}>
+          {item.icon}
+        </View>
+      );
     }
     return null;
   };
@@ -54,12 +63,8 @@ const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, si
       android_ripple={{ color: 'rgba(0, 0, 0, 0.1)' }}
       testID={testID}
     >
-      {item.icon && (
-        <View>
-          {renderIcon()}
-        </View>
-      )}
-      <Text style={labelStyle}>
+      {renderIcon()}
+      <Text style={labelStyle} numberOfLines={1}>
         {item.label}
       </Text>
     </Pressable>

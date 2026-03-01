@@ -1175,26 +1175,37 @@ function UserScreen() {
 
 ## useNavigationState Hook
 
-Access navigation state passed via the \`state\` property:
+Access navigation state passed via the \`state\` property.
+
+> **IMPORTANT — Type constraints:**
+> - \`navigate({ state: {...} })\` requires all values to be \`string | number | boolean\` — NO \`undefined\` or \`null\`. Do NOT spread objects that may contain undefined values.
+> - \`useNavigationState<T>()\` requires \`T extends Record<string, unknown>\`. Use \`Record<string, string | number | boolean>\` for the type parameter, or a specific interface with NON-optional fields.
+> - **Do NOT use optional fields (\`?\`) in the type parameter** — values passed via state are always present (they were explicitly set by navigate()). Use required fields instead.
 
 \`\`\`tsx
 import { useNavigationState } from '@idealyst/navigation';
 
-// When navigating:
+// When navigating — all values must be string | number | boolean:
 navigator.navigate({
   path: '/recording',
   state: { autostart: true, source: 'home' }
 });
 
-// In destination screen:
+// In destination screen — use REQUIRED fields (not optional):
 function RecordingScreen() {
-  const { autostart, source } = useNavigationState<{
-    autostart?: boolean;
-    source?: string;
+  const state = useNavigationState<{
+    autostart: boolean;
+    source: string;
   }>();
 
-  // autostart = true, source = 'home'
+  // state.autostart = true, state.source = 'home'
 }
+
+// For multi-step wizards, pass ALL accumulated data as required fields:
+navigator.navigate({
+  path: '/step3',
+  state: { firstName: name, lastName: last, theme: selectedTheme }
+});
 \`\`\`
 
 ### Consuming State (Web)

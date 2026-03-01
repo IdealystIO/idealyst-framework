@@ -145,7 +145,9 @@ const parseParameterizedPath = (path: string, rootRoute: any): { routeName: stri
                 const routeSegments = route.path.split('/').filter(Boolean);
                 // Clean up path joining to avoid double slashes
                 const cleanPath = route.path.startsWith('/') ? route.path.slice(1) : route.path;
-                const fullRoutePath = pathPrefix ? `${pathPrefix}/${cleanPath}` : route.path;
+                const joinedPath = pathPrefix ? `${pathPrefix}/${cleanPath}` : route.path;
+                // Normalize any double slashes (e.g. when pathPrefix is "/")
+                const fullRoutePath = joinedPath.replace(/\/\/+/g, '/');
                 
                 // Check if route segments match the path segments at current position
                 const remainingSegments = segments.length - startIndex;

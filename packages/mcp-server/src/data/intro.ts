@@ -146,8 +146,8 @@ These are mistakes agents make repeatedly. Each one causes TypeScript compilatio
 11. **NavigatorProvider** takes a \`route\` prop (SINGULAR) — NOT \`routes\`: \`<NavigatorProvider route={routeConfig} />\`. There is NO \`Router\` export.
 12. Use \`useNavigator()\` — NOT \`useNavigate()\`.
 13. \`navigate()\` takes an **object**: \`navigate({ path: '/settings' })\` — NOT \`navigate('/settings')\` or \`navigate('routeName', params)\`. To pass data use \`vars\`: \`navigate({ path: '/detail/:id', vars: { id: '123' } })\` — NOT \`params\`: \`navigate({ path: '/detail', params: { id: '123' } })\` (no \`params\` property exists).
-14. \`useNavigationState\` returns \`Record<string, unknown>\` by default. Always provide a type parameter: \`useNavigationState<{ title?: string }>()\`.
-15. \`useParams()\` does NOT accept generic type arguments. It returns \`Record<string, string>\`. Do NOT write \`useParams<{ id: string }>()\` — that causes TS2558.
+14. \`navigate({ state: {...} })\` values must be \`string | number | boolean\` — NO \`undefined\`, \`null\`, or objects. When forwarding state across wizard steps, ensure all values are defined before passing: \`navigate({ path: '/step2', state: { firstName: name, age: 25 } })\`. Do NOT use optional fields in state types.
+15. \`useParams()\` does NOT accept generic type arguments. It returns \`Record<string, string | undefined>\`. Do NOT write \`useParams<{ id: string }>()\` — that causes TS2558. Always guard for undefined: \`const id = params.id; if (!id) return null;\`.
 
 ### Imports & Styling
 16. **Never** import from \`react-native\` — no \`TouchableOpacity\`, \`FlatList\`, \`ScrollView\`, \`Animated\`, \`Dimensions\`, \`Linking\`, \`Platform\`. Idealyst provides cross-platform alternatives for all of these (e.g., \`openExternalLinks\` on Markdown, \`Pressable\` from \`@idealyst/components\`). **\`ScrollView\` is NOT exported from \`@idealyst/components\`** — use \`<View scrollable>\` instead. Do NOT \`import { ScrollView } from '@idealyst/components'\` — it will cause a TS import error.

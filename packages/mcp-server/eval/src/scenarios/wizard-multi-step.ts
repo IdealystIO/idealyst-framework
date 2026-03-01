@@ -33,6 +33,9 @@ Write your component code as real files using the Write tool to the workspace pa
 - Show a success message after submission
 
 Use useNavigator for navigation and useNavigationState to receive data passed between steps.
+
+**Important:** When calling navigate({ state: {...} }), all state values must be string | number | boolean (no undefined/null). Use required fields (NOT optional) in your state type parameters, since values were explicitly set by the sender.
+
 Look up the navigation types documentation using the MCP tools.`,
   expectedToolUsage: [
     "get_navigation_types",

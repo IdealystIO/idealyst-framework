@@ -24,3 +24,19 @@ export type {
   MarkdownDynamicProps,
   MarkdownVariants,
 } from './Markdown/Markdown.styles';
+
+// Editor
+export { default as MarkdownEditor } from './Editor/MarkdownEditor.web';
+
+// Editor types
+export type {
+  MarkdownEditorProps,
+  MarkdownEditorRef,
+  ToolbarItem,
+  ToolbarConfig,
+} from './Editor/types';
+
+export type {
+  EditorDynamicProps,
+  EditorVariants,
+} from './Editor/MarkdownEditor.styles';

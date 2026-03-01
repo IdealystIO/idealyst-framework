@@ -5,6 +5,7 @@ import {
   Pressable,
   ScrollView,
 } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { menuStyles } from './Menu.styles';
 import type { MenuProps, MenuItem as MenuItemType } from './types';
 import MenuItem from './MenuItem.native';
@@ -60,10 +61,41 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
 
   const mergedTriggerRef = useMergeRefs(ref, triggerRef);
 
+  // Animation shared values
+  const menuScale = useSharedValue(0.9);
+  const menuOpacity = useSharedValue(0);
+
+  const animatedMenuStyle = useAnimatedStyle(() => ({
+    opacity: menuOpacity.value,
+    transform: [{ scale: menuScale.value }],
+  }));
+
+  // Animate in when measured and positioned
+  const isMeasured = menuSize.height > 0;
+  const shouldShow = isMeasured && isPositioned;
+
+  useEffect(() => {
+    if (shouldShow) {
+      menuScale.value = withTiming(1, {
+        duration: 200,
+        easing: Easing.out(Easing.cubic),
+      });
+      menuOpacity.value = withTiming(1, {
+        duration: 150,
+        easing: Easing.out(Easing.ease),
+      });
+    } else {
+      menuScale.value = 0.9;
+      menuOpacity.value = 0;
+    }
+  }, [shouldShow]);
+
   // Reset position when menu closes
   useEffect(() => {
     if (!open) {
       resetPosition();
+      menuScale.value = 0.9;
+      menuOpacity.value = 0;
     }
   }, [open]);
 
@@ -93,10 +125,6 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
   const renderMenu = () => {
     if (!open) return null;
 
-    // Show menu only after it has been measured AND positioned
-    const isMeasured = menuSize.height > 0;
-    const shouldShow = isMeasured && isPositioned;
-
     return (
       <Modal
         visible={true}
@@ -115,26 +143,27 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
             style={[
               (menuStyles.menu as any)({}),
               style,
-              { opacity: shouldShow ? 1 : 0 }
             ]}
             onLayout={handleMenuLayout}
           >
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-            >
-              {items.map((item, index) => {
+            <Animated.View style={animatedMenuStyle}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+              >
+                {items.map((item, index) => {
 
-                return (
-                  <MenuItem
-                    key={item.id || index}
-                    item={item}
-                    onPress={handleItemPress}
-                    size={size}
-                    testID={testID ? `${testID}-item-${item.id || index}` : undefined}
-                  />
-                );
-              })}
-            </ScrollView>
+                  return (
+                    <MenuItem
+                      key={item.id || index}
+                      item={item}
+                      onPress={handleItemPress}
+                      size={size}
+                      testID={testID ? `${testID}-item-${item.id || index}` : undefined}
+                    />
+                  );
+                })}
+              </ScrollView>
+            </Animated.View>
           </BoundedModalContent>
         </Pressable>
       </Modal>
