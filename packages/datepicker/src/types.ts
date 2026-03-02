@@ -34,6 +34,8 @@ export interface DateInputProps {
   minDate?: Date;
   maxDate?: Date;
   disabled?: boolean;
+  /** When true, the entire input area is pressable to open the calendar instead of being a text input. */
+  pressable?: boolean;
   error?: string;
   size?: Size;
   style?: ViewStyle;
@@ -47,6 +49,8 @@ export interface TimeInputProps {
   mode?: '12h' | '24h';
   minuteStep?: number;
   disabled?: boolean;
+  /** When true, the entire input area is pressable to open the time picker instead of being a text input. */
+  pressable?: boolean;
   error?: string;
   size?: Size;
   style?: ViewStyle;
@@ -61,6 +65,8 @@ export interface DateTimePickerProps {
   timeMode?: '12h' | '24h';
   minuteStep?: number;
   disabled?: boolean;
+  /** When true, both input areas are pressable to open their pickers instead of being text inputs. */
+  pressable?: boolean;
   error?: string;
   size?: Size;
   style?: ViewStyle;

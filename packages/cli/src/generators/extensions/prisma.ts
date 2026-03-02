@@ -88,7 +88,7 @@ async function generatePrismaFiles(
   // Create src/index.ts
   await fs.writeFile(
     path.join(dbDir, 'src', 'index.ts'),
-    createPrismaIndex()
+    createPrismaIndex(data)
   );
 
   // Create src/schemas.ts
@@ -120,11 +120,23 @@ ${provider === 'postgresql'
  * Create Prisma package.json
  */
 function createPrismaPackageJson(data: TemplateData): Record<string, unknown> {
+  const deps: Record<string, string> = {
+    ...DEPENDENCIES.prisma,
+    'dotenv': '^16.4.0',
+    'zod': '^3.22.0',
+  };
+
   const devDeps: Record<string, string> = {
     ...DEPENDENCIES.prismaDev,
     'tsx': '^4.7.0',
     'typescript': '^5.0.0',
   };
+
+  // Add PostgreSQL driver adapter
+  if (data.databaseProvider === 'postgresql') {
+    Object.assign(deps, DEPENDENCIES.prismaPg);
+    Object.assign(devDeps, DEPENDENCIES.prismaPgDev);
+  }
 
   // Add @pothos/plugin-prisma for the prisma-pothos-types generator
   // This is needed so `prisma generate` can find the generator
@@ -154,11 +166,7 @@ function createPrismaPackageJson(data: TemplateData): Record<string, unknown> {
       'db:studio': 'prisma studio',
       'db:seed': 'tsx prisma/seed.ts',
     },
-    dependencies: {
-      ...DEPENDENCIES.prisma,
-      'dotenv': '^16.4.0',
-      'zod': '^3.22.0',
-    },
+    dependencies: deps,
     devDependencies: devDeps,
   };
 }
@@ -242,19 +250,43 @@ export default defineConfig({
 /**
  * Create Prisma index.ts
  */
-function createPrismaIndex(): string {
+function createPrismaIndex(data: TemplateData): string {
+  const isPostgres = data.databaseProvider === 'postgresql';
+
+  const pgImport = isPostgres
+    ? `import { PrismaPg } from '@prisma/adapter-pg';\n`
+    : '';
+
+  const pgAdapter = isPostgres
+    ? `
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+`
+    : '';
+
+  const clientInit = isPostgres
+    ? `export const prisma = globalThis.__prisma || new PrismaClient({ adapter });`
+    : `export const prisma = globalThis.__prisma || new PrismaClient();`;
+
   return `/**
  * Database package exports
  */
 
+import { config } from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import { PrismaClient } from '../prisma/generated/client/index.js';
-
+${pgImport}
+// Load .env from this package's root (ensures DATABASE_URL is set
+// regardless of which package is the runtime entry point)
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+config({ path: path.resolve(__dirname, '..', '.env') });
+${pgAdapter}
 // Prevent multiple instances of Prisma Client in development
 declare global {
   var __prisma: PrismaClient | undefined;
 }
 
-export const prisma = globalThis.__prisma || new PrismaClient();
+${clientInit}
 
 if (process.env.NODE_ENV !== 'production') {
   globalThis.__prisma = prisma;

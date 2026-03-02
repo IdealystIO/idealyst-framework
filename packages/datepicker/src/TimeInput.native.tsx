@@ -13,6 +13,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
   mode = '12h',
   minuteStep = 1,
   disabled = false,
+  pressable = false,
   error,
   size = 'md',
   style,
@@ -118,23 +119,43 @@ export const TimeInput: React.FC<TimeInputProps> = ({
           {label}
         </Text>
       )}
-      <View style={inputContainerStyle}>
-        <TextInput
-          value={inputValue}
-          onChangeText={handleInputChange}
-          onBlur={handleInputBlur}
-          placeholder={placeholder}
-          editable={!disabled}
-          style={textInputStyle}
-        />
+      {pressable ? (
         <TouchableOpacity
-          style={iconButtonStyle}
           onPress={() => !disabled && setOpen(true)}
           disabled={disabled}
+          activeOpacity={0.7}
         >
-          <MaterialDesignIcons name="clock-outline" size={iconStyle.width} style={iconStyle} />
+          <View style={inputContainerStyle} pointerEvents="none">
+            <TextInput
+              value={formatTime(value ?? undefined)}
+              placeholder={placeholder}
+              editable={false}
+              style={textInputStyle}
+            />
+            <View style={iconButtonStyle}>
+              <MaterialDesignIcons name="clock-outline" size={iconStyle.width} style={iconStyle} />
+            </View>
+          </View>
         </TouchableOpacity>
-      </View>
+      ) : (
+        <View style={inputContainerStyle}>
+          <TextInput
+            value={inputValue}
+            onChangeText={handleInputChange}
+            onBlur={handleInputBlur}
+            placeholder={placeholder}
+            editable={!disabled}
+            style={textInputStyle}
+          />
+          <TouchableOpacity
+            style={iconButtonStyle}
+            onPress={() => !disabled && setOpen(true)}
+            disabled={disabled}
+          >
+            <MaterialDesignIcons name="clock-outline" size={iconStyle.width} style={iconStyle} />
+          </TouchableOpacity>
+        </View>
+      )}
       {error && (
         <Text style={errorTextStyle}>
           {error}

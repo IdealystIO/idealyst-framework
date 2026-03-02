@@ -18,6 +18,7 @@ const Dialog = forwardRef<View, DialogProps>(({
   animationType: _animationType = 'fade',
   avoidKeyboard = false,
   padding: paddingProp = 20,
+  height,
   maxContentHeight,
   contentPadding = 24,
   contentStyle,
@@ -183,13 +184,29 @@ const Dialog = forwardRef<View, DialogProps>(({
     ? Math.min(maxContentHeight, maxAvailableHeight)
     : maxAvailableHeight;
 
-  // Dialog uses the effective max height, with flex: 1 so children can fill it
+  // Resolve explicit height (number or percentage string)
+  const resolvedHeight = typeof height === 'string'
+    ? height.endsWith('%')
+      ? (parseFloat(height) / 100) * maxAvailableHeight
+      : parseFloat(height)
+    : height;
+
+  // Dialog uses the effective max height, with a definite height when requested
+  // so children can resolve flex: 1 against it
   const dialogContainerStyle = {
     ...containerStyle,
     maxHeight: effectiveMaxHeight,
-    height: maxContentHeight ? effectiveMaxHeight : undefined,
+    height: resolvedHeight
+      ? Math.min(resolvedHeight, effectiveMaxHeight)
+      : maxContentHeight
+        ? effectiveMaxHeight
+        : undefined,
     flex: undefined,
   };
+
+  // Only apply flex: 1 to content when the dialog has a definite height to flex against.
+  // Without a definite height, flex: 1 collapses content instead of wrapping naturally.
+  const hasDefiniteHeight = Boolean(resolvedHeight || maxContentHeight);
 
   const dialogContainer = (
     <Animated.View ref={ref as any} style={[dialogContainerStyle, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
@@ -212,7 +229,7 @@ const Dialog = forwardRef<View, DialogProps>(({
           )}
         </View>
       )}
-      <View style={[contentPadding > 0 ? { padding: contentPadding } : undefined, contentStyle]}>
+      <View style={[hasDefiniteHeight && { flex: 1, minHeight: 0 }, contentPadding > 0 ? { padding: contentPadding } : undefined, contentStyle]}>
         {children}
       </View>
     </Animated.View>

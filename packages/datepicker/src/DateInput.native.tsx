@@ -13,6 +13,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   minDate,
   maxDate,
   disabled = false,
+  pressable = false,
   error,
   size = 'md',
   style,
@@ -98,23 +99,43 @@ export const DateInput: React.FC<DateInputProps> = ({
           {label}
         </Text>
       )}
-      <View style={inputContainerStyle}>
-        <TextInput
-          value={inputValue}
-          onChangeText={handleInputChange}
-          onBlur={handleInputBlur}
-          placeholder={placeholder}
-          editable={!disabled}
-          style={textInputStyle}
-        />
+      {pressable ? (
         <TouchableOpacity
-          style={iconButtonStyle}
           onPress={() => !disabled && setOpen(true)}
           disabled={disabled}
+          activeOpacity={0.7}
         >
-          <MaterialDesignIcons name="calendar" size={iconStyle.width} style={iconStyle} />
+          <View style={inputContainerStyle} pointerEvents="none">
+            <TextInput
+              value={formatDate(value ?? undefined)}
+              placeholder={placeholder}
+              editable={false}
+              style={textInputStyle}
+            />
+            <View style={iconButtonStyle}>
+              <MaterialDesignIcons name="calendar" size={iconStyle.width} style={iconStyle} />
+            </View>
+          </View>
         </TouchableOpacity>
-      </View>
+      ) : (
+        <View style={inputContainerStyle}>
+          <TextInput
+            value={inputValue}
+            onChangeText={handleInputChange}
+            onBlur={handleInputBlur}
+            placeholder={placeholder}
+            editable={!disabled}
+            style={textInputStyle}
+          />
+          <TouchableOpacity
+            style={iconButtonStyle}
+            onPress={() => !disabled && setOpen(true)}
+            disabled={disabled}
+          >
+            <MaterialDesignIcons name="calendar" size={iconStyle.width} style={iconStyle} />
+          </TouchableOpacity>
+        </View>
+      )}
       {error && (
         <Text style={errorTextStyle}>
           {error}

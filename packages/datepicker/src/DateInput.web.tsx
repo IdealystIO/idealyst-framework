@@ -18,6 +18,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   minDate,
   maxDate,
   disabled = false,
+  pressable = false,
   error,
   size = 'md',
   style,
@@ -113,25 +114,47 @@ export const DateInput: React.FC<DateInputProps> = ({
       {label && (
         <span {...labelProps}>{label}</span>
       )}
-      <div {...containerProps} ref={triggerRef}>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputBlur}
-          placeholder={placeholder}
-          disabled={disabled}
-          {...inputProps}
-        />
-        <button
-          type="button"
-          {...iconButtonProps}
+      {pressable ? (
+        <div
+          ref={triggerRef}
           onClick={() => !disabled && setOpen(!open)}
-          disabled={disabled}
+          style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
         >
-          <IconSvg path={mdiCalendar} size={iconSize} color={iconColor} />
-        </button>
-      </div>
+          <div {...containerProps} style={{ pointerEvents: 'none' }}>
+            <input
+              type="text"
+              value={formatDate(value ?? undefined)}
+              placeholder={placeholder}
+              readOnly
+              tabIndex={-1}
+              {...inputProps}
+            />
+            <div {...iconButtonProps}>
+              <IconSvg path={mdiCalendar} size={iconSize} color={iconColor} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div {...containerProps} ref={triggerRef}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            placeholder={placeholder}
+            disabled={disabled}
+            {...inputProps}
+          />
+          <button
+            type="button"
+            {...iconButtonProps}
+            onClick={() => !disabled && setOpen(!open)}
+            disabled={disabled}
+          >
+            <IconSvg path={mdiCalendar} size={iconSize} color={iconColor} />
+          </button>
+        </div>
+      )}
       {error && (
         <span {...errorProps}>{error}</span>
       )}

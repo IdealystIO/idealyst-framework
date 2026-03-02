@@ -62,12 +62,10 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
   const mergedTriggerRef = useMergeRefs(ref, triggerRef);
 
   // Animation shared values
-  const menuScale = useSharedValue(0.9);
   const menuOpacity = useSharedValue(0);
 
   const animatedMenuStyle = useAnimatedStyle(() => ({
     opacity: menuOpacity.value,
-    transform: [{ scale: menuScale.value }],
   }));
 
   // Animate in when measured and positioned
@@ -76,16 +74,11 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
 
   useEffect(() => {
     if (shouldShow) {
-      menuScale.value = withTiming(1, {
-        duration: 200,
-        easing: Easing.out(Easing.cubic),
-      });
       menuOpacity.value = withTiming(1, {
         duration: 150,
         easing: Easing.out(Easing.ease),
       });
     } else {
-      menuScale.value = 0.9;
       menuOpacity.value = 0;
     }
   }, [shouldShow]);
@@ -94,7 +87,6 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
   useEffect(() => {
     if (!open) {
       resetPosition();
-      menuScale.value = 0.9;
       menuOpacity.value = 0;
     }
   }, [open]);

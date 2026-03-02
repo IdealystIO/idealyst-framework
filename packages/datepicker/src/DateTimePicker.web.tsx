@@ -14,6 +14,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   timeMode = '12h',
   minuteStep = 1,
   disabled = false,
+  pressable = false,
   error,
   size = 'md',
   style,
@@ -95,6 +96,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             minDate={minDate}
             maxDate={maxDate}
             disabled={disabled}
+            pressable={pressable}
             error={error}
             size={size}
           />
@@ -107,6 +109,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
             mode={timeMode}
             minuteStep={minuteStep}
             disabled={disabled}
+            pressable={pressable}
             size={size}
           />
         </div>

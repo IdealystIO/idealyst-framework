@@ -17,6 +17,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
   mode = '12h',
   minuteStep = 1,
   disabled = false,
+  pressable = false,
   error,
   size = 'md',
   style,
@@ -137,25 +138,47 @@ export const TimeInput: React.FC<TimeInputProps> = ({
       {label && (
         <span {...labelProps}>{label}</span>
       )}
-      <div {...containerProps} ref={triggerRef}>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputBlur}
-          placeholder={placeholder}
-          disabled={disabled}
-          {...inputProps}
-        />
-        <button
-          type="button"
-          {...iconButtonProps}
+      {pressable ? (
+        <div
+          ref={triggerRef}
           onClick={() => !disabled && setOpen(!open)}
-          disabled={disabled}
+          style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
         >
-          <IconSvg path={mdiClockOutline} size={iconSize} color={iconColor} />
-        </button>
-      </div>
+          <div {...containerProps} style={{ pointerEvents: 'none' }}>
+            <input
+              type="text"
+              value={formatTime(value ?? undefined)}
+              placeholder={placeholder}
+              readOnly
+              tabIndex={-1}
+              {...inputProps}
+            />
+            <div {...iconButtonProps}>
+              <IconSvg path={mdiClockOutline} size={iconSize} color={iconColor} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div {...containerProps} ref={triggerRef}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            placeholder={placeholder}
+            disabled={disabled}
+            {...inputProps}
+          />
+          <button
+            type="button"
+            {...iconButtonProps}
+            onClick={() => !disabled && setOpen(!open)}
+            disabled={disabled}
+          >
+            <IconSvg path={mdiClockOutline} size={iconSize} color={iconColor} />
+          </button>
+        </div>
+      )}
       {error && (
         <span {...errorProps}>{error}</span>
       )}

@@ -6,7 +6,7 @@
 export const VERSION = '0.1.0';
 
 // Current Idealyst framework version to use in templates
-export const IDEALYST_VERSION = '1.2.119';
+export const IDEALYST_VERSION = '1.2.121';
 
 // React Native version
 export const REACT_NATIVE_VERSION = '0.83.0';
@@ -126,6 +126,13 @@ export const DEPENDENCIES = {
   },
   prisma: {
     '@prisma/client': '^7.1.0',
+  },
+  prismaPg: {
+    '@prisma/adapter-pg': '^7.1.0',
+    'pg': '^8.13.0',
+  },
+  prismaPgDev: {
+    '@types/pg': '^8.11.0',
   },
   prismaDev: {
     'prisma': '^7.1.0',

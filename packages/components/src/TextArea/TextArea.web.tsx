@@ -21,6 +21,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   minHeight,
   maxHeight,
   autoGrow = false,
+  fill = false,
   maxLength,
   label,
   error,
@@ -158,7 +159,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   const characterCountProps = getWebProps([characterCountStyleComputed]);
 
   const adjustHeight = useCallback(() => {
-    if (!autoGrow || !textareaRef.current) return;
+    if (!autoGrow || fill || !textareaRef.current) return;
 
     const textarea = textareaRef.current;
 
@@ -176,7 +177,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
     }
 
     textarea.style.height = `${newHeight}px`;
-  }, [autoGrow, minHeight, maxHeight]);
+  }, [autoGrow, fill, minHeight, maxHeight]);
 
   useEffect(() => {
     adjustHeight();
@@ -243,17 +244,18 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   const mergedTextareaRef = useMergeRefs(textareaRef, computedTextareaProps.ref);
 
   return (
-    <div {...containerProps} ref={mergedRef} id={id} data-testid={testID}>
+    <div {...containerProps} ref={mergedRef} id={id} data-testid={testID} style={{ ...containerProps.style as any, ...(fill ? { flex: 1, display: 'flex', flexDirection: 'column' } : {}) }}>
       {label && (
         <label {...labelProps} id={labelId} htmlFor={textareaId}>{label}</label>
       )}
 
-      <div {...textareaContainerProps}>
+      <div {...textareaContainerProps} style={{ ...textareaContainerProps.style as any, ...(fill ? { flex: 1, display: 'flex', flexDirection: 'column' } : {}) }}>
         <textarea
           {...computedTextareaProps}
           {...ariaProps}
           id={textareaId}
           ref={mergedTextareaRef}
+          style={{ ...computedTextareaProps.style as any, ...(fill ? { flex: 1 } : {}) }}
           value={value}
           onChange={handleChange}
           onFocus={handleFocus}
@@ -261,7 +263,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
-          rows={autoGrow ? undefined : rows}
+          rows={fill ? undefined : autoGrow ? undefined : rows}
           maxLength={maxLength}
         />
       </div>

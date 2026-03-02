@@ -388,6 +388,8 @@ function postProcessComponentTypes(componentName: string, result: unknown): unkn
       (result as any).usageNote = "TextArea has a DIFFERENT API from TextInput. " +
         "TextArea uses onChange (not onChangeText) and does NOT have onBlur. " +
         "TextArea DOES support label, error, and rows props (TextInput does NOT support label/error). " +
+        "TextArea supports `fill` prop: when true, all container layers get flex: 1 so the textarea " +
+        "expands to fill available vertical space (useful inside Dialog with avoidKeyboard). " +
         "Always call get_component_types('TextArea') separately — do NOT assume it shares TextInput's props.";
     }
   }

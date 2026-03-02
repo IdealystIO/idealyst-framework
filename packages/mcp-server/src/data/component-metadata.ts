@@ -204,12 +204,16 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
       'Title and close button',
       'Backdrop click to close',
       'Animation types (slide, fade)',
+      'avoidKeyboard prop shifts dialog when keyboard opens (native)',
+      'height prop gives dialog a definite height so children can use flex: 1',
+      'Content area has flex: 1 — children can flex into available space',
     ],
     bestPractices: [
       'Use sparingly for important interactions',
       'Provide clear actions for dismissal',
       'Keep dialog content focused',
       'Use confirmation dialogs for destructive actions',
+      'Use height or maxContentHeight when children need flex-based sizing',
     ],
   },
 
@@ -577,11 +581,13 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
       'Character count',
       'Auto-resize',
       'Error state',
+      'fill prop for flex-based sizing (fills available space)',
     ],
     bestPractices: [
       'Use for multi-line input',
       'Show character limits when applicable',
       'Provide appropriate placeholder text',
+      'Use fill prop inside Dialog with avoidKeyboard to shrink with keyboard',
     ],
   },
 

@@ -73,10 +73,12 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
     },
   }),
 
-  // Calendar grid
+  // Calendar grid - fixed height so rows flex evenly regardless of 5 or 6 weeks
   calendarGrid: (_props: DatePickerDynamicProps) => ({
     flexDirection: 'row' as const,
     flexWrap: 'wrap' as const,
+    height: 252, // 6 rows × 42px
+    alignContent: 'space-evenly' as const,
     _web: {
       display: 'flex',
     },
@@ -263,12 +265,12 @@ export const datePickerCalendarStyles = defineStyle('DatePickerCalendar', (theme
     },
   }),
 
-  // Today styling - subtle background highlight
+  // Today styling - subtle gray background
   todayDay: (_props: DatePickerDynamicProps) => ({
-    backgroundColor: theme.intents.primary.light,
     borderRadius: 16,
+    backgroundColor: theme.colors.pallet.gray?.[200] ?? theme.colors.surface.secondary,
     _web: {
-      background: theme.intents.primary.light,
+      background: theme.colors.pallet.gray?.[200] ?? theme.colors.surface.secondary,
     },
   }),
 

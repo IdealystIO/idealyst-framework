@@ -17,6 +17,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   minHeight,
   maxHeight,
   autoGrow = false,
+  fill = false,
   maxLength,
   rows = 4,
   label,
@@ -167,12 +168,12 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   });
 
   return (
-    <View nativeID={id} style={[containerStyleComputed, style]} testID={testID}>
+    <View nativeID={id} style={[containerStyleComputed, fill && { flex: 1 }, style]} testID={testID}>
       {label && (
         <Text style={labelStyleComputed}>{label}</Text>
       )}
 
-      <View style={textareaContainerStyleComputed}>
+      <View style={[textareaContainerStyleComputed, fill && { flex: 1 }]}>
         <TextInput
           ref={useMergeRefs(textInputRef, ref as any)}
           {...nativeA11yProps}
@@ -183,16 +184,19 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
               textAlignVertical: autoGrow ? 'center' : 'top',
               backgroundColor: 'transparent',
             },
-            // For autoGrow: don't set height, let it grow naturally with minHeight constraint
-            // For fixed height: use rows-based height
-            autoGrow
-              ? {
-                  minHeight: minHeight ?? 44,
-                  maxHeight: maxHeight,
-                  // Force height to minHeight when empty to ensure shrinking
-                  ...(value === '' ? { height: minHeight ?? 44 } : {}),
-                }
-              : { height: rows * 24 },
+            // fill: expand to fill available space via flex
+            // autoGrow: don't set height, let it grow naturally with minHeight constraint
+            // default: use rows-based height
+            fill
+              ? { flex: 1 }
+              : autoGrow
+                ? {
+                    minHeight: minHeight ?? 44,
+                    maxHeight: maxHeight,
+                    // Force height to minHeight when empty to ensure shrinking
+                    ...(value === '' ? { height: minHeight ?? 44 } : {}),
+                  }
+                : { height: rows * 24 },
             textareaStyle,
           ]}
           value={value}

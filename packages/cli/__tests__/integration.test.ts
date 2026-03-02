@@ -393,7 +393,7 @@ describe('CLI Template Integration Tests', () => {
 
           const configContent = await fs.readFile(configPath, 'utf8');
           expect(configContent).toContain('defineConfig');
-          expect(configContent).toContain("url: env('DATABASE_URL')");
+          expect(configContent).toContain("url: process.env.DATABASE_URL!");
         });
 
         it('should have .env with DATABASE_URL', async () => {
@@ -408,7 +408,7 @@ describe('CLI Template Integration Tests', () => {
           const indexPath = path.join(projectPath, 'packages', 'database', 'src', 'index.ts');
           const indexContent = await fs.readFile(indexPath, 'utf8');
 
-          expect(indexContent).toContain('../generated/client/index.js');
+          expect(indexContent).toContain('../prisma/generated/client/index.js');
           expect(indexContent).toContain('export const prisma');
           expect(indexContent).toContain('export { PrismaClient }');
         });

@@ -44,6 +44,11 @@ export interface TextAreaProps extends FormInputStyleProps, FormAccessibilityPro
   minHeight?: number;
   maxHeight?: number;
   autoGrow?: boolean;
+  /**
+   * When true, the textarea expands to fill available vertical space using flex.
+   * Overrides `rows` and `autoGrow` height logic. All container layers get `flex: 1`.
+   */
+  fill?: boolean;
   maxLength?: number;
   label?: string;
   error?: string;
