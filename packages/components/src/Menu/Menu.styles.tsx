@@ -155,6 +155,14 @@ export const menuStyles = defineStyle('Menu', (theme: Theme) => ({
                 height: theme.sizes.$menu.iconSize,
                 fontSize: theme.sizes.$menu.iconSize,
             },
+            intent: {
+                neutral: {},
+                primary: { color: theme.intents.primary.primary },
+                success: { color: theme.intents.success.primary },
+                danger: { color: theme.intents.danger.primary },
+                warning: { color: theme.intents.warning.primary },
+                info: { color: theme.intents.info.primary },
+            },
         },
     }),
 
@@ -164,6 +172,14 @@ export const menuStyles = defineStyle('Menu', (theme: Theme) => ({
         variants: {
             size: {
                 fontSize: theme.sizes.$menu.labelFontSize,
+            },
+            intent: {
+                neutral: {},
+                primary: { color: theme.intents.primary.primary },
+                success: { color: theme.intents.success.primary },
+                danger: { color: theme.intents.danger.primary },
+                warning: { color: theme.intents.warning.primary },
+                info: { color: theme.intents.info.primary },
             },
         },
     }),

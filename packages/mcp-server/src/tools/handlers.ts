@@ -410,8 +410,11 @@ function postProcessComponentTypes(componentName: string, result: unknown): unkn
       (result as any).usageNote = "Icon color props: " +
         "Use `intent` for semantic coloring (primary, danger, success, etc.) — renders the icon in the intent's primary color. " +
         "Use `textColor` for text-semantic coloring (primary, secondary, tertiary, inverse) — renders the icon using theme.colors.text[textColor]. " +
-        "Use `color` for arbitrary hex/rgb colors. " +
-        "If the icon represents an action or status, use `intent`. If it should match surrounding text color, use `textColor`.";
+        "Use `color` for palette colors (e.g., 'primary', 'blue.500'). " +
+        "**CRITICAL: `color` and `textColor` are MUTUALLY EXCLUSIVE (discriminated union).** " +
+        "NEVER pass both — even conditionally with undefined values. Use one or the other. " +
+        "WRONG: `<Icon name='x' color={cond ? 'primary' : undefined} textColor={cond ? undefined : 'secondary'} />` — causes TS2322. " +
+        "RIGHT: `<Icon name='x' color={isActive ? 'primary' : 'neutral.400'} />` or use separate JSX branches.";
     }
   }
 

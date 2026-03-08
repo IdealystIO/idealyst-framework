@@ -20,9 +20,10 @@ const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, si
   });
 
   // Call styles as functions to get theme-reactive styles
-  const itemStyle = (menuItemStyles.item as any)({ intent: item.intent || 'neutral' });
-  const iconStyle = (menuItemStyles.icon as any)({});
-  const labelStyle = (menuItemStyles.label as any)({});
+  const intent = item.intent || 'neutral';
+  const itemStyle = (menuItemStyles.item as any)({ intent });
+  const iconStyle = (menuItemStyles.icon as any)({ intent });
+  const labelStyle = (menuItemStyles.label as any)({ intent });
 
   // Extract icon size from theme variant (fontSize is set by $menu.iconSize)
   const iconSize = iconStyle.fontSize || iconStyle.width || 20;

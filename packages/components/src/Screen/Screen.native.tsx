@@ -1,7 +1,8 @@
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useContext, useEffect } from 'react';
 import { View as RNView, ScrollView as RNScrollView, Keyboard, Platform } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from '@idealyst/theme';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { ScreenProps } from './types';
 import { screenStyles } from './Screen.styles';
 import type { IdealystElement } from '../utils/refTypes';
@@ -16,6 +17,7 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   safeAreaRight,
   scrollable = true,
   avoidKeyboard = true,
+  keyboardAvoidingOffset = 0,
   contentInset,
   onLayout,
   // Spacing variants from ContainerStyleProps
@@ -38,6 +40,9 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
   const applySafeAreaLeft = safeAreaLeft ?? safeArea;
   const applySafeAreaRight = safeAreaRight ?? safeArea;
 
+  // Detect tab bar height when inside a bottom tab navigator
+  const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
+
   // Animated keyboard offset
   const keyboardOffset = useSharedValue(0);
 
@@ -49,7 +54,10 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
     const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
 
     const showSubscription = Keyboard.addListener(showEvent, (e) => {
-      keyboardOffset.value = withTiming(e.endCoordinates.height, {
+      // Subtract the tab bar height and any manual offset since those areas
+      // are already occupied and don't need additional padding
+      const adjustedHeight = Math.max(0, e.endCoordinates.height - tabBarHeight - keyboardAvoidingOffset);
+      keyboardOffset.value = withTiming(adjustedHeight, {
         duration: Platform.OS === 'ios' ? e.duration : 250,
         easing: Easing.out(Easing.cubic),
       });
@@ -66,7 +74,7 @@ const Screen = forwardRef<IdealystElement, ScreenProps>(({
       showSubscription.remove();
       hideSubscription.remove();
     };
-  }, [avoidKeyboard]);
+  }, [avoidKeyboard, tabBarHeight, keyboardAvoidingOffset]);
 
   const animatedKeyboardStyle = useAnimatedStyle(() => ({
     paddingBottom: keyboardOffset.value,

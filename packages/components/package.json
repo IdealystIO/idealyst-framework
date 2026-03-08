@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/components",
-  "version": "1.2.121",
+  "version": "1.2.123",
   "description": "Shared component library for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/components#readme",
   "readme": "README.md",
@@ -56,12 +56,13 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/theme": "^1.2.121",
+    "@idealyst/theme": "^1.2.123",
     "@mdi/js": ">=7.0.0",
     "@mdi/react": ">=1.0.0",
     "@react-native-vector-icons/common": ">=12.0.0",
     "@react-native-vector-icons/material-design-icons": ">=12.0.0",
     "@react-native/normalize-colors": "*",
+    "@react-navigation/bottom-tabs": ">=7.0.0",
     "react": ">=16.8.0",
     "react-native": ">=0.60.0",
     "react-native-edge-to-edge": "*",
@@ -78,6 +79,9 @@
       "optional": true
     },
     "@mdi/react": {
+      "optional": true
+    },
+    "@react-navigation/bottom-tabs": {
       "optional": true
     },
     "@react-native/normalize-colors": {
@@ -107,8 +111,8 @@
   },
   "devDependencies": {
     "@idealyst/blur": "^1.2.40",
-    "@idealyst/theme": "^1.2.121",
-    "@idealyst/tooling": "^1.2.121",
+    "@idealyst/theme": "^1.2.123",
+    "@idealyst/tooling": "^1.2.123",
     "@mdi/react": "^1.6.1",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",

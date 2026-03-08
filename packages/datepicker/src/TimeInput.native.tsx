@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
+import { useUnistyles } from 'react-native-unistyles';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { TimePicker } from './TimePicker';
 import { dateTimeInputStyles } from './InputStyles';
 import type { TimeInputProps } from './types';
+import type { Theme } from '@idealyst/theme';
 
 export const TimeInput: React.FC<TimeInputProps> = ({
   value,
@@ -23,6 +25,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
 
   // Get dynamic styles - call as functions for theme reactivity
   const styles = dateTimeInputStyles;
+  const { theme } = useUnistyles() as { theme: Theme };
 
   // Apply variants for disabled, error, and size states
   styles.useVariants({
@@ -37,6 +40,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
   const iconButtonStyle = (styles.iconButton as any)({ disabled, size });
   const iconStyle = (styles.icon as any)({ size });
   const errorTextStyle = (styles.errorText as any)({});
+  const placeholderColor = theme.colors.text.tertiary;
   const modalBackdropStyle = (styles.modalBackdrop as any)({});
   const popoverContentStyle = (styles.popoverContent as any)({});
   const closeButtonStyle = (styles.closeButton as any)({ disabled: false });
@@ -129,6 +133,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
             <TextInput
               value={formatTime(value ?? undefined)}
               placeholder={placeholder}
+              placeholderTextColor={placeholderColor}
               editable={false}
               style={textInputStyle}
             />
@@ -144,6 +149,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
             onChangeText={handleInputChange}
             onBlur={handleInputBlur}
             placeholder={placeholder}
+            placeholderTextColor={placeholderColor}
             editable={!disabled}
             style={textInputStyle}
           />

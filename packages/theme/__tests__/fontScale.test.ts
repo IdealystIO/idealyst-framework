@@ -106,8 +106,8 @@ function buildTestTheme() {
                 md: { fontSize: 16, lineHeight: 24 },
             },
             tabBar: {
-                sm: { fontSize: 14, lineHeight: 20, padding: 8 },
-                md: { fontSize: 16, lineHeight: 24, padding: 12 },
+                sm: { fontSize: 14, lineHeight: 20, padding: 8, paddingBottom: 12 },
+                md: { fontSize: 16, lineHeight: 24, padding: 12, paddingBottom: 16 },
             },
             table: {
                 sm: { padding: 8, fontSize: 13, lineHeight: 18 },
@@ -528,7 +528,7 @@ describe('ThemeBuilder.setFontScale', () => {
                 list: { md: { paddingVertical: 4, paddingHorizontal: 12, minHeight: 44, iconSize: 20, labelFontSize: 16, labelLineHeight: 24 } },
                 menu: { md: { paddingVertical: 8, paddingHorizontal: 16, iconSize: 20, labelFontSize: 16 } },
                 text: { md: { fontSize: 16, lineHeight: 24 } },
-                tabBar: { md: { fontSize: 16, lineHeight: 24, padding: 12 } },
+                tabBar: { md: { fontSize: 16, lineHeight: 24, padding: 12, paddingBottom: 16 } },
                 table: { md: { padding: 16, fontSize: 14, lineHeight: 20 } },
                 tooltip: { md: { fontSize: 14, padding: 8 } },
                 view: { md: { padding: 16, spacing: 16 } },

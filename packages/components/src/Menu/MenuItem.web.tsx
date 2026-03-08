@@ -22,9 +22,10 @@ const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, si
   });
 
   // Compute dynamic styles - call as functions for theme reactivity
-  const itemStyle = (menuItemStyles.item as any)({ intent: item.intent || 'neutral' });
-  const iconStyle = (menuItemStyles.icon as any)({});
-  const labelStyle = (menuItemStyles.label as any)({});
+  const intent = item.intent || 'neutral';
+  const itemStyle = (menuItemStyles.item as any)({ intent });
+  const iconStyle = (menuItemStyles.icon as any)({ intent });
+  const labelStyle = (menuItemStyles.label as any)({ intent });
 
   const itemProps = getWebProps([itemStyle]);
   const iconProps = getWebProps([iconStyle]);

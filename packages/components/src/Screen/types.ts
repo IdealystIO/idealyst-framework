@@ -85,6 +85,15 @@ export interface ScreenProps extends ContainerStyleProps {
   avoidKeyboard?: boolean;
 
   /**
+   * Additional offset to subtract from the keyboard height when avoiding the keyboard.
+   * The Screen automatically accounts for the tab bar height when inside a tab navigator,
+   * but this prop can be used for other fixed UI elements that occupy space at the bottom.
+   * @default 0
+   * @platform native
+   */
+  keyboardAvoidingOffset?: number;
+
+  /**
    * Called when the layout of the screen changes.
    * Provides the new width, height, x, and y coordinates.
    */

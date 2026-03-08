@@ -19,9 +19,12 @@
 - Baseline (eval-17715163222): H=83, S=81
 - After first fixes (eval-17715311746): H=86, S=91
 - eval-1771538762661: H=85, S=88 (oauth timeout H=40/S=8 dragged average)
-- eval-1771539933214 (LATEST): H=85, S=88 (animate timeout H=39/S=5 dragged average)
-  - Excluding timeout: H=86.9, S=92.2 (highest S ever)
-  - 15/22 non-timeout scenarios at S>=93
+- eval-1771539933214: H=85, S=88 (animate timeout H=39/S=5 dragged average)
+- 37-scenario run 1 (eval-1772993696977): H=90.6, S=90.5, 32/37>=85
+- 37-scenario run 2 (eval-1772995172157, LATEST): H=91.4, S=90.6, 34/37>=85
+  - Fixes: flex shorthand, Icon color/textColor union, recipe weight='regular'->'normal', theme colors in sidebar recipe
+  - lottie-animation: 76->94 (+18), web-layout-sidebar: 78->92 (+14), no-context-audio: 80->93 (+13)
+  - Remaining <85: guide-tool-discovery (72, variance), animate-transitions (83, variance), full-app-no-context (82, variance)
 
 ## Common Naive Agent Failure Patterns (discovered)
 See [failure-patterns.md](failure-patterns.md) for details.
@@ -41,6 +44,9 @@ See [failure-patterns.md](failure-patterns.md) for details.
 13. **TextInputMode** - Only 'text'|'email'|'password'|'number'. NOT 'decimal' or 'tel'.
 14. **useAnimatedValue.value misuse** - Agents use `pulse.value` in inline styles. It's a snapshot, not live.
 15. **overflow in useAnimatedStyle** - `overflow` is NOT animatable. Set it as static style on parent.
+16. **View flex={1}** - NOT a shorthand prop. Must use `style={{ flex: 1 }}`.
+17. **Icon color/textColor union** - Discriminated union, NEVER pass both. Use one or the other.
+18. **Text weight='regular'** - Invalid. Use 'normal'. Valid: 'light'|'normal'|'medium'|'semibold'|'bold'.
 
 ## Effective Fix Patterns
 - Add "COMPLETE LIST" sections with export counts to prevent hallucination
@@ -71,6 +77,10 @@ See [failure-patterns.md](failure-patterns.md) for details.
 - `camera-guides.ts`, `files-guides.ts`: Image source/objectFit fixes
 - `handlers.ts`: Icon search aliases (back->arrow-left, search->magnify, etc)
 - `intro.ts`: IconName in data structures emphasis
+- `intro.ts`: Added flex not a shorthand, Icon color/textColor union docs
+- `icon-guide.ts`: Added color/textColor mutual exclusion note
+- `handlers.ts`: Updated Icon usageNote with discriminated union warning
+- `recipes/navigation.ts`: Fixed weight='regular'->'normal' (3 instances), used theme colors instead of hex
 
 ## Rubric Notes
 - TS compilation is the most impactful criterion (valid_props)
@@ -78,4 +88,6 @@ See [failure-patterns.md](failure-patterns.md) for details.
 - Navigation S=80 is mostly about IconName string typing (agent uses `string` instead of `IconName`)
 - overlay-components S=83 due to `inputMode="decimal"` (not valid TextInputMode)
 - api-backend consistently low H (60-62) due to wrong file locations, but S=86-88 (code quality is good)
-- guide-tool-discovery improved from S=82 to S=93 across runs
+- guide-tool-discovery: high variance (72-93), supervisor often wrong about Card.intent validity
+- full-app-no-context: high variance (82-87), supervisor incorrectly penalizes textColor on Icon
+- Supervisor frequently flags valid APIs as hallucinated (audio subscribeToData, Card intent, Icon textColor)

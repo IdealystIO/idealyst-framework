@@ -299,14 +299,16 @@ import { Outlet, useNavigator } from '@idealyst/navigation';
 import type { StackLayoutProps } from '@idealyst/navigation';
 import { View, Text, Pressable, Icon, Divider } from '@idealyst/components';
 import type { IconName } from '@idealyst/components';
+import { useTheme } from '@idealyst/theme';
 
 export function AppLayout({ routes, currentPath, options }: StackLayoutProps) {
   const { navigate } = useNavigator();
+  const theme = useTheme();
 
   return (
     <View style={{ flex: 1, flexDirection: 'row' }}>
       {/* Sidebar */}
-      <View style={{ width: 260, borderRightWidth: 1, borderRightColor: '#e0e0e0', backgroundColor: '#fafafa' }}>
+      <View style={{ width: 260, borderRightWidth: 1, borderRightColor: theme.colors.border.primary, backgroundColor: theme.colors.surface.secondary }}>
         {/* Logo / App name */}
         <View style={{ height: 56, justifyContent: 'center', paddingHorizontal: 16 }}>
           <Text typography="h6" weight="bold">{options?.headerTitle || 'My App'}</Text>
@@ -331,18 +333,20 @@ export function AppLayout({ routes, currentPath, options }: StackLayoutProps) {
                   paddingVertical: 10,
                   paddingHorizontal: 12,
                   borderRadius: 8,
-                  backgroundColor: isActive ? 'rgba(0,122,255,0.08)' : 'transparent',
+                  backgroundColor: isActive ? theme.intents.primary.light : 'transparent',
                 }}
               >
+                {/* Icon uses EITHER color OR textColor — never both */}
                 <Icon
                   name={(route.options?.icon as IconName) || 'circle-outline'}
                   size="sm"
-                  color={isActive ? '#007AFF' : '#666'}
+                  color={isActive ? 'primary' : undefined}
                 />
                 <Text
                   typography="body2"
-                  weight={isActive ? 'semibold' : 'regular'}
-                  style={{ color: isActive ? '#007AFF' : '#333' }}
+                  weight={isActive ? 'semibold' : 'normal'}
+                  color={isActive ? undefined : 'secondary'}
+                  style={isActive ? { color: theme.intents.primary.primary } : undefined}
                 >
                   {route.options?.title || route.path}
                 </Text>
@@ -502,7 +506,7 @@ export function TabLayout({ routes, currentPath }: TabLayoutProps) {
               {opts?.tabBarLabel && (
                 <Text
                   typography="body2"
-                  weight={isActive ? 'semibold' : 'regular'}
+                  weight={isActive ? 'semibold' : 'normal'}
                   style={{ color: isActive ? '#007AFF' : '#8E8E93' }}
                 >
                   {opts.tabBarLabel}
@@ -719,7 +723,7 @@ export function DashboardLayout({ routes, currentPath, options }: StackLayoutPro
                   {!collapsed && (
                     <Text
                       typography="body2"
-                      weight={isActive ? 'semibold' : 'regular'}
+                      weight={isActive ? 'semibold' : 'normal'}
                       style={{ color: isActive ? '#007AFF' : '#333' }}
                     >
                       {route.options?.title || route.path}

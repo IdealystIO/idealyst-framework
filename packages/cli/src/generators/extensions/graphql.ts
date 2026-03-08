@@ -191,14 +191,14 @@ function createExampleResolvers(data: TemplateData): string {
   const prismaResolvers = data.hasPrisma ? `
 // Item type - using Prisma plugin for type-safe GraphQL from Prisma models
 builder.prismaObject('Item', {
-  fields: (t) => ({
+  fields: (t: any) => ({
     id: t.exposeID('id'),
     title: t.exposeString('title'),
     description: t.exposeString('description', { nullable: true }),
     completed: t.exposeBoolean('completed'),
     createdAt: t.field({
       type: 'String',
-      resolve: (item) => item.createdAt.toISOString(),
+      resolve: (item: any) => item.createdAt.toISOString(),
     }),
   }),
 });

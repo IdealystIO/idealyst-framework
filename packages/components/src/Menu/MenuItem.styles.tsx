@@ -118,6 +118,14 @@ export const menuItemStyles = defineStyle('MenuItem', (theme: Theme) => ({
                 height: theme.sizes.$menu.iconSize,
                 fontSize: theme.sizes.$menu.iconSize,
             },
+            intent: {
+                neutral: {},
+                primary: { color: theme.intents.primary.primary },
+                success: { color: theme.intents.success.primary },
+                danger: { color: theme.intents.danger.primary },
+                warning: { color: theme.intents.warning.primary },
+                info: { color: theme.intents.info.primary },
+            },
         },
         _web: {
             display: 'flex',
@@ -130,6 +138,14 @@ export const menuItemStyles = defineStyle('MenuItem', (theme: Theme) => ({
         variants: {
             size: {
                 fontSize: theme.sizes.$menu.labelFontSize,
+            },
+            intent: {
+                neutral: {},
+                primary: { color: theme.intents.primary.primary },
+                success: { color: theme.intents.success.primary },
+                danger: { color: theme.intents.danger.primary },
+                warning: { color: theme.intents.warning.primary },
+                info: { color: theme.intents.info.primary },
             },
         },
     }),

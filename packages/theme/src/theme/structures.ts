@@ -242,6 +242,7 @@ export type TabBarSizeValue = {
     fontSize: SizeValue;
     lineHeight: SizeValue;
     padding: SizeValue;
+    paddingBottom: SizeValue;
 };
 
 export type TableSizeValue = {

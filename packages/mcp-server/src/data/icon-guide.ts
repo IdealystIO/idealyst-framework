@@ -74,7 +74,9 @@ import { Button, Icon, List, Badge } from '@idealyst/components';
 <Icon
   name="home"                    // Icon name (required) — type: IconName
   size="xs|sm|md|lg|xl|number"   // Icon size
-  color="primary|secondary|..."   // Theme color
+  color="primary|secondary|..."   // Palette color (Color type)
+  // OR textColor="primary|secondary|tertiary|inverse"  — Text color type
+  // NEVER use both color and textColor — they are mutually exclusive (discriminated union)
 />
 \`\`\`
 

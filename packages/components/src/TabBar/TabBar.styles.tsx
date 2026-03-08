@@ -127,7 +127,9 @@ export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
             variants: {
                 size: {
                     fontSize: theme.sizes.$tabBar.fontSize,
-                    padding: theme.sizes.$tabBar.padding,
+                    paddingHorizontal: theme.sizes.$tabBar.padding,
+                    paddingTop: theme.sizes.$tabBar.padding,
+                    paddingBottom: theme.sizes.$tabBar.paddingBottom,
                     lineHeight: theme.sizes.$tabBar.lineHeight,
                 },
             },
