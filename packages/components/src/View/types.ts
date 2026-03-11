@@ -90,6 +90,10 @@ export interface ViewProps extends ContainerStyleProps {
   style?: ViewStyleProp;
 
   /**
+   * @deprecated Use the ScrollView component instead, which provides scroll event
+   * abstractions (onScroll, onScrollBegin, onScrollEnd, onEndReached) and imperative
+   * scroll controls (scrollTo, scrollToEnd, scrollToStart) via ref.
+   *
    * Enable scrollable content.
    * - Native: Wraps children in a ScrollView
    * - Web: Renders a wrapper + content structure where the wrapper fills available

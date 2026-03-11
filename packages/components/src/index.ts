@@ -15,6 +15,9 @@ export * from './Text/types';
 export { default as View } from './View';
 export * from './View/types';
 
+export { default as ScrollView } from './ScrollView';
+export * from './ScrollView/types';
+
 export { default as Pressable } from './Pressable';
 export * from './Pressable/types';
 
@@ -134,6 +137,7 @@ export type { ButtonProps } from './Button/types';
 export type { IconButtonProps } from './IconButton/types';
 export type { TextProps } from './Text/types';
 export type { ViewProps } from './View/types';
+export type { ScrollViewProps, ScrollViewRef, ScrollEvent, ScrollPosition, ScrollToOptions } from './ScrollView/types';
 export type { LinkProps } from './Link/types';
 export type { TextInputProps } from './TextInput/types';
 /** @deprecated Use TextInputProps instead */

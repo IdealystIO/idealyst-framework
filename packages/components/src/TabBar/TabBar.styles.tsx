@@ -92,15 +92,15 @@ export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
     },
 
     tab: ({ type = 'standard', size = 'md', active = false, pillMode: _pillMode = 'light', disabled = false, iconPosition = 'left', justify = 'start' }: TabBarDynamicProps) => {
-        // Tab padding for pills
-        const paddingMap: Record<Size, { paddingVertical: number; paddingHorizontal: number }> = {
-            xs: { paddingVertical: 2, paddingHorizontal: 10 },
-            sm: { paddingVertical: 4, paddingHorizontal: 12 },
-            md: { paddingVertical: 6, paddingHorizontal: 16 },
-            lg: { paddingVertical: 8, paddingHorizontal: 20 },
-            xl: { paddingVertical: 10, paddingHorizontal: 24 },
+        // Tab padding for pills — narrower than standard tabs
+        const pillsPaddingMap: Record<Size, { paddingVertical: number; paddingHorizontal: number }> = {
+            xs: { paddingVertical: 2, paddingHorizontal: 8 },
+            sm: { paddingVertical: 3, paddingHorizontal: 10 },
+            md: { paddingVertical: 4, paddingHorizontal: 12 },
+            lg: { paddingVertical: 6, paddingHorizontal: 16 },
+            xl: { paddingVertical: 8, paddingHorizontal: 20 },
         };
-        const tabPadding = type === 'pills' ? paddingMap[size] : {};
+        const tabPadding = type === 'pills' ? pillsPaddingMap[size] : {};
 
         // Color based on type and active state
         let color = active ? theme.colors.text.primary : theme.colors.text.secondary;
@@ -125,13 +125,17 @@ export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
             opacity: disabled ? 0.5 : 1,
             ...tabPadding,
             variants: {
-                size: {
-                    fontSize: theme.sizes.$tabBar.fontSize,
-                    paddingHorizontal: theme.sizes.$tabBar.padding,
-                    paddingTop: theme.sizes.$tabBar.padding,
-                    paddingBottom: theme.sizes.$tabBar.paddingBottom,
-                    lineHeight: theme.sizes.$tabBar.lineHeight,
-                },
+                size: type === 'pills'
+                    ? {
+                        fontSize: theme.sizes.$tabBar.fontSize,
+                        lineHeight: theme.sizes.$tabBar.lineHeight,
+                    }
+                    : {
+                        fontSize: theme.sizes.$tabBar.fontSize,
+                        paddingVertical: theme.sizes.$tabBar.padding,
+                        paddingHorizontal: theme.sizes.$tabBar.padding,
+                        lineHeight: theme.sizes.$tabBar.lineHeight,
+                    },
             },
             _web: {
                 border: 'none',
@@ -186,8 +190,8 @@ export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
 
         const typeStyles = type === 'pills' ? {
             borderRadius: 9999,
-            bottom: 4,
-            top: 4,
+            bottom: 3,
+            top: 3,
             left: 0,
         } : {
             bottom: -1,
