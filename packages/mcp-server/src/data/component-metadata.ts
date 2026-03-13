@@ -420,6 +420,27 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
     ],
   },
 
+  ScrollView: {
+    category: 'layout',
+    description: 'Scrollable container for long or overflowing content. Replaces the deprecated `<View scrollable>` pattern. Supports vertical, horizontal, and bidirectional scrolling with scroll event callbacks and imperative scroll controls via ref.',
+    features: [
+      'direction prop: \'vertical\' (default) | \'horizontal\' | \'both\'',
+      'Scroll callbacks: onScroll, onScrollBegin, onScrollEnd, onEndReached (for infinite scroll)',
+      'Imperative ref: scrollTo, scrollToEnd, scrollToStart, getScrollPosition',
+      'Same spacing shorthand props as View: padding, paddingVertical, paddingHorizontal, gap, margin, etc.',
+      'Background, radius, and border variants (same as View)',
+      'showsIndicator, pagingEnabled, bounces, scrollEnabled, keyboardDismissMode props',
+      'contentContainerStyle for styling the inner content wrapper',
+    ],
+    bestPractices: [
+      'Use ScrollView for scrollable content instead of <View scrollable> (deprecated)',
+      'Use onEndReached + onEndReachedThreshold for infinite scroll / load-more patterns',
+      'Use direction="horizontal" for horizontal carousels or galleries',
+      'Use ref with scrollTo/scrollToEnd for programmatic scroll control',
+      'Wrap in a flex:1 container or give explicit height — ScrollView needs bounded parent height',
+    ],
+  },
+
   Select: {
     category: 'form',
     description: 'Dropdown selection component for choosing from a list of options',
@@ -678,6 +699,9 @@ const componentAliases: Record<string, string> = {
   picture: "Image",
   img: "Image",
   thumbnail: "Image",
+  scroll: "ScrollView",
+  scrollview: "ScrollView",
+  scrollable: "ScrollView",
 };
 
 /**

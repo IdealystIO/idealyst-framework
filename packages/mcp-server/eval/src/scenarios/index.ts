@@ -43,6 +43,7 @@ import { themeConfigScenario } from "./theme-config.js";
 import { installGuideCameraScenario } from "./install-guide-camera.js";
 import { wizardMultiStepScenario } from "./wizard-multi-step.js";
 import { multiScreenAppScenario } from "./multi-screen-app.js";
+import { scrollviewContentScenario } from "./scrollview-content.js";
 
 export const scenarios: Record<string, EvalScenario> = {
   // Component scenarios (symlinked workspace)
@@ -91,6 +92,7 @@ export const scenarios: Record<string, EvalScenario> = {
   "install-guide-camera": installGuideCameraScenario,
   "wizard-multi-step": wizardMultiStepScenario,
   "multi-screen-app": multiScreenAppScenario,
+  "scrollview-content": scrollviewContentScenario,
 };
 
 export const scenarioList: EvalScenario[] = Object.values(scenarios);

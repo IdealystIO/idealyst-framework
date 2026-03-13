@@ -378,7 +378,25 @@ function postProcessComponentTypes(componentName: string, result: unknown): unkn
         "These accept Size values (xs, sm, md, lg, xl). " +
         "Do NOT use paddingTop, paddingBottom, paddingLeft, paddingRight, marginTop, marginBottom, marginLeft, marginRight as shorthand props — " +
         "they do NOT exist and will cause TS2353. For single-side spacing use style={{ paddingTop: 16 }}. " +
-        "View does NOT have a `pointerEvents` JSX prop. Use style={{ pointerEvents: 'none' }} instead.";
+        "View does NOT have a `pointerEvents` JSX prop. Use style={{ pointerEvents: 'none' }} instead. " +
+        "**For scrollable content, use `<ScrollView>` from @idealyst/components** (NOT `<View scrollable>` which is deprecated). " +
+        "ScrollView supports direction ('vertical'|'horizontal'|'both'), scroll callbacks (onScroll, onEndReached), " +
+        "and imperative controls via ref (scrollTo, scrollToEnd, scrollToStart).";
+    }
+  }
+
+  // Add ScrollView-specific guidance
+  if (componentName.toLowerCase() === 'scrollview') {
+    if (typeof result === 'object' && result !== null) {
+      (result as any).usageNote = "ScrollView is the replacement for the deprecated `<View scrollable>` pattern. " +
+        "Import from @idealyst/components: `import { ScrollView } from '@idealyst/components'`. " +
+        "Key props: direction ('vertical'|'horizontal'|'both'), onScroll, onScrollBegin, onScrollEnd, onEndReached (infinite scroll), " +
+        "showsIndicator, pagingEnabled, bounces, scrollEnabled, keyboardDismissMode. " +
+        "Accepts same spacing shorthand props as View: padding, paddingVertical, paddingHorizontal, gap, margin, etc. " +
+        "Imperative ref (ScrollViewRef): scrollTo({x,y,animated}), scrollToEnd(), scrollToStart(), getScrollPosition(). " +
+        "Use `contentContainerStyle` for inner content styling (e.g., gap between items). " +
+        "ScrollView needs bounded parent height — wrap in a flex:1 container or give explicit height. " +
+        "Example: `<ScrollView padding=\"md\" gap=\"sm\" onEndReached={loadMore}>{items.map(...)}</ScrollView>`";
     }
   }
 

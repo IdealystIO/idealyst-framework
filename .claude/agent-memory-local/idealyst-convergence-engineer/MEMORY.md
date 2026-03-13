@@ -81,6 +81,9 @@ See [failure-patterns.md](failure-patterns.md) for details.
 - `icon-guide.ts`: Added color/textColor mutual exclusion note
 - `handlers.ts`: Updated Icon usageNote with discriminated union warning
 - `recipes/navigation.ts`: Fixed weight='regular'->'normal' (3 instances), used theme colors instead of hex
+- `component-metadata.ts`: Added ScrollView metadata entry + search aliases (scroll, scrollable, scrollview)
+- `handlers.ts`: Added ScrollView usageNote, updated View usageNote with ScrollView migration guidance
+- `intro.ts`: Updated View and imports sections to reference ScrollView over deprecated `<View scrollable>`
 
 ## Rubric Notes
 - TS compilation is the most impactful criterion (valid_props)
