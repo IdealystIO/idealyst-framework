@@ -66,10 +66,19 @@ const Tab: React.FC<TabProps> = ({
 }) => {
   const iconSize = ICON_SIZES[size || 'md'] || 18;
 
+  // Apply tab variants (size) for variant expansion (padding, fontSize, lineHeight)
+  tabBarTabStyles.useVariants({
+    size,
+  });
+
+  // Apply label variants (size) for variant expansion
+  tabBarLabelStyles.useVariants({
+    size,
+  });
+
   // Apply icon variants (size, disabled, iconPosition)
   tabBarIconStyles.useVariants({
     size,
-    active: isActive,
     disabled: Boolean(item.disabled),
     iconPosition,
   });

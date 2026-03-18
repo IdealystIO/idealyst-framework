@@ -173,7 +173,6 @@ const TabBar = forwardRef<IdealystElement, TabBarProps>(({
             // Apply icon variants (size, disabled, iconPosition)
             tabBarIconStyles.useVariants({
               size,
-              active: isActive,
               disabled: Boolean(item.disabled),
               iconPosition,
             });
@@ -181,7 +180,6 @@ const TabBar = forwardRef<IdealystElement, TabBarProps>(({
             // Compute dynamic styles for this tab - call as functions for theme reactivity
             const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode, justify });
             const labelStyle = (tabBarLabelStyles.tabLabel as any)({ type, active: isActive, pillMode });
-            const iconContainerStyle = (tabBarIconStyles.tabIcon as any)({});
 
             const icon = renderIcon(item.icon, isActive, iconSize);
 
@@ -201,7 +199,7 @@ const TabBar = forwardRef<IdealystElement, TabBarProps>(({
                 accessibilityLabel={item.label}
                 accessibilityState={{ selected: isActive, disabled: item.disabled }}
               >
-                {icon && <View style={iconContainerStyle}>{icon}</View>}
+                {icon && <View style={tabBarIconStyles.tabIcon as any}>{icon}</View>}
                 <Text style={labelStyle}>{item.label}</Text>
               </TouchableOpacity>
             );

@@ -11,9 +11,10 @@ export type TableAlignVariant = 'left' | 'center' | 'right';
 
 export interface TableColumn<T = any> extends SortableAccessibilityProps {
   key: string;
-  title: string;
+  title: ReactNode;
   dataIndex?: string;
   render?: (value: any, row: T, index: number) => ReactNode;
+  footer?: ReactNode | ((data: T[]) => ReactNode);
   width?: number | string;
   align?: TableAlignVariant;
 }

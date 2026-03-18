@@ -127,6 +127,43 @@ function TD({
 }
 
 // ============================================================================
+// TF Component (Footer Cell)
+// ============================================================================
+
+interface TFProps {
+  children: ReactNode;
+  size?: TableSizeVariant;
+  type?: TableType;
+  align?: TableAlignVariant;
+  width?: number | string;
+}
+
+function TF({
+  children,
+  size = 'md',
+  type = 'standard',
+  align = 'left',
+  width,
+}: TFProps) {
+  tableStyles.useVariants({
+    size,
+    type,
+    align,
+  });
+
+  const footerCellProps = getWebProps([(tableStyles.footerCell as any)({})]);
+
+  return (
+    <td
+      {...footerCellProps}
+      style={{ width }}
+    >
+      {children}
+    </td>
+  );
+}
+
+// ============================================================================
 // Main Table Component
 // ============================================================================
 
@@ -194,6 +231,15 @@ function Table<T = any>({
   };
 
   const isClickable = !!onRowPress;
+  const hasFooter = columns.some((col) => col.footer !== undefined);
+
+  // Helper to resolve footer content
+  const getFooterContent = (column: TableColumn<T>) => {
+    if (typeof column.footer === 'function') {
+      return column.footer(data);
+    }
+    return column.footer;
+  };
 
   return (
     <div {...containerProps} {...ariaProps} id={id} data-testid={testID}>
@@ -238,6 +284,23 @@ function Table<T = any>({
             </TR>
           ))}
         </tbody>
+        {hasFooter && (
+          <tfoot {...getWebProps([(tableStyles.tfoot as any)({})])}>
+            <tr>
+              {columns.map((column) => (
+                <TF
+                  key={column.key}
+                  size={size}
+                  type={type}
+                  align={column.align}
+                  width={column.width}
+                >
+                  {getFooterContent(column) ?? null}
+                </TF>
+              ))}
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   );

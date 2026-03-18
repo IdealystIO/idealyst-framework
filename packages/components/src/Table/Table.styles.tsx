@@ -88,6 +88,46 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
 
     tbody: (_props: TableDynamicProps) => ({}),
 
+    tfoot: (_props: TableDynamicProps) => ({
+        backgroundColor: theme.colors.surface.secondary,
+    }),
+
+    footerCell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => {
+        const alignStyles = {
+            left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
+            center: { textAlign: 'center' as const, justifyContent: 'center' as const },
+            right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
+        }[align];
+
+        const borderStyles = type === 'bordered' ? {
+            borderRightWidth: 1,
+            borderRightColor: theme.colors.border.primary,
+        } : {};
+
+        return {
+            flexDirection: 'row' as const,
+            alignItems: 'center' as const,
+            fontWeight: '600' as const,
+            color: theme.colors.text.primary,
+            borderTopWidth: 2,
+            borderTopColor: theme.colors.border.primary,
+            ...alignStyles,
+            ...borderStyles,
+            variants: {
+                size: {
+                    padding: theme.sizes.$table.padding,
+                    fontSize: theme.sizes.$table.fontSize,
+                    lineHeight: theme.sizes.$table.lineHeight,
+                },
+            },
+            _web: {
+                borderTop: `2px solid ${theme.colors.border.primary}`,
+                borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
+                ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},
+            },
+        } as const;
+    },
+
     row: ({ type = 'standard', clickable = false }: TableDynamicProps) => {
         const typeStyles = type === 'bordered' || type === 'striped' ? {
             borderBottomWidth: 1,

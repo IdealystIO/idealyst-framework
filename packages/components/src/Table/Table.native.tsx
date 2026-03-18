@@ -93,9 +93,11 @@ function TH({
         { width, flex: width ? undefined : 1 },
       ]}
     >
-      <Text style={headerCellStyle}>
-        {children}
-      </Text>
+      {typeof children === 'string' ? (
+        <Text style={headerCellStyle}>{children}</Text>
+      ) : (
+        children
+      )}
     </View>
   );
 }
@@ -127,6 +129,49 @@ function TD({
       ]}
     >
       {children}
+    </View>
+  );
+}
+
+// ============================================================================
+// TF Component (Footer Cell)
+// ============================================================================
+
+interface TFProps {
+  children: ReactNode;
+  size?: TableSizeVariant;
+  type?: TableType;
+  align?: TableAlignVariant;
+  width?: number | string;
+}
+
+function TF({
+  children,
+  size = 'md',
+  type = 'standard',
+  align = 'left',
+  width,
+}: TFProps) {
+  tableStyles.useVariants({
+    size,
+    type,
+    align,
+  });
+
+  const footerCellStyle = (tableStyles.footerCell as any)({});
+
+  return (
+    <View
+      style={[
+        footerCellStyle,
+        { width, flex: width ? undefined : 1 },
+      ]}
+    >
+      {typeof children === 'string' ? (
+        <Text style={footerCellStyle}>{children}</Text>
+      ) : (
+        children
+      )}
     </View>
   );
 }
@@ -200,6 +245,15 @@ function TableInner<T = any>({
   };
 
   const isClickable = !!onRowPress;
+  const hasFooter = columns.some((col) => col.footer !== undefined);
+
+  // Helper to resolve footer content
+  const getFooterContent = (column: TableColumn<T>) => {
+    if (typeof column.footer === 'function') {
+      return column.footer(data);
+    }
+    return column.footer;
+  };
 
   return (
     <ScrollView
@@ -253,6 +307,25 @@ function TableInner<T = any>({
             </TR>
           ))}
         </View>
+
+        {/* Footer */}
+        {hasFooter && (
+          <View style={(tableStyles.tfoot as any)({})}>
+            <View style={{ flexDirection: 'row' }}>
+              {columns.map((column) => (
+                <TF
+                  key={column.key}
+                  size={size}
+                  type={type}
+                  align={column.align}
+                  width={column.width}
+                >
+                  {getFooterContent(column) ?? null}
+                </TF>
+              ))}
+            </View>
+          </View>
+        )}
       </View>
     </ScrollView>
   );

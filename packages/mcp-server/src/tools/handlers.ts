@@ -412,6 +412,17 @@ function postProcessComponentTypes(componentName: string, result: unknown): unkn
     }
   }
 
+  // Add Table-specific guidance: footer and custom titles
+  if (componentName.toLowerCase() === 'table') {
+    if (typeof result === 'object' && result !== null) {
+      (result as any).usageNote = "Table column `title` accepts ReactNode — you can render icons, styled text, or any element as the column header. " +
+        "Table column `footer` accepts `ReactNode | ((data: T[]) => ReactNode)`. Use static ReactNode for labels (e.g., 'Total'), " +
+        "or a callback function for computed values (e.g., `(data) => '$' + data.reduce((sum, r) => sum + r.price, 0).toFixed(2)`). " +
+        "The footer row only renders when at least one column has a `footer` defined — columns without `footer` render empty cells. " +
+        "Table does NOT have compound components — no Table.Header, Table.Body, Table.Footer. Use the `columns` prop with `title` and `footer` fields.";
+    }
+  }
+
   // Add Image-specific guidance: objectFit vs resizeMode, source vs src
   if (componentName.toLowerCase() === 'image') {
     if (typeof result === 'object' && result !== null) {

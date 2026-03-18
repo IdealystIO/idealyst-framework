@@ -546,14 +546,18 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
     description: 'Structured data display in rows and columns',
     features: [
       'Sortable columns',
-      'Custom cell rendering',
-      'Header and footer',
-      'Striped rows',
+      'Custom cell rendering via column `render` function',
+      'Custom column titles (ReactNode) — render icons, badges, or any element as header',
+      'Footer row support — static content or computed from data via `footer` callback',
+      'Striped, bordered, and standard type variants',
+      'Column alignment (left, center, right)',
     ],
     bestPractices: [
       'Use for structured, comparable data',
       'Align numbers to the right',
-      'Provide sorting for large datasets',
+      'Column `title` accepts ReactNode — use for custom headers with icons or styled text',
+      'Column `footer` accepts ReactNode or `(data: T[]) => ReactNode` — use the callback form for computed values like sums/averages',
+      'Footer only renders when at least one column has a `footer` defined',
     ],
   },
 
