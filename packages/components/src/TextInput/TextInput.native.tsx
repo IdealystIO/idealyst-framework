@@ -1,11 +1,11 @@
-import React, { useState, isValidElement, useMemo, useEffect, useRef, useCallback } from 'react';
+import React, { useState, isValidElement, useMemo, useEffect, useRef, useCallback, useImperativeHandle } from 'react';
 import { View, TextInput as RNTextInput, TouchableOpacity, Platform, TextInputProps as RNTextInputProps } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { useUnistyles } from 'react-native-unistyles';
 import { TextInputProps } from './types';
 import { textInputStyles } from './TextInput.styles';
 import { getNativeFormAccessibilityProps } from '../utils/accessibility';
-import type { IdealystElement } from '../utils/refTypes';
+import type { TextInputHandle } from '../utils/refTypes';
 import Text from '../Text';
 
 // Inner TextInput component that can be memoized to prevent re-renders
@@ -52,7 +52,7 @@ const InnerRNTextInput = React.memo<InnerTextInputProps>(
   }
 );
 
-const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
+const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
   value,
   onChangeText,
   onFocus,
@@ -94,6 +94,13 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
 }, ref) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const inputRef = useRef<RNTextInput>(null);
+
+  // Expose focus/blur via imperative handle
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+    blur: () => inputRef.current?.blur(),
+  }), []);
 
   // Derive hasError from error prop or hasError boolean
   const computedHasError = Boolean(error) || hasError;
@@ -311,7 +318,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
 
         {/* Input */}
         <InnerRNTextInput
-          inputRef={ref}
+          inputRef={inputRef}
           value={value}
           onChangeText={handleChangeText}
           isAndroidSecure={needsAndroidSecureWorkaround}
@@ -359,7 +366,7 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
 
         {/* Input */}
         <InnerRNTextInput
-          inputRef={ref}
+          inputRef={inputRef}
           value={value}
           onChangeText={handleChangeText}
           isAndroidSecure={needsAndroidSecureWorkaround}

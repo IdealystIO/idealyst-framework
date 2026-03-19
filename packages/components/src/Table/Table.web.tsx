@@ -1,8 +1,27 @@
-import { useMemo, ReactNode } from 'react';
+import { useMemo, useRef, useCallback, ReactNode } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { tableStyles } from './Table.styles';
 import type { TableProps, TableColumn, TableType, TableSizeVariant, TableAlignVariant } from './types';
 import { getWebAriaProps } from '../utils/accessibility';
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+function getStickyStyle(
+  sticky: boolean | 'left' | 'right' | undefined,
+  offset: number | string | undefined,
+  zIndex: number,
+): React.CSSProperties | undefined {
+  if (!sticky) return undefined;
+  const side = sticky === 'right' ? 'right' : 'left';
+  return {
+    position: 'sticky',
+    [side]: offset ?? 0,
+    zIndex,
+    backgroundColor: 'inherit',
+  };
+}
 
 // ============================================================================
 // Sub-component Props
@@ -23,6 +42,11 @@ interface THProps {
   type?: TableType;
   align?: TableAlignVariant;
   width?: number | string;
+  sticky?: boolean | 'left' | 'right';
+  stickyOffset?: number | string;
+  resizable?: boolean;
+  onResize?: (width: number) => void;
+  minWidth?: number;
   accessibilitySort?: 'ascending' | 'descending' | 'none' | 'other';
 }
 
@@ -32,6 +56,8 @@ interface TDProps {
   type?: TableType;
   align?: TableAlignVariant;
   width?: number | string;
+  sticky?: boolean | 'left' | 'right';
+  stickyOffset?: number | string;
 }
 
 // ============================================================================
@@ -75,6 +101,11 @@ function TH({
   type = 'standard',
   align = 'left',
   width,
+  sticky,
+  stickyOffset,
+  resizable,
+  onResize,
+  minWidth = 50,
   accessibilitySort,
 }: THProps) {
   tableStyles.useVariants({
@@ -84,15 +115,62 @@ function TH({
   });
 
   const headerCellProps = getWebProps([(tableStyles.headerCell as any)({})]);
+  const thRef = useRef<HTMLTableCellElement>(null);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const th = thRef.current;
+    if (!th) return;
+
+    const startX = e.clientX;
+    const startWidth = th.getBoundingClientRect().width;
+
+    const handlePointerMove = (moveEvent: PointerEvent) => {
+      const newWidth = Math.max(minWidth, startWidth + (moveEvent.clientX - startX));
+      th.style.width = `${newWidth}px`;
+    };
+
+    const handlePointerUp = (_upEvent: PointerEvent) => {
+      document.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerup', handlePointerUp);
+      const finalWidth = th.getBoundingClientRect().width;
+      onResize?.(finalWidth);
+      // Remove inline cursor override
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+
+    // Prevent text selection and set resize cursor globally during drag
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    document.addEventListener('pointermove', handlePointerMove);
+    document.addEventListener('pointerup', handlePointerUp);
+  }, [minWidth, onResize]);
 
   return (
     <th
       {...headerCellProps}
+      ref={thRef}
       scope="col"
       aria-sort={accessibilitySort}
-      style={{ width }}
+      style={{ width, ...getStickyStyle(sticky, stickyOffset, 11) }}
     >
       {children}
+      {resizable && (
+        <span
+          onPointerDown={handlePointerDown}
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            bottom: 0,
+            width: 4,
+            cursor: 'col-resize',
+            userSelect: 'none',
+          }}
+        />
+      )}
     </th>
   );
 }
@@ -107,6 +185,8 @@ function TD({
   type = 'standard',
   align = 'left',
   width,
+  sticky,
+  stickyOffset,
 }: TDProps) {
   tableStyles.useVariants({
     size,
@@ -119,7 +199,7 @@ function TD({
   return (
     <td
       {...cellProps}
-      style={{ width }}
+      style={{ width, ...getStickyStyle(sticky, stickyOffset, 1) }}
     >
       {children}
     </td>
@@ -136,6 +216,8 @@ interface TFProps {
   type?: TableType;
   align?: TableAlignVariant;
   width?: number | string;
+  sticky?: boolean | 'left' | 'right';
+  stickyOffset?: number | string;
 }
 
 function TF({
@@ -144,6 +226,8 @@ function TF({
   type = 'standard',
   align = 'left',
   width,
+  sticky,
+  stickyOffset,
 }: TFProps) {
   tableStyles.useVariants({
     size,
@@ -156,7 +240,7 @@ function TF({
   return (
     <td
       {...footerCellProps}
-      style={{ width }}
+      style={{ width, ...getStickyStyle(sticky, stickyOffset, 1) }}
     >
       {children}
     </td>
@@ -176,8 +260,10 @@ function Table<T = any>({
   data,
   type = 'standard',
   size = 'md',
-  stickyHeader: _stickyHeader = false,
+  stickyHeader = false,
   onRowPress,
+  onColumnResize,
+  emptyState,
   // Spacing variants from ContainerStyleProps
   gap,
   padding,
@@ -241,10 +327,39 @@ function Table<T = any>({
     return column.footer;
   };
 
+  // Compute cumulative offsets for sticky columns (left and right independently)
+  const stickyOffsetMap = useMemo(() => {
+    const map = new Map<string, number>();
+
+    // Left sticky: accumulate left-to-right
+    let cumulativeLeft = 0;
+    for (const col of columns) {
+      const side = col.sticky === 'right' ? 'right' : col.sticky ? 'left' : null;
+      if (side !== 'left') continue;
+      map.set(col.key, cumulativeLeft);
+      if (typeof col.width === 'number') {
+        cumulativeLeft += col.width;
+      }
+    }
+
+    // Right sticky: accumulate right-to-left
+    let cumulativeRight = 0;
+    for (let i = columns.length - 1; i >= 0; i--) {
+      const col = columns[i];
+      if (col.sticky !== 'right') continue;
+      map.set(col.key, cumulativeRight);
+      if (typeof col.width === 'number') {
+        cumulativeRight += col.width;
+      }
+    }
+
+    return map;
+  }, [columns]);
+
   return (
     <div {...containerProps} {...ariaProps} id={id} data-testid={testID}>
       <table {...tableProps} role="table">
-        <thead {...getWebProps([(tableStyles.thead as any)({})])}>
+        <thead {...getWebProps([(tableStyles.thead as any)({ sticky: stickyHeader })])}>
           <tr>
             {columns.map((column) => (
               <TH
@@ -253,6 +368,11 @@ function Table<T = any>({
                 type={type}
                 align={column.align}
                 width={column.width}
+                sticky={column.sticky}
+                stickyOffset={stickyOffsetMap.get(column.key)}
+                resizable={column.resizable}
+                minWidth={column.minWidth}
+                onResize={onColumnResize ? (w) => onColumnResize(column.key, w) : undefined}
                 accessibilitySort={column.accessibilitySort}
               >
                 {column.title}
@@ -261,28 +381,38 @@ function Table<T = any>({
           </tr>
         </thead>
         <tbody {...getWebProps([(tableStyles.tbody as any)({})])}>
-          {data.map((row, rowIndex) => (
-            <TR
-              key={rowIndex}
-              size={size}
-              type={type}
-              clickable={isClickable}
-              onClick={() => onRowPress?.(row, rowIndex)}
-              testID={testID ? `${testID}-row-${rowIndex}` : undefined}
-            >
-              {columns.map((column) => (
-                <TD
-                  key={column.key}
-                  size={size}
-                  type={type}
-                  align={column.align}
-                  width={column.width}
-                >
-                  {getCellValue(column, row, rowIndex)}
-                </TD>
-              ))}
-            </TR>
-          ))}
+          {data.length === 0 && emptyState ? (
+            <tr>
+              <td colSpan={columns.length} style={{ textAlign: 'center' }}>
+                {emptyState}
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <TR
+                key={rowIndex}
+                size={size}
+                type={type}
+                clickable={isClickable}
+                onClick={() => onRowPress?.(row, rowIndex)}
+                testID={testID ? `${testID}-row-${rowIndex}` : undefined}
+              >
+                {columns.map((column) => (
+                  <TD
+                    key={column.key}
+                    size={size}
+                    type={type}
+                    align={column.align}
+                    width={column.width}
+                    sticky={column.sticky}
+                    stickyOffset={stickyOffsetMap.get(column.key)}
+                  >
+                    {getCellValue(column, row, rowIndex)}
+                  </TD>
+                ))}
+              </TR>
+            ))
+          )}
         </tbody>
         {hasFooter && (
           <tfoot {...getWebProps([(tableStyles.tfoot as any)({})])}>
@@ -294,6 +424,8 @@ function Table<T = any>({
                   type={type}
                   align={column.align}
                   width={column.width}
+                  sticky={column.sticky}
+                  stickyOffset={stickyOffsetMap.get(column.key)}
                 >
                   {getFooterContent(column) ?? null}
                 </TF>

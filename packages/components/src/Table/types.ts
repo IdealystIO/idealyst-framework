@@ -17,6 +17,21 @@ export interface TableColumn<T = any> extends SortableAccessibilityProps {
   footer?: ReactNode | ((data: T[]) => ReactNode);
   width?: number | string;
   align?: TableAlignVariant;
+  /**
+   * Makes this column sticky (pinned) when scrolling horizontally.
+   * `true` or `'left'` pins to the left, `'right'` pins to the right.
+   * Web only — uses CSS `position: sticky`.
+   */
+  sticky?: boolean | 'left' | 'right';
+  /**
+   * Allows the column to be resized by dragging the right edge of the header.
+   * Web only.
+   */
+  resizable?: boolean;
+  /**
+   * Minimum width when resizing (default: 50).
+   */
+  minWidth?: number;
 }
 
 /**
@@ -33,6 +48,16 @@ export interface TableProps<T = any> extends ContainerStyleProps, AccessibilityP
   size?: TableSizeVariant;
   stickyHeader?: boolean;
   onRowPress?: (row: T, index: number) => void;
+  /**
+   * Called when a column is resized via drag handle.
+   * Receives the column key and the new width in pixels.
+   */
+  onColumnResize?: (key: string, width: number) => void;
+  /**
+   * Content to display when `data` is empty.
+   * Renders in place of the table body.
+   */
+  emptyState?: ReactNode;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }

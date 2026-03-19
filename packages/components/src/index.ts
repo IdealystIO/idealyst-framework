@@ -210,6 +210,7 @@ export * from './utils/buildViewStyleVariants';
 // Cross-platform ref types
 export type {
   IdealystElement,
+  TextInputHandle,
   AnchorElement,
   AnchorRef,
   ComponentElement,

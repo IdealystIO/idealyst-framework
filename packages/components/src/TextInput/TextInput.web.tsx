@@ -1,4 +1,4 @@
-import React, { isValidElement, useState, useMemo, useRef } from 'react';
+import React, { isValidElement, useState, useMemo, useRef, useImperativeHandle } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { useUnistyles } from 'react-native-unistyles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
@@ -7,14 +7,14 @@ import useMergeRefs from '../hooks/useMergeRefs';
 import { textInputStyles } from './TextInput.styles';
 import { TextInputProps } from './types';
 import { getWebFormAriaProps, combineIds, generateAccessibilityId } from '../utils/accessibility';
-import type { IdealystElement } from '../utils/refTypes';
+import type { TextInputHandle } from '../utils/refTypes';
 import { flattenStyle } from '../utils/flattenStyle';
 
 /**
  * Single-line text input field with support for icons, password visibility toggle, and validation states.
  * Available in outlined and filled variants with multiple sizes.
  */
-const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
+const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
   value,
   onChangeText,
   onFocus,
@@ -234,8 +234,15 @@ const TextInput = React.forwardRef<IdealystElement, TextInputProps>(({
     accessibilityAutoComplete,
   ]);
 
-  // Merge the forwarded ref with unistyles ref for the input
-  const mergedInputRef = useMergeRefs(ref, inputWebProps.ref);
+  // Internal ref for the actual <input> element
+  const inputRef = useRef<HTMLInputElement>(null);
+  const mergedInputRef = useMergeRefs(inputRef, inputWebProps.ref);
+
+  // Expose focus/blur via imperative handle
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+    blur: () => inputRef.current?.blur(),
+  }), []);
 
   // Helper to render left icon
   const renderLeftIcon = () => {

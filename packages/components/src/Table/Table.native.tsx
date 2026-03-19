@@ -187,6 +187,7 @@ function TableInner<T = any>({
   size = 'md',
   stickyHeader: _stickyHeader = false,
   onRowPress,
+  emptyState,
   // Spacing variants from ContainerStyleProps
   gap,
   padding,
@@ -284,28 +285,34 @@ function TableInner<T = any>({
 
         {/* Body */}
         <View style={tbodyStyle}>
-          {data.map((row, rowIndex) => (
-            <TR
-              key={rowIndex}
-              size={size}
-              type={type}
-              clickable={isClickable}
-              onPress={() => onRowPress?.(row, rowIndex)}
-              testID={testID ? `${testID}-row-${rowIndex}` : undefined}
-            >
-              {columns.map((column) => (
-                <TD
-                  key={column.key}
-                  size={size}
-                  type={type}
-                  align={column.align}
-                  width={column.width}
-                >
-                  {getCellValue(column, row, rowIndex)}
-                </TD>
-              ))}
-            </TR>
-          ))}
+          {data.length === 0 && emptyState ? (
+            <View style={{ alignItems: 'center', padding: 16 }}>
+              {emptyState}
+            </View>
+          ) : (
+            data.map((row, rowIndex) => (
+              <TR
+                key={rowIndex}
+                size={size}
+                type={type}
+                clickable={isClickable}
+                onPress={() => onRowPress?.(row, rowIndex)}
+                testID={testID ? `${testID}-row-${rowIndex}` : undefined}
+              >
+                {columns.map((column) => (
+                  <TD
+                    key={column.key}
+                    size={size}
+                    type={type}
+                    align={column.align}
+                    width={column.width}
+                  >
+                    {getCellValue(column, row, rowIndex)}
+                  </TD>
+                ))}
+              </TR>
+            ))
+          )}
         </View>
 
         {/* Footer */}

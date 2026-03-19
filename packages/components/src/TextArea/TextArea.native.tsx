@@ -1,13 +1,12 @@
-import { useState, forwardRef, useMemo, useEffect, useRef } from 'react';
+import { useState, forwardRef, useMemo, useEffect, useRef, useImperativeHandle } from 'react';
 import { View, TextInput, NativeSyntheticEvent, TextInputContentSizeChangeEventData, TextInput as RNTextInput } from 'react-native';
 import { textAreaStyles } from './TextArea.styles';
 import Text from '../Text';
 import type { TextAreaProps } from './types';
 import { getNativeFormAccessibilityProps } from '../utils/accessibility';
-import type { IdealystElement } from '../utils/refTypes';
-import useMergeRefs from '../hooks/useMergeRefs';
+import type { TextInputHandle } from '../utils/refTypes';
 
-const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
+const TextArea = forwardRef<TextInputHandle, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',
   onChange,
@@ -51,6 +50,12 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   const [isFocused, setIsFocused] = useState(false);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
   const textInputRef = useRef<RNTextInput>(null);
+
+  // Expose focus/blur via imperative handle
+  useImperativeHandle(ref, () => ({
+    focus: () => textInputRef.current?.focus(),
+    blur: () => textInputRef.current?.blur(),
+  }), []);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
 
@@ -175,7 +180,7 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
 
       <View style={[textareaContainerStyleComputed, fill && { flex: 1 }]}>
         <TextInput
-          ref={useMergeRefs(textInputRef, ref as any)}
+          ref={textInputRef}
           {...nativeA11yProps}
           style={[
             textareaStyleComputed,

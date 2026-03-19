@@ -176,6 +176,7 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
             },
         },
         _web: {
+            position: 'relative',
             borderBottom: `2px solid ${theme.colors.border.primary}`,
             borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
             ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},

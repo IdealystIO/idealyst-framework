@@ -44,6 +44,24 @@ export type CrossPlatformElement = IdealystElement;
  */
 export type CrossPlatformRef = React.RefObject<IdealystElement>;
 
+/**
+ * Imperative handle for text input components (TextInput, TextArea).
+ * Provides cross-platform focus/blur control via refs.
+ *
+ * @example
+ * ```tsx
+ * const inputRef = React.useRef<TextInputHandle>(null);
+ * inputRef.current?.focus();
+ * inputRef.current?.blur();
+ * ```
+ */
+export interface TextInputHandle {
+  /** Programmatically focus the input */
+  focus: () => void;
+  /** Programmatically blur the input */
+  blur: () => void;
+}
+
 // Legacy exports kept for backwards compatibility
 export type WebElement = IdealystElement;
 export type NativeElement = IdealystElement;

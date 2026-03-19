@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect, forwardRef, useMemo, useCallback } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useMemo, useCallback, useImperativeHandle } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { textAreaStyles } from './TextArea.styles';
 import type { TextAreaProps } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebFormAriaProps, combineIds, generateAccessibilityId } from '../utils/accessibility';
-import type { IdealystElement } from '../utils/refTypes';
+import type { TextInputHandle } from '../utils/refTypes';
 
 /**
  * Multi-line text input with auto-grow, character counting, and validation support.
  * Includes label, helper text, and error message display.
  */
-const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
+const TextArea = forwardRef<TextInputHandle, TextAreaProps>(({
   value: controlledValue,
   defaultValue = '',
   onChange,
@@ -60,6 +60,12 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Expose focus/blur via imperative handle
+  useImperativeHandle(ref, () => ({
+    focus: () => textareaRef.current?.focus(),
+    blur: () => textareaRef.current?.blur(),
+  }), []);
 
   const value = controlledValue !== undefined ? controlledValue : internalValue;
   const hasError = Boolean(error);
@@ -240,11 +246,10 @@ const TextArea = forwardRef<IdealystElement, TextAreaProps>(({
     overflowStyle,
   ].filter(Boolean));
 
-  const mergedRef = useMergeRefs(ref, containerProps.ref);
   const mergedTextareaRef = useMergeRefs(textareaRef, computedTextareaProps.ref);
 
   return (
-    <div {...containerProps} ref={mergedRef} id={id} data-testid={testID} style={{ ...containerProps.style as any, ...(fill ? { flex: 1, display: 'flex', flexDirection: 'column' } : {}) }}>
+    <div {...containerProps} id={id} data-testid={testID} style={{ ...(containerProps as any).style, ...(fill ? { flex: 1, display: 'flex', flexDirection: 'column' } : {}) }}>
       {label && (
         <label {...labelProps} id={labelId} htmlFor={textareaId}>{label}</label>
       )}
