@@ -2264,7 +2264,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/animate@workspace:packages/animate"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.108"
+    "@idealyst/theme": "npm:^1.2.128"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
@@ -2272,7 +2272,7 @@ __metadata:
     react-native-svg: "npm:^15.14.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.108
+    "@idealyst/theme": ^1.2.128
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-reanimated: ">=3.0.0"
@@ -2357,14 +2357,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/blur@workspace:packages/blur"
   dependencies:
-    "@idealyst/components": "npm:^1.2.108"
+    "@idealyst/components": "npm:^1.2.128"
     "@react-native-community/blur": "npm:^4.4.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.108
+    "@idealyst/components": ^1.2.128
     "@react-native-community/blur": ">=4.0.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
@@ -2492,13 +2492,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/components@npm:^1.2.108, @idealyst/components@npm:^1.2.95, @idealyst/components@workspace:packages/components":
+"@idealyst/components@npm:^1.2.128, @idealyst/components@npm:^1.2.95, @idealyst/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
     "@idealyst/blur": "npm:^1.2.40"
-    "@idealyst/theme": "npm:^1.2.108"
-    "@idealyst/tooling": "npm:^1.2.108"
+    "@idealyst/theme": "npm:^1.2.128"
+    "@idealyst/tooling": "npm:^1.2.128"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
@@ -2511,12 +2511,13 @@ __metadata:
     react-native-vector-icons: "npm:^10.3.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.108
+    "@idealyst/theme": ^1.2.128
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.0.0"
     "@react-native-vector-icons/common": ">=12.0.0"
     "@react-native-vector-icons/material-design-icons": ">=12.0.0"
     "@react-native/normalize-colors": "*"
+    "@react-navigation/bottom-tabs": ">=7.0.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-edge-to-edge: "*"
@@ -2532,6 +2533,8 @@ __metadata:
     "@mdi/react":
       optional: true
     "@react-native/normalize-colors":
+      optional: true
+    "@react-navigation/bottom-tabs":
       optional: true
     react-native:
       optional: true
@@ -2571,8 +2574,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datagrid@workspace:packages/datagrid"
   dependencies:
-    "@idealyst/components": "npm:^1.2.108"
-    "@idealyst/theme": "npm:^1.2.108"
+    "@idealyst/components": "npm:^1.2.128"
+    "@idealyst/theme": "npm:^1.2.128"
     "@types/react": "npm:^19.1.0"
     "@types/react-window": "npm:^1.8.8"
     react: "npm:^19.1.0"
@@ -2580,8 +2583,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.108
-    "@idealyst/theme": ^1.2.108
+    "@idealyst/components": ^1.2.128
+    "@idealyst/theme": ^1.2.128
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -2604,7 +2607,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datepicker@workspace:packages/datepicker"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.108"
+    "@idealyst/theme": "npm:^1.2.128"
     "@mdi/js": "npm:^7.4.47"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
@@ -2615,7 +2618,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.2.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.108
+    "@idealyst/theme": ^1.2.128
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.6.0"
     react: ">=16.8.0"
@@ -2645,8 +2648,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/files@workspace:packages/files"
   dependencies:
-    "@idealyst/components": "npm:^1.2.108"
-    "@idealyst/theme": "npm:^1.2.108"
+    "@idealyst/components": "npm:^1.2.128"
+    "@idealyst/theme": "npm:^1.2.128"
     "@types/react": "npm:^19.1.0"
     "@types/react-native": "npm:^0.73.0"
     react: "npm:^19.1.0"
@@ -2654,8 +2657,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.108
-    "@idealyst/theme": ^1.2.108
+    "@idealyst/components": ^1.2.128
+    "@idealyst/theme": ^1.2.128
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-blob-util: ">=0.19.0"
@@ -2673,6 +2676,21 @@ __metadata:
     react-native-document-picker:
       optional: true
     react-native-image-picker:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@idealyst/live-activity@workspace:packages/live-activity":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/live-activity@workspace:packages/live-activity"
+  dependencies:
+    "@types/react": "npm:^19.1.0"
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    react: ">=18.0.0"
+    react-native: ">=0.76.0"
+  peerDependenciesMeta:
+    react-native:
       optional: true
   languageName: unknown
   linkType: soft
@@ -2702,12 +2720,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/markdown@npm:^1.2.108, @idealyst/markdown@workspace:packages/markdown":
+"@idealyst/markdown@npm:^1.2.128, @idealyst/markdown@workspace:packages/markdown":
   version: 0.0.0-use.local
   resolution: "@idealyst/markdown@workspace:packages/markdown"
   dependencies:
     "@10play/tentap-editor": "npm:^0.5.0"
-    "@idealyst/theme": "npm:^1.2.108"
+    "@idealyst/theme": "npm:^1.2.128"
     "@mdi/js": "npm:^7.4.0"
     "@mdi/react": "npm:^1.6.0"
     "@tiptap/extension-link": "npm:^2.11.0"
@@ -2730,7 +2748,7 @@ __metadata:
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@10play/tentap-editor": ">=0.5.0"
-    "@idealyst/theme": ^1.2.108
+    "@idealyst/theme": ^1.2.128
     "@tiptap/extension-link": ">=2.0.0"
     "@tiptap/extension-placeholder": ">=2.0.0"
     "@tiptap/extension-task-item": ">=2.0.0"
@@ -2789,10 +2807,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/mcp-server@workspace:packages/mcp-server"
   dependencies:
-    "@idealyst/components": "npm:^1.2.108"
-    "@idealyst/navigation": "npm:^1.2.108"
-    "@idealyst/theme": "npm:^1.2.108"
-    "@idealyst/tooling": "npm:^1.2.108"
+    "@idealyst/components": "npm:^1.2.128"
+    "@idealyst/navigation": "npm:^1.2.128"
+    "@idealyst/theme": "npm:^1.2.128"
+    "@idealyst/tooling": "npm:^1.2.128"
     "@modelcontextprotocol/sdk": "npm:^1.0.4"
     "@types/better-sqlite3": "npm:^7.6.12"
     "@types/node": "npm:^20.0.0"
@@ -2833,20 +2851,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/navigation@npm:^1.2.108, @idealyst/navigation@workspace:packages/navigation":
+"@idealyst/navigation@npm:^1.2.128, @idealyst/navigation@workspace:packages/navigation":
   version: 0.0.0-use.local
   resolution: "@idealyst/navigation@workspace:packages/navigation"
   dependencies:
     "@idealyst/animate": "npm:^1.2.38"
     "@idealyst/blur": "npm:^1.2.40"
     "@idealyst/camera": "npm:^1.2.30"
-    "@idealyst/components": "npm:^1.2.108"
+    "@idealyst/components": "npm:^1.2.128"
     "@idealyst/datagrid": "npm:^1.2.30"
     "@idealyst/datepicker": "npm:^1.2.30"
     "@idealyst/lottie": "npm:^1.2.38"
-    "@idealyst/markdown": "npm:^1.2.108"
+    "@idealyst/markdown": "npm:^1.2.128"
     "@idealyst/microphone": "npm:^1.2.30"
-    "@idealyst/theme": "npm:^1.2.108"
+    "@idealyst/theme": "npm:^1.2.128"
     "@types/react": "npm:^19.1.8"
     "@types/react-dom": "npm:^19.1.6"
     react: "npm:^19.1.0"
@@ -2857,9 +2875,9 @@ __metadata:
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@idealyst/camera": ^1.2.30
-    "@idealyst/components": ^1.2.108
+    "@idealyst/components": ^1.2.128
     "@idealyst/microphone": ^1.2.30
-    "@idealyst/theme": ^1.2.108
+    "@idealyst/theme": ^1.2.128
     "@react-navigation/bottom-tabs": ">=7.0.0"
     "@react-navigation/drawer": ">=7.0.0"
     "@react-navigation/native": ">=7.0.0"
@@ -2881,6 +2899,49 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@idealyst/network@workspace:packages/network":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/network@workspace:packages/network"
+  dependencies:
+    "@react-native-community/netinfo": "npm:^11.0.0"
+    "@types/react": "npm:^19.1.0"
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    "@react-native-community/netinfo": ">=9.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+  peerDependenciesMeta:
+    "@react-native-community/netinfo":
+      optional: true
+    react-native:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@idealyst/notifications@workspace:packages/notifications":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/notifications@workspace:packages/notifications"
+  dependencies:
+    "@types/react": "npm:^19.1.0"
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    "@notifee/react-native": ">=9.0.0"
+    "@react-native-firebase/app": ">=21.0.0"
+    "@react-native-firebase/messaging": ">=21.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+  peerDependenciesMeta:
+    "@notifee/react-native":
+      optional: true
+    "@react-native-firebase/app":
+      optional: true
+    "@react-native-firebase/messaging":
+      optional: true
+    react-native:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@idealyst/oauth-client@workspace:packages/oauth-client":
   version: 0.0.0-use.local
   resolution: "@idealyst/oauth-client@workspace:packages/oauth-client"
@@ -2890,11 +2951,13 @@ __metadata:
     "@types/react-native": "npm:^0.73.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
+    react-native-inappbrowser-reborn: "npm:^3.7.0"
     tsup: "npm:^8.3.5"
     typescript: "npm:^5.7.3"
   peerDependencies:
     "@idealyst/storage": ^1.2.30
     react-native: ">=0.60.0"
+    react-native-inappbrowser-reborn: ">=3.0.0"
   languageName: unknown
   linkType: soft
 
@@ -2905,13 +2968,42 @@ __metadata:
     "@types/react": "npm:^19.1.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@stripe/stripe-react-native": ">=0.38.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
+    react-native-iap: ">=14.0.0"
   peerDependenciesMeta:
-    "@stripe/stripe-react-native":
+    react-native:
+      optional: true
+    react-native-iap:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@idealyst/pdf@workspace:packages/pdf":
+  version: 0.0.0-use.local
+  resolution: "@idealyst/pdf@workspace:packages/pdf"
+  dependencies:
+    "@types/react": "npm:^19.1.0"
+    pdfjs-dist: "npm:^4.0.0"
+    react: "npm:^19.1.0"
+    react-native: "npm:^0.80.1"
+    react-native-blob-util: "npm:^0.19.0"
+    react-native-pdf: "npm:^6.7.0"
+    typescript: "npm:^5.0.0"
+  peerDependencies:
+    pdfjs-dist: ">=3.0.0"
+    react: ">=16.8.0"
+    react-native: ">=0.60.0"
+    react-native-blob-util: ">=0.19.0"
+    react-native-pdf: ">=6.0.0"
+  peerDependenciesMeta:
+    pdfjs-dist:
       optional: true
     react-native:
+      optional: true
+    react-native-blob-util:
+      optional: true
+    react-native-pdf:
       optional: true
   languageName: unknown
   linkType: soft
@@ -2964,14 +3056,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/theme@npm:^1.2.108, @idealyst/theme@npm:^1.2.80, @idealyst/theme@workspace:packages/theme":
+"@idealyst/theme@npm:^1.2.128, @idealyst/theme@npm:^1.2.80, @idealyst/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
     "@babel/core": "npm:^7.28.5"
     "@babel/preset-typescript": "npm:^7.28.5"
     "@babel/types": "npm:^7.28.5"
-    "@idealyst/tooling": "npm:^1.2.108"
+    "@idealyst/tooling": "npm:^1.2.128"
     "@types/babel__core": "npm:^7.20.0"
     "@types/react": "npm:^19.1.0"
     "@types/react-native": "npm:^0.73.0"
@@ -2985,7 +3077,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/tooling@npm:^1.2.108, @idealyst/tooling@workspace:packages/tooling":
+"@idealyst/tooling@npm:^1.2.128, @idealyst/tooling@workspace:packages/tooling":
   version: 0.0.0-use.local
   resolution: "@idealyst/tooling@workspace:packages/tooling"
   dependencies:
@@ -3442,6 +3534,125 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@napi-rs/canvas-android-arm64@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-android-arm64@npm:0.1.97"
+  conditions: os=android & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-darwin-arm64@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-darwin-arm64@npm:0.1.97"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-darwin-x64@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-darwin-x64@npm:0.1.97"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-linux-arm-gnueabihf@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-linux-arm-gnueabihf@npm:0.1.97"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-linux-arm64-gnu@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-linux-arm64-gnu@npm:0.1.97"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-linux-arm64-musl@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-linux-arm64-musl@npm:0.1.97"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-linux-riscv64-gnu@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-linux-riscv64-gnu@npm:0.1.97"
+  conditions: os=linux & cpu=riscv64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-linux-x64-gnu@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-linux-x64-gnu@npm:0.1.97"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-linux-x64-musl@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-linux-x64-musl@npm:0.1.97"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-win32-arm64-msvc@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-win32-arm64-msvc@npm:0.1.97"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas-win32-x64-msvc@npm:0.1.97":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas-win32-x64-msvc@npm:0.1.97"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@napi-rs/canvas@npm:^0.1.65":
+  version: 0.1.97
+  resolution: "@napi-rs/canvas@npm:0.1.97"
+  dependencies:
+    "@napi-rs/canvas-android-arm64": "npm:0.1.97"
+    "@napi-rs/canvas-darwin-arm64": "npm:0.1.97"
+    "@napi-rs/canvas-darwin-x64": "npm:0.1.97"
+    "@napi-rs/canvas-linux-arm-gnueabihf": "npm:0.1.97"
+    "@napi-rs/canvas-linux-arm64-gnu": "npm:0.1.97"
+    "@napi-rs/canvas-linux-arm64-musl": "npm:0.1.97"
+    "@napi-rs/canvas-linux-riscv64-gnu": "npm:0.1.97"
+    "@napi-rs/canvas-linux-x64-gnu": "npm:0.1.97"
+    "@napi-rs/canvas-linux-x64-musl": "npm:0.1.97"
+    "@napi-rs/canvas-win32-arm64-msvc": "npm:0.1.97"
+    "@napi-rs/canvas-win32-x64-msvc": "npm:0.1.97"
+  dependenciesMeta:
+    "@napi-rs/canvas-android-arm64":
+      optional: true
+    "@napi-rs/canvas-darwin-arm64":
+      optional: true
+    "@napi-rs/canvas-darwin-x64":
+      optional: true
+    "@napi-rs/canvas-linux-arm-gnueabihf":
+      optional: true
+    "@napi-rs/canvas-linux-arm64-gnu":
+      optional: true
+    "@napi-rs/canvas-linux-arm64-musl":
+      optional: true
+    "@napi-rs/canvas-linux-riscv64-gnu":
+      optional: true
+    "@napi-rs/canvas-linux-x64-gnu":
+      optional: true
+    "@napi-rs/canvas-linux-x64-musl":
+      optional: true
+    "@napi-rs/canvas-win32-arm64-msvc":
+      optional: true
+    "@napi-rs/canvas-win32-x64-msvc":
+      optional: true
+  checksum: 10/7129c6c0c417c355951daf06f82a910100d4daabff2fd0cab5f9b0377cc6e101aad02fb3d9d36b2780d12c89429bf0b67255e945178cf758f91e237f88e3d735
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -3532,6 +3743,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/netinfo@npm:^11.0.0":
+  version: 11.5.2
+  resolution: "@react-native-community/netinfo@npm:11.5.2"
+  peerDependencies:
+    react: "*"
+    react-native: ">=0.59"
+  checksum: 10/0c388e1beb61d0135eb9303b18d7d953b0f777af15e34a8c0ab03f428669a987d658ead645a37b410afae7844374d07e7ab947897d5720b1e7fee5525fffd5b5
+  languageName: node
+  linkType: hard
+
 "@react-native/assets-registry@npm:0.80.1":
   version: 0.80.1
   resolution: "@react-native/assets-registry@npm:0.80.1"
@@ -3612,6 +3833,13 @@ __metadata:
   version: 0.80.1
   resolution: "@react-native/js-polyfills@npm:0.80.1"
   checksum: 10/108386fd71c5431dea64c3ecc89bad94594f9afb96231af1993d702e0425a99be6fc6b0e3f1276b014a25581ab2476f6ce3ae81836b6805e95839402b805ace1
+  languageName: node
+  linkType: hard
+
+"@react-native/normalize-color@npm:*":
+  version: 2.1.0
+  resolution: "@react-native/normalize-color@npm:2.1.0"
+  checksum: 10/a72b98538e6b7e265fb0669b8767d5f788777fb1a0ac1df7b0c82d8b3a804c8122aa7b819688c5e36fcf90b5ba93050b0070e29d3f0d70ab9530c2abd2bb9f9e
   languageName: node
   linkType: hard
 
@@ -5251,6 +5479,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base-64@npm:0.1.0":
+  version: 0.1.0
+  resolution: "base-64@npm:0.1.0"
+  checksum: 10/5a42938f82372ab5392cbacc85a5a78115cbbd9dbef9f7540fa47d78763a3a8bd7d598475f0d92341f66285afd377509851a9bb5c67bbecb89686e9255d5b3eb
+  languageName: node
+  linkType: hard
+
 "base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
@@ -5979,6 +6214,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"crypto-js@npm:4.2.0":
+  version: 4.2.0
+  resolution: "crypto-js@npm:4.2.0"
+  checksum: 10/c7bcc56a6e01c3c397e95aa4a74e4241321f04677f9a618a8f48a63b5781617248afb9adb0629824792e7ec20ca0d4241a49b6b2938ae6f973ec4efc5c53c924
+  languageName: node
+  linkType: hard
+
 "css-select@npm:^5.1.0":
   version: 5.2.2
   resolution: "css-select@npm:5.2.2"
@@ -6113,6 +6355,17 @@ __metadata:
   version: 2.0.0
   resolution: "depd@npm:2.0.0"
   checksum: 10/c0c8ff36079ce5ada64f46cc9d6fd47ebcf38241105b6e0c98f412e8ad91f084bcf906ff644cc3a4bd876ca27a62accb8b0fff72ea6ed1a414b89d8506f4a5ca
+  languageName: node
+  linkType: hard
+
+"deprecated-react-native-prop-types@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "deprecated-react-native-prop-types@npm:2.3.0"
+  dependencies:
+    "@react-native/normalize-color": "npm:*"
+    invariant: "npm:*"
+    prop-types: "npm:*"
+  checksum: 10/5abbad5b6d6830ca92151167f42611256ada1e8991b5066ed3659f3bbe909ae87949f3e7f075f1b685256138cad81423222220f4c6d5740376db19cb9f793312
   languageName: node
   linkType: hard
 
@@ -7602,7 +7855,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:2.2.4, invariant@npm:^2.2.4":
+"invariant@npm:*, invariant@npm:2.2.4, invariant@npm:^2.2.4":
   version: 2.2.4
   resolution: "invariant@npm:2.2.4"
   dependencies:
@@ -9975,6 +10228,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"opencollective-postinstall@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "opencollective-postinstall@npm:2.0.3"
+  bin:
+    opencollective-postinstall: index.js
+  checksum: 10/69d63778087cd10c9d707d9ed360556780cfdd0cd6241ded0e26632f467f1d5a064f4a9aec19a30c187770c17adba034d988f7684b226f3a73e79f44e73fab0e
+  languageName: node
+  linkType: hard
+
 "ora@npm:^5.4.1":
   version: 5.4.1
   resolution: "ora@npm:5.4.1"
@@ -10174,6 +10436,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pdfjs-dist@npm:^4.0.0":
+  version: 4.10.38
+  resolution: "pdfjs-dist@npm:4.10.38"
+  dependencies:
+    "@napi-rs/canvas": "npm:^0.1.65"
+  dependenciesMeta:
+    "@napi-rs/canvas":
+      optional: true
+  checksum: 10/2fee929540863a32a368c02fe445550ce6f0992a08ccfaa05f2e2e185e8ac98b43eda6f88c94c366b86fe99149478eeff7ebb57793270b030c7af54169a4a54c
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^1.1.1":
   version: 1.1.1
   resolution: "picocolors@npm:1.1.1"
@@ -10339,7 +10613,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.7.2":
+"prop-types@npm:*, prop-types@npm:^15.7.2":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -10781,6 +11055,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-blob-util@npm:^0.19.0":
+  version: 0.19.11
+  resolution: "react-native-blob-util@npm:0.19.11"
+  dependencies:
+    base-64: "npm:0.1.0"
+    glob: "npm:^10.3.10"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/b5496b2d41ea76fc4ff85d3f88ec1c6b2d7d409b88b1d71d5a51edf64564fa0f9f444d1cd634e641f043387ca04425a9e7e337670870a528095afd64223186f9
+  languageName: node
+  linkType: hard
+
 "react-native-config@npm:^1.5.0":
   version: 1.6.1
   resolution: "react-native-config@npm:1.6.1"
@@ -10821,6 +11108,18 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/f82a1aa23bf46a688133c5c58b0ca0195205c3edc5741b2edc3a969fba72f03843df9c1d2f68300096fb588dadf5f88a4445ce49237053e01ef91580ea51cfe2
+  languageName: node
+  linkType: hard
+
+"react-native-inappbrowser-reborn@npm:^3.7.0":
+  version: 3.7.1
+  resolution: "react-native-inappbrowser-reborn@npm:3.7.1"
+  dependencies:
+    invariant: "npm:^2.2.4"
+    opencollective-postinstall: "npm:^2.0.3"
+  peerDependencies:
+    react-native: ">=0.56"
+  checksum: 10/c1f8e149000779208c82385ffee80ffdd415aeacc25556eef25d9bcdaa4c12ea9b679d22b95210add645a68ddc296bacd14f22366f1757d528391ddc9e1f974e
   languageName: node
   linkType: hard
 
@@ -10887,6 +11186,20 @@ __metadata:
     react: "*"
     react-native: ">=0.71.0"
   checksum: 10/29e3d0cc50b5ef6a0947b94c1536e9125ef5d7c86c3a6eb0db54bc90fee43f46742abd6bc4b97d8abbb9f6097d08ab79c79bb0a18ad4bd8f75de27302720aa16
+  languageName: node
+  linkType: hard
+
+"react-native-pdf@npm:^6.7.0":
+  version: 6.7.7
+  resolution: "react-native-pdf@npm:6.7.7"
+  dependencies:
+    crypto-js: "npm:4.2.0"
+    deprecated-react-native-prop-types: "npm:^2.3.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-blob-util: ">=0.13.7"
+  checksum: 10/b6e24c82103be0b03820ea3239509f369660fb701252e4d9888b1cbf1bcf5895e81f631c8e71e16a6579075080c79c0d311fe5cdf45511099a944893b8239263
   languageName: node
   linkType: hard
 

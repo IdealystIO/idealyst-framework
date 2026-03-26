@@ -14,6 +14,7 @@ import type { IdealystElement } from '../utils/refTypes';
  */
 const Menu = forwardRef<IdealystElement, MenuProps>(({
   children,
+  anchor,
   items,
   open = false,
   onOpenChange,
@@ -33,10 +34,14 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
   accessibilityControls,
   accessibilityHasPopup,
 }, ref) => {
+  const isAnchorMode = anchor != null && 'current' in anchor;
   const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuItemRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
   const focusedIndex = useRef<number>(-1);
+  const effectiveAnchorRef = isAnchorMode
+    ? (anchor as React.RefObject<HTMLElement>)
+    : (triggerRef as React.RefObject<HTMLElement>);
 
   // Generate unique ID for menu
   const menuId = useMemo(() => id || generateAccessibilityId('menu'), [id]);
@@ -68,8 +73,8 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
     if (matchesKey(e, MENU_KEYS.close)) {
       e.preventDefault();
       onOpenChange?.(false);
-      // Return focus to trigger
-      triggerRef.current?.focus();
+      // Return focus to trigger or anchor
+      effectiveAnchorRef.current?.focus();
       return;
     }
 
@@ -138,29 +143,31 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
 
   return (
     <>
-      <div
-        ref={triggerRef}
-        onClick={handleTriggerClick}
-        style={{ display: 'inline-block' }}
-        aria-haspopup={accessibilityHasPopup ?? 'menu'}
-        aria-expanded={open}
-        aria-controls={menuId}
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleTriggerClick();
-          }
-        }}
-      >
-        {children}
-      </div>
+      {!isAnchorMode && (
+        <div
+          ref={triggerRef}
+          onClick={handleTriggerClick}
+          style={{ display: 'inline-block' }}
+          aria-haspopup={accessibilityHasPopup ?? 'menu'}
+          aria-expanded={open}
+          aria-controls={menuId}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleTriggerClick();
+            }
+          }}
+        >
+          {children}
+        </div>
+      )}
 
       {open && <div {...overlayProps} />}
 
       <PositionedPortal
         open={open}
-        anchor={triggerRef as React.RefObject<HTMLElement>}
+        anchor={effectiveAnchorRef}
         placement={placement}
         offset={4}
         onClickOutside={() => onOpenChange?.(false)}

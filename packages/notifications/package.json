@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/notifications",
-  "version": "1.2.128",
+  "version": "1.2.135",
   "description": "Cross-platform push and local notifications for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/notifications#readme",
   "readme": "README.md",
@@ -45,9 +45,6 @@
     "react-native": ">=0.60.0"
   },
   "peerDependenciesMeta": {
-    "react-native": {
-      "optional": true
-    },
     "@notifee/react-native": {
       "optional": true
     },
@@ -55,6 +52,9 @@
       "optional": true
     },
     "@react-native-firebase/messaging": {
+      "optional": true
+    },
+    "react-native": {
       "optional": true
     }
   },

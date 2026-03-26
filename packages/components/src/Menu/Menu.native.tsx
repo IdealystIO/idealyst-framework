@@ -17,6 +17,7 @@ import type { IdealystElement } from '../utils/refTypes';
 
 const Menu = forwardRef<IdealystElement, MenuProps>(({
   children,
+  anchor,
   items,
   open,
   onOpenChange,
@@ -33,6 +34,8 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
   accessibilityRole,
   accessibilityExpanded,
 }, ref) => {
+  const isAnchorMode = anchor != null && typeof anchor === 'object' && 'current' in anchor;
+
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
     return getNativeInteractiveAccessibilityProps({
@@ -48,7 +51,7 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
     position: menuPosition,
     size: menuSize,
     isPositioned,
-    anchorRef: triggerRef,
+    anchorRef: hookAnchorRef,
     measureAndPosition,
     handleLayout: handleMenuLayout,
     reset: resetPosition,
@@ -59,7 +62,16 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
     matchWidth: false,
   });
 
-  const mergedTriggerRef = useMergeRefs(ref, triggerRef);
+  // In anchor mode, sync external anchor ref into the hook's ref and
+  // trigger measurement when open changes
+  useEffect(() => {
+    if (isAnchorMode && open && anchor?.current) {
+      hookAnchorRef.current = anchor.current;
+      measureAndPosition();
+    }
+  }, [isAnchorMode, open]);
+
+  const mergedTriggerRef = useMergeRefs(ref, hookAnchorRef);
 
   // Animation shared values
   const menuOpacity = useSharedValue(0);
@@ -162,24 +174,28 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
     );
   };
 
-  // Clone the child element and merge onPress handler
-  const trigger = isValidElement(children)
-    ? cloneElement(children as React.ReactElement<any>, {
-        onPress: () => {
-          // Call original onPress if it exists
-          const originalOnPress = (children as any).props?.onPress;
-          originalOnPress?.();
-          // Then handle menu toggle
-          handleTriggerPress();
-        },
-      })
-    : children;
+  // Clone the child element and merge onPress handler (children mode only)
+  const trigger = !isAnchorMode && children
+    ? (isValidElement(children)
+        ? cloneElement(children as React.ReactElement<any>, {
+            onPress: () => {
+              // Call original onPress if it exists
+              const originalOnPress = (children as any).props?.onPress;
+              originalOnPress?.();
+              // Then handle menu toggle
+              handleTriggerPress();
+            },
+          })
+        : children)
+    : null;
 
   return (
     <>
-      <View ref={mergedTriggerRef} nativeID={id} collapsable={false} {...nativeA11yProps}>
-        {trigger}
-      </View>
+      {!isAnchorMode && (
+        <View ref={mergedTriggerRef} nativeID={id} collapsable={false} {...nativeA11yProps}>
+          {trigger}
+        </View>
+      )}
 
       {renderMenu()}
     </>

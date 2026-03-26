@@ -62,7 +62,7 @@ export function DataGrid<T extends Record<string, any>>({
       {
         flexDirection: 'row',
         backgroundColor: '#ffffff',
-        borderBottomWidth: 2,
+        borderBottomWidth: 1,
         borderBottomColor: '#ddd',
         height: headerHeight,
         width: totalWidth,

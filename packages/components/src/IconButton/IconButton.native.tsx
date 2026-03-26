@@ -1,11 +1,13 @@
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useRef, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet as RNStyleSheet, TouchableOpacity, View } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { useUnistyles } from 'react-native-unistyles';
 import { iconButtonStyles } from './IconButton.styles';
 import { IconButtonProps } from './types';
+import { createPressEvent } from '../utils/events';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
+import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
 import type { Theme } from '@idealyst/theme';
 
@@ -35,6 +37,9 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
     accessibilityExpanded,
     accessibilityPressed,
   } = props;
+
+  const internalRef = useRef<IdealystElement>(null);
+  const mergedRef = useMergeRefs(ref, internalRef);
 
   // Get theme for icon size
   const { theme } = useUnistyles() as { theme: Theme };
@@ -153,8 +158,8 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
 
   // TouchableOpacity types don't include nativeID but it's a valid RN prop
   const touchableProps = {
-    ref,
-    onPress: pressHandler,
+    ref: mergedRef,
+    onPress: pressHandler ? (e: any) => pressHandler(createPressEvent(e, 'press', internalRef)) : undefined,
     disabled: isDisabled,
     testID,
     nativeID: id,

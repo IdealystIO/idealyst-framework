@@ -36,6 +36,7 @@ const IDEALYST_PACKAGES = [
   "lottie",
   "svg",
   "notifications",
+  "pdf",
 ];
 
 /**

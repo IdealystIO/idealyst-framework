@@ -1,7 +1,9 @@
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { PressableProps } from './types';
 import { pressableStyles } from './Pressable.styles';
+import { createPressEvent } from '../utils/events';
+import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
 
 const Pressable = forwardRef<IdealystElement, PressableProps>(({
@@ -20,6 +22,9 @@ const Pressable = forwardRef<IdealystElement, PressableProps>(({
   accessibilityRole: _accessibilityRole,
   id,
 }, ref) => {
+  const internalRef = useRef<IdealystElement>(null);
+  const mergedRef = useMergeRefs(ref, internalRef);
+
   // Apply spacing variants
   pressableStyles.useVariants({
     padding,
@@ -31,14 +36,14 @@ const Pressable = forwardRef<IdealystElement, PressableProps>(({
 
   return (
     <TouchableWithoutFeedback
-      onPress={disabled ? undefined : onPress}
-      onPressIn={disabled ? undefined : onPressIn}
-      onPressOut={disabled ? undefined : onPressOut}
+      onPress={disabled ? undefined : (e) => onPress?.(createPressEvent(e, 'press', internalRef))}
+      onPressIn={disabled ? undefined : (e) => onPressIn?.(createPressEvent(e, 'pressIn', internalRef))}
+      onPressOut={disabled ? undefined : (e) => onPressOut?.(createPressEvent(e, 'pressOut', internalRef))}
       disabled={disabled}
       testID={testID}
       accessibilityLabel={accessibilityLabel}
     >
-      <View ref={ref as any} nativeID={id} style={[pressableStyle, style]}>
+      <View ref={mergedRef as any} nativeID={id} style={[pressableStyle, style]}>
         {children}
       </View>
     </TouchableWithoutFeedback>

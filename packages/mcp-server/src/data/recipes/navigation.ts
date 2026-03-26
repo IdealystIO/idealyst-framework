@@ -475,7 +475,7 @@ export function TabLayout({ routes, currentPath }: TabLayoutProps) {
                 justifyContent: 'center',
                 gap: 6,
                 paddingHorizontal: 16,
-                borderBottomWidth: 2,
+                borderBottomWidth: 1,
                 borderBottomColor: isActive ? '#007AFF' : 'transparent',
               }}
             >

@@ -1,13 +1,15 @@
 #!/bin/bash
 
-# Publish all packages to npm
-# Usage: ./scripts/publish-all.sh <otp-code>
+# Publish all packages to npm in parallel
+# Usage: ./scripts/publish-all.sh [otp-code]
+# OTP is optional if using a granular access token without 2FA
 
-OTP=$1
+OTP_FLAG=""
 
-if [ -z "$OTP" ]; then
-  echo "Usage: ./scripts/publish-all.sh <otp-code>"
-  exit 1
+read -p "Enter OTP code (or press Enter to skip): " OTP
+
+if [ -n "$OTP" ]; then
+  OTP_FLAG="--otp=$OTP"
 fi
 
 PACKAGES=(
@@ -35,15 +37,55 @@ PACKAGES=(
   "notifications"
   "live-activity"
   "network"
+  "pdf"
 )
 
+ROOT_DIR=$(pwd)
+LOG_DIR=$(mktemp -d)
+PIDS=()
+PKG_NAMES=()
+
+echo "Publishing ${#PACKAGES[@]} packages in parallel..."
+
 for pkg in "${PACKAGES[@]}"; do
-  echo "Publishing @idealyst/$pkg..."
-  cd "packages/$pkg" && npm publish --otp="$OTP" && cd ../..
-  if [ $? -ne 0 ]; then
-    echo "Failed to publish @idealyst/$pkg"
-    exit 1
+  (
+    cd "$ROOT_DIR/packages/$pkg" && npm publish $OTP_FLAG > "$LOG_DIR/$pkg.log" 2>&1
+    echo $? > "$LOG_DIR/$pkg.exit"
+  ) &
+  PIDS+=($!)
+  PKG_NAMES+=("$pkg")
+done
+
+# Wait for all and collect results
+FAILED=()
+SUCCEEDED=()
+
+for i in "${!PIDS[@]}"; do
+  wait "${PIDS[$i]}"
+  EXIT_CODE=$(cat "$LOG_DIR/${PKG_NAMES[$i]}.exit" 2>/dev/null || echo "1")
+  if [ "$EXIT_CODE" -eq 0 ]; then
+    SUCCEEDED+=("${PKG_NAMES[$i]}")
+    echo "  ✓ @idealyst/${PKG_NAMES[$i]}"
+  else
+    FAILED+=("${PKG_NAMES[$i]}")
+    echo "  ✗ @idealyst/${PKG_NAMES[$i]}"
+    cat "$LOG_DIR/${PKG_NAMES[$i]}.log" 2>/dev/null | tail -5
   fi
 done
+
+# Cleanup
+rm -rf "$LOG_DIR"
+
+echo ""
+echo "Results: ${#SUCCEEDED[@]} succeeded, ${#FAILED[@]} failed out of ${#PACKAGES[@]}"
+
+if [ ${#FAILED[@]} -gt 0 ]; then
+  echo ""
+  echo "Failed packages:"
+  for pkg in "${FAILED[@]}"; do
+    echo "  - @idealyst/$pkg"
+  done
+  exit 1
+fi
 
 echo "All packages published successfully!"

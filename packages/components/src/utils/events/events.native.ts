@@ -24,16 +24,20 @@ import type {
   ScrollEvent,
   SubmitEvent,
 } from './types';
+import type { RefObject } from 'react';
+import type { IdealystElement } from '../refTypes';
 
 // No-op functions for native (these concepts don't apply)
 const noop = () => {};
 
 /**
- * Wraps a React Native GestureResponderEvent into a standardized PressEvent
+ * Wraps a React Native GestureResponderEvent into a standardized PressEvent.
+ * Pass the component's ref object as `targetRef` so consumers can use it for anchoring.
  */
 export function createPressEvent(
   event: GestureResponderEvent,
-  type: PressEvent['type'] = 'press'
+  type: PressEvent['type'] = 'press',
+  targetRef?: RefObject<IdealystElement>
 ): PressEvent {
   return {
     nativeEvent: event.nativeEvent,
@@ -41,6 +45,7 @@ export function createPressEvent(
     defaultPrevented: false,
     propagationStopped: false,
     type,
+    targetRef: targetRef ?? { current: event.target },
     preventDefault: noop,
     stopPropagation: noop,
   };

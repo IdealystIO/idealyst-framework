@@ -35,6 +35,7 @@ export function createPressEvent(
     defaultPrevented: event.defaultPrevented,
     propagationStopped: false,
     type,
+    targetRef: { current: event.currentTarget },
     preventDefault: () => event.preventDefault(),
     stopPropagation: () => event.stopPropagation(),
   };

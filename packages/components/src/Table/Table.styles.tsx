@@ -137,12 +137,14 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         return {
             ...typeStyles,
             _web: {
-                transition: 'background-color 0.2s ease',
+                transition: 'background-color 0.15s ease',
                 borderBottom: (type === 'bordered' || type === 'striped')
                     ? `1px solid ${theme.colors.border.primary}`
                     : undefined,
                 cursor: clickable ? 'pointer' : undefined,
-                _hover: clickable ? { backgroundColor: theme.colors.surface.secondary } : {},
+                _hover: {
+                    backgroundColor: theme.colors.surface.secondary,
+                },
                 // Striped rows handled via CSS pseudo-selector
                 ...(type === 'striped' ? {
                     ':nth-child(even)': {
@@ -158,7 +160,7 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         alignItems: 'center' as const,
         fontWeight: '600' as const,
         color: theme.colors.text.primary,
-        borderBottomWidth: 2,
+        borderBottomWidth: 1,
         borderBottomColor: theme.colors.border.primary,
         variants: {
             type: {

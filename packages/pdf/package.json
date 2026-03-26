@@ -1,7 +1,7 @@
 {
-  "name": "@idealyst/blur",
+  "name": "@idealyst/pdf",
   "version": "1.2.135",
-  "description": "Cross-platform blur component for React and React Native",
+  "description": "Cross-platform PDF viewer for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -10,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/IdealystIO/idealyst-framework.git",
-    "directory": "packages/blur"
+    "directory": "packages/pdf"
   },
   "author": "Idealyst <contact@idealyst.io>",
   "license": "MIT",
@@ -23,11 +23,6 @@
       "import": "./src/index.ts",
       "require": "./src/index.ts",
       "types": "./src/index.ts"
-    },
-    "./examples": {
-      "import": "./src/examples/index.ts",
-      "require": "./src/examples/index.ts",
-      "types": "./src/examples/index.ts"
     }
   },
   "scripts": {
@@ -35,28 +30,33 @@
     "publish:npm": "npm publish"
   },
   "peerDependencies": {
-    "@idealyst/components": "^1.2.135",
-    "@react-native-community/blur": ">=4.0.0",
+    "pdfjs-dist": ">=3.0.0",
     "react": ">=16.8.0",
-    "react-native": ">=0.60.0"
+    "react-native": ">=0.60.0",
+    "react-native-blob-util": ">=0.19.0",
+    "react-native-pdf": ">=6.0.0"
   },
   "peerDependenciesMeta": {
-    "@idealyst/components": {
-      "optional": true
-    },
-    "@react-native-community/blur": {
+    "pdfjs-dist": {
       "optional": true
     },
     "react-native": {
       "optional": true
+    },
+    "react-native-blob-util": {
+      "optional": true
+    },
+    "react-native-pdf": {
+      "optional": true
     }
   },
   "devDependencies": {
-    "@idealyst/components": "^1.2.135",
-    "@react-native-community/blur": "^4.4.1",
     "@types/react": "^19.1.0",
+    "pdfjs-dist": "^4.0.0",
     "react": "^19.1.0",
     "react-native": "^0.80.1",
+    "react-native-blob-util": "^0.19.0",
+    "react-native-pdf": "^6.7.0",
     "typescript": "^5.0.0"
   },
   "files": [
@@ -66,9 +66,10 @@
   "keywords": [
     "react",
     "react-native",
-    "blur",
-    "backdrop-filter",
+    "pdf",
+    "viewer",
+    "document",
     "cross-platform",
-    "glassmorphism"
+    "pdfjs"
   ]
 }

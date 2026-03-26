@@ -7,6 +7,36 @@ import type { NavigateParams } from "../context/types";
 export const NOT_FOUND_SCREEN_NAME = '__notFound__';
 
 /**
+ * Screen transition animation type.
+ * On native, maps directly to react-navigation's `animation` option.
+ * On web, this is a noop — no transition animations are applied.
+ *
+ * - "default" — platform default animation
+ * - "fade" — fades screen in or out
+ * - "fade_from_bottom" — fade from bottom animation
+ * - "flip" — flips the screen (iOS only, requires modal presentation)
+ * - "simple_push" — default animation without native header transition (iOS only)
+ * - "slide_from_bottom" — slides in from bottom
+ * - "slide_from_right" — slides in from right (Android only, default on iOS)
+ * - "slide_from_left" — slides in from left
+ * - "ios_from_right" — iOS-style slide from right (Android only, default on iOS)
+ * - "ios_from_left" — iOS-style slide from left (Android only, default on iOS)
+ * - "none" — no animation
+ */
+export type ScreenAnimation =
+    | 'default'
+    | 'fade'
+    | 'fade_from_bottom'
+    | 'flip'
+    | 'simple_push'
+    | 'slide_from_bottom'
+    | 'slide_from_right'
+    | 'slide_from_left'
+    | 'ios_from_right'
+    | 'ios_from_left'
+    | 'none';
+
+/**
  * Tab bar specific screen options
  */
 export type TabBarScreenOptions = {
@@ -86,6 +116,14 @@ export type ScreenOptions = {
      * Native: Screen uses fullScreenModal presentation
      */
     fullScreen?: boolean;
+    /**
+     * Screen transition animation.
+     * On native, controls how the screen animates when pushed/popped.
+     * On web, this is a noop.
+     *
+     * @default 'default' (platform default)
+     */
+    animation?: ScreenAnimation;
 
 } & NavigatorOptions;
 

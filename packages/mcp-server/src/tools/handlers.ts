@@ -38,6 +38,7 @@ import { paymentsGuides } from "../data/payments-guides.js";
 import { notificationsGuides } from "../data/notifications-guides.js";
 import { liveActivityGuides } from "../data/live-activity-guides.js";
 import { networkGuides } from "../data/network-guides.js";
+import { pdfGuides } from "../data/pdf-guides.js";
 import {
   packages,
   getPackageSummary,
@@ -95,6 +96,7 @@ import type {
   GetNotificationsGuideArgs,
   GetLiveActivityGuideArgs,
   GetNetworkGuideArgs,
+  GetPdfGuideArgs,
   ListPackagesArgs,
   GetPackageDocsArgs,
   SearchPackagesArgs,
@@ -1271,6 +1273,23 @@ export function getNetworkGuide(args: GetNetworkGuideArgs): ToolResponse {
   return textResponse(guide);
 }
 
+/**
+ * Get documentation for the PDF viewer package
+ */
+export function getPdfGuide(args: GetPdfGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://pdf/${topic}`;
+  const guide = pdfGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
 // ============================================================================
 // Package Tool Handlers
 // ============================================================================
@@ -1630,6 +1649,7 @@ export const toolHandlers: Record<string, (args: any) => ToolResponse> = {
   get_notifications_guide: getNotificationsGuide,
   get_live_activity_guide: getLiveActivityGuide,
   get_network_guide: getNetworkGuide,
+  get_pdf_guide: getPdfGuide,
   list_packages: listPackages,
   get_package_docs: getPackageDocs,
   search_packages: searchPackages,

@@ -20,7 +20,7 @@ export interface TableColumn<T = any> extends SortableAccessibilityProps {
   /**
    * Makes this column sticky (pinned) when scrolling horizontally.
    * `true` or `'left'` pins to the left, `'right'` pins to the right.
-   * Web only — uses CSS `position: sticky`.
+   * On web uses CSS `position: sticky`, on native renders outside the ScrollView.
    */
   sticky?: boolean | 'left' | 'right';
   /**

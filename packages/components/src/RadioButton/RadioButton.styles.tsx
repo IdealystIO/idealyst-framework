@@ -1,5 +1,8 @@
 /**
- * RadioButton styles using defineStyle with dynamic props.
+ * RadioButton styles using defineStyle.
+ *
+ * Static style entries are plain objects; dynamic entries are functions that
+ * receive runtime props.  Variants are resolved via `useVariants()`.
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
@@ -20,6 +23,7 @@ export type RadioButtonDynamicProps = {
     checked?: boolean;
     disabled?: boolean;
     orientation?: RadioGroupOrientation;
+    hasError?: boolean;
     margin?: ViewStyleSize;
     marginVertical?: ViewStyleSize;
     marginHorizontal?: ViewStyleSize;
@@ -29,7 +33,7 @@ export type RadioButtonDynamicProps = {
  * RadioButton styles with intent/checked/disabled handling.
  */
 export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
-    container: (_props: RadioButtonDynamicProps) => ({
+    container: {
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         paddingVertical: 4,
@@ -47,9 +51,9 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
                 marginHorizontal: theme.sizes.$view.padding,
             },
         },
-    }),
+    },
 
-    radio: (_props: RadioButtonDynamicProps) => ({
+    radio: {
         borderRadius: 9999,
         borderWidth: 1.5,
         borderStyle: 'solid' as const,
@@ -82,9 +86,9 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
         _web: {
             transition: 'all 0.2s ease',
         },
-    }),
+    },
 
-    radioDot: (_props: RadioButtonDynamicProps) => ({
+    radioDot: {
         borderRadius: 9999,
         variants: {
             size: {
@@ -95,9 +99,9 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
                 backgroundColor: theme.$intents.primary,
             },
         },
-    }),
+    },
 
-    label: (_props: RadioButtonDynamicProps) => ({
+    label: {
         color: theme.colors.text.primary,
         variants: {
             size: {
@@ -108,9 +112,9 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
                 false: { opacity: 1 },
             },
         },
-    }),
+    },
 
-    groupContainer: (_props: RadioButtonDynamicProps) => ({
+    groupContainer: {
         gap: 4,
         variants: {
             orientation: {
@@ -124,15 +128,15 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
                 },
             },
         },
-    }),
+    },
 
-    groupWrapper: (_props: RadioButtonDynamicProps) => ({
+    groupWrapper: {
         display: 'flex' as const,
         flexDirection: 'column' as const,
         gap: 4,
-    }),
+    },
 
-    groupLabel: (_props: RadioButtonDynamicProps) => ({
+    groupLabel: {
         fontSize: 14,
         fontWeight: '500' as const,
         color: theme.colors.text.primary,
@@ -142,9 +146,9 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
                 false: { opacity: 1 },
             },
         },
-    }),
+    },
 
-    groupHelperText: (_props: RadioButtonDynamicProps) => ({
+    groupHelperText: {
         fontSize: 12,
         variants: {
             hasError: {
@@ -152,5 +156,5 @@ export const radioButtonStyles = defineStyle('RadioButton', (theme: Theme) => ({
                 false: { color: theme.colors.text.secondary },
             },
         },
-    }),
+    },
 }));

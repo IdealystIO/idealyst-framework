@@ -1413,6 +1413,85 @@ function Test() {
       },
     ],
   },
+
+  // =====================================================================
+  // MEDIA PACKAGES — PDF
+  // =====================================================================
+
+  pdf: {
+    packageName: "PDF",
+    npmName: "@idealyst/pdf",
+    description:
+      "Cross-platform PDF viewer using pdfjs-dist (web) and react-native-pdf (native)",
+    platforms: ["web", "native"],
+    complexity: "moderate",
+    installation: {
+      yarn: "yarn add @idealyst/pdf",
+      npm: "npm install @idealyst/pdf",
+    },
+    peerDependencies: [
+      {
+        name: "pdfjs-dist",
+        required: true,
+        platforms: ["web"],
+        note: "Mozilla PDF.js for web rendering",
+      },
+      {
+        name: "react-native-pdf",
+        required: true,
+        platforms: ["native"],
+        note: "Native PDF renderer (PDFKit on iOS, PdfRenderer on Android)",
+      },
+      {
+        name: "react-native-blob-util",
+        required: true,
+        platforms: ["native"],
+        note: "Required peer dependency of react-native-pdf for file handling",
+      },
+    ],
+    ios: {
+      podInstallRequired: true,
+      additionalSteps: [
+        "cd ios && pod install",
+        "Ensure minimum iOS deployment target is 13.0 or higher",
+      ],
+    },
+    android: {
+      permissions: [],
+      additionalSteps: [
+        "No special permissions required for PDF viewing",
+        "Ensure minSdkVersion is 21 or higher",
+      ],
+    },
+    web: {
+      additionalDependencies: ["pdfjs-dist"],
+      notes: [
+        "The pdfjs-dist worker is auto-configured from CDN by default.",
+        "For custom setups: set pdfjs.GlobalWorkerOptions.workerSrc before rendering PDFViewer.",
+        "For Vite: import pdfjs-dist/build/pdf.worker.min.mjs and set as workerSrc.",
+      ],
+    },
+    verification: `import { PDFViewer } from '@idealyst/pdf';
+// Should render without errors:
+<PDFViewer source="https://example.com/sample.pdf" style={{ flex: 1 }} />`,
+    troubleshooting: [
+      {
+        issue: "PDF.js worker not found on web",
+        solution:
+          "Set pdfjs.GlobalWorkerOptions.workerSrc to the correct worker URL before rendering PDFViewer. The package sets a CDN default, but custom bundler setups may need manual configuration.",
+      },
+      {
+        issue: "react-native-pdf not linking on iOS",
+        solution:
+          "Run cd ios && pod install and rebuild the project. Ensure minimum deployment target is iOS 13.0+.",
+      },
+      {
+        issue: "Blank screen on Android",
+        solution:
+          "Ensure minSdkVersion is 21+ in android/build.gradle. Also check that react-native-blob-util is installed as a peer of react-native-pdf.",
+      },
+    ],
+  },
 };
 
 /**

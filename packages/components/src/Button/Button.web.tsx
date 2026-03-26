@@ -3,6 +3,7 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { ButtonProps } from './types';
 import { buttonStyles } from './Button.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import { createPressEvent } from '../utils/events';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
@@ -67,7 +68,7 @@ const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
     e.preventDefault();
     e.stopPropagation();
     if (!isDisabled && pressHandler) {
-      pressHandler();
+      pressHandler(createPressEvent(e));
     }
   };
 

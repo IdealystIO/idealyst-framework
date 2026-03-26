@@ -158,6 +158,7 @@ const buildScreen = (params: RouteParam, Navigator: TypedNavigator, parentPath =
             };
         }
 
+
         // Wrap headerLeft if it's a component
         if (options.headerLeft) {
             const HeaderLeftContent = options.headerLeft as React.ComponentType<any>;

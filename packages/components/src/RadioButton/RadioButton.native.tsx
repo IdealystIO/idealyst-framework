@@ -90,6 +90,7 @@ const RadioButton = forwardRef<IdealystElement, RadioButtonProps>(({
   // Apply variants for radio styles
   radioButtonStyles.useVariants({
     size,
+    intent,
     checked,
     disabled,
     margin,
@@ -102,26 +103,20 @@ const RadioButton = forwardRef<IdealystElement, RadioButtonProps>(({
     outputRange: [0, 1],
   });
 
-  // Get dynamic styles - call as functions for theme reactivity
-  const containerStyle = (radioButtonStyles.container as any)({});
-  const radioStyle = (radioButtonStyles.radio as any)({ intent, checked, disabled });
-  const radioDotStyle = (radioButtonStyles.radioDot as any)({ intent });
-  const labelStyle = (radioButtonStyles.label as any)({ disabled });
-
   return (
     <Pressable
       ref={ref as any}
       nativeID={id}
       onPress={handlePress}
       disabled={disabled}
-      style={[containerStyle, style]}
+      style={[radioButtonStyles.container, style]}
       testID={testID}
       {...nativeA11yProps}
     >
-      <View style={radioStyle}>
+      <View style={radioButtonStyles.radio}>
         <Animated.View
           style={[
-            radioDotStyle,
+            radioButtonStyles.radioDot,
             {
               transform: [{ scale: dotScale }],
             },
@@ -129,7 +124,7 @@ const RadioButton = forwardRef<IdealystElement, RadioButtonProps>(({
         />
       </View>
       {label && (
-        <Text style={labelStyle}>
+        <Text style={radioButtonStyles.label}>
           {label}
         </Text>
       )}

@@ -85,7 +85,7 @@ export const dataGridStyles = StyleSheet.create(((theme: Theme) => {
 
     headerRow: ({ stickyHeader }: DataGridVariants) => ({
       backgroundColor: stickyHeader ? theme.colors.surface.primary : theme.colors.surface.secondary,
-      borderBottomWidth: 2,
+      borderBottomWidth: 1,
       borderBottomColor: theme.colors.border.secondary,
       borderStyle: 'solid',
       flexDirection: 'row',

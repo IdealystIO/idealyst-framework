@@ -4,6 +4,7 @@ import type { IconName } from '../Icon/icon-types';
 import { Intent, Size } from '@idealyst/theme';
 import { BaseProps } from '../utils/viewStyleProps';
 import { InteractiveAccessibilityProps } from '../utils/accessibility';
+import type { PressEvent } from '../utils/events';
 
 // Component-specific type aliases for future extensibility
 export type IconButtonType = 'contained' | 'outlined' | 'text';
@@ -31,13 +32,13 @@ export interface IconButtonProps extends BaseProps, InteractiveAccessibilityProp
   /**
    * Called when the button is pressed
    */
-  onPress?: () => void;
+  onPress?: (event: PressEvent) => void;
 
   /**
    * @deprecated Use `onPress` instead. This prop exists for web compatibility only.
    * Using onClick will log a deprecation warning in development.
    */
-  onClick?: () => void;
+  onClick?: (event: PressEvent) => void;
 
   /**
    * Whether the button is disabled

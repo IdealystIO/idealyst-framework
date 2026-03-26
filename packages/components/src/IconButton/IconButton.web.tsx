@@ -4,6 +4,7 @@ import { useUnistyles } from 'react-native-unistyles';
 import { IconButtonProps } from './types';
 import { iconButtonStyles } from './IconButton.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import { createPressEvent } from '../utils/events';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 import type { IdealystElement } from '../utils/refTypes';
@@ -72,7 +73,7 @@ const IconButton = forwardRef<IdealystElement, IconButtonProps>((props, ref) => 
     e.preventDefault();
     e.stopPropagation();
     if (!isDisabled && pressHandler) {
-      pressHandler();
+      pressHandler(createPressEvent(e));
     }
   };
 

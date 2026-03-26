@@ -1,10 +1,12 @@
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useRef, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet as RNStyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import Svg, { Defs, LinearGradient, Stop, Rect } from 'react-native-svg';
 import { buttonStyles } from './Button.styles';
 import { ButtonProps } from './types';
+import { createPressEvent } from '../utils/events';
 import { getNativeInteractiveAccessibilityProps } from '../utils/accessibility';
+import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
 
 const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
@@ -35,6 +37,9 @@ const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
     accessibilityExpanded,
     accessibilityPressed,
   } = props;
+
+  const internalRef = useRef<IdealystElement>(null);
+  const mergedRef = useMergeRefs(ref, internalRef);
 
   // Button is effectively disabled when loading
   const isDisabled = disabled || loading;
@@ -168,8 +173,8 @@ const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
 
   // TouchableOpacity types don't include nativeID but it's a valid RN prop
   const touchableProps = {
-    ref,
-    onPress: pressHandler,
+    ref: mergedRef,
+    onPress: pressHandler ? (e: any) => pressHandler(createPressEvent(e, 'press', internalRef)) : undefined,
     disabled: isDisabled,
     testID,
     nativeID: id,

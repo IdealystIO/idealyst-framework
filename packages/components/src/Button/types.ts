@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { IconName } from '../Icon/icon-types';
+import type { PressEvent } from '../utils/events';
 import { Intent, Size } from '@idealyst/theme';
 import { BaseProps } from '../utils/viewStyleProps';
 import { InteractiveAccessibilityProps } from '../utils/accessibility';
@@ -31,13 +32,13 @@ export interface ButtonProps extends BaseProps, InteractiveAccessibilityProps {
   /**
    * Called when the button is pressed
    */
-  onPress?: () => void;
+  onPress?: (event: PressEvent) => void;
 
   /**
    * @deprecated Use `onPress` instead. This prop exists for web compatibility only.
    * Using onClick will log a deprecation warning in development.
    */
-  onClick?: () => void;
+  onClick?: (event: PressEvent) => void;
 
   /**
    * Whether the button is disabled

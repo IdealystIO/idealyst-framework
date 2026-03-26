@@ -194,6 +194,10 @@ export interface GetNetworkGuideArgs {
   topic: "overview" | "api" | "examples";
 }
 
+export interface GetPdfGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
 // ============================================================================
 // Package Tool Types
 // ============================================================================
@@ -276,6 +280,7 @@ export type ToolName =
   | "get_notifications_guide"
   | "get_live_activity_guide"
   | "get_network_guide"
+  | "get_pdf_guide"
   | "list_packages"
   | "get_package_docs"
   | "search_packages"
@@ -315,6 +320,7 @@ export type ToolArgs =
   | GetNotificationsGuideArgs
   | GetLiveActivityGuideArgs
   | GetNetworkGuideArgs
+  | GetPdfGuideArgs
   | ListPackagesArgs
   | GetPackageDocsArgs
   | SearchPackagesArgs

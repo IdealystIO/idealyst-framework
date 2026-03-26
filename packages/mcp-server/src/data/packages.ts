@@ -1296,6 +1296,52 @@ function App() {
     ],
     relatedPackages: ["storage", "config"],
   },
+
+  pdf: {
+    name: "PDF",
+    npmName: "@idealyst/pdf",
+    description:
+      "Cross-platform PDF viewer for React and React Native. Renders PDFs from URL, local file, or base64 with page navigation, zoom, and scroll.",
+    category: "media",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/pdf",
+    peerDependencies: [
+      "pdfjs-dist (web)",
+      "react-native-pdf (native)",
+      "react-native-blob-util (native)",
+    ],
+    features: [
+      "Render PDFs from URL, file path, or base64",
+      "Page navigation (controlled or free scroll)",
+      "Pinch-to-zoom with configurable limits",
+      "Horizontal and vertical scroll modes",
+      "Page indicator overlay",
+      "Fit-to-width, fit-to-height, fit-both modes",
+      "PDFViewerRef for imperative control (goToPage, setZoom)",
+    ],
+    quickStart: `import { PDFViewer } from '@idealyst/pdf';
+
+function DocumentScreen() {
+  return (
+    <PDFViewer
+      source="https://example.com/document.pdf"
+      onLoad={({ totalPages }) => console.log('Pages:', totalPages)}
+      onPageChange={(page, total) => console.log(page, '/', total)}
+      style={{ flex: 1 }}
+    />
+  );
+}`,
+    apiHighlights: [
+      "PDFViewer component",
+      "PDFViewerRef — goToPage(page), setZoom(level)",
+      "PDFSource = string | { uri: string } | { base64: string }",
+      "fitPolicy: 'width' | 'height' | 'both'",
+      "direction: 'horizontal' | 'vertical'",
+      "onLoad, onPageChange, onError callbacks",
+    ],
+    relatedPackages: ["components"],
+  },
 };
 
 /**

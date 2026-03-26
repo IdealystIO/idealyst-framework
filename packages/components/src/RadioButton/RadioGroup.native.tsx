@@ -17,7 +17,7 @@ const RadioGroup = forwardRef<IdealystElement, RadioGroupProps>(({
   value,
   onValueChange,
   disabled = false,
-  orientation: _orientation = 'vertical',
+  orientation = 'vertical',
   children,
   error,
   helperText,
@@ -46,9 +46,12 @@ const RadioGroup = forwardRef<IdealystElement, RadioGroupProps>(({
     });
   }, [accessibilityLabel, accessibilityHint, accessibilityDisabled, disabled, accessibilityHidden, accessibilityRole]);
 
-  const wrapperStyle = (radioButtonStyles.groupWrapper as any)({});
-  const labelStyle = (radioButtonStyles.groupLabel as any)({ disabled });
-  const helperTextStyle = (radioButtonStyles.groupHelperText as any)({ hasError });
+  // Apply variants for group styles
+  radioButtonStyles.useVariants({
+    orientation,
+    disabled,
+    hasError,
+  });
 
   const content = (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>
@@ -71,13 +74,13 @@ const RadioGroup = forwardRef<IdealystElement, RadioGroupProps>(({
   }
 
   return (
-    <View ref={ref as any} style={wrapperStyle}>
-      {label && <Text style={labelStyle}>{label}</Text>}
+    <View ref={ref as any} style={radioButtonStyles.groupWrapper}>
+      {label && <Text style={radioButtonStyles.groupLabel}>{label}</Text>}
       {content}
       {showFooter && (
         <View style={{ flex: 1 }}>
-          {error && <Text style={helperTextStyle}>{error}</Text>}
-          {!error && helperText && <Text style={helperTextStyle}>{helperText}</Text>}
+          {error && <Text style={radioButtonStyles.groupHelperText}>{error}</Text>}
+          {!error && helperText && <Text style={radioButtonStyles.groupHelperText}>{helperText}</Text>}
         </View>
       )}
     </View>

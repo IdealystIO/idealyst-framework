@@ -519,6 +519,28 @@ export const getNotificationsGuideDefinition: ToolDefinition = {
 };
 
 // ============================================================================
+// PDF Tool Definitions
+// ============================================================================
+
+export const getPdfGuideDefinition: ToolDefinition = {
+  name: "get_pdf_guide",
+  description:
+    "Get documentation for @idealyst/pdf cross-platform PDF viewer package. Covers PDFViewer component, PDFViewerRef imperative methods, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
+// ============================================================================
 // Package Tool Definitions
 // ============================================================================
 
@@ -766,6 +788,7 @@ export const toolDefinitions: ToolDefinition[] = [
   getNotificationsGuideDefinition,
   getLiveActivityGuideDefinition,
   getNetworkGuideDefinition,
+  getPdfGuideDefinition,
   // Package tools
   listPackagesDefinition,
   getPackageDocsDefinition,

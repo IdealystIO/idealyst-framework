@@ -70,6 +70,7 @@ export type {
   GetNotificationsGuideArgs,
   GetLiveActivityGuideArgs,
   GetNetworkGuideArgs,
+  GetPdfGuideArgs,
   // Package tool types
   ListPackagesArgs,
   GetPackageDocsArgs,
@@ -116,6 +117,7 @@ export {
   getNotificationsGuideDefinition,
   getLiveActivityGuideDefinition,
   getNetworkGuideDefinition,
+  getPdfGuideDefinition,
   listPackagesDefinition,
   getPackageDocsDefinition,
   searchPackagesDefinition,
@@ -163,6 +165,7 @@ export {
   getNotificationsGuide,
   getLiveActivityGuide,
   getNetworkGuide,
+  getPdfGuide,
   listPackages,
   getPackageDocs,
   searchPackages,

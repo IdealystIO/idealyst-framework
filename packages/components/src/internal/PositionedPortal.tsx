@@ -32,87 +32,85 @@ const calculatePosition = (
   offset: number,
   matchWidth: boolean
 ): Position => {
-  const viewport = {
-    width: window.innerWidth,
-    height: window.innerHeight,
-    scrollX: window.scrollX,
-    scrollY: window.scrollY,
-  };
+  // anchorRect from getBoundingClientRect() is viewport-relative,
+  // which is exactly what we need for position: fixed.
+  const vpWidth = window.innerWidth;
+  const vpHeight = window.innerHeight;
 
   let position: Position = { top: 0, left: 0 };
 
-  // Calculate initial position based on placement
+  // Calculate initial position based on placement (viewport-relative for fixed positioning)
   switch (placement) {
     case 'top':
       position = {
-        top: anchorRect.top + viewport.scrollY - contentSize.height - offset,
-        left: anchorRect.left + viewport.scrollX + anchorRect.width / 2 - contentSize.width / 2,
+        top: anchorRect.top - contentSize.height - offset,
+        left: anchorRect.left + anchorRect.width / 2 - contentSize.width / 2,
       };
       break;
     case 'top-start':
       position = {
-        top: anchorRect.top + viewport.scrollY - contentSize.height - offset,
-        left: anchorRect.left + viewport.scrollX,
+        top: anchorRect.top - contentSize.height - offset,
+        left: anchorRect.left,
       };
       break;
     case 'top-end':
       position = {
-        top: anchorRect.top + viewport.scrollY - contentSize.height - offset,
-        left: anchorRect.right + viewport.scrollX - contentSize.width,
+        top: anchorRect.top - contentSize.height - offset,
+        left: anchorRect.right - contentSize.width,
       };
       break;
     case 'bottom':
       position = {
-        top: anchorRect.bottom + viewport.scrollY + offset,
-        left: anchorRect.left + viewport.scrollX + anchorRect.width / 2 - contentSize.width / 2,
+        top: anchorRect.bottom + offset,
+        left: anchorRect.left + anchorRect.width / 2 - contentSize.width / 2,
       };
       break;
     case 'bottom-start':
       position = {
-        top: anchorRect.bottom + viewport.scrollY + offset,
-        left: anchorRect.left + viewport.scrollX,
+        top: anchorRect.bottom + offset,
+        left: anchorRect.left,
       };
       break;
     case 'bottom-end':
       position = {
-        top: anchorRect.bottom + viewport.scrollY + offset,
-        left: anchorRect.right + viewport.scrollX - contentSize.width,
+        top: anchorRect.bottom + offset,
+        left: anchorRect.right - contentSize.width,
       };
       break;
     case 'left':
       position = {
-        top: anchorRect.top + viewport.scrollY + anchorRect.height / 2 - contentSize.height / 2,
-        left: anchorRect.left + viewport.scrollX - contentSize.width - offset,
+        top: anchorRect.top + anchorRect.height / 2 - contentSize.height / 2,
+        left: anchorRect.left - contentSize.width - offset,
       };
       break;
     case 'left-start':
       position = {
-        top: anchorRect.top + viewport.scrollY,
-        left: anchorRect.left + viewport.scrollX - contentSize.width - offset,
+        top: anchorRect.top,
+        left: anchorRect.left - contentSize.width - offset,
       };
       break;
     case 'left-end':
       position = {
-        top: anchorRect.bottom + viewport.scrollY - contentSize.height,
-        left: anchorRect.left + viewport.scrollX - contentSize.width - offset,
+        top: anchorRect.bottom - contentSize.height,
+        left: anchorRect.left - contentSize.width - offset,
       };
       break;
     case 'right':
       position = {
-        top: anchorRect.top + viewport.scrollY + anchorRect.height / 2 - contentSize.height / 2,
-        left: anchorRect.right + viewport.scrollX + offset,
+        top: anchorRect.top + anchorRect.height / 2 - contentSize.height / 2,
+        left: anchorRect.right + offset,
       };
       break;
     case 'right-start':
       position = {
-        top: anchorRect.top + viewport.scrollY,
-        left: anchorRect.right + viewport.scrollX + offset,
+        top: anchorRect.top,
+        left: anchorRect.right + offset,
       };
       break;
     case 'right-end':
       position = {
-        top: anchorRect.bottom + viewport.scrollY - contentSize.height,
-        left: anchorRect.right + viewport.scrollX + offset,
+        top: anchorRect.bottom - contentSize.height,
+        left: anchorRect.right + offset,
       };
       break;
   }
@@ -122,10 +120,27 @@ const calculatePosition = (
     position.width = anchorRect.width;
   }
 
-  // Constrain to viewport
+  // Clamp to viewport bounds (viewport-relative for fixed positioning)
   const padding = 8;
-  position.left = Math.max(padding, Math.min(position.left, viewport.width - contentSize.width - padding));
-  position.top = Math.max(padding, Math.min(position.top, viewport.height + viewport.scrollY - contentSize.height - padding));
+  position.left = Math.max(padding, Math.min(position.left, vpWidth - contentSize.width - padding));
+  position.top = Math.max(padding, Math.min(position.top, vpHeight - contentSize.height - padding));
+
+  // Flip vertical placement if it overflows
+  const isAbove = placement.startsWith('top');
+  const isBelow = placement.startsWith('bottom');
+  if (isBelow && position.top + contentSize.height > vpHeight - padding) {
+    // Not enough space below — try above
+    const aboveTop = anchorRect.top - contentSize.height - offset;
+    if (aboveTop >= padding) {
+      position.top = aboveTop;
+    }
+  } else if (isAbove && position.top < padding) {
+    // Not enough space above — try below
+    const belowTop = anchorRect.bottom + offset;
+    if (belowTop + contentSize.height <= vpHeight - padding) {
+      position.top = belowTop;
+    }
+  }
 
   return position;
 };

@@ -6,6 +6,9 @@
  * React Native's event system doesn't have these concepts in the same way.
  */
 
+import type { RefObject } from 'react';
+import type { IdealystElement } from '../refTypes';
+
 /**
  * Base synthetic event interface that normalizes web and native events
  */
@@ -53,6 +56,24 @@ export interface PressEvent extends SyntheticEvent {
    * The type of press event
    */
   type: 'press' | 'pressIn' | 'pressOut' | 'longPress';
+
+  /**
+   * A ref pointing to the element that fired the event.
+   * Can be passed directly as an anchor to Menu, Popover, etc.
+   *
+   * @example
+   * ```tsx
+   * const [open, setOpen] = useState(false);
+   * const [anchor, setAnchor] = useState<RefObject<IdealystElement> | null>(null);
+   *
+   * <Button onPress={(e) => {
+   *   setAnchor(e.targetRef);
+   *   setOpen(true);
+   * }}>Actions</Button>
+   * <Menu anchor={anchor} open={open} onOpenChange={setOpen} items={items} />
+   * ```
+   */
+  targetRef: RefObject<IdealystElement>;
 }
 
 /**

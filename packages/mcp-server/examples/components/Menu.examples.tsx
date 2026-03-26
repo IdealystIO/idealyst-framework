@@ -319,3 +319,30 @@ export function DropdownMenu() {
     </View>
   );
 }
+
+// Example 12: Menu with Anchor Ref (no children wrapper)
+export function MenuWithAnchor() {
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+
+  const items: MenuItem[] = [
+    { id: '1', label: 'Profile', icon: 'account', onClick: () => console.log('Profile') },
+    { id: '2', label: 'Settings', icon: 'cog', onClick: () => console.log('Settings') },
+    { id: '3', label: 'separator', separator: true },
+    { id: '4', label: 'Logout', icon: 'logout', intent: 'danger', onClick: () => console.log('Logout') },
+  ];
+
+  return (
+    <View spacing="md">
+      <Button ref={anchorRef} onPress={() => setOpen(!open)}>
+        User Menu
+      </Button>
+      <Menu
+        anchor={anchorRef}
+        items={items}
+        open={open}
+        onOpenChange={setOpen}
+      />
+    </View>
+  );
+}

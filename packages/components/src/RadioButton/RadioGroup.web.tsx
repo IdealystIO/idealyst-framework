@@ -59,9 +59,9 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
     style as any,
   ]);
 
-  const wrapperProps = getWebProps([(radioButtonStyles.groupWrapper as any)({})]);
-  const labelProps = getWebProps([(radioButtonStyles.groupLabel as any)({ disabled })]);
-  const helperTextProps = getWebProps([(radioButtonStyles.groupHelperText as any)({ hasError })]);
+  const wrapperProps = getWebProps([radioButtonStyles.groupWrapper]);
+  const labelProps = getWebProps([radioButtonStyles.groupLabel]);
+  const helperTextProps = getWebProps([radioButtonStyles.groupHelperText]);
 
   const content = (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>

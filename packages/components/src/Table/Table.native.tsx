@@ -256,6 +256,96 @@ function TableInner<T = any>({
     return column.footer;
   };
 
+  // Split columns into sticky left, scrollable, and sticky right
+  const leftCols = useMemo(() => columns.filter((c) => c.sticky === true || c.sticky === 'left'), [columns]);
+  const rightCols = useMemo(() => columns.filter((c) => c.sticky === 'right'), [columns]);
+  const scrollCols = useMemo(() => columns.filter((c) => !c.sticky), [columns]);
+  const hasStickyColumns = leftCols.length > 0 || rightCols.length > 0;
+
+  // Renders a column group (header + body + footer) for a set of columns
+  const renderColumnGroup = (cols: TableColumn<T>[]) => (
+    <View>
+      {/* Header */}
+      <View style={theadStyle}>
+        <View style={{ flexDirection: 'row' }}>
+          {cols.map((column) => (
+            <TH key={column.key} size={size} type={type} align={column.align} width={column.width}>
+              {column.title}
+            </TH>
+          ))}
+        </View>
+      </View>
+
+      {/* Body */}
+      <View style={tbodyStyle}>
+        {data.length === 0 && emptyState ? (
+          <View style={{ alignItems: 'center', padding: 16 }}>
+            {emptyState}
+          </View>
+        ) : (
+          data.map((row, rowIndex) => (
+            <TR
+              key={rowIndex}
+              size={size}
+              type={type}
+              clickable={isClickable}
+              onPress={() => onRowPress?.(row, rowIndex)}
+              testID={testID ? `${testID}-row-${rowIndex}` : undefined}
+            >
+              {cols.map((column) => (
+                <TD key={column.key} size={size} type={type} align={column.align} width={column.width}>
+                  {getCellValue(column, row, rowIndex)}
+                </TD>
+              ))}
+            </TR>
+          ))
+        )}
+      </View>
+
+      {/* Footer */}
+      {hasFooter && (
+        <View style={(tableStyles.tfoot as any)({})}>
+          <View style={{ flexDirection: 'row' }}>
+            {cols.map((column) => (
+              <TF key={column.key} size={size} type={type} align={column.align} width={column.width}>
+                {getFooterContent(column) ?? null}
+              </TF>
+            ))}
+          </View>
+        </View>
+      )}
+    </View>
+  );
+
+  // When there are sticky columns, render as: [left sticky] [scrollable] [right sticky]
+  if (hasStickyColumns) {
+    return (
+      <View
+        nativeID={id}
+        style={[containerStyle, { flexDirection: 'row' }, style]}
+        testID={testID}
+        {...nativeA11yProps}
+      >
+        {leftCols.length > 0 && (
+          <View style={{ zIndex: 1, backgroundColor: theadStyle.backgroundColor || containerStyle.backgroundColor }}>
+            {renderColumnGroup(leftCols)}
+          </View>
+        )}
+        <ScrollView ref={ref} horizontal style={{ flex: 1 }}>
+          <View style={tableStyle}>
+            {renderColumnGroup(scrollCols)}
+          </View>
+        </ScrollView>
+        {rightCols.length > 0 && (
+          <View style={{ zIndex: 1, backgroundColor: theadStyle.backgroundColor || containerStyle.backgroundColor }}>
+            {renderColumnGroup(rightCols)}
+          </View>
+        )}
+      </View>
+    );
+  }
+
+  // No sticky columns — original simple layout
   return (
     <ScrollView
       ref={ref}
@@ -266,73 +356,7 @@ function TableInner<T = any>({
       {...nativeA11yProps}
     >
       <View style={tableStyle}>
-        {/* Header */}
-        <View style={theadStyle}>
-          <View style={{ flexDirection: 'row' }}>
-            {columns.map((column) => (
-              <TH
-                key={column.key}
-                size={size}
-                type={type}
-                align={column.align}
-                width={column.width}
-              >
-                {column.title}
-              </TH>
-            ))}
-          </View>
-        </View>
-
-        {/* Body */}
-        <View style={tbodyStyle}>
-          {data.length === 0 && emptyState ? (
-            <View style={{ alignItems: 'center', padding: 16 }}>
-              {emptyState}
-            </View>
-          ) : (
-            data.map((row, rowIndex) => (
-              <TR
-                key={rowIndex}
-                size={size}
-                type={type}
-                clickable={isClickable}
-                onPress={() => onRowPress?.(row, rowIndex)}
-                testID={testID ? `${testID}-row-${rowIndex}` : undefined}
-              >
-                {columns.map((column) => (
-                  <TD
-                    key={column.key}
-                    size={size}
-                    type={type}
-                    align={column.align}
-                    width={column.width}
-                  >
-                    {getCellValue(column, row, rowIndex)}
-                  </TD>
-                ))}
-              </TR>
-            ))
-          )}
-        </View>
-
-        {/* Footer */}
-        {hasFooter && (
-          <View style={(tableStyles.tfoot as any)({})}>
-            <View style={{ flexDirection: 'row' }}>
-              {columns.map((column) => (
-                <TF
-                  key={column.key}
-                  size={size}
-                  type={type}
-                  align={column.align}
-                  width={column.width}
-                >
-                  {getFooterContent(column) ?? null}
-                </TF>
-              ))}
-            </View>
-          </View>
-        )}
+        {renderColumnGroup(columns)}
       </View>
     </ScrollView>
   );
