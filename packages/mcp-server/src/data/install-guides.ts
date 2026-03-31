@@ -1004,7 +1004,7 @@ export default {
     },
     peerDependencies: [
       {
-        name: "react-native-document-picker",
+        name: "@react-native-documents/picker",
         required: true,
         platforms: ["native"],
         note: "Required for document selection on native",

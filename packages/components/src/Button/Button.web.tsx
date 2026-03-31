@@ -65,8 +65,6 @@ const Button = forwardRef<IdealystElement, ButtonProps>((props, ref) => {
   }
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
     if (!isDisabled && pressHandler) {
       pressHandler(createPressEvent(e));
     }

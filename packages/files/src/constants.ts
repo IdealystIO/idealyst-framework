@@ -82,7 +82,7 @@ export const FILE_TYPE_EXTENSIONS: Record<FileType, string[]> = {
 };
 
 /**
- * Document picker type mappings for react-native-document-picker.
+ * Document picker type mappings for @react-native-documents/picker.
  */
 export const DOCUMENT_PICKER_TYPES: Record<FileType, string[]> = {
   image: ['public.image'],

@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Screen, View, Text, Button, Menu, MenuItem } from '@idealyst/components';
 
 export const MenuExamples: React.FC = () => {
   const [basicMenuOpen, setBasicMenuOpen] = useState(false);
+  const [anchorMenuOpen, setAnchorMenuOpen] = useState(false);
   const [placementMenuOpen, setPlacementMenuOpen] = useState(false);
   const [iconNameMenuOpen, setIconNameMenuOpen] = useState(false);
   const [intentMenuOpen, setIntentMenuOpen] = useState(false);
   const [separatorMenuOpen, setSeparatorMenuOpen] = useState(false);
   const [disabledMenuOpen, setDisabledMenuOpen] = useState(false);
+  const [rightEdgeMenuOpen, setRightEdgeMenuOpen] = useState(false);
+  const [bottomEdgeMenuOpen, setBottomEdgeMenuOpen] = useState(false);
+
+  const anchorRef = useRef(null);
 
   const [selectedAction, setSelectedAction] = useState<string>('');
 
@@ -59,7 +64,7 @@ export const MenuExamples: React.FC = () => {
       )}
 
       <View gap="md">
-        <Text typography="h5">Basic Menu</Text>
+        <Text typography="h5">Basic Menu (Children Mode)</Text>
         <Menu
           items={basicItems}
           open={basicMenuOpen}
@@ -69,6 +74,27 @@ export const MenuExamples: React.FC = () => {
             Open Menu
           </Button>
         </Menu>
+      </View>
+
+      <View gap="md">
+        <Text typography="h5">Anchor Mode</Text>
+        <Text typography="body2" color="secondary">
+          The menu appears next to the anchor element, not the button.
+        </Text>
+        <View direction="row" gap="md" align="center">
+          <Button type="outlined" onPress={() => setAnchorMenuOpen(true)}>
+            Open Anchored Menu
+          </Button>
+          <View ref={anchorRef} style={{ padding: 8, borderWidth: 1, borderStyle: 'dashed', borderColor: '#999', borderRadius: 8 }}>
+            <Text color="secondary">Anchor</Text>
+          </View>
+        </View>
+        <Menu
+          items={iconNameItems}
+          anchor={anchorRef}
+          open={anchorMenuOpen}
+          onOpenChange={setAnchorMenuOpen}
+        />
       </View>
 
       <View gap="md">
@@ -133,6 +159,37 @@ export const MenuExamples: React.FC = () => {
         >
           <Button type="outlined">
             Menu with Disabled
+          </Button>
+        </Menu>
+      </View>
+
+      <Text typography="h4">Edge-of-Screen Tests</Text>
+      <Text typography="body2" color="secondary">
+        These menus should flip or clamp to stay within the viewport.
+      </Text>
+
+      <View style={{ alignItems: 'flex-end' }}>
+        <Menu
+          items={iconNameItems}
+          open={rightEdgeMenuOpen}
+          onOpenChange={setRightEdgeMenuOpen}
+          placement="bottom-end"
+        >
+          <Button type="outlined">
+            Right Edge
+          </Button>
+        </Menu>
+      </View>
+
+      <View style={{ marginTop: 200 }}>
+        <Menu
+          items={separatorItems}
+          open={bottomEdgeMenuOpen}
+          onOpenChange={setBottomEdgeMenuOpen}
+          placement="bottom-start"
+        >
+          <Button type="outlined">
+            Bottom Edge (scroll down)
           </Button>
         </Menu>
       </View>

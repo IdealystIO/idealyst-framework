@@ -23,21 +23,32 @@ type ReactFormEvent = React.FormEvent<HTMLFormElement>;
 type ReactUIEvent = React.UIEvent<HTMLElement>;
 
 /**
- * Wraps a React mouse/click event into a standardized PressEvent
+ * Wraps a React mouse/click event into a standardized PressEvent.
+ * preventDefault() and stopPropagation() call through to the underlying
+ * React event and also update the PressEvent's own flags.
  */
 export function createPressEvent(
   event: ReactMouseEvent,
   type: PressEvent['type'] = 'press'
 ): PressEvent {
+  let defaultPrevented = event.defaultPrevented;
+  let propagationStopped = false;
+
   return {
     nativeEvent: event.nativeEvent,
     timestamp: event.timeStamp,
-    defaultPrevented: event.defaultPrevented,
-    propagationStopped: false,
+    get defaultPrevented() { return defaultPrevented; },
+    get propagationStopped() { return propagationStopped; },
     type,
     targetRef: { current: event.currentTarget },
-    preventDefault: () => event.preventDefault(),
-    stopPropagation: () => event.stopPropagation(),
+    preventDefault() {
+      defaultPrevented = true;
+      event.preventDefault();
+    },
+    stopPropagation() {
+      propagationStopped = true;
+      event.stopPropagation();
+    },
   };
 }
 

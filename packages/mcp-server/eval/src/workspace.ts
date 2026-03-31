@@ -79,7 +79,7 @@ const PEER_DEPS: Array<[string, string[]]> = [
     ["packages/files/node_modules", "node_modules"],
   ],
   [
-    "react-native-document-picker",
+    "@react-native-documents/picker",
     ["packages/files/node_modules", "node_modules"],
   ],
   [

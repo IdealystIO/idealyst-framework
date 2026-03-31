@@ -33,21 +33,25 @@ const noop = () => {};
 /**
  * Wraps a React Native GestureResponderEvent into a standardized PressEvent.
  * Pass the component's ref object as `targetRef` so consumers can use it for anchoring.
+ * preventDefault() and stopPropagation() are no-ops on native but still update flags.
  */
 export function createPressEvent(
   event: GestureResponderEvent,
   type: PressEvent['type'] = 'press',
   targetRef?: RefObject<IdealystElement>
 ): PressEvent {
+  let defaultPrevented = false;
+  let propagationStopped = false;
+
   return {
     nativeEvent: event.nativeEvent,
     timestamp: event.nativeEvent.timestamp,
-    defaultPrevented: false,
-    propagationStopped: false,
+    get defaultPrevented() { return defaultPrevented; },
+    get propagationStopped() { return propagationStopped; },
     type,
     targetRef: targetRef ?? { current: event.target },
-    preventDefault: noop,
-    stopPropagation: noop,
+    preventDefault() { defaultPrevented = true; },
+    stopPropagation() { propagationStopped = true; },
   };
 }
 

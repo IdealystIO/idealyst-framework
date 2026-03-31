@@ -28,24 +28,18 @@ const Pressable = forwardRef<IdealystElement, PressableProps>(({
   const [_isPressed, setIsPressed] = useState(false);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
     if (disabled) return;
     setIsPressed(true);
     onPressIn?.(createPressEvent(e as React.MouseEvent<HTMLElement>, 'pressIn'));
   }, [disabled, onPressIn]);
 
   const handleMouseUp = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
     if (disabled) return;
     setIsPressed(false);
     onPressOut?.(createPressEvent(e as React.MouseEvent<HTMLElement>, 'pressOut'));
   }, [disabled, onPressOut]);
 
   const handleClick = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
     if (disabled) return;
     onPress?.(createPressEvent(e as React.MouseEvent<HTMLElement>));
   }, [disabled, onPress]);

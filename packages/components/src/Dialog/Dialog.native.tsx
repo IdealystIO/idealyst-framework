@@ -1,6 +1,6 @@
-import { useEffect, forwardRef, useMemo, useState } from 'react';
+import { useEffect, forwardRef, useMemo } from 'react';
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback, BackHandler, Platform, Keyboard, useWindowDimensions } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import Animated, { useSharedValue, useDerivedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from '@idealyst/theme';
 import { DialogProps } from './types';
 import { dialogStyles } from './Dialog.styles';
@@ -51,27 +51,35 @@ const Dialog = forwardRef<View, DialogProps>(({
   // Get safe area insets
   const insets = useSafeAreaInsets();
 
-  // Track keyboard height for avoidKeyboard
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  // Animated keyboard height for smooth keyboard avoidance
+  const keyboardHeight = useSharedValue(0);
   const { height: screenHeight } = useWindowDimensions();
 
   useEffect(() => {
-    if (!avoidKeyboard || !open) return;
+    if (!avoidKeyboard || !open) {
+      // Animate back to 0 when dialog closes or avoidKeyboard is disabled
+      keyboardHeight.value = withTiming(0, { duration: 250 });
+      return;
+    }
 
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
     const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
 
     const showSub = Keyboard.addListener(showEvent, (e) => {
-      setKeyboardHeight(e.endCoordinates.height);
+      const duration = Platform.OS === 'ios' ? e.duration : 250;
+      keyboardHeight.value = withTiming(e.endCoordinates.height, { duration });
     });
 
-    const hideSub = Keyboard.addListener(hideEvent, () => {
-      setKeyboardHeight(0);
+    const hideSub = Keyboard.addListener(hideEvent, (e) => {
+      const duration = Platform.OS === 'ios' ? (e?.duration ?? 250) : 250;
+      keyboardHeight.value = withTiming(0, { duration });
     });
 
     return () => {
       showSub.remove();
       hideSub.remove();
+      // Animate back to 0 on cleanup so we don't get stuck at a stale value
+      keyboardHeight.value = withTiming(0, { duration: 250 });
     };
   }, [avoidKeyboard, open]);
 
@@ -168,48 +176,69 @@ const Dialog = forwardRef<View, DialogProps>(({
     bottom: 0,
   };
 
-  // Position offsets for the container view
-  // Top: always safe area + padding
-  // Bottom: safe area + padding (no keyboard) or keyboard + padding (with keyboard)
+  // Derived bottom offset — animates smoothly with keyboard
   const topOffset = insets.top + paddingProp;
-  const bottomOffset = keyboardHeight > 0
-    ? keyboardHeight + paddingProp
-    : insets.bottom + paddingProp;
+  const bottomOffset = useDerivedValue(() => {
+    'worklet';
+    return keyboardHeight.value > 0
+      ? keyboardHeight.value + paddingProp
+      : insets.bottom + paddingProp;
+  });
 
-  // Max height is the available space (used as a ceiling, children can be smaller)
-  const maxAvailableHeight = screenHeight - topOffset - bottomOffset;
-
-  // Use the smaller of user's preferred max height and available space
-  const effectiveMaxHeight = maxContentHeight
-    ? Math.min(maxContentHeight, maxAvailableHeight)
-    : maxAvailableHeight;
+  // Animated style for the positioning wrapper
+  const positioningStyle = useAnimatedStyle(() => {
+    'worklet';
+    return {
+      bottom: bottomOffset.value,
+    };
+  });
 
   // Resolve explicit height (number or percentage string)
   const resolvedHeight = typeof height === 'string'
     ? height.endsWith('%')
-      ? (parseFloat(height) / 100) * maxAvailableHeight
+      ? (parseFloat(height) / 100) * screenHeight // approximate; animated version below handles it
       : parseFloat(height)
     : height;
-
-  // Dialog uses the effective max height, with a definite height when requested
-  // so children can resolve flex: 1 against it
-  const dialogContainerStyle = {
-    ...containerStyle,
-    maxHeight: effectiveMaxHeight,
-    height: resolvedHeight
-      ? Math.min(resolvedHeight, effectiveMaxHeight)
-      : maxContentHeight
-        ? effectiveMaxHeight
-        : undefined,
-    flex: undefined,
-  };
 
   // Only apply flex: 1 to content when the dialog has a definite height to flex against.
   // Without a definite height, flex: 1 collapses content instead of wrapping naturally.
   const hasDefiniteHeight = Boolean(resolvedHeight || maxContentHeight);
 
+  // Static container styles (not dependent on keyboard)
+  const staticContainerStyle = {
+    ...containerStyle,
+    flex: undefined,
+  };
+
+  // Animated maxHeight/height that responds to keyboard changes
+  const dialogSizeStyle = useAnimatedStyle(() => {
+    'worklet';
+    const currentBottom = bottomOffset.value;
+    const maxAvailable = screenHeight - topOffset - currentBottom;
+    const effectiveMax = maxContentHeight
+      ? Math.min(maxContentHeight, maxAvailable)
+      : maxAvailable;
+
+    const result: { maxHeight: number; height?: number } = {
+      maxHeight: effectiveMax,
+    };
+
+    if (resolvedHeight) {
+      result.height = Math.min(resolvedHeight, effectiveMax);
+    } else if (maxContentHeight) {
+      result.height = effectiveMax;
+    }
+
+    return result;
+  });
+
   const dialogContainer = (
-    <Animated.View ref={ref as any} style={[dialogContainerStyle, style, containerAnimatedStyle]} nativeID={id} {...nativeA11yProps}>
+    <Animated.View
+      ref={ref as any}
+      style={[staticContainerStyle, style, dialogSizeStyle, containerAnimatedStyle]}
+      nativeID={id}
+      {...nativeA11yProps}
+    >
       {(title || showCloseButton) && (
         <View style={[headerStyle, { flexShrink: 0 }]}>
           {title && (
@@ -259,21 +288,20 @@ const Dialog = forwardRef<View, DialogProps>(({
         </TouchableWithoutFeedback>
       )}
       {/* Dialog content - positioned absolute, accounts for keyboard and safe areas */}
-      <View
-        style={{
+      <Animated.View
+        style={[{
           position: 'absolute',
           top: topOffset,
           left: 0,
           right: 0,
-          bottom: bottomOffset,
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 1001,
-        }}
+        }, positioningStyle]}
         pointerEvents="box-none"
       >
         {dialogContainer}
-      </View>
+      </Animated.View>
     </Modal>
   );
 });

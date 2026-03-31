@@ -23,7 +23,7 @@ import {
   getFileExtension,
 } from '../utils';
 import { checkPermissions, requestPermissions } from '../permissions/permissions.native';
-import DocumentPicker, { type DocumentPickerResponse } from 'react-native-document-picker';
+import { pick as pickDocuments, keepLocalCopy, isErrorWithCode, errorCodes } from '@react-native-documents/picker';
 import { launchCamera, launchImageLibrary, type ImagePickerResponse } from 'react-native-image-picker';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 
@@ -32,7 +32,7 @@ type FilePickerEvents = {
 };
 
 /**
- * Native implementation of IFilePicker using react-native-document-picker and react-native-image-picker.
+ * Native implementation of IFilePicker using @react-native-documents/picker and react-native-image-picker.
  */
 export class NativeFilePicker implements IFilePicker {
   private _status: FilePickerStatus = { ...INITIAL_FILE_PICKER_STATUS };
@@ -223,14 +223,24 @@ export class NativeFilePicker implements IFilePicker {
     const types = this._buildDocumentPickerTypes(config);
 
     try {
-      const results = await DocumentPicker.pick({
+      const results = await pickDocuments({
         type: types,
         allowMultiSelection: config.multiple,
-        copyTo: 'cachesDirectory',
+        mode: 'import',
       });
 
       this._updateState('processing');
-      const files = await this._transformDocumentPickerResponse(results, config);
+
+      // Copy picked files to cache directory for reliable access
+      const localCopies = await keepLocalCopy({
+        files: results.map(doc => ({
+          uri: doc.uri,
+          fileName: doc.name || `file_${Date.now()}`,
+        })),
+        destination: 'cachesDirectory',
+      });
+
+      const files = await this._transformDocumentPickerResponse(results, localCopies, config);
       const { accepted, rejected } = validateFilesUtil(files, config);
 
       this._updateState('idle');
@@ -240,7 +250,7 @@ export class NativeFilePicker implements IFilePicker {
         rejected,
       };
     } catch (error) {
-      if (DocumentPicker.isCancel(error)) {
+      if (isErrorWithCode(error) && error.code === errorCodes.OPERATION_CANCELED) {
         this._updateState('idle');
         return { cancelled: true, files: [], rejected: [] };
       }
@@ -312,21 +322,31 @@ export class NativeFilePicker implements IFilePicker {
   }
 
   private async _transformDocumentPickerResponse(
-    results: DocumentPickerResponse[],
+    results: { uri: string; name: string | null; type: string | null; size: number | null }[],
+    localCopies: { sourceUri: string; status: string; localUri?: string; copyError?: string }[],
     config?: FilePickerConfig
   ): Promise<PickedFile[]> {
     const files: PickedFile[] = [];
 
+    // Build a map from source URI to local copy URI for quick lookup
+    const localUriMap = new Map<string, string>();
+    for (const copy of localCopies) {
+      if (copy.status === 'success' && copy.localUri) {
+        localUriMap.set(copy.sourceUri, copy.localUri);
+      }
+    }
+
     for (const doc of results) {
+      const resolvedUri = localUriMap.get(doc.uri) || doc.uri;
       const file: PickedFile = {
         id: generateId(),
         name: doc.name || `file_${Date.now()}`,
         size: doc.size || 0,
         type: doc.type || 'application/octet-stream',
-        uri: doc.fileCopyUri || doc.uri,
+        uri: resolvedUri,
         extension: getFileExtension(doc.name || ''),
-        getArrayBuffer: () => this._readFileAsArrayBuffer(doc.fileCopyUri || doc.uri),
-        getData: () => this._readFileAsBase64(doc.fileCopyUri || doc.uri),
+        getArrayBuffer: () => this._readFileAsArrayBuffer(resolvedUri),
+        getData: () => this._readFileAsBase64(resolvedUri),
       };
 
       files.push(file);

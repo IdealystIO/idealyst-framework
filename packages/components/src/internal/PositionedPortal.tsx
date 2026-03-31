@@ -120,27 +120,41 @@ const calculatePosition = (
     position.width = anchorRect.width;
   }
 
-  // Clamp to viewport bounds (viewport-relative for fixed positioning)
   const padding = 8;
-  position.left = Math.max(padding, Math.min(position.left, vpWidth - contentSize.width - padding));
-  position.top = Math.max(padding, Math.min(position.top, vpHeight - contentSize.height - padding));
 
-  // Flip vertical placement if it overflows
+  // Flip placement if it overflows (must run BEFORE clamping)
   const isAbove = placement.startsWith('top');
   const isBelow = placement.startsWith('bottom');
+  const isLeft = placement.startsWith('left');
+  const isRight = placement.startsWith('right');
+
   if (isBelow && position.top + contentSize.height > vpHeight - padding) {
-    // Not enough space below — try above
     const aboveTop = anchorRect.top - contentSize.height - offset;
     if (aboveTop >= padding) {
       position.top = aboveTop;
     }
   } else if (isAbove && position.top < padding) {
-    // Not enough space above — try below
     const belowTop = anchorRect.bottom + offset;
     if (belowTop + contentSize.height <= vpHeight - padding) {
       position.top = belowTop;
     }
   }
+
+  if (isRight && position.left + contentSize.width > vpWidth - padding) {
+    const leftPos = anchorRect.left - contentSize.width - offset;
+    if (leftPos >= padding) {
+      position.left = leftPos;
+    }
+  } else if (isLeft && position.left < padding) {
+    const rightPos = anchorRect.right + offset;
+    if (rightPos + contentSize.width <= vpWidth - padding) {
+      position.left = rightPos;
+    }
+  }
+
+  // Clamp to viewport bounds as final safety net
+  position.left = Math.max(padding, Math.min(position.left, vpWidth - contentSize.width - padding));
+  position.top = Math.max(padding, Math.min(position.top, vpHeight - contentSize.height - padding));
 
   return position;
 };
@@ -162,17 +176,18 @@ export const PositionedPortal: React.FC<PositionedPortalProps> = ({
 
   // Calculate position
   const updatePosition = useCallback(() => {
-    if (!contentRef.current || !anchor.current) {
-      return;
-    }
+    if (!contentRef.current || !anchor.current) return;
 
     const anchorRect = anchor.current.getBoundingClientRect();
-    const contentRect = contentRef.current.getBoundingClientRect();
+    // Use scrollWidth/scrollHeight for intrinsic content size —
+    // getBoundingClientRect() can be wrong when the element is at position 0,0
+    // because the container div has no explicit width and may stretch.
+    const contentWidth = contentRef.current.scrollWidth;
+    const contentHeight = contentRef.current.scrollHeight;
 
-    // Use actual measured size from the DOM
     const newPosition = calculatePosition(
       anchorRect,
-      { width: contentRect.width, height: contentRect.height },
+      { width: contentWidth, height: contentHeight },
       placement,
       offset,
       matchWidth
@@ -185,11 +200,8 @@ export const PositionedPortal: React.FC<PositionedPortalProps> = ({
   // Position after DOM is ready
   useLayoutEffect(() => {
     if (open) {
-      // Use requestAnimationFrame to ensure ref is attached and layout is complete
       const rafId = requestAnimationFrame(() => {
-        if (contentRef.current && anchor.current) {
-          updatePosition();
-        }
+        updatePosition();
       });
       return () => cancelAnimationFrame(rafId);
     } else {

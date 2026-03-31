@@ -909,9 +909,9 @@ function AnimatedComponent() {
     platforms: ["web", "native"],
     documentationStatus: "full",
     installation:
-      "yarn add @idealyst/files react-native-document-picker react-native-image-picker react-native-blob-util",
+      "yarn add @idealyst/files @react-native-documents/picker react-native-image-picker react-native-blob-util",
     peerDependencies: [
-      "react-native-document-picker (native)",
+      "@react-native-documents/picker (native)",
       "react-native-image-picker (native)",
       "react-native-blob-util (native)",
     ],
