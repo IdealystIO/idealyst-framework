@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Screen, View, Text, Badge, Button } from '@idealyst/components';
 import Table from '../Table';
-import type { TableColumn } from '../Table/types';
+import type { TableColumn, SortDirection } from '../Table/types';
 
 interface User {
   id: number;
@@ -287,8 +287,101 @@ export const TableExamples: React.FC = () => {
           No data to display
         </Text>
       </View>
+
+      <SortableTableExample />
+      <OptionsTableExample />
     </View>
     </Screen>
+  );
+};
+
+const SortableTableExample: React.FC = () => {
+  const [sortedProducts, setSortedProducts] = useState([
+    { id: 1, name: 'Laptop', category: 'Electronics', price: 999.99, stock: 15 },
+    { id: 2, name: 'Mouse', category: 'Electronics', price: 29.99, stock: 150 },
+    { id: 3, name: 'Keyboard', category: 'Electronics', price: 79.99, stock: 75 },
+    { id: 4, name: 'Monitor', category: 'Electronics', price: 299.99, stock: 30 },
+    { id: 5, name: 'Desk', category: 'Furniture', price: 399.99, stock: 10 },
+  ]);
+
+  const handleSort = (columnKey: string, direction: SortDirection) => {
+    if (!direction) {
+      setSortedProducts([...sortedProducts]);
+      return;
+    }
+    const sorted = [...sortedProducts].sort((a, b) => {
+      const aVal = (a as any)[columnKey];
+      const bVal = (b as any)[columnKey];
+      if (typeof aVal === 'number') return direction === 'asc' ? aVal - bVal : bVal - aVal;
+      return direction === 'asc'
+        ? String(aVal).localeCompare(String(bVal))
+        : String(bVal).localeCompare(String(aVal));
+    });
+    setSortedProducts(sorted);
+  };
+
+  const columns: TableColumn<typeof sortedProducts[0]>[] = [
+    { key: 'name', title: 'Product', dataIndex: 'name', sortable: true },
+    { key: 'category', title: 'Category', dataIndex: 'category', width: '150px', sortable: true },
+    { key: 'price', title: 'Price', dataIndex: 'price', width: '120px', align: 'right', sortable: true, render: (price: number) => `$${price.toFixed(2)}` },
+    { key: 'stock', title: 'Stock', dataIndex: 'stock', width: '100px', align: 'center', sortable: true },
+  ];
+
+  return (
+    <View gap="md">
+      <Text typography="h5">Sortable Table</Text>
+      <Table columns={columns} data={sortedProducts} onSort={handleSort} dividers />
+      <Text typography="caption" color="secondary">
+        Click column headers to cycle sort: unsorted, ascending, descending
+      </Text>
+    </View>
+  );
+};
+
+const OptionsTableExample: React.FC = () => {
+  const data = [
+    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
+    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
+  ];
+
+  const columns: TableColumn<typeof data[0]>[] = [
+    {
+      key: 'name',
+      title: 'Name',
+      dataIndex: 'name',
+      sortable: true,
+      options: [
+        { id: 'sort-asc', label: 'Sort A-Z', icon: 'sort-ascending', onClick: () => console.log('Sort A-Z') },
+        { id: 'sort-desc', label: 'Sort Z-A', icon: 'sort-descending', onClick: () => console.log('Sort Z-A') },
+        { id: 'sep', label: '', separator: true },
+        { id: 'hide', label: 'Hide Column', icon: 'eye-off', onClick: () => console.log('Hide column') },
+      ],
+    },
+    {
+      key: 'email',
+      title: 'Email',
+      dataIndex: 'email',
+      options: [
+        { id: 'copy', label: 'Copy All Emails', icon: 'content-copy', onClick: () => console.log('Copy emails') },
+      ],
+    },
+    {
+      key: 'role',
+      title: 'Role',
+      dataIndex: 'role',
+      width: '120px',
+    },
+  ];
+
+  return (
+    <View gap="md">
+      <Text typography="h5">Column Options Menu</Text>
+      <Table columns={columns} data={data} dividers />
+      <Text typography="caption" color="secondary">
+        Columns with options show a kebab menu icon in the header
+      </Text>
+    </View>
   );
 };
 

@@ -231,6 +231,9 @@ export type MenuSizeValue = {
     paddingHorizontal: SizeValue;
     iconSize: SizeValue;
     labelFontSize: SizeValue;
+    minHeight: SizeValue;
+    borderRadius: SizeValue;
+    iconGap: SizeValue;
 };
 
 export type TextSizeValue = {

@@ -3,11 +3,13 @@ import type { ReactNode } from 'react';
 import { Size } from '@idealyst/theme';
 import { ContainerStyleProps } from '../utils/viewStyleProps';
 import { AccessibilityProps, SortableAccessibilityProps } from '../utils/accessibility';
+import type { MenuItem } from '../Menu/types';
 
 // Component-specific type aliases for future extensibility
 export type TableSizeVariant = Size;
 export type TableType = 'standard' | 'striped';
 export type TableAlignVariant = 'left' | 'center' | 'right';
+export type SortDirection = 'asc' | 'desc' | null;
 
 export interface TableColumn<T = any> extends SortableAccessibilityProps {
   key: string;
@@ -32,6 +34,16 @@ export interface TableColumn<T = any> extends SortableAccessibilityProps {
    * Minimum width when resizing (default: 50).
    */
   minWidth?: number;
+  /**
+   * Enables click-to-sort cycling on this column header.
+   * Cycles: unsorted → ascending → descending → unsorted.
+   */
+  sortable?: boolean;
+  /**
+   * Menu items to show in a column options dropdown.
+   * Uses the existing MenuItem type from the Menu component.
+   */
+  options?: MenuItem[];
 }
 
 /**
@@ -58,6 +70,11 @@ export interface TableProps<T = any> extends ContainerStyleProps, AccessibilityP
    * Receives the column key and the new width in pixels.
    */
   onColumnResize?: (key: string, width: number) => void;
+  /**
+   * Called when sort state changes via header click.
+   * The Table manages sort state internally; the parent handles data ordering.
+   */
+  onSort?: (columnKey: string, direction: SortDirection) => void;
   /**
    * Content to display when `data` is empty.
    * Renders in place of the table body.

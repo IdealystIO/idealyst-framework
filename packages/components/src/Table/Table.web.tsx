@@ -1,8 +1,11 @@
-import { useMemo, useRef, useCallback, ReactNode } from 'react';
+import { useMemo, useRef, useCallback, useState, ReactNode } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
 import { tableStyles } from './Table.styles';
-import type { TableProps, TableColumn, TableType, TableSizeVariant, TableAlignVariant } from './types';
+import type { TableProps, TableColumn, TableType, TableSizeVariant, TableAlignVariant, SortDirection } from './types';
+import type { MenuItem } from '../Menu/types';
 import { getWebAriaProps } from '../utils/accessibility';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import Menu from '../Menu/Menu.web';
 
 // ============================================================================
 // Helpers
@@ -49,6 +52,10 @@ interface THProps {
   onResize?: (width: number) => void;
   minWidth?: number;
   accessibilitySort?: 'ascending' | 'descending' | 'none' | 'other';
+  sortable?: boolean;
+  sortDirection?: SortDirection;
+  onSort?: () => void;
+  options?: MenuItem[];
 }
 
 interface TDProps {
@@ -110,15 +117,36 @@ function TH({
   onResize,
   minWidth = 50,
   accessibilitySort,
+  sortable,
+  sortDirection,
+  onSort,
+  options,
 }: THProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   tableStyles.useVariants({
     size,
     type,
     align,
+    sortable: !!sortable,
+    sortActive: sortDirection != null,
   });
 
   const headerCellProps = getWebProps([(tableStyles.headerCell as any)({})]);
+  const sortIndicatorProps = getWebProps([(tableStyles.sortIndicator as any)({ sortActive: sortDirection != null })]);
+  const optionsButtonProps = getWebProps([(tableStyles.optionsButton as any)({})]);
   const thRef = useRef<HTMLTableCellElement>(null);
+
+  // Derive aria-sort from sortDirection
+  const derivedAriaSort = accessibilitySort ?? (
+    sortDirection === 'asc' ? 'ascending' :
+    sortDirection === 'desc' ? 'descending' :
+    sortable ? 'none' : undefined
+  );
+
+  // Sort indicator icon name
+  const sortIconName = sortDirection === 'asc' ? 'arrow-up' :
+    sortDirection === 'desc' ? 'arrow-down' : 'arrow-up-down';
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     e.preventDefault();
@@ -139,12 +167,10 @@ function TH({
       document.removeEventListener('pointerup', handlePointerUp);
       const finalWidth = th.getBoundingClientRect().width;
       onResize?.(finalWidth);
-      // Remove inline cursor override
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     };
 
-    // Prevent text selection and set resize cursor globally during drag
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
     document.addEventListener('pointermove', handlePointerMove);
@@ -156,10 +182,47 @@ function TH({
       {...headerCellProps}
       ref={thRef}
       scope="col"
-      aria-sort={accessibilitySort}
+      aria-sort={derivedAriaSort}
       style={{ width, ...getStickyStyle(sticky, stickyOffset, 11) }}
+      onClick={sortable ? onSort : undefined}
     >
-      {children}
+      <span style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <span style={{ flex: 1, minWidth: 0 }}>
+          {children}
+        </span>
+        {sortable && (
+          <span {...sortIndicatorProps} style={{ display: 'inline-flex', flexShrink: 0 }}>
+            <IconSvg name={sortIconName} size="0.85em" aria-label={sortIconName} />
+          </span>
+        )}
+        {options && options.length > 0 && (
+          <span onClick={(e) => e.stopPropagation()} style={{ display: 'inline-flex', flexShrink: 0 }}>
+            <Menu
+              items={options}
+              open={menuOpen}
+              onOpenChange={setMenuOpen}
+              placement="bottom-start"
+              size={size}
+            >
+              <button
+                {...optionsButtonProps}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 2,
+                }}
+                aria-label="Column options"
+              >
+                <IconSvg name="dots-vertical" size="0.85em" aria-label="dots-vertical" />
+              </button>
+            </Menu>
+          </span>
+        )}
+      </span>
       {resizable && (
         <span
           onPointerDown={handlePointerDown}
@@ -266,6 +329,7 @@ function Table<T = any>({
   stickyHeader = false,
   onRowPress,
   onColumnResize,
+  onSort,
   dividers = false,
   emptyState,
   // Spacing variants from ContainerStyleProps
@@ -285,6 +349,26 @@ function Table<T = any>({
   accessibilityRole,
   accessibilityHidden,
 }: TableProps<T>) {
+  // Sort state
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+
+  const handleSort = useCallback((columnKey: string) => {
+    let newDir: SortDirection;
+    if (sortColumn !== columnKey) {
+      newDir = 'asc';
+    } else if (sortDirection === 'asc') {
+      newDir = 'desc';
+    } else {
+      setSortColumn(null);
+      setSortDirection(null);
+      onSort?.(columnKey, null);
+      return;
+    }
+    setSortColumn(columnKey);
+    setSortDirection(newDir);
+    onSort?.(columnKey, newDir);
+  }, [sortColumn, sortDirection, onSort]);
   // Generate ARIA props
   const ariaProps = useMemo(() => {
     return getWebAriaProps({
@@ -378,6 +462,10 @@ function Table<T = any>({
                 minWidth={column.minWidth}
                 onResize={onColumnResize ? (w) => onColumnResize(column.key, w) : undefined}
                 accessibilitySort={column.accessibilitySort}
+                sortable={column.sortable}
+                sortDirection={sortColumn === column.key ? sortDirection : undefined}
+                onSort={column.sortable ? () => handleSort(column.key) : undefined}
+                options={column.options}
               >
                 {column.title}
               </TH>

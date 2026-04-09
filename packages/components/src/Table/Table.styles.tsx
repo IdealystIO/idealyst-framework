@@ -23,6 +23,8 @@ export type TableDynamicProps = {
     even?: boolean;
     sticky?: boolean;
     align?: CellAlign;
+    sortable?: boolean;
+    sortActive?: boolean;
     gap?: ViewStyleSize;
     padding?: ViewStyleSize;
     paddingVertical?: ViewStyleSize;
@@ -178,10 +180,69 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
                 fontSize: theme.sizes.$table.fontSize,
                 lineHeight: theme.sizes.$table.lineHeight,
             },
+            sortable: {
+                true: {
+                    _web: {
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                        transition: 'background-color 0.15s ease',
+                        _hover: {
+                            backgroundColor: theme.colors.surface.hover,
+                        },
+                    },
+                },
+            },
         },
         _web: {
             position: 'relative',
             borderBottom: `1px solid ${theme.colors.border.primary}`,
+        },
+    }),
+
+    sortIndicator: ({ sortActive = false }: TableDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        marginLeft: 4,
+        opacity: sortActive ? 1 : 0.4,
+        color: sortActive ? theme.colors.text.primary : theme.colors.text.tertiary,
+        flexShrink: 0,
+        _web: {
+            transition: 'opacity 0.15s ease, color 0.15s ease',
+        },
+        variants: {
+            size: {
+                width: theme.sizes.$table.fontSize,
+                height: theme.sizes.$table.fontSize,
+            },
+        },
+    }),
+
+    optionsButton: (_props: TableDynamicProps) => ({
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        marginLeft: 4,
+        borderRadius: 4,
+        padding: 2,
+        opacity: 0.4,
+        flexShrink: 0,
+        color: theme.colors.text.tertiary,
+        _web: {
+            cursor: 'pointer',
+            border: 'none',
+            background: 'transparent',
+            transition: 'opacity 0.15s ease, background-color 0.15s ease',
+            _hover: {
+                opacity: 1,
+                backgroundColor: theme.colors.surface.hover,
+            },
+        },
+        variants: {
+            size: {
+                width: theme.sizes.$table.fontSize,
+                height: theme.sizes.$table.fontSize,
+            },
         },
     }),
 

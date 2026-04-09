@@ -5,8 +5,8 @@
  * to ensure accuracy and correctness.
  */
 
-import React from 'react';
-import { Table, View, Text, Badge, Icon, type TableColumn } from '@idealyst/components';
+import React, { useState } from 'react';
+import { Table, View, Text, Badge, Icon, type TableColumn, type SortDirection } from '@idealyst/components';
 
 // ============================================================================
 // Example 1: Basic Table
@@ -233,4 +233,77 @@ export function ColumnAlignment() {
   ];
 
   return <Table columns={columns} data={products} type="bordered" />;
+}
+
+// ============================================================================
+// Example 9: Sortable Columns
+// ============================================================================
+
+export function SortableTable() {
+  const [data, setData] = useState(products);
+
+  const handleSort = (columnKey: string, direction: SortDirection) => {
+    if (!direction) {
+      setData([...products]); // Reset to original order
+      return;
+    }
+    const sorted = [...data].sort((a, b) => {
+      const aVal = a[columnKey as keyof Product];
+      const bVal = b[columnKey as keyof Product];
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return direction === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+      return direction === 'asc'
+        ? String(aVal).localeCompare(String(bVal))
+        : String(bVal).localeCompare(String(aVal));
+    });
+    setData(sorted);
+  };
+
+  const columns: TableColumn<Product>[] = [
+    { key: 'name', title: 'Product', dataIndex: 'name', sortable: true },
+    { key: 'quantity', title: 'Qty', dataIndex: 'quantity', align: 'right', sortable: true },
+    {
+      key: 'price',
+      title: 'Price',
+      dataIndex: 'price',
+      align: 'right',
+      sortable: true,
+      render: (value: number) => `$${value.toFixed(2)}`,
+    },
+  ];
+
+  return <Table columns={columns} data={data} onSort={handleSort} dividers />;
+}
+
+// ============================================================================
+// Example 10: Column Options Menu
+// ============================================================================
+
+export function ColumnOptionsMenu() {
+  const columns: TableColumn<User>[] = [
+    {
+      key: 'name',
+      title: 'Name',
+      dataIndex: 'name',
+      sortable: true,
+      options: [
+        { id: 'sort-asc', label: 'Sort A-Z', icon: 'sort-ascending', onClick: () => console.log('Sort A-Z') },
+        { id: 'sort-desc', label: 'Sort Z-A', icon: 'sort-descending', onClick: () => console.log('Sort Z-A') },
+        { id: 'sep', label: '', separator: true },
+        { id: 'hide', label: 'Hide Column', icon: 'eye-off', onClick: () => console.log('Hide') },
+      ],
+    },
+    {
+      key: 'role',
+      title: 'Role',
+      dataIndex: 'role',
+      options: [
+        { id: 'copy', label: 'Copy All', icon: 'content-copy', onClick: () => console.log('Copy') },
+      ],
+    },
+    { key: 'status', title: 'Status', dataIndex: 'status' },
+  ];
+
+  return <Table columns={columns} data={users} dividers />;
 }

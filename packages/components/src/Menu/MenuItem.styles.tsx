@@ -25,12 +25,12 @@ export const menuItemStyles = defineStyle('MenuItem', (theme: Theme) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         backgroundColor: 'transparent' as const,
-        borderRadius: 4,
-        minHeight: 44,
         variants: {
             size: {
                 paddingVertical: theme.sizes.$menu.paddingVertical,
                 paddingHorizontal: theme.sizes.$menu.paddingHorizontal,
+                minHeight: theme.sizes.$menu.minHeight,
+                borderRadius: theme.sizes.$menu.borderRadius,
             },
             intent: {
                 neutral: {
@@ -110,13 +110,13 @@ export const menuItemStyles = defineStyle('MenuItem', (theme: Theme) => ({
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
         flexShrink: 0,
-        marginRight: 12,
         color: theme.colors.text.primary,
         variants: {
             size: {
                 width: theme.sizes.$menu.iconSize,
                 height: theme.sizes.$menu.iconSize,
                 fontSize: theme.sizes.$menu.iconSize,
+                marginRight: theme.sizes.$menu.iconGap,
             },
             intent: {
                 neutral: {},
@@ -135,6 +135,9 @@ export const menuItemStyles = defineStyle('MenuItem', (theme: Theme) => ({
     label: (_props: MenuItemDynamicProps) => ({
         flex: 1,
         color: theme.colors.text.primary,
+        _web: {
+            whiteSpace: 'nowrap',
+        },
         variants: {
             size: {
                 fontSize: theme.sizes.$menu.labelFontSize,

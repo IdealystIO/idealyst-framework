@@ -18,6 +18,7 @@ const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, si
   // Initialize styles with useVariants (for size and disabled)
   menuItemStyles.useVariants({
     size,
+    intent: item.intent || 'neutral',
     disabled: Boolean(item.disabled),
   });
 
@@ -54,22 +55,10 @@ const MenuItem = forwardRef<IdealystElement, MenuItemProps>(({ item, onPress, si
   // Merge refs
   const mergedRef = useMergeRefs(ref, itemProps.ref);
 
-  // Button reset styles that must be applied directly
-  const buttonResetStyles: React.CSSProperties = {
-    display: 'flex',
-    width: '100%',
-    border: 'none',
-    outline: 'none',
-    cursor: item.disabled ? 'not-allowed' : 'pointer',
-    background: 'transparent',
-    textAlign: 'left',
-  };
-
   return (
     <button
       {...itemProps}
       ref={mergedRef}
-      style={buttonResetStyles}
       onClick={(e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();

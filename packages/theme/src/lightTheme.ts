@@ -241,11 +241,11 @@ export const lightTheme = createTheme()
             xl: { paddingVertical: 8, paddingHorizontal: 20, minHeight: 60, iconSize: 28, labelFontSize: 20, labelLineHeight: 32 },
         },
         menu: {
-            xs: { paddingVertical: 2, paddingHorizontal: 6, iconSize: 14, labelFontSize: 12 },
-            sm: { paddingVertical: 4, paddingHorizontal: 8, iconSize: 16, labelFontSize: 14 },
-            md: { paddingVertical: 8, paddingHorizontal: 16, iconSize: 20, labelFontSize: 16 },
-            lg: { paddingVertical: 16, paddingHorizontal: 24, iconSize: 24, labelFontSize: 18 },
-            xl: { paddingVertical: 20, paddingHorizontal: 28, iconSize: 28, labelFontSize: 20 },
+            xs: { paddingVertical: 2, paddingHorizontal: 6, iconSize: 14, labelFontSize: 12, minHeight: 24, borderRadius: 4, iconGap: 6 },
+            sm: { paddingVertical: 4, paddingHorizontal: 8, iconSize: 16, labelFontSize: 14, minHeight: 28, borderRadius: 4, iconGap: 8 },
+            md: { paddingVertical: 6, paddingHorizontal: 12, iconSize: 18, labelFontSize: 14, minHeight: 32, borderRadius: 6, iconGap: 10 },
+            lg: { paddingVertical: 8, paddingHorizontal: 16, iconSize: 20, labelFontSize: 16, minHeight: 36, borderRadius: 6, iconGap: 12 },
+            xl: { paddingVertical: 10, paddingHorizontal: 20, iconSize: 24, labelFontSize: 18, minHeight: 40, borderRadius: 8, iconGap: 14 },
         },
         text: {
             xs: { fontSize: 12, lineHeight: 18 },

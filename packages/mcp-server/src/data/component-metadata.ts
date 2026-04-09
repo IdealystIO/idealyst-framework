@@ -545,7 +545,8 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
     category: 'data',
     description: 'Structured data display in rows and columns',
     features: [
-      'Sortable columns',
+      'Sortable columns — set `sortable: true` on a column, handle `onSort` callback on Table',
+      'Column options menu — set `options: MenuItem[]` on a column to show a kebab (⋮) dropdown in the header',
       'Custom cell rendering via column `render` function',
       'Custom column titles (ReactNode) — render icons, badges, or any element as header',
       'Footer row support — static content or computed from data via `footer` callback',
@@ -559,6 +560,9 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
       'Column `title` accepts ReactNode — use for custom headers with icons or styled text',
       'Column `footer` accepts ReactNode or `(data: T[]) => ReactNode` — use the callback form for computed values like sums/averages',
       'Footer only renders when at least one column has a `footer` defined',
+      'Sort: Table manages sort state internally (3-state cycle: null → asc → desc → null). The parent sorts data via `onSort(columnKey, direction)` callback.',
+      'Sort: `SortDirection` type is `"asc" | "desc" | null`. Import from `@idealyst/components`.',
+      'Column options: `options` uses the `MenuItem[]` type from the Menu component. Each item has `id`, `label`, `onClick`, and optional `icon`, `separator`, `intent`.',
     ],
   },
 

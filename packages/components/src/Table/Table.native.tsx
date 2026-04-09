@@ -1,8 +1,11 @@
-import React, { forwardRef, useMemo, ReactNode } from 'react';
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import React, { forwardRef, useMemo, useState, useCallback, ReactNode } from 'react';
+import { View, ScrollView, Text, TouchableOpacity, Pressable } from 'react-native';
 import { tableStyles } from './Table.styles';
-import type { TableProps, TableColumn, TableType, TableSizeVariant, TableAlignVariant } from './types';
+import type { TableProps, TableColumn, TableType, TableSizeVariant, TableAlignVariant, SortDirection } from './types';
+import type { MenuItem } from '../Menu/types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import Icon from '../Icon/Icon.native';
+import Menu from '../Menu/Menu.native';
 
 // ============================================================================
 // Sub-component Props
@@ -25,6 +28,10 @@ interface THProps {
   type?: TableType;
   align?: TableAlignVariant;
   width?: number | string;
+  sortable?: boolean;
+  sortDirection?: SortDirection;
+  onSort?: () => void;
+  options?: MenuItem[];
 }
 
 interface TDProps {
@@ -83,29 +90,72 @@ function TH({
   type = 'standard',
   align = 'left',
   width,
+  sortable,
+  sortDirection,
+  onSort,
+  options,
 }: THProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   tableStyles.useVariants({
     size,
     type,
     align,
+    sortable: !!sortable,
+    sortActive: sortDirection != null,
   });
 
   const headerCellStyle = (tableStyles.headerCell as any)({});
+  const sortIndicatorStyle = (tableStyles.sortIndicator as any)({ sortActive: sortDirection != null });
+  const optionsButtonStyle = (tableStyles.optionsButton as any)({});
 
-  return (
+  const sortIconName = sortDirection === 'asc' ? 'arrow-up' :
+    sortDirection === 'desc' ? 'arrow-down' : 'arrow-up-down';
+
+  const content = (
     <View
       style={[
         headerCellStyle,
         { width, flex: width ? undefined : 1 },
       ]}
     >
-      {typeof children === 'string' ? (
-        <Text style={headerCellStyle}>{children}</Text>
-      ) : (
-        children
+      <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, gap: 2 }}>
+        {typeof children === 'string' ? (
+          <Text style={headerCellStyle}>{children}</Text>
+        ) : (
+          children
+        )}
+        {sortable && (
+          <View style={sortIndicatorStyle}>
+            <Icon name={sortIconName} size={size} />
+          </View>
+        )}
+      </View>
+      {options && options.length > 0 && (
+        <Menu
+          items={options}
+          open={menuOpen}
+          onOpenChange={setMenuOpen}
+          placement="bottom-start"
+          size={size}
+        >
+          <Pressable style={optionsButtonStyle}>
+            <Icon name="dots-vertical" size={size} />
+          </Pressable>
+        </Menu>
       )}
     </View>
   );
+
+  if (sortable) {
+    return (
+      <Pressable onPress={onSort}>
+        {content}
+      </Pressable>
+    );
+  }
+
+  return content;
 }
 
 // ============================================================================
@@ -193,6 +243,7 @@ function TableInner<T = any>({
   size = 'md',
   stickyHeader: _stickyHeader = false,
   onRowPress,
+  onSort,
   dividers = false,
   emptyState,
   // Spacing variants from ContainerStyleProps
@@ -212,6 +263,26 @@ function TableInner<T = any>({
   accessibilityRole,
   accessibilityHidden,
 }: TableProps<T>, ref: React.Ref<ScrollView>) {
+  // Sort state
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+
+  const handleSort = useCallback((columnKey: string) => {
+    let newDir: SortDirection;
+    if (sortColumn !== columnKey) {
+      newDir = 'asc';
+    } else if (sortDirection === 'asc') {
+      newDir = 'desc';
+    } else {
+      setSortColumn(null);
+      setSortDirection(null);
+      onSort?.(columnKey, null);
+      return;
+    }
+    setSortColumn(columnKey);
+    setSortDirection(newDir);
+    onSort?.(columnKey, newDir);
+  }, [sortColumn, sortDirection, onSort]);
   // Generate native accessibility props
   const nativeA11yProps = useMemo(() => {
     return getNativeAccessibilityProps({
@@ -276,7 +347,17 @@ function TableInner<T = any>({
       <View style={theadStyle}>
         <View style={{ flexDirection: 'row' }}>
           {cols.map((column) => (
-            <TH key={column.key} size={size} type={type} align={column.align} width={column.width}>
+            <TH
+              key={column.key}
+              size={size}
+              type={type}
+              align={column.align}
+              width={column.width}
+              sortable={column.sortable}
+              sortDirection={sortColumn === column.key ? sortDirection : undefined}
+              onSort={column.sortable ? () => handleSort(column.key) : undefined}
+              options={column.options}
+            >
               {column.title}
             </TH>
           ))}
