@@ -49,7 +49,7 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 8,
-        fontWeight: '600',
+        fontWeight: '500',
         textAlign: 'center',
         // Inline theme accesses so Unistyles can trace them
         backgroundColor: type === 'contained'
@@ -99,7 +99,7 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
         },
     }),
     text: ({ intent = 'primary', type = 'contained' }: ButtonDynamicProps) => ({
-        fontWeight: '600',
+        fontWeight: '500',
         textAlign: 'center',
         // Inline: contained uses contrast, others use primary
         color: type === 'contained'
@@ -135,7 +135,7 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
-        gap: 4,
+        gap: 10,
     }),
     spinner: ({ intent = 'primary', type = 'contained' }: ButtonDynamicProps) => ({
         display: 'flex',

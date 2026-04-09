@@ -115,11 +115,11 @@ export const lightTheme = createTheme()
     // Sizes
     .setSizes({
         button: {
-            xs: { paddingVertical: 4, paddingHorizontal: 8, minHeight: 24, fontSize: 12, lineHeight: 16, iconSize: 12 },
-            sm: { paddingVertical: 6, paddingHorizontal: 12, minHeight: 32, fontSize: 14, lineHeight: 20, iconSize: 14 },
-            md: { paddingVertical: 8, paddingHorizontal: 16, minHeight: 40, fontSize: 16, lineHeight: 24, iconSize: 16 },
-            lg: { paddingVertical: 10, paddingHorizontal: 20, minHeight: 48, fontSize: 18, lineHeight: 28, iconSize: 18 },
-            xl: { paddingVertical: 12, paddingHorizontal: 24, minHeight: 56, fontSize: 20, lineHeight: 32, iconSize: 20 },
+            xs: { paddingVertical: 3, paddingHorizontal: 8, minHeight: 24, fontSize: 11, lineHeight: 16, iconSize: 12 },
+            sm: { paddingVertical: 5, paddingHorizontal: 12, minHeight: 32, fontSize: 13, lineHeight: 18, iconSize: 14 },
+            md: { paddingVertical: 6, paddingHorizontal: 16, minHeight: 36, fontSize: 14, lineHeight: 20, iconSize: 16 },
+            lg: { paddingVertical: 8, paddingHorizontal: 20, minHeight: 44, fontSize: 16, lineHeight: 24, iconSize: 18 },
+            xl: { paddingVertical: 10, paddingHorizontal: 24, minHeight: 52, fontSize: 18, lineHeight: 28, iconSize: 20 },
         },
         iconButton: {
             xs: { size: 24, iconSize: 16 },
