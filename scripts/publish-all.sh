@@ -38,6 +38,7 @@ PACKAGES=(
   "live-activity"
   "network"
   "pdf"
+  "camera"
 )
 
 ROOT_DIR=$(pwd)

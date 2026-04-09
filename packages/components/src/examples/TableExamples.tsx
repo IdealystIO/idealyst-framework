@@ -156,19 +156,34 @@ export const TableExamples: React.FC = () => {
             />
           </View>
           <View gap="xs">
-            <Text typography="body2">Bordered</Text>
-            <Table
-              columns={userColumns}
-              data={users}
-              type="bordered"
-            />
-          </View>
-          <View gap="xs">
             <Text typography="body2">Striped</Text>
             <Table
               columns={userColumns}
               data={users}
               type="striped"
+            />
+          </View>
+        </View>
+      </View>
+
+      <View gap="md">
+        <Text typography="h5">With Dividers</Text>
+        <View gap="sm">
+          <View gap="xs">
+            <Text typography="body2">Standard + Dividers</Text>
+            <Table
+              columns={userColumns}
+              data={users}
+              dividers
+            />
+          </View>
+          <View gap="xs">
+            <Text typography="body2">Striped + Dividers</Text>
+            <Table
+              columns={userColumns}
+              data={users}
+              type="striped"
+              dividers
             />
           </View>
         </View>
@@ -183,7 +198,7 @@ export const TableExamples: React.FC = () => {
               columns={userColumns}
               data={users.slice(0, 2)}
               size="sm"
-              type="bordered"
+              dividers
             />
           </View>
           <View gap="xs">
@@ -192,7 +207,7 @@ export const TableExamples: React.FC = () => {
               columns={userColumns}
               data={users.slice(0, 2)}
               size="md"
-              type="bordered"
+              dividers
             />
           </View>
           <View gap="xs">
@@ -201,7 +216,7 @@ export const TableExamples: React.FC = () => {
               columns={userColumns}
               data={users.slice(0, 2)}
               size="lg"
-              type="bordered"
+              dividers
             />
           </View>
         </View>

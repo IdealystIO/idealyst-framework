@@ -49,6 +49,7 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
 
     switchContainer: (_props: SwitchDynamicProps) => ({
         justifyContent: 'center' as const,
+        alignItems: 'center' as const,
         variants: {
             disabled: {
                 true: { _web: { cursor: 'not-allowed' } },
@@ -56,10 +57,12 @@ export const switchStyles = defineStyle('Switch', (theme: Theme) => ({
             },
         },
         _web: {
+            display: 'inline-flex',
             border: 'none',
             padding: 0,
             backgroundColor: 'transparent',
             width: 'fit-content',
+            verticalAlign: 'middle',
         },
     }),
 

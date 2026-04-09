@@ -13,6 +13,8 @@ interface TRProps {
   size?: TableSizeVariant;
   type?: TableType;
   clickable?: boolean;
+  dividers?: boolean;
+  even?: boolean;
   onPress?: () => void;
   testID?: string;
 }
@@ -42,6 +44,8 @@ function TR({
   size = 'md',
   type = 'standard',
   clickable = false,
+  dividers = false,
+  even = false,
   onPress,
   testID,
 }: TRProps) {
@@ -49,6 +53,8 @@ function TR({
     size,
     type,
     clickable,
+    dividers,
+    even,
   });
 
   const rowStyle = (tableStyles.row as any)({});
@@ -187,6 +193,7 @@ function TableInner<T = any>({
   size = 'md',
   stickyHeader: _stickyHeader = false,
   onRowPress,
+  dividers = false,
   emptyState,
   // Spacing variants from ContainerStyleProps
   gap,
@@ -289,6 +296,8 @@ function TableInner<T = any>({
               size={size}
               type={type}
               clickable={isClickable}
+              dividers={dividers && rowIndex < data.length - 1}
+              even={rowIndex % 2 === 1}
               onPress={() => onRowPress?.(row, rowIndex)}
               testID={testID ? `${testID}-row-${rowIndex}` : undefined}
             >

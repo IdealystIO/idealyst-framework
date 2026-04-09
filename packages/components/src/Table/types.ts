@@ -6,7 +6,7 @@ import { AccessibilityProps, SortableAccessibilityProps } from '../utils/accessi
 
 // Component-specific type aliases for future extensibility
 export type TableSizeVariant = Size;
-export type TableType = 'standard' | 'bordered' | 'striped';
+export type TableType = 'standard' | 'striped';
 export type TableAlignVariant = 'left' | 'center' | 'right';
 
 export interface TableColumn<T = any> extends SortableAccessibilityProps {
@@ -47,6 +47,11 @@ export interface TableProps<T = any> extends ContainerStyleProps, AccessibilityP
   type?: TableType;
   size?: TableSizeVariant;
   stickyHeader?: boolean;
+  /**
+   * Show dividers (horizontal borders) between rows.
+   * Works with any table `type`.
+   */
+  dividers?: boolean;
   onRowPress?: (row: T, index: number) => void;
   /**
    * Called when a column is resized via drag handle.

@@ -12,13 +12,15 @@ void StyleSheet;
 // Wrap theme for $iterator support
 type Theme = ThemeStyleWrapper<BaseTheme>;
 
-type TableType = 'standard' | 'bordered' | 'striped';
+type TableType = 'standard' | 'striped';
 type CellAlign = 'left' | 'center' | 'right';
 
 export type TableDynamicProps = {
     size?: Size;
     type?: TableType;
     clickable?: boolean;
+    dividers?: boolean;
+    even?: boolean;
     sticky?: boolean;
     align?: CellAlign;
     gap?: ViewStyleSize;
@@ -92,70 +94,73 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         backgroundColor: theme.colors.surface.secondary,
     }),
 
-    footerCell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => {
-        const alignStyles = {
-            left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
-            center: { textAlign: 'center' as const, justifyContent: 'center' as const },
-            right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
-        }[align];
+    footerCell: (_props: TableDynamicProps) => ({
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        fontWeight: '600' as const,
+        color: theme.colors.text.primary,
+        borderTopWidth: 1,
+        borderTopColor: theme.colors.border.primary,
+        variants: {
+            align: {
+                left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
+                center: { textAlign: 'center' as const, justifyContent: 'center' as const },
+                right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
+            },
+            size: {
+                paddingVertical: theme.sizes.$table.headerPadding,
+                paddingHorizontal: theme.sizes.$table.padding,
+                fontSize: theme.sizes.$table.headerFontSize,
+                lineHeight: theme.sizes.$table.headerLineHeight,
+            },
+        },
+        _web: {
+            borderTop: `1px solid ${theme.colors.border.primary}`,
+        },
+    }),
 
-        const borderStyles = type === 'bordered' ? {
-            borderRightWidth: 1,
-            borderRightColor: theme.colors.border.primary,
-        } : {};
-
-        return {
-            flexDirection: 'row' as const,
-            alignItems: 'center' as const,
-            fontWeight: '600' as const,
-            color: theme.colors.text.primary,
-            borderTopWidth: 2,
-            borderTopColor: theme.colors.border.primary,
-            ...alignStyles,
-            ...borderStyles,
-            variants: {
-                size: {
-                    padding: theme.sizes.$table.padding,
-                    fontSize: theme.sizes.$table.fontSize,
-                    lineHeight: theme.sizes.$table.lineHeight,
+    row: (_props: TableDynamicProps) => ({
+        variants: {
+            type: {
+                striped: {
+                    _web: {
+                        ':nth-child(even)': {
+                            backgroundColor: theme.colors.surface.secondary,
+                        },
+                    },
                 },
             },
-            _web: {
-                borderTop: `2px solid ${theme.colors.border.primary}`,
-                borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
-                ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},
+            clickable: {
+                true: { _web: { cursor: 'pointer' } },
             },
-        } as const;
-    },
-
-    row: ({ type = 'standard', clickable = false }: TableDynamicProps) => {
-        const typeStyles = type === 'bordered' || type === 'striped' ? {
-            borderBottomWidth: 1,
-            borderBottomColor: theme.colors.border.primary,
-        } : {};
-
-        return {
-            ...typeStyles,
-            _web: {
-                transition: 'background-color 0.15s ease',
-                borderBottom: (type === 'bordered' || type === 'striped')
-                    ? `1px solid ${theme.colors.border.primary}`
-                    : undefined,
-                cursor: clickable ? 'pointer' : undefined,
-                _hover: {
+            dividers: {
+                true: {
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.colors.border.primary,
+                    _web: {
+                        borderBottom: `1px solid ${theme.colors.border.primary}`,
+                    },
+                },
+            },
+        },
+        compoundVariants: [
+            {
+                type: 'striped',
+                even: true,
+                styles: {
                     backgroundColor: theme.colors.surface.secondary,
                 },
-                // Striped rows handled via CSS pseudo-selector
-                ...(type === 'striped' ? {
-                    ':nth-child(even)': {
-                        backgroundColor: theme.colors.surface.secondary,
-                    },
-                } : {}),
             },
-        } as const;
-    },
+        ],
+        _web: {
+            transition: 'background-color 0.15s ease',
+            _hover: {
+                backgroundColor: theme.colors.surface.hover,
+            },
+        },
+    }),
 
-    headerCell: ({ type = 'standard', align: _align = 'left' }: TableDynamicProps) => ({
+    headerCell: (_props: TableDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         fontWeight: '600' as const,
@@ -163,9 +168,29 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border.primary,
         variants: {
-            type: {
-                bordered: { borderRightWidth: 1, borderRightColor: theme.colors.border.primary },
+            align: {
+                left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
+                center: { textAlign: 'center' as const, justifyContent: 'center' as const },
+                right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
             },
+            size: {
+                paddingVertical: theme.sizes.$table.headerPadding,
+                paddingHorizontal: theme.sizes.$table.padding,
+                fontSize: theme.sizes.$table.headerFontSize,
+                lineHeight: theme.sizes.$table.headerLineHeight,
+            },
+        },
+        _web: {
+            position: 'relative',
+            borderBottom: `1px solid ${theme.colors.border.primary}`,
+        },
+    }),
+
+    cell: (_props: TableDynamicProps) => ({
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        color: theme.colors.text.primary,
+        variants: {
             align: {
                 left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
                 center: { textAlign: 'center' as const, justifyContent: 'center' as const },
@@ -177,43 +202,5 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
                 lineHeight: theme.sizes.$table.lineHeight,
             },
         },
-        _web: {
-            position: 'relative',
-            borderBottom: `2px solid ${theme.colors.border.primary}`,
-            borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
-            ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},
-        },
     }),
-
-    cell: ({ type = 'standard', align = 'left' }: TableDynamicProps) => {
-        const alignStyles = {
-            left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
-            center: { textAlign: 'center' as const, justifyContent: 'center' as const },
-            right: { textAlign: 'right' as const, justifyContent: 'flex-end' as const },
-        }[align];
-
-        const borderStyles = type === 'bordered' ? {
-            borderRightWidth: 1,
-            borderRightColor: theme.colors.border.primary,
-        } : {};
-
-        return {
-            flexDirection: 'row' as const,
-            alignItems: 'center' as const,
-            color: theme.colors.text.primary,
-            ...alignStyles,
-            ...borderStyles,
-            variants: {
-                size: {
-                    padding: theme.sizes.$table.padding,
-                    fontSize: theme.sizes.$table.fontSize,
-                    lineHeight: theme.sizes.$table.lineHeight,
-                },
-            },
-            _web: {
-                borderRight: type === 'bordered' ? `1px solid ${theme.colors.border.primary}` : undefined,
-                ':last-child': type === 'bordered' ? { borderRight: 'none' } : {},
-            },
-        } as const;
-    },
 }));

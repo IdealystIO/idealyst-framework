@@ -249,6 +249,9 @@ export type TableSizeValue = {
     padding: SizeValue;
     fontSize: SizeValue;
     lineHeight: SizeValue;
+    headerPadding: SizeValue;
+    headerFontSize: SizeValue;
+    headerLineHeight: SizeValue;
 };
 
 export type TooltipSizeValue = {

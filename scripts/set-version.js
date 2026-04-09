@@ -54,6 +54,7 @@ const packagePaths = [
   'packages/live-activity/package.json',
   'packages/pdf/package.json',
   'packages/network/package.json',
+  'packages/camera/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',

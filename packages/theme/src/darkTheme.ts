@@ -93,6 +93,7 @@ export const darkTheme = createTheme()
             primary: '#1e1e1e',
             secondary: '#1e1e1e',
             tertiary: '#2a2a2a',
+            hover: '#252525',
             inverse: '#ffffff',
             'inverse-secondary': 'rgba(255, 255, 255, 0.9)',
             'inverse-tertiary': 'rgba(255, 255, 255, 0.7)',

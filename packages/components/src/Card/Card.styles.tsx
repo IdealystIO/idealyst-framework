@@ -52,7 +52,7 @@ export const cardStyles = defineStyle('Card', (theme: Theme) => ({
         variants: {
             type: {
                 outlined: {
-                    backgroundColor: 'transparent',
+                    backgroundColor: theme.colors.surface.primary,
                     borderWidth: 1,
                     borderStyle: 'solid' as const,
                 },

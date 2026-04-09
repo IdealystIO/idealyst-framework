@@ -12,6 +12,7 @@ const FONT_PROPERTIES = new Set([
     'fontSize',
     'lineHeight',
     'headerFontSize',
+    'headerLineHeight',
     'labelFontSize',
     'labelLineHeight',
     'titleFontSize',

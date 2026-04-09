@@ -549,7 +549,8 @@ export const componentMetadata: Record<string, ComponentMetadata> = {
       'Custom cell rendering via column `render` function',
       'Custom column titles (ReactNode) — render icons, badges, or any element as header',
       'Footer row support — static content or computed from data via `footer` callback',
-      'Striped, bordered, and standard type variants',
+      'Row dividers via `dividers` prop — works with any table type',
+      'Striped and standard type variants',
       'Column alignment (left, center, right)',
     ],
     bestPractices: [
