@@ -97,7 +97,6 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
     footerCell: (_props: TableDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
-        fontWeight: '600' as const,
         color: theme.colors.text.primary,
         borderTopWidth: 1,
         borderTopColor: theme.colors.border.primary,
@@ -110,8 +109,8 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
             size: {
                 paddingVertical: theme.sizes.$table.headerPadding,
                 paddingHorizontal: theme.sizes.$table.padding,
-                fontSize: theme.sizes.$table.headerFontSize,
-                lineHeight: theme.sizes.$table.headerLineHeight,
+                fontSize: theme.sizes.$table.fontSize,
+                lineHeight: theme.sizes.$table.lineHeight,
             },
         },
         _web: {
@@ -163,8 +162,7 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
     headerCell: (_props: TableDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
-        fontWeight: '600' as const,
-        color: theme.colors.text.primary,
+        color: theme.colors.text.secondary,
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border.primary,
         variants: {
@@ -176,8 +174,8 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
             size: {
                 paddingVertical: theme.sizes.$table.headerPadding,
                 paddingHorizontal: theme.sizes.$table.padding,
-                fontSize: theme.sizes.$table.headerFontSize,
-                lineHeight: theme.sizes.$table.headerLineHeight,
+                fontSize: theme.sizes.$table.fontSize,
+                lineHeight: theme.sizes.$table.lineHeight,
             },
         },
         _web: {

@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/network",
-  "version": "1.2.145",
+  "version": "1.2.146",
   "description": "Cross-platform network connectivity and utilities for React and React Native",
   "documentation": "https://github.com/IdealystIO/idealyst-framework/tree/main/packages/network#readme",
   "readme": "README.md",
