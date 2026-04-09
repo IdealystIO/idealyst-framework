@@ -162,6 +162,7 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
     headerCell: (_props: TableDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
+        fontWeight: '500' as const,
         color: theme.colors.text.secondary,
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border.primary,
