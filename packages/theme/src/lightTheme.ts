@@ -255,11 +255,11 @@ export const lightTheme = createTheme()
             xl: { fontSize: 24, lineHeight: 31.92 },
         },
         tabBar: {
-            xs: { fontSize: 12, lineHeight: 18, padding: 4, paddingBottom: 6 },
-            sm: { fontSize: 14, lineHeight: 20, padding: 6, paddingBottom: 8 },
-            md: { fontSize: 16, lineHeight: 24, padding: 8, paddingBottom: 10 },
-            lg: { fontSize: 18, lineHeight: 28, padding: 10, paddingBottom: 12 },
-            xl: { fontSize: 20, lineHeight: 32, padding: 12, paddingBottom: 14 },
+            xs: { fontSize: 11, lineHeight: 16, padding: 6, paddingBottom: 8, pillPaddingVertical: 2, pillPaddingHorizontal: 8 },
+            sm: { fontSize: 12, lineHeight: 18, padding: 8, paddingBottom: 10, pillPaddingVertical: 3, pillPaddingHorizontal: 10 },
+            md: { fontSize: 14, lineHeight: 20, padding: 10, paddingBottom: 12, pillPaddingVertical: 4, pillPaddingHorizontal: 12 },
+            lg: { fontSize: 16, lineHeight: 24, padding: 12, paddingBottom: 14, pillPaddingVertical: 6, pillPaddingHorizontal: 16 },
+            xl: { fontSize: 18, lineHeight: 28, padding: 14, paddingBottom: 16, pillPaddingVertical: 8, pillPaddingHorizontal: 20 },
         },
         table: {
             xs: { padding: 6, fontSize: 12, lineHeight: 16, headerPadding: 4, headerFontSize: 11, headerLineHeight: 14 },

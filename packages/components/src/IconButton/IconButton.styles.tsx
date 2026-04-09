@@ -76,6 +76,14 @@ export const iconButtonStyles = defineStyle('IconButton', (theme: Theme) => ({
                     backgroundColor: 'transparent',
                     borderColor: 'transparent',
                     borderWidth: 0,
+                    _web: {
+                        _hover: {
+                            backgroundColor: theme.colors.surface.secondary,
+                        },
+                        _active: {
+                            backgroundColor: theme.colors.surface.tertiary,
+                        },
+                    },
                 }
             },
             // Size variants - circular so width equals height

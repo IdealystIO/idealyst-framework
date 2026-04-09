@@ -66,29 +66,33 @@ const Tab: React.FC<TabProps> = ({
 }) => {
   const iconSize = ICON_SIZES[size || 'md'] || 18;
 
-  // Apply tab variants (size) for variant expansion (padding, fontSize, lineHeight)
+  // Apply tab variants
   tabBarTabStyles.useVariants({
     size,
+    type,
+    active: isActive,
+    disabled: Boolean(item.disabled),
+    iconPosition,
+    justify,
   });
 
-  // Apply label variants (size) for variant expansion
+  // Apply label variants
   tabBarLabelStyles.useVariants({
     size,
+    type,
+    active: isActive,
+    disabled: Boolean(item.disabled),
   });
 
-  // Apply icon variants (size, disabled, iconPosition)
+  // Apply icon variants
   tabBarIconStyles.useVariants({
     size,
     disabled: Boolean(item.disabled),
     iconPosition,
   });
 
-  // Compute dynamic styles for this tab
-  const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode, justify });
-  const labelStyle = (tabBarLabelStyles.tabLabel as any)({ type, active: isActive, pillMode });
-
-  const tabProps = getWebProps([tabStyle]);
-  const labelProps = getWebProps([labelStyle]);
+  const tabProps = getWebProps([tabBarTabStyles.tab as any]);
+  const labelProps = getWebProps([tabBarLabelStyles.tabLabel as any]);
   const iconProps = getWebProps([tabBarIconStyles.tabIcon as any]);
 
   // Merge refs from getWebProps with our tracking ref
@@ -262,8 +266,10 @@ const TabBar: React.FC<TabBarProps> = ({
     onChange?.(itemValue);
   };
 
-  // Apply container variants (for spacing only)
-  (tabBarContainerStyles.useVariants as any)({
+  // Apply container variants
+  tabBarContainerStyles.useVariants({
+    type,
+    pillMode,
     justify,
     gap,
     padding,
@@ -274,12 +280,14 @@ const TabBar: React.FC<TabBarProps> = ({
     marginHorizontal,
   });
 
-  // Compute dynamic container and indicator styles
-  const containerStyle = (tabBarContainerStyles.container as any)({ type, pillMode });
-  const containerProps = getWebProps([containerStyle, style as any]);
+  // Apply indicator variants
+  tabBarIndicatorStyles.useVariants({
+    type,
+    pillMode,
+  });
 
-  const indicatorVisualStyle = (tabBarIndicatorStyles.indicator as any)({ type, pillMode });
-  const indicatorProps = getWebProps([indicatorVisualStyle]);
+  const containerProps = getWebProps([tabBarContainerStyles.container as any, style as any]);
+  const indicatorProps = getWebProps([tabBarIndicatorStyles.indicator as any]);
 
   // Merge container ref with getWebProps ref
   const mergedContainerRef = useMergeRefs<HTMLDivElement>(

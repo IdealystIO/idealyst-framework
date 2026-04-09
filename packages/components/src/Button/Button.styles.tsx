@@ -81,6 +81,14 @@ export const buttonStyles = defineStyle('Button', (theme: Theme) => ({
                     backgroundColor: 'transparent',
                     borderColor: 'transparent',
                     borderWidth: 0,
+                    _web: {
+                        _hover: {
+                            backgroundColor: theme.colors.surface.secondary,
+                        },
+                        _active: {
+                            backgroundColor: theme.colors.surface.tertiary,
+                        },
+                    },
                 }
             },
             size: {

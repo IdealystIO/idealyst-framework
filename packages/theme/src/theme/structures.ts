@@ -243,6 +243,8 @@ export type TabBarSizeValue = {
     lineHeight: SizeValue;
     padding: SizeValue;
     paddingBottom: SizeValue;
+    pillPaddingVertical: SizeValue;
+    pillPaddingHorizontal: SizeValue;
 };
 
 export type TableSizeValue = {

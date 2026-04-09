@@ -1,9 +1,9 @@
 /**
- * TabBar styles using defineStyle with dynamic props.
+ * TabBar styles using defineStyle with static variants + compoundVariants.
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
-import type { Theme as BaseTheme, Size } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
 import { ViewStyleSize } from '../utils/viewStyleProps';
 
 // Required: Unistyles must see StyleSheet usage in original source to process this file
@@ -12,19 +12,14 @@ void StyleSheet;
 // Wrap theme for $iterator support
 type Theme = ThemeStyleWrapper<BaseTheme>;
 
-type TabBarType = 'standard' | 'underline' | 'pills';
-type TabBarPillMode = 'light' | 'dark';
-type TabBarIconPosition = 'left' | 'top';
-type TabBarJustify = 'start' | 'center' | 'equal' | 'space-between';
-
-export type TabBarDynamicProps = {
-    size?: Size;
-    type?: TabBarType;
-    pillMode?: TabBarPillMode;
+export type TabBarVariants = {
+    size?: ViewStyleSize;
+    type?: 'standard' | 'underline' | 'pills';
+    pillMode?: 'light' | 'dark';
     active?: boolean;
     disabled?: boolean;
-    iconPosition?: TabBarIconPosition;
-    justify?: TabBarJustify;
+    iconPosition?: 'left' | 'top';
+    justify?: 'start' | 'center' | 'equal' | 'space-between';
     gap?: ViewStyleSize;
     padding?: ViewStyleSize;
     paddingVertical?: ViewStyleSize;
@@ -35,140 +30,158 @@ export type TabBarDynamicProps = {
 };
 
 /**
- * TabBar styles with type/pillMode/active handling.
+ * TabBar styles with static variants and compoundVariants.
  */
 export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
-    container: ({ type = 'standard', pillMode = 'light', justify = 'start' }: TabBarDynamicProps) => {
-        const backgroundColor = type === 'pills'
-            ? (pillMode === 'dark' ? theme.colors.surface.inverse : theme.colors.surface.secondary)
-            : undefined;
-
-        const justifyContent = {
-            start: 'flex-start',
-            center: 'center',
-            equal: 'stretch',
-            'space-between': 'space-between',
-        }[justify];
-
-        return {
-            display: 'flex' as const,
-            flexDirection: 'row' as const,
-            gap: type === 'pills' ? 4 : 0,
-            position: 'relative' as const,
-            borderBottomWidth: type === 'pills' ? 0 : 1,
-            borderBottomStyle: 'solid' as const,
-            borderBottomColor: theme.colors.border.primary,
-            padding: type === 'pills' ? 4 : undefined,
-            backgroundColor: backgroundColor || (type === 'pills' ? theme.colors.surface.secondary : undefined),
-            overflow: type === 'pills' ? ('hidden' as const) : undefined,
-            alignSelf: type === 'pills' ? ('flex-start' as const) : undefined,
-            width: type === 'pills' ? undefined : '100%',
-            borderRadius: type === 'pills' ? 9999 : undefined,
-            justifyContent: justifyContent as any,
-            variants: {
-                gap: {
-                    gap: theme.sizes.$view.padding,
-                },
-                padding: {
-                    padding: theme.sizes.$view.padding,
-                },
-                paddingVertical: {
-                    paddingVertical: theme.sizes.$view.padding,
-                },
-                paddingHorizontal: {
-                    paddingHorizontal: theme.sizes.$view.padding,
-                },
-                margin: {
-                    margin: theme.sizes.$view.padding,
-                },
-                marginVertical: {
-                    marginVertical: theme.sizes.$view.padding,
-                },
-                marginHorizontal: {
-                    marginHorizontal: theme.sizes.$view.padding,
+    container: {
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        position: 'relative' as const,
+        borderBottomWidth: 1,
+        borderBottomStyle: 'solid' as const,
+        borderBottomColor: theme.colors.border.primary,
+        width: '100%',
+        variants: {
+            type: {
+                standard: {},
+                underline: {},
+                pills: {
+                    gap: 4,
+                    borderBottomWidth: 0,
+                    padding: 4,
+                    backgroundColor: theme.colors.surface.secondary,
+                    overflow: 'hidden' as const,
+                    alignSelf: 'flex-start' as const,
+                    width: undefined,
+                    borderRadius: 9999,
                 },
             },
-        } as const;
+            justify: {
+                start: { justifyContent: 'flex-start' as const },
+                center: { justifyContent: 'center' as const },
+                equal: { justifyContent: 'stretch' as const },
+                'space-between': { justifyContent: 'space-between' as const },
+            },
+            gap: {
+                gap: theme.sizes.$view.padding,
+            },
+            padding: {
+                padding: theme.sizes.$view.padding,
+            },
+            paddingVertical: {
+                paddingVertical: theme.sizes.$view.padding,
+            },
+            paddingHorizontal: {
+                paddingHorizontal: theme.sizes.$view.padding,
+            },
+            margin: {
+                margin: theme.sizes.$view.padding,
+            },
+            marginVertical: {
+                marginVertical: theme.sizes.$view.padding,
+            },
+            marginHorizontal: {
+                marginHorizontal: theme.sizes.$view.padding,
+            },
+        },
+        compoundVariants: [
+            { type: 'pills', pillMode: 'dark', styles: { backgroundColor: theme.colors.surface.inverse } },
+        ],
     },
 
-    tab: ({ type = 'standard', size = 'md', active = false, pillMode: _pillMode = 'light', disabled = false, iconPosition = 'left', justify = 'start' }: TabBarDynamicProps) => {
-        // Resolve padding at runtime — can't use $iterator with runtime `type` check
-        // Use explicit top/bottom/left/right for cross-platform compatibility
-        const pillsPaddingMap: Record<Size, { paddingTop: number; paddingBottom: number; paddingLeft: number; paddingRight: number }> = {
-            xs: { paddingTop: 2, paddingBottom: 2, paddingLeft: 8, paddingRight: 8 },
-            sm: { paddingTop: 3, paddingBottom: 3, paddingLeft: 10, paddingRight: 10 },
-            md: { paddingTop: 4, paddingBottom: 4, paddingLeft: 12, paddingRight: 12 },
-            lg: { paddingTop: 6, paddingBottom: 6, paddingLeft: 16, paddingRight: 16 },
-            xl: { paddingTop: 8, paddingBottom: 8, paddingLeft: 20, paddingRight: 20 },
-        };
-        const sizeValues = theme.sizes.tabBar[size];
-        const tabPadding = type === 'pills'
-            ? pillsPaddingMap[size]
-            : {
-                paddingTop: sizeValues.padding,
-                paddingBottom: sizeValues.padding,
-                paddingLeft: sizeValues.padding,
-                paddingRight: sizeValues.padding,
-            };
-
-        // Color based on type and active state
-        let color = active ? theme.colors.text.primary : theme.colors.text.secondary;
-        if (active) {
-            if (type === 'pills') color = theme.intents.primary.contrast;
-            else if (type === 'underline') color = theme.intents.primary.primary;
-        }
-
-        return {
-            display: 'flex' as const,
-            flexDirection: iconPosition === 'top' ? ('column' as const) : ('row' as const),
-            alignItems: 'center' as const,
-            justifyContent: 'center' as const,
-            fontWeight: '500' as const,
-            flex: justify === 'equal' ? 1 : undefined,
-            color,
-            position: 'relative' as const,
-            zIndex: 2,
-            backgroundColor: 'transparent' as const,
-            gap: 6,
-            borderRadius: type === 'pills' ? 9999 : undefined,
-            opacity: disabled ? 0.5 : 1,
-            ...tabPadding,
-            variants: {
-                size: {
-                    fontSize: theme.sizes.$tabBar.fontSize,
-                    lineHeight: theme.sizes.$tabBar.lineHeight,
+    tab: {
+        display: 'flex' as const,
+        flexDirection: 'row' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        fontWeight: '500' as const,
+        color: theme.colors.text.secondary,
+        position: 'relative' as const,
+        zIndex: 2,
+        backgroundColor: 'transparent' as const,
+        gap: 6,
+        opacity: 0.9,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$tabBar.fontSize,
+                lineHeight: theme.sizes.$tabBar.lineHeight,
+                paddingTop: theme.sizes.$tabBar.padding,
+                paddingBottom: theme.sizes.$tabBar.padding,
+                paddingLeft: theme.sizes.$tabBar.padding,
+                paddingRight: theme.sizes.$tabBar.padding,
+            },
+            type: {
+                standard: {},
+                underline: {},
+                pills: {
+                    borderRadius: 9999,
                 },
             },
-            _web: {
-                border: 'none',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                outline: 'none',
-                transition: 'color 0.2s ease',
-                _hover: disabled ? {} : { color: theme.colors.text.primary },
+            active: {
+                true: {
+                    color: theme.colors.text.primary,
+                    opacity: 1,
+                },
+                false: {},
             },
-        } as const;
+            disabled: {
+                true: { opacity: 0.5 },
+                false: {},
+            },
+            iconPosition: {
+                top: { flexDirection: 'column' as const },
+                left: { flexDirection: 'row' as const },
+            },
+            justify: {
+                start: {},
+                center: {},
+                equal: { flex: 1 },
+                'space-between': {},
+            },
+        },
+        compoundVariants: [
+            // Active + underline: use primary intent color
+            { type: 'underline', active: true, styles: { color: theme.intents.primary.primary } },
+            // Active + pills: use contrast color
+            { type: 'pills', active: true, styles: { color: theme.intents.primary.contrast } },
+            // Pills type: tighter padding per size (from theme)
+            { type: 'pills', size: 'xs', styles: { paddingTop: theme.sizes.tabBar.xs.pillPaddingVertical, paddingBottom: theme.sizes.tabBar.xs.pillPaddingVertical, paddingLeft: theme.sizes.tabBar.xs.pillPaddingHorizontal, paddingRight: theme.sizes.tabBar.xs.pillPaddingHorizontal } },
+            { type: 'pills', size: 'sm', styles: { paddingTop: theme.sizes.tabBar.sm.pillPaddingVertical, paddingBottom: theme.sizes.tabBar.sm.pillPaddingVertical, paddingLeft: theme.sizes.tabBar.sm.pillPaddingHorizontal, paddingRight: theme.sizes.tabBar.sm.pillPaddingHorizontal } },
+            { type: 'pills', size: 'md', styles: { paddingTop: theme.sizes.tabBar.md.pillPaddingVertical, paddingBottom: theme.sizes.tabBar.md.pillPaddingVertical, paddingLeft: theme.sizes.tabBar.md.pillPaddingHorizontal, paddingRight: theme.sizes.tabBar.md.pillPaddingHorizontal } },
+            { type: 'pills', size: 'lg', styles: { paddingTop: theme.sizes.tabBar.lg.pillPaddingVertical, paddingBottom: theme.sizes.tabBar.lg.pillPaddingVertical, paddingLeft: theme.sizes.tabBar.lg.pillPaddingHorizontal, paddingRight: theme.sizes.tabBar.lg.pillPaddingHorizontal } },
+            { type: 'pills', size: 'xl', styles: { paddingTop: theme.sizes.tabBar.xl.pillPaddingVertical, paddingBottom: theme.sizes.tabBar.xl.pillPaddingVertical, paddingLeft: theme.sizes.tabBar.xl.pillPaddingHorizontal, paddingRight: theme.sizes.tabBar.xl.pillPaddingHorizontal } },
+        ],
+        _web: {
+            border: 'none',
+            cursor: 'pointer',
+            outline: 'none',
+            transition: 'color 0.2s ease, opacity 0.2s ease',
+        },
     },
 
-    tabLabel: ({ type = 'standard', active = false, pillMode: _pillMode = 'light', disabled = false }: TabBarDynamicProps) => {
-        let color = active ? theme.colors.text.primary : theme.colors.text.secondary;
-        if (active) {
-            if (type === 'pills') color = theme.colors.text.primary;
-            else if (type === 'underline') color = theme.intents.primary.primary;
-        }
-
-        return {
-            position: 'relative' as const,
-            zIndex: 3,
-            fontWeight: '500' as const,
-            color,
-            opacity: disabled ? 0.5 : 1,
-            variants: {
-                size: {
-                    fontSize: theme.sizes.$tabBar.fontSize,
-                    lineHeight: theme.sizes.$tabBar.lineHeight,
-                },
+    tabLabel: {
+        position: 'relative' as const,
+        zIndex: 3,
+        fontWeight: '500' as const,
+        color: theme.colors.text.secondary,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$tabBar.fontSize,
+                lineHeight: theme.sizes.$tabBar.lineHeight,
             },
-        } as const;
+            active: {
+                true: { color: theme.colors.text.primary },
+                false: {},
+            },
+            disabled: {
+                true: { opacity: 0.5 },
+                false: { opacity: 1 },
+            },
+        },
+        compoundVariants: [
+            { type: 'underline', active: true, styles: { color: theme.intents.primary.primary } },
+            { type: 'pills', active: true, styles: { color: theme.colors.text.primary } },
+        ],
     },
 
     tabIcon: {
@@ -191,31 +204,33 @@ export const tabBarStyles = defineStyle('TabBar', (theme: Theme) => ({
         },
     },
 
-    indicator: ({ type = 'standard', pillMode = 'light' }: TabBarDynamicProps) => {
-        const backgroundColor = type === 'pills'
-            ? (pillMode === 'dark' ? theme.colors.surface.secondary : theme.colors.surface.tertiary)
-            : theme.intents.primary.primary;
-
-        const typeStyles = type === 'pills' ? {
-            borderRadius: 9999,
-            top: 4,
-            bottom: 4,
-            left: 0,
-        } : {
-            bottom: -1,
-            height: 2,
-        };
-
-        return {
-            position: 'absolute' as const,
-            pointerEvents: 'none' as const,
-            zIndex: 1,
-            backgroundColor,
-            ...typeStyles,
-            _web: {
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    indicator: {
+        position: 'absolute' as const,
+        pointerEvents: 'none' as const,
+        zIndex: 1,
+        backgroundColor: theme.intents.primary.primary,
+        bottom: -1,
+        height: 2,
+        variants: {
+            type: {
+                standard: {},
+                underline: {},
+                pills: {
+                    borderRadius: 9999,
+                    top: 4,
+                    bottom: 4,
+                    height: undefined,
+                    left: 0,
+                    backgroundColor: theme.colors.surface.tertiary,
+                },
             },
-        } as const;
+        },
+        compoundVariants: [
+            { type: 'pills', pillMode: 'dark', styles: { backgroundColor: theme.colors.surface.secondary } },
+        ],
+        _web: {
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        },
     },
 }));
 

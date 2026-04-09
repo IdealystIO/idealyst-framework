@@ -1,9 +1,10 @@
 /**
- * Breadcrumb styles using defineStyle with $iterator expansion.
+ * Breadcrumb styles using defineStyle with static variants.
  */
 import { StyleSheet } from 'react-native-unistyles';
 import { defineStyle, ThemeStyleWrapper } from '@idealyst/theme';
-import type { Theme as BaseTheme, Size } from '@idealyst/theme';
+import type { Theme as BaseTheme } from '@idealyst/theme';
+import { ViewStyleSize } from '../utils/viewStyleProps';
 
 // Required: Unistyles must see StyleSheet usage in original source to process this file
 void StyleSheet;
@@ -11,59 +12,61 @@ void StyleSheet;
 // Wrap theme for $iterator support
 type Theme = ThemeStyleWrapper<BaseTheme>;
 
-type BreadcrumbIntent = 'primary' | 'neutral';
-
-export type BreadcrumbDynamicProps = {
-    size?: Size;
-    intent?: BreadcrumbIntent;
+export type BreadcrumbVariants = {
+    size?: ViewStyleSize;
+    intent?: 'primary' | 'neutral';
+    active?: boolean;
     disabled?: boolean;
-    isLast?: boolean;
-    clickable?: boolean;
 };
 
 /**
- * Breadcrumb styles with intent and state handling.
+ * Breadcrumb styles with static variants.
  */
 export const breadcrumbStyles = defineStyle('Breadcrumb', (theme: Theme) => ({
-    container: (_props: BreadcrumbDynamicProps) => ({
+    container: {
         display: 'flex' as const,
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         flexWrap: 'wrap' as const,
-        gap: 8,
-    }),
+        gap: 4,
+    },
 
-    item: (_props: BreadcrumbDynamicProps) => ({
+    item: {
         display: 'flex' as const,
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         gap: 4,
-    }),
-
-    itemText: ({ intent = 'primary', isLast = false, disabled = false, clickable = true }: BreadcrumbDynamicProps) => {
-        // Get color based on state - inline for Unistyles to trace
-        const color = disabled
-            ? theme.colors.text.secondary
-            : isLast
-                ? theme.colors.text.primary
-                : clickable
-                    ? (intent === 'primary' ? theme.intents.primary.primary : theme.colors.text.secondary)
-                    : theme.colors.text.secondary;
-
-        return {
-            color,
-            opacity: disabled ? 0.5 : 1,
-            variants: {
-                // $iterator expands for each breadcrumb size
-                size: {
-                    fontSize: theme.sizes.$breadcrumb.fontSize,
-                    lineHeight: theme.sizes.$breadcrumb.lineHeight,
-                },
+        opacity: 0.7,
+        variants: {
+            active: {
+                true: { opacity: 1 },
+                false: { _web: { _hover: { opacity: 1 } } },
             },
-        } as const;
+            disabled: {
+                true: { opacity: 0.5 },
+                false: {},
+            },
+        },
+        _web: {
+            transition: 'opacity 0.2s ease',
+        },
     },
 
-    icon: (_props: BreadcrumbDynamicProps) => ({
+    itemText: {
+        color: theme.colors.text.primary,
+        variants: {
+            size: {
+                fontSize: theme.sizes.$breadcrumb.fontSize,
+                lineHeight: theme.sizes.$breadcrumb.lineHeight,
+            },
+            disabled: {
+                true: { color: theme.colors.text.secondary },
+                false: {},
+            },
+        },
+    },
+
+    icon: {
         variants: {
             size: {
                 width: theme.sizes.$breadcrumb.iconSize,
@@ -71,26 +74,25 @@ export const breadcrumbStyles = defineStyle('Breadcrumb', (theme: Theme) => ({
                 fontSize: theme.sizes.$breadcrumb.iconSize,
             },
         },
-    }),
+    },
 
-    separator: (_props: BreadcrumbDynamicProps) => ({
+    separator: {
         color: theme.colors.text.tertiary,
+        opacity: 0.9,
         variants: {
             size: {
                 fontSize: theme.sizes.$breadcrumb.fontSize,
                 lineHeight: theme.sizes.$breadcrumb.lineHeight,
             },
         },
-    }),
+    },
 
-    ellipsis: (_props: BreadcrumbDynamicProps) => ({
+    separatorIcon: {
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
-    }),
-
-    ellipsisIcon: ({ intent = 'primary' }: BreadcrumbDynamicProps) => ({
-        color: intent === 'primary' ? theme.intents.primary.primary : theme.colors.text.secondary,
+        color: theme.colors.text.tertiary,
+        opacity: 0.9,
         variants: {
             size: {
                 width: theme.sizes.$breadcrumb.iconSize,
@@ -98,21 +100,46 @@ export const breadcrumbStyles = defineStyle('Breadcrumb', (theme: Theme) => ({
                 fontSize: theme.sizes.$breadcrumb.iconSize,
             },
         },
-    }),
+    },
 
-    menuButton: (_props: BreadcrumbDynamicProps) => ({
+    ellipsis: {
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+    },
+
+    ellipsisIcon: {
+        color: theme.colors.text.secondary,
+        variants: {
+            size: {
+                width: theme.sizes.$breadcrumb.iconSize,
+                height: theme.sizes.$breadcrumb.iconSize,
+                fontSize: theme.sizes.$breadcrumb.iconSize,
+            },
+            intent: {
+                primary: { color: theme.intents.primary.primary },
+                neutral: { color: theme.colors.text.secondary },
+            },
+        },
+    },
+
+    menuButton: {
         paddingVertical: 4,
         paddingHorizontal: 8,
-    }),
+    },
 
-    menuButtonIcon: ({ intent = 'primary' }: BreadcrumbDynamicProps) => ({
-        color: intent === 'primary' ? theme.intents.primary.primary : theme.colors.text.secondary,
+    menuButtonIcon: {
+        color: theme.colors.text.secondary,
         variants: {
             size: {
                 width: theme.sizes.$breadcrumb.iconSize,
                 height: theme.sizes.$breadcrumb.iconSize,
                 fontSize: theme.sizes.$breadcrumb.iconSize,
             },
+            intent: {
+                primary: { color: theme.intents.primary.primary },
+                neutral: { color: theme.colors.text.secondary },
+            },
         },
-    }),
+    },
 }));

@@ -34,6 +34,77 @@ function renderIcon(
   return icon;
 }
 
+/**
+ * Individual tab component to isolate useVariants calls per tab.
+ */
+const TabItem = ({
+  item,
+  isActive,
+  size,
+  type,
+  iconPosition,
+  justify,
+  onPress,
+  onLayout,
+  testID,
+}: {
+  item: TabBarItem;
+  isActive: boolean;
+  size: TabBarProps['size'];
+  type: TabBarProps['type'];
+  iconPosition: TabBarProps['iconPosition'];
+  justify: TabBarProps['justify'];
+  onPress: () => void;
+  onLayout: (e: LayoutChangeEvent) => void;
+  testID?: string;
+}) => {
+  const iconSize = ICON_SIZES[size || 'md'] || 18;
+
+  // Apply tab variants per tab (active/disabled differ per item)
+  tabBarTabStyles.useVariants({
+    size,
+    type,
+    active: isActive,
+    disabled: Boolean(item.disabled),
+    iconPosition,
+    justify,
+  });
+
+  // Apply label variants
+  tabBarLabelStyles.useVariants({
+    size,
+    type,
+    active: isActive,
+    disabled: Boolean(item.disabled),
+  });
+
+  // Apply icon variants
+  tabBarIconStyles.useVariants({
+    size,
+    disabled: Boolean(item.disabled),
+    iconPosition,
+  });
+
+  const icon = renderIcon(item.icon, isActive, iconSize);
+
+  return (
+    <TouchableOpacity
+      onLayout={onLayout}
+      style={tabBarTabStyles.tab as any}
+      onPress={onPress}
+      disabled={item.disabled}
+      activeOpacity={0.7}
+      testID={`${testID}-tab-${item.value}`}
+      accessibilityRole="tab"
+      accessibilityLabel={item.label}
+      accessibilityState={{ selected: isActive, disabled: item.disabled }}
+    >
+      {icon && <View style={tabBarIconStyles.tabIcon as any}>{icon}</View>}
+      <Text style={tabBarLabelStyles.tabLabel as any}>{item.label}</Text>
+    </TouchableOpacity>
+  );
+};
+
 const TabBar = forwardRef<IdealystElement, TabBarProps>(({
   items,
   value: controlledValue,
@@ -129,8 +200,10 @@ const TabBar = forwardRef<IdealystElement, TabBarProps>(({
     };
   });
 
-  // Apply container variants (for spacing only)
+  // Apply container variants
   tabBarContainerStyles.useVariants({
+    type,
+    pillMode,
     justify,
     gap,
     padding,
@@ -141,9 +214,11 @@ const TabBar = forwardRef<IdealystElement, TabBarProps>(({
     marginHorizontal,
   });
 
-  // Compute dynamic container and indicator styles
-  const containerStyle = (tabBarContainerStyles.container as any)({ type, pillMode });
-  const indicatorStyle = (tabBarIndicatorStyles.indicator as any)({ type, pillMode });
+  // Apply indicator variants
+  tabBarIndicatorStyles.useVariants({
+    type,
+    pillMode,
+  });
 
   return (
     <ScrollView
@@ -155,11 +230,11 @@ const TabBar = forwardRef<IdealystElement, TabBarProps>(({
       }}
       style={{ width: '100%' }}
     >
-      <View ref={ref as any} nativeID={id} style={[containerStyle, style]} testID={testID} {...nativeA11yProps}>
+      <View ref={ref as any} nativeID={id} style={[tabBarContainerStyles.container as any, style]} testID={testID} {...nativeA11yProps}>
         {/* Animated indicator - render first so it's behind */}
         <Animated.View
           style={[
-            indicatorStyle,
+            tabBarIndicatorStyles.indicator as any,
             indicatorAnimatedStyle,
           ]}
         />
@@ -168,40 +243,23 @@ const TabBar = forwardRef<IdealystElement, TabBarProps>(({
         <View style={{ flexDirection: 'row', flex: 1 }}>
           {items.map((item) => {
             const isActive = value === item.value;
-            const iconSize = ICON_SIZES[size] || 18;
-
-            // Apply icon variants (size, disabled, iconPosition)
-            tabBarIconStyles.useVariants({
-              size,
-              disabled: Boolean(item.disabled),
-              iconPosition,
-            });
-
-            // Compute dynamic styles for this tab - call as functions for theme reactivity
-            const tabStyle = (tabBarTabStyles.tab as any)({ type, size, active: isActive, pillMode, justify });
-            const labelStyle = (tabBarLabelStyles.tabLabel as any)({ type, active: isActive, pillMode });
-
-            const icon = renderIcon(item.icon, isActive, iconSize);
 
             return (
-              <TouchableOpacity
+              <TabItem
                 key={item.value}
+                item={item}
+                isActive={isActive}
+                size={size}
+                type={type}
+                iconPosition={iconPosition}
+                justify={justify}
+                onPress={() => handleTabClick(item.value, item.disabled)}
                 onLayout={(event: LayoutChangeEvent) => {
                   const { x, width } = event.nativeEvent.layout;
                   handleTabLayout(item.value, x, width);
                 }}
-                style={tabStyle}
-                onPress={() => handleTabClick(item.value, item.disabled)}
-                disabled={item.disabled}
-                activeOpacity={0.7}
-                testID={`${testID}-tab-${item.value}`}
-                accessibilityRole="tab"
-                accessibilityLabel={item.label}
-                accessibilityState={{ selected: isActive, disabled: item.disabled }}
-              >
-                {icon && <View style={tabBarIconStyles.tabIcon as any}>{icon}</View>}
-                <Text style={labelStyle}>{item.label}</Text>
-              </TouchableOpacity>
+                testID={testID}
+              />
             );
           })}
         </View>

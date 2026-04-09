@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/pdf",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Cross-platform PDF viewer for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",

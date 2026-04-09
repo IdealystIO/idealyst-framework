@@ -17,34 +17,26 @@ interface BreadcrumbItemProps {
 }
 
 const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, intent, itemStyle }) => {
-  const isClickable = !!item.onPress && !item.disabled;
   const isDisabled = item.disabled || false;
 
-  // Apply size variant
   breadcrumbStyles.useVariants({
     size,
-  });
-
-  // Get dynamic item text style
-  const itemTextStyle = (breadcrumbStyles.itemText as any)({
     intent,
-    isLast,
+    active: isLast,
     disabled: isDisabled,
-    clickable: isClickable,
   });
 
-  const iconStyle = (breadcrumbStyles.icon as any)({});
+  const iconSize = (breadcrumbStyles.icon as any).width || 16;
 
   const renderIcon = () => {
     if (!item.icon) return null;
 
     if (typeof item.icon === 'string') {
-      const iconSize = iconStyle.width || 16;
       return (
         <Icon
           name={item.icon as IconName}
           size={iconSize}
-          style={iconStyle}
+          style={breadcrumbStyles.icon}
         />
       );
     } else if (isValidElement(item.icon)) {
@@ -54,16 +46,14 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
     return null;
   };
 
-  const itemContainerStyle = (breadcrumbStyles.item as any)({});
-
   const content = (
-    <View style={[itemContainerStyle, itemStyle]}>
-      {item.icon && <View style={iconStyle}>{renderIcon()}</View>}
-      <Text style={itemTextStyle}>{item.label}</Text>
+    <View style={[breadcrumbStyles.item, itemStyle]}>
+      {item.icon && <View style={breadcrumbStyles.icon}>{renderIcon()}</View>}
+      <Text style={breadcrumbStyles.itemText}>{item.label}</Text>
     </View>
   );
 
-  if (isClickable) {
+  if (!!item.onPress && !item.disabled) {
     return (
       <Pressable
         onPress={item.onPress}
@@ -89,12 +79,12 @@ interface BreadcrumbSeparatorProps {
 
 const BreadcrumbSeparator: React.FC<BreadcrumbSeparatorProps> = ({ separator, size, separatorStyle }) => {
   breadcrumbStyles.useVariants({ size });
-  const sepStyle = (breadcrumbStyles.separator as any)({});
 
   if (typeof separator === 'string') {
-    return <Text style={[sepStyle, separatorStyle]}>{separator}</Text>;
+    return <Text style={[breadcrumbStyles.separator, separatorStyle]}>{separator}</Text>;
   }
-  return <View style={[sepStyle, separatorStyle]}>{separator}</View>;
+
+  return <View style={[breadcrumbStyles.separatorIcon, separatorStyle]}>{separator}</View>;
 };
 
 interface BreadcrumbEllipsisProps {
@@ -103,13 +93,11 @@ interface BreadcrumbEllipsisProps {
 }
 
 const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent }) => {
-  breadcrumbStyles.useVariants({ size });
-  const ellipsisStyle = (breadcrumbStyles.ellipsis as any)({});
-  const iconStyle = (breadcrumbStyles.ellipsisIcon as any)({ intent });
+  breadcrumbStyles.useVariants({ size, intent });
 
   return (
-    <View style={ellipsisStyle}>
-      <Icon name="dots-horizontal" style={iconStyle} />
+    <View style={breadcrumbStyles.ellipsis}>
+      <Icon name="dots-horizontal" style={breadcrumbStyles.ellipsisIcon} />
     </View>
   );
 };
@@ -130,11 +118,7 @@ const Breadcrumb = forwardRef<IdealystElement, BreadcrumbProps>(({
 }, ref) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Apply variants
-  breadcrumbStyles.useVariants({ size });
-  const containerStyle = (breadcrumbStyles.container as any)({});
-  const menuButtonStyle = (breadcrumbStyles.menuButton as any)({});
-  const menuIconStyle = (breadcrumbStyles.menuButtonIcon as any)({ intent });
+  breadcrumbStyles.useVariants({ size, intent });
 
   // Handle responsive collapsing
   let displayItems = items;
@@ -172,7 +156,7 @@ const Breadcrumb = forwardRef<IdealystElement, BreadcrumbProps>(({
     <View
       ref={ref as any}
       nativeID={id}
-      style={[containerStyle, style]}
+      style={[breadcrumbStyles.container, style]}
       testID={testID}
       accessibilityLabel="Breadcrumb"
     >
@@ -200,11 +184,11 @@ const Breadcrumb = forwardRef<IdealystElement, BreadcrumbProps>(({
                   size={size}
                 >
                   <Pressable
-                    style={menuButtonStyle}
+                    style={breadcrumbStyles.menuButton}
                     accessibilityRole="button"
                     accessibilityLabel="Show more breadcrumb items"
                   >
-                    <Icon name="dots-horizontal" style={menuIconStyle} />
+                    <Icon name="dots-horizontal" style={breadcrumbStyles.menuButtonIcon} />
                   </Pressable>
                 </Menu>
                 <BreadcrumbSeparator separator={separator} size={size} separatorStyle={separatorStyle} />

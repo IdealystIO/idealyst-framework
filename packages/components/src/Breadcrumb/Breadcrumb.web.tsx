@@ -19,24 +19,16 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
   const isClickable = !!item.onPress && !item.disabled;
   const isDisabled = item.disabled || false;
 
-  // Apply size variant
   breadcrumbStyles.useVariants({
     size,
-  });
-
-  // Get dynamic styles - call as functions for theme reactivity
-  const itemStyle_ = (breadcrumbStyles.item as any)({});
-  const itemTextStyle = (breadcrumbStyles.itemText as any)({
     intent,
-    isLast,
+    active: isLast,
     disabled: isDisabled,
-    clickable: isClickable,
   });
-  const iconStyle = (breadcrumbStyles.icon as any)({});
 
-  const itemProps = getWebProps([itemStyle_]);
-  const itemTextProps = getWebProps([itemTextStyle, itemStyle]);
-  const iconProps = getWebProps([iconStyle]);
+  const itemProps = getWebProps([breadcrumbStyles.item]);
+  const itemTextProps = getWebProps([breadcrumbStyles.itemText, itemStyle]);
+  const iconProps = getWebProps([breadcrumbStyles.icon]);
 
   const handleClick = () => {
     if (!item.disabled && item.onPress) {
@@ -61,8 +53,45 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
     return null;
   };
 
-  const content = (
-    <div {...itemProps}>
+  if (isClickable) {
+    return (
+      <button
+        {...itemProps}
+        onClick={handleClick}
+        disabled={isDisabled}
+        aria-current={isLast ? 'page' : undefined}
+        style={{
+          background: 'none',
+          border: 'none',
+          padding: 0,
+          margin: 0,
+          cursor: 'pointer',
+          textDecoration: 'none',
+          font: 'inherit',
+          color: 'inherit',
+        }}
+      >
+        {item.icon && (
+          <span
+            {...iconProps}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {renderIcon()}
+          </span>
+        )}
+        <span {...itemTextProps}>
+          {item.label}
+        </span>
+      </button>
+    );
+  }
+
+  return (
+    <div {...itemProps} aria-current={isLast ? 'page' : undefined}>
       {item.icon && (
         <span
           {...iconProps}
@@ -80,31 +109,6 @@ const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({ item, isLast, size, int
       </span>
     </div>
   );
-
-  if (isClickable) {
-    return (
-      <button
-        onClick={handleClick}
-        style={{
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          cursor: 'pointer',
-          textDecoration: 'none',
-        }}
-        disabled={isDisabled}
-        aria-current={isLast ? 'page' : undefined}
-      >
-        {content}
-      </button>
-    );
-  }
-
-  return (
-    <div aria-current={isLast ? 'page' : undefined}>
-      {content}
-    </div>
-  );
 };
 
 interface BreadcrumbSeparatorProps {
@@ -115,11 +119,20 @@ interface BreadcrumbSeparatorProps {
 
 const BreadcrumbSeparator: React.FC<BreadcrumbSeparatorProps> = ({ separator, size, separatorStyle }) => {
   breadcrumbStyles.useVariants({ size });
-  const separatorStyle_ = (breadcrumbStyles.separator as any)({});
-  const separatorProps = getWebProps([separatorStyle_, separatorStyle]);
+  const isTextSeparator = typeof separator === 'string';
 
+  if (isTextSeparator) {
+    const separatorProps = getWebProps([breadcrumbStyles.separator, separatorStyle]);
+    return (
+      <span {...separatorProps} aria-hidden="true">
+        {separator}
+      </span>
+    );
+  }
+
+  const separatorIconProps = getWebProps([breadcrumbStyles.separatorIcon, separatorStyle]);
   return (
-    <span {...separatorProps} aria-hidden="true">
+    <span {...separatorIconProps} aria-hidden="true">
       {separator}
     </span>
   );
@@ -131,11 +144,9 @@ interface BreadcrumbEllipsisProps {
 }
 
 const BreadcrumbEllipsis: React.FC<BreadcrumbEllipsisProps> = ({ size, intent }) => {
-  breadcrumbStyles.useVariants({ size });
-  const ellipsisStyle = (breadcrumbStyles.ellipsis as any)({});
-  const ellipsisIconStyle = (breadcrumbStyles.ellipsisIcon as any)({ intent });
-  const ellipsisProps = getWebProps([ellipsisStyle]);
-  const iconProps = getWebProps([ellipsisIconStyle]);
+  breadcrumbStyles.useVariants({ size, intent });
+  const ellipsisProps = getWebProps([breadcrumbStyles.ellipsis]);
+  const iconProps = getWebProps([breadcrumbStyles.ellipsisIcon]);
 
   return (
     <span {...ellipsisProps}>
@@ -168,17 +179,10 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Get dynamic styles - call as functions for theme reactivity
-  const containerStyle = (breadcrumbStyles.container as any)({});
-  const menuButtonStyle = (breadcrumbStyles.menuButton as any)({});
-  const menuButtonIconStyle = (breadcrumbStyles.menuButtonIcon as any)({ intent });
-
-  const containerProps = getWebProps([containerStyle, style as any]);
-
-  // Apply variants for menu button
-  breadcrumbStyles.useVariants({ size });
-  const menuButtonProps = getWebProps([menuButtonStyle]);
-  const menuIconProps = getWebProps([menuButtonIconStyle]);
+  breadcrumbStyles.useVariants({ size, intent });
+  const containerProps = getWebProps([breadcrumbStyles.container, style as any]);
+  const menuButtonProps = getWebProps([breadcrumbStyles.menuButton]);
+  const menuIconProps = getWebProps([breadcrumbStyles.menuButtonIcon]);
 
   // Handle responsive collapsing
   let displayItems = items;
