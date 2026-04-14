@@ -10,6 +10,8 @@ import {
 import type { TabBarProps, TabBarItem } from './types';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebAriaProps, generateAccessibilityId } from '../utils/accessibility';
+import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import { isIconName } from '../Icon/icon-resolver';
 
 // Icon size mapping based on size variant
 const ICON_SIZES: Record<string, number> = {
@@ -29,6 +31,9 @@ function renderIcon(
   if (!icon) return null;
   if (typeof icon === 'function') {
     return icon({ active, size });
+  }
+  if (isIconName(icon)) {
+    return <IconSvg name={icon} size={size} />;
   }
   return icon;
 }

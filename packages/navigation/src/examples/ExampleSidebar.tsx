@@ -86,6 +86,7 @@ const componentGroups: ComponentGroup[] = [
     {
         title: 'Data',
         items: [
+            { label: 'Charts', path: '/charts', icon: 'chart-line' },
             { label: 'DataGrid', path: '/datagrid', icon: 'grid' },
             { label: 'DatePicker', path: '/datepicker', icon: 'calendar-today' },
             { label: 'Table', path: '/table', icon: 'table' },

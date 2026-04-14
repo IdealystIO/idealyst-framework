@@ -1,6 +1,26 @@
 import React, { useState } from 'react';
 import { Screen, View, Text } from '@idealyst/components';
+import { ThemeSettings } from '@idealyst/theme';
 import Switch from '../Switch';
+
+/** Theme toggle using local state + ThemeSettings (no Unistyles runtime subscription) */
+const ThemeToggleDemo: React.FC = () => {
+  const [isDark, setIsDark] = useState(false);
+
+  const handleToggle = (checked: boolean) => {
+    setIsDark(checked);
+    ThemeSettings.setTheme(checked ? 'dark' : 'light', checked ? 'dark' : 'light');
+  };
+
+  return (
+    <View gap="md">
+      <Text typography="h5">Theme Toggle (tests backdrop reactivity)</Text>
+      <Switch checked={isDark} onChange={handleToggle} label="Dark Mode" size="md" />
+      <Switch checked={isDark} onChange={handleToggle} label="Dark Mode (sm)" size="sm" />
+      <Switch checked={isDark} onChange={handleToggle} label="Dark Mode (lg)" size="lg" />
+    </View>
+  );
+};
 
 export const SwitchExamples: React.FC = () => {
   const [basicChecked, setBasicChecked] = useState(false);
@@ -24,6 +44,8 @@ export const SwitchExamples: React.FC = () => {
     <Screen background="primary" padding="lg">
     <View gap="lg">
       <Text typography="h3">Switch Examples</Text>
+
+      <ThemeToggleDemo />
 
       <View gap="md">
         <Text typography="h5">Basic Switch</Text>

@@ -14,6 +14,8 @@
         "baseUrl": ".",
         "paths": {
             "@idealyst/components": ["../components/src"],
+            "@idealyst/charts/examples": ["../charts/src/examples"],
+            "@idealyst/charts": ["../charts/src"],
             "@idealyst/theme": ["../theme/src"],
             "@react-navigation/native": ["../example-native/node_modules/@react-navigation/native"],
             "@react-navigation/bottom-tabs": ["../example-native/node_modules/@react-navigation/bottom-tabs"],

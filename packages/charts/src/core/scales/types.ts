@@ -1,8 +1,28 @@
 /**
  * Scale Type Definitions
  *
- * Scales are functions that map data values (domain) to visual values (range).
+ * Re-exports D3 scale types under our existing names for API stability.
+ * Config interfaces define our creation API.
  */
+
+import type { ScaleLinear, ScaleBand, ScaleTime } from 'd3-scale';
+
+// =============================================================================
+// Scale Instances (backed by D3)
+// =============================================================================
+
+/** Linear scale — maps continuous numeric domain to continuous range */
+export type LinearScale = ScaleLinear<number, number>;
+
+/** Band scale — maps discrete categorical domain to continuous bands */
+export type BandScale = ScaleBand<string>;
+
+/** Time scale — maps Date domain to continuous range */
+export type TimeScale = ScaleTime<number, number>;
+
+// =============================================================================
+// Scale Configuration (our creation API)
+// =============================================================================
 
 /**
  * Configuration for linear scales (numeric data)
@@ -48,58 +68,4 @@ export interface TimeScaleConfig {
   nice?: boolean;
   /** Clamp output to range bounds */
   clamp?: boolean;
-}
-
-/**
- * Linear scale instance
- */
-export interface LinearScale {
-  /** Scale a value from domain to range */
-  (value: number): number;
-  /** Invert a range value back to domain */
-  invert(value: number): number;
-  /** Get the domain */
-  domain(): [number, number];
-  /** Get the range */
-  range(): [number, number];
-  /** Generate tick values */
-  ticks(count?: number): number[];
-  /** Create a copy with updated domain */
-  copy(): LinearScale;
-}
-
-/**
- * Band scale instance
- */
-export interface BandScale {
-  /** Scale a category to its band start position */
-  (value: string): number | undefined;
-  /** Get the domain (category names) */
-  domain(): string[];
-  /** Get the range */
-  range(): [number, number];
-  /** Get the width of each band */
-  bandwidth(): number;
-  /** Get the step (band + padding) */
-  step(): number;
-  /** Create a copy */
-  copy(): BandScale;
-}
-
-/**
- * Time scale instance
- */
-export interface TimeScale {
-  /** Scale a date to a pixel position */
-  (value: Date): number;
-  /** Invert a pixel position back to a date */
-  invert(value: number): Date;
-  /** Get the domain */
-  domain(): [Date, Date];
-  /** Get the range */
-  range(): [number, number];
-  /** Generate tick dates */
-  ticks(count?: number): Date[];
-  /** Create a copy */
-  copy(): TimeScale;
 }

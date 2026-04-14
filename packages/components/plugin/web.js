@@ -13,7 +13,13 @@
  *
  * Config options:
  * - debug: boolean - enable debug logging
- * - icons: string[] - array of icon names to always include
+ * - components: Record<string, string[]> - custom components with their icon prop names
+ *   e.g. { "NavItem": ["icon"], "SidebarLink": ["icon", "activeIcon"] }
+ *
+ * For icons that can't be statically detected, register them manually in your entry point:
+ *   import { IconRegistry } from '@idealyst/components';
+ *   import { mdiArrowUpDown } from '@mdi/js';
+ *   IconRegistry.register('arrow-up-down', mdiArrowUpDown);
  */
 
 // Load @mdi/js exports for validation
@@ -26,7 +32,7 @@ try {
 
 module.exports = function ({ types: t }, options = {}) {
   const debug = options.debug || false;
-  const configIcons = options.icons || [];
+  const customComponents = options.components || {};
 
   const debugLog = (...args) => {
     if (debug) {
@@ -34,8 +40,40 @@ module.exports = function ({ types: t }, options = {}) {
     }
   };
 
-  debugLog('Plugin loaded with config icons:', configIcons);
   debugLog('@mdi/js loaded:', mdiExports ? 'yes' : 'no');
+
+  // Built-in component → icon prop mapping, merged with custom components
+  const iconPropMap = {
+    'Icon': ['name'],
+    'IconSvg': ['name'],
+    'Button': ['leftIcon', 'rightIcon'],
+    'Badge': ['icon'],
+    'Breadcrumb': ['icon'],
+    'Menu': ['icon'],
+    'MenuItem': ['icon'],
+    'ListItem': ['leading', 'trailing'],
+    'Alert': ['icon'],
+    'Chip': ['icon', 'deleteIcon'],
+    'Input': ['leftIcon', 'rightIcon'],
+    'TextInput': ['leftIcon', 'rightIcon'],
+    'IconButton': ['icon'],
+    ...customComponents,
+  };
+
+  // Collect unique prop names for ObjectProperty scanning.
+  // Exclude 'name' — too generic, only meaningful as JSX prop on Icon/IconSvg.
+  const iconPropNames = new Set();
+  for (const [, props] of Object.entries(iconPropMap)) {
+    for (const p of props) {
+      if (p !== 'name') {
+        iconPropNames.add(p);
+      }
+    }
+  }
+
+  if (Object.keys(customComponents).length > 0) {
+    debugLog('Custom components registered:', customComponents);
+  }
 
   /**
    * Convert kebab-case icon name to MDI import name
@@ -114,15 +152,6 @@ module.exports = function ({ types: t }, options = {}) {
           state.hasIconUsage = false;
 
           debugLog('Processing file:', state.filename || 'unknown');
-
-          // Add config icons
-          configIcons.forEach(iconName => {
-            const normalized = normalizeIconName(iconName);
-            if (normalized) {
-              state.iconNames.add(normalized);
-              debugLog(`Added config icon: ${normalized}`);
-            }
-          });
         },
 
         exit(path, state) {
@@ -167,31 +196,21 @@ module.exports = function ({ types: t }, options = {}) {
             t.stringLiteral('@mdi/js')
           );
 
-          // Determine the import path for IconRegistry
-          // If we're inside the components package, use relative import to avoid circular deps
-          const filename = state.filename || '';
-          const isInsideComponentsPackage = filename.includes('packages/components/src') ||
-                                            filename.includes('packages\\components\\src');
-
-          let registryImportPath = '@idealyst/components';
-          if (isInsideComponentsPackage) {
-            // Calculate relative path to Icon/IconRegistry
-            const path = require('path');
-            const fileDir = path.dirname(filename);
-            const registryPath = path.join(filename.split('packages/components/src')[0] || filename.split('packages\\components\\src')[0], 'packages/components/src/Icon/IconRegistry');
-            let relativePath = path.relative(fileDir, registryPath).replace(/\\/g, '/');
-            if (!relativePath.startsWith('.')) {
-              relativePath = './' + relativePath;
+          // Check if the file already imports IconRegistry (e.g., internal components package files)
+          let hasExistingRegistryImport = false;
+          let lastImportIndex = -1;
+          path.node.body.forEach((node, index) => {
+            if (t.isImportDeclaration(node)) {
+              lastImportIndex = index;
+              if (node.specifiers.some(s =>
+                t.isImportSpecifier(s) &&
+                t.isIdentifier(s.imported) &&
+                s.imported.name === 'IconRegistry'
+              )) {
+                hasExistingRegistryImport = true;
+              }
             }
-            registryImportPath = relativePath;
-            debugLog(`Using relative import for IconRegistry: ${registryImportPath}`);
-          }
-
-          // Create: import { IconRegistry } from '...' ;
-          const registryImport = t.importDeclaration(
-            [t.importSpecifier(t.identifier('IconRegistry'), t.identifier('IconRegistry'))],
-            t.stringLiteral(registryImportPath)
-          );
+          });
 
           // Create: IconRegistry.registerMany({ 'home': _mdiHome, ... });
           const registerCall = t.expressionStatement(
@@ -204,22 +223,45 @@ module.exports = function ({ types: t }, options = {}) {
             )
           );
 
-          // Insert at the top of the file (after existing imports)
-          // Find the last import declaration
-          let lastImportIndex = -1;
-          path.node.body.forEach((node, index) => {
-            if (t.isImportDeclaration(node)) {
-              lastImportIndex = index;
-            }
-          });
-
-          // Insert after last import, or at the beginning if no imports
           const insertIndex = lastImportIndex + 1;
 
-          // Insert in reverse order so they end up in correct order
-          path.node.body.splice(insertIndex, 0, mdiImport);
-          path.node.body.splice(insertIndex, 0, registryImport);
-          path.node.body.splice(insertIndex + 2, 0, registerCall);
+          if (hasExistingRegistryImport) {
+            // File already imports IconRegistry — just add the @mdi/js import and registerMany call
+            debugLog('File already imports IconRegistry, skipping duplicate import');
+            path.node.body.splice(insertIndex, 0, mdiImport);
+            path.node.body.splice(insertIndex + 1, 0, registerCall);
+          } else {
+            // Determine the import path for IconRegistry
+            const filename = state.filename || '';
+            const nodePath = require('path');
+
+            // Check if we're inside the components package source (monorepo dev or node_modules)
+            const componentsSrcMatch = filename.match(/^(.*[/\\](?:packages|@idealyst)[/\\]components[/\\]src)[/\\]/);
+
+            let registryImportPath = '@idealyst/components';
+            if (componentsSrcMatch) {
+              // Calculate relative path from this file to Icon/IconRegistry
+              const fileDir = nodePath.dirname(filename);
+              const registryPath = nodePath.join(componentsSrcMatch[1], 'Icon', 'IconRegistry');
+              let relativePath = nodePath.relative(fileDir, registryPath).replace(/\\/g, '/');
+              if (!relativePath.startsWith('.')) {
+                relativePath = './' + relativePath;
+              }
+              registryImportPath = relativePath;
+              debugLog(`Using relative import for IconRegistry: ${registryImportPath}`);
+            }
+
+            // Create: import { IconRegistry } from '...' ;
+            const registryImport = t.importDeclaration(
+              [t.importSpecifier(t.identifier('IconRegistry'), t.identifier('IconRegistry'))],
+              t.stringLiteral(registryImportPath)
+            );
+
+            // Insert in reverse order so they end up in correct order
+            path.node.body.splice(insertIndex, 0, mdiImport);
+            path.node.body.splice(insertIndex, 0, registryImport);
+            path.node.body.splice(insertIndex + 2, 0, registerCall);
+          }
 
           debugLog('Injected registration code');
         }
@@ -234,24 +276,6 @@ module.exports = function ({ types: t }, options = {}) {
         }
 
         const componentName = node.openingElement.name.name;
-
-        // Map of components to their icon prop names
-        const iconPropMap = {
-          'Icon': ['name'],
-          'IconSvg': ['name'],  // Internal component also uses name prop now
-          'Button': ['leftIcon', 'rightIcon'],
-          'Badge': ['icon'],
-          'Breadcrumb': ['icon'],
-          'Menu': ['icon'],
-          'MenuItem': ['icon'],
-          'ListItem': ['leading', 'trailing'],
-          'Alert': ['icon'],
-          'Chip': ['icon', 'deleteIcon'],
-          'Input': ['leftIcon', 'rightIcon'],
-          'TextInput': ['leftIcon', 'rightIcon'],
-          'IconButton': ['icon'],
-        };
-
         const iconProps = iconPropMap[componentName];
         if (!iconProps) return;
 
@@ -377,10 +401,7 @@ module.exports = function ({ types: t }, options = {}) {
       ObjectProperty(path, state) {
         const { node } = path;
 
-        // Check if this is an icon-related property
-        const iconPropNames = ['icon', 'leftIcon', 'rightIcon', 'leading', 'trailing', 'deleteIcon'];
-
-        if (t.isIdentifier(node.key) && iconPropNames.includes(node.key.name)) {
+        if (t.isIdentifier(node.key) && iconPropNames.has(node.key.name)) {
           if (t.isStringLiteral(node.value)) {
             const iconName = extractIconName(node.value.value);
             if (iconName) {

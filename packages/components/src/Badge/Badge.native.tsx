@@ -1,45 +1,44 @@
 import { isValidElement, forwardRef } from 'react';
 import { View, Text } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import { useUnistyles } from 'react-native-unistyles';
+import type { Theme } from '@idealyst/theme';
 import { BadgeProps } from './types';
-import { badgeStyles } from './Badge.styles';
+import { badgeStyles, resolveBadgeColor } from './Badge.styles';
 import { isIconName } from '../Icon/icon-resolver';
 import type { IdealystElement } from '../utils/refTypes';
 
 /**
  * Small status indicator for counts, labels, or notifications.
  * Available in filled, outlined, and dot variants with customizable colors.
- *
- * Supports both `intent` (semantic colors) and `color` (raw palette colors).
- * If both are provided, `intent` takes precedence.
  */
-const Badge = forwardRef<IdealystElement, BadgeProps>(({
-  children,
-  icon,
-  size = 'md',
-  type = 'filled',
-  intent,
-  color,
-  style,
-  testID,
-  id,
-}, ref) => {
-  // Default to 'primary' intent if neither intent nor color is provided
-  const effectiveColor = intent ? undefined : (color ?? 'primary');
+const Badge = forwardRef<IdealystElement, BadgeProps>((props, ref) => {
+  const {
+    children,
+    icon,
+    size = 'md',
+    type: typeProp,
+    variant,
+    intent = 'primary',
+    color,
+    style,
+    testID,
+    id,
+  } = props;
 
-  badgeStyles.useVariants({
-    size,
-    type,
-  });
+  const type = variant ?? typeProp ?? 'filled';
+  const { theme } = useUnistyles() as { theme: Theme };
 
-  // Call dynamic styles with intent/color - intent takes precedence
-  const badgeStyle = (badgeStyles.badge as any)({ intent, color: effectiveColor });
-  const textStyle = (badgeStyles.text as any)({ intent, color: effectiveColor });
+  badgeStyles.useVariants({ size, type, intent });
+
+  // Resolve color prop overrides (only when color is set without explicit intent)
+  const colorStyles = color && !props.intent
+    ? resolveBadgeColor(theme, color, type)
+    : null;
 
   // Map badge size to icon size
   const iconSize = size === 'sm' ? 12 : size === 'md' ? 14 : 16;
 
-  // Helper to render icon
   const renderIcon = () => {
     if (!icon) return null;
 
@@ -48,7 +47,7 @@ const Badge = forwardRef<IdealystElement, BadgeProps>(({
         <MaterialDesignIcons
           name={icon}
           size={iconSize}
-          color={textStyle.color}
+          color={colorStyles?.iconColor ?? (badgeStyles.icon as any).color}
         />
       );
     } else if (isValidElement(icon)) {
@@ -57,12 +56,11 @@ const Badge = forwardRef<IdealystElement, BadgeProps>(({
     return null;
   };
 
-
   if (type === 'dot') {
     return (
       <View
         nativeID={id}
-        style={[badgeStyle, style]}
+        style={[badgeStyles.badge as any, colorStyles?.badge, style]}
         testID={testID}
         accessibilityLabel="status indicator"
       />
@@ -76,21 +74,21 @@ const Badge = forwardRef<IdealystElement, BadgeProps>(({
     <View
       ref={ref as any}
       nativeID={id}
-      style={[badgeStyle, style]}
+      style={[badgeStyles.badge as any, colorStyles?.badge, style]}
       testID={testID}
       accessibilityLabel="badge"
     >
       {hasIcon && hasChildren ? (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <View style={badgeStyles.content as any}>
           {renderIcon()}
-          <Text style={textStyle}>
+          <Text style={[badgeStyles.text as any, colorStyles?.text]}>
             {children}
           </Text>
         </View>
       ) : hasIcon ? (
         renderIcon()
       ) : (
-        <Text style={textStyle}>
+        <Text style={[badgeStyles.text as any, colorStyles?.text]}>
           {children}
         </Text>
       )}
@@ -100,4 +98,4 @@ const Badge = forwardRef<IdealystElement, BadgeProps>(({
 
 Badge.displayName = 'Badge';
 
-export default Badge; 
+export default Badge;

@@ -1,7 +1,9 @@
 import React, { isValidElement, forwardRef } from 'react';
 import { getWebProps } from 'react-native-unistyles/web';
+import { useUnistyles } from 'react-native-unistyles';
+import type { Theme } from '@idealyst/theme';
 import { BadgeProps } from './types';
-import { badgeStyles } from './Badge.styles';
+import { badgeStyles, resolveBadgeColor } from './Badge.styles';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
 import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
@@ -10,9 +12,6 @@ import { flattenStyle } from '../utils/flattenStyle';
 /**
  * Small status indicator for counts, labels, or notifications.
  * Available in filled, outlined, and dot variants with customizable colors.
- *
- * Supports both `intent` (semantic colors) and `color` (raw palette colors).
- * If both are provided, `intent` takes precedence.
  */
 const Badge = forwardRef<IdealystElement, BadgeProps>((props, ref) => {
   const {
@@ -20,7 +19,7 @@ const Badge = forwardRef<IdealystElement, BadgeProps>((props, ref) => {
     size = 'md',
     type: typeProp,
     variant,
-    intent,
+    intent = 'primary',
     color,
     icon,
     style,
@@ -28,54 +27,50 @@ const Badge = forwardRef<IdealystElement, BadgeProps>((props, ref) => {
     id,
   } = props;
 
-  // variant is an alias for type - variant takes precedence if both are set
   const type = variant ?? typeProp ?? 'filled';
+  const { theme } = useUnistyles() as { theme: Theme };
 
-  // Default to 'primary' intent if neither intent nor color is provided
-  const effectiveColor = intent ? undefined : (color ?? 'primary');
+  badgeStyles.useVariants({ size, type, intent });
 
-  badgeStyles.useVariants({
-    size,
-    type,
-  });
+  // Resolve color prop overrides (only when color is set without explicit intent)
+  const colorStyles = color && !props.intent
+    ? resolveBadgeColor(theme, color, type)
+    : null;
 
-  const badgeStyle = (badgeStyles.badge as any)({ intent, color: effectiveColor });
-  const contentStyle = badgeStyles.content as any;
-  const textStyle = (badgeStyles.text as any)({ intent, color: effectiveColor });
+  const badgeProps = getWebProps([badgeStyles.badge as any]);
+  const contentProps = getWebProps([badgeStyles.content as any]);
+  const textProps = getWebProps([badgeStyles.text as any]);
 
-  const badgeProps = getWebProps([badgeStyle]);
-  const contentProps = getWebProps([contentStyle]);
-  const textProps = getWebProps([textStyle]);
-  const iconProps = getWebProps([badgeStyles.icon, textStyle]);
+  // Icon size from theme config
+  const iconSize = theme.sizes.badge[size].iconSize as number;
 
-  // Helper to render icon
   const renderIcon = (iconProp: typeof icon) => {
     if (typeof iconProp === 'string') {
-      // Render IconSvg with the icon name - registry lookup happens inside
       return (
         <IconSvg
           name={iconProp}
-          {...iconProps}
+          size={iconSize}
+          color={colorStyles?.iconColor ?? 'currentColor'}
           aria-label={iconProp}
         />
       );
     } else if (isValidElement(iconProp)) {
-      // Render custom component as-is
       return iconProp;
     }
     return null;
   };
 
   const mergedRef = useMergeRefs(ref, badgeProps.ref);
-
-  // Flatten style array for web compatibility
   const flatStyle = flattenStyle(style);
+  const badgeStyle = colorStyles
+    ? { ...flatStyle, ...colorStyles.badge }
+    : flatStyle;
 
   if (type === 'dot') {
     return (
       <span
         {...badgeProps}
-        style={flatStyle}
+        style={badgeStyle as any}
         ref={mergedRef}
         id={id}
         data-testid={testID}
@@ -86,25 +81,28 @@ const Badge = forwardRef<IdealystElement, BadgeProps>((props, ref) => {
   }
 
   const hasIcon = !!icon;
+  const hasChildren = !!children;
 
   return (
     <span
       {...badgeProps}
-      style={flatStyle}
+      style={badgeStyle as any}
       ref={mergedRef}
       id={id}
       data-testid={testID}
       role="status"
     >
-      {hasIcon ? (
+      {hasIcon && hasChildren ? (
         <span {...contentProps}>
           {renderIcon(icon)}
-          <span {...textProps}>
+          <span {...textProps} style={colorStyles?.text as any}>
             {children}
-            </span>
           </span>
+        </span>
+      ) : hasIcon ? (
+        renderIcon(icon)
       ) : (
-        <span {...textProps}>
+        <span {...textProps} style={colorStyles?.text as any}>
           {children}
         </span>
       )}

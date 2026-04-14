@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, forwardRef, ReactNode, useMemo } from 'react';
 import { View, TouchableOpacity, Text, ScrollView, LayoutChangeEvent } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import {
   tabBarContainerStyles,
   tabBarTabStyles,
@@ -10,6 +11,7 @@ import {
 } from './TabBar.styles';
 import type { TabBarProps, TabBarItem } from './types';
 import { getNativeAccessibilityProps } from '../utils/accessibility';
+import { isIconName } from '../Icon/icon-resolver';
 import type { IdealystElement } from '../utils/refTypes';
 
 // Icon size mapping based on size variant
@@ -30,6 +32,9 @@ function renderIcon(
   if (!icon) return null;
   if (typeof icon === 'function') {
     return icon({ active, size });
+  }
+  if (isIconName(icon)) {
+    return <MaterialDesignIcons name={icon} size={size} />;
   }
   return icon;
 }

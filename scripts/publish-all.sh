@@ -39,6 +39,7 @@ PACKAGES=(
   "network"
   "pdf"
   "camera"
+  "charts"
 )
 
 ROOT_DIR=$(pwd)

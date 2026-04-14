@@ -52,13 +52,13 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     marginHorizontal,
   });
 
-  // Resolve dynamic style functions
-  const switchContainerStyle = (switchStyles.switchContainer as any)({});
-  const switchTrackStyle = (switchStyles.switchTrack as any)({});
-  const containerStyle = (switchStyles.container as any)({});
-  const labelStyle = (switchStyles.label as any)({});
-  const wrapperStyle = (switchStyles.wrapper as any)({});
-  const helperTextStyle = (switchStyles.helperText as any)({ hasError });
+  // Static style references (variants resolved by useVariants above)
+  const switchContainerStyle = switchStyles.switchContainer as any;
+  const switchTrackStyle = switchStyles.switchTrack as any;
+  const containerStyle = switchStyles.container as any;
+  const labelStyle = switchStyles.label as any;
+  const wrapperStyle = switchStyles.wrapper as any;
+  const helperTextStyle = switchStyles.helperText as any;
 
   const progress = useSharedValue(checked ? 1 : 0);
 

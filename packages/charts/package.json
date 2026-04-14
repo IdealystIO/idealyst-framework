@@ -30,6 +30,11 @@
       "types": "./src/examples/index.ts"
     }
   },
+  "dependencies": {
+    "d3-array": "^3.2.4",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0"
+  },
   "scripts": {
     "prepublishOnly": "echo 'Publishing TypeScript source directly'",
     "publish:npm": "npm publish"
@@ -71,6 +76,9 @@
     "@idealyst/svg": "^1.2.80",
     "@idealyst/theme": "^1.2.80",
     "@shopify/react-native-skia": "^1.8.2",
+    "@types/d3-array": "^3.2.1",
+    "@types/d3-scale": "^4.0.8",
+    "@types/d3-shape": "^3.1.6",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",
     "react-native": "^0.80.1",

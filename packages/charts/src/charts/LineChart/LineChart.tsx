@@ -13,8 +13,10 @@ import {
   useRenderer,
 } from '../../components/ChartContainer';
 import { XAxis, YAxis, GridLines } from '../../components/Axis';
+import { ChartTooltip } from '../../components/Tooltip';
 import { useLineChart } from './useLineChart';
 import { useChartAnimation } from '../../hooks/useChartAnimation';
+import { useChartTooltip, type ScreenPoint } from '../../hooks/useChartTooltip';
 import type { LineChartProps } from './types';
 import type { ChartDataSeries } from '../../types';
 
@@ -34,6 +36,8 @@ const LineChartInner: React.FC<
   showXAxis = true,
   showYAxis = true,
   showGrid = true,
+  showTooltip = false,
+  tooltip: tooltipConfig,
   xAxis,
   yAxis,
   animate = true,
@@ -42,7 +46,7 @@ const LineChartInner: React.FC<
 }) => {
   const { width, height, padding, innerWidth, innerHeight } = useChart();
   const { renderer } = useRenderer();
-  const { Canvas, Group, Path, Circle, Defs, LinearGradient } = renderer;
+  const { Canvas, Group, Path, Circle, Line, Defs, LinearGradient } = renderer;
 
   // Get theme for colors
   let theme: Theme | undefined;
@@ -70,6 +74,36 @@ const LineChartInner: React.FC<
     easing: 'easeOut',
   });
 
+  // Build screen points for tooltip hit detection
+  const screenPoints = useMemo((): ScreenPoint[] => {
+    if (!showTooltip) return [];
+    const pts: ScreenPoint[] = [];
+    for (const line of lineData) {
+      for (const pt of line.points) {
+        pts.push({
+          x: pt.x,
+          y: pt.y,
+          dataPoint: { x: pt.rawX, y: pt.rawY },
+          seriesIndex: line.seriesIndex,
+          pointIndex: pt.pointIndex,
+        });
+      }
+    }
+    return pts;
+  }, [showTooltip, lineData]);
+
+  const colors = useMemo(() => lineData.map((l) => l.color), [lineData]);
+
+  // Tooltip hook
+  const { tooltipContext, tooltipX, activePointIndex, containerProps } = useChartTooltip({
+    enabled: showTooltip,
+    points: screenPoints,
+    series: data,
+    colors,
+    padding,
+    innerWidth,
+  });
+
   // Handle data point press
   const handlePointPress = useCallback(
     (seriesIndex: number, pointIndex: number) => {
@@ -83,125 +117,184 @@ const LineChartInner: React.FC<
   );
 
   return (
-    <Canvas
-      width={width}
-      height={height}
-      accessibilityLabel={`Line chart with ${data.length} series`}
-    >
-      {/* Definitions for gradients */}
-      {showArea && (
-        <Defs>
-          {lineData.map((line) => (
-            <LinearGradient
-              key={`gradient-${line.seriesIndex}`}
-              id={`area-gradient-${line.seriesIndex}`}
-              x1={0}
-              y1={0}
-              x2={0}
-              y2={1}
-              stops={[
-                { offset: 0, color: line.color, opacity: areaOpacity * animationProgress },
-                { offset: 1, color: line.color, opacity: 0 },
-              ]}
-            />
-          ))}
-        </Defs>
-      )}
+    <>
+      {/* Mouse event wrapper for tooltip */}
+      <div {...containerProps} style={{ position: 'absolute', inset: 0 }}>
+        <Canvas
+          width={width}
+          height={height}
+          accessibilityLabel={`Line chart with ${data.length} series`}
+        >
+          {/* Definitions for gradients */}
+          {showArea && (
+            <Defs>
+              {lineData.map((line) => (
+                <LinearGradient
+                  key={`gradient-${line.seriesIndex}`}
+                  id={`area-gradient-${line.seriesIndex}`}
+                  x1={0}
+                  y1={0}
+                  x2={0}
+                  y2={1}
+                  stops={[
+                    { offset: 0, color: line.color, opacity: areaOpacity * animationProgress },
+                    { offset: 1, color: line.color, opacity: 0 },
+                  ]}
+                />
+              ))}
+            </Defs>
+          )}
 
-      {/* Chart area with padding offset */}
-      <Group x={padding.left} y={padding.top}>
-        {/* Grid lines */}
-        {showGrid && (
-          <>
-            <GridLines
-              scale={yScale}
-              width={innerWidth}
-              height={innerHeight}
-              direction="horizontal"
-              count={5}
-            />
-          </>
-        )}
+          {/* Chart area with padding offset */}
+          <Group x={padding.left} y={padding.top}>
+            {/* Grid lines */}
+            {showGrid && (
+              <>
+                <GridLines
+                  scale={yScale}
+                  width={innerWidth}
+                  height={innerHeight}
+                  direction="horizontal"
+                  count={5}
+                />
+              </>
+            )}
 
-        {/* Area fills (rendered first, behind lines) */}
-        {showArea &&
-          lineData.map((line) =>
-            line.areaPath ? (
+            {/* Vertical hover guide line */}
+            {showTooltip && activePointIndex !== null && (() => {
+              // Find the X position for the active column
+              const activePt = lineData[0]?.points[activePointIndex];
+              if (!activePt) return null;
+              return (
+                <Line
+                  x1={activePt.x}
+                  y1={0}
+                  x2={activePt.x}
+                  y2={innerHeight}
+                  stroke="rgba(0, 0, 0, 0.12)"
+                  strokeWidth={1}
+                  strokeDasharray={[4, 4]}
+                />
+              );
+            })()}
+
+            {/* Area fills (rendered first, behind lines) */}
+            {showArea &&
+              lineData.map((line) =>
+                line.areaPath ? (
+                  <Path
+                    key={`area-${line.seriesIndex}`}
+                    d={line.areaPath}
+                    fill={`url(#area-gradient-${line.seriesIndex})`}
+                    stroke="none"
+                    opacity={animationProgress}
+                  />
+                ) : null
+              )}
+
+            {/* Lines with draw animation */}
+            {lineData.map((line) => (
               <Path
-                key={`area-${line.seriesIndex}`}
-                d={line.areaPath}
-                fill={`url(#area-gradient-${line.seriesIndex})`}
-                stroke="none"
-                opacity={animationProgress}
+                key={`line-${line.seriesIndex}`}
+                d={line.linePath}
+                fill="none"
+                stroke={line.color}
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                // Draw animation using stroke-dasharray technique
+                strokeDasharray={animate ? [line.pathLength, line.pathLength] : undefined}
+                strokeDashoffset={animate ? line.pathLength * (1 - animationProgress) : undefined}
               />
-            ) : null
-          )}
+            ))}
 
-        {/* Lines with draw animation */}
-        {lineData.map((line) => (
-          <Path
-            key={`line-${line.seriesIndex}`}
-            d={line.linePath}
-            fill="none"
-            stroke={line.color}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            // Draw animation using stroke-dasharray technique
-            strokeDasharray={animate ? [line.pathLength, line.pathLength] : undefined}
-            strokeDashoffset={animate ? line.pathLength * (1 - animationProgress) : undefined}
-          />
-        ))}
+            {/* Data points with fade-in animation */}
+            {showDots &&
+              lineData.map((line) =>
+                line.points.map((point) => {
+                  const isActive =
+                    showTooltip &&
+                    activePointIndex === point.pointIndex;
 
-        {/* Data points with fade-in animation */}
-        {showDots &&
-          lineData.map((line) =>
-            line.points.map((point) => (
-              <Circle
-                key={`point-${line.seriesIndex}-${point.pointIndex}`}
-                cx={point.x}
-                cy={point.y}
-                r={dotRadius * animationProgress}
-                fill={line.color}
-                stroke="#ffffff"
-                strokeWidth={2}
-                opacity={animationProgress}
+                  return (
+                    <Circle
+                      key={`point-${line.seriesIndex}-${point.pointIndex}`}
+                      cx={point.x}
+                      cy={point.y}
+                      r={(isActive ? dotRadius * 1.5 : dotRadius) * animationProgress}
+                      fill={isActive ? '#ffffff' : line.color}
+                      stroke={isActive ? line.color : '#ffffff'}
+                      strokeWidth={isActive ? 2.5 : 2}
+                      opacity={animationProgress}
+                    />
+                  );
+                })
+              )}
+
+            {/* Highlight active points when dots are hidden */}
+            {!showDots && showTooltip && activePointIndex !== null &&
+              lineData.map((line) => {
+                const pt = line.points[activePointIndex];
+                if (!pt) return null;
+                return (
+                  <Circle
+                    key={`hover-${line.seriesIndex}`}
+                    cx={pt.x}
+                    cy={pt.y}
+                    r={5}
+                    fill="#ffffff"
+                    stroke={line.color}
+                    strokeWidth={2.5}
+                    opacity={1}
+                  />
+                );
+              })}
+
+            {/* X Axis */}
+            {showXAxis && (
+              <XAxis
+                scale={xScale}
+                y={innerHeight}
+                length={innerWidth}
+                tickCount={xAxis?.tickCount ?? 5}
+                tickFormat={xAxis?.tickFormat}
+                label={xAxis?.label}
+                showLine={xAxis?.show !== false}
+                showTicks={xAxis?.show !== false}
+                showLabels={xAxis?.show !== false}
               />
-            ))
-          )}
+            )}
 
-        {/* X Axis */}
-        {showXAxis && (
-          <XAxis
-            scale={xScale}
-            y={innerHeight}
-            length={innerWidth}
-            tickCount={xAxis?.tickCount ?? 5}
-            tickFormat={xAxis?.tickFormat}
-            label={xAxis?.label}
-            showLine={xAxis?.show !== false}
-            showTicks={xAxis?.show !== false}
-            showLabels={xAxis?.show !== false}
-          />
-        )}
+            {/* Y Axis */}
+            {showYAxis && (
+              <YAxis
+                scale={yScale}
+                x={0}
+                length={innerHeight}
+                position="left"
+                tickCount={yAxis?.tickCount ?? 5}
+                tickFormat={yAxis?.tickFormat}
+                label={yAxis?.label}
+                showLine={yAxis?.show !== false}
+                showTicks={yAxis?.show !== false}
+                showLabels={yAxis?.show !== false}
+              />
+            )}
+          </Group>
+        </Canvas>
+      </div>
 
-        {/* Y Axis */}
-        {showYAxis && (
-          <YAxis
-            scale={yScale}
-            x={0}
-            length={innerHeight}
-            position="left"
-            tickCount={yAxis?.tickCount ?? 5}
-            tickFormat={yAxis?.tickFormat}
-            label={yAxis?.label}
-            showLine={yAxis?.show !== false}
-            showTicks={yAxis?.show !== false}
-            showLabels={yAxis?.show !== false}
-          />
-        )}
-      </Group>
-    </Canvas>
+      {/* Tooltip overlay */}
+      {showTooltip && (
+        <ChartTooltip
+          context={tooltipContext}
+          x={tooltipX}
+          chartWidth={width}
+          chartHeight={height}
+          config={tooltipConfig}
+        />
+      )}
+    </>
   );
 };
 

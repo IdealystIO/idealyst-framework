@@ -86,8 +86,7 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     checked,
   ]);
 
-  
-  // Apply variants using the correct Unistyles v3 pattern
+  // Apply variants for all static styles
   switchStyles.useVariants({
     size,
     checked,
@@ -100,17 +99,14 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     marginHorizontal,
   });
 
-  const dynamicProps = { size, checked, disabled, hasError, intent, labelPosition };
-  const trackProps = getWebProps([(switchStyles.switchTrack as any)(dynamicProps)]);
-  const thumbProps = getWebProps([(switchStyles.switchThumb as any)(dynamicProps)]);
-  const thumbIconProps = getWebProps([(switchStyles.thumbIcon as any)(dynamicProps)]);
-  const labelProps = getWebProps([(switchStyles.label as any)(dynamicProps)]);
+  const trackProps = getWebProps([switchStyles.switchTrack as any]);
+  const thumbProps = getWebProps([switchStyles.switchThumb as any]);
+  const thumbIconProps = getWebProps([switchStyles.thumbIcon as any]);
+  const labelProps = getWebProps([switchStyles.label as any]);
 
   // Wrapper and helperText styles
-  const wrapperStyleComputed = (switchStyles.wrapper as any)({});
-  const helperTextStyleComputed = (switchStyles.helperText as any)({ hasError });
-  const wrapperProps = getWebProps([wrapperStyleComputed, flattenStyle(style)]);
-  const helperTextProps = getWebProps([helperTextStyleComputed]);
+  const wrapperProps = getWebProps([switchStyles.wrapper as any, flattenStyle(style)]);
+  const helperTextProps = getWebProps([switchStyles.helperText as any]);
 
   const showFooter = Boolean(error) || Boolean(helperText);
 
@@ -134,11 +130,8 @@ const Switch = forwardRef<IdealystElement, SwitchProps>(({
     return null;
   };
 
-  // Computed button props with static style references
-  const computedButtonProps = getWebProps([(switchStyles.switchContainer as any)(dynamicProps)]);
-
-  // Computed container props (for when label exists)
-  const computedContainerProps = getWebProps([(switchStyles.container as any)(dynamicProps), !needsWrapper && flattenStyle(style)].filter(Boolean));
+  const computedButtonProps = getWebProps([switchStyles.switchContainer as any]);
+  const computedContainerProps = getWebProps([switchStyles.container as any, !needsWrapper && flattenStyle(style)].filter(Boolean));
 
   const mergedButtonRef = useMergeRefs(ref as React.Ref<HTMLButtonElement>, computedButtonProps.ref);
   const mergedContainerRef = useMergeRefs(ref as React.Ref<HTMLDivElement>, computedContainerProps.ref);

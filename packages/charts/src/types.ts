@@ -239,6 +239,8 @@ export interface BaseChartProps {
   interactive?: boolean;
   /** Show tooltip on hover/touch */
   showTooltip?: boolean;
+  /** Tooltip configuration (render function, placement, offset) */
+  tooltip?: TooltipConfig;
   /** Callback when a data point is pressed */
   onDataPointPress?: (point: DataPoint, seriesIndex: number, pointIndex: number) => void;
 
@@ -311,14 +313,39 @@ export interface ChartGestureState {
 }
 
 /**
+ * A single series entry in the tooltip
+ */
+export interface TooltipEntry {
+  /** The data point being hovered */
+  point: DataPoint;
+  /** The series this point belongs to */
+  series: ChartDataSeries;
+  /** Series index */
+  seriesIndex: number;
+  /** Point index within the series */
+  pointIndex: number;
+  /** Resolved color for this series */
+  color: string;
+}
+
+/**
+ * Context passed to tooltip render functions.
+ * Contains all series values at the hovered X position.
+ */
+export interface TooltipContext {
+  /** All series entries at the hovered X position */
+  entries: TooltipEntry[];
+  /** The shared X label for this column */
+  label: string;
+}
+
+/**
  * Tooltip configuration
  */
 export interface TooltipConfig {
   /** Custom tooltip content renderer */
-  renderContent?: (point: NormalizedDataPoint, series: ChartDataSeries) => ReactNode;
-  /** Preferred placement */
-  placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
-  /** Offset from anchor point */
+  renderContent?: (context: TooltipContext) => ReactNode;
+  /** Offset from anchor point in px */
   offset?: number;
 }
 

@@ -7,6 +7,7 @@ import { MicrophoneExamples } from '@idealyst/microphone/examples';
 import { AnimateExamples } from '@idealyst/animate/examples';
 import { LottieExamples } from '@idealyst/lottie/examples';
 import { BlurViewExamples } from '@idealyst/blur/examples';
+import { ChartsExamples } from '@idealyst/charts/examples';
 import { MarkdownEditorExamples } from '@idealyst/markdown/examples';
 import { Text, View, Card, Screen, Icon, Button } from '@idealyst/components';
 import { NavigatorParam, RouteParam, NotFoundComponentProps } from '../routing';
@@ -345,6 +346,7 @@ const ExampleNavigationRouter: NavigatorParam = {
         { path: "blur", type: 'screen', component: BlurViewExamples, options: { title: "Blur" } },
         { path: "markdown-editor", type: 'screen', component: MarkdownEditorExamples, options: { title: "Markdown Editor" } },
         { path: "grid", type: 'screen', component: GridExamples, options: { title: "Grid" } },
+        { path: "charts", type: 'screen', component: ChartsExamples, options: { title: "Charts" } },
         { path: "theme-extension", type: 'screen', component: ThemeExtensionExamples, options: { title: "Theme Extension" } },
     ],
 };

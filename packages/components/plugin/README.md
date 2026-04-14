@@ -131,25 +131,51 @@ function getFileIcon(type) {
 module.exports = {
   plugins: [
     ['@idealyst/components/plugin/web', {
-      debug: false,  // Enable debug logging
-      manifestPath: './icons.manifest.json'  // Path to icon manifest
+      debug: false,          // Enable debug logging
+      components: {          // Register custom components with icon props
+        'NavItem': ['icon'],
+        'SidebarLink': ['icon', 'activeIcon'],
+      },
     }]
   ]
 };
 ```
 
-### Manifest File Format
+### Custom Components
 
-```json
-{
-  "icons": [
-    "home",
-    "menu",
-    "close",
-    "account",
-    "settings"
-  ]
-}
+By default, the plugin only scans built-in Idealyst components (Icon, Button, Badge, etc.) for icon props. Use the `components` option to register your own components:
+
+```javascript
+// vite.config.ts
+["@idealyst/components/plugin/web", {
+  components: {
+    "NavItem": ["icon"],              // single icon prop
+    "SidebarLink": ["icon", "activeIcon"],  // multiple icon props
+    "FeatureCard": ["leftIcon", "rightIcon"],
+  }
+}]
+```
+
+Custom components get the same detection capabilities as built-in ones — string literals, ternaries, variables, and logical expressions are all supported:
+
+```jsx
+// All detected automatically with the config above
+<NavItem icon="home" />
+<NavItem icon={active ? "home" : "home-outline"} />
+<SidebarLink icon="cog" activeIcon="cog-outline" />
+```
+
+### Manual Icon Registration
+
+For icons that can't be statically detected (e.g., returned from functions or computed at runtime), register them manually in your app entry point:
+
+```tsx
+// App.tsx or main.tsx
+import { IconRegistry } from '@idealyst/components';
+import { mdiArrowUpDown, mdiFileDocument } from '@mdi/js';
+
+IconRegistry.register('arrow-up-down', mdiArrowUpDown);
+IconRegistry.register('file-document', mdiFileDocument);
 ```
 
 ## How It Works

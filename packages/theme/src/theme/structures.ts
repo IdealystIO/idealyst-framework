@@ -115,7 +115,7 @@ export type ChipSizeValue = {
 
 export type BadgeSizeValue = {
     minWidth: SizeValue;
-    height: SizeValue;
+    paddingVertical: SizeValue;
     paddingHorizontal: SizeValue;
     fontSize: SizeValue;
     lineHeight: SizeValue;

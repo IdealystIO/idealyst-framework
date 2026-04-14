@@ -2,9 +2,12 @@
  * Arc Path Generator
  *
  * Generates SVG path strings for pie charts, donut charts, and radial elements.
+ * Backed by d3-shape's arc() and pie() generators.
  */
 
-import { type Point, round } from './commands';
+import { arc as d3Arc, pie as d3Pie } from 'd3-shape';
+import type { Point } from './commands';
+import { round } from './commands';
 
 /**
  * Configuration for arc generation
@@ -38,20 +41,9 @@ export interface ArcCentroid {
   radius: number;
 }
 
-/**
- * Convert polar coordinates to cartesian
- */
-function polarToCartesian(
-  centerX: number,
-  centerY: number,
-  radius: number,
-  angle: number
-): Point {
-  return {
-    x: centerX + radius * Math.cos(angle),
-    y: centerY + radius * Math.sin(angle),
-  };
-}
+// D3 uses 0 = 12 o'clock (top), our API uses 0 = 3 o'clock (right / standard math).
+// Offset: D3 angle = our angle + PI/2
+const ANGLE_OFFSET = Math.PI / 2;
 
 /**
  * Generate an arc path for pie/donut segments
@@ -93,88 +85,23 @@ export function generateArcPath(
     padAngle = 0,
   } = config;
 
-  // Apply padding
-  const actualStartAngle = startAngle + padAngle / 2;
-  const actualEndAngle = endAngle - padAngle / 2;
+  const arcGenerator = d3Arc()
+    .innerRadius(innerRadius)
+    .outerRadius(outerRadius)
+    .cornerRadius(cornerRadius);
 
-  // Handle full circle case
-  const angleDiff = actualEndAngle - actualStartAngle;
-  const isFullCircle = Math.abs(angleDiff) >= 2 * Math.PI - 0.001;
+  const path = arcGenerator({
+    startAngle: startAngle + ANGLE_OFFSET,
+    endAngle: endAngle + ANGLE_OFFSET,
+    padAngle,
+    innerRadius,
+    outerRadius,
+  });
 
-  if (isFullCircle) {
-    // For a full circle, we need to draw two arcs
-    if (innerRadius > 0) {
-      // Donut (full ring)
-      const outerStart = polarToCartesian(centerX, centerY, outerRadius, actualStartAngle);
-      const outerMid = polarToCartesian(centerX, centerY, outerRadius, actualStartAngle + Math.PI);
-      const innerStart = polarToCartesian(centerX, centerY, innerRadius, actualStartAngle);
-      const innerMid = polarToCartesian(centerX, centerY, innerRadius, actualStartAngle + Math.PI);
+  if (!path) return '';
 
-      return [
-        `M ${round(outerStart.x)} ${round(outerStart.y)}`,
-        `A ${round(outerRadius)} ${round(outerRadius)} 0 0 1 ${round(outerMid.x)} ${round(outerMid.y)}`,
-        `A ${round(outerRadius)} ${round(outerRadius)} 0 0 1 ${round(outerStart.x)} ${round(outerStart.y)}`,
-        `M ${round(innerStart.x)} ${round(innerStart.y)}`,
-        `A ${round(innerRadius)} ${round(innerRadius)} 0 0 0 ${round(innerMid.x)} ${round(innerMid.y)}`,
-        `A ${round(innerRadius)} ${round(innerRadius)} 0 0 0 ${round(innerStart.x)} ${round(innerStart.y)}`,
-        'Z',
-      ].join(' ');
-    } else {
-      // Full pie (circle)
-      const top = polarToCartesian(centerX, centerY, outerRadius, -Math.PI / 2);
-      const bottom = polarToCartesian(centerX, centerY, outerRadius, Math.PI / 2);
-
-      return [
-        `M ${round(top.x)} ${round(top.y)}`,
-        `A ${round(outerRadius)} ${round(outerRadius)} 0 0 1 ${round(bottom.x)} ${round(bottom.y)}`,
-        `A ${round(outerRadius)} ${round(outerRadius)} 0 0 1 ${round(top.x)} ${round(top.y)}`,
-        'Z',
-      ].join(' ');
-    }
-  }
-
-  // Calculate points
-  const outerStart = polarToCartesian(centerX, centerY, outerRadius, actualStartAngle);
-  const outerEnd = polarToCartesian(centerX, centerY, outerRadius, actualEndAngle);
-
-  // Determine if we need the large arc flag
-  const largeArcFlag = angleDiff > Math.PI ? 1 : 0;
-  const sweepFlag = 1; // Always clockwise
-
-  let path: string;
-
-  if (innerRadius > 0) {
-    // Donut segment
-    const innerStart = polarToCartesian(centerX, centerY, innerRadius, actualStartAngle);
-    const innerEnd = polarToCartesian(centerX, centerY, innerRadius, actualEndAngle);
-
-    path = [
-      // Move to outer start
-      `M ${round(outerStart.x)} ${round(outerStart.y)}`,
-      // Outer arc to outer end
-      `A ${round(outerRadius)} ${round(outerRadius)} 0 ${largeArcFlag} ${sweepFlag} ${round(outerEnd.x)} ${round(outerEnd.y)}`,
-      // Line to inner end
-      `L ${round(innerEnd.x)} ${round(innerEnd.y)}`,
-      // Inner arc back to inner start (counter-clockwise)
-      `A ${round(innerRadius)} ${round(innerRadius)} 0 ${largeArcFlag} ${1 - sweepFlag} ${round(innerStart.x)} ${round(innerStart.y)}`,
-      // Close path
-      'Z',
-    ].join(' ');
-  } else {
-    // Pie slice (no inner radius)
-    path = [
-      // Move to center
-      `M ${round(centerX)} ${round(centerY)}`,
-      // Line to outer start
-      `L ${round(outerStart.x)} ${round(outerStart.y)}`,
-      // Outer arc to outer end
-      `A ${round(outerRadius)} ${round(outerRadius)} 0 ${largeArcFlag} ${sweepFlag} ${round(outerEnd.x)} ${round(outerEnd.y)}`,
-      // Close path (back to center)
-      'Z',
-    ].join(' ');
-  }
-
-  return path;
+  // D3 generates arcs centered at (0,0). Translate to (centerX, centerY).
+  return translateSvgPath(path, centerX, centerY);
 }
 
 /**
@@ -188,18 +115,24 @@ export function getArcCentroid(
 ): ArcCentroid {
   const { startAngle, endAngle, innerRadius, outerRadius } = config;
 
-  // Middle angle
-  const midAngle = (startAngle + endAngle) / 2;
+  const arcGenerator = d3Arc()
+    .innerRadius(innerRadius)
+    .outerRadius(outerRadius);
 
-  // Middle radius
+  const [cx, cy] = arcGenerator.centroid({
+    startAngle: startAngle + ANGLE_OFFSET,
+    endAngle: endAngle + ANGLE_OFFSET,
+    padAngle: 0,
+    innerRadius,
+    outerRadius,
+  });
+
+  const midAngle = (startAngle + endAngle) / 2;
   const midRadius = (innerRadius + outerRadius) / 2;
 
-  // Calculate position
-  const point = polarToCartesian(centerX, centerY, midRadius, midAngle);
-
   return {
-    x: point.x,
-    y: point.y,
+    x: cx + centerX,
+    y: cy + centerY,
     angle: midAngle,
     radius: midRadius,
   };
@@ -218,31 +151,22 @@ export function calculateArcAngles(
 ): Array<{ startAngle: number; endAngle: number; value: number; percentage: number }> {
   const total = values.reduce((sum, v) => sum + Math.abs(v), 0);
 
-  if (total === 0) {
-    // All zeros - distribute equally
-    const anglePerSlice = (2 * Math.PI) / values.length;
-    return values.map((value, i) => ({
-      startAngle: startAngle + i * anglePerSlice,
-      endAngle: startAngle + (i + 1) * anglePerSlice,
-      value,
-      percentage: 100 / values.length,
-    }));
-  }
+  const pieGenerator = d3Pie<number>()
+    .value((d) => Math.abs(d))
+    .startAngle(startAngle + ANGLE_OFFSET)
+    .endAngle(startAngle + ANGLE_OFFSET + 2 * Math.PI)
+    .sort(null);
 
-  let currentAngle = startAngle;
-  return values.map((value) => {
-    const percentage = (Math.abs(value) / total) * 100;
-    const angleSpan = (Math.abs(value) / total) * 2 * Math.PI;
-    const segmentStartAngle = currentAngle;
-    currentAngle += angleSpan;
+  const arcs = pieGenerator(values);
 
-    return {
-      startAngle: segmentStartAngle,
-      endAngle: currentAngle,
-      value,
-      percentage,
-    };
-  });
+  return arcs.map((a) => ({
+    startAngle: a.startAngle - ANGLE_OFFSET,
+    endAngle: a.endAngle - ANGLE_OFFSET,
+    value: a.data,
+    percentage: total > 0
+      ? (Math.abs(a.data) / total) * 100
+      : 100 / values.length,
+  }));
 }
 
 /**
@@ -255,8 +179,91 @@ export function generateRadialLine(
   innerRadius: number,
   outerRadius: number
 ): string {
-  const start = polarToCartesian(centerX, centerY, innerRadius, angle);
-  const end = polarToCartesian(centerX, centerY, outerRadius, angle);
+  const startX = centerX + innerRadius * Math.cos(angle);
+  const startY = centerY + innerRadius * Math.sin(angle);
+  const endX = centerX + outerRadius * Math.cos(angle);
+  const endY = centerY + outerRadius * Math.sin(angle);
 
-  return `M ${round(start.x)} ${round(start.y)} L ${round(end.x)} ${round(end.y)}`;
+  return `M ${round(startX)} ${round(startY)} L ${round(endX)} ${round(endY)}`;
+}
+
+/**
+ * Translate all coordinates in an SVG path string by (dx, dy).
+ *
+ * Tokenizes the path into numbers and non-number segments, then offsets
+ * the coordinate pairs for each command based on how many coordinate
+ * pairs that command type consumes.
+ */
+function translateSvgPath(path: string, dx: number, dy: number): string {
+  if (dx === 0 && dy === 0) return path;
+
+  // Split the path into tokens: commands and numbers
+  const tokens = path.match(/[a-zA-Z]|[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?/g);
+  if (!tokens) return path;
+
+  const result: string[] = [];
+  let i = 0;
+
+  while (i < tokens.length) {
+    const token = tokens[i];
+    if (/^[a-zA-Z]$/.test(token)) {
+      result.push(token);
+      i++;
+
+      const cmd = token.toUpperCase();
+
+      if (cmd === 'Z') {
+        continue;
+      }
+
+      // Number of coordinate pairs per command
+      // M/L: 1 pair (x,y), C: 3 pairs, S/Q: 2 pairs, A: special
+      if (cmd === 'A') {
+        // A rx ry rotation large-arc-flag sweep-flag x y
+        // Only x,y (positions 5,6) get translated
+        for (let j = 0; j < 7 && i < tokens.length; j++) {
+          const num = parseFloat(tokens[i]);
+          if (j === 5) {
+            result.push(String(round(num + dx)));
+          } else if (j === 6) {
+            result.push(String(round(num + dy)));
+          } else {
+            result.push(tokens[i]);
+          }
+          i++;
+        }
+      } else {
+        // For M, L, C, S, Q, T — all numbers are x,y pairs
+        const pairCounts: Record<string, number> = { M: 1, L: 1, H: 0, V: 0, C: 3, S: 2, Q: 2, T: 1 };
+        const pairs = pairCounts[cmd] ?? 0;
+
+        if (cmd === 'H') {
+          // H x — translate x only
+          if (i < tokens.length) {
+            result.push(String(round(parseFloat(tokens[i]) + dx)));
+            i++;
+          }
+        } else if (cmd === 'V') {
+          // V y — translate y only
+          if (i < tokens.length) {
+            result.push(String(round(parseFloat(tokens[i]) + dy)));
+            i++;
+          }
+        } else {
+          for (let p = 0; p < pairs; p++) {
+            if (i + 1 < tokens.length) {
+              result.push(String(round(parseFloat(tokens[i]) + dx)));
+              result.push(String(round(parseFloat(tokens[i + 1]) + dy)));
+              i += 2;
+            }
+          }
+        }
+      }
+    } else {
+      result.push(token);
+      i++;
+    }
+  }
+
+  return result.join(' ');
 }

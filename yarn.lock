@@ -2264,7 +2264,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/animate@workspace:packages/animate"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.138"
+    "@idealyst/theme": "npm:^1.3.10"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
@@ -2272,7 +2272,7 @@ __metadata:
     react-native-svg: "npm:^15.14.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.138
+    "@idealyst/theme": ^1.3.10
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-reanimated: ">=3.0.0"
@@ -2357,14 +2357,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/blur@workspace:packages/blur"
   dependencies:
-    "@idealyst/components": "npm:^1.2.138"
+    "@idealyst/components": "npm:^1.3.10"
     "@react-native-community/blur": "npm:^4.4.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.138
+    "@idealyst/components": ^1.3.10
     "@react-native-community/blur": ">=4.0.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
@@ -2389,7 +2389,7 @@ __metadata:
     react-native-vision-camera: "npm:^4.0.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ">=1.0.0"
+    "@idealyst/components": ^1.3.10
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-vision-camera: ">=4.0.0"
@@ -2411,7 +2411,13 @@ __metadata:
     "@idealyst/svg": "npm:^1.2.80"
     "@idealyst/theme": "npm:^1.2.80"
     "@shopify/react-native-skia": "npm:^1.8.2"
+    "@types/d3-array": "npm:^3.2.1"
+    "@types/d3-scale": "npm:^4.0.8"
+    "@types/d3-shape": "npm:^3.1.6"
     "@types/react": "npm:^19.1.0"
+    d3-array: "npm:^3.2.4"
+    d3-scale: "npm:^4.0.2"
+    d3-shape: "npm:^3.2.0"
     react: "npm:^19.1.0"
     react-native: "npm:^0.80.1"
     react-native-gesture-handler: "npm:^2.29.0"
@@ -2492,13 +2498,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/components@npm:^1.2.138, @idealyst/components@npm:^1.2.95, @idealyst/components@workspace:packages/components":
+"@idealyst/components@npm:^1.2.95, @idealyst/components@npm:^1.3.10, @idealyst/components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "@idealyst/components@workspace:packages/components"
   dependencies:
     "@idealyst/blur": "npm:^1.2.40"
-    "@idealyst/theme": "npm:^1.2.138"
-    "@idealyst/tooling": "npm:^1.2.138"
+    "@idealyst/theme": "npm:^1.3.10"
+    "@idealyst/tooling": "npm:^1.3.10"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
     react: "npm:^19.1.0"
@@ -2511,7 +2517,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.3.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.138
+    "@idealyst/theme": ^1.3.10
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.0.0"
     "@react-native-vector-icons/common": ">=12.0.0"
@@ -2574,8 +2580,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datagrid@workspace:packages/datagrid"
   dependencies:
-    "@idealyst/components": "npm:^1.2.138"
-    "@idealyst/theme": "npm:^1.2.138"
+    "@idealyst/components": "npm:^1.3.10"
+    "@idealyst/theme": "npm:^1.3.10"
     "@types/react": "npm:^19.1.0"
     "@types/react-window": "npm:^1.8.8"
     react: "npm:^19.1.0"
@@ -2583,8 +2589,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.138
-    "@idealyst/theme": ^1.2.138
+    "@idealyst/components": ^1.3.10
+    "@idealyst/theme": ^1.3.10
     react: ">=16.8.0"
     react-native: ">=0.60.0"
     react-native-unistyles: ^3.0.4
@@ -2607,7 +2613,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/datepicker@workspace:packages/datepicker"
   dependencies:
-    "@idealyst/theme": "npm:^1.2.138"
+    "@idealyst/theme": "npm:^1.3.10"
     "@mdi/js": "npm:^7.4.47"
     "@mdi/react": "npm:^1.6.1"
     "@types/react": "npm:^19.1.0"
@@ -2618,7 +2624,7 @@ __metadata:
     react-native-vector-icons: "npm:^10.2.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/theme": ^1.2.138
+    "@idealyst/theme": ^1.3.10
     "@mdi/js": ">=7.0.0"
     "@mdi/react": ">=1.6.0"
     react: ">=16.8.0"
@@ -2648,8 +2654,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/files@workspace:packages/files"
   dependencies:
-    "@idealyst/components": "npm:^1.2.138"
-    "@idealyst/theme": "npm:^1.2.138"
+    "@idealyst/components": "npm:^1.3.10"
+    "@idealyst/theme": "npm:^1.3.10"
     "@types/react": "npm:^19.1.0"
     "@types/react-native": "npm:^0.73.0"
     react: "npm:^19.1.0"
@@ -2657,8 +2663,8 @@ __metadata:
     react-native-unistyles: "npm:^3.0.10"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@idealyst/components": ^1.2.138
-    "@idealyst/theme": ^1.2.138
+    "@idealyst/components": ^1.3.10
+    "@idealyst/theme": ^1.3.10
     "@react-native-documents/picker": ">=1.0.0"
     react: ">=16.8.0"
     react-native: ">=0.60.0"
@@ -2720,12 +2726,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/markdown@npm:^1.2.138, @idealyst/markdown@workspace:packages/markdown":
+"@idealyst/markdown@npm:^1.3.10, @idealyst/markdown@workspace:packages/markdown":
   version: 0.0.0-use.local
   resolution: "@idealyst/markdown@workspace:packages/markdown"
   dependencies:
     "@10play/tentap-editor": "npm:^0.5.0"
-    "@idealyst/theme": "npm:^1.2.138"
+    "@idealyst/theme": "npm:^1.3.10"
     "@mdi/js": "npm:^7.4.0"
     "@mdi/react": "npm:^1.6.0"
     "@tiptap/extension-link": "npm:^2.11.0"
@@ -2748,7 +2754,7 @@ __metadata:
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@10play/tentap-editor": ">=0.5.0"
-    "@idealyst/theme": ^1.2.138
+    "@idealyst/theme": ^1.3.10
     "@tiptap/extension-link": ">=2.0.0"
     "@tiptap/extension-placeholder": ">=2.0.0"
     "@tiptap/extension-task-item": ">=2.0.0"
@@ -2807,10 +2813,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@idealyst/mcp-server@workspace:packages/mcp-server"
   dependencies:
-    "@idealyst/components": "npm:^1.2.138"
-    "@idealyst/navigation": "npm:^1.2.138"
-    "@idealyst/theme": "npm:^1.2.138"
-    "@idealyst/tooling": "npm:^1.2.138"
+    "@idealyst/components": "npm:^1.3.10"
+    "@idealyst/navigation": "npm:^1.3.10"
+    "@idealyst/theme": "npm:^1.3.10"
+    "@idealyst/tooling": "npm:^1.3.10"
     "@modelcontextprotocol/sdk": "npm:^1.0.4"
     "@types/better-sqlite3": "npm:^7.6.12"
     "@types/node": "npm:^20.0.0"
@@ -2851,20 +2857,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/navigation@npm:^1.2.138, @idealyst/navigation@workspace:packages/navigation":
+"@idealyst/navigation@npm:^1.3.10, @idealyst/navigation@workspace:packages/navigation":
   version: 0.0.0-use.local
   resolution: "@idealyst/navigation@workspace:packages/navigation"
   dependencies:
     "@idealyst/animate": "npm:^1.2.38"
     "@idealyst/blur": "npm:^1.2.40"
     "@idealyst/camera": "npm:^1.2.30"
-    "@idealyst/components": "npm:^1.2.138"
+    "@idealyst/components": "npm:^1.3.10"
     "@idealyst/datagrid": "npm:^1.2.30"
     "@idealyst/datepicker": "npm:^1.2.30"
     "@idealyst/lottie": "npm:^1.2.38"
-    "@idealyst/markdown": "npm:^1.2.138"
+    "@idealyst/markdown": "npm:^1.3.10"
     "@idealyst/microphone": "npm:^1.2.30"
-    "@idealyst/theme": "npm:^1.2.138"
+    "@idealyst/theme": "npm:^1.3.10"
     "@types/react": "npm:^19.1.8"
     "@types/react-dom": "npm:^19.1.6"
     react: "npm:^19.1.0"
@@ -2875,9 +2881,9 @@ __metadata:
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@idealyst/camera": ^1.2.30
-    "@idealyst/components": ^1.2.138
+    "@idealyst/components": ^1.3.10
     "@idealyst/microphone": ^1.2.30
-    "@idealyst/theme": ^1.2.138
+    "@idealyst/theme": ^1.3.10
     "@react-navigation/bottom-tabs": ">=7.0.0"
     "@react-navigation/drawer": ">=7.0.0"
     "@react-navigation/native": ">=7.0.0"
@@ -3056,14 +3062,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/theme@npm:^1.2.138, @idealyst/theme@npm:^1.2.80, @idealyst/theme@workspace:packages/theme":
+"@idealyst/theme@npm:^1.2.80, @idealyst/theme@npm:^1.3.10, @idealyst/theme@workspace:packages/theme":
   version: 0.0.0-use.local
   resolution: "@idealyst/theme@workspace:packages/theme"
   dependencies:
     "@babel/core": "npm:^7.28.5"
     "@babel/preset-typescript": "npm:^7.28.5"
     "@babel/types": "npm:^7.28.5"
-    "@idealyst/tooling": "npm:^1.2.138"
+    "@idealyst/tooling": "npm:^1.3.10"
     "@types/babel__core": "npm:^7.20.0"
     "@types/react": "npm:^19.1.0"
     "@types/react-native": "npm:^0.73.0"
@@ -3077,7 +3083,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@idealyst/tooling@npm:^1.2.138, @idealyst/tooling@workspace:packages/tooling":
+"@idealyst/tooling@npm:^1.3.10, @idealyst/tooling@workspace:packages/tooling":
   version: 0.0.0-use.local
   resolution: "@idealyst/tooling@workspace:packages/tooling"
   dependencies:
@@ -4791,6 +4797,45 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/d3-array@npm:^3.2.1":
+  version: 3.2.2
+  resolution: "@types/d3-array@npm:3.2.2"
+  checksum: 10/1afebd05b688cafaaea295f765b409789f088b274b8a7ca40a4bc2b79760044a898e06a915f40bbc59cf39eabdd2b5d32e960b136fc025fd05c9a9d4435614c6
+  languageName: node
+  linkType: hard
+
+"@types/d3-path@npm:*":
+  version: 3.1.1
+  resolution: "@types/d3-path@npm:3.1.1"
+  checksum: 10/0437994d45d852ecbe9c4484e5abe504cd48751796d23798b6d829503a15563fdd348d93ac44489ba9c656992d16157f695eb889d9ce1198963f8e1dbabb1266
+  languageName: node
+  linkType: hard
+
+"@types/d3-scale@npm:^4.0.8":
+  version: 4.0.9
+  resolution: "@types/d3-scale@npm:4.0.9"
+  dependencies:
+    "@types/d3-time": "npm:*"
+  checksum: 10/2cae90a5e39252ae51388f3909ffb7009178582990462838a4edd53dd7e2e08121b38f0d2e1ac0e28e41167e88dea5b99e064ca139ba917b900a8020cf85362f
+  languageName: node
+  linkType: hard
+
+"@types/d3-shape@npm:^3.1.6":
+  version: 3.1.8
+  resolution: "@types/d3-shape@npm:3.1.8"
+  dependencies:
+    "@types/d3-path": "npm:*"
+  checksum: 10/ebc161d49101d84409829fea516ba7ec71ad51a1e97438ca0fafc1c30b56b3feae802d220375323632723a338dda7237c652e831e0b53527a6222ab0d1bb7809
+  languageName: node
+  linkType: hard
+
+"@types/d3-time@npm:*":
+  version: 3.0.4
+  resolution: "@types/d3-time@npm:3.0.4"
+  checksum: 10/b1eb4255066da56023ad243fd4ae5a20462d73bd087a0297c7d49ece42b2304a4a04297568c604a38541019885b2bc35a9e0fd704fad218e9bc9c5f07dc685ce
+  languageName: node
+  linkType: hard
+
 "@types/debug@npm:^4.0.0":
   version: 4.1.12
   resolution: "@types/debug@npm:4.1.12"
@@ -6255,6 +6300,85 @@ __metadata:
   version: 3.1.3
   resolution: "csstype@npm:3.1.3"
   checksum: 10/f593cce41ff5ade23f44e77521e3a1bcc2c64107041e1bf6c3c32adc5187d0d60983292fda326154d20b01079e24931aa5b08e4467cc488b60bb1e7f6d478ade
+  languageName: node
+  linkType: hard
+
+"d3-array@npm:2 - 3, d3-array@npm:2.10.0 - 3, d3-array@npm:^3.2.4":
+  version: 3.2.4
+  resolution: "d3-array@npm:3.2.4"
+  dependencies:
+    internmap: "npm:1 - 2"
+  checksum: 10/5800c467f89634776a5977f6dae3f4e127d91be80f1d07e3e6e35303f9de93e6636d014b234838eea620f7469688d191b3f41207a30040aab750a63c97ec1d7c
+  languageName: node
+  linkType: hard
+
+"d3-color@npm:1 - 3":
+  version: 3.1.0
+  resolution: "d3-color@npm:3.1.0"
+  checksum: 10/536ba05bfd9f4fcd6fa289b5974f5c846b21d186875684637e22bf6855e6aba93e24a2eb3712985c6af3f502fbbfa03708edb72f58142f626241a8a17258e545
+  languageName: node
+  linkType: hard
+
+"d3-format@npm:1 - 3":
+  version: 3.1.2
+  resolution: "d3-format@npm:3.1.2"
+  checksum: 10/811d913c2c7624cb0d2a8f0ccd7964c50945b3de3c7f7aa14c309fba7266a3ec53cbee8c05f6ad61b2b65b93e157c55a0e07db59bc3180c39dac52be8e841ab1
+  languageName: node
+  linkType: hard
+
+"d3-interpolate@npm:1.2.0 - 3":
+  version: 3.0.1
+  resolution: "d3-interpolate@npm:3.0.1"
+  dependencies:
+    d3-color: "npm:1 - 3"
+  checksum: 10/988d66497ef5c190cf64f8c80cd66e1e9a58c4d1f8932d776a8e3ae59330291795d5a342f5a97602782ccbef21a5df73bc7faf1f0dc46a5145ba6243a82a0f0e
+  languageName: node
+  linkType: hard
+
+"d3-path@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "d3-path@npm:3.1.0"
+  checksum: 10/8e97a9ab4930a05b18adda64cf4929219bac913a5506cf8585631020253b39309549632a5cbeac778c0077994442ddaaee8316ee3f380e7baf7566321b84e76a
+  languageName: node
+  linkType: hard
+
+"d3-scale@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "d3-scale@npm:4.0.2"
+  dependencies:
+    d3-array: "npm:2.10.0 - 3"
+    d3-format: "npm:1 - 3"
+    d3-interpolate: "npm:1.2.0 - 3"
+    d3-time: "npm:2.1.1 - 3"
+    d3-time-format: "npm:2 - 4"
+  checksum: 10/e2dc4243586eae2a0fdf91de1df1a90d51dfacb295933f0ca7e9184c31203b01436bef69906ad40f1100173a5e6197ae753cb7b8a1a8fcfda43194ea9cad6493
+  languageName: node
+  linkType: hard
+
+"d3-shape@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "d3-shape@npm:3.2.0"
+  dependencies:
+    d3-path: "npm:^3.1.0"
+  checksum: 10/2e861f4d4781ee8abd85d2b435f848d667479dcf01a4e0db3a06600a5bdeddedb240f88229ec7b3bf7fa300c2b3526faeaf7e75f9a24dbf4396d3cc5358ff39d
+  languageName: node
+  linkType: hard
+
+"d3-time-format@npm:2 - 4":
+  version: 4.1.0
+  resolution: "d3-time-format@npm:4.1.0"
+  dependencies:
+    d3-time: "npm:1 - 3"
+  checksum: 10/ffc0959258fbb90e3890bfb31b43b764f51502b575e87d0af2c85b85ac379120d246914d07fca9f533d1bcedc27b2841d308a00fd64848c3e2cad9eff5c9a0aa
+  languageName: node
+  linkType: hard
+
+"d3-time@npm:1 - 3, d3-time@npm:2.1.1 - 3":
+  version: 3.1.0
+  resolution: "d3-time@npm:3.1.0"
+  dependencies:
+    d3-array: "npm:2 - 3"
+  checksum: 10/c110bed295ce63e8180e45b82a9b0ba114d5f33ff315871878f209c1a6d821caa505739a2b07f38d1396637155b8e7372632dacc018e11fbe8ceef58f6af806d
   languageName: node
   linkType: hard
 
@@ -7852,6 +7976,13 @@ __metadata:
     wrap-ansi: "npm:^6.2.0"
     yoctocolors-cjs: "npm:^2.1.2"
   checksum: 10/92d0a0f55701e05a8dd3624eab0c03c6e96de18285cefdbef4edc5c1a77c8283361700e088db275ec5d5b36c45ff9428127125d78428e07ea4c5574f55b17176
+  languageName: node
+  linkType: hard
+
+"internmap@npm:1 - 2":
+  version: 2.0.3
+  resolution: "internmap@npm:2.0.3"
+  checksum: 10/873e0e7fcfe32f999aa0997a0b648b1244508e56e3ea6b8259b5245b50b5eeb3853fba221f96692bd6d1def501da76c32d64a5cb22a0b26cdd9b445664f805e0
   languageName: node
   linkType: hard
 

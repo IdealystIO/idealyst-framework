@@ -22,6 +22,7 @@ export const SvgCanvas: React.FC<CanvasProps> = ({
       viewBox={`0 0 ${width} ${height}`}
       testID={testID}
       aria-label={accessibilityLabel}
+      style={{ userSelect: 'none', cursor: 'pointer' } as any}
     >
       {children}
     </Svg>

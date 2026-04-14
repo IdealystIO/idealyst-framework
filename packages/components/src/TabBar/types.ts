@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { ContainerStyleProps } from '../utils/viewStyleProps';
 import { AccessibilityProps } from '../utils/accessibility';
+import type { IconName } from '../Icon/icon-types';
 
 // Component-specific type aliases for future extensibility
 export type TabBarSizeVariant = Size;
@@ -15,8 +16,8 @@ export type TabBarJustify = 'start' | 'center' | 'equal' | 'space-between';
 export interface TabBarItem {
   value: string;
   label: string;
-  /** Icon to display - can be a React node or a render function receiving active state */
-  icon?: ReactNode | ((props: { active: boolean; size: number }) => ReactNode);
+  /** Icon to display - can be an icon name string, a React node, or a render function receiving active state */
+  icon?: IconName | ReactNode | ((props: { active: boolean; size: number }) => ReactNode);
   disabled?: boolean;
 }
 

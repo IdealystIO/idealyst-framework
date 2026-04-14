@@ -4,6 +4,8 @@
  * Example components demonstrating chart usage.
  */
 
+export { ChartsExamples } from './ChartsExamples';
+
 import type { ChartDataSeries } from '../types';
 
 /**

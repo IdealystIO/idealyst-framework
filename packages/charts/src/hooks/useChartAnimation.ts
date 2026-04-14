@@ -156,17 +156,20 @@ export function useChartAnimation(
 
   // Run entrance animation on mount
   useEffect(() => {
-    if (enabled && !hasAnimatedRef.current) {
-      hasAnimatedRef.current = true;
-      runAnimation(effectiveDuration, easing);
-    } else if (!enabled) {
+    if (!enabled) {
       setProgress(1);
+      return;
     }
+
+    // Always restart animation on mount (handles React Strict Mode re-mount)
+    hasAnimatedRef.current = true;
+    runAnimation(effectiveDuration, easing);
 
     return () => {
       cancelAnimation();
     };
-  }, [enabled, effectiveDuration, easing, runAnimation, cancelAnimation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled]);
 
   return {
     progress,

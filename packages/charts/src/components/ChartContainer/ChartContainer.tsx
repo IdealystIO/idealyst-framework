@@ -174,9 +174,12 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
     [width, height, padding, innerWidth, innerHeight, intent, size, renderer]
   );
 
-  // Container style
+  // Container style — position:relative for tooltip overlay positioning
+  // overflow:visible so the tooltip can extend beyond chart bounds
   const containerStyle = useMemo(
     () => ({
+      position: 'relative' as const,
+      overflow: 'visible' as const,
       width: propWidth ?? '100%',
       height: propHeight ?? (aspectRatio ? undefined : 200),
       aspectRatio: aspectRatio && !propHeight ? aspectRatio : undefined,

@@ -318,23 +318,14 @@ describe('MDI Icon Registry Babel Plugin', () => {
     });
   });
 
-  describe('Config Icons Option', () => {
-    it('includes icons from config option', () => {
-      const code = `const x = 1;`; // No icon usage in code
+  describe('Config Icons Option (removed)', () => {
+    it('does not inject icons from legacy icons option', () => {
+      const code = `const x = 1;`;
       const result = transform(code, { icons: ['star', 'heart'] });
       const icons = getDetectedIcons(result?.code);
 
-      expect(icons).toContain('star');
-      expect(icons).toContain('heart');
-    });
-
-    it('combines config icons with detected icons', () => {
-      const code = `<Icon name="home" />`;
-      const result = transform(code, { icons: ['star'] });
-      const icons = getDetectedIcons(result?.code);
-
-      expect(icons).toContain('home');
-      expect(icons).toContain('star');
+      // icons option no longer injects — use IconRegistry.register() manually instead
+      expect(icons).toEqual([]);
     });
   });
 
@@ -584,6 +575,82 @@ describe('MDI Icon Registry Babel Plugin', () => {
       // Original code should still be present
       expect(result?.code).toContain('useState');
       expect(result?.code).toContain('setVisible');
+    });
+  });
+
+  describe('Custom Components via `components` Option', () => {
+    it('detects icon in custom component with single icon prop', () => {
+      const code = `<NavItem icon="home" label="Home" />`;
+      const result = transform(code, { components: { NavItem: ['icon'] } });
+      const icons = getDetectedIcons(result?.code);
+
+      expect(icons).toContain('home');
+    });
+
+    it('detects icons in custom component with multiple icon props', () => {
+      const code = `<SidebarLink icon="cog" activeIcon="cog-outline" />`;
+      const result = transform(code, { components: { SidebarLink: ['icon', 'activeIcon'] } });
+      const icons = getDetectedIcons(result?.code);
+
+      expect(icons).toContain('cog');
+      expect(icons).toContain('cog-outline');
+    });
+
+    it('detects ternary icon values in custom components', () => {
+      const code = `<NavItem icon={active ? "home" : "home-outline"} />`;
+      const result = transform(code, { components: { NavItem: ['icon'] } });
+      const icons = getDetectedIcons(result?.code);
+
+      expect(icons).toContain('home');
+      expect(icons).toContain('home-outline');
+    });
+
+    it('detects variable-referenced icons in custom components', () => {
+      const code = `
+        const navIcon = "account";
+        <NavItem icon={navIcon} />;
+      `;
+      const result = transform(code, { components: { NavItem: ['icon'] } });
+      const icons = getDetectedIcons(result?.code);
+
+      expect(icons).toContain('account');
+    });
+
+    it('detects icons in object properties using custom prop names', () => {
+      const code = `
+        const items = [
+          { activeIcon: "home", label: "Home" },
+          { activeIcon: "cog", label: "Settings" },
+        ];
+      `;
+      const result = transform(code, { components: { NavItem: ['activeIcon'] } });
+      const icons = getDetectedIcons(result?.code);
+
+      expect(icons).toContain('home');
+      expect(icons).toContain('cog');
+    });
+
+    it('works alongside built-in components', () => {
+      const code = `
+        <>
+          <Icon name="star" />
+          <NavItem icon="home" />
+        </>
+      `;
+      const result = transform(code, { components: { NavItem: ['icon'] } });
+      const icons = getDetectedIcons(result?.code);
+
+      expect(icons).toContain('star');
+      expect(icons).toContain('home');
+    });
+
+    it('does not detect custom prop names without config', () => {
+      // 'activeIcon' is not a built-in icon prop name, so without config it won't be detected
+      const code = `<NavItem activeIcon="home" />`;
+      const result = transform(code);
+      const icons = getDetectedIcons(result?.code);
+
+      expect(icons).not.toContain('home');
     });
   });
 

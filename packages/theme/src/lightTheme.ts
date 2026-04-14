@@ -136,11 +136,11 @@ export const lightTheme = createTheme()
             xl: { paddingVertical: 4, paddingHorizontal: 14, minHeight: 32, borderRadius: 999, fontSize: 16, lineHeight: 20, iconSize: 18 },
         },
         badge: {
-            xs: { minWidth: 12, height: 12, paddingHorizontal: 2, fontSize: 8, lineHeight: 10, iconSize: 8 },
-            sm: { minWidth: 16, height: 16, paddingHorizontal: 4, fontSize: 10, lineHeight: 12, iconSize: 10 },
-            md: { minWidth: 20, height: 20, paddingHorizontal: 6, fontSize: 12, lineHeight: 14, iconSize: 12 },
-            lg: { minWidth: 24, height: 24, paddingHorizontal: 8, fontSize: 14, lineHeight: 16, iconSize: 14 },
-            xl: { minWidth: 28, height: 28, paddingHorizontal: 10, fontSize: 16, lineHeight: 18, iconSize: 16 },
+            xs: { minWidth: 14, paddingVertical: 2, paddingHorizontal: 6, fontSize: 8, lineHeight: 10, iconSize: 8 },
+            sm: { minWidth: 18, paddingVertical: 2, paddingHorizontal: 8, fontSize: 10, lineHeight: 12, iconSize: 10 },
+            md: { minWidth: 22, paddingVertical: 3, paddingHorizontal: 10, fontSize: 12, lineHeight: 14, iconSize: 12 },
+            lg: { minWidth: 26, paddingVertical: 4, paddingHorizontal: 12, fontSize: 14, lineHeight: 16, iconSize: 14 },
+            xl: { minWidth: 30, paddingVertical: 4, paddingHorizontal: 14, fontSize: 16, lineHeight: 18, iconSize: 16 },
         },
         icon: {
             xs: { width: 12, height: 12, fontSize: 12 },

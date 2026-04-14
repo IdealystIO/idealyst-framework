@@ -13,8 +13,10 @@ import {
   useRenderer,
 } from '../../components/ChartContainer';
 import { XAxis, YAxis, GridLines } from '../../components/Axis';
+import { ChartTooltip } from '../../components/Tooltip';
 import { useBarChart } from './useBarChart';
 import { useStaggeredAnimation } from '../../hooks/useChartAnimation';
+import { useChartTooltip, type ScreenBar } from '../../hooks/useChartTooltip';
 import type { BarChartProps } from './types';
 import type { ChartDataSeries } from '../../types';
 
@@ -34,6 +36,8 @@ const BarChartInner: React.FC<
   showXAxis = true,
   showYAxis = true,
   showGrid = true,
+  showTooltip = false,
+  tooltip: tooltipConfig,
   xAxis,
   yAxis,
   animate = true,
@@ -85,6 +89,38 @@ const BarChartInner: React.FC<
   const xScale = orientation === 'vertical' ? categoryScale : valueScale;
   const yScale = orientation === 'vertical' ? valueScale : categoryScale;
 
+  // Build screen bars for tooltip hit detection
+  const screenBars = useMemo((): ScreenBar[] => {
+    if (!showTooltip) return [];
+    const result: ScreenBar[] = [];
+    for (const seriesData of barData) {
+      for (const bar of seriesData.bars) {
+        result.push({
+          x: bar.x,
+          y: bar.y,
+          width: bar.width,
+          height: bar.height,
+          dataPoint: bar.dataPoint,
+          seriesIndex: seriesData.seriesIndex,
+          pointIndex: bar.pointIndex,
+        });
+      }
+    }
+    return result;
+  }, [showTooltip, barData]);
+
+  const colors = useMemo(() => barData.map((s) => s.color), [barData]);
+
+  // Tooltip hook
+  const { tooltipContext, tooltipX, activePointIndex, containerProps } = useChartTooltip({
+    enabled: showTooltip,
+    bars: screenBars,
+    series: data,
+    colors,
+    padding,
+    innerWidth,
+  });
+
   // Handle bar press
   const handleBarPress = useCallback(
     (seriesIndex: number, pointIndex: number) => {
@@ -130,81 +166,101 @@ const BarChartInner: React.FC<
   let globalBarIndex = 0;
 
   return (
-    <Canvas
-      width={width}
-      height={height}
-      accessibilityLabel={`Bar chart with ${data.length} series`}
-    >
-      {/* Chart area with padding offset */}
-      <Group x={padding.left} y={padding.top}>
-        {/* Grid lines */}
-        {showGrid && (
-          <GridLines
-            scale={orientation === 'vertical' ? valueScale : categoryScale}
-            width={innerWidth}
-            height={innerHeight}
-            direction={orientation === 'vertical' ? 'horizontal' : 'vertical'}
-            count={5}
-          />
-        )}
-
-        {/* Bars with staggered entrance animation */}
-        {barData.map((seriesData) =>
-          seriesData.bars.map((bar) => {
-            const currentIndex = globalBarIndex++;
-            const animatedProps = getAnimatedBarProps(
-              bar,
-              currentIndex,
-              orientation === 'vertical'
-            );
-
-            return (
-              <Rect
-                key={`bar-${seriesData.seriesIndex}-${bar.pointIndex}`}
-                x={animatedProps.x}
-                y={animatedProps.y}
-                width={Math.max(0, animatedProps.width)}
-                height={Math.max(0, animatedProps.height)}
-                fill={seriesData.color}
-                rx={barRadius}
-                ry={barRadius}
+    <>
+      {/* Mouse event wrapper for tooltip */}
+      <div {...containerProps} style={{ position: 'absolute', inset: 0 }}>
+        <Canvas
+          width={width}
+          height={height}
+          accessibilityLabel={`Bar chart with ${data.length} series`}
+        >
+          {/* Chart area with padding offset */}
+          <Group x={padding.left} y={padding.top}>
+            {/* Grid lines */}
+            {showGrid && (
+              <GridLines
+                scale={orientation === 'vertical' ? valueScale : categoryScale}
+                width={innerWidth}
+                height={innerHeight}
+                direction={orientation === 'vertical' ? 'horizontal' : 'vertical'}
+                count={5}
               />
-            );
-          })
-        )}
+            )}
 
-        {/* X Axis */}
-        {showXAxis && (
-          <XAxis
-            scale={xScale}
-            y={innerHeight}
-            length={innerWidth}
-            tickCount={orientation === 'vertical' ? undefined : 5}
-            tickFormat={xAxis?.tickFormat}
-            label={xAxis?.label}
-            showLine={xAxis?.show !== false}
-            showTicks={xAxis?.show !== false}
-            showLabels={xAxis?.show !== false}
-          />
-        )}
+            {/* Bars with staggered entrance animation */}
+            {barData.map((seriesData) =>
+              seriesData.bars.map((bar) => {
+                const currentIndex = globalBarIndex++;
+                const animatedProps = getAnimatedBarProps(
+                  bar,
+                  currentIndex,
+                  orientation === 'vertical'
+                );
 
-        {/* Y Axis */}
-        {showYAxis && (
-          <YAxis
-            scale={yScale}
-            x={0}
-            length={innerHeight}
-            position="left"
-            tickCount={orientation === 'vertical' ? 5 : undefined}
-            tickFormat={yAxis?.tickFormat}
-            label={yAxis?.label}
-            showLine={yAxis?.show !== false}
-            showTicks={yAxis?.show !== false}
-            showLabels={yAxis?.show !== false}
-          />
-        )}
-      </Group>
-    </Canvas>
+                const isActive =
+                  showTooltip && activePointIndex === bar.pointIndex;
+
+                return (
+                  <Rect
+                    key={`bar-${seriesData.seriesIndex}-${bar.pointIndex}`}
+                    x={animatedProps.x}
+                    y={animatedProps.y}
+                    width={Math.max(0, animatedProps.width)}
+                    height={Math.max(0, animatedProps.height)}
+                    fill={seriesData.color}
+                    opacity={isActive ? 0.8 : 1}
+                    rx={barRadius}
+                    ry={barRadius}
+                  />
+                );
+              })
+            )}
+
+            {/* X Axis */}
+            {showXAxis && (
+              <XAxis
+                scale={xScale}
+                y={innerHeight}
+                length={innerWidth}
+                tickCount={orientation === 'vertical' ? undefined : 5}
+                tickFormat={xAxis?.tickFormat}
+                label={xAxis?.label}
+                showLine={xAxis?.show !== false}
+                showTicks={xAxis?.show !== false}
+                showLabels={xAxis?.show !== false}
+              />
+            )}
+
+            {/* Y Axis */}
+            {showYAxis && (
+              <YAxis
+                scale={yScale}
+                x={0}
+                length={innerHeight}
+                position="left"
+                tickCount={orientation === 'vertical' ? 5 : undefined}
+                tickFormat={yAxis?.tickFormat}
+                label={yAxis?.label}
+                showLine={yAxis?.show !== false}
+                showTicks={yAxis?.show !== false}
+                showLabels={yAxis?.show !== false}
+              />
+            )}
+          </Group>
+        </Canvas>
+      </div>
+
+      {/* Tooltip overlay */}
+      {showTooltip && (
+        <ChartTooltip
+          context={tooltipContext}
+          x={tooltipX}
+          chartWidth={width}
+          chartHeight={height}
+          config={tooltipConfig}
+        />
+      )}
+    </>
   );
 };
 

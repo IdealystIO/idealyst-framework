@@ -107,6 +107,9 @@ export default defineConfig({
       '@idealyst/markdown/examples': path.resolve(__dirname, '../../../../packages/markdown/src/examples'),
       '@idealyst/markdown': path.resolve(__dirname, '../../../../packages/markdown/src'),
       '@idealyst/blur': path.resolve(__dirname, '../../../../packages/blur/src'),
+      '@idealyst/charts/examples': path.resolve(__dirname, '../../../../packages/charts/src/examples'),
+      '@idealyst/charts': path.resolve(__dirname, '../../../../packages/charts/src'),
+      '@idealyst/svg': path.resolve(__dirname, '../../../../packages/svg/src'),
     },
     // Platform-specific file resolution
     extensions: ['.web.tsx', '.web.ts', '.tsx', '.ts', '.js', '.jsx'],
@@ -129,6 +132,8 @@ export default defineConfig({
       '@idealyst/animate',
       '@idealyst/lottie',
       '@idealyst/markdown',
+      '@idealyst/charts',
+      '@idealyst/svg',
       '@test-select-demo/shared',
     ],
     esbuildOptions: {
