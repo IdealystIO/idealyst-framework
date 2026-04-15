@@ -12,7 +12,7 @@ import {
   useChart,
   useRenderer,
 } from '../../components/ChartContainer';
-import { XAxis, YAxis, GridLines } from '../../components/Axis';
+import { XAxis, YAxis, GridLines, ReferenceLines } from '../../components/Axis';
 import { ChartTooltip } from '../../components/Tooltip';
 import { useBarChart } from './useBarChart';
 import { useStaggeredAnimation } from '../../hooks/useChartAnimation';
@@ -38,6 +38,7 @@ const BarChartInner: React.FC<
   showGrid = true,
   showTooltip = false,
   tooltip: tooltipConfig,
+  referenceLines,
   xAxis,
   yAxis,
   animate = true,
@@ -184,6 +185,17 @@ const BarChartInner: React.FC<
                 height={innerHeight}
                 direction={orientation === 'vertical' ? 'horizontal' : 'vertical'}
                 count={5}
+              />
+            )}
+
+            {/* Reference lines (targets, thresholds) */}
+            {referenceLines && referenceLines.length > 0 && (
+              <ReferenceLines
+                lines={referenceLines}
+                xScale={xScale}
+                yScale={yScale}
+                innerWidth={innerWidth}
+                innerHeight={innerHeight}
               />
             )}
 

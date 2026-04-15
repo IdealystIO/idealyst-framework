@@ -1,4 +1,5 @@
-import { useRoute } from '@react-navigation/native';
+import { useCallback } from 'react';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
 export interface UseNavigationStateOptions {
     /**
@@ -10,25 +11,35 @@ export interface UseNavigationStateOptions {
 }
 
 /**
- * Hook to access navigation state passed via the navigate() function.
- * On native, state is passed via route params (merged with path params).
- * Returns the state object passed during navigation, or an empty object if no state was passed.
+ * Hook to access and update navigation state.
+ * On native, state is stored as route params via React Navigation.
+ * Returns a tuple of [state, setState] for reading and updating params in-place.
  *
  * @example
  * // Navigate with state
- * navigate({ path: '/recording', state: { autostart: true } });
+ * navigate({ path: '/search', state: { q: 'hello', sort: 'asc' } });
  *
- * // Access state in destination screen
- * const { autostart } = useNavigationState<{ autostart?: boolean }>();
+ * // Read and update state in destination screen
+ * const [state, setState] = useNavigationState<{ q: string; sort: string }>();
+ * // state.q === 'hello', state.sort === 'asc'
+ *
+ * // Update params in-place (no navigation)
+ * setState({ sort: 'desc' });
  *
  * @example
  * // The consume option is accepted but has no effect on native
- * const { autostart } = useNavigationState<{ autostart?: boolean }>({ consume: ['autostart'] });
+ * const [state] = useNavigationState<{ autostart?: boolean }>({ consume: ['autostart'] });
  */
 export function useNavigationState<T extends Record<string, unknown> = Record<string, unknown>>(
     _options?: UseNavigationStateOptions
-): T {
+): [T, (updates: Partial<T>) => void] {
     const route = useRoute();
-    const params = route.params as Record<string, unknown> | undefined;
-    return (params as T) || ({} as T);
+    const navigation = useNavigation();
+    const params = (route.params as T) || ({} as T);
+
+    const setState = useCallback((updates: Partial<T>) => {
+        navigation.setParams(updates as any);
+    }, [navigation]);
+
+    return [params, setState];
 }

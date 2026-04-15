@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from '../router';
 
 export interface UseNavigationStateOptions {
@@ -16,22 +16,25 @@ export interface UseNavigationStateOptions {
 }
 
 /**
- * Hook to access navigation state passed via the navigate() function.
- * On web, state is passed as URL query parameters.
- * Returns the state object passed during navigation, or an empty object if no state was passed.
+ * Hook to access and update navigation state.
+ * On web, state is stored as URL query parameters.
+ * Returns a tuple of [state, setState] for reading and updating params in-place.
  *
  * @example
  * // Navigate with state
- * navigate({ path: '/recording', state: { autostart: true } });
+ * navigate({ path: '/search', state: { q: 'hello', sort: 'asc' } });
  *
- * // Access state in destination screen
- * const { autostart } = useNavigationState<{ autostart?: boolean }>();
- * // URL will be: /recording?autostart=true
+ * // Read and update state in destination screen
+ * const [state, setState] = useNavigationState<{ q: string; sort: string }>();
+ * // state.q === 'hello', state.sort === 'asc'
+ *
+ * // Update params in-place (no navigation, replaces history entry)
+ * setState({ sort: 'desc' });
  *
  * @example
- * // Consume (remove) the parameter after reading
- * const { autostart } = useNavigationState<{ autostart?: boolean }>({ consume: ['autostart'] });
- * // autostart = true, URL becomes: /recording (param removed)
+ * // Consume (remove) a parameter after reading
+ * const [state] = useNavigationState<{ autostart?: boolean }>({ consume: ['autostart'] });
+ * // state.autostart = true, URL becomes: /recording (param removed)
  */
 function parseSearchParams(searchParams: URLSearchParams): Record<string, unknown> {
     const state: Record<string, unknown> = {};
@@ -51,7 +54,7 @@ function parseSearchParams(searchParams: URLSearchParams): Record<string, unknow
 
 export function useNavigationState<T extends Record<string, unknown> = Record<string, unknown>>(
     options?: UseNavigationStateOptions
-): T {
+): [T, (updates: Partial<T>) => void] {
     const [searchParams, setSearchParams] = useSearchParams();
     const consumedStateRef = useRef<Record<string, unknown> | null>(null);
     const hasConsumed = useRef(false);
@@ -60,7 +63,6 @@ export function useNavigationState<T extends Record<string, unknown> = Record<st
     if (options?.consume && options.consume.length > 0 && !hasConsumed.current) {
         const keysToConsume = options.consume.filter(key => searchParams.has(key));
         if (keysToConsume.length > 0 && consumedStateRef.current === null) {
-            // Capture the full state including values we're about to consume
             consumedStateRef.current = parseSearchParams(searchParams);
         }
     }
@@ -78,10 +80,24 @@ export function useNavigationState<T extends Record<string, unknown> = Record<st
         }
     }, [options?.consume, searchParams, setSearchParams]);
 
-    // Return captured state if we consumed params, otherwise parse current URL
-    if (consumedStateRef.current !== null) {
-        return consumedStateRef.current as T;
-    }
+    const setState = useCallback((updates: Partial<T>) => {
+        setSearchParams((prev) => {
+            const newParams = new URLSearchParams(prev);
+            for (const [key, value] of Object.entries(updates)) {
+                if (value === undefined || value === null) {
+                    newParams.delete(key);
+                } else {
+                    newParams.set(key, String(value));
+                }
+            }
+            return newParams;
+        }, { replace: true });
+    }, [setSearchParams]);
 
-    return parseSearchParams(searchParams) as T;
+    // Return captured state if we consumed params, otherwise parse current URL
+    const state = consumedStateRef.current !== null
+        ? consumedStateRef.current as T
+        : parseSearchParams(searchParams) as T;
+
+    return [state, setState];
 }

@@ -1175,7 +1175,9 @@ function UserScreen() {
 
 ## useNavigationState Hook
 
-Access navigation state passed via the \`state\` property.
+Access and update navigation state. Returns a \`[state, setState]\` tuple.
+
+On web, state is stored as URL query parameters. On native, state is stored as route params.
 
 > **IMPORTANT — Type constraints:**
 > - \`navigate({ state: {...} })\` requires all values to be \`string | number | boolean\` — NO \`undefined\` or \`null\`. Do NOT spread objects that may contain undefined values.
@@ -1191,14 +1193,19 @@ navigator.navigate({
   state: { autostart: true, source: 'home' }
 });
 
-// In destination screen — use REQUIRED fields (not optional):
+// In destination screen — returns [state, setState] tuple:
 function RecordingScreen() {
-  const state = useNavigationState<{
+  const [state, setState] = useNavigationState<{
     autostart: boolean;
     source: string;
   }>();
 
   // state.autostart = true, state.source = 'home'
+
+  // Update params in-place without navigation:
+  setState({ source: 'settings' });
+  // Web: URL updates to ?autostart=true&source=settings (replaces history entry)
+  // Native: route params update in-place via setParams()
 }
 
 // For multi-step wizards, pass ALL accumulated data as required fields:
@@ -1208,13 +1215,31 @@ navigator.navigate({
 });
 \`\`\`
 
+### Updating State In-Place
+
+Use the setter to update params without triggering navigation:
+
+\`\`\`tsx
+function SearchScreen() {
+  const [state, setState] = useNavigationState<{
+    q: string;
+    sort: string;
+  }>();
+
+  // Update sort without navigating
+  const toggleSort = () => {
+    setState({ sort: state.sort === 'asc' ? 'desc' : 'asc' });
+  };
+}
+\`\`\`
+
 ### Consuming State (Web)
 
 Remove state from URL after reading:
 
 \`\`\`tsx
 // URL: /recording?autostart=true
-const { autostart } = useNavigationState<{ autostart?: boolean }>({
+const [{ autostart }] = useNavigationState<{ autostart?: boolean }>({
   consume: ['autostart']
 });
 // autostart = true, URL becomes: /recording (param removed)
@@ -1334,14 +1359,15 @@ navigator.navigate({
 import { useNavigationState } from '@idealyst/navigation';
 
 function SearchScreen() {
-  // Query params are accessed via useNavigationState on web
-  const { q, category, sort } = useNavigationState<{
+  // Query params are accessed via useNavigationState (returns [state, setState])
+  const [{ q, category, sort }, setParams] = useNavigationState<{
     q?: string;
     category?: string;
     sort?: string;
   }>();
 
-  // Use params...
+  // Update query params in-place without navigation
+  const changeSort = (newSort: string) => setParams({ sort: newSort });
 }
 \`\`\`
 

@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/lottie",
-  "version": "1.3.12",
+  "version": "1.3.15",
   "description": "Cross-platform Lottie animation component for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",

@@ -9,12 +9,61 @@ import { useRenderer } from '../ChartContainer';
 import type { XAxisProps, AxisScale } from './types';
 
 /**
+ * Estimate the pixel width of a label string.
+ * Uses ~0.6 × fontSize per character as a rough heuristic.
+ */
+function estimateLabelWidth(text: string, fontSize: number): number {
+  return text.length * fontSize * 0.6;
+}
+
+/**
+ * Auto-skip band scale labels so they don't overlap.
+ * Returns every Nth value where N is the smallest integer that keeps labels
+ * from overlapping, always including the first and last values.
+ */
+function autoSkipBandLabels(
+  domain: (number | string | Date)[],
+  axisLength: number,
+  fontSize: number,
+  formatter: (value: number | string | Date) => string,
+  minSpacing: number = 8,
+): (number | string | Date)[] {
+  if (domain.length <= 1) return domain;
+
+  // Estimate average label width
+  const avgWidth =
+    domain.reduce((sum: number, v) => sum + estimateLabelWidth(formatter(v), fontSize), 0) /
+    domain.length;
+
+  // How many labels fit without overlapping?
+  const maxLabels = Math.max(1, Math.floor(axisLength / (avgWidth + minSpacing)));
+
+  if (maxLabels >= domain.length) return domain;
+
+  // Calculate step — show every Nth label
+  const step = Math.ceil(domain.length / maxLabels);
+
+  const result: (number | string | Date)[] = [];
+  for (let i = 0; i < domain.length; i += step) {
+    result.push(domain[i]);
+  }
+  // Always include the last label
+  if (result[result.length - 1] !== domain[domain.length - 1]) {
+    result.push(domain[domain.length - 1]);
+  }
+  return result;
+}
+
+/**
  * Get tick values from scale
  */
 function getTickValues(
   scale: AxisScale,
   tickCount: number,
-  customTickValues?: (number | string | Date)[]
+  axisLength: number,
+  fontSize: number,
+  formatter: (value: number | string | Date) => string,
+  customTickValues?: (number | string | Date)[],
 ): (number | string | Date)[] {
   if (customTickValues) return customTickValues;
 
@@ -23,10 +72,12 @@ function getTickValues(
     return scale.ticks(tickCount);
   }
 
-  // Band scale - return domain values
+  // Band scale - auto-skip labels to avoid overlap
   if ('domain' in scale && typeof scale.domain === 'function') {
     const domain = scale.domain();
-    if (Array.isArray(domain)) return domain;
+    if (Array.isArray(domain)) {
+      return autoSkipBandLabels(domain, axisLength, fontSize, formatter);
+    }
   }
 
   return [];
@@ -100,10 +151,10 @@ export const XAxis: React.FC<XAxisProps> = ({
   const { renderer } = useRenderer();
   const { Group, Line, Text } = renderer;
 
-  // Get tick values
+  // Get tick values (auto-skips band scale labels to avoid overlap)
   const tickValues = useMemo(
-    () => getTickValues(scale, tickCount, customTickValues),
-    [scale, tickCount, customTickValues]
+    () => getTickValues(scale, tickCount, length, fontSize, tickFormat, customTickValues),
+    [scale, tickCount, length, fontSize, tickFormat, customTickValues]
   );
 
   // Calculate tick positions

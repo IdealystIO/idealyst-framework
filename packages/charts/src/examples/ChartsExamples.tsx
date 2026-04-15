@@ -16,7 +16,8 @@ import {
 } from '@idealyst/components';
 import { LineChart } from '../charts/LineChart';
 import { BarChart } from '../charts/BarChart';
-import type { ChartDataSeries, CurveType, TooltipContext } from '../types';
+import { GaugeChart } from '../charts/GaugeChart';
+import type { ChartDataSeries, CurveType, TooltipContext, ReferenceLine, GaugeSegment } from '../types';
 
 // =============================================================================
 // Sample Data
@@ -102,6 +103,57 @@ const groupedData: ChartDataSeries[] = [
   },
 ];
 
+const revenueReferenceLines: ReferenceLine[] = [
+  {
+    value: 80,
+    axis: 'y',
+    label: 'Revenue Target',
+    color: '#16a34a',
+    strokeStyle: 'dashed',
+    labelPosition: 'end',
+  },
+  {
+    value: 50,
+    axis: 'y',
+    label: 'Break-Even',
+    color: '#ca8a04',
+    strokeStyle: 'dotted',
+    labelPosition: 'end',
+  },
+  {
+    value: 'Jul',
+    axis: 'x',
+    label: 'H2 Start',
+    color: '#9333ea',
+    strokeStyle: 'dashed',
+    labelPosition: 'start',
+  },
+];
+
+const salesReferenceLines: ReferenceLine[] = [
+  {
+    value: 250,
+    axis: 'y',
+    label: 'Annual Target',
+    color: '#dc2626',
+    strokeStyle: 'dashed',
+  },
+];
+
+const bonusSegments: GaugeSegment[] = [
+  { value: 0.33, color: '#ef4444' },  // Red — poor
+  { value: 0.34, color: '#f59e0b' },  // Yellow — fair
+  { value: 0.33, color: '#22c55e' },  // Green — good
+];
+
+const healthSegments: GaugeSegment[] = [
+  { value: 0.2, color: '#ef4444' },
+  { value: 0.2, color: '#f97316' },
+  { value: 0.2, color: '#eab308' },
+  { value: 0.2, color: '#84cc16' },
+  { value: 0.2, color: '#22c55e' },
+];
+
 const curveOptions: CurveType[] = [
   'linear',
   'monotone',
@@ -164,6 +216,7 @@ export function ChartsExamples() {
             animationDuration={750}
             showGrid
             showTooltip
+            referenceLines={revenueReferenceLines}
             tooltip={{
               renderContent: (ctx: TooltipContext) => (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -238,6 +291,7 @@ export function ChartsExamples() {
             animationDuration={400}
             showGrid
             showTooltip
+            referenceLines={salesReferenceLines}
             yAxis={{ tickFormat: (v) => `$${v}K` }}
           />
         </Card>
@@ -260,6 +314,46 @@ export function ChartsExamples() {
             showLegend
             yAxis={{ tickFormat: (v) => `$${v}K` }}
           />
+        </Card>
+
+        <Divider />
+
+        {/* Gauge Charts */}
+        <Card padding="md" gap="md">
+          <Text typography="h5" weight="bold">Gauge Meters</Text>
+          <Text typography="caption" color="secondary">
+            180-degree arc meters with colored segments and animated needle
+          </Text>
+
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
+            <View style={{ flex: 1, minWidth: 220 }}>
+              <GaugeChart
+                key={`gauge1-${animKey}`}
+                value={0.12}
+                segments={bonusSegments}
+                title="Bonus Tracker"
+                formattedValue="12%"
+                valueColor="#ef4444"
+                subtitle="Pace: 1.6 Feet/day \u00B7 Projected: 23 Feet"
+                height={200}
+                animate
+              />
+            </View>
+            <View style={{ flex: 1, minWidth: 220 }}>
+              <GaugeChart
+                key={`gauge2-${animKey}`}
+                value={0.72}
+                segments={healthSegments}
+                title="System Health"
+                formattedValue="72%"
+                valueColor="#22c55e"
+                subtitle="All services operational"
+                height={200}
+                arcThickness={20}
+                animate
+              />
+            </View>
+          </View>
         </Card>
 
         {/* Info Card */}

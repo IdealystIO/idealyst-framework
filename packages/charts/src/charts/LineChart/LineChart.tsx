@@ -12,7 +12,7 @@ import {
   useChart,
   useRenderer,
 } from '../../components/ChartContainer';
-import { XAxis, YAxis, GridLines } from '../../components/Axis';
+import { XAxis, YAxis, GridLines, ReferenceLines } from '../../components/Axis';
 import { ChartTooltip } from '../../components/Tooltip';
 import { useLineChart } from './useLineChart';
 import { useChartAnimation } from '../../hooks/useChartAnimation';
@@ -38,6 +38,7 @@ const LineChartInner: React.FC<
   showGrid = true,
   showTooltip = false,
   tooltip: tooltipConfig,
+  referenceLines,
   xAxis,
   yAxis,
   animate = true,
@@ -158,6 +159,17 @@ const LineChartInner: React.FC<
                   count={5}
                 />
               </>
+            )}
+
+            {/* Reference lines (targets, thresholds) */}
+            {referenceLines && referenceLines.length > 0 && (
+              <ReferenceLines
+                lines={referenceLines}
+                xScale={xScale}
+                yScale={yScale}
+                innerWidth={innerWidth}
+                innerHeight={innerHeight}
+              />
             )}
 
             {/* Vertical hover guide line */}

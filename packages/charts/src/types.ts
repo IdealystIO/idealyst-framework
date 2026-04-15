@@ -82,6 +82,19 @@ export interface PieDataPoint {
 }
 
 /**
+ * A colored segment of a gauge arc.
+ * Segments are laid out left-to-right across the 180° arc.
+ */
+export interface GaugeSegment {
+  /** Proportion of the arc this segment occupies (0-1, all segments should sum to 1) */
+  value: number;
+  /** Segment color */
+  color: string;
+  /** Optional label for the segment */
+  label?: string;
+}
+
+/**
  * Normalized data point with screen coordinates
  */
 export interface NormalizedDataPoint {
@@ -273,6 +286,37 @@ export interface CartesianChartProps extends BaseChartProps {
   showYAxis?: boolean;
   /** Show grid lines (shorthand) */
   showGrid?: boolean;
+  /** Reference lines (targets, thresholds, averages) drawn across the chart */
+  referenceLines?: ReferenceLine[];
+}
+
+// =============================================================================
+// Reference Lines
+// =============================================================================
+
+/**
+ * A reference line drawn across the chart at a fixed value.
+ * Use for targets, thresholds, averages, baselines, etc.
+ */
+export interface ReferenceLine {
+  /** The axis value where the line is drawn */
+  value: number | string;
+  /** Which axis the value refers to: 'y' draws horizontal, 'x' draws vertical */
+  axis: 'x' | 'y';
+  /** Display label shown at the edge of the line */
+  label?: string;
+  /** Line color (defaults to current theme secondary) */
+  color?: string;
+  /** Theme intent for automatic coloring */
+  intent?: Intent;
+  /** Stroke style */
+  strokeStyle?: 'solid' | 'dashed' | 'dotted';
+  /** Stroke width (default: 1.5) */
+  strokeWidth?: number;
+  /** Opacity (0-1, default: 0.7) */
+  opacity?: number;
+  /** Label position along the line */
+  labelPosition?: 'start' | 'end' | 'center';
 }
 
 // =============================================================================

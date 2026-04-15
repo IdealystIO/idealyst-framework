@@ -141,8 +141,8 @@ function PostDetail() {
         </Text>
 
         <Text typography="body1" color="secondary" style={{ marginBottom: 16, lineHeight: 24 }}>
-          Access state data passed during navigation. On web, state is passed as
-          URL query parameters. On native, it's passed via route params.
+          Access and update state data passed during navigation. Returns a [state, setState] tuple.
+          On web, state is stored as URL query parameters. On native, it's stored as route params.
         </Text>
 
         <CodeBlock
@@ -163,15 +163,18 @@ function SourceScreen() {
   return <Button onPress={handleStart}>Start Recording</Button>;
 }
 
-// Receiving state
+// Receiving and updating state
 function RecordingScreen() {
-  const { autostart } = useNavigationState<{ autostart?: boolean }>();
+  const [{ autostart }, setState] = useNavigationState<{ autostart: boolean }>();
 
   useEffect(() => {
     if (autostart) {
       startRecording();
     }
   }, [autostart]);
+
+  // Update params in-place without navigation
+  // setState({ autostart: false });
 
   return <View>...</View>;
 }`}
@@ -191,7 +194,7 @@ function RecordingScreen() {
           title="Consuming State"
           code={`// URL: /recording?autostart=true
 
-const { autostart } = useNavigationState<{ autostart?: boolean }>({
+const [{ autostart }] = useNavigationState<{ autostart?: boolean }>({
   consume: ['autostart']
 });
 
@@ -210,7 +213,7 @@ const { autostart } = useNavigationState<{ autostart?: boolean }>({
             <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
               {`• useCurrentPath uses React Router's useLocation
 • useParams uses React Router's useParams
-• useNavigationState parses URL query params`}
+• useNavigationState reads/writes URL query params`}
             </Text>
           </Card>
 
@@ -219,7 +222,7 @@ const { autostart } = useNavigationState<{ autostart?: boolean }>({
             <Text typography="body2" color="tertiary" style={{ lineHeight: 22 }}>
               {`• useCurrentPath uses React Navigation's useRoute
 • useParams uses React Navigation's route.params
-• useNavigationState uses route.params`}
+• useNavigationState reads/writes route.params`}
             </Text>
           </Card>
         </View>

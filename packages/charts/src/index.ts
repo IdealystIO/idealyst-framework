@@ -73,6 +73,9 @@ export type { LineChartProps, ProcessedLineData } from './charts/LineChart';
 export { BarChart, useBarChart } from './charts/BarChart';
 export type { BarChartProps, ProcessedBarData, ProcessedBar } from './charts/BarChart';
 
+export { GaugeChart } from './charts/GaugeChart';
+export type { GaugeChartProps } from './charts/GaugeChart';
+
 // Axis Components
 export { XAxis, YAxis, GridLines } from './components/Axis';
 export type { XAxisProps, YAxisProps, GridLinesProps, AxisScale } from './components/Axis';
