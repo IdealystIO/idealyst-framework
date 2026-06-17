@@ -153,6 +153,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         transparent
         animationType="fade"
         onRequestClose={() => setOpen(false)}
+        supportedOrientations={['portrait', 'landscape']}
       >
         <View style={modalBackdropStyle}>
           <View style={popoverContentStyle}>

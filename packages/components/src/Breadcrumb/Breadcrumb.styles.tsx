@@ -67,11 +67,16 @@ export const breadcrumbStyles = defineStyle('Breadcrumb', (theme: Theme) => ({
     },
 
     icon: {
+        color: theme.colors.text.primary,
         variants: {
             size: {
                 width: theme.sizes.$breadcrumb.iconSize,
                 height: theme.sizes.$breadcrumb.iconSize,
                 fontSize: theme.sizes.$breadcrumb.iconSize,
+            },
+            disabled: {
+                true: { color: theme.colors.text.secondary },
+                false: {},
             },
         },
     },

@@ -271,6 +271,7 @@ const Dialog = forwardRef<View, DialogProps>(({
       animationType="none"
       onRequestClose={() => onClose()}
       statusBarTranslucent
+      supportedOrientations={['portrait', 'landscape']}
       testID={testID}
     >
       {/* Backdrop layer - positioned absolute, full screen */}

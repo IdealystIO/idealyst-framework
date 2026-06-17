@@ -244,6 +244,7 @@ const Select = forwardRef<IdealystElement, SelectProps>(({
         transparent
         animationType="none"
         onRequestClose={closeDropdown}
+        supportedOrientations={['portrait', 'landscape']}
       >
         <Pressable
           style={overlayStyle}

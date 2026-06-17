@@ -3,9 +3,16 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { breadcrumbStyles } from './Breadcrumb.styles';
 import type { BreadcrumbProps, BreadcrumbItem as BreadcrumbItemType } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import { IconRegistry } from '../Icon/IconRegistry';
 import { isIconName } from '../Icon/icon-resolver';
 import Menu from '../Menu/Menu.web';
 import type { MenuItem } from '../Menu/types';
+import { mdiDotsHorizontal } from '@mdi/js';
+
+// Self-register icons used internally by Breadcrumb
+IconRegistry.registerMany({
+  'dots-horizontal': mdiDotsHorizontal,
+});
 
 interface BreadcrumbItemProps {
   item: BreadcrumbItemType;

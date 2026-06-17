@@ -149,6 +149,7 @@ const Popover = forwardRef<IdealystElement, PopoverProps>(({
       transparent
       animationType="fade"
       onRequestClose={() => onOpenChange(false)}
+      supportedOrientations={['portrait', 'landscape']}
       testID={testID}
       nativeID={id}
     >

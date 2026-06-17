@@ -3,10 +3,22 @@ import { getWebProps } from 'react-native-unistyles/web';
 import { alertStyles } from './Alert.styles';
 import type { AlertProps } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import { IconRegistry } from '../Icon/IconRegistry';
 import { isIconName } from '../Icon/icon-resolver';
 import useMergeRefs from '../hooks/useMergeRefs';
 import type { IdealystElement } from '../utils/refTypes';
 import { flattenStyle } from '../utils/flattenStyle';
+import { mdiInformation, mdiCheckCircle, mdiAlertCircle, mdiAlert, mdiRecordCircle, mdiClose } from '@mdi/js';
+
+// Self-register icons used internally by Alert
+IconRegistry.registerMany({
+  'information': mdiInformation,
+  'check-circle': mdiCheckCircle,
+  'alert-circle': mdiAlertCircle,
+  'alert': mdiAlert,
+  'record-circle': mdiRecordCircle,
+  'close': mdiClose,
+});
 
 // Default icons for each intent
 const defaultIcons: Record<string, React.ComponentType<any>> = {

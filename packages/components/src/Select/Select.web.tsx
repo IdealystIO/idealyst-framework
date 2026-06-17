@@ -2,11 +2,18 @@ import React, { forwardRef, useEffect, useRef, useState } from 'react';
 // @ts-ignore - web-specific import
 import { getWebProps } from 'react-native-unistyles/web';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import { IconRegistry } from '../Icon/IconRegistry';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { PositionedPortal } from '../internal/PositionedPortal';
 import { selectStyles } from './Select.styles';
 import { SelectOption, SelectProps } from './types';
 import type { IdealystElement } from '../utils/refTypes';
+import { mdiChevronDown } from '@mdi/js';
+
+// Self-register icons used internally by Select
+IconRegistry.registerMany({
+  'chevron-down': mdiChevronDown,
+});
 
 /**
  * Dropdown selection component with search, keyboard navigation, and custom option rendering.

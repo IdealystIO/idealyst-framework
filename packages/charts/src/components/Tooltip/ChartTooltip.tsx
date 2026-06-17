@@ -7,6 +7,8 @@
  */
 
 import React, { useRef, useState, useLayoutEffect } from 'react';
+import { useUnistyles } from 'react-native-unistyles';
+import type { Theme } from '@idealyst/theme';
 import type { TooltipConfig, TooltipContext } from '../../types';
 
 export interface ChartTooltipProps {
@@ -84,6 +86,15 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
 
+  // Get theme for colors
+  let theme: Theme | undefined;
+  try {
+    const unistyles = useUnistyles();
+    theme = unistyles.theme as Theme;
+  } catch {
+    // Not in Unistyles context
+  }
+
   // Measure tooltip after render so we can position correctly
   useLayoutEffect(() => {
     if (tooltipRef.current && context) {
@@ -120,14 +131,14 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
         pointerEvents: 'none',
         zIndex: 10,
         // Visual style
-        backgroundColor: 'rgba(255, 255, 255, 0.96)',
-        border: '1px solid rgba(0, 0, 0, 0.08)',
+        backgroundColor: theme ? `${theme.colors.surface.primary}f5` : 'rgba(255, 255, 255, 0.96)',
+        border: `1px solid ${theme?.colors.border.primary ?? 'rgba(0, 0, 0, 0.08)'}`,
         borderRadius: 8,
         padding: '8px 12px',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
         fontSize: 12,
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        color: '#1a1a1a',
+        color: theme?.colors.text.primary ?? '#1a1a1a',
         whiteSpace: 'nowrap' as const,
         // Smooth animation between columns
         transition: 'left 0.15s ease-out, top 0.15s ease-out',

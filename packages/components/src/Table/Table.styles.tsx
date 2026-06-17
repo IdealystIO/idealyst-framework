@@ -78,6 +78,7 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         width: '100%',
         _web: {
             borderCollapse: 'collapse',
+            minWidth: 'max-content',
         },
     }),
 
@@ -116,6 +117,7 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
             },
         },
         _web: {
+            display: 'table-cell',
             borderTop: `1px solid ${theme.colors.border.primary}`,
         },
     }),
@@ -194,6 +196,7 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
             },
         },
         _web: {
+            display: 'table-cell',
             position: 'relative',
             borderBottom: `1px solid ${theme.colors.border.primary}`,
         },
@@ -261,6 +264,9 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
                 fontSize: theme.sizes.$table.fontSize,
                 lineHeight: theme.sizes.$table.lineHeight,
             },
+        },
+        _web: {
+            display: 'table-cell',
         },
     }),
 }));

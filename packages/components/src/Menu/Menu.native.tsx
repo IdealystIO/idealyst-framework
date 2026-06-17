@@ -135,6 +135,7 @@ const Menu = forwardRef<IdealystElement, MenuProps>(({
         transparent
         animationType="none"
         onRequestClose={() => onOpenChange?.(false)}
+        supportedOrientations={['portrait', 'landscape']}
       >
         <Pressable
           style={{ flex: 1 }}

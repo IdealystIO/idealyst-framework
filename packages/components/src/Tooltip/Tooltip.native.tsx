@@ -155,6 +155,7 @@ const Tooltip = forwardRef<IdealystElement, TooltipProps>(({
           transparent
           animationType="fade"
           onRequestClose={() => setVisible(false)}
+          supportedOrientations={['portrait', 'landscape']}
           testID={testID}
         >
           <Pressable style={{ flex: 1 }} onPress={() => setVisible(false)}>

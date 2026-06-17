@@ -4,7 +4,14 @@ import { useUnistyles } from 'react-native-unistyles';
 import { accordionStyles } from './Accordion.styles';
 import type { AccordionProps, AccordionItem as AccordionItemType } from './types';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import { IconRegistry } from '../Icon/IconRegistry';
 import { getWebAriaProps, generateAccessibilityId, ACCORDION_KEYS } from '../utils/accessibility';
+import { mdiChevronDown } from '@mdi/js';
+
+// Self-register icons used internally by Accordion
+IconRegistry.registerMany({
+  'chevron-down': mdiChevronDown,
+});
 
 interface AccordionItemProps {
   item: AccordionItemType;

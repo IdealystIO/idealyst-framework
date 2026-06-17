@@ -5,7 +5,17 @@ import type { TableProps, TableColumn, TableType, TableSizeVariant, TableAlignVa
 import type { MenuItem } from '../Menu/types';
 import { getWebAriaProps } from '../utils/accessibility';
 import { IconSvg } from '../Icon/IconSvg/IconSvg.web';
+import { IconRegistry } from '../Icon/IconRegistry';
 import Menu from '../Menu/Menu.web';
+import { mdiArrowUp, mdiArrowDown, mdiArrowUpDown, mdiDotsVertical } from '@mdi/js';
+
+// Self-register icons used internally by Table
+IconRegistry.registerMany({
+  'arrow-up': mdiArrowUp,
+  'arrow-down': mdiArrowDown,
+  'arrow-up-down': mdiArrowUpDown,
+  'dots-vertical': mdiDotsVertical,
+});
 
 // ============================================================================
 // Helpers
@@ -262,12 +272,16 @@ function TD({
 
   const cellProps = getWebProps([(tableStyles.cell as any)({})]);
 
+  const justifyContent = align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start';
+
   return (
     <td
       {...cellProps}
       style={{ width, ...getStickyStyle(sticky, stickyOffset, 1) }}
     >
-      {children}
+      <span style={{ display: 'flex', alignItems: 'center', justifyContent }}>
+        {children}
+      </span>
     </td>
   );
 }
@@ -302,13 +316,16 @@ function TF({
   });
 
   const footerCellProps = getWebProps([(tableStyles.footerCell as any)({})]);
+  const justifyContent = align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start';
 
   return (
     <td
       {...footerCellProps}
       style={{ width, ...getStickyStyle(sticky, stickyOffset, 1) }}
     >
-      {children}
+      <span style={{ display: 'flex', alignItems: 'center', justifyContent }}>
+        {children}
+      </span>
     </td>
   );
 }

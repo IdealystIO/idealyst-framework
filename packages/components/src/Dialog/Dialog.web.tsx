@@ -38,6 +38,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
 }, ref) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousActiveElementRef = useRef<HTMLElement | null>(null);
+  const mouseDownTargetRef = useRef<EventTarget | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
 
@@ -124,8 +125,12 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
 
   if (!shouldRender) return null;
 
+  const handleBackdropMouseDown = (event: React.MouseEvent) => {
+    mouseDownTargetRef.current = event.target;
+  };
+
   const handleBackdropClick = (event: React.MouseEvent) => {
-    if (closeOnBackdropClick && event.target === event.currentTarget) {
+    if (closeOnBackdropClick && event.target === event.currentTarget && mouseDownTargetRef.current === event.currentTarget) {
       onClose();
     }
   };
@@ -189,6 +194,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
     <div
       ref={mergedBackdropRef}
       style={customBackdropWrapperStyle}
+      onMouseDown={handleBackdropMouseDown}
       onClick={handleBackdropClick}
       data-testid={testID}
     >
@@ -233,6 +239,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
     <div
       {...backdropProps}
       ref={mergedBackdropRef}
+      onMouseDown={handleBackdropMouseDown}
       onClick={handleBackdropClick}
       data-testid={testID}
     >
