@@ -56,6 +56,7 @@ const packagePaths = [
   'packages/network/package.json',
   'packages/camera/package.json',
   'packages/charts/package.json',
+  'packages/dnd/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json',
   'examples/docs/package.json',

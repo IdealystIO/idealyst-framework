@@ -198,6 +198,10 @@ export interface GetPdfGuideArgs {
   topic: "overview" | "api" | "examples";
 }
 
+export interface GetDndGuideArgs {
+  topic: "overview" | "api" | "examples";
+}
+
 // ============================================================================
 // Package Tool Types
 // ============================================================================
@@ -281,6 +285,7 @@ export type ToolName =
   | "get_live_activity_guide"
   | "get_network_guide"
   | "get_pdf_guide"
+  | "get_dnd_guide"
   | "list_packages"
   | "get_package_docs"
   | "search_packages"
@@ -321,6 +326,7 @@ export type ToolArgs =
   | GetLiveActivityGuideArgs
   | GetNetworkGuideArgs
   | GetPdfGuideArgs
+  | GetDndGuideArgs
   | ListPackagesArgs
   | GetPackageDocsArgs
   | SearchPackagesArgs

@@ -39,6 +39,7 @@ import { notificationsGuides } from "../data/notifications-guides.js";
 import { liveActivityGuides } from "../data/live-activity-guides.js";
 import { networkGuides } from "../data/network-guides.js";
 import { pdfGuides } from "../data/pdf-guides.js";
+import { dndGuides } from "../data/dnd-guides.js";
 import {
   packages,
   getPackageSummary,
@@ -97,6 +98,7 @@ import type {
   GetLiveActivityGuideArgs,
   GetNetworkGuideArgs,
   GetPdfGuideArgs,
+  GetDndGuideArgs,
   ListPackagesArgs,
   GetPackageDocsArgs,
   SearchPackagesArgs,
@@ -1290,6 +1292,23 @@ export function getPdfGuide(args: GetPdfGuideArgs): ToolResponse {
   return textResponse(guide);
 }
 
+/**
+ * Get documentation for the dnd package
+ */
+export function getDndGuide(args: GetDndGuideArgs): ToolResponse {
+  const topic = args.topic;
+  const uri = `idealyst://dnd/${topic}`;
+  const guide = dndGuides[uri];
+
+  if (!guide) {
+    return textResponse(
+      `Topic "${topic}" not found. Available topics: overview, api, examples`
+    );
+  }
+
+  return textResponse(guide);
+}
+
 // ============================================================================
 // Package Tool Handlers
 // ============================================================================
@@ -1650,6 +1669,7 @@ export const toolHandlers: Record<string, (args: any) => ToolResponse> = {
   get_live_activity_guide: getLiveActivityGuide,
   get_network_guide: getNetworkGuide,
   get_pdf_guide: getPdfGuide,
+  get_dnd_guide: getDndGuide,
   list_packages: listPackages,
   get_package_docs: getPackageDocs,
   search_packages: searchPackages,

@@ -1,6 +1,8 @@
 import { useState, useEffect, forwardRef, useMemo, memo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import { useUnistyles } from 'react-native-unistyles';
+import type { Intent, Theme } from '@idealyst/theme';
 import { CheckboxProps } from './types';
 import { checkboxStyles } from './Checkbox.styles';
 import { getNativeSelectionAccessibilityProps } from '../utils/accessibility';
@@ -11,16 +13,18 @@ import type { IdealystElement } from '../utils/refTypes';
  * Uses the resolved checkmark style as the single source of truth for sizing,
  * reducing rerenders on the parent Checkbox component.
  */
-const CheckmarkIcon = memo(({ indeterminate, checked }: { indeterminate: boolean; checked: boolean }) => {
+const CheckmarkIcon = memo(({ indeterminate, checked, intent }: { indeterminate: boolean; checked: boolean; intent: Intent }) => {
+  const { theme }: { theme: Theme } = useUnistyles();
   const checkmarkStyle = (checkboxStyles.checkmark as any)({ checked });
   const iconSize = (typeof checkmarkStyle?.width === 'number' ? checkmarkStyle.width : 14);
+  const iconColor = theme.intents[intent].contrast;
 
   return (
     <View style={checkmarkStyle}>
       <MaterialDesignIcons
         name={indeterminate ? 'minus' : 'check'}
         size={iconSize}
-        color="#ffffff"
+        color={iconColor}
       />
     </View>
   );
@@ -141,7 +145,7 @@ const Checkbox = forwardRef<IdealystElement, CheckboxProps>(({
       >
         <View style={checkboxStyle}>
           {(internalChecked || indeterminate) && (
-            <CheckmarkIcon indeterminate={indeterminate} checked={internalChecked} />
+            <CheckmarkIcon indeterminate={indeterminate} checked={internalChecked} intent={intent} />
           )}
         </View>
         {labelContent && (

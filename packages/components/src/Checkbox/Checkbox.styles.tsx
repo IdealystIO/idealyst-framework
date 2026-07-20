@@ -126,7 +126,7 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
-        color: '#ffffff',
+        color: theme.$intents.contrast,
         variants: {
             size: {
                 xs: { width: 10, height: 10 },

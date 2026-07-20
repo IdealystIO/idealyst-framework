@@ -40,6 +40,7 @@ PACKAGES=(
   "pdf"
   "camera"
   "charts"
+  "dnd"
 )
 
 ROOT_DIR=$(pwd)

@@ -540,6 +540,24 @@ export const getPdfGuideDefinition: ToolDefinition = {
   },
 };
 
+export const getDndGuideDefinition: ToolDefinition = {
+  name: "get_dnd_guide",
+  description:
+    "Get documentation for @idealyst/dnd cross-platform drag-and-drop package. Covers DndProvider, useDraggable, useDroppable, useSortable, DragOverlay, collision detection, and examples.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      topic: {
+        type: "string",
+        description:
+          "Topic to get docs for: 'overview', 'api', 'examples'",
+        enum: ["overview", "api", "examples"],
+      },
+    },
+    required: ["topic"],
+  },
+};
+
 // ============================================================================
 // Package Tool Definitions
 // ============================================================================
@@ -789,6 +807,7 @@ export const toolDefinitions: ToolDefinition[] = [
   getLiveActivityGuideDefinition,
   getNetworkGuideDefinition,
   getPdfGuideDefinition,
+  getDndGuideDefinition,
   // Package tools
   listPackagesDefinition,
   getPackageDocsDefinition,

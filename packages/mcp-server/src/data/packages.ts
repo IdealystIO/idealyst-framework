@@ -900,6 +900,66 @@ function AnimatedComponent() {
     relatedPackages: ["theme", "svg", "animate"],
   },
 
+  dnd: {
+    name: "DnD",
+    npmName: "@idealyst/dnd",
+    description:
+      "Cross-platform drag-and-drop hooks for React and React Native. Uses dnd-kit on web and custom Reanimated + Gesture Handler implementation on native. Provides useDraggable, useDroppable, useSortable, DragOverlay, and collision detection.",
+    category: "ui",
+    platforms: ["web", "native"],
+    documentationStatus: "full",
+    installation: "yarn add @idealyst/dnd",
+    peerDependencies: [
+      "react-native-reanimated (native)",
+      "react-native-gesture-handler (native)",
+    ],
+    features: [
+      "useDraggable - Make any element draggable with type-safe data",
+      "useDroppable - Create drop zones with accept type filtering",
+      "useSortable - Reorderable lists with animated transitions",
+      "DragOverlay - Custom drag preview component",
+      "DndProvider - Context provider with drag lifecycle callbacks",
+      "Type-safe drag data with TypeScript generics",
+      "Collision detection: rectIntersection, closestCenter, closestCorners",
+      "Cross-list sorting with groups",
+      "Activation delay and tolerance for touch disambiguation",
+    ],
+    quickStart: `import { DndProvider, useDraggable, useDroppable } from '@idealyst/dnd';
+
+function App() {
+  return (
+    <DndProvider onDragEnd={(e) => {
+      if (e.over) console.log('Dropped', e.active.id, 'on', e.over.id);
+    }}>
+      <DraggableItem />
+      <DropZone />
+    </DndProvider>
+  );
+}
+
+function DraggableItem() {
+  const { ref, isDragging, attributes } = useDraggable({
+    id: 'item-1',
+    data: { label: 'Hello' },
+  });
+  return <div ref={ref} {...attributes}>Drag me</div>;
+}
+
+function DropZone() {
+  const { ref, isOver } = useDroppable({ id: 'zone-1' });
+  return <div ref={ref}>Drop here</div>;
+}`,
+    apiHighlights: [
+      "useDraggable({ id, data?, type?, disabled? }) -> { ref, isDragging, attributes }",
+      "useDroppable({ id, data?, accept?, disabled? }) -> { ref, isOver, isActive, activeItem }",
+      "useSortable({ id, index, data?, group? }) -> { ref, isDragging, isSorting, style }",
+      "DndProvider - onDragStart, onDragMove, onDragEnd, onDragCancel",
+      "DragOverlay - Render function receives active item data",
+      "rectIntersection, closestCenter, closestCorners - Collision strategies",
+    ],
+    relatedPackages: ["components", "animate"],
+  },
+
   "files": {
     name: "Files",
     npmName: "@idealyst/files",

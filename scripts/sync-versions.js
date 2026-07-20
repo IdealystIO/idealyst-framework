@@ -21,6 +21,7 @@ const packagePaths = [
   'packages/storage/package.json',
   'packages/mcp-server/package.json',
   'packages/microphone/package.json',
+  'packages/dnd/package.json',
   'examples/example-native/package.json',
   'examples/example-web/package.json'
 ];

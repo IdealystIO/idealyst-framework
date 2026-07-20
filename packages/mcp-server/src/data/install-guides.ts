@@ -1492,6 +1492,65 @@ function Test() {
       },
     ],
   },
+
+  dnd: {
+    packageName: "DnD",
+    npmName: "@idealyst/dnd",
+    description:
+      "Cross-platform drag-and-drop hooks using dnd-kit (web) and Reanimated + Gesture Handler (native)",
+    platforms: ["web", "native"],
+    complexity: "moderate",
+    installation: {
+      yarn: "yarn add @idealyst/dnd",
+      npm: "npm install @idealyst/dnd",
+    },
+    peerDependencies: [
+      {
+        name: "react-native-reanimated",
+        required: true,
+        platforms: ["native"],
+        note: "Required for native drag animations (UI thread)",
+      },
+      {
+        name: "react-native-gesture-handler",
+        required: true,
+        platforms: ["native"],
+        note: "Required for native pan gesture recognition",
+      },
+    ],
+    ios: {
+      podInstallRequired: true,
+      additionalSteps: [
+        "cd ios && pod install (installs Reanimated and Gesture Handler native modules)",
+      ],
+    },
+    android: {
+      additionalSteps: [
+        "Reanimated requires the Hermes JS engine (default in RN 0.70+)",
+        "Add `react-native-reanimated/plugin` to your babel.config.js plugins array",
+      ],
+    },
+    web: {
+      notes: [
+        "dnd-kit packages (@dnd-kit/core, @dnd-kit/sortable) are bundled as dependencies — no extra install needed",
+        "Works with all major bundlers (Vite, Webpack, esbuild)",
+      ],
+    },
+    verification:
+      "Import { DndProvider, useDraggable } from '@idealyst/dnd' and wrap a component tree — drag should work on first run.",
+    troubleshooting: [
+      {
+        issue: "Reanimated worklet error on native",
+        solution:
+          "Ensure `react-native-reanimated/plugin` is in your babel.config.js plugins array (must be last). Clear Metro cache: npx react-native start --reset-cache",
+      },
+      {
+        issue: "GestureHandlerRootView warning",
+        solution:
+          "DndProvider already wraps children in GestureHandlerRootView. Do not nest another GestureHandlerRootView inside it.",
+      },
+    ],
+  },
 };
 
 /**

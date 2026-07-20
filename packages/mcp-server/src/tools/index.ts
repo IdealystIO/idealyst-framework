@@ -71,6 +71,7 @@ export type {
   GetLiveActivityGuideArgs,
   GetNetworkGuideArgs,
   GetPdfGuideArgs,
+  GetDndGuideArgs,
   // Package tool types
   ListPackagesArgs,
   GetPackageDocsArgs,
@@ -118,6 +119,7 @@ export {
   getLiveActivityGuideDefinition,
   getNetworkGuideDefinition,
   getPdfGuideDefinition,
+  getDndGuideDefinition,
   listPackagesDefinition,
   getPackageDocsDefinition,
   searchPackagesDefinition,
@@ -166,6 +168,7 @@ export {
   getLiveActivityGuide,
   getNetworkGuide,
   getPdfGuide,
+  getDndGuide,
   listPackages,
   getPackageDocs,
   searchPackages,
