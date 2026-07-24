@@ -168,7 +168,7 @@ Check these files for:
 Priority files (have dynamic functions or need checking):
 - [ ] Switch.styles.tsx (has dynamic functions with intent)
 - [ ] TextArea.styles.tsx
-- [ ] Checkbox.styles.tsx
+- [x] Checkbox.styles.tsx (moved `$intents.contrast` from bare property into `variants.intent` block; component files already pass `intent` to `useVariants`)
 - [ ] RadioButton.styles.tsx
 - [ ] Select.styles.tsx
 - [ ] Progress.styles.tsx

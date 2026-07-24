@@ -126,7 +126,6 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
         display: 'flex' as const,
         alignItems: 'center' as const,
         justifyContent: 'center' as const,
-        color: theme.$intents.contrast,
         variants: {
             size: {
                 xs: { width: 10, height: 10 },
@@ -138,6 +137,10 @@ export const checkboxStyles = defineStyle('Checkbox', (theme: Theme) => ({
             checked: {
                 true: { opacity: 1 },
                 false: { opacity: 0 },
+            },
+            // $intents expands per intent, providing contrast color for checkmark on filled background
+            intent: {
+                color: theme.$intents.contrast,
             },
         },
     }),

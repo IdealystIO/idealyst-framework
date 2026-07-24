@@ -6,7 +6,7 @@
 export const VERSION = '0.1.0';
 
 // Current Idealyst framework version to use in templates
-export const IDEALYST_VERSION = '1.3.22';
+export const IDEALYST_VERSION = '1.3.23';
 
 // React Native version
 export const REACT_NATIVE_VERSION = '0.83.0';
