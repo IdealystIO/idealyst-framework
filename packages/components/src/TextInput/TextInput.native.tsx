@@ -312,7 +312,7 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
         <Text style={labelStyle}>{label}</Text>
       )}
 
-      <View style={containerStyle}>
+      <View key="input-container" style={containerStyle}>
         {/* Left Icon */}
         {leftIcon && (
           <View style={leftIconContainerStyle}>
@@ -351,14 +351,14 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
         ) : null}
       </View>
 
-      {showFooter && (
-        <View style={footerStyle}>
+      {showFooter ? (
+        <View key="footer" style={footerStyle}>
           <View style={{ flex: 1 }}>
             {error && <Text style={helperTextStyle}>{error}</Text>}
             {!error && helperText && <Text style={helperTextStyle}>{helperText}</Text>}
           </View>
         </View>
-      )}
+      ) : null}
     </View>
   );
 });

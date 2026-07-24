@@ -314,7 +314,7 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
         <label {...labelProps} id={labelId} htmlFor={inputId}>{label}</label>
       )}
 
-      <div onClick={handleContainerPress} ref={mergedContainerRef} {...containerProps}>
+      <div key="input-container" onClick={handleContainerPress} ref={mergedContainerRef} {...containerProps}>
         {/* Left Icon */}
         {leftIcon && (
           <span {...leftIconContainerProps}>
@@ -359,8 +359,8 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
         ) : null}
       </div>
 
-      {showFooter && (
-        <div {...footerProps}>
+      {showFooter ? (
+        <div key="footer" {...footerProps}>
           <div style={{ flex: 1 }}>
             {error && (
               <span {...helperTextProps} id={errorId} role="alert">
@@ -374,7 +374,7 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
             )}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 });
