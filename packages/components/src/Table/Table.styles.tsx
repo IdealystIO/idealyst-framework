@@ -97,12 +97,16 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         backgroundColor: theme.colors.surface.secondary,
     }),
 
-    footerCell: (_props: TableDynamicProps) => ({
+    footerCell: ({ sticky = false }: TableDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         color: theme.colors.text.primary,
         borderTopWidth: 1,
         borderTopColor: theme.colors.border.primary,
+        // Sticky columns need an opaque background so scrolling content
+        // does not show through. Footer cells use surface.secondary to
+        // match the <tfoot> background.
+        ...(sticky ? { backgroundColor: theme.colors.surface.secondary } : {}),
         variants: {
             align: {
                 left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
@@ -163,13 +167,17 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         },
     }),
 
-    headerCell: (_props: TableDynamicProps) => ({
+    headerCell: ({ sticky = false }: TableDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         fontWeight: '500' as const,
         color: theme.colors.text.secondary,
         borderBottomWidth: 1,
         borderBottomColor: theme.colors.border.primary,
+        // Sticky columns need an opaque background so scrolling content
+        // does not show through. Header cells use surface.secondary to
+        // match the <thead> background.
+        ...(sticky ? { backgroundColor: theme.colors.surface.secondary } : {}),
         variants: {
             align: {
                 left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },
@@ -249,10 +257,14 @@ export const tableStyles = defineStyle('Table', (theme: Theme) => ({
         },
     }),
 
-    cell: (_props: TableDynamicProps) => ({
+    cell: ({ sticky = false }: TableDynamicProps) => ({
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         color: theme.colors.text.primary,
+        // Sticky columns need an opaque background so scrolling content
+        // does not show through. Body cells use surface.primary to match
+        // the default table body background.
+        ...(sticky ? { backgroundColor: theme.colors.surface.primary } : {}),
         variants: {
             align: {
                 left: { textAlign: 'left' as const, justifyContent: 'flex-start' as const },

@@ -52,6 +52,8 @@ const Image: React.FC<ImageProps> = ({
   const imageProps = getWebProps([
     imageStyles.image as any,
     {
+      width: '100%',
+      height: '100%',
       objectFit: objectFit,
       borderRadius: borderRadius ? `${borderRadius}px` : undefined,
     }

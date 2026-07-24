@@ -71,9 +71,6 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
   // Derive hasError from error prop or hasError boolean
   const computedHasError = Boolean(error) || hasError;
 
-  // Determine if we need a wrapper (when label, error, or helperText is present)
-  const needsWrapper = Boolean(label) || Boolean(error) || Boolean(helperText);
-
   // Generate unique IDs for accessibility
   const inputId = useMemo(() => id || generateAccessibilityId('textinput'), [id]);
   const errorId = useMemo(() => `${inputId}-error`, [inputId]);
@@ -162,7 +159,7 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
 
   // Get web props for all styled elements (all styles are dynamic functions)
   const dynamicContainerStyle = (textInputStyles.container as any)({ type, focused: isFocused, hasError: computedHasError, disabled });
-  const {ref: containerStyleRef, ...containerProps} = getWebProps([dynamicContainerStyle, !needsWrapper && flattenStyle(style)].filter(Boolean));
+  const {ref: containerStyleRef, ...containerProps} = getWebProps([dynamicContainerStyle]);
   const leftIconContainerProps = getWebProps([(textInputStyles.leftIconContainer as any)({})]);
   const rightIconContainerProps = getWebProps([(textInputStyles.rightIconContainer as any)({})]);
   const passwordToggleProps = getWebProps([(textInputStyles.passwordToggle as any)({})]);
@@ -309,57 +306,8 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
 
   const showFooter = Boolean(error) || Boolean(helperText);
 
-  // If no wrapper needed, return flat input container
-  if (!needsWrapper) {
-    return (
-      <div onClick={handleContainerPress} ref={mergedContainerRef} {...containerProps} id={id} data-testid={testID}>
-        {/* Left Icon */}
-        {leftIcon && (
-          <span {...leftIconContainerProps}>
-            {renderLeftIcon()}
-          </span>
-        )}
-
-        {/* Input */}
-        <input
-          {...inputWebProps}
-          {...ariaProps}
-          id={inputId}
-          ref={mergedInputRef}
-          type={getInputType()}
-          value={value}
-          onClick={handlePress}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          disabled={disabled}
-          autoCapitalize={autoCapitalize}
-        />
-
-        {/* Right Icon or Password Toggle */}
-        {shouldShowPasswordToggle ? (
-          <button
-            {...passwordToggleProps}
-            onClick={togglePasswordVisibility}
-            disabled={disabled}
-            aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
-            type="button"
-            tabIndex={-1}
-          >
-            {renderPasswordToggleIcon()}
-          </button>
-        ) : rightIcon ? (
-          <span {...rightIconContainerProps}>
-            {renderRightIcon()}
-          </span>
-        ) : null}
-      </div>
-    );
-  }
-
-  // With wrapper for label/error/helperText
+  // Always render a single stable tree so that toggling label/error/helperText
+  // never changes the <input> position in the React tree, preventing focus loss.
   return (
     <div {...wrapperProps} id={id} data-testid={testID}>
       {label && (

@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useLayoutEffect, useCallback, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { usePortalContainer } from './portalContainer';
 
 export type Placement =
   | 'top' | 'top-start' | 'top-end'
@@ -174,6 +175,11 @@ export const PositionedPortal: React.FC<PositionedPortalProps> = ({
   const [position, setPosition] = useState<Position>({ top: 0, left: 0 });
   const [isPositioned, setIsPositioned] = useState(false);
 
+  // Acquire the shared theme-aware portal container on mount, release on
+  // unmount.  The container mirrors the active Unistyles theme class and
+  // sets color-scheme so that portal content inherits the correct theme.
+  const portalContainer = usePortalContainer();
+
   // Calculate position
   const updatePosition = useCallback(() => {
     if (!contentRef.current || !anchor.current) return;
@@ -277,5 +283,5 @@ export const PositionedPortal: React.FC<PositionedPortalProps> = ({
     </div>
   );
 
-  return createPortal(content, document.body);
+  return createPortal(content, portalContainer);
 };

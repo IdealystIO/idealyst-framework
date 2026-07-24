@@ -10,6 +10,7 @@ import type { ChartDataSeries, CurveType } from '../../types';
 import { createLinearScale, createBandScale, extent } from '../../core/scales';
 import { generateLinePath, generateAreaPath, approximatePathLength } from '../../core/path';
 import type { Point } from '../../core/path/commands';
+import { getAllXValues } from '../../core/domain';
 import type { ProcessedLineData } from './types';
 
 /**
@@ -69,26 +70,6 @@ function isNumericXAxis(data: ChartDataSeries[]): boolean {
 
   const firstX = data[0].data[0].x;
   return typeof firstX === 'number' || firstX instanceof Date;
-}
-
-/**
- * Get all X values across all series
- */
-function getAllXValues(data: ChartDataSeries[]): (number | string | Date)[] {
-  const values: (number | string | Date)[] = [];
-  const seen = new Set<string>();
-
-  for (const series of data) {
-    for (const point of series.data) {
-      const key = String(point.x);
-      if (!seen.has(key)) {
-        seen.add(key);
-        values.push(point.x);
-      }
-    }
-  }
-
-  return values;
 }
 
 /**

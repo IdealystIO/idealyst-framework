@@ -157,6 +157,7 @@ const Button = forwardRef<ComponentRef<typeof TouchableOpacity>, ButtonProps>((p
 - [x] Alert.styles.tsx + Alert.native.tsx
 - [x] Input.styles.tsx
 - [x] Accordion.styles.tsx (already static)
+- [x] Badge.styles.tsx + Badge.native.tsx + Badge.web.tsx (static variants + compoundVariants for type/intent; `color` prop handled via inline overrides in `resolveBadgeColor()`)
 
 ### 🔄 Needs Review/Update
 Check these files for:
@@ -165,7 +166,6 @@ Check these files for:
 3. Deprecated ref types
 
 Priority files (have dynamic functions or need checking):
-- [ ] Badge.styles.tsx (uses `color` param - may need to stay dynamic)
 - [ ] Switch.styles.tsx (has dynamic functions with intent)
 - [ ] TextArea.styles.tsx
 - [ ] Checkbox.styles.tsx
@@ -182,7 +182,7 @@ Already static (just verify):
 - [ ] Icon.styles.tsx
 
 ### Special Cases
-- **Badge**: Uses `color` prop which isn't a fixed set - may need dynamic styles
+- **Badge**: Completed. Uses static variants/compoundVariants with `$intents` expansion. The `color` prop (arbitrary palette colors) is handled via `resolveBadgeColor()` inline overrides, separate from the variant system.
 - **Switch**: Uses transform calculations - may need partial dynamic approach
 - **Icon**: Uses dynamic color from `color` or `intent` props
 

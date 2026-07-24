@@ -1,6 +1,6 @@
 {
   "name": "@idealyst/dnd",
-  "version": "1.3.20",
+  "version": "1.3.21",
   "description": "Cross-platform drag-and-drop hooks for React and React Native",
   "readme": "README.md",
   "main": "src/index.ts",

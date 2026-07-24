@@ -7,6 +7,7 @@ import Icon from '../Icon';
 import useMergeRefs from '../hooks/useMergeRefs';
 import { getWebInteractiveAriaProps, generateAccessibilityId } from '../utils/accessibility';
 import { flattenStyle } from '../utils/flattenStyle';
+import { usePortalContainer } from '../internal/portalContainer';
 
 /**
  * Modal overlay dialog for focused user interactions and confirmations.
@@ -41,6 +42,10 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   const mouseDownTargetRef = useRef<EventTarget | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
+
+  // Use theme-aware portal container so dialog inherits the correct
+  // color-scheme and theme class in dark mode.
+  const portalContainer = usePortalContainer();
 
   // Generate unique IDs for accessibility
   const dialogId = useMemo(() => id || generateAccessibilityId('dialog'), [id]);
@@ -279,7 +284,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
     </div>
   );
 
-  return createPortal(dialogContent, document.body);
+  return createPortal(dialogContent, portalContainer);
 });
 
 Dialog.displayName = 'Dialog';

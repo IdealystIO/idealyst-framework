@@ -32,7 +32,6 @@ function getStickyStyle(
     position: 'sticky',
     [side]: offset ?? 0,
     zIndex,
-    backgroundColor: 'inherit',
   };
 }
 
@@ -142,7 +141,7 @@ function TH({
     sortActive: sortDirection != null,
   });
 
-  const headerCellProps = getWebProps([(tableStyles.headerCell as any)({})]);
+  const headerCellProps = getWebProps([(tableStyles.headerCell as any)({ sticky: !!sticky })]);
   const sortIndicatorProps = getWebProps([(tableStyles.sortIndicator as any)({ sortActive: sortDirection != null })]);
   const optionsButtonProps = getWebProps([(tableStyles.optionsButton as any)({})]);
   const thRef = useRef<HTMLTableCellElement>(null);
@@ -270,7 +269,7 @@ function TD({
     align,
   });
 
-  const cellProps = getWebProps([(tableStyles.cell as any)({})]);
+  const cellProps = getWebProps([(tableStyles.cell as any)({ sticky: !!sticky })]);
 
   const justifyContent = align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start';
 
@@ -315,7 +314,7 @@ function TF({
     align,
   });
 
-  const footerCellProps = getWebProps([(tableStyles.footerCell as any)({})]);
+  const footerCellProps = getWebProps([(tableStyles.footerCell as any)({ sticky: !!sticky })]);
   const justifyContent = align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start';
 
   return (

@@ -105,8 +105,7 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
   // Derive hasError from error prop or hasError boolean
   const computedHasError = Boolean(error) || hasError;
 
-  // Determine if we need a wrapper (when label, error, or helperText is present)
-  const needsWrapper = Boolean(label) || Boolean(error) || Boolean(helperText);
+  // Note: we always render the wrapper structure for tree stability (see below).
 
   // Track if this is a secure field that needs Android workaround
   const isSecureField = inputMode === 'password' || secureTextEntry;
@@ -305,51 +304,8 @@ const TextInput = React.forwardRef<TextInputHandle, TextInputProps>(({
     return null;
   };
 
-  // If no wrapper needed, return flat input container
-  if (!needsWrapper) {
-    return (
-      <View style={[containerStyle, style]} testID={testID} nativeID={id}>
-        {/* Left Icon */}
-        {leftIcon && (
-          <View style={leftIconContainerStyle}>
-            {renderLeftIcon()}
-          </View>
-        )}
-
-        {/* Input */}
-        <InnerRNTextInput
-          inputRef={inputRef}
-          value={value}
-          onChangeText={handleChangeText}
-          isAndroidSecure={needsAndroidSecureWorkaround}
-          inputStyle={inputStyle}
-          textInputProps={textInputProps}
-        />
-
-        {/* Right Icon or Password Toggle */}
-        {shouldShowPasswordToggle ? (
-          <TouchableOpacity
-            style={passwordToggleStyle}
-            onPress={togglePasswordVisibility}
-            disabled={disabled}
-            accessibilityLabel={isPasswordVisible ? 'Hide password' : 'Show password'}
-          >
-            <MaterialDesignIcons
-              name={isPasswordVisible ? 'eye-off' : 'eye'}
-              size={iconSize}
-              color={iconColor}
-            />
-          </TouchableOpacity>
-        ) : rightIcon ? (
-          <View style={rightIconContainerStyle}>
-            {renderRightIcon()}
-          </View>
-        ) : null}
-      </View>
-    );
-  }
-
-  // With wrapper for label/error/helperText
+  // Always render a single stable tree so that toggling label/error/helperText
+  // never changes the TextInput position in the React tree, preventing focus loss.
   return (
     <View style={[wrapperStyle, style]} testID={testID} nativeID={id}>
       {label && (
