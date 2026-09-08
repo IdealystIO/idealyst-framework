@@ -1,3 +1,6 @@
+# This project is no longer maintained
+After working on this project for a while, I decided I wanted to tackle a more ambitious project of achieving the same sort of cross-platform development abstractions but built from the ground up, which created the idealyst-native framework that is now my main project.
+
 # Idealyst Framework
 
 A highly opinionated cross-platform framework that provides a unified development experience for Mobile and Web, built on React/React Native, and designed to be used with LLMs. Idealyst provides abstractions for **Styles**, **Components** and **Navigation**, which developers may have had difficulty maintaining across various platforms in the past. An MCP server to facilitate use with LLMs, providing key information about the framework's philosophy, and all of its functionality.
